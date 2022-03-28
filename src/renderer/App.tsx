@@ -37,7 +37,7 @@ const MainScreen = () => {
   return (
     <div>
       <div>
-        <h1>Nice Node</h1>
+        <h1>NiceNode</h1>
         <h3>Status: {sStatus}</h3>
       </div>
       <div className="Hello">
