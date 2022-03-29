@@ -63,7 +63,7 @@ const MainScreen = () => {
 
   useEffect(() => {
     if (sFreeDisk !== undefined && sGethDiskUsed !== undefined) {
-      if (sGethDiskUsed + sFreeDisk > 600) {
+      if (sGethDiskUsed + sFreeDisk > 1000) {
         setStorageWarning(false);
       } else {
         setStorageWarning(true);
@@ -99,9 +99,9 @@ const MainScreen = () => {
       </div>
       {sStorageWarning && (
         <div style={{ maxWidth: 400, background: '#666666' }}>
-          Warning: At least 600 GB of storage is required to run an Ethereum
-          Node. Your computer does not have enough SSD storage space. Please
-          visit ethereum.org to see computer hardware requirements at
+          Warning: At least 1 TB of storage is required to run an Ethereum Node.
+          Your computer does not have enough SSD storage space. Please visit
+          ethereum.org to see computer hardware requirements at
           <a href="https://ethereum.org/en/run-a-node/#build-your-own">
             ethereum.org/run-a-node
           </a>
