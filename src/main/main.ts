@@ -17,7 +17,7 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron';
 // eslint-disable-next-line import/no-unresolved
 // import * as Sentry from '@sentry/electron/dist/main';
 import * as Sentry from '@sentry/node';
-// import { CaptureConsole } from '@sentry/integrations';
+import { CaptureConsole } from '@sentry/integrations';
 
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -40,11 +40,11 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
   maxBreadcrumbs: 50,
   debug: true,
-  // integrations: [
-  //   new CaptureConsole({
-  //     levels: ['error'],
-  //   }),
-  // ],
+  integrations: [
+    new CaptureConsole({
+      levels: ['error', 'warn'],
+    }),
+  ],
 });
 
 // If your app does uses auto updates
