@@ -1,8 +1,5 @@
-import os from 'os';
 import checkDiskSpace from 'check-disk-space';
 import { app } from 'electron';
-// eslint-disable-next-line import/no-cycle
-import { gethDataDir } from './geth';
 
 const du = require('du');
 
@@ -12,6 +9,10 @@ console.log('User data dir: ', app.getPath('userData'));
 export const getNNDirPath = (): string => {
   // Linux: ~/.config/NiceNode
   return app.getPath('userData');
+};
+
+export const gethDataDir = (): string => {
+  return `${getNNDirPath()}/geth-mainnet`;
 };
 
 export const getSystemFreeDiskSpace = async (): Promise<number> => {

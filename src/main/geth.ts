@@ -7,15 +7,11 @@ import sleep from 'await-sleep';
 
 import { send, CHANNELS, MESSAGES } from './messenger';
 import { exec, execAwait } from './execHelper';
-import { getNNDirPath } from './files';
+import { getNNDirPath, gethDataDir } from './files';
 
 const axios = require('axios').default;
 
 // const fetch = require('node-fetch');
-
-export const gethDataDir = (): string => {
-  return `${getNNDirPath()}/geth-mainnet`;
-};
 
 let status = 'Uninitialized';
 let gethProcess: ChildProcess;
