@@ -11,6 +11,8 @@ declare global {
       getGethStatus(): string;
       startGeth(): void;
       stopGeth(): void;
+      getGethDiskUsed(): number;
+      getSystemFreeDiskSpace(): number;
     };
   }
 }

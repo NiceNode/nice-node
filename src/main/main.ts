@@ -24,12 +24,14 @@ import { resolveHtmlPath } from './util';
 import { setWindow } from './messenger';
 import { downloadGeth, getStatus, startGeth, stopGeth } from './geth';
 import { SENTRY_DSN } from './client-keys';
-import { getFreeDiskSpace } from './files';
+import { getGethUsedDiskSpace, getSystemFreeDiskSpace } from './files';
+// import { dontSuspendSystem } from './power';
 
 const logDiskSpace = async () => {
-  console.log(`DIsk freeeeeeee /`, await getFreeDiskSpace());
+  console.log(`System disk free: `, await getSystemFreeDiskSpace());
 };
 logDiskSpace();
+getGethUsedDiskSpace();
 
 // debug({ isEnabled: true });
 Sentry.init({
@@ -156,7 +158,10 @@ app
     ipcMain.handle('getGethStatus', getStatus);
     ipcMain.handle('startGeth', startGeth);
     ipcMain.handle('stopGeth', stopGeth);
+    ipcMain.handle('getGethDiskUsed', getGethUsedDiskSpace);
+    ipcMain.handle('getSystemFreeDiskSpace', getSystemFreeDiskSpace);
     createWindow();
+    // dontSuspendSystem();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.

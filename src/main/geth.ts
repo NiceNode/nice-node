@@ -13,7 +13,9 @@ const axios = require('axios').default;
 
 // const fetch = require('node-fetch');
 
-export const prepareToStart = async () => {};
+export const gethDataDir = (): string => {
+  return `${getNNDirPath()}/geth-mainnet`;
+};
 
 let status = 'Uninitialized';
 let gethProcess: ChildProcess;
@@ -22,17 +24,19 @@ export const downloadGeth = async () => {
   console.log('downloading geth');
   status = 'initializing';
   send(CHANNELS.geth, status);
+
+  try {
+    await access(gethDataDir());
+  } catch {
+    console.log('making geth data dir...');
+    const nnDir = await mkdir(gethDataDir());
+  }
+
   try {
     await access(`${getNNDirPath()}/geth.tar.gz`);
     status = 'downloaded';
     send(CHANNELS.geth, status);
   } catch (err) {
-    try {
-      await access(getNNDirPath());
-    } catch {
-      console.log('making .nicenode dir...');
-      const nnDir = await mkdir(getNNDirPath());
-    }
     console.log('Geth not downloaded yet. downloading geth...');
     status = MESSAGES.downloading;
     send(CHANNELS.geth, status);
@@ -97,17 +101,22 @@ export const startGeth = async () => {
     return;
   }
 
+  const gethDataPath = gethDataDir();
+  const gethInput = [
+    '--ws',
+    '--ws.origins',
+    'https://ethvis.xyz,http://localhost:3000',
+    '--ws.api',
+    '"engine,net,eth,web3,subscribe,miner,txpool"',
+    '--identity',
+    'nicenode-0.0.1-1',
+    '--datadir',
+    gethDataPath,
+  ];
+  console.log('Starting geth with input: ', gethInput);
   const childProcess = execFile(
     `./geth-linux-amd64-1.10.16-20356e57/geth`,
-    [
-      '--ws',
-      '--ws.origins',
-      'https://ethvis.xyz,http://localhost:3000',
-      '--ws.api',
-      '"engine,net,eth,web3,subscribe,miner,txpool"',
-      '--identity',
-      'nicenode-0.0.1-1',
-    ],
+    gethInput,
     { cwd: `${getNNDirPath()}` },
     (error, stdout, stderr) => {
       if (error) {

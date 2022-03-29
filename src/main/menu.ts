@@ -154,30 +154,30 @@ export default class MenuBuilder {
     const subMenuHelp: MenuItemConstructorOptions = {
       label: 'Help',
       submenu: [
-        {
-          label: 'Learn More',
-          click() {
-            shell.openExternal('https://electronjs.org');
-          },
-        },
+        // {
+        //   label: 'Learn More',
+        //   click() {
+        //     shell.openExternal('https://electronjs.org');
+        //   },
+        // },
         {
           label: 'Documentation',
           click() {
+            shell.openExternal('https://github.com/jgresham/NiceNode#readme');
+          },
+        },
+        {
+          label: 'Computer Hardware Requirements',
+          click() {
             shell.openExternal(
-              'https://github.com/electron/electron/tree/main/docs#readme'
+              'https://ethereum.org/en/run-a-node/#build-your-own'
             );
           },
         },
         {
-          label: 'Community Discussions',
+          label: 'Report Issues',
           click() {
-            shell.openExternal('https://www.electronjs.org/community');
-          },
-        },
-        {
-          label: 'Search Issues',
-          click() {
-            shell.openExternal('https://github.com/electron/electron/issues');
+            shell.openExternal('https://github.com/jgresham/NiceNode/issues');
           },
         },
       ],
@@ -255,30 +255,30 @@ export default class MenuBuilder {
       {
         label: 'Help',
         submenu: [
-          {
-            label: 'Learn More',
-            click() {
-              shell.openExternal('https://electronjs.org');
-            },
-          },
+          // {
+          //   label: 'Learn More',
+          //   click() {
+          //     shell.openExternal('https://electronjs.org');
+          //   },
+          // },
           {
             label: 'Documentation',
             click() {
+              shell.openExternal('https://github.com/jgresham/NiceNode#readme');
+            },
+          },
+          {
+            label: 'Computer Hardware Requirements',
+            click() {
               shell.openExternal(
-                'https://github.com/electron/electron/tree/main/docs#readme'
+                'https://ethereum.org/en/run-a-node/#build-your-own'
               );
             },
           },
           {
-            label: 'Community Discussions',
+            label: 'Report Issues',
             click() {
-              shell.openExternal('https://www.electronjs.org/community');
-            },
-          },
-          {
-            label: 'Search Issues',
-            click() {
-              shell.openExternal('https://github.com/electron/electron/issues');
+              shell.openExternal('https://github.com/jgresham/NiceNode/issues');
             },
           },
         ],

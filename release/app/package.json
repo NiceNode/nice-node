@@ -1,5 +1,5 @@
 {
-  "name": "nice-node",
+  "name": "NiceNode",
   "version": "0.0.1-alpha",
   "description": "An app to easily run an Ethereum node",
   "main": "./dist/main/main.js",
