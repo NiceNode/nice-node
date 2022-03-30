@@ -90,7 +90,7 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "NiceNode",
+      "owner": "jgresham",
       "repo": "NiceNode"
     }
   },
