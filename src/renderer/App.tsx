@@ -18,7 +18,7 @@ const MainScreen = () => {
 
   useEffect(() => {
     console.log('App loaded. Initializing...');
-    electron.ipcRenderer.on(CHANNELS.geth, (_event, message) => {
+    electron.ipcRenderer.on(CHANNELS.geth, (message) => {
       console.log('Geth status received: ', message);
       setStatus(message);
     });

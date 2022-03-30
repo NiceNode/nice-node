@@ -5,5 +5,5 @@ export const CHANNELS = {
 export const MESSAGES = {
   downloading: 'downloading',
   extracting: 'extracting',
-  readyToStart: 'readyToStart',
+  readyToStart: 'ready to start',
 };

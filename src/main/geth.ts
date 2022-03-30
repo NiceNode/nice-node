@@ -8,6 +8,11 @@ import sleep from 'await-sleep';
 import { send, CHANNELS, MESSAGES } from './messenger';
 import { execAwait } from './execHelper';
 import { getNNDirPath, gethDataDir } from './files';
+import {
+  getGethDownloadURL,
+  gethBuildNameForPlatformAndArch,
+} from './gethDownload';
+import { isWindows } from './platform';
 
 const axios = require('axios').default;
 
@@ -38,13 +43,9 @@ export const downloadGeth = async () => {
     send(CHANNELS.geth, status);
     try {
       console.log('fetching geth binary from github...');
-      // const res = await fetch(
-      //   'https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.16-20356e57.tar.gz'
-      // );
-      const res = await axios.get(
-        'https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.16-20356e57.tar.gz',
-        { responseType: 'stream' }
-      );
+      const res = await axios.get(getGethDownloadURL(), {
+        responseType: 'stream',
+      });
       // if (!res.ok) throw new Error(`unexpected response ${res.statusText}`);
       console.log('response from github ok');
       const fileWriteStream = createWriteStream(
@@ -105,13 +106,17 @@ export const startGeth = async () => {
     '--ws.api',
     '"engine,net,eth,web3,subscribe,miner,txpool"',
     '--identity',
-    'nicenode-0.0.1-1',
+    'NiceNode-0.0.2-1',
     '--datadir',
     gethDataPath,
   ];
   console.log('Starting geth with input: ', gethInput);
+  let execCommand = `./${gethBuildNameForPlatformAndArch()}/geth`;
+  if (isWindows()) {
+    execCommand = `${gethBuildNameForPlatformAndArch()}.exe`;
+  }
   const childProcess = execFile(
-    `./geth-linux-amd64-1.10.16-20356e57/geth`,
+    execCommand,
     gethInput,
     { cwd: `${getNNDirPath()}` },
     (error, stdout, stderr) => {
