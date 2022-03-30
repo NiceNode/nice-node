@@ -45,7 +45,7 @@ export const getGethDownloadURL = () => {
   const gethBuildName = gethBuildNameForPlatformAndArch();
   let gethBuildFilename;
   if (platform.isWindows()) {
-    gethBuildFilename = `${gethBuildName}.exe`;
+    gethBuildFilename = `${gethBuildName}.zip`;
   } else {
     gethBuildFilename = `${gethBuildName}.tar.gz`;
   }
