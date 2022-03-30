@@ -90,8 +90,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "nice-node",
-      "repo": "nice-node"
+      "owner": "NiceNode",
+      "repo": "NiceNode"
     }
   },
   "repository": {
