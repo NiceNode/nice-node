@@ -3,6 +3,8 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { CHANNELS } from './messages';
 import './App.css';
 
+import electron from './electronGlobal';
+
 const MainScreen = () => {
   const [sStatus, setStatus] = useState('loading...');
   const [sGethDiskUsed, setGethDiskUsed] = useState<number>();
@@ -16,7 +18,7 @@ const MainScreen = () => {
 
   useEffect(() => {
     console.log('App loaded. Initializing...');
-    window.electron.ipcRenderer.on(CHANNELS.geth, (_event, message) => {
+    electron.ipcRenderer.on(CHANNELS.geth, (_event, message) => {
       console.log('Geth status received: ', message);
       setStatus(message);
     });
