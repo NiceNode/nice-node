@@ -12,7 +12,7 @@ const MainScreen = () => {
   const [sStorageWarning, setStorageWarning] = useState<boolean>();
 
   const refreshGethStatus = async () => {
-    const status = await window.electron.getGethStatus();
+    const status = await electron.getGethStatus();
     setStatus(status);
   };
 
@@ -29,19 +29,19 @@ const MainScreen = () => {
 
   const onClickStartGeth = async () => {
     // Send message to main process to start Geth
-    await window.electron.startGeth();
+    await electron.startGeth();
     refreshGethStatus();
   };
 
   const onClickStopGeth = async () => {
     // Send message to main process to start Geth
-    await window.electron.stopGeth();
+    await electron.stopGeth();
     refreshGethStatus();
   };
 
   useEffect(() => {
     const updateGethDiskUsed = async () => {
-      const gethDiskUsed = await window.electron.getGethDiskUsed();
+      const gethDiskUsed = await electron.getGethDiskUsed();
       if (gethDiskUsed) {
         setGethDiskUsed(gethDiskUsed);
       }
@@ -53,7 +53,7 @@ const MainScreen = () => {
 
   useEffect(() => {
     const updateFreeDisk = async () => {
-      const freeDisk = await window.electron.getSystemFreeDiskSpace();
+      const freeDisk = await electron.getSystemFreeDiskSpace();
       if (freeDisk) {
         setFreeDisk(freeDisk);
       }
