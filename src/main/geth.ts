@@ -113,7 +113,7 @@ export const startGeth = async () => {
   console.log('Starting geth with input: ', gethInput);
   let execCommand = `./${gethBuildNameForPlatformAndArch()}/geth`;
   if (isWindows()) {
-    execCommand = `${gethBuildNameForPlatformAndArch()}.exe`;
+    execCommand = `${gethBuildNameForPlatformAndArch()}\geth.exe`;
   }
   const childProcess = execFile(
     execCommand,
