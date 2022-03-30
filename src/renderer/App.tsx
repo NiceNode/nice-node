@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
+import { ipcRenderer } from 'electron';
 import { CHANNELS } from './messages';
 import './App.css';
 
@@ -16,7 +17,7 @@ const MainScreen = () => {
 
   useEffect(() => {
     console.log('App loaded. Initializing...');
-    window.electron.ipcRenderer.on(CHANNELS.geth, (message) => {
+    ipcRenderer.on(CHANNELS.geth, (_event, message) => {
       console.log('Geth status received: ', message);
       setStatus(message);
     });
@@ -27,13 +28,13 @@ const MainScreen = () => {
 
   const onClickStartGeth = async () => {
     // Send message to main process to start Geth
-    const status = await window.electron.startGeth();
+    await window.electron.startGeth();
     refreshGethStatus();
   };
 
   const onClickStopGeth = async () => {
     // Send message to main process to start Geth
-    const status = await window.electron.stopGeth();
+    await window.electron.stopGeth();
     refreshGethStatus();
   };
 

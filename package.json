@@ -110,7 +110,8 @@
     },
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/.erb/mocks/fileMock.js",
-      "\\.(css|less|sass|scss)$": "identity-obj-proxy"
+      "\\.(css|less|sass|scss)$": "identity-obj-proxy",
+      "^electron$": "<rootDir>/spec/mock/electron-mock.ts"
     },
     "moduleFileExtensions": [
       "js",
@@ -156,6 +157,7 @@
     "electron": "^16.0.5",
     "electron-builder": "22.13.1",
     "electron-devtools-installer": "^3.2.0",
+    "electron-mock-ipc": "^0.3.12",
     "electron-notarize": "^1.1.1",
     "electron-rebuild": "^3.2.5",
     "electronmon": "^2.0.2",

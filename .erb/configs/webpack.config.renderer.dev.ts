@@ -168,6 +168,7 @@ const configuration: webpack.Configuration = {
         shell: true,
         stdio: 'inherit',
       })
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         .on('close', (code: number) => process.exit(code!))
         .on('error', (spawnError) => console.error(spawnError));
 
@@ -178,6 +179,7 @@ const configuration: webpack.Configuration = {
       })
         .on('close', (code: number) => {
           preloadProcess.kill();
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           process.exit(code!);
         })
         .on('error', (spawnError) => console.error(spawnError));

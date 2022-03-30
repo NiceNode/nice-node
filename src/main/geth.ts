@@ -6,7 +6,7 @@ import sleep from 'await-sleep';
 // import fetch from 'node-fetch';
 
 import { send, CHANNELS, MESSAGES } from './messenger';
-import { exec, execAwait } from './execHelper';
+import { execAwait } from './execHelper';
 import { getNNDirPath, gethDataDir } from './files';
 
 const axios = require('axios').default;
@@ -25,7 +25,7 @@ export const downloadGeth = async () => {
     await access(gethDataDir());
   } catch {
     console.log('making geth data dir...');
-    const nnDir = await mkdir(gethDataDir());
+    await mkdir(gethDataDir());
   }
 
   try {
@@ -60,7 +60,7 @@ export const downloadGeth = async () => {
       console.log('done piping response from github to filestream');
       await fileWriteStream.close();
       // allow anyone to read the file
-      const chresults = await chmod(`${getNNDirPath()}/geth.tar.gz`, 0o444);
+      await chmod(`${getNNDirPath()}/geth.tar.gz`, 0o444);
     } catch (err2) {
       console.error(err2, 'error extracting geth');
       throw err2;

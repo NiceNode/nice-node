@@ -1,6 +1,6 @@
 import { powerSaveBlocker } from 'electron';
 
-let id: number;
+let id: number | undefined;
 // eslint-disable-next-line import/prefer-default-export
 export const dontSuspendSystem = () => {
   // "Block the system from entering low-power (sleep) mode."
