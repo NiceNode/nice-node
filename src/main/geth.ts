@@ -3,7 +3,6 @@ import { createWriteStream } from 'fs';
 import { access, chmod, mkdir } from 'fs/promises';
 import { ChildProcess, execFile } from 'child_process';
 import sleep from 'await-sleep';
-// import fetch from 'node-fetch';
 
 import { send, CHANNELS, MESSAGES } from './messenger';
 import { execAwait } from './execHelper';
@@ -16,13 +15,12 @@ import { isWindows } from './platform';
 
 const axios = require('axios').default;
 
-// const fetch = require('node-fetch');
-
 let status = 'Uninitialized';
 let gethProcess: ChildProcess;
+let stopInitiatedAfterAStart = false; // For Windows lack of POSIX kill signals
 
 export const downloadGeth = async () => {
-  console.log('downloading geth');
+  console.log('initializing geth');
   status = 'initializing';
   send(CHANNELS.geth, status);
 
@@ -34,7 +32,11 @@ export const downloadGeth = async () => {
   }
 
   try {
-    await access(`${getNNDirPath()}/geth.tar.gz`);
+    let gethCompressedPath = `${getNNDirPath()}/geth.tar.gz`;
+    if (isWindows()) {
+      gethCompressedPath = `${getNNDirPath()}/geth.zip`;
+    }
+    await access(gethCompressedPath);
     status = 'downloaded';
     send(CHANNELS.geth, status);
   } catch (err) {
@@ -65,7 +67,9 @@ export const downloadGeth = async () => {
       // allow anyone to read the file
       await chmod(fileOutPath, 0o444);
     } catch (err2) {
-      console.error(err2, 'error extracting geth');
+      console.error(err2, 'error downloading geth');
+      status = 'error downloading';
+      send(CHANNELS.geth, status);
       throw err2;
     }
   }
@@ -80,7 +84,7 @@ export const unzipGeth = async () => {
   send(CHANNELS.geth, status);
   let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
   if (isWindows()) {
-    tarCommand = `tar -xf ${getNNDirPath()}/geth.zip`;
+    tarCommand = `tar -C ${getNNDirPath()} -xf ${getNNDirPath()}/geth.zip`;
   }
   const result = await execAwait(tarCommand);
   if (!result.err) {
@@ -94,6 +98,7 @@ export const unzipGeth = async () => {
 
 export const startGeth = async () => {
   console.log('Starting geth');
+  stopInitiatedAfterAStart = false;
 
   if (gethProcess && !gethProcess.killed) {
     console.error('Geth process still running. Wait to stop or stop first.');
@@ -110,7 +115,7 @@ export const startGeth = async () => {
     '--ws.api',
     '"engine,net,eth,web3,subscribe,miner,txpool"',
     '--identity',
-    'NiceNode-0.0.3-1',
+    'NiceNode-0.0.4-1',
     '--datadir',
     gethDataPath,
   ];
@@ -126,10 +131,14 @@ export const startGeth = async () => {
     { cwd: `${getNNDirPath()}` },
     (error, stdout, stderr) => {
       if (error) {
-        console.error(`geth start exec error: ${error}`);
-        status = 'error starting';
-        send(CHANNELS.geth, status);
-        return;
+        if (!(stopInitiatedAfterAStart && isWindows())) {
+          console.error(`geth start exec error: `, error);
+          console.error(`geth start exec error: `, stdout);
+          console.error(`geth start exec error: `, stderr);
+          status = 'error starting';
+          send(CHANNELS.geth, status);
+          return;
+        }
       }
       console.log(`geth start stdout: ${stdout}`);
       console.error(`geth start  stderr: ${stderr}`);
@@ -145,6 +154,7 @@ export const startGeth = async () => {
 
 export const stopGeth = async () => {
   console.log('Stopping geth');
+  stopInitiatedAfterAStart = true;
 
   if (!gethProcess) {
     console.error("geth hasn't been started");

@@ -9,7 +9,6 @@ export const setWindow = (inMainWindow: BrowserWindow): void => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const send = (channel: string, ...args: any[]): void => {
   if (!mainWindow) {
-    console.error('mainWindow is unset');
     return;
   }
   console.log('sending ', channel, args);
