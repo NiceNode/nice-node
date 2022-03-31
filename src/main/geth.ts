@@ -111,11 +111,11 @@ export const startGeth = async () => {
   const gethInput = [
     '--ws',
     '--ws.origins',
-    'https://ethvis.xyz,http://localhost:3000',
+    'https://ethvis.xyz,http://localhost:1212',
     '--ws.api',
-    '"engine,net,eth,web3,subscribe,miner,txpool"',
+    '"admin,engine,net,eth,web3,subscribe,miner,txpool"',
     '--identity',
-    'NiceNode-0.0.4-1',
+    'NiceNode-0.0.5-1',
     '--datadir',
     gethDataPath,
   ];
