@@ -18,7 +18,7 @@ export const gethDataDir = (): string => {
 export const getSystemFreeDiskSpace = async (): Promise<number> => {
   // eslint-disable-next-line @typescript-eslint/return-await
   // const diskSpace = await checkDiskSpace('/');
-  const diskSpace = await checkDiskSpace(app.getAppPath('home'));
+  const diskSpace = await checkDiskSpace(app.getPath('userData'));
   const freeInGBs = diskSpace.free * 1e-9;
   console.log('GBs free: ', freeInGBs);
   return freeInGBs;
