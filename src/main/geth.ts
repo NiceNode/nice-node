@@ -13,6 +13,7 @@ import {
   gethBuildNameForPlatformAndArch,
 } from './gethDownload';
 import { isWindows } from './platform';
+import { platform } from 'os';
 
 const axios = require('axios').default;
 
@@ -48,9 +49,11 @@ export const downloadGeth = async () => {
       });
       // if (!res.ok) throw new Error(`unexpected response ${res.statusText}`);
       console.log('response from github ok');
-      const fileWriteStream = createWriteStream(
-        `${getNNDirPath()}/geth.tar.gz`
-      );
+      let fileOutPath = `${getNNDirPath()}/geth.tar.gz`;
+      if (isWindows()) {
+        fileOutPath = `${getNNDirPath()}/geth.zip`;
+      }
+      const fileWriteStream = createWriteStream(fileOutPath);
       // const { body } = res;
       const { data } = res;
       if (!data) {
@@ -61,7 +64,7 @@ export const downloadGeth = async () => {
       console.log('done piping response from github to filestream');
       await fileWriteStream.close();
       // allow anyone to read the file
-      await chmod(`${getNNDirPath()}/geth.tar.gz`, 0o444);
+      await chmod(fileOutPath, 0o444);
     } catch (err2) {
       console.error(err2, 'error extracting geth');
       throw err2;
@@ -76,9 +79,11 @@ export const unzipGeth = async () => {
   console.log('geth download complete succeeded. unzipping...');
   status = MESSAGES.extracting;
   send(CHANNELS.geth, status);
-  const result = await execAwait(
-    `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`
-  );
+  let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
+  if (isWindows()) {
+    tarCommand = `tar -xf ${getNNDirPath()}/geth.zip`;
+  }
+  const result = await execAwait(tarCommand);
   if (!result.err) {
     console.log('geth unzip complete succeeded');
     status = MESSAGES.readyToStart;
@@ -115,6 +120,7 @@ export const startGeth = async () => {
   if (isWindows()) {
     execCommand = `${gethBuildNameForPlatformAndArch()}\\geth.exe`;
   }
+  console.log(execCommand);
   const childProcess = execFile(
     execCommand,
     gethInput,
