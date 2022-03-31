@@ -110,7 +110,7 @@ export const startGeth = async () => {
     '--ws.api',
     '"engine,net,eth,web3,subscribe,miner,txpool"',
     '--identity',
-    'NiceNode-0.0.2-1',
+    'NiceNode-0.0.3-1',
     '--datadir',
     gethDataPath,
   ];
