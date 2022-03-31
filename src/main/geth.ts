@@ -13,7 +13,6 @@ import {
   gethBuildNameForPlatformAndArch,
 } from './gethDownload';
 import { isWindows } from './platform';
-import { platform } from 'os';
 
 const axios = require('axios').default;
 
