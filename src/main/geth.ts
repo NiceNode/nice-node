@@ -100,7 +100,7 @@ export const startGeth = async () => {
   console.log('Starting geth');
   stopInitiatedAfterAStart = false;
 
-  if (gethProcess && !gethProcess.killed) {
+  if (gethProcess && (!gethProcess.killed || gethProcess.exitCode !== null)) {
     console.error('Geth process still running. Wait to stop or stop first.');
     status = 'error starting';
     send(CHANNELS.geth, status);
@@ -111,7 +111,7 @@ export const startGeth = async () => {
   const gethInput = [
     '--ws',
     '--ws.origins',
-    'https://ethvis.xyz,http://localhost:1212',
+    'https://ethvis.xyz,nice-node://',
     '--ws.api',
     '"admin,engine,net,eth,web3,subscribe,miner,txpool"',
     '--identity',
