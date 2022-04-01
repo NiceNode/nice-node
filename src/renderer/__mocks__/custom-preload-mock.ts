@@ -13,3 +13,8 @@ export const getGethDiskUsed = (): number => {
 export const getSystemFreeDiskSpace = (): number => {
   return 2000;
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getStoreValue = (): any => {
+  return true;
+};
