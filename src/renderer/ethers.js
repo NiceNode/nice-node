@@ -14166,7 +14166,6 @@ function getGlobal() {
 const anyGlobal = getGlobal();
 let crypto = anyGlobal.crypto || anyGlobal.msCrypto;
 if (!crypto || !crypto.getRandomValues) {
-  logger$m.warn('WARNING: Missing strong random number source');
   crypto = {
     getRandomValues: function (buffer) {
       return logger$m.throwError(
