@@ -4,7 +4,9 @@ import {
   shell,
   BrowserWindow,
   MenuItemConstructorOptions,
+  clipboard,
 } from 'electron';
+import { getDebugInfoString, getGithubIssueProblemURL } from './debug';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -175,9 +177,15 @@ export default class MenuBuilder {
           },
         },
         {
-          label: 'Report Issues',
+          label: 'Report Problems',
           click() {
-            shell.openExternal('https://github.com/jgresham/NiceNode/issues');
+            shell.openExternal(getGithubIssueProblemURL());
+          },
+        },
+        {
+          label: 'Copy Configuration Details to Clipboard',
+          click() {
+            clipboard.writeText(getDebugInfoString());
           },
         },
       ],
@@ -276,9 +284,15 @@ export default class MenuBuilder {
             },
           },
           {
-            label: 'Report Issues',
+            label: 'Report Problems',
             click() {
-              shell.openExternal('https://github.com/jgresham/NiceNode/issues');
+              shell.openExternal(getGithubIssueProblemURL());
+            },
+          },
+          {
+            label: 'Copy Configuration Details to Clipboard',
+            click() {
+              clipboard.writeText(getDebugInfoString());
             },
           },
         ],

@@ -25,6 +25,8 @@ import { resolveHtmlPath } from './util';
 import { setWindow } from './messenger';
 import { downloadGeth, getStatus, startGeth, stopGeth } from './geth';
 import { getGethUsedDiskSpace, getSystemFreeDiskSpace } from './files';
+import getDebugInfo from './debug';
+
 // import { dontSuspendSystem } from './power';
 
 require('dotenv').config();
@@ -154,10 +156,6 @@ const createWindow = async () => {
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
     filter,
     (details, callback) => {
-      console.log(
-        'onBeforeSendHeaders: overriding origin header for: ',
-        details
-      );
       details.requestHeaders.Origin = `nice-node://`;
       callback({ requestHeaders: details.requestHeaders });
     }
@@ -165,7 +163,6 @@ const createWindow = async () => {
   mainWindow.webContents.session.webRequest.onHeadersReceived(
     filter,
     (details, callback) => {
-      console.log('onHeadersReceived: overriding origin header for: ', details);
       if (!details.responseHeaders) {
         details.responseHeaders = {};
       }
@@ -199,6 +196,7 @@ app
     ipcMain.handle('stopGeth', stopGeth);
     ipcMain.handle('getGethDiskUsed', getGethUsedDiskSpace);
     ipcMain.handle('getSystemFreeDiskSpace', getSystemFreeDiskSpace);
+    ipcMain.handle('getDebugInfo', getDebugInfo);
     createWindow();
     // dontSuspendSystem();
     app.on('activate', () => {

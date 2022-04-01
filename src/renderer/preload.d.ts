@@ -12,6 +12,7 @@ declare global {
       stopGeth(): void;
       getGethDiskUsed(): number;
       getSystemFreeDiskSpace(): number;
+      getDebugInfo(): any;
     };
   }
 }

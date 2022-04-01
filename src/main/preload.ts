@@ -24,4 +24,5 @@ contextBridge.exposeInMainWorld('electron', {
   stopGeth: () => ipcRenderer.invoke('stopGeth'),
   getGethDiskUsed: () => ipcRenderer.invoke('getGethDiskUsed'),
   getSystemFreeDiskSpace: () => ipcRenderer.invoke('getSystemFreeDiskSpace'),
+  getDebugInfo: () => ipcRenderer.invoke('getDebugInfo'),
 });
