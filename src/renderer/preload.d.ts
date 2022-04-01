@@ -12,7 +12,12 @@ declare global {
       stopGeth(): void;
       getGethDiskUsed(): number;
       getSystemFreeDiskSpace(): number;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       getDebugInfo(): any;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      getStoreValue(key: string): any;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setStoreValue(key: string, value: any): void;
     };
   }
 }

@@ -18,10 +18,14 @@ const MainScreen = () => {
   const [sStorageWarning, setStorageWarning] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
+  const [sIsOpenOnLogin, setIsOpenOnLogin] = useState<boolean>(false);
 
   const refreshGethStatus = async () => {
     const status = await electron.getGethStatus();
     setStatus(status);
+    const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
+    console.log('isStartOnLogin: ', isStartOnLogin);
+    setIsOpenOnLogin(isStartOnLogin);
   };
 
   const refreshGethData = async () => {
@@ -61,6 +65,7 @@ const MainScreen = () => {
       console.log('Geth status received: ', message);
       setStatus(message);
     });
+
     refreshGethStatus();
   }, []);
 
@@ -121,6 +126,11 @@ const MainScreen = () => {
     }
   }, [sFreeDisk, sGethDiskUsed]);
 
+  const onChangeOpenOnLogin = (openOnLogin: boolean) => {
+    electron.setStoreValue('isStartOnLogin', openOnLogin);
+    setIsOpenOnLogin(openOnLogin);
+  };
+
   return (
     <div
       style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
@@ -142,6 +152,31 @@ const MainScreen = () => {
         <button type="button" onClick={onClickStopGeth}>
           <span>Stop</span>
         </button>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'start',
+          marginBottom: 10,
+        }}
+      >
+        <form>
+          <label htmlFor="openOnLogin">
+            <input
+              id="openOnLogin"
+              type="checkbox"
+              name="openOnLogin"
+              checked={sIsOpenOnLogin}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onChangeOpenOnLogin(e.target.checked)
+              }
+            />
+            Start when your computer starts (Windows and macOS only)
+          </label>
+
+          {/* <label htmlFor="openOnLogin">Start when your computer starts</label> */}
+        </form>
       </div>
       <div>
         <div

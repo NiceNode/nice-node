@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell } from 'electron';
 // import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
 // import debug from 'electron-debug';
@@ -23,9 +23,10 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
 import { setWindow } from './messenger';
-import { downloadGeth, getStatus, startGeth, stopGeth } from './geth';
+import { initialize as initGeth } from './geth';
 import { getGethUsedDiskSpace, getSystemFreeDiskSpace } from './files';
-import getDebugInfo from './debug';
+import * as ipc from './ipc';
+import * as power from './power';
 
 // import { dontSuspendSystem } from './power';
 
@@ -191,12 +192,9 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
-    ipcMain.handle('getGethStatus', getStatus);
-    ipcMain.handle('startGeth', startGeth);
-    ipcMain.handle('stopGeth', stopGeth);
-    ipcMain.handle('getGethDiskUsed', getGethUsedDiskSpace);
-    ipcMain.handle('getSystemFreeDiskSpace', getSystemFreeDiskSpace);
-    ipcMain.handle('getDebugInfo', getDebugInfo);
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    initialize();
+
     createWindow();
     // dontSuspendSystem();
     app.on('activate', () => {
@@ -207,9 +205,12 @@ app
   })
   .catch(console.log);
 
-const initialize = async () => {
+// no blocking work
+const initialize = () => {
   console.log('Initializing main process work...');
-  await downloadGeth();
+  initGeth();
+  ipc.initialize();
+  power.initialize();
 };
 
-initialize();
+console.log('app name: ', app.getName());

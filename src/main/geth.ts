@@ -12,6 +12,7 @@ import {
   gethBuildNameForPlatformAndArch,
 } from './gethDownload';
 import { isWindows } from './platform';
+import { getIsStartOnLogin } from './store';
 
 const axios = require('axios').default;
 
@@ -190,4 +191,13 @@ export const stopGeth = async () => {
 
 export const getStatus = () => {
   return status;
+};
+
+export const initialize = async () => {
+  // make sure geth is downloaded and ready to go
+  await downloadGeth();
+  // check if geth should be auto started
+  if (getIsStartOnLogin()) {
+    startGeth();
+  }
 };

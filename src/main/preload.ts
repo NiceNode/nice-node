@@ -10,14 +10,6 @@ contextBridge.exposeInMainWorld('electron', {
         ipcRenderer.on(channel, (_event, ...args) => func(...args));
       }
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    once(channel: string, func: (...args: any[]) => void) {
-      const validChannels = ['ipc-example'];
-      if (validChannels.includes(channel)) {
-        // Deliberately strip event as it includes `sender`
-        ipcRenderer.once(channel, (_event, ...args) => func(...args));
-      }
-    },
   },
   getGethStatus: () => ipcRenderer.invoke('getGethStatus'),
   startGeth: () => ipcRenderer.invoke('startGeth'),
@@ -25,4 +17,8 @@ contextBridge.exposeInMainWorld('electron', {
   getGethDiskUsed: () => ipcRenderer.invoke('getGethDiskUsed'),
   getSystemFreeDiskSpace: () => ipcRenderer.invoke('getSystemFreeDiskSpace'),
   getDebugInfo: () => ipcRenderer.invoke('getDebugInfo'),
+  getStoreValue: (key: string) => ipcRenderer.invoke('getStoreValue', key),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setStoreValue: (key: string, value: any) =>
+    ipcRenderer.invoke('setStoreValue', key, value),
 });
