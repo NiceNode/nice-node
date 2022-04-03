@@ -1,7 +1,7 @@
 import { promises as streamPromises } from 'stream';
 import { createWriteStream } from 'fs';
 import { access, chmod, mkdir } from 'fs/promises';
-import { ChildProcess, execFile } from 'child_process';
+import { ChildProcess, execFile, ExecFileOptions } from 'child_process';
 import sleep from 'await-sleep';
 
 import { send, CHANNELS, MESSAGES } from './messenger';
@@ -126,10 +126,13 @@ export const startGeth = async () => {
     execCommand = `${gethBuildNameForPlatformAndArch()}\\geth.exe`;
   }
   console.log(execCommand);
+  const options: ExecFileOptions = {
+    cwd: `${getNNDirPath()}`,
+  };
   const childProcess = execFile(
     execCommand,
     gethInput,
-    { cwd: `${getNNDirPath()}` },
+    options,
     (error, stdout, stderr) => {
       if (error) {
         if (!(stopInitiatedAfterAStart && isWindows())) {
@@ -146,6 +149,15 @@ export const startGeth = async () => {
     }
   );
   gethProcess = childProcess;
+  gethProcess.on('error', (data) => {
+    console.log(`Geth::error:: ${data}`);
+  });
+  gethProcess.stderr?.on('data', (data) => {
+    console.log(`Geth::log:: ${data}`);
+  });
+  gethProcess.stdout?.on('data', (data) => {
+    console.log(`Geth::stdout:: ${data}`);
+  });
   console.log('geth started successfully');
   status = 'running';
   send(CHANNELS.geth, status);
