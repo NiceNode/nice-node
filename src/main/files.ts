@@ -8,6 +8,7 @@ console.log('User data dir: ', app.getPath('userData'));
 
 export const getNNDirPath = (): string => {
   // Linux: ~/.config/NiceNode
+  // macOS: ~/Library/Application Support/NiceNode (space causes issues)
   return app.getPath('userData');
 };
 

@@ -1,4 +1,4 @@
-name: Test
+name: Run
 
 on: [push, pull_request]
 
@@ -18,18 +18,19 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          cache: 'npm'
+          cache: npm
 
       - name: npm install
         run: |
           npm install
 
-      - name: npm test
+      - name: list files in directory
+        run: |
+          ls ${{ github.workspace }}
+
+      - name: npm start
         env:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          # npm run package
-          # npm run lint
-          npm exec tsc --verbose
-          # npm test
+          npm run start

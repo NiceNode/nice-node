@@ -11,7 +11,7 @@ import {
   getGethDownloadURL,
   gethBuildNameForPlatformAndArch,
 } from './gethDownload';
-import { isWindows } from './platform';
+import { isWindows, isMac } from './platform';
 import { getIsStartOnLogin } from './store';
 
 const axios = require('axios').default;
@@ -86,6 +86,8 @@ export const unzipGeth = async () => {
   let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
   if (isWindows()) {
     tarCommand = `tar -C ${getNNDirPath()} -xf ${getNNDirPath()}/geth.zip`;
+  } else if (isMac()) {
+    tarCommand = `tar --extract --file "${getNNDirPath()}/geth.tar.gz" --directory "${getNNDirPath()}"`;
   }
   const result = await execAwait(tarCommand);
   if (!result.err) {
@@ -101,7 +103,8 @@ export const startGeth = async () => {
   console.log('Starting geth');
   stopInitiatedAfterAStart = false;
 
-  if (gethProcess && (!gethProcess.killed || gethProcess.exitCode === null)) {
+  // geth is killed if (killed || exitCode === null)
+  if (gethProcess && !gethProcess.killed && gethProcess.exitCode === null) {
     console.log('gethProcess', gethProcess);
     console.error('Geth process still running. Wait to stop or stop first.');
     status = 'error starting';
@@ -115,7 +118,7 @@ export const startGeth = async () => {
     '--ws.origins',
     'https://ethvis.xyz,nice-node://',
     '--ws.api',
-    '"admin,engine,net,eth,web3,subscribe,miner,txpool"',
+    '"engine,net,eth,web3,miner"',
     '--identity',
     'NiceNode-0.0.6-1',
     '--datadir',
@@ -130,6 +133,7 @@ export const startGeth = async () => {
   const options: SpawnOptions = {
     cwd: `${getNNDirPath()}`,
     stdio: 'inherit',
+    detached: false,
   };
   const childProcess = spawn(execCommand, gethInput, options);
   //   (error, stdout, stderr) => {
@@ -191,6 +195,7 @@ export const stopGeth = async () => {
     console.error("geth hasn't been started");
     return;
   }
+  console.log('Calling gethProcess.kill(). GethProcess: ', gethProcess);
   let killResult = gethProcess.kill();
   if (killResult && gethProcess.killed) {
     console.log('geth stopped successfully');

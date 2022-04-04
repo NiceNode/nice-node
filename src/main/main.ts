@@ -27,6 +27,7 @@ import { initialize as initGeth } from './geth';
 import { getGethUsedDiskSpace, getSystemFreeDiskSpace } from './files';
 import * as ipc from './ipc';
 import * as power from './power';
+// import * as processExit from './processExit';
 
 // import { dontSuspendSystem } from './power';
 
@@ -211,6 +212,7 @@ const initialize = () => {
   initGeth();
   ipc.initialize();
   power.initialize();
+  // processExit.initialize();
 };
 
 console.log('app name: ', app.getName());
