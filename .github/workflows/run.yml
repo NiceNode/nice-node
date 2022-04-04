@@ -29,8 +29,13 @@ jobs:
           ls ${{ github.workspace }}
 
       - name: npm start
+        timeout-minutes: 3
         env:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           npm run start
+
+      - name: check if geth downloaded and extracted?
+        run: |
+          ls -al ${{ github.workspace }}
