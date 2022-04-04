@@ -1,7 +1,7 @@
 import { promises as streamPromises } from 'stream';
 import { createWriteStream } from 'fs';
 import { access, chmod, mkdir } from 'fs/promises';
-import { ChildProcess, execFile, ExecFileOptions } from 'child_process';
+import { ChildProcess, spawn, SpawnOptions } from 'child_process';
 import sleep from 'await-sleep';
 
 import { send, CHANNELS, MESSAGES } from './messenger';
@@ -101,7 +101,8 @@ export const startGeth = async () => {
   console.log('Starting geth');
   stopInitiatedAfterAStart = false;
 
-  if (gethProcess && (!gethProcess.killed || gethProcess.exitCode !== null)) {
+  if (gethProcess && (!gethProcess.killed || gethProcess.exitCode === null)) {
+    console.log('gethProcess', gethProcess);
     console.error('Geth process still running. Wait to stop or stop first.');
     status = 'error starting';
     send(CHANNELS.geth, status);
@@ -126,38 +127,55 @@ export const startGeth = async () => {
     execCommand = `${gethBuildNameForPlatformAndArch()}\\geth.exe`;
   }
   console.log(execCommand);
-  const options: ExecFileOptions = {
+  const options: SpawnOptions = {
     cwd: `${getNNDirPath()}`,
+    stdio: 'inherit',
   };
-  const childProcess = execFile(
-    execCommand,
-    gethInput,
-    options,
-    (error, stdout, stderr) => {
-      if (error) {
-        if (!(stopInitiatedAfterAStart && isWindows())) {
-          console.error(`geth start exec error: `, error);
-          console.error(`geth start exec error: `, stdout);
-          console.error(`geth start exec error: `, stderr);
-          status = 'error starting';
-          send(CHANNELS.geth, status);
-          return;
-        }
-      }
-      console.log(`geth start stdout: ${stdout}`);
-      console.error(`geth start  stderr: ${stderr}`);
-    }
-  );
+  const childProcess = spawn(execCommand, gethInput, options);
+  //   (error, stdout, stderr) => {
+  //     if (error) {
+  //       if (!(stopInitiatedAfterAStart && isWindows())) {
+  //         console.error(`geth start exec error: `, error);
+  //         console.error(`geth start exec error: `, stdout);
+  //         console.error(`geth start exec error: `, stderr);
+  //         status = 'error starting';
+  //         send(CHANNELS.geth, status);
+  //         return;
+  //       }
+  //     }
+  //     console.log(`geth start stdout: ${stdout}`);
+  //     console.error(`geth start  stderr: ${stderr}`);
+  //   }
+  // );
   gethProcess = childProcess;
   gethProcess.on('error', (data) => {
-    console.log(`Geth::error:: ${data}`);
+    console.error(`Geth::error:: `, data);
   });
-  gethProcess.stderr?.on('data', (data) => {
-    console.log(`Geth::log:: ${data}`);
+  gethProcess.on('disconnect', () => {
+    console.log(`Geth::disconnect::`);
   });
-  gethProcess.stdout?.on('data', (data) => {
-    console.log(`Geth::stdout:: ${data}`);
+  gethProcess.on('close', (code) => {
+    // code == 0, clean exit
+    // code == 1, crash
+    console.log(`Geth::close:: ${code}`);
   });
+  gethProcess.on('exit', (code, signal) => {
+    // code == 0, clean exit
+    // code == 1, crash
+    console.log(`Geth::exit:: ${code}, ${signal}`);
+    if (code === 1) {
+      if (stopInitiatedAfterAStart && isWindows()) {
+        console.log('Windows un-smooth stop');
+      }
+      console.error('Geth exit error: ');
+    }
+  });
+  // gethProcess.stderr?.on('data', (data) => {
+  //   console.log(`Geth::log:: ${data}`);
+  // });
+  // gethProcess.stdout?.on('data', (data) => {
+  //   console.log(`Geth::stdout:: ${data}`);
+  // });
   console.log('geth started successfully');
   status = 'running';
   send(CHANNELS.geth, status);
