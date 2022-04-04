@@ -23,11 +23,5 @@
     // skip because github's macos-latest was checking lib types
     "skipLibCheck": true
   },
-  "exclude": [
-    "node_modules",
-    "test",
-    "release/build",
-    "release/app/dist",
-    ".erb/dll"
-  ]
+  "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
 }

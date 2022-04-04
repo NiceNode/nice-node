@@ -232,7 +232,8 @@ export const initialize = async () => {
   // make sure geth is downloaded and ready to go
   await downloadGeth();
   // check if geth should be auto started
-  if (getIsStartOnLogin()) {
+  console.log('process.env.NN_AUTOSTART_NODE: ', process.env.NN_AUTOSTART_NODE);
+  if (getIsStartOnLogin() || process.env.NN_AUTOSTART_NODE === 'true') {
     startGeth();
   }
 };

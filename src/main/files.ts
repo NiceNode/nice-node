@@ -30,7 +30,7 @@ export const tryGetGethUsedDiskSpace = async () => {
   try {
     diskUsedInGBs = (await du(gethDataDir())) * 1e-9;
   } catch (err) {
-    console.error(
+    console.info(
       'Error calculating geth disk usage. Likely geth is cleanup up files.'
     );
   }
