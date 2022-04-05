@@ -119,6 +119,7 @@ export const startGeth = async () => {
     'https://ethvis.xyz,nice-node://',
     '--ws.api',
     '"engine,net,eth,web3,miner"',
+    '--http',
     '--identity',
     'NiceNode-0.0.6-1',
     '--datadir',

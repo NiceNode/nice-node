@@ -17,6 +17,7 @@
     "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
     "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
     "test": "jest",
+    "test-dev": "jest  --watch --verbose",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -108,6 +109,10 @@
   "jest": {
     "testURL": "http://localhost/",
     "testEnvironment": "jsdom",
+    "testMatch": [
+      "**/__tests__/**/*.test.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ],
     "transform": {
       "\\.(ts|tsx|js|jsx)$": "ts-jest"
     },
