@@ -1,6 +1,8 @@
-import { promises as streamPromises } from 'stream';
-// import { pipeline } from 'node:stream';
-// import { promisify } from 'node:util';
+// import { promises as streamPromises } from 'stream';
+import { pipeline } from 'node:stream';
+import { promisify } from 'node:util';
+// import fetch from 'node-fetch';
+
 import { createWriteStream } from 'fs';
 import { access, chmod, mkdir } from 'fs/promises';
 import { ChildProcess, spawn, SpawnOptions } from 'child_process';
@@ -16,9 +18,16 @@ import {
 import { isWindows, isMac } from './platform';
 import { getIsStartOnLogin } from './store';
 import { registerChildProcess } from './processExit';
+import { httpGet } from './httpReq';
 
-// const streamPipeline = promisify(pipeline);
-const axios = require('axios').default;
+const streamPipeline = promisify(pipeline);
+// const axios = require('axios').default;
+// const fetch = (...args: any) => {
+//   // eslint-disable-next-line @typescript-eslint/no-shadow
+//   // eslint-disable-next-line promise/catch-or-return, @typescript-eslint/no-shadow
+//   import('node-fetch').then(({ default: fetch }) => fetch(...args));
+// };
+// const http = require('node:http');
 
 let status = 'Uninitialized';
 let gethProcess: ChildProcess;
@@ -48,11 +57,16 @@ export const downloadGeth = async () => {
     console.log('Geth not downloaded yet. downloading geth...');
     status = MESSAGES.downloading;
     send(CHANNELS.geth, status);
+
     try {
       console.log('fetching geth binary from github...');
-      const res = await axios.get(getGethDownloadURL(), {
-        responseType: 'stream',
-      });
+      // const res = await axios.get(getGethDownloadURL(), {
+      //   responseType: 'stream',
+      // });
+
+      const response = await httpGet(getGethDownloadURL());
+
+      // const res = await fetch(getGethDownloadURL());
       // if (!res.ok) throw new Error(`unexpected response ${res.statusText}`);
       console.log('response from github ok');
       let fileOutPath = `${getNNDirPath()}/geth.tar.gz`;
@@ -60,18 +74,22 @@ export const downloadGeth = async () => {
         fileOutPath = `${getNNDirPath()}/geth.zip`;
       }
       const fileWriteStream = createWriteStream(fileOutPath);
-      const { data } = res;
-      if (!data) {
-        throw Error(`Error downloading geth`);
-      }
+      // const { data } = res;
+      // if (!data) {
+      //   throw Error(`Error downloading geth`);
+      // }
+      // if (!res.body) {
+      //   throw Error(`Error downloading geth`);
+      // }
       console.log('piping response from github to filestream');
-      await streamPromises.pipeline(data, fileWriteStream);
-      // await streamPipeline(data, fileWriteStream);
+      // await streamPromises.pipeline(data, fileWriteStream);
+      await streamPipeline(response, fileWriteStream);
       console.log('done piping response from github to filestream');
       await fileWriteStream.close();
+
       // allow anyone to read the file
       console.log('closed file');
-      await chmod(fileOutPath, 0o444);
+      await chmod(fileOutPath, 0o777);
       console.log('modified file permissions');
     } catch (err2) {
       console.error(err2, 'error downloading geth');

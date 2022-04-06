@@ -1,5 +1,7 @@
-import { opendir } from 'fs/promises';
+import { opendir, access } from 'fs/promises';
+import path from 'path';
 
+// import { gethBuildNameForPlatformAndArch } from '../main/gethDownload';
 import { getNNDirPath } from '../main/files';
 import { downloadGeth } from '../main/geth';
 
@@ -29,6 +31,13 @@ describe('Downloading geth', () => {
         count++;
       }
       expect(count).toBeGreaterThan(0);
+      const gzipPath = path.join(dirPath, 'geth.tar.gz');
+      console.log('gzip path: ', gzipPath);
+      // path.join(dirPath, gethBuildNameForPlatformAndArch() + '.tar.gz')
+
+      const accessRes = await access(gzipPath);
+      // const accessRes = await access('./geth.tar.gz');
+      expect(accessRes).toBeDefined();
     } catch (err) {
       console.error(err);
     }
