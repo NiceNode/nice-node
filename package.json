@@ -210,9 +210,8 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
-    "@sentry/electron": "^3.0.5",
+    "@sentry/electron": "^3.0.6",
     "@sentry/integrations": "^6.19.2",
-    "@sentry/node": "^6.19.2",
     "await-sleep": "0.0.1",
     "axios": "^0.26.1",
     "check-disk-space": "^3.3.0",

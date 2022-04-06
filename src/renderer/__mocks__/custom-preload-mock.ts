@@ -18,3 +18,5 @@ export const getSystemFreeDiskSpace = (): number => {
 export const getStoreValue = (): any => {
   return true;
 };
+
+export const SENTRY_DSN = 'fake_sentry_dsn';
