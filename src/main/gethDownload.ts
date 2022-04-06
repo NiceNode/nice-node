@@ -49,5 +49,7 @@ export const getGethDownloadURL = () => {
   } else {
     gethBuildFilename = `${gethBuildName}.tar.gz`;
   }
-  return `${baseURL}${gethBuildFilename}`;
+  const gethDownloadURL = `${baseURL}${gethBuildFilename}`;
+  console.log('gethDownloadURL: ', gethDownloadURL);
+  return gethDownloadURL;
 };

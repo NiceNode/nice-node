@@ -1,4 +1,6 @@
 import { promises as streamPromises } from 'stream';
+// import { pipeline } from 'node:stream';
+// import { promisify } from 'node:util';
 import { createWriteStream } from 'fs';
 import { access, chmod, mkdir } from 'fs/promises';
 import { ChildProcess, spawn, SpawnOptions } from 'child_process';
@@ -13,7 +15,9 @@ import {
 } from './gethDownload';
 import { isWindows, isMac } from './platform';
 import { getIsStartOnLogin } from './store';
+import { registerChildProcess } from './processExit';
 
+// const streamPipeline = promisify(pipeline);
 const axios = require('axios').default;
 
 let status = 'Uninitialized';
@@ -56,17 +60,19 @@ export const downloadGeth = async () => {
         fileOutPath = `${getNNDirPath()}/geth.zip`;
       }
       const fileWriteStream = createWriteStream(fileOutPath);
-      // const { body } = res;
       const { data } = res;
       if (!data) {
         throw Error(`Error downloading geth`);
       }
       console.log('piping response from github to filestream');
       await streamPromises.pipeline(data, fileWriteStream);
+      // await streamPipeline(data, fileWriteStream);
       console.log('done piping response from github to filestream');
       await fileWriteStream.close();
       // allow anyone to read the file
+      console.log('closed file');
       await chmod(fileOutPath, 0o444);
+      console.log('modified file permissions');
     } catch (err2) {
       console.error(err2, 'error downloading geth');
       status = 'error downloading';
@@ -83,7 +89,8 @@ export const unzipGeth = async () => {
   console.log('geth download complete succeeded. unzipping...');
   status = MESSAGES.extracting;
   send(CHANNELS.geth, status);
-  let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
+  let tarCommand = `tar --directory ${getNNDirPath()} -xf ${getNNDirPath()}/geth.tar.gz`;
+  // let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
   if (isWindows()) {
     tarCommand = `tar -C ${getNNDirPath()} -xf ${getNNDirPath()}/geth.zip`;
   } else if (isMac()) {
@@ -118,10 +125,12 @@ export const startGeth = async () => {
     '--ws.origins',
     'https://ethvis.xyz,nice-node://',
     '--ws.api',
-    '"engine,net,eth,web3,miner"',
+    'admin,engine,net,eth,web3',
     '--http',
     '--identity',
     'NiceNode-0.0.6-1',
+    // '--syncmode',
+    // 'light',
     '--datadir',
     gethDataPath,
   ];
@@ -171,7 +180,10 @@ export const startGeth = async () => {
     if (code === 1) {
       if (stopInitiatedAfterAStart && isWindows()) {
         console.log('Windows un-smooth stop');
+        return;
       }
+      status = 'error starting';
+      send(CHANNELS.geth, status);
       console.error('Geth exit error: ');
     }
   });
@@ -237,4 +249,5 @@ export const initialize = async () => {
   if (getIsStartOnLogin() || process.env.NN_AUTOSTART_NODE === 'true') {
     startGeth();
   }
+  registerChildProcess(gethProcess);
 };

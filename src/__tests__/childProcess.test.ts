@@ -1,7 +1,7 @@
 import { spawn, SpawnOptions } from 'child_process';
 import sleep from 'await-sleep';
 
-describe('process testing', () => {
+describe('Nodejs process testing', () => {
   it('Successfully Kill never ending node process', async () => {
     // spawn child process
     const execCommand = 'node';
