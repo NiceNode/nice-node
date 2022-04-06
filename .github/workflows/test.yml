@@ -18,18 +18,30 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          cache: npm
+          cache: 'npm'
 
       - name: npm install
         run: |
           npm install
 
-      - name: npm test
+      - name: npm package
         env:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           npm run package
+
+      - name: npm lint
+        run: |
           npm run lint
-          npm exec tsc
+          npm exec tsc --verbose
+          npm test
+
+      - name: npm exec tsc
+        run: |
+          npm exec tsc --verbose
+          npm test
+
+      - name: npm test
+        run: |
           npm test

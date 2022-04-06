@@ -1,4 +1,8 @@
-import { promises as streamPromises } from 'stream';
+// import { promises as streamPromises } from 'stream';
+import { pipeline } from 'node:stream';
+import { promisify } from 'node:util';
+// import fetch from 'node-fetch';
+
 import { createWriteStream } from 'fs';
 import { access, chmod, mkdir } from 'fs/promises';
 import { ChildProcess, spawn, SpawnOptions } from 'child_process';
@@ -11,10 +15,19 @@ import {
   getGethDownloadURL,
   gethBuildNameForPlatformAndArch,
 } from './gethDownload';
-import { isWindows } from './platform';
+import { isWindows, isMac } from './platform';
 import { getIsStartOnLogin } from './store';
+import { registerChildProcess } from './processExit';
+import { httpGet } from './httpReq';
 
-const axios = require('axios').default;
+const streamPipeline = promisify(pipeline);
+// const axios = require('axios').default;
+// const fetch = (...args: any) => {
+//   // eslint-disable-next-line @typescript-eslint/no-shadow
+//   // eslint-disable-next-line promise/catch-or-return, @typescript-eslint/no-shadow
+//   import('node-fetch').then(({ default: fetch }) => fetch(...args));
+// };
+// const http = require('node:http');
 
 let status = 'Uninitialized';
 let gethProcess: ChildProcess;
@@ -44,11 +57,16 @@ export const downloadGeth = async () => {
     console.log('Geth not downloaded yet. downloading geth...');
     status = MESSAGES.downloading;
     send(CHANNELS.geth, status);
+
     try {
       console.log('fetching geth binary from github...');
-      const res = await axios.get(getGethDownloadURL(), {
-        responseType: 'stream',
-      });
+      // const res = await axios.get(getGethDownloadURL(), {
+      //   responseType: 'stream',
+      // });
+
+      const response = await httpGet(getGethDownloadURL());
+
+      // const res = await fetch(getGethDownloadURL());
       // if (!res.ok) throw new Error(`unexpected response ${res.statusText}`);
       console.log('response from github ok');
       let fileOutPath = `${getNNDirPath()}/geth.tar.gz`;
@@ -56,17 +74,23 @@ export const downloadGeth = async () => {
         fileOutPath = `${getNNDirPath()}/geth.zip`;
       }
       const fileWriteStream = createWriteStream(fileOutPath);
-      // const { body } = res;
-      const { data } = res;
-      if (!data) {
-        throw Error(`Error downloading geth`);
-      }
+      // const { data } = res;
+      // if (!data) {
+      //   throw Error(`Error downloading geth`);
+      // }
+      // if (!res.body) {
+      //   throw Error(`Error downloading geth`);
+      // }
       console.log('piping response from github to filestream');
-      await streamPromises.pipeline(data, fileWriteStream);
+      // await streamPromises.pipeline(data, fileWriteStream);
+      await streamPipeline(response, fileWriteStream);
       console.log('done piping response from github to filestream');
       await fileWriteStream.close();
+
       // allow anyone to read the file
+      console.log('closed file');
       await chmod(fileOutPath, 0o444);
+      console.log('modified file permissions');
     } catch (err2) {
       console.error(err2, 'error downloading geth');
       status = 'error downloading';
@@ -83,9 +107,12 @@ export const unzipGeth = async () => {
   console.log('geth download complete succeeded. unzipping...');
   status = MESSAGES.extracting;
   send(CHANNELS.geth, status);
-  let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
+  let tarCommand = `tar --directory ${getNNDirPath()} -xf ${getNNDirPath()}/geth.tar.gz`;
+  // let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
   if (isWindows()) {
     tarCommand = `tar -C ${getNNDirPath()} -xf ${getNNDirPath()}/geth.zip`;
+  } else if (isMac()) {
+    tarCommand = `tar --extract --file "${getNNDirPath()}/geth.tar.gz" --directory "${getNNDirPath()}"`;
   }
   const result = await execAwait(tarCommand);
   if (!result.err) {
@@ -101,7 +128,8 @@ export const startGeth = async () => {
   console.log('Starting geth');
   stopInitiatedAfterAStart = false;
 
-  if (gethProcess && (!gethProcess.killed || gethProcess.exitCode === null)) {
+  // geth is killed if (killed || exitCode === null)
+  if (gethProcess && !gethProcess.killed && gethProcess.exitCode === null) {
     console.log('gethProcess', gethProcess);
     console.error('Geth process still running. Wait to stop or stop first.');
     status = 'error starting';
@@ -115,9 +143,12 @@ export const startGeth = async () => {
     '--ws.origins',
     'https://ethvis.xyz,nice-node://',
     '--ws.api',
-    '"admin,engine,net,eth,web3,subscribe,miner,txpool"',
+    'admin,engine,net,eth,web3',
+    '--http',
     '--identity',
     'NiceNode-0.0.6-1',
+    // '--syncmode',
+    // 'light',
     '--datadir',
     gethDataPath,
   ];
@@ -130,6 +161,7 @@ export const startGeth = async () => {
   const options: SpawnOptions = {
     cwd: `${getNNDirPath()}`,
     stdio: 'inherit',
+    detached: false,
   };
   const childProcess = spawn(execCommand, gethInput, options);
   //   (error, stdout, stderr) => {
@@ -166,7 +198,10 @@ export const startGeth = async () => {
     if (code === 1) {
       if (stopInitiatedAfterAStart && isWindows()) {
         console.log('Windows un-smooth stop');
+        return;
       }
+      status = 'error starting';
+      send(CHANNELS.geth, status);
       console.error('Geth exit error: ');
     }
   });
@@ -191,6 +226,7 @@ export const stopGeth = async () => {
     console.error("geth hasn't been started");
     return;
   }
+  console.log('Calling gethProcess.kill(). GethProcess: ', gethProcess);
   let killResult = gethProcess.kill();
   if (killResult && gethProcess.killed) {
     console.log('geth stopped successfully');
@@ -227,7 +263,9 @@ export const initialize = async () => {
   // make sure geth is downloaded and ready to go
   await downloadGeth();
   // check if geth should be auto started
-  if (getIsStartOnLogin()) {
+  console.log('process.env.NN_AUTOSTART_NODE: ', process.env.NN_AUTOSTART_NODE);
+  if (getIsStartOnLogin() || process.env.NN_AUTOSTART_NODE === 'true') {
     startGeth();
   }
+  registerChildProcess(gethProcess);
 };
