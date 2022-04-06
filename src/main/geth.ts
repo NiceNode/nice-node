@@ -89,7 +89,7 @@ export const downloadGeth = async () => {
 
       // allow anyone to read the file
       console.log('closed file');
-      await chmod(fileOutPath, 0o777);
+      await chmod(fileOutPath, 0o444);
       console.log('modified file permissions');
     } catch (err2) {
       console.error(err2, 'error downloading geth');

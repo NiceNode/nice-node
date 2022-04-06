@@ -1,4 +1,4 @@
-import { opendir, access } from 'fs/promises';
+import { opendir, access, mkdir, rm } from 'fs/promises';
 import { constants } from 'fs';
 
 import path from 'path';
@@ -22,6 +22,23 @@ jest.mock('electron', () => {
       }),
     },
   };
+});
+
+const mockAppDir = path.join(__dirname, 'NiceNode');
+beforeAll(async () => {
+  try {
+    await mkdir(mockAppDir);
+  } catch (err) {
+    console.log('mkdir NiceNode err: ', err);
+  }
+});
+
+afterAll(async () => {
+  try {
+    await rm(mockAppDir, { recursive: true });
+  } catch (err) {
+    console.log('rm NiceNode err: ', err);
+  }
 });
 
 jest.setTimeout(60000);
