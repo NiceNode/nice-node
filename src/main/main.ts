@@ -13,10 +13,8 @@ import { app, BrowserWindow, shell } from 'electron';
 // import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
 // import debug from 'electron-debug';
-// import * as Sentry from '@sentry/electron/main';
-// eslint-disable-next-line import/no-unresolved
-// import * as Sentry from '@sentry/electron/dist/main';
-import * as Sentry from '@sentry/node';
+import * as Sentry from '@sentry/electron/main';
+
 import { CaptureConsole } from '@sentry/integrations';
 
 import MenuBuilder from './menu';
@@ -61,12 +59,6 @@ Sentry.init({
 // }
 
 let mainWindow: BrowserWindow | null = null;
-
-// ipcMain.on('ipc-example', async (event, arg) => {
-//   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-//   console.log(msgTemplate(arg));
-//   event.reply('ipc-example', msgTemplate('pong'));
-// });
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');

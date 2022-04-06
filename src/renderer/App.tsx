@@ -1,10 +1,17 @@
 import { useEffect, useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
+import * as Sentry from '@sentry/electron/renderer';
+
 import { CHANNELS } from './messages';
 import electron from './electronGlobal';
 import './App.css';
 
 import { ethers } from './ethers';
+
+Sentry.init({
+  dsn: electron.SENTRY_DSN,
+  debug: true,
+});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let getGethDataInterval: any;

@@ -5,6 +5,14 @@ import App from '../renderer/App';
 
 jest.mock('../renderer/electronGlobal');
 
+jest.mock('@sentry/electron/renderer', () => {
+  return {
+    init: jest.fn(() => {
+      return {};
+    }),
+  };
+});
+
 // this is just a little hack to silence a warning that we'll get until we
 // upgrade to 16.9. See also: https://github.com/facebook/react/pull/14853
 const originalError = console.error;
