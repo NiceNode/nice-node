@@ -30,3 +30,6 @@ npm-debug.log.*
 
 # Keys & secrets
 .env
+
+# Test file i/o
+src/__tests__/NiceNode/*

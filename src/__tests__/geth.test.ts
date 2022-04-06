@@ -1,17 +1,29 @@
 import { opendir, access } from 'fs/promises';
+import { constants } from 'fs';
+
 import path from 'path';
 
 // import { gethBuildNameForPlatformAndArch } from '../main/gethDownload';
 import { getNNDirPath } from '../main/files';
 import { downloadGeth } from '../main/geth';
+import { gethBuildNameForPlatformAndArch } from '../main/gethDownload';
 
 jest.mock('electron', () => {
   return {
     app: {
-      getPath: jest.fn(() => __dirname),
+      getPath: jest.fn((pathName: string): string => {
+        if (pathName === 'userData') {
+          return path.join(__dirname, 'NiceNode');
+        }
+        if (pathName === 'appData') {
+          return __dirname;
+        }
+        return __dirname;
+      }),
     },
   };
 });
+
 jest.setTimeout(60000);
 describe('Downloading geth', () => {
   it('Successfully downloads', async () => {
@@ -27,20 +39,26 @@ describe('Downloading geth', () => {
       // eslint-disable-next-line no-restricted-syntax
       for await (const dirent of dir) {
         console.log('NNdir file or dir: ', dirent.name);
-        // eslint-disable-next-line no-plusplus
-        count++;
+        count += 1;
       }
       expect(count).toBeGreaterThan(0);
-      const gzipPath = path.join(dirPath, 'geth.tar.gz');
-      console.log('gzip path: ', gzipPath);
-      // path.join(dirPath, gethBuildNameForPlatformAndArch() + '.tar.gz')
 
-      const accessRes = await access(gzipPath);
-      // const accessRes = await access('./geth.tar.gz');
-      expect(accessRes).toBeDefined();
+      // returns undefined on success
+      const accessResZip = await access(
+        path.join(dirPath, 'geth.tar.gz'),
+        constants.F_OK
+      );
+      expect(accessResZip).toBeUndefined();
+
+      // test unzip successful
+      const unzippedGethDir = path.join(
+        dirPath,
+        gethBuildNameForPlatformAndArch()
+      );
+      const accessResUnzipped = await access(unzippedGethDir, constants.F_OK);
+      expect(accessResUnzipped).toBeUndefined();
     } catch (err) {
       console.error(err);
     }
-    // expect(childProcess.killed).toBe(true);
   });
 });

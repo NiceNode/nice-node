@@ -41,6 +41,22 @@ export const gethBuildNameForPlatformAndArch = () => {
   );
 };
 
+export const getCompressedExtension = () => {
+  if (platform.isWindows()) {
+    return '.zip';
+  }
+  return '.tar.gz';
+};
+
+export const gethFullBuildNameForPlatformAndArch = () => {
+  let fullBuildName = gethBuildNameForPlatformAndArch();
+  if (platform.isWindows()) {
+    fullBuildName += '.zip';
+  }
+  fullBuildName += '.tar.gz';
+  return fullBuildName;
+};
+
 export const getGethDownloadURL = () => {
   const gethBuildName = gethBuildNameForPlatformAndArch();
   let gethBuildFilename;
