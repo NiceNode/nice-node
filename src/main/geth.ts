@@ -145,6 +145,8 @@ export const startGeth = async () => {
     '--ws.api',
     'admin,engine,net,eth,web3',
     '--http',
+    '--http.corsdomain',
+    'nice-node://',
     '--identity',
     'NiceNode-0.0.6-1',
     // '--syncmode',

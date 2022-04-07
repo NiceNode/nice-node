@@ -15,8 +15,9 @@ body {
   font-family: sans-serif;
   overflow-y: hidden;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 0;
+  /* justify-content: center;
+  align-items: center; */
 }
 
 button {

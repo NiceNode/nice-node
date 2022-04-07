@@ -6,25 +6,18 @@ import { CHANNELS } from './messages';
 import electron from './electronGlobal';
 import './App.css';
 
-import { ethers } from './ethers';
+import Header from './Header';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
   debug: true,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let getGethDataInterval: any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const hexToDecimal = (hex: any) => parseInt(hex, 16);
-
 const MainScreen = () => {
   const [sStatus, setStatus] = useState('loading...');
   const [sGethDiskUsed, setGethDiskUsed] = useState<number>();
   const [sFreeDisk, setFreeDisk] = useState<number>();
   const [sStorageWarning, setStorageWarning] = useState<boolean>();
-  const [sSyncPercent, setSyncPercent] = useState<string>('');
-  const [sPeers, setPeers] = useState<number>();
   const [sIsOpenOnLogin, setIsOpenOnLogin] = useState<boolean>(false);
 
   const refreshGethStatus = async () => {
@@ -33,37 +26,6 @@ const MainScreen = () => {
     const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
     console.log('isStartOnLogin: ', isStartOnLogin);
     setIsOpenOnLogin(isStartOnLogin);
-  };
-
-  const refreshGethData = async () => {
-    getGethDataInterval = setInterval(async () => {
-      try {
-        console.log(window.origin);
-        const provider = new ethers.providers.WebSocketProvider(
-          'ws://localhost:8546'
-        );
-        console.log('curr block: ', await provider.getBlockNumber());
-        console.log('curr network: ', await provider.getNetwork());
-        console.log(
-          'curr eth_blockNumber: ',
-          await provider.send('eth_blockNumber')
-        );
-        const syncingData = await provider.send('eth_syncing');
-        console.log('curr sync: ', syncingData);
-        if (typeof syncingData === 'object') {
-          const syncRatio = syncingData.currentBlock / syncingData.highestBlock;
-          setSyncPercent((syncRatio * 100).toFixed(1));
-        } else {
-          setSyncPercent('');
-        }
-        // console.log('curr admin peers: ', await provider.send('admin_peers'));
-        const numPeers = await provider.send('net_peerCount');
-        console.log('curr net peers: ', numPeers);
-        setPeers(hexToDecimal(numPeers));
-      } catch (err) {
-        console.error('error getting curr block: ', err);
-      }
-    }, 10000);
   };
 
   useEffect(() => {
@@ -75,15 +37,6 @@ const MainScreen = () => {
 
     refreshGethStatus();
   }, []);
-
-  useEffect(() => {
-    if (sStatus === 'running') {
-      refreshGethData();
-    } else {
-      setPeers(undefined);
-      clearInterval(getGethDataInterval);
-    }
-  }, [sStatus]);
 
   // Wait for message that says Geth is ready to start
 
@@ -140,93 +93,95 @@ const MainScreen = () => {
 
   return (
     <div
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100vw',
+        height: '100vh',
+      }}
     >
-      <div>
-        <h1>NiceNode</h1>
-        <h2>An Ethereum Node</h2>
-        <h3>Status: {sStatus}</h3>
-      </div>
-      <div className="Hello">
-        <button
-          type="button"
-          onClick={onClickStartGeth}
-          disabled={sStatus === 'running'}
-        >
-          <span>Start</span>
-        </button>
-        &nbsp;
-        <button type="button" onClick={onClickStopGeth}>
-          <span>Stop</span>
-        </button>
-      </div>
+      <Header />
+
       <div
         style={{
           display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'start',
-          marginBottom: 10,
+          flexDirection: 'column',
+          alignItems: 'center',
+          flex: 1,
+          justifyContent: 'center',
         }}
       >
-        <form>
-          <label htmlFor="openOnLogin">
-            <input
-              id="openOnLogin"
-              type="checkbox"
-              name="openOnLogin"
-              checked={sIsOpenOnLogin}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onChangeOpenOnLogin(e.target.checked)
-              }
-            />
-            Start when your computer starts (Windows and macOS only)
-          </label>
-
-          {/* <label htmlFor="openOnLogin">Start when your computer starts</label> */}
-        </form>
-      </div>
-      <div>
+        <div>
+          <h2>An Ethereum Node</h2>
+          <h3>Status: {sStatus}</h3>
+        </div>
+        <div className="Hello">
+          <button
+            type="button"
+            onClick={onClickStartGeth}
+            disabled={sStatus === 'running'}
+          >
+            <span>Start</span>
+          </button>
+          &nbsp;
+          <button type="button" onClick={onClickStopGeth}>
+            <span>Stop</span>
+          </button>
+        </div>
         <div
           style={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: 350,
+            alignItems: 'start',
+            marginBottom: 10,
           }}
         >
-          <span>
-            <strong>Node: </strong>
-          </span>
-          {sSyncPercent && <span>{sSyncPercent}% blocks synced</span>}
-          {sPeers !== undefined && <span>{sPeers} peer node(s)</span>}
+          <form>
+            <label htmlFor="openOnLogin">
+              <input
+                id="openOnLogin"
+                type="checkbox"
+                name="openOnLogin"
+                checked={sIsOpenOnLogin}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onChangeOpenOnLogin(e.target.checked)
+                }
+              />
+              Start when your computer starts (Windows and macOS only)
+            </label>
+
+            {/* <label htmlFor="openOnLogin">Start when your computer starts</label> */}
+          </form>
         </div>
-        {sGethDiskUsed !== undefined && (
-          <h4>Storage used by node: {sGethDiskUsed.toFixed(1)} GB</h4>
-        )}
-        {sFreeDisk !== undefined && (
-          <h4>Storage available: {sFreeDisk.toFixed(1)} GB</h4>
+        <div>
+          {sGethDiskUsed !== undefined && (
+            <h4>Storage used by node: {sGethDiskUsed.toFixed(1)} GB</h4>
+          )}
+          {sFreeDisk !== undefined && (
+            <h4>Storage available: {sFreeDisk.toFixed(1)} GB</h4>
+          )}
+        </div>
+        {sStorageWarning && (
+          <div
+            style={{
+              maxWidth: 400,
+              background: 'rgb(255, 255, 204)',
+              borderRadius: 5,
+              paddingLeft: 5,
+              paddingRight: 5,
+            }}
+          >
+            <p style={{ color: '#333333' }}>
+              Warning: At least 1 TB of storage is required to run an Ethereum
+              Node. Your computer does not have enough SSD storage space. Please
+              visit ethereum.org to see computer hardware requirements at
+              <a href="https://ethereum.org/en/run-a-node/#build-your-own">
+                ethereum.org/run-a-node
+              </a>
+            </p>
+          </div>
         )}
       </div>
-      {sStorageWarning && (
-        <div
-          style={{
-            maxWidth: 400,
-            background: 'rgb(255, 255, 204)',
-            borderRadius: 5,
-            paddingLeft: 5,
-            paddingRight: 5,
-          }}
-        >
-          <p style={{ color: '#333333' }}>
-            Warning: At least 1 TB of storage is required to run an Ethereum
-            Node. Your computer does not have enough SSD storage space. Please
-            visit ethereum.org to see computer hardware requirements at
-            <a href="https://ethereum.org/en/run-a-node/#build-your-own">
-              ethereum.org/run-a-node
-            </a>
-          </p>
-        </div>
-      )}
     </div>
   );
 };

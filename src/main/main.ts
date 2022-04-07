@@ -151,6 +151,7 @@ const createWindow = async () => {
     filter,
     (details, callback) => {
       details.requestHeaders.Origin = `nice-node://`;
+      // console.log('request!: ', details.requestHeaders);
       callback({ requestHeaders: details.requestHeaders });
     }
   );
@@ -160,10 +161,13 @@ const createWindow = async () => {
       if (!details.responseHeaders) {
         details.responseHeaders = {};
       }
-      details.responseHeaders['access-control-allow-origin'] = [
-        'nice-node://',
+
+      details.responseHeaders['Access-Control-Allow-Origin'] = [
+        '*',
         // 'http://localhost:1212', // URL your local electron app hosted
       ];
+      // console.log('response!: ', details.responseHeaders);
+
       callback({ responseHeaders: details.responseHeaders });
     }
   );
