@@ -15,7 +15,7 @@ import {
   getGethDownloadURL,
   gethBuildNameForPlatformAndArch,
 } from './gethDownload';
-import { isWindows, isMac } from './platform';
+import { isWindows } from './platform';
 import { getIsStartOnLogin } from './store';
 import { registerChildProcess } from './processExit';
 import { httpGet } from './httpReq';
@@ -107,12 +107,10 @@ export const unzipGeth = async () => {
   console.log('geth download complete succeeded. unzipping...');
   status = MESSAGES.extracting;
   send(CHANNELS.geth, status);
-  let tarCommand = `tar --directory ${getNNDirPath()} -xf ${getNNDirPath()}/geth.tar.gz`;
+  let tarCommand = `tar --directory "${getNNDirPath()}" -xf "${getNNDirPath()}/geth.tar.gz"`;
   // let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
   if (isWindows()) {
     tarCommand = `tar -C ${getNNDirPath()} -xf ${getNNDirPath()}/geth.zip`;
-  } else if (isMac()) {
-    tarCommand = `tar --extract --file "${getNNDirPath()}/geth.tar.gz" --directory "${getNNDirPath()}"`;
   }
   const result = await execAwait(tarCommand);
   if (!result.err) {
