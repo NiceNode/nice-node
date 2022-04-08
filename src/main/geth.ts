@@ -148,7 +148,7 @@ export const startGeth = async () => {
     '--http.corsdomain',
     'nice-node://',
     '--identity',
-    'NiceNode-0.0.6-1',
+    'NiceNode-0.1.0-1',
     // '--syncmode',
     // 'light',
     '--datadir',
