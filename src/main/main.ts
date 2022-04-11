@@ -10,43 +10,36 @@
  */
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
+
 // import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
 // import debug from 'electron-debug';
 import * as Sentry from '@sentry/electron/main';
+// import { CaptureConsole } from '@sentry/integrations';
 
-import { CaptureConsole } from '@sentry/integrations';
-
+import logger from './logger';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-
 import { setWindow } from './messenger';
 import { initialize as initGeth } from './geth';
-import { getGethUsedDiskSpace, getSystemFreeDiskSpace } from './files';
 import * as ipc from './ipc';
 import * as power from './power';
+
 // import * as processExit from './processExit';
 
 // import { dontSuspendSystem } from './power';
 
 require('dotenv').config();
-
-const logDiskSpace = async () => {
-  console.log(`System disk free: `, await getSystemFreeDiskSpace());
-};
-logDiskSpace();
-getGethUsedDiskSpace();
-
 // debug({ isEnabled: true });
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   maxBreadcrumbs: 50,
   debug: true,
-  integrations: [
-    new CaptureConsole({
-      levels: ['error', 'warn'],
-    }),
-  ],
+  // integrations: [
+  //   new CaptureConsole({
+  //     levels: ['error', 'warn'],
+  //   }),
+  // ],
 });
 
 // If your app does uses auto updates
@@ -82,7 +75,7 @@ const installExtensions = async () => {
       extensions.map((name) => installer[name]),
       forceDownload
     )
-    .catch(console.log);
+    .catch(logger.info);
 };
 
 const createWindow = async () => {
@@ -151,7 +144,7 @@ const createWindow = async () => {
     filter,
     (details, callback) => {
       details.requestHeaders.Origin = `nice-node://`;
-      // console.log('request!: ', details.requestHeaders);
+      // logger.info('request!: ', details.requestHeaders);
       callback({ requestHeaders: details.requestHeaders });
     }
   );
@@ -166,7 +159,7 @@ const createWindow = async () => {
         '*',
         // 'http://localhost:1212', // URL your local electron app hosted
       ];
-      // console.log('response!: ', details.responseHeaders);
+      // logger.info('response!: ', details.responseHeaders);
 
       callback({ responseHeaders: details.responseHeaders });
     }
@@ -200,15 +193,15 @@ app
       if (mainWindow === null) createWindow();
     });
   })
-  .catch(console.log);
+  .catch(logger.info);
 
 // no blocking work
 const initialize = () => {
-  console.log('Initializing main process work...');
+  logger.info('Initializing main process work...');
   initGeth();
   ipc.initialize();
   power.initialize();
   // processExit.initialize();
 };
 
-console.log('app name: ', app.getName());
+logger.info('app name: ', app.getName());

@@ -2,9 +2,9 @@ import '@testing-library/jest-dom';
 // import { render } from '@testing-library/react';
 import { render } from './text-utils';
 
-import App from '../renderer/App';
+import App from '../../renderer/App';
 
-jest.mock('../renderer/electronGlobal');
+jest.mock('../../renderer/electronGlobal');
 
 jest.mock('@sentry/electron/renderer', () => {
   return {

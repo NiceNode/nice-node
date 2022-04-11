@@ -1,6 +1,8 @@
 import * as platform from './platform';
 import * as arch from './arch';
 
+import logger from './logger';
+
 const baseURL = 'https://gethstore.blob.core.windows.net/builds/';
 const macOS = 'geth-darwin-amd64-1.10.17-25c9b49f';
 const windows32bit = 'geth-windows-386-1.10.17-25c9b49f';
@@ -66,6 +68,6 @@ export const getGethDownloadURL = () => {
     gethBuildFilename = `${gethBuildName}.tar.gz`;
   }
   const gethDownloadURL = `${baseURL}${gethBuildFilename}`;
-  console.log('gethDownloadURL: ', gethDownloadURL);
+  logger.info('gethDownloadURL: ', gethDownloadURL);
   return gethDownloadURL;
 };
