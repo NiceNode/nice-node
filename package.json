@@ -1,6 +1,7 @@
 {
   "name": "nice-node",
   "description": "An app to easily run an Ethereum node",
+  "productName": "NiceNode",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
@@ -95,12 +96,12 @@
     "publish": {
       "provider": "github",
       "owner": "jgresham",
-      "repo": "NiceNode"
+      "repo": "nice-node"
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jgresham/NiceNode.git"
+    "url": "git+https://github.com/jgresham/nice-node.git"
   },
   "author": {
     "name": "jgresham"

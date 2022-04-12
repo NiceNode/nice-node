@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: You want something added to the NiceNode. 🎉
+about: You want something added to NiceNode. 🎉
 labels: 'enhancement'
 ---
 

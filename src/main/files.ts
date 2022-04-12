@@ -12,6 +12,7 @@ logger.info('User data dir: ', app.getPath('userData'));
 logger.info('logs dir: ', app.getPath('logs'));
 
 export const getNNDirPath = (): string => {
+  // In packaged build...
   // Linux: ~/.config/NiceNode
   // macOS: ~/Library/Application Support/NiceNode (space causes issues)
   return app.getPath('userData');

@@ -58,7 +58,7 @@ export const getDebugInfoShortString = () => {
 };
 
 export const getGithubIssueProblemURL = () => {
-  const url = new URL('https://github.com/jgresham/NiceNode/issues/new');
+  const url = new URL('https://github.com/jgresham/nice-node/issues/new');
   url.searchParams.set(
     'body',
     `Problem description\n-\n<!-- Describe your problem on the next line! Thank you -->\n\n\nFor NiceNode developers\n-\n${getDebugInfoShortString()}`

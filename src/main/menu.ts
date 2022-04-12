@@ -165,7 +165,7 @@ export default class MenuBuilder {
         {
           label: 'Documentation',
           click() {
-            shell.openExternal('https://github.com/jgresham/NiceNode#readme');
+            shell.openExternal('https://github.com/jgresham/nice-node#readme');
           },
         },
         {
@@ -272,7 +272,9 @@ export default class MenuBuilder {
           {
             label: 'Documentation',
             click() {
-              shell.openExternal('https://github.com/jgresham/NiceNode#readme');
+              shell.openExternal(
+                'https://github.com/jgresham/nice-node#readme'
+              );
             },
           },
           {
