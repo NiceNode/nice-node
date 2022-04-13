@@ -23,13 +23,6 @@ import { registerChildProcess } from './processExit';
 import { httpGet } from './httpReq';
 
 const streamPipeline = promisify(pipeline);
-// const axios = require('axios').default;
-// const fetch = (...args: any) => {
-//   // eslint-disable-next-line @typescript-eslint/no-shadow
-//   // eslint-disable-next-line promise/catch-or-return, @typescript-eslint/no-shadow
-//   import('node-fetch').then(({ default: fetch }) => fetch(...args));
-// };
-// const http = require('node:http');
 
 let status = 'Uninitialized';
 let gethProcess: ChildProcess;
@@ -55,20 +48,17 @@ export const downloadGeth = async () => {
     await access(gethCompressedPath);
     status = 'downloaded';
     send(CHANNELS.geth, status);
-  } catch (err) {
-    logger.info('Geth not downloaded yet. downloading geth...');
+  } catch {
+    logger.info(
+      'Geth not downloaded yet (or unable to access downloaded file). downloading geth...'
+    );
     status = MESSAGES.downloading;
     send(CHANNELS.geth, status);
 
     try {
       logger.info('fetching geth binary from github...');
-      // const res = await axios.get(getGethDownloadURL(), {
-      //   responseType: 'stream',
-      // });
-
       const response = await httpGet(getGethDownloadURL());
 
-      // const res = await fetch(getGethDownloadURL());
       // if (!res.ok) throw new Error(`unexpected response ${res.statusText}`);
       logger.info('response from github ok');
       let fileOutPath = `${getNNDirPath()}/geth.tar.gz`;
@@ -76,13 +66,7 @@ export const downloadGeth = async () => {
         fileOutPath = `${getNNDirPath()}/geth.zip`;
       }
       const fileWriteStream = createWriteStream(fileOutPath);
-      // const { data } = res;
-      // if (!data) {
-      //   throw Error(`Error downloading geth`);
-      // }
-      // if (!res.body) {
-      //   throw Error(`Error downloading geth`);
-      // }
+
       logger.info('piping response from github to filestream');
       // await streamPromises.pipeline(data, fileWriteStream);
       await streamPipeline(response, fileWriteStream);
@@ -93,11 +77,11 @@ export const downloadGeth = async () => {
       logger.info('closed file');
       await chmod(fileOutPath, 0o444);
       logger.info('modified file permissions');
-    } catch (err2) {
-      console.error(err2, 'error downloading geth');
+    } catch (err) {
+      logger.error('error downloading geth', err);
       status = 'error downloading';
       send(CHANNELS.geth, status);
-      throw err2;
+      throw err;
     }
   }
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -120,7 +104,7 @@ export const unzipGeth = async () => {
     status = MESSAGES.readyToStart;
     send(CHANNELS.geth, status);
   } else {
-    console.error(result.err);
+    logger.error(result.err);
   }
 };
 
@@ -130,8 +114,7 @@ export const startGeth = async () => {
 
   // geth is killed if (killed || exitCode === null)
   if (gethProcess && !gethProcess.killed && gethProcess.exitCode === null) {
-    logger.info('gethProcess', gethProcess);
-    console.error('Geth process still running. Wait to stop or stop first.');
+    logger.error('Geth process still running. Wait to stop or stop first.');
     status = 'error starting';
     send(CHANNELS.geth, status);
     return;
@@ -179,7 +162,7 @@ export const startGeth = async () => {
   const handleGethLogStream = (data: Buffer | string | any) => {
     const gethLogs = data?.toString().split('\n ');
     gethLogs.forEach((log: string) => {
-      // console.log('getProcess:: log:: ', log);
+      // logger.log('getProcess:: log:: ', log);
       if (log.includes('ERROR')) {
         gethLogger.error(log);
       } else {
@@ -190,7 +173,7 @@ export const startGeth = async () => {
   gethProcess.stderr?.on('data', handleGethLogStream);
   gethProcess.stdout?.on('data', handleGethLogStream);
   gethProcess.on('error', (data) => {
-    console.error(`Geth::error:: `, data);
+    logger.error(`Geth::error:: `, data);
   });
   gethProcess.on('disconnect', () => {
     logger.info(`Geth::disconnect::`);
@@ -211,20 +194,14 @@ export const startGeth = async () => {
       }
       status = 'error starting';
       send(CHANNELS.geth, status);
-      console.error('Geth exit error: ');
+      logger.error('Geth::exit::error::');
     }
   });
-  // gethProcess.stderr?.on('data', (data) => {
-  //   logger.info(`Geth::log:: ${data}`);
-  // });
-  // gethProcess.stdout?.on('data', (data) => {
-  //   logger.info(`Geth::stdout:: ${data}`);
-  // });
   logger.info('geth started successfully');
   status = 'running';
   send(CHANNELS.geth, status);
   // logger.info('geth childProcess:', childProcess);
-  logger.info('geth childProcess pid:', childProcess.pid);
+  logger.info(`geth childProcess pid: ${childProcess.pid}`);
 };
 
 export const stopGeth = async () => {
@@ -232,10 +209,9 @@ export const stopGeth = async () => {
   stopInitiatedAfterAStart = true;
 
   if (!gethProcess) {
-    console.error("geth hasn't been started");
+    logger.error("Can't stop geth, because it hasn't been started");
     return;
   }
-  // logger.info('Calling gethProcess.kill(). GethProcess: ', gethProcess);
   let killResult = gethProcess.kill();
   if (killResult && gethProcess.killed) {
     logger.info('geth stopped successfully');
@@ -245,8 +221,9 @@ export const stopGeth = async () => {
     logger.info('sleeping 5s to confirm if geth stopped');
     await sleep(5000);
     if (!gethProcess.killed) {
-      logger.info("SIGTERM didn't kill get in 5 seconds. sending SIGKILL");
+      logger.info("SIGTERM didn't kill geth in 5 seconds. sending SIGKILL");
       killResult = gethProcess.kill(9);
+      await sleep(1000);
       if (killResult) {
         logger.info('geth stopped successfully from SIGKILL');
         status = 'stopped';
@@ -254,7 +231,7 @@ export const stopGeth = async () => {
       } else {
         status = 'error stopping';
         send(CHANNELS.geth, status);
-        console.error('error stopping geth');
+        logger.error('error stopping geth');
       }
     } else {
       logger.info('geth stopped successfully from SIGTERM');
@@ -272,7 +249,9 @@ export const initialize = async () => {
   // make sure geth is downloaded and ready to go
   await downloadGeth();
   // check if geth should be auto started
-  logger.info('process.env.NN_AUTOSTART_NODE: ', process.env.NN_AUTOSTART_NODE);
+  logger.info(
+    `process.env.NN_AUTOSTART_NODE: ${process.env.NN_AUTOSTART_NODE}`
+  );
   if (getIsStartOnLogin() || process.env.NN_AUTOSTART_NODE === 'true') {
     startGeth();
   }

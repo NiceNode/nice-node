@@ -1,5 +1,7 @@
 import { app, powerSaveBlocker, powerMonitor } from 'electron';
+
 import { getIsStartOnLogin, watchIsStartOnLogin } from './store';
+import logger from './logger';
 
 let id: number | undefined;
 // eslint-disable-next-line import/prefer-default-export
@@ -20,19 +22,19 @@ export const allowSuspendSystem = () => {
 export const initialize = () => {
   // get saved settings and make sure app values are up to date
   const isStartOnLogin = getIsStartOnLogin();
-  console.log('isStartOnLogin: ', isStartOnLogin);
+  logger.info(`isStartOnLogin: ${isStartOnLogin}`);
   app.setLoginItemSettings({ openAtLogin: isStartOnLogin });
   watchIsStartOnLogin((openAtLogin: boolean) => {
     app.setLoginItemSettings({ openAtLogin });
   });
 };
 
-console.log('Is on battery: ', powerMonitor.isOnBatteryPower());
-console.log('on battery: ', powerMonitor.onBatteryPower);
+logger.info(`Is on battery: ${powerMonitor.isOnBatteryPower()}`);
+logger.info(`on battery: ${powerMonitor.onBatteryPower}`);
 powerMonitor.on('on-battery', () => {
-  console.log('PowerChange: On battery!');
+  logger.info('PowerChange: On battery!');
 });
 powerMonitor.on('on-ac', () => {
-  console.log('PowerChange: On power!');
+  logger.info('PowerChange: On power!');
 });
 dontSuspendSystem();

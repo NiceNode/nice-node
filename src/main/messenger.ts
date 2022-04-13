@@ -1,5 +1,7 @@
 import { BrowserWindow } from 'electron';
 
+import logger from './logger';
+
 let mainWindow: BrowserWindow;
 
 export const setWindow = (inMainWindow: BrowserWindow): void => {
@@ -11,7 +13,7 @@ export const send = (channel: string, ...args: any[]): void => {
   if (!mainWindow) {
     return;
   }
-  console.log('sending ', channel, args);
+  logger.info('sending ', channel, args);
   mainWindow.webContents.send(channel, args);
 };
 

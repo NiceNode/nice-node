@@ -1,3 +1,5 @@
+import logger from './logger';
+
 const cp = require('child_process');
 
 export const { exec } = cp;
@@ -7,7 +9,7 @@ export const execAwait = (
   options = { log: false, cwd: process.cwd() }
 ) => {
   if (options.log) {
-    console.log(command);
+    logger.info(command);
   }
 
   return new Promise((resolve, reject) => {

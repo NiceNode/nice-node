@@ -1,24 +1,22 @@
 import process from 'process';
 import { ChildProcess } from 'child_process';
 
+import logger from './logger';
+
 const childProcesses: ChildProcess[] = [];
 
-// eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
-  console.log('Initializing process exit handlers...');
-  // get saved settings and make sure app values are up to date
+  logger.info('Initializing process exit handlers...');
   process.on('SIGINT', () => {
-    console.log('SIGINT received!');
+    logger.info('SIGINT received!');
     childProcesses.forEach((childProcess) => {
       childProcess.kill();
-      // kill doesn't work on some OS (macOS), so send abort signal
     });
   });
   process.on('SIGTERM', () => {
-    console.log('SIGTERM received!');
+    logger.info('SIGTERM received!');
     childProcesses.forEach((childProcess) => {
       childProcess.kill();
-      // kill doesn't work on some OS (macOS), so send abort signal
     });
   });
 };
