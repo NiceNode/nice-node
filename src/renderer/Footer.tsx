@@ -145,6 +145,7 @@ const Footer = () => {
               theme="monokai"
               displayDataTypes={false}
               enableClipboard={false}
+              style={{ overflow: 'auto' }}
             />
             <h4>Geth Error Logs</h4>
             <ReactJson

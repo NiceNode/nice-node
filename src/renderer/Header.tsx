@@ -12,6 +12,7 @@ import { useGetNetworkConnectedQuery } from './state/network';
 import { hexToDecimal } from './utils';
 
 const Header = () => {
+  const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(null, {
@@ -26,19 +27,29 @@ const Header = () => {
   });
 
   useEffect(() => {
-    console.log('qExeuctionIsSyncing.data: ', qExeuctionIsSyncing.data);
+    console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
+    if (qExeuctionIsSyncing.isError) {
+      setSyncPercent('');
+      setIsSyncing(false);
+      return;
+    }
     const syncingData = qExeuctionIsSyncing.data;
-    console.log('curr sync: ', syncingData);
     if (typeof syncingData === 'object') {
       const syncRatio = syncingData.currentBlock / syncingData.highestBlock;
       setSyncPercent((syncRatio * 100).toFixed(1));
+      setIsSyncing(true);
     } else {
       setSyncPercent('');
+      setIsSyncing(false);
     }
   }, [qExeuctionIsSyncing]);
 
   useEffect(() => {
-    console.log('qExecutionPeers.data: ', qExecutionPeers.data);
+    console.log('qExecutionPeers: ', qExecutionPeers);
+    if (qExecutionPeers.isError) {
+      setPeers(undefined);
+      return;
+    }
     if (typeof qExecutionPeers.data === 'string') {
       setPeers(hexToDecimal(qExecutionPeers.data));
     } else {
@@ -89,7 +100,7 @@ const Header = () => {
             alignContent: 'center',
           }}
         >
-          <FaSync />
+          <FaSync className={sIsSyncing ? 'spin' : ''} />
           <span style={{ marginLeft: 5, marginRight: 10 }}>
             {sSyncPercent}% synced
           </span>
