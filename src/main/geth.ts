@@ -1,6 +1,7 @@
 // import { promises as streamPromises } from 'stream';
 import { pipeline } from 'node:stream';
 import { promisify } from 'node:util';
+import path from 'node:path';
 // import fetch from 'node-fetch';
 
 import { createWriteStream } from 'fs';
@@ -153,18 +154,26 @@ export const startGeth = async () => {
     '--datadir',
     gethDataPath,
   ];
-  logger.info('Starting geth with input: ', gethInput);
-  let execCommand = `./${gethBuildNameForPlatformAndArch()}/geth`;
+  logger.info(`Starting geth with input: ${gethInput}`);
+  let execFileAbsolutePath = path.join(
+    getNNDirPath(),
+    gethBuildNameForPlatformAndArch(),
+    'geth'
+  );
   if (isWindows()) {
-    execCommand = `${gethBuildNameForPlatformAndArch()}\\geth.exe`;
+    execFileAbsolutePath = path.join(
+      getNNDirPath(),
+      gethBuildNameForPlatformAndArch(),
+      'geth.exe'
+    );
+    // `${gethBuildNameForPlatformAndArch()}\\geth.exe`;
   }
-  logger.info(execCommand);
+  logger.info(execFileAbsolutePath);
   const options: SpawnOptions = {
-    cwd: `${getNNDirPath()}`,
     stdio: ['inherit', 'pipe', 'pipe'],
     detached: false,
   };
-  const childProcess = spawn(execCommand, gethInput, options);
+  const childProcess = spawn(execFileAbsolutePath, gethInput, options);
   gethProcess = childProcess;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleGethLogStream = (data: Buffer | string | any) => {
