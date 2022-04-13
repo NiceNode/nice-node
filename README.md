@@ -8,6 +8,8 @@
 
 <strong>Why?: </strong>The light client roadmap for Ethereum depends on access to reliable full nodes. Increasing the number and availability of full nodes is therefore important for the future of Ethereum.
 
+<strong>Logo credits:</strong> Logo made by Artist, William Tempest, from https://ethereum.org/en/assets/
+
 # Development
 
 [![Test](https://github.com/jgresham/nice-node/actions/workflows/test.yml/badge.svg)](https://github.com/jgresham/nice-node/actions/workflows/test.yml)
