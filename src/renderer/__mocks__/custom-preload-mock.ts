@@ -19,4 +19,14 @@ export const getStoreValue = (): any => {
   return true;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getGethLogs = (): any => {
+  return [{ level: 'info', message: 'one log' }];
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getGethErrorLogs = (): any => {
+  return [{ level: 'info', message: 'one log' }];
+};
+
 export const SENTRY_DSN = 'fake_sentry_dsn';

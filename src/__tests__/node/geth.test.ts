@@ -4,9 +4,9 @@ import { constants } from 'fs';
 import path from 'path';
 
 // import { gethBuildNameForPlatformAndArch } from '../main/gethDownload';
-import { getNNDirPath } from '../main/files';
-import { downloadGeth } from '../main/geth';
-import { gethBuildNameForPlatformAndArch } from '../main/gethDownload';
+import { getNNDirPath } from '../../main/files';
+import { downloadGeth } from '../../main/geth';
+import { gethBuildNameForPlatformAndArch } from '../../main/gethDownload';
 
 jest.mock('electron', () => {
   return {
@@ -19,6 +19,9 @@ jest.mock('electron', () => {
           return __dirname;
         }
         return __dirname;
+      }),
+      setAppLogsPath: jest.fn((pathName: string): string => {
+        return pathName;
       }),
     },
   };

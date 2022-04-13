@@ -1,6 +1,8 @@
 import http from 'node:http';
 import https from 'node:https';
 
+import logger from './logger';
+
 export const httpGet = (url: string): Promise<http.IncomingMessage> => {
   return new Promise((resolve, reject) => {
     try {
@@ -8,11 +10,11 @@ export const httpGet = (url: string): Promise<http.IncomingMessage> => {
         resolve(response);
       });
       request.on('error', (err) => {
-        console.error('https request: ', err);
+        logger.error('https request: ', err);
       });
       request.end();
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       reject(err);
     }
   });

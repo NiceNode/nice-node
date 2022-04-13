@@ -7,6 +7,7 @@ import electron from './electronGlobal';
 import './App.css';
 
 import Header from './Header';
+import Footer from './Footer';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -182,6 +183,7 @@ const MainScreen = () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

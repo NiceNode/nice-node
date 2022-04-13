@@ -1,12 +1,18 @@
 import checkDiskSpace from 'check-disk-space';
 import { app } from 'electron';
+import { readFile } from 'fs/promises';
+import path from 'path';
+
+import logger from './logger';
 
 const du = require('du');
 
-console.log('App data dir: ', app.getPath('appData'));
-console.log('User data dir: ', app.getPath('userData'));
+logger.info('App data dir: ', app.getPath('appData'));
+logger.info('User data dir: ', app.getPath('userData'));
+logger.info('logs dir: ', app.getPath('logs'));
 
 export const getNNDirPath = (): string => {
+  // In packaged build...
   // Linux: ~/.config/NiceNode
   // macOS: ~/Library/Application Support/NiceNode (space causes issues)
   return app.getPath('userData');
@@ -21,7 +27,7 @@ export const getSystemFreeDiskSpace = async (): Promise<number> => {
   // const diskSpace = await checkDiskSpace('/');
   const diskSpace = await checkDiskSpace(app.getPath('userData'));
   const freeInGBs = diskSpace.free * 1e-9;
-  console.log('GBs free: ', freeInGBs);
+  logger.log('GBs free: ', freeInGBs);
   return freeInGBs;
 };
 
@@ -43,6 +49,32 @@ export const getGethUsedDiskSpace = async (): Promise<number | undefined> => {
   if (diskUsedInGBs === undefined) {
     diskUsedInGBs = await tryGetGethUsedDiskSpace();
   }
-  console.log('Geth disk used (GBs): ', diskUsedInGBs);
+  logger.info('Geth disk used (GBs): ', diskUsedInGBs);
   return diskUsedInGBs;
+};
+
+export const getGethLogs = async () => {
+  try {
+    const gethLogFile = await readFile(
+      path.join(app.getPath('logs'), 'geth', 'application.log')
+    );
+    console.log('getGethLogs: ', gethLogFile);
+    return gethLogFile.toString().split('\n');
+  } catch (err) {
+    logger.error(`getGethLogs error: ${err}`);
+  }
+  return undefined;
+};
+
+export const getGethErrorLogs = async () => {
+  try {
+    const gethLogFile = await readFile(
+      path.join(app.getPath('logs'), 'geth', 'error.log')
+    );
+    console.log('getGethErrorLogs: ', gethLogFile);
+    return gethLogFile.toString().split('\n');
+  } catch (err) {
+    logger.error(`getGethErrorLogs error: ${err}`);
+  }
+  return undefined;
 };

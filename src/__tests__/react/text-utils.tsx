@@ -4,9 +4,9 @@ import { render as rtlRender } from '@testing-library/react';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 // Import your own reducer
-import { RtkqExecutionWs } from '../renderer/state/services';
+import { RtkqExecutionWs } from '../../renderer/state/services';
 // import appStore from '../renderer/state/store';
-import { RtkqNetwork } from '../renderer/state/network';
+import { RtkqNetwork } from '../../renderer/state/network';
 // import { RtkqNetwork } from '../renderer/state/network';
 
 function render(

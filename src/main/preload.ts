@@ -22,4 +22,6 @@ contextBridge.exposeInMainWorld('electron', {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setStoreValue: (key: string, value: any) =>
     ipcRenderer.invoke('setStoreValue', key, value),
+  getGethLogs: () => ipcRenderer.invoke('getGethLogs'),
+  getGethErrorLogs: () => ipcRenderer.invoke('getGethErrorLogs'),
 });
