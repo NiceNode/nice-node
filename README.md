@@ -4,6 +4,8 @@
 
 <strong>Mission: </strong>2x the number of Ethereum nodes by making a one-click-to-start Ethereum node
 
+![NiceNodeScreenshot](https://www.nicenode.xyz/img/screenshot.png "NiceNodeScreenshot")
+
 <strong>Why?: </strong>The light client roadmap for Ethereum depends on access to reliable full nodes. Increasing the number and availability of full nodes is therefore important for the future of Ethereum.
 
 # Development
