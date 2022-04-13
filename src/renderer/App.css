@@ -61,3 +61,16 @@ a:hover {
   align-items: center;
   margin: 20px 0;
 }
+
+@keyframes spin {
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin 10s infinite linear;
+}
