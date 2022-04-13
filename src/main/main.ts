@@ -144,7 +144,6 @@ const createWindow = async () => {
     filter,
     (details, callback) => {
       details.requestHeaders.Origin = `nice-node://`;
-      // logger.info('request!: ', details.requestHeaders);
       callback({ requestHeaders: details.requestHeaders });
     }
   );
@@ -159,7 +158,6 @@ const createWindow = async () => {
         '*',
         // 'http://localhost:1212', // URL your local electron app hosted
       ];
-      // logger.info('response!: ', details.responseHeaders);
 
       callback({ responseHeaders: details.responseHeaders });
     }
@@ -204,4 +202,4 @@ const initialize = () => {
   // processExit.initialize();
 };
 
-logger.info('app name: ', app.getName());
+logger.info(`app name: ${app.getName()}`);

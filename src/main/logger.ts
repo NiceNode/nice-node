@@ -1,7 +1,7 @@
 import { app } from 'electron';
 import path from 'path';
 import * as winston from 'winston';
-import DailyRotateFile from 'winston-daily-rotate-file';
+// import DailyRotateFile from 'winston-daily-rotate-file';
 
 const logsPath = path.join(app.getPath('userData'), 'logs');
 console.log('set log path to: ', logsPath);
@@ -12,29 +12,32 @@ console.log(
   path.join(app.getPath('logs'), 'application-%DATE%.log')
 );
 
-const combinedTransport: DailyRotateFile = new DailyRotateFile({
-  filename: path.join(app.getPath('logs'), 'application-%DATE%.log'),
-  datePattern: 'YYYY-MM-DD-HH',
-  maxSize: '50m',
-  maxFiles: 1,
-});
+// const combinedTransport: DailyRotateFile = new DailyRotateFile({
+//   filename: path.join(app.getPath('logs'), 'application-%DATE%.log'),
+//   datePattern: 'YYYY-MM-DD-HH',
+//   maxSize: '50m',
+//   maxFiles: 1,
+// });
 
 const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
-  defaultMeta: { service: 'user-service' },
+  defaultMeta: { service: 'nice-node-service' },
   transports: [
     //
     // - Write all logs with importance level of `error` or less to `error.log`
     // - Write all logs with importance level of `info` or less to `combined.log`
     //
-    new winston.transports.Console({}),
+    new winston.transports.File({
+      filename: path.join(app.getPath('logs'), 'application.log'),
+      level: 'info',
+      maxsize: 50000000, // 50 MB
+    }),
     new winston.transports.File({
       filename: path.join(app.getPath('logs'), 'error.log'),
       level: 'error',
       maxsize: 50000000, // 50 MB
     }),
-    combinedTransport,
   ],
 });
 
@@ -62,6 +65,9 @@ const logger = winston.createLogger({
 // });
 
 export const gethLogger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  defaultMeta: { service: 'geth-service' },
   // transports: [gethRotateTransport, gethErrorRotateTransport],
   transports: [
     new winston.transports.File({
