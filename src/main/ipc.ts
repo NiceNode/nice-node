@@ -5,6 +5,7 @@ import {
   getGethErrorLogs,
   getGethUsedDiskSpace,
   getSystemFreeDiskSpace,
+  deleteGethDisk,
 } from './files';
 import { getStatus, startGeth, stopGeth } from './geth';
 import { store } from './store';
@@ -15,6 +16,7 @@ export const initialize = () => {
   ipcMain.handle('getGethStatus', getStatus);
   ipcMain.handle('startGeth', startGeth);
   ipcMain.handle('stopGeth', stopGeth);
+  ipcMain.handle('deleteGethDisk', deleteGethDisk);
   ipcMain.handle('getGethDiskUsed', getGethUsedDiskSpace);
   ipcMain.handle('getSystemFreeDiskSpace', getSystemFreeDiskSpace);
   ipcMain.handle('getDebugInfo', getDebugInfo);

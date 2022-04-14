@@ -11,6 +11,7 @@ declare global {
       getGethStatus(): string;
       startGeth(): void;
       stopGeth(): void;
+      deleteGethDisk(): boolean;
       getGethDiskUsed(): number;
       getSystemFreeDiskSpace(): number;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
