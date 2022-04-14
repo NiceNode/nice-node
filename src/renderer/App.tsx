@@ -7,7 +7,7 @@ import electron from './electronGlobal';
 import './App.css';
 
 import Header from './Header';
-import Footer from './Footer';
+import Footer from './Footer/Footer';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,

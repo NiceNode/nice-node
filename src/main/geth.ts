@@ -12,6 +12,7 @@ import sleep from 'await-sleep';
 import logger, { gethLogger } from './logger';
 import { send, CHANNELS, MESSAGES } from './messenger';
 import { execAwait } from './execHelper';
+// eslint-disable-next-line import/no-cycle
 import { getNNDirPath, gethDataDir } from './files';
 import {
   getGethDownloadURL,
@@ -28,17 +29,22 @@ let status = 'Uninitialized';
 let gethProcess: ChildProcess;
 let stopInitiatedAfterAStart = false; // For Windows lack of POSIX kill signals
 
+const checkAndOrCreateGethDataDir = async () => {
+  try {
+    await access(gethDataDir());
+    logger.info('geth data dir exists');
+  } catch {
+    logger.info('making geth data dir...');
+    await mkdir(gethDataDir());
+  }
+};
+
 export const downloadGeth = async () => {
   logger.info('initializing geth');
   status = 'initializing';
   send(CHANNELS.geth, status);
 
-  try {
-    await access(gethDataDir());
-  } catch {
-    logger.info('making geth data dir...');
-    await mkdir(gethDataDir());
-  }
+  await checkAndOrCreateGethDataDir();
 
   try {
     let gethCompressedPath = `${getNNDirPath()}/geth.tar.gz`;
@@ -119,6 +125,8 @@ export const startGeth = async () => {
     send(CHANNELS.geth, status);
     return;
   }
+
+  await checkAndOrCreateGethDataDir();
 
   const gethDataPath = gethDataDir();
   const gethInput = [
@@ -214,6 +222,9 @@ export const stopGeth = async () => {
   }
   let killResult = gethProcess.kill();
   if (killResult && gethProcess.killed) {
+    // todo: wait for geth onExit callback
+    // temp: wait 5 seconds for geth to shutdown properly
+    await sleep(5000);
     logger.info('geth stopped successfully');
     status = 'stopped';
     send(CHANNELS.geth, status);
