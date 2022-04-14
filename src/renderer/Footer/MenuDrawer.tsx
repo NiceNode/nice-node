@@ -27,13 +27,14 @@ const MenuDrawerStyled = styled.div`
 `;
 
 type Props = {
+  title: string;
   isSelected: boolean;
   onClickCloseButton: () => void;
   children: React.ReactNode;
 };
 
 const MenuDrawer: React.FC<Props> = (props) => {
-  const { isSelected, onClickCloseButton, children } = props;
+  const { title, isSelected, onClickCloseButton, children } = props;
   return (
     <MenuDrawerStyled className={isSelected ? 'show' : 'hidde'}>
       <div
@@ -41,11 +42,17 @@ const MenuDrawer: React.FC<Props> = (props) => {
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          width: '100%',
+          marginLeft: 15,
+          marginRight: 15,
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <IconButton type="button" onClick={onClickCloseButton}>
+        <div style={{ display: 'flex' }}>
+          <h1 style={{ flexGrow: 1 }}>{title}</h1>
+          <IconButton
+            type="button"
+            onClick={onClickCloseButton}
+            style={{ paddingRight: 0 }}
+          >
             <CgCloseO />
           </IconButton>
         </div>

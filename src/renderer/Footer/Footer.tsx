@@ -96,6 +96,7 @@ const Footer = () => {
         <VscDebugConsole />
       </IconButton>
       <MenuDrawer
+        title="App and Node Logs"
         isSelected={sSelectedMenuDrawer === 'debugging'}
         onClickCloseButton={() => setSelectedMenuDrawer(undefined)}
       >
@@ -117,19 +118,27 @@ const Footer = () => {
         />
       </MenuDrawer>
       <MenuDrawer
+        title="Settings"
         isSelected={sSelectedMenuDrawer === 'settings'}
         onClickCloseButton={() => setSelectedMenuDrawer(undefined)}
       >
         <h2>Storage</h2>
         <div>
-          <p>Delete Node Storage</p>
+          <h3>Delete node data</h3>
+          <p>
+            Your node requires this data to run and will require time and
+            internet data to recover if deleted. Only delete node data if you do
+            not intend to run a node.
+          </p>
           <button
             type="button"
             onClick={async () => {
               console.log('Deleting Geth Data');
+              // clear result while waiting for delete to return
               setGethDeleteResult(undefined);
               setGethDeleteResult(await electron.deleteGethDisk());
             }}
+            style={{ marginLeft: 10, backgroundColor: 'red', color: 'white' }}
           >
             <span>Delete</span>
           </button>
@@ -145,6 +154,7 @@ const Footer = () => {
         </div>
       </MenuDrawer>
       <MenuDrawer
+        title="Monitoring"
         isSelected={sSelectedMenuDrawer === 'monitoring'}
         onClickCloseButton={() => setSelectedMenuDrawer(undefined)}
       >
