@@ -268,3 +268,7 @@ export const initialize = async () => {
   }
   registerChildProcess(gethProcess);
 };
+
+export const getPid = () => {
+  return gethProcess?.pid;
+};

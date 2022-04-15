@@ -27,7 +27,7 @@ const Header = () => {
   });
 
   useEffect(() => {
-    console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
+    // console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
     if (qExeuctionIsSyncing.isError) {
       setSyncPercent('');
       setIsSyncing(false);
@@ -45,7 +45,7 @@ const Header = () => {
   }, [qExeuctionIsSyncing]);
 
   useEffect(() => {
-    console.log('qExecutionPeers: ', qExecutionPeers);
+    // console.log('qExecutionPeers: ', qExecutionPeers);
     if (qExecutionPeers.isError) {
       setPeers(undefined);
       return;

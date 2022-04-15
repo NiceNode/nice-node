@@ -10,6 +10,7 @@ import {
 import { getStatus, startGeth, stopGeth } from './geth';
 import { store } from './store';
 import logger from './logger';
+import { getMainProcessUsage, getNodeUsage } from './monitor';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -32,4 +33,6 @@ export const initialize = () => {
   });
   ipcMain.handle('getGethLogs', getGethLogs);
   ipcMain.handle('getGethErrorLogs', getGethErrorLogs);
+  ipcMain.handle('getNodeUsage', getNodeUsage);
+  ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
 };
