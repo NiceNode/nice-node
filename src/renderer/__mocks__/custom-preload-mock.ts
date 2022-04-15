@@ -29,4 +29,19 @@ export const getGethErrorLogs = (): any => {
   return [{ level: 'info', message: 'one log' }];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getRendererProcessUsage = (): any => {
+  return { cpu: 200000, memory: 'high' };
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getMainProcessUsage = (): any => {
+  return { cpu: 200000, memory: 'high' };
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getNodeUsage = (): any => {
+  return { cpu: 200000, memory: 'high' };
+};
+
 export const SENTRY_DSN = 'fake_sentry_dsn';

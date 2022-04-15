@@ -15,6 +15,8 @@ const Footer = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sGethErrorLogs, setGethErrorLogs] = useState<any>();
   const [sGethDeleteResult, setGethDeleteResult] = useState<boolean>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [sMonitoringData, setMonitoringData] = useState<any>();
 
   const getGethLogs = async () => {
     const gethLogs = await electron.getGethLogs();
@@ -25,15 +27,80 @@ const Footer = () => {
     setGethErrorLogs(gethLogs);
   };
 
+  const getMonitoringData = async () => {
+    const rendererProcessUsage = await electron.getRendererProcessUsage();
+    const mainProcessUsage = await electron.getMainProcessUsage();
+    const nodeUsage = await electron.getNodeUsage();
+
+    // --- Memory ---
+    let totalMemoryUsed = 0;
+    if (nodeUsage?.memory) {
+      nodeUsage.memory *= 1e-9;
+      totalMemoryUsed += nodeUsage.memory;
+    }
+    if (rendererProcessUsage?.memory?.residentSet) {
+      rendererProcessUsage.memory.residentSet *= 1e-9;
+      totalMemoryUsed += rendererProcessUsage.memory.residentSet;
+    }
+    if (mainProcessUsage?.memory?.residentSet) {
+      mainProcessUsage.memory.residentSet *= 1e-9;
+      totalMemoryUsed += mainProcessUsage.memory.residentSet;
+    }
+    let uiMemoryUsage;
+    // https://thewebdev.info/2022/01/08/how-to-programmatically-get-memory-usage-in-chrome-with-javascript/
+    if (typeof window?.performance?.memory?.usedJSHeapSize === 'number') {
+      uiMemoryUsage = window.performance.memory.usedJSHeapSize * 1e-9;
+      totalMemoryUsed += uiMemoryUsage;
+    }
+    if (uiMemoryUsage) {
+      uiMemoryUsage = `${uiMemoryUsage.toFixed(3)}GB`;
+    }
+    let totalMemoryUsedStr;
+    if (totalMemoryUsed) {
+      totalMemoryUsedStr = `Total memory used: ${totalMemoryUsed.toFixed(3)}GB`;
+    }
+
+    // --- CPU ---
+    let totalCpuUsed = 0;
+    if (nodeUsage?.cpu) {
+      totalCpuUsed += nodeUsage.cpu;
+    }
+    if (rendererProcessUsage?.cpu?.percentCPUUsage) {
+      totalCpuUsed += rendererProcessUsage.cpu.percentCPUUsage;
+    }
+    if (mainProcessUsage?.cpu?.percentCPUUsage) {
+      totalCpuUsed += rendererProcessUsage.cpu.percentCPUUsage;
+    }
+    let totalCpuUsedStr;
+    if (totalCpuUsed) {
+      totalCpuUsedStr = `Total cpu used: ${totalCpuUsed.toFixed(
+        1
+      )}% of virtual CPU cores`;
+    }
+    setMonitoringData({
+      total: {
+        memory: totalMemoryUsedStr,
+        cpu: totalCpuUsedStr,
+      },
+      nodeProcess: nodeUsage,
+      uiMemoryUsage,
+      rendererProcess: rendererProcessUsage,
+      mainProcess: mainProcessUsage,
+    });
+  };
+
   useEffect(() => {
     getGethLogs();
     getGethErrorLogs();
+    getMonitoringData();
   }, []);
 
   useEffect(() => {
     if (sSelectedMenuDrawer === 'debugging') {
       getGethLogs();
       getGethErrorLogs();
+    } else if (sSelectedMenuDrawer === 'monitoring') {
+      getMonitoringData();
     }
   }, [sSelectedMenuDrawer]);
 
@@ -102,19 +169,21 @@ const Footer = () => {
       >
         <h4>Geth Info Logs</h4>
         <ReactJson
+          style={{ overflow: 'auto', maxHeight: '80%' }}
           src={{ logs: sLogs }}
           theme="monokai"
           displayDataTypes={false}
           enableClipboard={false}
-          style={{ overflow: 'auto', maxHeight: '80%' }}
+          collapsed
         />
         <h4>Geth Error Logs</h4>
         <ReactJson
-          src={{ logs: sGethErrorLogs }}
           style={{ overflow: 'auto', maxHeight: '80%' }}
+          src={{ logs: sGethErrorLogs }}
           theme="monokai"
           displayDataTypes={false}
           enableClipboard={false}
+          collapsed
         />
       </MenuDrawer>
       <MenuDrawer
@@ -158,7 +227,20 @@ const Footer = () => {
         isSelected={sSelectedMenuDrawer === 'monitoring'}
         onClickCloseButton={() => setSelectedMenuDrawer(undefined)}
       >
-        <div style={{ flex: 1, overflow: 'auto' }}>Monitoring</div>
+        <div style={{ flex: 1, overflow: 'auto' }}>
+          <h2>Memory</h2>
+          {sMonitoringData?.total?.memory}
+          <h2>CPU</h2>
+          {sMonitoringData?.total?.cpu}
+          <h2>All available metrics</h2>
+          <ReactJson
+            src={sMonitoringData}
+            theme="monokai"
+            displayDataTypes={false}
+            enableClipboard={false}
+            style={{ overflow: 'auto', maxHeight: '80%' }}
+          />
+        </div>
       </MenuDrawer>
     </div>
   );

@@ -1,11 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+// Since we are using Chrome only in Electron and this is not a web standard yet,
+//  we extend window.performance to include Chrome's memory stats
+interface Performance extends Performance {
+  memory?: {
+    /** The maximum size of the heap, in bytes, that is available to the context. */
+    jsHeapSizeLimit: number;
+    /** The total allocated heap size, in bytes. */
+    totalJSHeapSize: number;
+    /** The currently active segment of JS heap, in bytes. */
+    usedJSHeapSize: number;
+  };
+}
+
 declare global {
   interface Window {
     electron: {
       SENTRY_DSN: string;
       ipcRenderer: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         on(channel: string, func: (...args: any[]) => void): void;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         once(channel: string, func: (...args: any[]) => void): void;
       };
       getGethStatus(): string;
@@ -14,17 +27,17 @@ declare global {
       deleteGethDisk(): boolean;
       getGethDiskUsed(): number;
       getSystemFreeDiskSpace(): number;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       getDebugInfo(): any;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       getStoreValue(key: string): any;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setStoreValue(key: string, value: any): void;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       getGethLogs(): any;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       getGethErrorLogs(): any;
+      getRendererProcessUsage(): any;
+      getMainProcessUsage(): any;
+      getNodeUsage(): any;
     };
+
+    performance: Performance;
   }
 }
 

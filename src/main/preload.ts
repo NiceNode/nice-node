@@ -25,4 +25,11 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('setStoreValue', key, value),
   getGethLogs: () => ipcRenderer.invoke('getGethLogs'),
   getGethErrorLogs: () => ipcRenderer.invoke('getGethErrorLogs'),
+  getMainProcessUsage: () => ipcRenderer.invoke('getMainProcessUsage'),
+  getRendererProcessUsage: async () => {
+    const memory = await process.getProcessMemoryInfo();
+    const cpu = await process.getCPUUsage();
+    return { memory, cpu };
+  },
+  getNodeUsage: () => ipcRenderer.invoke('getNodeUsage'),
 });
