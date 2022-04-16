@@ -2,9 +2,11 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
 import { RtkqExecutionWs } from './services';
 import { RtkqNetwork } from './network';
+import nodeReducer from './node';
 
 export const store = configureStore({
   reducer: {
+    node: nodeReducer,
     [RtkqExecutionWs.reducerPath]: RtkqExecutionWs.reducer,
     [RtkqNetwork.reducerPath]: RtkqNetwork.reducer,
   },

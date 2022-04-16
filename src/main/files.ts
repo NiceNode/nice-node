@@ -25,12 +25,14 @@ export const gethDataDir = (): string => {
 };
 
 export const getSystemFreeDiskSpace = async (): Promise<number> => {
-  // eslint-disable-next-line @typescript-eslint/return-await
-  // const diskSpace = await checkDiskSpace('/');
   const diskSpace = await checkDiskSpace(app.getPath('userData'));
   const freeInGBs = diskSpace.free * 1e-9;
-  logger.info('GBs free: ', freeInGBs);
   return freeInGBs;
+};
+export const getSystemDiskSize = async (): Promise<number> => {
+  const diskSpace = await checkDiskSpace(app.getPath('userData'));
+  const sizeInGBs = diskSpace.size * 1e-9;
+  return sizeInGBs;
 };
 
 export const tryGetGethUsedDiskSpace = async () => {
@@ -39,7 +41,7 @@ export const tryGetGethUsedDiskSpace = async () => {
     diskUsedInGBs = (await du(gethDataDir())) * 1e-9;
   } catch (err) {
     console.info(
-      'Error calculating geth disk usage. Likely geth is cleanup up files.'
+      'Cannot calculate geth disk usage. Likely geth is changing files.'
     );
   }
   return diskUsedInGBs;
@@ -51,7 +53,7 @@ export const getGethUsedDiskSpace = async (): Promise<number | undefined> => {
   if (diskUsedInGBs === undefined) {
     diskUsedInGBs = await tryGetGethUsedDiskSpace();
   }
-  logger.info(`Geth disk used (GBs): ${diskUsedInGBs}`);
+  // logger.info(`Geth disk used (GBs): ${diskUsedInGBs}`);
   return diskUsedInGBs;
 };
 

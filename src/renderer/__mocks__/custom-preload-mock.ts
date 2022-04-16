@@ -44,4 +44,8 @@ export const getNodeUsage = (): any => {
   return { cpu: 200000, memory: 'high' };
 };
 
+export const checkSystemHardware = (): string[] => {
+  return ['Yo internet no bueno'];
+};
+
 export const SENTRY_DSN = 'fake_sentry_dsn';

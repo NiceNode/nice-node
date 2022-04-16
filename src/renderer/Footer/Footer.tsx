@@ -7,8 +7,13 @@ import ReactJson from 'react-json-view';
 import IconButton from '../IconButton';
 import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
+import { useAppSelector } from '../state/hooks';
+import { selectNumFreeDiskGB, selectNumGethDiskUsedGB } from '../state/node';
 
 const Footer = () => {
+  const sGethDiskUsed = useAppSelector(selectNumGethDiskUsedGB);
+  const sFreeDisk = useAppSelector(selectNumFreeDiskGB);
+
   const [sSelectedMenuDrawer, setSelectedMenuDrawer] = useState<string>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sLogs, setLogs] = useState<any>();
@@ -228,6 +233,15 @@ const Footer = () => {
         onClickCloseButton={() => setSelectedMenuDrawer(undefined)}
       >
         <div style={{ flex: 1, overflow: 'auto' }}>
+          <h2>Storage</h2>
+          <div>
+            {sGethDiskUsed !== undefined && (
+              <h4>Storage used by node: {sGethDiskUsed.toFixed(1)} GB</h4>
+            )}
+            {sFreeDisk !== undefined && (
+              <h4>Storage available: {sFreeDisk.toFixed(1)} GB</h4>
+            )}
+          </div>
           <h2>Memory</h2>
           {sMonitoringData?.total?.memory}
           <h2>CPU</h2>

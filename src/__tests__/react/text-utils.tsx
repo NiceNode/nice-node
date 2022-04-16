@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { RtkqExecutionWs } from '../../renderer/state/services';
 // import appStore from '../renderer/state/store';
 import { RtkqNetwork } from '../../renderer/state/network';
+import nodeReducer from '../../renderer/state/node';
 // import { RtkqNetwork } from '../renderer/state/network';
 
 function render(
@@ -14,6 +15,7 @@ function render(
   {
     store = configureStore({
       reducer: {
+        node: nodeReducer,
         [RtkqExecutionWs.reducerPath]: RtkqExecutionWs.reducer,
         [RtkqNetwork.reducerPath]: RtkqNetwork.reducer,
       },
