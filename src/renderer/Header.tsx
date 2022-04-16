@@ -3,15 +3,18 @@ import { useEffect, useState } from 'react';
 import { HiUserGroup } from 'react-icons/hi';
 import { FaSync } from 'react-icons/fa';
 import { MdSignalWifiStatusbarConnectedNoInternet } from 'react-icons/md';
-
+import { FiHardDrive } from 'react-icons/fi';
 import {
   useGetExecutionIsSyncingQuery,
   useGetExecutionPeersQuery,
 } from './state/services';
 import { useGetNetworkConnectedQuery } from './state/network';
 import { hexToDecimal } from './utils';
+import { useAppSelector } from './state/hooks';
+import { selectNumGethDiskUsedGB } from './state/node';
 
 const Header = () => {
+  const sGethDiskUsed = useAppSelector(selectNumGethDiskUsedGB);
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
@@ -77,8 +80,23 @@ const Header = () => {
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'end',
+          fontSize: '1.1rem',
         }}
       >
+        {sGethDiskUsed && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignContent: 'center',
+            }}
+          >
+            <FiHardDrive />
+            <span style={{ marginLeft: 5, marginRight: 10 }}>
+              {sGethDiskUsed.toFixed(1)}GB
+            </span>
+          </div>
+        )}
         {qNetwork?.data?.isConnected === false && (
           <div
             style={{

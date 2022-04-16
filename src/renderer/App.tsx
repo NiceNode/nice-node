@@ -8,17 +8,17 @@ import './App.css';
 
 import Header from './Header';
 import Footer from './Footer/Footer';
+import Warnings from './Warnings';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
   debug: true,
 });
 
+// start services to poll node, os, etc.?
+
 const MainScreen = () => {
   const [sStatus, setStatus] = useState('loading...');
-  const [sGethDiskUsed, setGethDiskUsed] = useState<number>();
-  const [sFreeDisk, setFreeDisk] = useState<number>();
-  const [sStorageWarning, setStorageWarning] = useState<boolean>();
   const [sIsOpenOnLogin, setIsOpenOnLogin] = useState<boolean>(false);
 
   const refreshGethStatus = async () => {
@@ -52,40 +52,6 @@ const MainScreen = () => {
     await electron.stopGeth();
     refreshGethStatus();
   };
-
-  useEffect(() => {
-    const updateGethDiskUsed = async () => {
-      const gethDiskUsed = await electron.getGethDiskUsed();
-      if (gethDiskUsed) {
-        setGethDiskUsed(gethDiskUsed);
-      }
-    };
-    updateGethDiskUsed();
-    const intveral = setInterval(updateGethDiskUsed, 30000);
-    return () => clearInterval(intveral);
-  }, []);
-
-  useEffect(() => {
-    const updateFreeDisk = async () => {
-      const freeDisk = await electron.getSystemFreeDiskSpace();
-      if (freeDisk) {
-        setFreeDisk(freeDisk);
-      }
-    };
-    updateFreeDisk();
-    const intveral = setInterval(updateFreeDisk, 30000);
-    return () => clearInterval(intveral);
-  }, []);
-
-  useEffect(() => {
-    if (sFreeDisk !== undefined && sGethDiskUsed !== undefined) {
-      if (sGethDiskUsed + sFreeDisk > 1000) {
-        setStorageWarning(false);
-      } else {
-        setStorageWarning(true);
-      }
-    }
-  }, [sFreeDisk, sGethDiskUsed]);
 
   const onChangeOpenOnLogin = (openOnLogin: boolean) => {
     electron.setStoreValue('isStartOnLogin', openOnLogin);
@@ -154,34 +120,7 @@ const MainScreen = () => {
             {/* <label htmlFor="openOnLogin">Start when your computer starts</label> */}
           </form>
         </div>
-        <div>
-          {sGethDiskUsed !== undefined && (
-            <h4>Storage used by node: {sGethDiskUsed.toFixed(1)} GB</h4>
-          )}
-          {sFreeDisk !== undefined && (
-            <h4>Storage available: {sFreeDisk.toFixed(1)} GB</h4>
-          )}
-        </div>
-        {sStorageWarning && (
-          <div
-            style={{
-              maxWidth: 400,
-              background: 'rgb(255, 255, 204)',
-              borderRadius: 5,
-              paddingLeft: 5,
-              paddingRight: 5,
-            }}
-          >
-            <p style={{ color: '#333333' }}>
-              Warning: At least 1 TB of storage is required to run an Ethereum
-              Node. Your computer does not have enough SSD storage space. Please
-              visit ethereum.org to see computer hardware requirements at
-              <a href="https://ethereum.org/en/run-a-node/#build-your-own">
-                ethereum.org/run-a-node
-              </a>
-            </p>
-          </div>
-        )}
+        <Warnings />
       </div>
       <Footer />
     </div>

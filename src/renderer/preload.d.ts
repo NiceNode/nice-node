@@ -35,6 +35,7 @@ declare global {
       getRendererProcessUsage(): any;
       getMainProcessUsage(): any;
       getNodeUsage(): any;
+      checkSystemHardware(): string[];
     };
 
     performance: Performance;
