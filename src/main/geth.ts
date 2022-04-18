@@ -130,16 +130,14 @@ export const startGeth = async () => {
 
   const gethDataPath = gethDataDir();
   const gethInput = [
-    '--ws',
-    '--ws.origins',
-    'https://ethvis.xyz,nice-node://',
-    '--ws.api',
-    'admin,engine,net,eth,web3',
+    // '--ws',
+    // '--ws.origins',
+    // 'nice-node://',
+    // '--ws.api',
+    // 'admin,engine,net,eth,web3',
     '--http',
     '--http.corsdomain',
     'nice-node://',
-    '--identity',
-    'NiceNode-0.2.0-1',
     // '--syncmode',
     // 'light',
     '--datadir',

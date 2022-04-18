@@ -9,11 +9,14 @@ import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
 import { useAppSelector } from '../state/hooks';
 import { selectNumFreeDiskGB, selectNumGethDiskUsedGB } from '../state/node';
+import { useGetExecutionNodeInfoQuery } from '../state/services';
 
 const Footer = () => {
   const sGethDiskUsed = useAppSelector(selectNumGethDiskUsedGB);
   const sFreeDisk = useAppSelector(selectNumFreeDiskGB);
-
+  const qNodeInfo = useGetExecutionNodeInfoQuery(null, {
+    pollingInterval: 60000,
+  });
   const [sSelectedMenuDrawer, setSelectedMenuDrawer] = useState<string>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sLogs, setLogs] = useState<any>();
@@ -196,6 +199,10 @@ const Footer = () => {
         isSelected={sSelectedMenuDrawer === 'settings'}
         onClickCloseButton={() => setSelectedMenuDrawer(undefined)}
       >
+        <h2>Node</h2>
+        {qNodeInfo?.currentData && !qNodeInfo?.isError && (
+          <h3>Running: {qNodeInfo.currentData}</h3>
+        )}
         <h2>Storage</h2>
         <div>
           <h3>Delete node data</h3>

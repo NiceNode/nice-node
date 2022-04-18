@@ -4,8 +4,10 @@ import { HiUserGroup } from 'react-icons/hi';
 import { FaSync } from 'react-icons/fa';
 import { MdSignalWifiStatusbarConnectedNoInternet } from 'react-icons/md';
 import { FiHardDrive } from 'react-icons/fi';
+import { SiHiveBlockchain } from 'react-icons/si';
 import {
   useGetExecutionIsSyncingQuery,
+  useGetExecutionLatestBlockQuery,
   useGetExecutionPeersQuery,
 } from './state/services';
 import { useGetNetworkConnectedQuery } from './state/network';
@@ -18,6 +20,7 @@ const Header = () => {
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
+  const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>();
   const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(null, {
     pollingInterval: 15000,
   });
@@ -28,12 +31,16 @@ const Header = () => {
     // Only polls network connection if there are exactly 0 peers
     pollingInterval: typeof sPeers === 'number' && sPeers === 0 ? 30000 : 0,
   });
+  const qLatestBlock = useGetExecutionLatestBlockQuery(null, {
+    // Only polls network connection if there are exactly 0 peers
+    pollingInterval: 15000,
+  });
 
   useEffect(() => {
     // console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
     if (qExeuctionIsSyncing.isError) {
       setSyncPercent('');
-      setIsSyncing(false);
+      setIsSyncing(undefined);
       return;
     }
     const syncingData = qExeuctionIsSyncing.data;
@@ -41,14 +48,17 @@ const Header = () => {
       const syncRatio = syncingData.currentBlock / syncingData.highestBlock;
       setSyncPercent((syncRatio * 100).toFixed(1));
       setIsSyncing(true);
-    } else {
+    } else if (syncingData === false) {
+      // light client geth, it is done syncing if data is false
       setSyncPercent('');
       setIsSyncing(false);
+    } else {
+      setSyncPercent('');
+      setIsSyncing(undefined);
     }
   }, [qExeuctionIsSyncing]);
 
   useEffect(() => {
-    // console.log('qExecutionPeers: ', qExecutionPeers);
     if (qExecutionPeers.isError) {
       setPeers(undefined);
       return;
@@ -59,6 +69,22 @@ const Header = () => {
       setPeers(undefined);
     }
   }, [qExecutionPeers]);
+
+  useEffect(() => {
+    if (qLatestBlock.isError) {
+      setLatestBlockNumber(undefined);
+      return;
+    }
+    if (
+      qLatestBlock?.data?.number &&
+      typeof qLatestBlock.data.number === 'string'
+    ) {
+      const latestBlockNum = hexToDecimal(qLatestBlock.data.number);
+      setLatestBlockNumber(latestBlockNum);
+    } else {
+      setLatestBlockNumber(undefined);
+    }
+  }, [qLatestBlock]);
 
   return (
     <div
@@ -83,12 +109,26 @@ const Header = () => {
           fontSize: '1.1rem',
         }}
       >
+        {typeof sLatestBlockNumber === 'number' && sLatestBlockNumber > 0 && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <SiHiveBlockchain />
+            <span style={{ marginLeft: 5, marginRight: 10 }}>
+              {sLatestBlockNumber}
+            </span>
+          </div>
+        )}
         {sGethDiskUsed && (
           <div
             style={{
               display: 'flex',
               flexDirection: 'row',
-              alignContent: 'center',
+              alignItems: 'center',
             }}
           >
             <FiHardDrive />
@@ -102,7 +142,7 @@ const Header = () => {
             style={{
               display: 'flex',
               flexDirection: 'row',
-              alignContent: 'center',
+              alignItems: 'center',
             }}
           >
             <MdSignalWifiStatusbarConnectedNoInternet />
@@ -111,11 +151,12 @@ const Header = () => {
             </span>
           </div>
         )}
+        {/* {sIsSyncing !== false && ( */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'row',
-            alignContent: 'center',
+            alignItems: 'center',
           }}
         >
           <FaSync className={sIsSyncing ? 'spin' : ''} />
@@ -123,12 +164,12 @@ const Header = () => {
             {sSyncPercent}% synced
           </span>
         </div>
-
+        {/* )} */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'row',
-            alignContent: 'center',
+            alignItems: 'center',
           }}
         >
           <HiUserGroup />

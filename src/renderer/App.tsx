@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
+import ReactTooltip from 'react-tooltip';
 
 import { CHANNELS } from './messages';
 import electron from './electronGlobal';
@@ -9,6 +10,8 @@ import './App.css';
 import Header from './Header';
 import Footer from './Footer/Footer';
 import Warnings from './Warnings';
+import { useGetExecutionNodeInfoQuery } from './state/services';
+import { detectExecutionClient } from './utils';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -19,7 +22,12 @@ Sentry.init({
 
 const MainScreen = () => {
   const [sStatus, setStatus] = useState('loading...');
+  const [sNodeInfo, setNodeInfo] = useState(undefined);
   const [sIsOpenOnLogin, setIsOpenOnLogin] = useState<boolean>(false);
+
+  const qNodeInfo = useGetExecutionNodeInfoQuery(null, {
+    pollingInterval: 15000,
+  });
 
   const refreshGethStatus = async () => {
     const status = await electron.getGethStatus();
@@ -38,6 +46,14 @@ const MainScreen = () => {
 
     refreshGethStatus();
   }, []);
+
+  useEffect(() => {
+    if (typeof qNodeInfo?.data === 'string') {
+      setNodeInfo(qNodeInfo.data);
+    } else {
+      setNodeInfo(undefined);
+    }
+  }, [qNodeInfo]);
 
   // Wait for message that says Geth is ready to start
 
@@ -81,6 +97,21 @@ const MainScreen = () => {
         <div>
           <h2>An Ethereum Node</h2>
           <h3>Status: {sStatus}</h3>
+          {sStatus === 'running' && (
+            <>
+              <h4 data-tip data-for="nodeInfo">
+                {detectExecutionClient(sNodeInfo, true)}
+              </h4>
+              <ReactTooltip
+                place="bottom"
+                type="light"
+                effect="solid"
+                id="nodeInfo"
+              >
+                <span style={{ fontSize: 16 }}>{sNodeInfo}</span>
+              </ReactTooltip>
+            </>
+          )}
         </div>
         <div className="Hello">
           <button
@@ -91,7 +122,11 @@ const MainScreen = () => {
             <span>Start</span>
           </button>
           &nbsp;
-          <button type="button" onClick={onClickStopGeth}>
+          <button
+            type="button"
+            onClick={onClickStopGeth}
+            disabled={sStatus === 'stopped'}
+          >
             <span>Stop</span>
           </button>
         </div>

@@ -31,7 +31,6 @@ const Warnings = () => {
     const updateGethDiskUsed = async () => {
       const gethDiskUsed = await electron.getGethDiskUsed();
       if (gethDiskUsed) {
-        console.log('dispatch gethDiskUsed: ', gethDiskUsed);
         dispatch(updateNodeNumGethDiskUsedGB(gethDiskUsed));
       }
     };
