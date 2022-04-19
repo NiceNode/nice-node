@@ -24,6 +24,9 @@ const MenuDrawerStyled = styled.div`
     #fedc2a 129.35%
   );
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 type Props = {
