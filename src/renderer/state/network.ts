@@ -22,7 +22,6 @@ export const RtkqNetwork: any = createApi({
         try {
           await fetch('https://google.com', { mode: 'no-cors' });
           data.isConnected = true;
-          console.log('fetched google');
         } catch (e) {
           const error = { message: 'Unable to confirm internet connection.' };
           console.log(error.message);

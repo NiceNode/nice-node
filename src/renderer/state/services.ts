@@ -17,21 +17,17 @@ export const RtkqExecutionWs: any = createApi({
   reducerPath: 'RtkqExecutionWs',
   baseQuery: fakeBaseQuery<CustomerErrorType>(),
   endpoints: (builder) => ({
-    getExecutionLatestBlock: builder.query<ProviderResponse, null>({
+    getExecutionLatestBlock: builder.query<ProviderResponse, string>({
       queryFn: async () => {
         let data;
         try {
-          data = await provider.getBlockNumber();
+          data = await provider.send('eth_getBlockByNumber', ['latest', false]);
         } catch (e) {
+          const error = { message: 'Unable to get syncing value' };
           console.log(e);
+          return { error };
         }
         return { data };
-      },
-    }),
-    getExecutionBlock: builder.query<ProviderResponse, string>({
-      queryFn: async (blockId) => {
-        const block = await provider.getBlock(blockId);
-        return { data: block };
       },
     }),
     getExecutionIsSyncing: builder.query<ProviderResponse, null>({
@@ -53,6 +49,20 @@ export const RtkqExecutionWs: any = createApi({
         return { data: network };
       },
     }),
+    getExecutionNodeInfo: builder.query<ProviderResponse, null>({
+      queryFn: async () => {
+        let data;
+        // let error;
+        try {
+          data = await provider.send('web3_clientVersion');
+        } catch (e) {
+          const error = { message: 'Unable to get client version.' };
+          console.log(e);
+          return { error };
+        }
+        return { data };
+      },
+    }),
     getExecutionPeers: builder.query<ProviderResponse, null>({
       queryFn: async () => {
         let data;
@@ -71,9 +81,10 @@ export const RtkqExecutionWs: any = createApi({
 });
 
 export const {
-  useGetExecutionBlockQuery,
+  useGetExecutionLatestBlockQuery,
   useGetExecutionIsSyncingQuery,
   useGetExecutionNetworkInfoQuery,
+  useGetExecutionNodeInfoQuery,
   useGetExecutionChainIdQuery,
   useGetExecutionPeersQuery,
 } = RtkqExecutionWs;

@@ -263,6 +263,7 @@
     "react-json-view": "^1.21.3",
     "react-redux": "^7.2.8",
     "react-router-dom": "^6.2.2",
+    "react-tooltip": "^4.2.21",
     "styled-components": "^5.3.5",
     "winston": "^3.7.2",
     "winston-daily-rotate-file": "^4.6.1"

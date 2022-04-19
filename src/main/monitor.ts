@@ -16,8 +16,13 @@ export const getNodeUsage = async () => {
   if (typeof nodePid !== 'number') {
     return undefined;
   }
-  const gethUsage = await getProcessUsageByPid(nodePid);
-  return gethUsage;
+  try {
+    const gethUsage = await getProcessUsageByPid(nodePid);
+    return gethUsage;
+  } catch (err) {
+    console.error(err);
+    return undefined;
+  }
 };
 
 export const getMainProcessUsage = async () => {
