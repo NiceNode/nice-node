@@ -10,7 +10,7 @@ import { ChildProcess, spawn, SpawnOptions } from 'child_process';
 import sleep from 'await-sleep';
 
 import logger, { gethLogger } from './logger';
-import { send, CHANNELS, MESSAGES } from './messenger';
+import { send, CHANNELS, NODE_STATUS } from './messenger';
 import { execAwait } from './execHelper';
 // eslint-disable-next-line import/no-cycle
 import { getNNDirPath, gethDataDir } from './files';
@@ -41,7 +41,7 @@ const checkAndOrCreateGethDataDir = async () => {
 
 export const downloadGeth = async () => {
   logger.info('initializing geth');
-  status = 'initializing';
+  status = NODE_STATUS.initializing;
   send(CHANNELS.geth, status);
 
   await checkAndOrCreateGethDataDir();
@@ -52,13 +52,13 @@ export const downloadGeth = async () => {
       gethCompressedPath = `${getNNDirPath()}/geth.zip`;
     }
     await access(gethCompressedPath);
-    status = 'downloaded';
+    status = NODE_STATUS.downloaded;
     send(CHANNELS.geth, status);
   } catch {
     logger.info(
       'Geth not downloaded yet (or unable to access downloaded file). downloading geth...'
     );
-    status = MESSAGES.downloading;
+    status = NODE_STATUS.downloading;
     send(CHANNELS.geth, status);
 
     try {
@@ -85,7 +85,7 @@ export const downloadGeth = async () => {
       logger.info('modified file permissions');
     } catch (err) {
       logger.error('error downloading geth', err);
-      status = 'error downloading';
+      status = NODE_STATUS.errorDownloading;
       send(CHANNELS.geth, status);
       throw err;
     }
@@ -97,7 +97,7 @@ export const downloadGeth = async () => {
 
 export const unzipGeth = async () => {
   logger.info('geth download complete succeeded. unzipping...');
-  status = MESSAGES.extracting;
+  status = NODE_STATUS.extracting;
   send(CHANNELS.geth, status);
   let tarCommand = `tar --directory "${getNNDirPath()}" -xf "${getNNDirPath()}/geth.tar.gz"`;
   // let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
@@ -107,7 +107,7 @@ export const unzipGeth = async () => {
   const result = await execAwait(tarCommand);
   if (!result.err) {
     logger.info('geth unzip complete succeeded');
-    status = MESSAGES.readyToStart;
+    status = NODE_STATUS.readyToStart;
     send(CHANNELS.geth, status);
   } else {
     logger.error(result.err);
@@ -121,7 +121,7 @@ export const startGeth = async () => {
   // geth is killed if (killed || exitCode === null)
   if (gethProcess && !gethProcess.killed && gethProcess.exitCode === null) {
     logger.error('Geth process still running. Wait to stop or stop first.');
-    status = 'error starting';
+    status = NODE_STATUS.errorStarting;
     send(CHANNELS.geth, status);
     return;
   }
@@ -198,13 +198,13 @@ export const startGeth = async () => {
         logger.info('Windows un-smooth stop');
         return;
       }
-      status = 'error starting';
+      status = NODE_STATUS.errorStarting;
       send(CHANNELS.geth, status);
       logger.error('Geth::exit::error::');
     }
   });
   logger.info('geth started successfully');
-  status = 'running';
+  status = NODE_STATUS.running;
   send(CHANNELS.geth, status);
   // logger.info('geth childProcess:', childProcess);
   logger.info(`geth childProcess pid: ${childProcess.pid}`);
@@ -212,6 +212,8 @@ export const startGeth = async () => {
 
 export const stopGeth = async () => {
   logger.info('Stopping geth');
+  status = NODE_STATUS.stopping;
+  send(CHANNELS.geth, status);
   stopInitiatedAfterAStart = true;
 
   if (!gethProcess) {
@@ -224,7 +226,7 @@ export const stopGeth = async () => {
     // temp: wait 5 seconds for geth to shutdown properly
     await sleep(5000);
     logger.info('geth stopped successfully');
-    status = 'stopped';
+    status = NODE_STATUS.stopped;
     send(CHANNELS.geth, status);
   } else {
     logger.info('sleeping 5s to confirm if geth stopped');
@@ -235,16 +237,16 @@ export const stopGeth = async () => {
       await sleep(1000);
       if (killResult) {
         logger.info('geth stopped successfully from SIGKILL');
-        status = 'stopped';
+        status = NODE_STATUS.stopped;
         send(CHANNELS.geth, status);
       } else {
-        status = 'error stopping';
+        status = NODE_STATUS.errorStopping;
         send(CHANNELS.geth, status);
         logger.error('error stopping geth');
       }
     } else {
       logger.info('geth stopped successfully from SIGTERM');
-      status = 'stopped';
+      status = NODE_STATUS.stopped;
       send(CHANNELS.geth, status);
     }
   }
