@@ -159,7 +159,7 @@ export const startGeth = async () => {
   }
   logger.info(execFileAbsolutePath);
   const options: SpawnOptions = {
-    stdio: ['inherit', 'pipe', 'pipe'],
+    stdio: [null, 'pipe', 'pipe'],
     detached: false,
   };
   const childProcess = spawn(execFileAbsolutePath, gethInput, options);
