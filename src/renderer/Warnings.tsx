@@ -98,8 +98,8 @@ const Warnings = () => {
       >
         {sWarnings?.map((warning) => {
           return (
-            <div style={{ marginBottom: 5 }}>
-              <span key={warning}>- {warning}</span>
+            <div key={warning} style={{ marginBottom: 5 }}>
+              <span>- {warning}</span>
             </div>
           );
         })}

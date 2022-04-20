@@ -7,7 +7,14 @@ import {
   getSystemFreeDiskSpace,
   deleteGethDisk,
 } from './files';
-import { getStatus, startGeth, stopGeth } from './geth';
+import {
+  getDefaultNodeConfig,
+  setToDefaultNodeConfig,
+  getNodeConfig,
+  getStatus,
+  startGeth,
+  stopGeth,
+} from './geth';
 import { store } from './store';
 import logger from './logger';
 import {
@@ -37,6 +44,9 @@ export const initialize = () => {
   });
   ipcMain.handle('getGethLogs', getGethLogs);
   ipcMain.handle('getGethErrorLogs', getGethErrorLogs);
+  ipcMain.handle('getNodeConfig', getNodeConfig);
+  ipcMain.handle('getDefaultNodeConfig', getDefaultNodeConfig);
+  ipcMain.handle('setToDefaultNodeConfig', setToDefaultNodeConfig);
   ipcMain.handle('getNodeUsage', getNodeUsage);
   ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
   ipcMain.handle('checkSystemHardware', checkSystemHardware);

@@ -35,6 +35,9 @@ declare global {
       getRendererProcessUsage(): any;
       getMainProcessUsage(): any;
       getNodeUsage(): any;
+      getNodeConfig(): string[];
+      getDefaultNodeConfig(): string[];
+      setToDefaultNodeConfig(): void;
       checkSystemHardware(): string[];
     };
 

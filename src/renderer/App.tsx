@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
 import ReactTooltip from 'react-tooltip';
+import { useAppDispatch, useAppSelector } from './state/hooks';
 
-import { CHANNELS } from './messages';
 import electron from './electronGlobal';
 import './App.css';
 
@@ -12,6 +12,9 @@ import Footer from './Footer/Footer';
 import Warnings from './Warnings';
 import { useGetExecutionNodeInfoQuery } from './state/services';
 import { detectExecutionClient } from './utils';
+import { initialize as initializeIpcListeners } from './ipc';
+import { selectNodeStatus, updateNodeStatus } from './state/node';
+import { NODE_STATUS } from './messages';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -21,31 +24,28 @@ Sentry.init({
 // start services to poll node, os, etc.?
 
 const MainScreen = () => {
-  const [sStatus, setStatus] = useState('loading...');
   const [sNodeInfo, setNodeInfo] = useState(undefined);
   const [sIsOpenOnLogin, setIsOpenOnLogin] = useState<boolean>(false);
+  const sNodeStatus = useAppSelector(selectNodeStatus);
+  const dispatch = useAppDispatch();
 
   const qNodeInfo = useGetExecutionNodeInfoQuery(null, {
     pollingInterval: 15000,
   });
 
-  const refreshGethStatus = async () => {
+  const refreshGethStatus = useCallback(async () => {
     const status = await electron.getGethStatus();
-    setStatus(status);
+    dispatch(updateNodeStatus(status));
     const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
     console.log('isStartOnLogin: ', isStartOnLogin);
     setIsOpenOnLogin(isStartOnLogin);
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     console.log('App loaded. Initializing...');
-    electron.ipcRenderer.on(CHANNELS.geth, (message) => {
-      console.log('Geth status received: ', message);
-      setStatus(message);
-    });
-
+    initializeIpcListeners(dispatch);
     refreshGethStatus();
-  }, []);
+  }, [dispatch, refreshGethStatus]);
 
   useEffect(() => {
     if (typeof qNodeInfo?.data === 'string') {
@@ -96,8 +96,8 @@ const MainScreen = () => {
       >
         <div>
           <h2>An Ethereum Node</h2>
-          <h3>Status: {sStatus}</h3>
-          {sStatus === 'running' && (
+          <h3>Status: {sNodeStatus}</h3>
+          {sNodeStatus === 'running' && (
             <>
               <h4 data-tip data-for="nodeInfo">
                 {detectExecutionClient(sNodeInfo, true)}
@@ -117,7 +117,13 @@ const MainScreen = () => {
           <button
             type="button"
             onClick={onClickStartGeth}
-            disabled={sStatus === 'running'}
+            disabled={
+              !(
+                sNodeStatus === NODE_STATUS.readyToStart ||
+                sNodeStatus === NODE_STATUS.stopped ||
+                sNodeStatus === NODE_STATUS.errorStopping
+              )
+            }
           >
             <span>Start</span>
           </button>
@@ -125,7 +131,7 @@ const MainScreen = () => {
           <button
             type="button"
             onClick={onClickStopGeth}
-            disabled={sStatus === 'stopped'}
+            disabled={sNodeStatus !== NODE_STATUS.running}
           >
             <span>Stop</span>
           </button>

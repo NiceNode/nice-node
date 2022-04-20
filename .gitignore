@@ -33,4 +33,4 @@ npm-debug.log.*
 .env
 
 # Test file i/o
-src/__tests__/NiceNode/*
+src/__tests__/node/NiceNode/*
