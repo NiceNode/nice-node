@@ -2,11 +2,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
 import ReactTooltip from 'react-tooltip';
-import { useAppDispatch, useAppSelector } from './state/hooks';
 
-import electron from './electronGlobal';
 import './App.css';
-
+import { useAppDispatch, useAppSelector } from './state/hooks';
+import electron from './electronGlobal';
 import Header from './Header';
 import Footer from './Footer/Footer';
 import Warnings from './Warnings';

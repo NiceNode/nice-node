@@ -1,19 +1,35 @@
 import { VscDebugConsole } from 'react-icons/vsc';
 import { AiOutlineAreaChart } from 'react-icons/ai';
 import { MdSettings } from 'react-icons/md';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import IconButton from '../IconButton';
 import Settings from './Settings';
 import Monitoring from './Monitoring';
 import Debugging from './Debugging';
+import electron from '../electronGlobal';
 
 const Footer = () => {
   const [sSelectedMenuDrawer, setSelectedMenuDrawer] = useState<string>();
+  const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
 
   const onCloseDrawer = () => {
     setSelectedMenuDrawer(undefined);
   };
+
+  const getNiceNodeVersion = async () => {
+    const debugInfo = await electron.getDebugInfo();
+    if (
+      debugInfo?.niceNodeVersion &&
+      typeof debugInfo.niceNodeVersion === 'string'
+    ) {
+      setNiceNodeVersion(debugInfo.niceNodeVersion);
+    }
+  };
+
+  useEffect(() => {
+    getNiceNodeVersion();
+  }, []);
 
   return (
     <div
@@ -73,6 +89,9 @@ const Footer = () => {
       >
         <VscDebugConsole />
       </IconButton>
+      <div style={{ position: 'fixed', right: 10, fontSize: 14 }}>
+        <span>version {sNiceNodeVersion}</span>
+      </div>
 
       <Debugging
         isOpen={sSelectedMenuDrawer === 'debugging'}
