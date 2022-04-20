@@ -32,5 +32,8 @@ contextBridge.exposeInMainWorld('electron', {
     return { memory, cpu };
   },
   getNodeUsage: () => ipcRenderer.invoke('getNodeUsage'),
+  getNodeConfig: () => ipcRenderer.invoke('getNodeConfig'),
+  getDefaultNodeConfig: () => ipcRenderer.invoke('getDefaultNodeConfig'),
+  setToDefaultNodeConfig: () => ipcRenderer.invoke('setToDefaultNodeConfig'),
   checkSystemHardware: () => ipcRenderer.invoke('checkSystemHardware'),
 });

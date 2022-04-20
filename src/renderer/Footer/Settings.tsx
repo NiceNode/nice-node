@@ -3,6 +3,7 @@ import { useState } from 'react';
 import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
 import { useGetExecutionNodeInfoQuery } from '../state/services';
+import NodeConfig from './NodeConfig';
 
 type Props = {
   isOpen: boolean | undefined;
@@ -21,24 +22,7 @@ const Settings = ({ isOpen, onClickCloseButton }: Props) => {
       isSelected={!!isOpen}
       onClickCloseButton={onClickCloseButton}
     >
-      <h2>Node</h2>
-      <h3>Configuration</h3>
-      {/* <button
-          type="button"
-          onClick={async () => {
-            setIsApplyChangesOpen(true);
-          }}
-          style={{ marginLeft: 10 }}
-        >
-          <span>Apply changes</span>
-        </button> */}
-      {/* <Modal
-          isOpen={sIsApplyChangesOpen}
-          title="Apply changes"
-          onClickCloseButton={() => setIsApplyChangesOpen(false)}
-        >
-          <span>Are you sure you want to make these changes?</span>
-        </Modal> */}
+      <NodeConfig />
       {qNodeInfo?.currentData && !qNodeInfo?.isError && (
         <h4>Running: {qNodeInfo.currentData}</h4>
       )}

@@ -15,3 +15,11 @@ export const watchIsStartOnLogin = (
 ): void => {
   store.onDidChange('isStartOnLogin', handler);
 };
+
+export const setNodeConfig = (nodeConfig: string[]): void => {
+  store.set('nodeConfig', nodeConfig);
+};
+
+export const getNodeConfig = (): string[] => {
+  return store.get('nodeConfig');
+};

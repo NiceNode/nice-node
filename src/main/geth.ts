@@ -19,7 +19,11 @@ import {
   gethBuildNameForPlatformAndArch,
 } from './gethDownload';
 import { isWindows } from './platform';
-import { getIsStartOnLogin } from './store';
+import {
+  getIsStartOnLogin,
+  getNodeConfig as storeGetNodeConfig,
+  setNodeConfig,
+} from './store';
 import { registerChildProcess } from './processExit';
 import { httpGet } from './httpReq';
 
@@ -37,6 +41,30 @@ const checkAndOrCreateGethDataDir = async () => {
     logger.info('making geth data dir...');
     await mkdir(gethDataDir());
   }
+};
+
+export const getDefaultNodeConfig = () => {
+  const gethDataPath = gethDataDir();
+  const defaultConfig = [
+    '--http',
+    '--http.corsdomain',
+    'nice-node://',
+    '--datadir',
+    gethDataPath,
+  ];
+  return defaultConfig;
+};
+
+export const getNodeConfig = () => {
+  const storeConfig: string[] = storeGetNodeConfig();
+  if (storeConfig !== undefined) {
+    return storeConfig;
+  }
+  return getDefaultNodeConfig();
+};
+
+export const setToDefaultNodeConfig = () => {
+  setNodeConfig(getDefaultNodeConfig());
 };
 
 export const downloadGeth = async () => {
@@ -128,21 +156,7 @@ export const startGeth = async () => {
 
   await checkAndOrCreateGethDataDir();
 
-  const gethDataPath = gethDataDir();
-  const gethInput = [
-    // '--ws',
-    // '--ws.origins',
-    // 'nice-node://',
-    // '--ws.api',
-    // 'admin,engine,net,eth,web3',
-    '--http',
-    '--http.corsdomain',
-    'nice-node://',
-    // '--syncmode',
-    // 'light',
-    '--datadir',
-    gethDataPath,
-  ];
+  const gethInput = getNodeConfig();
   logger.info(`Starting geth with input: ${gethInput}`);
   let execFileAbsolutePath = path.join(
     getNNDirPath(),
@@ -188,6 +202,12 @@ export const startGeth = async () => {
     // code == 0, clean exit
     // code == 1, crash
     logger.info(`Geth::close:: ${code}`);
+    if (code !== 0) {
+      status = NODE_STATUS.errorStarting;
+      send(CHANNELS.geth, status);
+      logger.error(`Error starting node (geth) ${code}`);
+      // todo: determine the error and show geth error logs to user.
+    }
   });
   gethProcess.on('exit', (code, signal) => {
     // code == 0, clean exit
