@@ -9,15 +9,16 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, dialog, shell } from 'electron';
 
 import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
 // import debug from 'electron-debug';
 import * as Sentry from '@sentry/electron/main';
+import sleep from 'await-sleep';
 // import { CaptureConsole } from '@sentry/integrations';
 
-import logger from './logger';
+import logger, { autoUpdateLogger } from './logger';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { setWindow } from './messenger';
@@ -42,10 +43,59 @@ Sentry.init({
   // ],
 });
 
+autoUpdater.on('error', (error) => {
+  logger.error('autoUpdater:::::::::error', error);
+});
+
+autoUpdater.on('checking-for-update', () => {
+  logger.info('autoUpdater:::::::::checking-for-update');
+});
+autoUpdater.on('download-progress', (info) => {
+  logger.info(`autoUpdater:::::::::download-progress ${info}`);
+});
+autoUpdater.on('update-available', async () => {
+  logger.info('autoUpdater:::::::::update-available');
+  // Quick fix to wait for window load before showing update prompt
+  await sleep(5000);
+  dialog
+    .showMessageBox({
+      type: 'info',
+      title: 'Updates for NiceNode available',
+      message:
+        'Do you want update NiceNode now? NiceNode restarts for updates.',
+      buttons: ['Yes', 'No'],
+    })
+    .then(async (buttonIndex) => {
+      if (buttonIndex.response === 0) {
+        console.log('update accepted by user');
+        console.log('starting download');
+        await autoUpdater.downloadUpdate();
+        console.log('done with download. restarting app');
+        autoUpdater.quitAndInstall();
+        console.log('after quit called');
+      } else {
+        console.log('update checkbox not checked');
+      }
+    })
+    .catch((err) => {
+      console.error('error in update available diaglog: ', err);
+    });
+});
+
+autoUpdater.on('update-not-available', () => {
+  logger.info('autoUpdater:::::::::update-not-available');
+});
+
+autoUpdater.on('update-downloaded', () => {
+  logger.info('autoUpdater:::::::::update-downloaded');
+});
+
 // If your app does uses auto updates
 export default class AppUpdater {
   constructor() {
-    autoUpdater.logger = logger;
+    autoUpdater.logger = autoUpdateLogger;
+    autoUpdater.autoDownload = false;
+    autoUpdater.autoInstallOnAppQuit = false;
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
@@ -132,7 +182,7 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  // new AppUpdater();
+  new AppUpdater();
 
   // [Start] Modifies the renderer's Origin header for all outgoing web requests.
   // This is done to simplify the allowed origins set for geth

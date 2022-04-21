@@ -26,7 +26,7 @@ const logger = winston.createLogger({
   transports: [
     //
     // - Write all logs with importance level of `error` or less to `error.log`
-    // - Write all logs with importance level of `info` or less to `combined.log`
+    // - Write all logs with importance level of `info` or less to `application.log`
     //
     new winston.transports.File({
       filename: path.join(app.getPath('logs'), 'application.log'),
@@ -37,6 +37,24 @@ const logger = winston.createLogger({
       filename: path.join(app.getPath('logs'), 'error.log'),
       level: 'error',
       maxsize: 50000000, // 50 MB
+    }),
+  ],
+});
+
+export const autoUpdateLogger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  defaultMeta: { service: 'auto-updater-service' },
+  transports: [
+    new winston.transports.File({
+      filename: path.join(app.getPath('logs'), 'auto-updater-application.log'),
+      level: 'info',
+      maxsize: 10000000, // 50 MB
+    }),
+    new winston.transports.File({
+      filename: path.join(app.getPath('logs'), 'auto-updater-error.log'),
+      level: 'error',
+      maxsize: 10000000, // 50 MB
     }),
   ],
 });
@@ -88,6 +106,11 @@ export const gethLogger = winston.createLogger({
 // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
+    new winston.transports.Console({
+      format: winston.format.simple(),
+    })
+  );
+  autoUpdateLogger.add(
     new winston.transports.Console({
       format: winston.format.simple(),
     })
