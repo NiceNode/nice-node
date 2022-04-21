@@ -12,7 +12,11 @@ import Warnings from './Warnings';
 import { useGetExecutionNodeInfoQuery } from './state/services';
 import { detectExecutionClient } from './utils';
 import { initialize as initializeIpcListeners } from './ipc';
-import { selectNodeStatus, updateNodeStatus } from './state/node';
+import {
+  selectIsAvailableForPolling,
+  selectNodeStatus,
+  updateNodeStatus,
+} from './state/node';
 import { NODE_STATUS } from './messages';
 
 Sentry.init({
@@ -27,9 +31,10 @@ const MainScreen = () => {
   const [sIsOpenOnLogin, setIsOpenOnLogin] = useState<boolean>(false);
   const sNodeStatus = useAppSelector(selectNodeStatus);
   const dispatch = useAppDispatch();
-
+  const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
+  const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
   const qNodeInfo = useGetExecutionNodeInfoQuery(null, {
-    pollingInterval: 15000,
+    pollingInterval,
   });
 
   const refreshGethStatus = useCallback(async () => {
