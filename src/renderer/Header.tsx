@@ -13,7 +13,10 @@ import {
 import { useGetNetworkConnectedQuery } from './state/network';
 import { hexToDecimal } from './utils';
 import { useAppSelector } from './state/hooks';
-import { selectNumGethDiskUsedGB } from './state/node';
+import {
+  selectNumGethDiskUsedGB,
+  selectIsAvailableForPolling,
+} from './state/node';
 
 const Header = () => {
   const sGethDiskUsed = useAppSelector(selectNumGethDiskUsedGB);
@@ -21,20 +24,31 @@ const Header = () => {
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>();
+  const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
+  const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
   const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(null, {
-    pollingInterval: 15000,
+    pollingInterval,
   });
   const qExecutionPeers = useGetExecutionPeersQuery(null, {
-    pollingInterval: 15000,
+    pollingInterval,
+  });
+  const qLatestBlock = useGetExecutionLatestBlockQuery(null, {
+    pollingInterval,
   });
   const qNetwork = useGetNetworkConnectedQuery(null, {
     // Only polls network connection if there are exactly 0 peers
     pollingInterval: typeof sPeers === 'number' && sPeers === 0 ? 30000 : 0,
   });
-  const qLatestBlock = useGetExecutionLatestBlockQuery(null, {
-    // Only polls network connection if there are exactly 0 peers
-    pollingInterval: 15000,
-  });
+
+  useEffect(() => {
+    if (!sIsAvailableForPolling) {
+      // clear all node data when it becomes unavailable to get
+      setSyncPercent('');
+      setIsSyncing(undefined);
+      setPeers(undefined);
+      setLatestBlockNumber(undefined);
+    }
+  }, [sIsAvailableForPolling]);
 
   useEffect(() => {
     // console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
