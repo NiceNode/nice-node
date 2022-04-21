@@ -11,7 +11,7 @@
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 
-// import { autoUpdater } from 'electron-updater';
+import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
 // import debug from 'electron-debug';
 import * as Sentry from '@sentry/electron/main';
@@ -43,13 +43,12 @@ Sentry.init({
 });
 
 // If your app does uses auto updates
-// export default class AppUpdater {
-//   constructor() {
-//     log.transports.file.level = 'info';
-//     autoUpdater.logger = log;
-//     autoUpdater.checkForUpdatesAndNotify();
-//   }
-// }
+export default class AppUpdater {
+  constructor() {
+    autoUpdater.logger = logger;
+    autoUpdater.checkForUpdatesAndNotify();
+  }
+}
 
 let mainWindow: BrowserWindow | null = null;
 
