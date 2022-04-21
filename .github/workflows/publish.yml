@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - 10-code-signing-mac-and-windows
 
 jobs:
   publish:

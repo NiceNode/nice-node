@@ -43,6 +43,7 @@ const NodeConfig = () => {
         } else {
           setParseError('Input is not an array.');
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         setParseError(err.message);
       }
