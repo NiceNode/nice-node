@@ -59,21 +59,14 @@ export default class MenuBuilder {
       label: 'Electron',
       submenu: [
         {
-          label: 'About ElectronReact',
+          label: 'About NiceNode',
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
-        { label: 'Services', submenu: [] },
-        { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide NiceNode',
           accelerator: 'Command+H',
           selector: 'hide:',
-        },
-        {
-          label: 'Hide Others',
-          accelerator: 'Command+Shift+H',
-          selector: 'hideOtherApplications:',
         },
         { label: 'Show All', selector: 'unhideAllApplications:' },
         { type: 'separator' },
@@ -83,22 +76,6 @@ export default class MenuBuilder {
           click: () => {
             app.quit();
           },
-        },
-      ],
-    };
-    const subMenuEdit: DarwinMenuItemConstructorOptions = {
-      label: 'Edit',
-      submenu: [
-        { label: 'Undo', accelerator: 'Command+Z', selector: 'undo:' },
-        { label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:' },
-        { type: 'separator' },
-        { label: 'Cut', accelerator: 'Command+X', selector: 'cut:' },
-        { label: 'Copy', accelerator: 'Command+C', selector: 'copy:' },
-        { label: 'Paste', accelerator: 'Command+V', selector: 'paste:' },
-        {
-          label: 'Select All',
-          accelerator: 'Command+A',
-          selector: 'selectAll:',
         },
       ],
     };
@@ -156,16 +133,10 @@ export default class MenuBuilder {
     const subMenuHelp: MenuItemConstructorOptions = {
       label: 'Help',
       submenu: [
-        // {
-        //   label: 'Learn More',
-        //   click() {
-        //     shell.openExternal('https://electronjs.org');
-        //   },
-        // },
         {
           label: 'Documentation',
           click() {
-            shell.openExternal('https://github.com/jgresham/nice-node#readme');
+            shell.openExternal('https://nicenode.xyz');
           },
         },
         {
@@ -197,7 +168,7 @@ export default class MenuBuilder {
         ? subMenuViewDev
         : subMenuViewProd;
 
-    return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
+    return [subMenuAbout, subMenuView, subMenuWindow, subMenuHelp];
   }
 
   buildDefaultTemplate() {
@@ -263,18 +234,10 @@ export default class MenuBuilder {
       {
         label: 'Help',
         submenu: [
-          // {
-          //   label: 'Learn More',
-          //   click() {
-          //     shell.openExternal('https://electronjs.org');
-          //   },
-          // },
           {
-            label: 'Documentation',
+            label: 'NiceNode Documentation',
             click() {
-              shell.openExternal(
-                'https://github.com/jgresham/nice-node#readme'
-              );
+              shell.openExternal('https://nicenode.xyz');
             },
           },
           {
