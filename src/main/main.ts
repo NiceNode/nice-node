@@ -11,7 +11,7 @@
 import path from 'path';
 import { app, BrowserWindow, dialog, shell } from 'electron';
 
-import { autoUpdater } from 'electron-updater';
+import { autoUpdater, UpdateInfo } from 'electron-updater';
 // import log from 'electron-log';
 // import debug from 'electron-debug';
 import * as Sentry from '@sentry/electron/main';
@@ -41,53 +41,6 @@ Sentry.init({
   //     levels: ['error', 'warn'],
   //   }),
   // ],
-});
-
-autoUpdater.on('error', (error) => {
-  logger.error('autoUpdater:::::::::error', error);
-});
-
-autoUpdater.on('checking-for-update', () => {
-  logger.info('autoUpdater:::::::::checking-for-update');
-});
-autoUpdater.on('download-progress', (info) => {
-  logger.info(`autoUpdater:::::::::download-progress ${info}`);
-});
-autoUpdater.on('update-available', async () => {
-  logger.info('autoUpdater:::::::::update-available');
-  // Quick fix to wait for window load before showing update prompt
-  await sleep(5000);
-  dialog
-    .showMessageBox({
-      type: 'info',
-      title: 'Updates for NiceNode available',
-      message:
-        'Do you want update NiceNode now? NiceNode restarts for updates.',
-      buttons: ['Yes', 'No'],
-    })
-    .then(async (buttonIndex) => {
-      if (buttonIndex.response === 0) {
-        console.log('update accepted by user');
-        console.log('starting download');
-        await autoUpdater.downloadUpdate();
-        console.log('done with download. restarting app');
-        autoUpdater.quitAndInstall();
-        console.log('after quit called');
-      } else {
-        console.log('update checkbox not checked');
-      }
-    })
-    .catch((err) => {
-      console.error('error in update available diaglog: ', err);
-    });
-});
-
-autoUpdater.on('update-not-available', () => {
-  logger.info('autoUpdater:::::::::update-not-available');
-});
-
-autoUpdater.on('update-downloaded', () => {
-  logger.info('autoUpdater:::::::::update-downloaded');
 });
 
 // If your app does uses auto updates
@@ -181,7 +134,9 @@ const createWindow = async () => {
   });
 
   // Remove this if your app does not use auto updates
-  // eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  intiUpdateHandlers(mainWindow);
+  // eslint-disable-next-line no-new
   new AppUpdater();
 
   // [Start] Modifies the renderer's Origin header for all outgoing web requests.
@@ -241,6 +196,59 @@ app
     });
   })
   .catch(logger.info);
+
+const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
+  autoUpdater.on('error', (error) => {
+    logger.error('autoUpdater:::::::::error', error);
+  });
+
+  autoUpdater.on('checking-for-update', () => {
+    logger.info('autoUpdater:::::::::checking-for-update');
+  });
+  autoUpdater.on('download-progress', (info) => {
+    logger.info(`autoUpdater:::::::::download-progress: `, info);
+  });
+  autoUpdater.on('update-available', async (info: UpdateInfo) => {
+    logger.info('autoUpdater:::::::::update-available: ', info);
+    // Quick fix to wait for window load before showing update prompt
+    await sleep(5000);
+    dialog
+      .showMessageBox(browserWindow, {
+        type: 'info',
+        title: 'Updates for NiceNode available',
+        message: `Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version ${info.version}.`,
+        buttons: ['Yes', 'No'],
+      })
+      .then(async (buttonIndex) => {
+        if (buttonIndex.response === 0) {
+          console.log('update accepted by user');
+          console.log('starting download');
+          autoUpdater.downloadUpdate();
+          dialog.showMessageBox(browserWindow, {
+            type: 'info',
+            title: 'Updates for NiceNode available',
+            message: `Downloading NiceNode update...`,
+          });
+        } else {
+          console.log('update checkbox not checked');
+        }
+      })
+      .catch((err) => {
+        console.error('error in update available diaglog: ', err);
+      });
+  });
+
+  autoUpdater.on('update-not-available', () => {
+    logger.info('autoUpdater:::::::::update-not-available');
+  });
+
+  autoUpdater.on('update-downloaded', () => {
+    logger.info('autoUpdater:::::::::update-downloaded');
+    console.log('done with download. restarting app');
+    autoUpdater.quitAndInstall();
+    console.log('after quit called');
+  });
+};
 
 // no blocking work
 const initialize = () => {
