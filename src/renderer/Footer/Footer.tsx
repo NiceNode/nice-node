@@ -90,7 +90,7 @@ const Footer = () => {
         <VscDebugConsole />
       </IconButton>
       <div style={{ position: 'fixed', right: 10, fontSize: 14 }}>
-        <span>version {sNiceNodeVersion}</span>
+        <span>v{sNiceNodeVersion}</span>
       </div>
 
       <Debugging
