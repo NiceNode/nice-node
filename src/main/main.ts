@@ -49,6 +49,11 @@ export default class AppUpdater {
     autoUpdater.logger = autoUpdateLogger;
     autoUpdater.autoDownload = false;
     autoUpdater.autoInstallOnAppQuit = false;
+    // Github allows releases to be marked as "pre-release" for
+    //  testing purposes. Devs can set this to true and create
+    //  a "pre-release" to test the auto update functionality.
+    // https://www.electron.build/auto-update#appupdater-moduleeventseventemitter
+    autoUpdater.allowPrerelease = false;
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
@@ -244,9 +249,8 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
 
   autoUpdater.on('update-downloaded', () => {
     logger.info('autoUpdater:::::::::update-downloaded');
-    console.log('done with download. restarting app');
+    logger.info('Calling autoUpdater.quitAndInstall()');
     autoUpdater.quitAndInstall();
-    console.log('after quit called');
   });
 };
 

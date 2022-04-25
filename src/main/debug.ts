@@ -9,7 +9,7 @@ export default function getDebugInfo() {
   let niceNodeVersion = app.getVersion();
 
   if (process.env.NODE_ENV === 'development') {
-    niceNodeVersion = `dev-${niceNodeVersion}`;
+    niceNodeVersion = `Dev-${niceNodeVersion}`;
   }
 
   return {
@@ -28,7 +28,7 @@ const getDebugInfoShort = () => {
   let niceNodeVersion = app.getVersion();
 
   if (process.env.NODE_ENV === 'development') {
-    niceNodeVersion = `dev-${niceNodeVersion}`;
+    niceNodeVersion = `Dev-${niceNodeVersion}`;
   }
 
   return {
