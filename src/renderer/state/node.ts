@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from './store';
 import { NODE_STATUS } from '../messages';
+import { NodeConfig } from '../../main/state/nodeConfig';
 
 // Define a type for the slice state
 export interface NodeState {
+  config?: NodeConfig;
   numGethDiskUsedGB: number | undefined;
   numFreeDiskGB: number | undefined;
   status: string | undefined;
@@ -20,6 +22,19 @@ export const initialState: NodeState = {
 };
 
 console.log('Intial node state: ', initialState);
+/**
+ * If the node is running and has http turned on, then poll!
+ * @param state NodeState
+ */
+const setIsAvailableForPolling = (state: NodeState) => {
+  if (state.status === NODE_STATUS.running && state?.config?.http === true) {
+    state.isAvailableForPolling = true;
+    console.log('Starting polling node for data');
+  } else {
+    state.isAvailableForPolling = false;
+    console.log('Stop polling node for data');
+  }
+};
 
 export const nodeSlice = createSlice({
   name: 'node',
@@ -40,24 +55,27 @@ export const nodeSlice = createSlice({
     },
     updateNodeStatus: (state, action: PayloadAction<string | undefined>) => {
       state.status = action.payload;
-      if (state.status === NODE_STATUS.running) {
-        state.isAvailableForPolling = true;
-        console.log('Starting polling node for data');
-      } else {
-        state.isAvailableForPolling = false;
-        console.log('Stop polling node for data');
-      }
+      setIsAvailableForPolling(state);
+    },
+    updateNodeConfig: (
+      state,
+      action: PayloadAction<NodeConfig | undefined>
+    ) => {
+      state.config = action.payload;
+      setIsAvailableForPolling(state);
     },
   },
 });
 
 export const {
+  updateNodeConfig,
   updateNodeNumGethDiskUsedGB,
   updateSystemNumFreeDiskGB,
   updateNodeStatus,
 } = nodeSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
+export const selectNodeConfig = (state: RootState) => state.node.config;
 export const selectNumGethDiskUsedGB = (state: RootState): number | undefined =>
   state.node.numGethDiskUsedGB;
 export const selectNumFreeDiskGB = (state: RootState): number | undefined =>

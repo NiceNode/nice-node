@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 
 import { NodeConfig } from '../../main/state/nodeConfig';
 import electron from '../electronGlobal';
 import { NODE_STATUS } from '../messages';
-import { useAppSelector } from '../state/hooks';
-import { selectNodeStatus } from '../state/node';
+import { useAppDispatch, useAppSelector } from '../state/hooks';
+import { selectNodeStatus, updateNodeConfig } from '../state/node';
 import metamaskLogo from '../../../assets/metamaskLogo.svg';
 
 const METAMASK_CHROME_EXTENSION_ID =
@@ -22,16 +22,17 @@ const NodeConfiguration = () => {
   const [sLightModeEnabled, setLightModeEnabled] = useState<boolean>();
   const [sParseError, setParseError] = useState<string>();
   const sNodeStatus = useAppSelector(selectNodeStatus);
+  const dispatch = useAppDispatch();
 
-  const getNodeConfig = async () => {
-    console.log('NodeConfig.tsx: getNodeConfig: ');
+  const getNodeConfig = useCallback(async () => {
     const nodeConfig = await electron.getNodeConfig(NODE);
+    dispatch(updateNodeConfig(nodeConfig));
     setNodeConfig(nodeConfig);
     const strRepresentation = nodeConfig.useDirectInput
       ? nodeConfig.directInputConfig
       : nodeConfig.asCliInput;
     setNodeConfigRaw(JSON.stringify(strRepresentation, null, 2));
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     if (!sNodeConfig) {
@@ -104,7 +105,7 @@ const NodeConfiguration = () => {
 
   useEffect(() => {
     getNodeConfig();
-  }, []);
+  }, [getNodeConfig]);
 
   const onChangeRawInput = (newRawInput: string) => {
     setNodeConfigRaw(newRawInput);
@@ -146,13 +147,13 @@ const NodeConfiguration = () => {
   return (
     <>
       <h2>Node</h2>
-      <h3>Configuration</h3>
       {isConfigDisabled && (
         <h5>The node must be stopped to make configuration changes.</h5>
       )}
       {sNodeConfig?.useDirectInput && (
         <h5>Detected advanced usage from direct text input</h5>
       )}
+      <h3>Sync mode</h3>
       <div style={{ marginBottom: 10 }}>
         <button
           type="button"
@@ -173,6 +174,7 @@ const NodeConfiguration = () => {
           <FiExternalLink />
         </a>
       </div>
+      <h3>Connections</h3>
       <div style={{ marginBottom: 10 }}>
         <button
           type="button"
@@ -198,6 +200,7 @@ const NodeConfiguration = () => {
           <FiExternalLink />
         </a>
       </div>
+      <h3>Restore default</h3>
       <div>
         <button
           type="button"
@@ -210,6 +213,7 @@ const NodeConfiguration = () => {
           <span>Set to NiceNode defaults</span>
         </button>
       </div>
+      <h3>Direct input (for advanced users)</h3>
       <h4>
         Runtime input passed directly to the node. Enter an array of strings.
       </h4>
