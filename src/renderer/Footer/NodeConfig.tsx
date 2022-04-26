@@ -19,6 +19,7 @@ const NodeConfiguration = () => {
   const [sNodeConfig, setNodeConfig] = useState<NodeConfig>();
   const [sNodeConfigRaw, setNodeConfigRaw] = useState<string>();
   const [sMetaMaskEnabled, setMetaMaskEnabled] = useState<boolean>();
+  const [sLightModeEnabled, setLightModeEnabled] = useState<boolean>();
   const [sParseError, setParseError] = useState<string>();
   const sNodeStatus = useAppSelector(selectNodeStatus);
 
@@ -33,7 +34,10 @@ const NodeConfiguration = () => {
   };
 
   useEffect(() => {
-    if (sNodeConfig && Array.isArray(sNodeConfig.httpAllowedDomains)) {
+    if (!sNodeConfig) {
+      return;
+    }
+    if (Array.isArray(sNodeConfig.httpAllowedDomains)) {
       if (
         sNodeConfig.httpAllowedDomains.includes(METAMASK_CHROME_EXTENSION_ID) ||
         sNodeConfig.httpAllowedDomains.includes(METAMASK_FIREFOX_EXTENSION_ID)
@@ -43,10 +47,17 @@ const NodeConfiguration = () => {
       }
     }
     setMetaMaskEnabled(false);
+
+    setLightModeEnabled(sNodeConfig.syncMode === 'light');
   }, [sNodeConfig]);
 
   const setToDefaultNodeConfig = async () => {
     await electron.setToDefaultNodeConfig(NODE);
+    await getNodeConfig();
+  };
+
+  const changeNodeConfig = async (newConfig: NodeConfig) => {
+    await electron.changeNodeConfig(NODE, newConfig);
     await getNodeConfig();
   };
 
@@ -79,12 +90,16 @@ const NodeConfiguration = () => {
         );
       }
     }
-
-    await electron.changeNodeConfig(NODE, {
+    changeNodeConfig({
       http: true,
       httpAllowedDomains: newAllowedDomains,
     });
-    await getNodeConfig();
+  };
+
+  const toggleLightClient = async () => {
+    changeNodeConfig({
+      syncMode: sLightModeEnabled ? 'snap' : 'light',
+    });
   };
 
   useEffect(() => {
@@ -141,6 +156,26 @@ const NodeConfiguration = () => {
       <div style={{ marginBottom: 10 }}>
         <button
           type="button"
+          onClick={toggleLightClient}
+          disabled={isConfigDisabled}
+          style={{ marginLeft: 10 }}
+        >
+          <span>
+            {sLightModeEnabled ? 'Run full node mode' : 'Run light client mode'}
+          </span>
+        </button>
+        <a
+          target="_blank"
+          href="https://geth.ethereum.org/docs/interface/les"
+          rel="noreferrer"
+        >
+          {`Geth's light client guide`}
+          <FiExternalLink />
+        </a>
+      </div>
+      <div style={{ marginBottom: 10 }}>
+        <button
+          type="button"
           onClick={toggleMetamaskConnections}
           disabled={isConfigDisabled}
           style={{ marginLeft: 10 }}
@@ -172,7 +207,7 @@ const NodeConfiguration = () => {
           disabled={isConfigDisabled}
           style={{ marginLeft: 10 }}
         >
-          <span>Set to default configuration</span>
+          <span>Set to NiceNode defaults</span>
         </button>
       </div>
       <h4>
