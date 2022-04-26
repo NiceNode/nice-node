@@ -44,10 +44,8 @@ li {
 }
 
 a {
-  text-decoration: none;
-  height: fit-content;
-  width: fit-content;
   margin: 10px;
+  color: white;
 }
 
 a:hover {

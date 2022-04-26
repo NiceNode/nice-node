@@ -19,13 +19,11 @@ import {
   gethBuildNameForPlatformAndArch,
 } from './gethDownload';
 import { isWindows } from './platform';
-import {
-  getIsStartOnLogin,
-  getNodeConfig as storeGetNodeConfig,
-  setNodeConfig,
-} from './store';
+import { getIsStartOnLogin } from './state/store';
 import { registerChildProcess } from './processExit';
 import { httpGet } from './httpReq';
+// eslint-disable-next-line import/no-cycle
+import { getNodeConfigAsCliInput } from './state/nodeConfig';
 
 const streamPipeline = promisify(pipeline);
 
@@ -41,30 +39,6 @@ const checkAndOrCreateGethDataDir = async () => {
     logger.info('making geth data dir...');
     await mkdir(gethDataDir());
   }
-};
-
-export const getDefaultNodeConfig = () => {
-  const gethDataPath = gethDataDir();
-  const defaultConfig = [
-    '--http',
-    '--http.corsdomain',
-    'nice-node://',
-    '--datadir',
-    gethDataPath,
-  ];
-  return defaultConfig;
-};
-
-export const getNodeConfig = () => {
-  const storeConfig: string[] = storeGetNodeConfig();
-  if (storeConfig !== undefined) {
-    return storeConfig;
-  }
-  return getDefaultNodeConfig();
-};
-
-export const setToDefaultNodeConfig = () => {
-  setNodeConfig(getDefaultNodeConfig());
 };
 
 export const downloadGeth = async () => {
@@ -156,7 +130,7 @@ export const startGeth = async () => {
 
   await checkAndOrCreateGethDataDir();
 
-  const gethInput = getNodeConfig();
+  const gethInput = getNodeConfigAsCliInput('geth');
   logger.info(`Starting geth with input: ${gethInput}`);
   let execFileAbsolutePath = path.join(
     getNNDirPath(),

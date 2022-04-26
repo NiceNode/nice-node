@@ -7,15 +7,16 @@ import {
   getSystemFreeDiskSpace,
   deleteGethDisk,
 } from './files';
+import { getStatus, startGeth, stopGeth } from './geth';
 import {
   getDefaultNodeConfig,
   setToDefaultNodeConfig,
   getNodeConfig,
-  getStatus,
-  startGeth,
-  stopGeth,
-} from './geth';
-import { store } from './store';
+  NodeConfig,
+  setDirectInputNodeConfig,
+  changeNodeConfig,
+} from './state/nodeConfig';
+import store from './state/store';
 import logger from './logger';
 import {
   checkSystemHardware,
@@ -44,9 +45,30 @@ export const initialize = () => {
   });
   ipcMain.handle('getGethLogs', getGethLogs);
   ipcMain.handle('getGethErrorLogs', getGethErrorLogs);
-  ipcMain.handle('getNodeConfig', getNodeConfig);
-  ipcMain.handle('getDefaultNodeConfig', getDefaultNodeConfig);
-  ipcMain.handle('setToDefaultNodeConfig', setToDefaultNodeConfig);
+  ipcMain.handle('getNodeConfig', (_event, node: string) => {
+    console.log('ipc main handle getNodeConfig: ', node);
+    return getNodeConfig(node);
+  });
+  ipcMain.handle(
+    'changeNodeConfig',
+    (_event, node: string, nodeConfig: NodeConfig) => {
+      return changeNodeConfig(node, nodeConfig);
+    }
+  );
+  ipcMain.handle('getDefaultNodeConfig', (_event, node: string) => {
+    console.log('main handle getDefaultNodeConfig');
+    return getDefaultNodeConfig(node);
+  });
+  ipcMain.handle('setToDefaultNodeConfig', (_event, node: string) => {
+    console.log('main node: ', node);
+    return setToDefaultNodeConfig(node);
+  });
+  ipcMain.handle(
+    'setDirectInputNodeConfig',
+    (_event, node: string, directInput: string[]) => {
+      return setDirectInputNodeConfig(node, directInput);
+    }
+  );
   ipcMain.handle('getNodeUsage', getNodeUsage);
   ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
