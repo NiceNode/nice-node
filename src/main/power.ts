@@ -1,6 +1,6 @@
 import { app, powerSaveBlocker, powerMonitor } from 'electron';
 
-import { getIsStartOnLogin, watchIsStartOnLogin } from './store';
+import { getIsStartOnLogin, watchIsStartOnLogin } from './state/store';
 import logger from './logger';
 
 let id: number | undefined;

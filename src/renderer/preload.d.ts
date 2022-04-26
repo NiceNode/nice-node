@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { NodeConfig } from '../main/state/nodeConfig';
+
 // Since we are using Chrome only in Electron and this is not a web standard yet,
 //  we extend window.performance to include Chrome's memory stats
 interface Performance extends Performance {
@@ -35,9 +37,11 @@ declare global {
       getRendererProcessUsage(): any;
       getMainProcessUsage(): any;
       getNodeUsage(): any;
-      getNodeConfig(): string[];
-      getDefaultNodeConfig(): string[];
-      setToDefaultNodeConfig(): void;
+      getNodeConfig(node: string): NodeConfig;
+      changeNodeConfig(node: string, nodeConfig: NodeConfig): void;
+      setDirectInputNodeConfig(node: string, directInput: string[]): void;
+      getDefaultNodeConfig(node: string): NodeConfig;
+      setToDefaultNodeConfig(node: string): void;
       checkSystemHardware(): string[];
     };
 

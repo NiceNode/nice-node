@@ -1,6 +1,6 @@
 const Store = require('electron-store');
 
-export const store = new Store();
+const store = new Store();
 
 export const setIsStartOnLogin = (isStartOnLogin: boolean): void => {
   store.set('isStartOnLogin', isStartOnLogin);
@@ -16,10 +16,4 @@ export const watchIsStartOnLogin = (
   store.onDidChange('isStartOnLogin', handler);
 };
 
-export const setNodeConfig = (nodeConfig: string[]): void => {
-  store.set('nodeConfig', nodeConfig);
-};
-
-export const getNodeConfig = (): string[] => {
-  return store.get('nodeConfig');
-};
+export default store;

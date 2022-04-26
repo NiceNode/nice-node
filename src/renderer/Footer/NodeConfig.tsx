@@ -1,22 +1,88 @@
 import { useEffect, useState } from 'react';
-import electron from '../electronGlobal';
 
+import { NodeConfig } from '../../main/state/nodeConfig';
+import electron from '../electronGlobal';
 import { NODE_STATUS } from '../messages';
 import { useAppSelector } from '../state/hooks';
 import { selectNodeStatus } from '../state/node';
+import metamaskLogo from '../../../assets/metamaskLogo.svg';
 
-const NodeConfig = () => {
+const METAMASK_CHROME_EXTENSION_ID =
+  'chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn';
+const METAMASK_FIREFOX_EXTENSION_ID =
+  'moz-extension://e9845626-1402-4ea2-9534-f54a65cf958f';
+
+const NODE = 'geth';
+
+const NodeConfiguration = () => {
+  const [sNodeConfig, setNodeConfig] = useState<NodeConfig>();
   const [sNodeConfigRaw, setNodeConfigRaw] = useState<string>();
+  const [sMetaMaskEnabled, setMetaMaskEnabled] = useState<boolean>();
   const [sParseError, setParseError] = useState<string>();
   const sNodeStatus = useAppSelector(selectNodeStatus);
 
   const getNodeConfig = async () => {
-    const nodeConfig = await electron.getNodeConfig();
-    setNodeConfigRaw(JSON.stringify(nodeConfig, null, 2));
+    console.log('NodeConfig.tsx: getNodeConfig: ');
+    const nodeConfig = await electron.getNodeConfig(NODE);
+    setNodeConfig(nodeConfig);
+    const strRepresentation = nodeConfig.useDirectInput
+      ? nodeConfig.directInputConfig
+      : nodeConfig.asCliInput;
+    setNodeConfigRaw(JSON.stringify(strRepresentation, null, 2));
   };
 
+  useEffect(() => {
+    if (sNodeConfig && Array.isArray(sNodeConfig.httpAllowedDomains)) {
+      if (
+        sNodeConfig.httpAllowedDomains.includes(METAMASK_CHROME_EXTENSION_ID) ||
+        sNodeConfig.httpAllowedDomains.includes(METAMASK_FIREFOX_EXTENSION_ID)
+      ) {
+        setMetaMaskEnabled(true);
+        return;
+      }
+    }
+    setMetaMaskEnabled(false);
+  }, [sNodeConfig]);
+
   const setToDefaultNodeConfig = async () => {
-    await electron.setToDefaultNodeConfig();
+    await electron.setToDefaultNodeConfig(NODE);
+    await getNodeConfig();
+  };
+
+  const toggleMetamaskConnections = async () => {
+    const currAllowedDomains = sNodeConfig?.httpAllowedDomains;
+
+    // add metamask extension IDs to allowed http origins
+    let newAllowedDomains: string[] = [];
+    if (Array.isArray(currAllowedDomains)) {
+      newAllowedDomains = currAllowedDomains;
+    }
+    if (sMetaMaskEnabled) {
+      // disable metamask
+      newAllowedDomains = newAllowedDomains.filter((domain) => {
+        return (
+          domain !== METAMASK_CHROME_EXTENSION_ID &&
+          domain !== METAMASK_FIREFOX_EXTENSION_ID
+        );
+      });
+    } else {
+      // enable metamask
+      if (!newAllowedDomains.includes(METAMASK_CHROME_EXTENSION_ID)) {
+        newAllowedDomains = newAllowedDomains.concat(
+          METAMASK_CHROME_EXTENSION_ID
+        );
+      }
+      if (!newAllowedDomains.includes(METAMASK_FIREFOX_EXTENSION_ID)) {
+        newAllowedDomains = newAllowedDomains.concat(
+          METAMASK_FIREFOX_EXTENSION_ID
+        );
+      }
+    }
+
+    await electron.changeNodeConfig(NODE, {
+      http: true,
+      httpAllowedDomains: newAllowedDomains,
+    });
     await getNodeConfig();
   };
 
@@ -24,10 +90,12 @@ const NodeConfig = () => {
     getNodeConfig();
   }, []);
 
-  useEffect(() => {
-    if (sNodeConfigRaw) {
+  const onChangeRawInput = (newRawInput: string) => {
+    setNodeConfigRaw(newRawInput);
+
+    if (newRawInput) {
       try {
-        const nodeConfigInput = JSON.parse(sNodeConfigRaw);
+        const nodeConfigInput = JSON.parse(newRawInput);
         if (Array.isArray(nodeConfigInput)) {
           const isAllStrings = nodeConfigInput.every(
             (i) => typeof i === 'string'
@@ -38,7 +106,7 @@ const NodeConfig = () => {
             );
             return;
           }
-          electron.setStoreValue('nodeConfig', nodeConfigInput);
+          electron.setDirectInputNodeConfig(NODE, nodeConfigInput);
           setParseError(undefined);
         } else {
           setParseError('Input is not an array.');
@@ -52,7 +120,7 @@ const NodeConfig = () => {
         'Input an array of strings or just [] if no input desired.'
       );
     }
-  }, [sNodeConfigRaw]);
+  };
 
   const isConfigDisabled = !(
     sNodeStatus === NODE_STATUS.readyToStart ||
@@ -66,6 +134,38 @@ const NodeConfig = () => {
       {isConfigDisabled && (
         <h5>The node must be stopped to make configuration changes.</h5>
       )}
+      {sNodeConfig?.useDirectInput && (
+        <h5>Detected advanced usage from direct text input</h5>
+      )}
+      <div style={{ marginBottom: 10 }}>
+        <button
+          type="button"
+          onClick={toggleMetamaskConnections}
+          disabled={isConfigDisabled}
+          style={{ marginLeft: 10 }}
+        >
+          <span>
+            {sMetaMaskEnabled ? 'Disable' : 'Enable'} connections from{' '}
+          </span>
+          <img
+            src={metamaskLogo}
+            alt="Metamask logo"
+            style={{ width: 100, marginLeft: 10 }}
+          />
+        </button>
+      </div>
+      <div>
+        <button
+          type="button"
+          onClick={async () => {
+            setToDefaultNodeConfig();
+          }}
+          disabled={isConfigDisabled}
+          style={{ marginLeft: 10 }}
+        >
+          <span>Set to default configuration</span>
+        </button>
+      </div>
       <h4>
         Runtime input passed directly to the node. Enter an array of strings.
       </h4>
@@ -82,20 +182,9 @@ const NodeConfig = () => {
             minHeight: 150,
           }}
           value={sNodeConfigRaw}
-          onChange={(e) => setNodeConfigRaw(e.target.value)}
+          onChange={(e) => onChangeRawInput(e.target.value)}
           disabled={isConfigDisabled}
         />
-      </div>
-      <div>
-        <button
-          type="button"
-          onClick={async () => {
-            setToDefaultNodeConfig();
-          }}
-          style={{ marginLeft: 10 }}
-        >
-          <span>Set to default configuration</span>
-        </button>
       </div>
 
       {/* </><button
@@ -117,4 +206,4 @@ const NodeConfig = () => {
     </>
   );
 };
-export default NodeConfig;
+export default NodeConfiguration;
