@@ -4,7 +4,7 @@ import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
 import { useGetExecutionNodeInfoQuery } from '../state/services';
 import NodeConfig from './NodeConfig';
-import NiceNodeSettings from './NiceNodeSettings';
+// import NiceNodeSettings from './NiceNodeSettings';
 
 type Props = {
   isOpen: boolean | undefined;
@@ -24,7 +24,7 @@ const Settings = ({ isOpen, onClickCloseButton }: Props) => {
       onClickCloseButton={onClickCloseButton}
     >
       <NodeConfig />
-      <NiceNodeSettings />
+      {/* <NiceNodeSettings /> */}
       {qNodeInfo?.currentData && !qNodeInfo?.isError && (
         <h4>Running: {qNodeInfo.currentData}</h4>
       )}

@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react';
 
+import { ImWarning } from 'react-icons/im';
 import { HiUserGroup } from 'react-icons/hi';
+import { BsFillLightningChargeFill } from 'react-icons/bs';
 import { FaSync } from 'react-icons/fa';
-import { MdSignalWifiStatusbarConnectedNoInternet } from 'react-icons/md';
+import {
+  MdSignalWifiStatusbarConnectedNoInternet,
+  MdHttp,
+} from 'react-icons/md';
 import { FiHardDrive } from 'react-icons/fi';
+import { VscDebugDisconnect } from 'react-icons/vsc';
 import { SiHiveBlockchain } from 'react-icons/si';
 import {
   useGetExecutionIsSyncingQuery,
@@ -16,6 +22,7 @@ import { useAppSelector } from './state/hooks';
 import {
   selectNumGethDiskUsedGB,
   selectIsAvailableForPolling,
+  selectNodeConfig,
 } from './state/node';
 
 const Header = () => {
@@ -24,6 +31,7 @@ const Header = () => {
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>();
+  const sNodeConfig = useAppSelector(selectNodeConfig);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
   const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(null, {
@@ -123,6 +131,33 @@ const Header = () => {
           fontSize: '1.1rem',
         }}
       >
+        {!sNodeConfig?.http && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginRight: 20,
+            }}
+          >
+            <ImWarning />
+            <VscDebugDisconnect style={{ fontSize: '1.8rem' }} />
+            <MdHttp style={{ fontSize: '2.5rem' }} />
+          </div>
+        )}
+        {sNodeConfig?.syncMode === 'light' && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginRight: 10,
+            }}
+          >
+            <BsFillLightningChargeFill />
+            <span>Light client</span>
+          </div>
+        )}
         {typeof sLatestBlockNumber === 'number' && sLatestBlockNumber > 0 && (
           <div
             style={{

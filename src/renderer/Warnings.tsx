@@ -10,12 +10,14 @@ import {
   selectNumFreeDiskGB,
   updateNodeNumGethDiskUsedGB,
   updateSystemNumFreeDiskGB,
+  selectNodeConfig,
 } from './state/node';
 
 const Warnings = () => {
   const dispatch = useAppDispatch();
   const sGethDiskUsed = useAppSelector(selectNumGethDiskUsedGB);
   const sFreeDisk = useAppSelector(selectNumFreeDiskGB);
+  const sNodeConfig = useAppSelector(selectNodeConfig);
 
   const [sIsOpen, setIsOpen] = useState<boolean>(false);
   const [sHasBeenClosed, setHasBeenClosed] = useState<boolean>(false);
@@ -53,13 +55,22 @@ const Warnings = () => {
 
   useEffect(() => {
     if (sFreeDisk !== undefined && sGethDiskUsed !== undefined) {
-      if (sGethDiskUsed + sFreeDisk > 1000) {
-        setStorageWarning(false);
+      if (sNodeConfig?.syncMode === 'light') {
+        if (sFreeDisk < 2) {
+          setStorageWarning(true);
+        } else {
+          setStorageWarning(false);
+        }
       } else {
-        setStorageWarning(true);
+        // eslint-disable-next-line no-lonely-if
+        if (sGethDiskUsed + sFreeDisk > 1000) {
+          setStorageWarning(false);
+        } else {
+          setStorageWarning(true);
+        }
       }
     }
-  }, [sGethDiskUsed, sFreeDisk, sStorageWarning]);
+  }, [sGethDiskUsed, sFreeDisk, sStorageWarning, sNodeConfig]);
 
   useEffect(() => {
     // don't show the warning if it has already been closed
@@ -105,18 +116,40 @@ const Warnings = () => {
         })}
         {sStorageWarning && (
           <div style={{ marginBottom: 5 }}>
-            <span>
-              - At least 1 TB of storage is required to run an Ethereum Node.
-              Your computer does not have enough free SSD storage space.
-            </span>
+            {sNodeConfig?.syncMode === 'light' ? (
+              <span>
+                - At least 2GB of storage is required to run an Ethereum light
+                client. Your computer does not have enough free SSD storage
+                space.
+              </span>
+            ) : (
+              <span>
+                - At least 1 TB of storage is required to run an Ethereum Node.
+                Your computer does not have enough free SSD storage space.
+              </span>
+            )}
           </div>
         )}
         {((sWarnings && sWarnings.length > 0) || sStorageWarning) && (
           <div style={{ marginTop: 5 }}>
             <span>
-              Please visit ethereum.org to see computer hardware requirements at
-              <a href="https://ethereum.org/en/run-a-node/#build-your-own">
+              Please visit ethereum.org to see computer hardware requirements at{' '}
+              <a
+                style={{ color: 'blue' }}
+                href="https://ethereum.org/en/run-a-node/#build-your-own"
+              >
                 ethereum.org/run-a-node
+              </a>
+            </span>
+            <br />
+            <span>
+              Or consider using light client mode available in Settings &gt;
+              Node Configuration{' '}
+              <a
+                style={{ color: 'blue' }}
+                href="https://geth.ethereum.org/docs/interface/les"
+              >
+                geth.ethereum.org/docs/interface/les
               </a>
             </span>
           </div>
