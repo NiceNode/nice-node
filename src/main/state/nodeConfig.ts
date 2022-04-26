@@ -6,6 +6,7 @@ import store from './store';
 export type NodeConfig = {
   http?: boolean;
   httpAllowedDomains?: string[];
+  syncMode?: string;
   dataDirectory?: string;
   useDirectInput?: boolean;
   directInputConfig?: string[];
@@ -34,6 +35,10 @@ export const nodeConfigToCliInput = (
     if (config.dataDirectory) {
       cliInput.push('--datadir');
       cliInput.push(config.dataDirectory);
+    }
+    if (config.syncMode) {
+      cliInput.push('--syncmode');
+      cliInput.push(config.syncMode);
     }
   } else {
     logger.error(`Unknown config to CLI input for node ${node}.`);
