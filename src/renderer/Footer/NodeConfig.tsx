@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { FiExternalLink } from 'react-icons/fi';
 
 import { NodeConfig } from '../../main/state/nodeConfig';
 import electron from '../electronGlobal';
@@ -153,6 +154,14 @@ const NodeConfiguration = () => {
             style={{ width: 100, marginLeft: 10 }}
           />
         </button>
+        <a
+          target="_blank"
+          href="https://metamask.zendesk.com/hc/en-us/articles/360015290012-Using-a-Local-Node"
+          rel="noreferrer"
+        >
+          {`MetaMask's local node guide`}
+          <FiExternalLink />
+        </a>
       </div>
       <div>
         <button
