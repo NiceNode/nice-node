@@ -1,6 +1,6 @@
 # NiceNode
 
-"A one-click-to-start Ethereum node"
+"Run a node, just press start"
 
 <strong>Mission: </strong>2x the number of Ethereum nodes by making a one-click-to-start Ethereum node
 
