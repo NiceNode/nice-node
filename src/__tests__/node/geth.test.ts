@@ -44,7 +44,7 @@ afterAll(async () => {
   }
 });
 
-jest.setTimeout(60000);
+jest.setTimeout(120000);
 describe('Downloading geth', () => {
   it('Successfully downloads', async () => {
     // spawn child process
