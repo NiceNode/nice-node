@@ -6,7 +6,9 @@ import {
   MenuItemConstructorOptions,
   clipboard,
 } from 'electron';
+
 import { getDebugInfoString, getGithubIssueProblemURL } from './debug';
+import { checkForUpdates } from './updater';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -159,6 +161,12 @@ export default class MenuBuilder {
             clipboard.writeText(getDebugInfoString());
           },
         },
+        {
+          label: 'Check for updates',
+          click() {
+            checkForUpdates(true);
+          },
+        },
       ],
     };
 
@@ -258,6 +266,12 @@ export default class MenuBuilder {
             label: 'Copy Configuration Details to Clipboard',
             click() {
               clipboard.writeText(getDebugInfoString());
+            },
+          },
+          {
+            label: 'Check for updates',
+            click() {
+              checkForUpdates(true);
             },
           },
         ],
