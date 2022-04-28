@@ -10,8 +10,6 @@
  */
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
-// import log from 'electron-log';
-// import debug from 'electron-debug';
 import * as Sentry from '@sentry/electron/main';
 // import { CaptureConsole } from '@sentry/integrations';
 
@@ -22,11 +20,8 @@ import { setWindow } from './messenger';
 import { initialize as initGeth } from './geth';
 import * as ipc from './ipc';
 import * as power from './power';
+import { setCorsForNiceNode } from './corsMiddleware';
 import * as updater from './updater';
-
-// import * as processExit from './processExit';
-
-// import { dontSuspendSystem } from './power';
 
 require('dotenv').config();
 // debug({ isEnabled: true });
@@ -125,34 +120,8 @@ const createWindow = async () => {
     return { action: 'deny' };
   });
 
-  // [Start] Modifies the renderer's Origin header for all outgoing web requests.
-  // This is done to simplify the allowed origins set for geth
-  const filter = {
-    urls: ['http://localhost/*', 'ws://localhost/'], // Remote API URS for which you are getting CORS error
-  };
-  mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
-    filter,
-    (details, callback) => {
-      details.requestHeaders.Origin = `nice-node://`;
-      callback({ requestHeaders: details.requestHeaders });
-    }
-  );
-  mainWindow.webContents.session.webRequest.onHeadersReceived(
-    filter,
-    (details, callback) => {
-      if (!details.responseHeaders) {
-        details.responseHeaders = {};
-      }
-
-      details.responseHeaders['Access-Control-Allow-Origin'] = [
-        '*',
-        // 'http://localhost:1212', // URL your local electron app hosted
-      ];
-
-      callback({ responseHeaders: details.responseHeaders });
-    }
-  );
-  // [End] modifying Origin header
+  // Intercepts web requests from the UI an internet and sets origins
+  setCorsForNiceNode(mainWindow);
 };
 
 /**
