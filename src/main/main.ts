@@ -23,6 +23,7 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { setWindow } from './messenger';
 import { initialize as initGeth } from './geth';
+import { initialize as initDocker } from './docker';
 import * as ipc from './ipc';
 import * as power from './power';
 
@@ -260,6 +261,7 @@ const initialize = () => {
   initGeth();
   ipc.initialize();
   power.initialize();
+  initDocker();
   // processExit.initialize();
 };
 
