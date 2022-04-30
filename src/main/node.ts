@@ -48,13 +48,13 @@ export default class Node {
     this.iconUrl = opts.iconUrl;
   }
 
-  start() {
-    console.log(`start ${this.executionType} node`);
-  }
+  // start() {
+  //   console.log(`start ${this.executionType} node`);
+  // }
 
-  stop() {
-    console.log(`stop ${this.executionType} node`);
-  }
+  // stop() {
+  //   console.log(`stop ${this.executionType} node`);
+  // }
 }
 
 // export class DockerNode {

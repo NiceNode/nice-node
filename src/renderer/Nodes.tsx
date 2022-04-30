@@ -20,13 +20,15 @@ const Nodes = () => {
       iconUrl: 'https://i.imgur.com/iEywqSx.png',
     };
     const node = await electron.addNode(nodeOptions);
-    // qGetNodes
+    qGetNodes.refetch();
     console.log('NODEEEEEEEE', node);
   };
 
+  // todo: modal with confirm & delete data warning,etc.
   const onClickRemoveNode = async (nodeId: NodeId) => {
     const node = await electron.removeNode(nodeId);
     console.log('removed node: ', node);
+    qGetNodes.refetch();
   };
 
   return (
@@ -57,6 +59,18 @@ const Nodes = () => {
                   onClick={() => onClickRemoveNode(node.id)}
                 >
                   <span>Remove {node.displayName}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => electron.startNode(node.id)}
+                >
+                  <span>start {node.displayName}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => electron.stopNode(node.id)}
+                >
+                  <span>stop {node.displayName}</span>
                 </button>
               </div>
             );

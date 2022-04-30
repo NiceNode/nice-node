@@ -12,7 +12,7 @@ export const startNode = (nodeId: NodeId) => {
   if (!node) {
     throw new Error(`Unable to start node ${nodeId}. Node not found.`);
   }
-  return node.start();
+  start(node);
 };
 
 export const stopNode = (nodeId: NodeId) => {
@@ -21,4 +21,11 @@ export const stopNode = (nodeId: NodeId) => {
     throw new Error(`Unable to stop node ${nodeId}. Node not found.`);
   }
   return node.stop();
+};
+
+const start = (node) => {
+  // start
+  //  docker run
+  // stop
+  //  docker stop
 };
