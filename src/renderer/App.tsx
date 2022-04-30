@@ -18,6 +18,7 @@ import {
   updateNodeStatus,
 } from './state/node';
 import { NODE_STATUS } from './messages';
+import Nodes from './Nodes';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -99,6 +100,7 @@ const MainScreen = () => {
         }}
       >
         <div>
+          <Nodes />
           <h2>An Ethereum Node</h2>
           <h3>Status: {sNodeStatus}</h3>
           {sNodeStatus === 'running' && (

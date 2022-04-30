@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
 import { RtkqExecutionWs } from './services';
+import { RtkqNodeService } from './nodeService';
 import { RtkqNetwork } from './network';
 import nodeReducer from './node';
 
 export const store = configureStore({
   reducer: {
     node: nodeReducer,
+    [RtkqNodeService.reducerPath]: RtkqNodeService.reducer,
     [RtkqExecutionWs.reducerPath]: RtkqExecutionWs.reducer,
     [RtkqNetwork.reducerPath]: RtkqNetwork.reducer,
   },
@@ -14,6 +16,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     })
+      .concat(RtkqNodeService.middleware)
       .concat(RtkqExecutionWs.middleware)
       .concat(RtkqNetwork.middleware),
 });

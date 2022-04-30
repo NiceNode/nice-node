@@ -23,6 +23,9 @@ import {
   getMainProcessUsage,
   getNodeUsage,
 } from './monitor';
+import { addNode, startNode, stopNode } from './nodeManager';
+import { getNodes, getNode, removeNode } from './state/nodes';
+import { NodeId, NodeOptions } from './node';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -72,4 +75,19 @@ export const initialize = () => {
   ipcMain.handle('getNodeUsage', getNodeUsage);
   ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
+
+  // Multi-node
+  ipcMain.handle('getNodes', getNodes);
+  ipcMain.handle('addNode', (_event, nodeOptions: NodeOptions) => {
+    return addNode(nodeOptions);
+  });
+  ipcMain.handle('removeNode', (_event, nodeId: NodeId) => {
+    return removeNode(nodeId);
+  });
+  ipcMain.handle('startNode', (_event, nodeId: NodeId) => {
+    return startNode(nodeId);
+  });
+  ipcMain.handle('stopNode', (_event, nodeId: NodeId) => {
+    return stopNode(nodeId);
+  });
 };

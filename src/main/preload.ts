@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
+import { NodeId, NodeOptions } from './node';
 import { NodeConfig } from './state/nodeConfig';
 
 contextBridge.exposeInMainWorld('electron', {
@@ -45,4 +46,16 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('setDirectInputNodeConfig', node, directInput);
   },
   checkSystemHardware: () => ipcRenderer.invoke('checkSystemHardware'),
+
+  // Multi-node
+  getNodes: () => ipcRenderer.invoke('getNodes'),
+  addNode: (nodeOptions: NodeOptions) =>
+    ipcRenderer.invoke('addNode', nodeOptions),
+  removeNode: (nodeId: NodeId) => ipcRenderer.invoke('removeNode', nodeId),
+  startNode: (nodeId: NodeId) => {
+    ipcRenderer.invoke('startNode', nodeId);
+  },
+  stopNode: (nodeId: NodeId) => {
+    ipcRenderer.invoke('stopNode', nodeId);
+  },
 });

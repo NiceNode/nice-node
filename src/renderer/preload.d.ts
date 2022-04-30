@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+import { Node, NodeId } from '../main/node';
 import { NodeConfig } from '../main/state/nodeConfig';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
@@ -43,6 +43,13 @@ declare global {
       getDefaultNodeConfig(node: string): NodeConfig;
       setToDefaultNodeConfig(node: string): void;
       checkSystemHardware(): string[];
+
+      // Multi-node
+      getNodes(): Node[];
+      addNode(nodeOptions: nodeOptions): Node;
+      removeNode(nodeId: NodeId): Node;
+      startNode(nodeId: NodeId): void;
+      stopNode(nodeId: NodeId): void;
     };
 
     performance: Performance;
