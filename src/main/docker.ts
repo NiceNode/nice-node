@@ -105,6 +105,7 @@ export const startDockerNode = async (
   await runCommand(`pull ${imageName}`);
 
   // todo: custom setup: ex. create data directory
+  // todo: check if there is a stopped container?
 
   // run
   // todo: use node options to create docker and node input

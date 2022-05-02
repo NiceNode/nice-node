@@ -19,6 +19,7 @@ import {
 } from './state/node';
 import { NODE_STATUS } from './messages';
 import Nodes from './Nodes';
+import LeftSideBar from './LeftSideBar';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -89,86 +90,95 @@ const MainScreen = () => {
       }}
     >
       <Header />
-
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          flexDirection: 'row',
           flex: 1,
-          justifyContent: 'center',
         }}
       >
-        <div>
-          <Nodes />
-          <h2>An Ethereum Node</h2>
-          <h3>Status: {sNodeStatus}</h3>
-          {sNodeStatus === 'running' && (
-            <>
-              <h4 data-tip data-for="nodeInfo">
-                {detectExecutionClient(sNodeInfo, true)}
-              </h4>
-              <ReactTooltip
-                place="bottom"
-                type="light"
-                effect="solid"
-                id="nodeInfo"
-              >
-                <span style={{ fontSize: 16 }}>{sNodeInfo}</span>
-              </ReactTooltip>
-            </>
-          )}
-        </div>
-        <div className="Hello">
-          <button
-            type="button"
-            onClick={onClickStartGeth}
-            disabled={
-              !(
-                sNodeStatus === NODE_STATUS.readyToStart ||
-                sNodeStatus === NODE_STATUS.stopped ||
-                sNodeStatus === NODE_STATUS.errorStopping
-              )
-            }
-          >
-            <span>Start</span>
-          </button>
-          &nbsp;
-          <button
-            type="button"
-            onClick={onClickStopGeth}
-            disabled={sNodeStatus !== NODE_STATUS.running}
-          >
-            <span>Stop</span>
-          </button>
-        </div>
+        <LeftSideBar />
+
         <div
           style={{
             display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'start',
-            marginBottom: 10,
+            flexDirection: 'column',
+            alignItems: 'center',
+            flex: 1,
+            justifyContent: 'center',
           }}
         >
-          <form>
-            <label htmlFor="openOnLogin">
-              <input
-                id="openOnLogin"
-                type="checkbox"
-                name="openOnLogin"
-                checked={sIsOpenOnLogin}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  onChangeOpenOnLogin(e.target.checked)
-                }
-              />
-              Start when your computer starts (Windows and macOS only)
-            </label>
+          <div>
+            <h2>An Ethereum Node</h2>
+            <h3>Status: {sNodeStatus}</h3>
+            {sNodeStatus === 'running' && (
+              <>
+                <h4 data-tip data-for="nodeInfo">
+                  {detectExecutionClient(sNodeInfo, true)}
+                </h4>
+                <ReactTooltip
+                  place="bottom"
+                  type="light"
+                  effect="solid"
+                  id="nodeInfo"
+                >
+                  <span style={{ fontSize: 16 }}>{sNodeInfo}</span>
+                </ReactTooltip>
+              </>
+            )}
+          </div>
+          <div className="Hello">
+            <button
+              type="button"
+              onClick={onClickStartGeth}
+              disabled={
+                !(
+                  sNodeStatus === NODE_STATUS.readyToStart ||
+                  sNodeStatus === NODE_STATUS.stopped ||
+                  sNodeStatus === NODE_STATUS.errorStopping
+                )
+              }
+            >
+              <span>Start</span>
+            </button>
+            &nbsp;
+            <button
+              type="button"
+              onClick={onClickStopGeth}
+              disabled={sNodeStatus !== NODE_STATUS.running}
+            >
+              <span>Stop</span>
+            </button>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'start',
+              marginBottom: 10,
+            }}
+          >
+            <form>
+              <label htmlFor="openOnLogin">
+                <input
+                  id="openOnLogin"
+                  type="checkbox"
+                  name="openOnLogin"
+                  checked={sIsOpenOnLogin}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    onChangeOpenOnLogin(e.target.checked)
+                  }
+                />
+                Start when your computer starts (Windows and macOS only)
+              </label>
 
-            {/* <label htmlFor="openOnLogin">Start when your computer starts</label> */}
-          </form>
+              {/* <label htmlFor="openOnLogin">Start when your computer starts</label> */}
+            </form>
+          </div>
+          <Warnings />
         </div>
-        <Warnings />
       </div>
+
       <Footer />
     </div>
   );

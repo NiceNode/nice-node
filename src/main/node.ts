@@ -21,7 +21,7 @@ export type DockerOptions = NodeOptions & {
   executionType: 'docker';
   imageName: string; // todo: support multi-image node
   // todo: support non-docker hub
-  containerIds: string[];
+  containerIds?: string[];
 };
 
 /**
