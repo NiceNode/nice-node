@@ -5,8 +5,9 @@ import path from 'path';
 
 // import { gethBuildNameForPlatformAndArch } from '../main/gethDownload';
 import { getNNDirPath } from '../../main/files';
-import { downloadGeth } from '../../main/geth';
+import { downloadGeth, getStatus, startGeth, stopGeth } from '../../main/geth';
 import { gethBuildNameForPlatformAndArch } from '../../main/gethDownload';
+import { NODE_STATUS } from '../../main/messenger';
 
 jest.mock('electron', () => {
   return {
@@ -80,5 +81,17 @@ describe('Downloading geth', () => {
     } catch (err) {
       console.error(err);
     }
+  });
+});
+
+describe('Starting and stopping geth', () => {
+  it('Successfully starts and stops', async () => {
+    // start child process
+    await startGeth();
+    expect(getStatus()).toBe(NODE_STATUS.running);
+
+    // stop child process
+    await stopGeth();
+    expect(getStatus()).toBe(NODE_STATUS.stopped);
   });
 });
