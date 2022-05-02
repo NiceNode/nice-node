@@ -4,6 +4,7 @@ import sleep from 'await-sleep';
 import { httpGet, httpGetJson } from './httpReq';
 
 import logger from './logger';
+import { DockerOptions } from './node';
 
 // const options = {
 //   machineName: undefined, // uses local docker
@@ -20,9 +21,10 @@ const options = new Options(
   undefined,
   undefined
 );
+let docker: Docker;
 
 export const initialize = async () => {
-  const docker = new Docker(options);
+  docker = new Docker(options);
   let data = await docker.command('info');
   // console.log('DOCKER info DATA: ', data);
 
@@ -64,26 +66,68 @@ export const initialize = async () => {
   // console.log('containerId: ', containerId);
   // console.log('DOCKER docker run data: ', data);
   // wait x time
-  try {
-    await sleep(20000);
+  // try {
+  //   await sleep(20000);
 
-    console.log('fetching beacon node data...');
-    const parsedData = await httpGetJson(
-      'http://localhost:5052/eth/v1/config/spec',
-      true
-    );
-    console.log('beacon node data parsedData: ', parsedData);
-    data = await docker.command(`ps -s`);
-    console.log('DOCKER ps -s data: ', data);
+  //   console.log('fetching beacon node data...');
+  //   const parsedData = await httpGetJson(
+  //     'http://localhost:5052/eth/v1/config/spec',
+  //     true
+  //   );
+  //   console.log('beacon node data parsedData: ', parsedData);
+  //   data = await docker.command(`ps -s`);
+  //   console.log('DOCKER ps -s data: ', data);
 
-    // data = await docker.command(`stop ${containerId}`);
-    // console.log('DOCKER stop data: ', data);
-  } catch (err) {
-    // data = await docker.command(`stop ${containerId}`);
-    // console.log('DOCKER stop data: ', data);
-  }
+  //   // data = await docker.command(`stop ${containerId}`);
+  //   // console.log('DOCKER stop data: ', data);
+  // } catch (err) {
+  //   // data = await docker.command(`stop ${containerId}`);
+  //   // console.log('DOCKER stop data: ', data);
+  // }
 
   // get logs/rpc stats
 
   // kill
+};
+
+const runCommand = async (command: string) => {
+  logger.info(`Running docker ${command}`);
+  const data = await docker.command(command);
+  logger.info(`DOCKER ${command} data: ${JSON.stringify(data)}`);
+  return data;
+};
+
+export const startDockerNode = async (
+  node: DockerOptions
+): Promise<string[]> => {
+  // pull image
+  const { imageName } = node;
+  await runCommand(`pull ${imageName}`);
+
+  // todo: custom setup: ex. create data directory
+
+  // run
+  // todo: use node options to create docker and node input
+  const dockerInput =
+    '-d -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052 -v /home/johns/.lighthouse:/root/.lighthouse';
+  const nodeInput =
+    'lighthouse --network mainnet beacon --http --http-address 0.0.0.0';
+  const runData = await runCommand(
+    `run ${dockerInput} ${imageName} ${nodeInput}`
+  );
+  // const runData = await runCommand(
+  //   'run -d -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052 -v $HOME/.lighthouse:/root/.lighthouse sigp/lighthouse lighthouse --network mainnet beacon --http --http-address 0.0.0.0'
+  // );
+  // return docker conainter ids?
+  const { containerId, raw, command } = runData;
+  return [containerId];
+};
+
+export const stopDockerNode = async (node: DockerOptions) => {
+  // run
+  // todo: use node options to create docker and node input
+  // todo: loop
+  const containerId = node.containerIds[0];
+  await runCommand(`stop ${containerId}`);
+  return containerId;
 };

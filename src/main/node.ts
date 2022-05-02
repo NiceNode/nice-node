@@ -21,41 +21,63 @@ export type DockerOptions = NodeOptions & {
   executionType: 'docker';
   imageName: string; // todo: support multi-image node
   // todo: support non-docker hub
+  containerIds: string[];
 };
 
 /**
  * @param downloadUrl binary must end in .tar.gz or .zip
  */
-export type BinaryOptions = {
+export type BinaryOptions = NodeOptions & {
   executionType: 'binary';
   downloadUrl: string;
   // todo: could be file path
 };
 
-export default class Node {
+type Node = NodeOptions & {
   id: NodeId;
-  displayName: string;
-  executionType: 'docker' | 'binary';
-  runInBackground?: boolean; // default to true
-  dataPath?: string; // defaults to NiceNode app route
-  rpcTranslation?: string; // eth EL, eth CL, custom. defaults to eth EL
-  iconUrl?: string;
+};
 
-  constructor(opts: NodeOptions) {
-    this.id = uuidv4();
-    this.executionType = opts.executionType;
-    this.displayName = opts.displayName;
-    this.iconUrl = opts.iconUrl;
-  }
+export type DockerNode = Node & DockerOptions;
 
-  // start() {
-  //   console.log(`start ${this.executionType} node`);
-  // }
+export type BinaryNode = Node & BinaryOptions;
 
-  // stop() {
-  //   console.log(`stop ${this.executionType} node`);
-  // }
-}
+export const createNode = (opts: NodeOptions): Node => {
+  const node: Node = {
+    ...opts,
+    id: uuidv4(),
+  };
+  return node;
+};
+export default Node;
+
+// export default type Node = NodeOptions & {
+//   id: NodeId;
+// };
+
+// export default class Node {
+//   id: NodeId;
+//   displayName: string;
+//   executionType: 'docker' | 'binary';
+//   runInBackground?: boolean; // default to true
+//   dataPath?: string; // defaults to NiceNode app route
+//   rpcTranslation?: string; // eth EL, eth CL, custom. defaults to eth EL
+//   iconUrl?: string;
+
+//   constructor(opts: NodeOptions) {
+//     this.id = uuidv4();
+//     this.executionType = opts.executionType;
+//     this.displayName = opts.displayName;
+//     this.iconUrl = opts.iconUrl;
+//   }
+
+//   // start() {
+//   //   console.log(`start ${this.executionType} node`);
+//   // }
+
+//   // stop() {
+//   //   console.log(`stop ${this.executionType} node`);
+//   // }
+// }
 
 // export class DockerNode {
 //   id: NodeId;
