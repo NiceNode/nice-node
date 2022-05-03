@@ -18,7 +18,8 @@ const ModalBackdrop = styled.div`
 `;
 
 const ModalContent = styled.div`
-  background-color: #fefefe;
+  // background-color: #fefefe;
+  background-color: #d3d3d3;
   padding: 20px;
   padding-top: 0px;
   border: 1px solid #888;

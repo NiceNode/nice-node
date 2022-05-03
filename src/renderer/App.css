@@ -31,12 +31,12 @@ button {
     0px 18px 88px -4px rgba(24, 39, 75, 0.14);
   transition: all ease-in 0.1s;
   cursor: pointer;
-  opacity: 0.9;
+  /* opacity: 0.9; */
 }
 
 button:hover {
   transform: scale(1.05);
-  opacity: 1;
+  /* opacity: 1; */
 }
 
 li {

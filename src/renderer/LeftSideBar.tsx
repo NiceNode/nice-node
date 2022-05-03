@@ -7,37 +7,13 @@ import Node, { DockerOptions, NodeId, NodeOptions } from '../main/node';
 import electron from './electronGlobal';
 import IconButton from './IconButton';
 import { useGetNodesQuery } from './state/nodeService';
+import AddNodeModal from './AddNode/AddNode';
+import AddNode from './AddNode/AddNode';
 
 const LeftSideBar = () => {
   const qGetNodes = useGetNodesQuery(null, {
     pollingInterval: 10000,
   });
-  // useEffect(() => {
-  //   getNiceNodeVersion();
-  // }, []);
-
-  const onClickAddNode = async () => {
-    // todo: let user select the node type/config
-    // const nodeOptions: DockerOptions = {
-    //   displayName: 'Lighthouse Beacon Node',
-    //   imageName: 'sigp/lighthouse',
-    //   category: 'L1/ConsensusClient/BeaconNode',
-    //   executionType: 'docker',
-    //   runInBackground: true,
-    //   iconUrl: 'https://i.imgur.com/iEywqSx.png',
-    // };
-    const nodeOptions: DockerOptions = {
-      displayName: 'Nethermind',
-      imageName: 'nethermind/nethermind',
-      category: 'L1/ExecutionClient',
-      executionType: 'docker',
-      runInBackground: true,
-      iconUrl: 'https://nethermind.io/images/Logo.svg',
-    };
-    const node = await electron.addNode(nodeOptions);
-    qGetNodes.refetch();
-    console.log('NODEEEEEEEE', node);
-  };
 
   // todo: modal with confirm & delete data warning,etc.
   const onClickRemoveNode = async (nodeId: NodeId) => {
@@ -45,8 +21,6 @@ const LeftSideBar = () => {
     console.log('removed node: ', node);
     qGetNodes.refetch();
   };
-
-  useEffect(() => {}, []);
 
   return (
     <div
@@ -57,10 +31,7 @@ const LeftSideBar = () => {
         paddingTop: 30,
       }}
     >
-      <span>Add node</span>
-      <IconButton type="button" onClick={onClickAddNode}>
-        <BsPlusSquareDotted />
-      </IconButton>
+      <AddNode />
       {qGetNodes.error && <>Oh no, there was an error getting nodes</>}
       {qGetNodes.isLoading && <>Loading nodes...</>}
       {qGetNodes.data ? (
