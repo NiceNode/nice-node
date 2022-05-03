@@ -2,6 +2,8 @@ import { Docker, Options } from 'docker-cli-js';
 import path from 'node:path';
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import sleep from 'await-sleep';
+import * as readline from 'node:readline';
+import { Readable, Writable } from 'node:stream';
 
 import logger from './logger';
 import { DockerNode, DockerOptions, NodeStatus } from './node';
@@ -36,7 +38,7 @@ const runCommand = async (command: string) => {
 const watchDockerEvents = async () => {
   logger.info('Starting dockerWatchProcess');
 
-  // geth is killed if (killed || exitCode === null)
+  // dockerWatchProcess is killed if (killed || exitCode === null)
   if (dockerWatchProcess && !dockerWatchProcess.killed) {
     logger.error(
       'dockerWatchProcess process still running. Wait to stop or stop first.'
@@ -51,38 +53,43 @@ const watchDockerEvents = async () => {
   const watchInput = ['--format', "'{{json .}}'"];
   const childProcess = spawn('docker events', watchInput, spawnOptions);
   dockerWatchProcess = childProcess;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDockerEvent = (data: Buffer | string | any) => {
-    const dockerLogs = data?.toString().split('\n');
-    dockerLogs.forEach((log: any) => {
-      if (!log) {
-        return;
+  if (!dockerWatchProcess.stdout) {
+    throw new Error('Docker watch events stdout stream is undefined.');
+    return;
+  }
+  const rl = readline.createInterface({
+    input: dockerWatchProcess.stdout,
+  });
+
+  rl.on('line', (log: string) => {
+    // console.log(`readlinereadlinereadlinereadlinereadlineReceived: ${log}`);
+    console.log('dockerWatchProcess event::::::', log);
+    // {"status":"start","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"start","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480501042702}
+    // {"status":"die","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"die","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"exitCode":"0","git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480851573969}
+    try {
+      const dockerEvent = JSON.parse(log);
+      // const dockerEvent = log;
+      if (dockerEvent.Action === 'die' && dockerEvent.Type === 'container') {
+        // mark node as stopped
+        logger.info('Docker container die event');
+        setDockerNodeStatus(dockerEvent.id, NodeStatus.stopped);
+      } else if (
+        dockerEvent.Action === 'start' &&
+        dockerEvent.Type === 'container'
+      ) {
+        logger.info('Docker container start event');
+        // mark node as started
+        setDockerNodeStatus(dockerEvent.id, NodeStatus.running);
       }
-      console.log('dockerWatchProcess event::::::', log);
-      // {"status":"start","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"start","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480501042702}
-      // {"status":"die","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"die","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"exitCode":"0","git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480851573969}
-      try {
-        const dockerEvent = JSON.parse(log);
-        // const dockerEvent = log;
-        if (dockerEvent.Action === 'die' && dockerEvent.Type === 'container') {
-          // mark node as stopped
-          logger.info('Docker container die event');
-          setDockerNodeStatus(dockerEvent.id, NodeStatus.stopped);
-        } else if (
-          dockerEvent.Action === 'start' &&
-          dockerEvent.Type === 'container'
-        ) {
-          logger.info('Docker container start event');
-          // mark node as started
-          setDockerNodeStatus(dockerEvent.id, NodeStatus.running);
-        }
-      } catch (err) {
-        logger.error(`Error parsing docker event log ${log}`, err);
-      }
-    });
-  };
-  dockerWatchProcess.stderr?.on('data', handleDockerEvent);
-  dockerWatchProcess.stdout?.on('data', handleDockerEvent);
+    } catch (err) {
+      logger.error(`Error parsing docker event log ${log}`, err);
+    }
+  });
+
+  dockerWatchProcess.stderr?.on('data', (data) => {
+    logger.error(`dockerWatchProcess::error:: `, data);
+  });
+
   dockerWatchProcess.on('error', (data) => {
     logger.error(`dockerWatchProcess::error:: `, data);
   });
