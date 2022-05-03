@@ -9,19 +9,30 @@ import IconButton from './IconButton';
 import { useGetNodesQuery } from './state/nodeService';
 
 const LeftSideBar = () => {
-  const qGetNodes = useGetNodesQuery();
+  const qGetNodes = useGetNodesQuery(null, {
+    pollingInterval: 10000,
+  });
   // useEffect(() => {
   //   getNiceNodeVersion();
   // }, []);
 
   const onClickAddNode = async () => {
     // todo: let user select the node type/config
+    // const nodeOptions: DockerOptions = {
+    //   displayName: 'Lighthouse Beacon Node',
+    //   imageName: 'sigp/lighthouse',
+    //   category: 'L1/ConsensusClient/BeaconNode',
+    //   executionType: 'docker',
+    //   runInBackground: true,
+    //   iconUrl: 'https://i.imgur.com/iEywqSx.png',
+    // };
     const nodeOptions: DockerOptions = {
-      displayName: 'Lighthouse Beacon Node',
-      imageName: 'sigp/lighthouse',
+      displayName: 'Nethermind',
+      imageName: 'nethermind/nethermind',
+      category: 'L1/ExecutionClient',
       executionType: 'docker',
       runInBackground: true,
-      iconUrl: 'https://i.imgur.com/iEywqSx.png',
+      iconUrl: 'https://nethermind.io/images/Logo.svg',
     };
     const node = await electron.addNode(nodeOptions);
     qGetNodes.refetch();
@@ -40,10 +51,7 @@ const LeftSideBar = () => {
   return (
     <div
       style={{
-        width: 80,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+        width: 100,
         paddingLeft: 10,
         paddingRight: 10,
         paddingTop: 30,
@@ -58,6 +66,12 @@ const LeftSideBar = () => {
       {qGetNodes.data ? (
         <>
           {qGetNodes.data.map((node: Node) => {
+            let statusColor = node.status === 'running' ? 'green' : 'black';
+            if (node.status.includes('error')) {
+              statusColor = 'red';
+            } else if (node.status.includes('stopped')) {
+              statusColor = 'grey';
+            }
             return (
               <div
                 key={node.id}
@@ -98,6 +112,10 @@ const LeftSideBar = () => {
                   >
                     <MdDelete />
                   </IconButton>
+                  <span
+                    className="colored-circle"
+                    style={{ background: statusColor }}
+                  />
                 </div>
               </div>
             );

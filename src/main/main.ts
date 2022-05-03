@@ -24,6 +24,7 @@ import { resolveHtmlPath } from './util';
 import { setWindow } from './messenger';
 import { initialize as initGeth } from './geth';
 import { initialize as initDocker } from './docker';
+import { initialize as initNodeManager } from './nodeManager';
 import * as ipc from './ipc';
 import * as power from './power';
 
@@ -262,6 +263,7 @@ const initialize = () => {
   ipc.initialize();
   power.initialize();
   initDocker();
+  initNodeManager();
   // processExit.initialize();
 };
 

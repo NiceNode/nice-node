@@ -15,6 +15,7 @@ export type NodeOptions = {
   //  which NiceNode uses to show the state of the node.
   //  (ex. peers, syncing, latest block num, etc.)
   iconUrl?: string;
+  category?: string;
 };
 
 export type DockerOptions = NodeOptions & {
@@ -33,74 +34,42 @@ export type BinaryOptions = NodeOptions & {
   // todo: could be file path
 };
 
+export enum NodeStatus {
+  created = 'created',
+  initializing = 'initializing',
+  downloading = 'downloading',
+  downloaded = 'downloaded',
+  errorDownloading = 'error downloading',
+  extracting = 'extracting',
+  readyToStart = 'ready to start',
+  starting = 'starting',
+  running = 'running',
+  stopping = 'stopping',
+  stopped = 'stopped',
+  errorStarting = 'error starting',
+  errorStopping = 'error stopping',
+}
+
 type Node = NodeOptions & {
   id: NodeId;
+  status: NodeStatus;
+  lastStarted?: string;
+  lastStopped?: string;
 };
 
 export type DockerNode = Node & DockerOptions;
 
 export type BinaryNode = Node & BinaryOptions;
 
+export const isDockerNode = (node: Node) => node.executionType === 'docker';
+export const isBinaryNode = (node: Node) => node.executionType === 'binary';
+
 export const createNode = (opts: NodeOptions): Node => {
   const node: Node = {
     ...opts,
     id: uuidv4(),
+    status: NodeStatus.created,
   };
   return node;
 };
 export default Node;
-
-// export default type Node = NodeOptions & {
-//   id: NodeId;
-// };
-
-// export default class Node {
-//   id: NodeId;
-//   displayName: string;
-//   executionType: 'docker' | 'binary';
-//   runInBackground?: boolean; // default to true
-//   dataPath?: string; // defaults to NiceNode app route
-//   rpcTranslation?: string; // eth EL, eth CL, custom. defaults to eth EL
-//   iconUrl?: string;
-
-//   constructor(opts: NodeOptions) {
-//     this.id = uuidv4();
-//     this.executionType = opts.executionType;
-//     this.displayName = opts.displayName;
-//     this.iconUrl = opts.iconUrl;
-//   }
-
-//   // start() {
-//   //   console.log(`start ${this.executionType} node`);
-//   // }
-
-//   // stop() {
-//   //   console.log(`stop ${this.executionType} node`);
-//   // }
-// }
-
-// export class DockerNode {
-//   id: NodeId;
-//   displayName: string;
-//   executionType: 'docker' | 'binary';
-//   runInBackground?: boolean; // default to true
-//   dataPath?: string; // defaults to NiceNode app route
-//   rpcTranslation?: string;
-//   imageName?: string; // todo: support multi-image node
-//   downloadUrl?: string;
-
-//   constructor({ executionType, displayName }: NodeOptions) {
-//     super();
-//     this.id = uuidv4();
-//     this.executionType = executionType;
-//     this.displayName = displayName;
-//   }
-
-//   start() {
-//     console.log(`start ${this.executionType} node`);
-//   }
-
-//   stop() {
-//     console.log(`stop ${this.executionType} node`);
-//   }
-// }

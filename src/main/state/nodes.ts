@@ -1,4 +1,6 @@
-import Node, { NodeId } from '../node';
+import logger from 'main/logger';
+import { NodeState } from 'renderer/state/node';
+import Node, { DockerNode, isDockerNode, NodeId, NodeStatus } from '../node';
 import store from './store';
 
 const USER_NODES_KEY = 'userNodes';
@@ -19,6 +21,11 @@ type UserNodes = {
   nodes: NodeMap;
   nodeIds: string[];
 };
+
+/**
+ * Called on app launch.
+ * Initializes internal data structures for readiness.
+ */
 const initialize = () => {
   const userNodes = store.get(USER_NODES_KEY);
   if (!userNodes || typeof userNodes !== 'object') {
@@ -66,6 +73,34 @@ export const addNode = (newNode: Node) => {
 export const updateNode = (node: Node) => {
   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${node.id}`, node);
   return getNode(node.id);
+};
+
+/**
+ * Finds a node by a docker container Id and updates the status
+ * @param containerId
+ * @param status
+ * @returns
+ */
+export const setDockerNodeStatus = (
+  containerId: string,
+  status: NodeStatus
+) => {
+  // get all nodes
+  const nodes = getNodes();
+  const nodeToUpdate = nodes.find((node) => {
+    if (isDockerNode(node)) {
+      const dockerNode = node as DockerNode;
+      console.log('FOUND THE NODE!!!!!!!!!!!!!!!!!!!1');
+      return dockerNode.containerIds?.includes(containerId);
+    }
+    return false;
+  });
+  if (!nodeToUpdate) {
+    throw new Error(`No node found with containerId ${containerId}`);
+  }
+  // search all contianerIds for matching one
+  store.set(`${USER_NODES_KEY}.${NODES_KEY}.${nodeToUpdate.id}.status`, status);
+  return getNode(nodeToUpdate.id);
 };
 
 // todo: an optimization
