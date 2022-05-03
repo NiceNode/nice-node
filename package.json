@@ -138,7 +138,7 @@
         ],
         "testPathIgnorePatterns": [
           "release/app/dist",
-          "release/build"
+          "release/build/"  
         ],
         "setupFiles": [
           "./.erb/scripts/check-build-exists.ts"
@@ -165,7 +165,7 @@
         ],
         "testPathIgnorePatterns": [
           "release/app/dist",
-          "release/build"
+          "release/build/"
         ],
         "setupFiles": [
           "./.erb/scripts/check-build-exists.ts"
