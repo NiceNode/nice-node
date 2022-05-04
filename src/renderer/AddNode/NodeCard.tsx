@@ -1,14 +1,13 @@
-import { BsPlusSquareDotted } from 'react-icons/bs';
-import { useEffect, useState } from 'react';
-
-import Node, { DockerOptions, NodeId, NodeOptions } from '../../main/node';
-import electron from '../electronGlobal';
+import { NodeOptions } from '../../main/node';
 import DivButton from '../DivButton';
-import { Modal } from '../Modal';
 
-const NodeCard = (props: { nodeOptions: NodeOptions }) => {
+const NodeCard = (props: {
+  nodeOptions: NodeOptions;
+  onSelected: () => void;
+}) => {
   // eslint-disable-next-line react/destructuring-assignment
-  const { displayName, iconUrl, category, executionType } = props.nodeOptions;
+  const { nodeOptions, onSelected } = props;
+  const { displayName, iconUrl, category, executionType } = nodeOptions;
   return (
     <DivButton
       key={displayName}
@@ -21,6 +20,7 @@ const NodeCard = (props: { nodeOptions: NodeOptions }) => {
         marginLeft: 5,
         marginRight: 10,
       }}
+      onClick={onSelected}
     >
       <div
         style={{
