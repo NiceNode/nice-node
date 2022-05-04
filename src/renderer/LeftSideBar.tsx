@@ -1,4 +1,3 @@
-import { BsPlusSquareDotted } from 'react-icons/bs';
 import { MdDelete } from 'react-icons/md';
 import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
@@ -7,13 +6,26 @@ import Node, { DockerOptions, NodeId, NodeOptions } from '../main/node';
 import electron from './electronGlobal';
 import IconButton from './IconButton';
 import { useGetNodesQuery } from './state/nodeService';
-import AddNodeModal from './AddNode/AddNode';
 import AddNode from './AddNode/AddNode';
+import DivButton from './DivButton';
+import { useAppDispatch, useAppSelector } from './state/hooks';
+import { selectSelectedNode, updateSelectedNode } from './state/node';
 
 const LeftSideBar = () => {
+  const sSelectedNode = useAppSelector(selectSelectedNode);
   const qGetNodes = useGetNodesQuery(null, {
     pollingInterval: 10000,
   });
+  const dispatch = useAppDispatch();
+
+  // Default selected node to be the first node
+  if (
+    !sSelectedNode &&
+    Array.isArray(qGetNodes?.data) &&
+    qGetNodes.data.length > 0
+  ) {
+    dispatch(updateSelectedNode(qGetNodes.data[0]));
+  }
 
   // todo: modal with confirm & delete data warning,etc.
   const onClickRemoveNode = async (nodeId: NodeId) => {
@@ -43,10 +55,16 @@ const LeftSideBar = () => {
             } else if (node.status.includes('stopped')) {
               statusColor = 'grey';
             }
+            const isSelectedNode = sSelectedNode?.id === node.id;
             return (
-              <div
+              <DivButton
                 key={node.id}
-                style={{ border: '1px solid', padding: 2, borderRadius: 5 }}
+                style={{
+                  border: isSelectedNode ? '3px solid' : '1px solid',
+                  padding: 2,
+                  borderRadius: 5,
+                }}
+                onClick={() => dispatch(updateSelectedNode(node))}
               >
                 <img
                   src={node.iconUrl}
@@ -62,7 +80,7 @@ const LeftSideBar = () => {
                     flexDirection: 'row',
                   }}
                 >
-                  <IconButton
+                  {/* <IconButton
                     type="button"
                     onClick={() => electron.startNode(node.id)}
                     style={{ padding: 2 }}
@@ -82,13 +100,13 @@ const LeftSideBar = () => {
                     style={{ padding: 2 }}
                   >
                     <MdDelete />
-                  </IconButton>
+                  </IconButton> */}
                   <span
                     className="colored-circle"
                     style={{ background: statusColor }}
                   />
                 </div>
-              </div>
+              </DivButton>
             );
           })}
         </>

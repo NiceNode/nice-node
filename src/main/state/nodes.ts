@@ -1,5 +1,4 @@
-import logger from 'main/logger';
-import { NodeState } from 'renderer/state/node';
+import logger from '../logger';
 import Node, { DockerNode, isDockerNode, NodeId, NodeStatus } from '../node';
 import store from './store';
 
@@ -72,6 +71,7 @@ export const addNode = (newNode: Node) => {
 //  or process events in a queue?
 export const updateNode = (node: Node) => {
   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${node.id}`, node);
+  logger.info(`Node::updateNode::${JSON.stringify(node)}`);
   return getNode(node.id);
 };
 

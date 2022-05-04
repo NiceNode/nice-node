@@ -9,7 +9,7 @@ import NodeCard from './NodeCard';
 import ConfirmAddNode from './ConfirmAddNode';
 
 const AddNode = () => {
-  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>(true);
+  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>(false);
   const [sIsModalOpenConfirmAddNode, setIsModalOpenConfirmAddNode] =
     useState<boolean>(false);
   const [sSelectedNodeOptions, setSelectedNodeOptions] =

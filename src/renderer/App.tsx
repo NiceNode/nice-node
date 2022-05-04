@@ -20,6 +20,7 @@ import {
 import { NODE_STATUS } from './messages';
 import Nodes from './Nodes';
 import LeftSideBar from './LeftSideBar';
+import NodeScreen from './NodeScreen';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -63,22 +64,22 @@ const MainScreen = () => {
 
   // Wait for message that says Geth is ready to start
 
-  const onClickStartGeth = async () => {
-    // Send message to main process to start Geth
-    await electron.startGeth();
-    refreshGethStatus();
-  };
+  // const onClickStartGeth = async () => {
+  //   // Send message to main process to start Geth
+  //   await electron.startGeth();
+  //   refreshGethStatus();
+  // };
 
-  const onClickStopGeth = async () => {
-    // Send message to main process to start Geth
-    await electron.stopGeth();
-    refreshGethStatus();
-  };
+  // const onClickStopGeth = async () => {
+  //   // Send message to main process to start Geth
+  //   await electron.stopGeth();
+  //   refreshGethStatus();
+  // };
 
-  const onChangeOpenOnLogin = (openOnLogin: boolean) => {
-    electron.setStoreValue('isStartOnLogin', openOnLogin);
-    setIsOpenOnLogin(openOnLogin);
-  };
+  // const onChangeOpenOnLogin = (openOnLogin: boolean) => {
+  //   electron.setStoreValue('isStartOnLogin', openOnLogin);
+  //   setIsOpenOnLogin(openOnLogin);
+  // };
 
   return (
     <div
@@ -108,9 +109,10 @@ const MainScreen = () => {
             justifyContent: 'center',
           }}
         >
+          <NodeScreen />
           <div>
-            <h2>An Ethereum Node</h2>
-            <h3>Status: {sNodeStatus}</h3>
+            {/* <h2>An Ethereum Node</h2>
+            <h3>Status: {sNodeStatus}</h3> */}
             {sNodeStatus === 'running' && (
               <>
                 <h4 data-tip data-for="nodeInfo">
@@ -127,7 +129,7 @@ const MainScreen = () => {
               </>
             )}
           </div>
-          <div className="Hello">
+          {/* <div className="Hello">
             <button
               type="button"
               onClick={onClickStartGeth}
@@ -149,32 +151,7 @@ const MainScreen = () => {
             >
               <span>Stop</span>
             </button>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'start',
-              marginBottom: 10,
-            }}
-          >
-            <form>
-              <label htmlFor="openOnLogin">
-                <input
-                  id="openOnLogin"
-                  type="checkbox"
-                  name="openOnLogin"
-                  checked={sIsOpenOnLogin}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    onChangeOpenOnLogin(e.target.checked)
-                  }
-                />
-                Start when your computer starts (Windows and macOS only)
-              </label>
-
-              {/* <label htmlFor="openOnLogin">Start when your computer starts</label> */}
-            </form>
-          </div>
+          </div> */}
           <Warnings />
         </div>
       </div>
