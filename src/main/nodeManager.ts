@@ -25,14 +25,21 @@ export const startNode = async (nodeId: NodeId) => {
   node.status = NodeStatus.starting;
   nodeStore.updateNode(node);
 
-  if (node.executionType === 'docker') {
-    const dockerNode = node as DockerNode;
-    const containerIds = await startDockerNode(dockerNode);
-    dockerNode.containerIds = containerIds;
-    dockerNode.status = NodeStatus.running;
-    nodeStore.updateNode(dockerNode);
-  } else {
-    logger.info('TODO: start a binary');
+  try {
+    if (node.executionType === 'docker') {
+      const dockerNode = node as DockerNode;
+      // startDockerNode(dockerNode);
+      const containerIds = await startDockerNode(dockerNode);
+      dockerNode.containerIds = containerIds;
+      dockerNode.status = NodeStatus.running;
+      nodeStore.updateNode(dockerNode);
+    } else {
+      logger.info('TODO: start a binary');
+    }
+  } catch (err) {
+    logger.error(err);
+    node.status = NodeStatus.errorStarting;
+    nodeStore.updateNode(node);
   }
 };
 
@@ -60,7 +67,6 @@ export const stopNode = async (nodeId: NodeId) => {
 export const initialize = async () => {
   // get all nodes
   const nodes = nodeStore.getNodes();
-  console.log('initialize nodeManager checkNode: nodes', nodes);
   // eslint-disable-next-line no-plusplus
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
@@ -70,7 +76,7 @@ export const initialize = async () => {
         try {
           // eslint-disable-next-line no-await-in-loop
           const containerDetails = await getContainerDetails(
-            dockerNode.containerIds[0]
+            dockerNode.containerIds
           );
           // {..."State": {
           //     "Status": "exited",

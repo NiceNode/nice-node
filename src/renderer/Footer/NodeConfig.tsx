@@ -3,7 +3,7 @@ import { FiExternalLink } from 'react-icons/fi';
 
 import { NodeConfig } from '../../main/state/nodeConfig';
 import electron from '../electronGlobal';
-import { NODE_STATUS } from '../messages';
+import { NodeStatus } from '../../main/node';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { selectNodeStatus, updateNodeConfig } from '../state/node';
 import metamaskLogo from '../../../assets/metamaskLogo.svg';
@@ -140,8 +140,8 @@ const NodeConfiguration = () => {
   };
 
   const isConfigDisabled = !(
-    sNodeStatus === NODE_STATUS.readyToStart ||
-    sNodeStatus === NODE_STATUS.stopped
+    sNodeStatus === NodeStatus.readyToStart ||
+    sNodeStatus === NodeStatus.stopped
   );
 
   return (

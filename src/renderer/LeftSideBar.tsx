@@ -9,30 +9,32 @@ import { useGetNodesQuery } from './state/nodeService';
 import AddNode from './AddNode/AddNode';
 import DivButton from './DivButton';
 import { useAppDispatch, useAppSelector } from './state/hooks';
-import { selectSelectedNode, updateSelectedNode } from './state/node';
+import { selectSelectedNodeId, updateSelectedNodeId } from './state/node';
 
 const LeftSideBar = () => {
-  const sSelectedNode = useAppSelector(selectSelectedNode);
+  const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const qGetNodes = useGetNodesQuery(null, {
-    pollingInterval: 10000,
+    pollingInterval: 0,
   });
   const dispatch = useAppDispatch();
 
   // Default selected node to be the first node
-  if (
-    !sSelectedNode &&
-    Array.isArray(qGetNodes?.data) &&
-    qGetNodes.data.length > 0
-  ) {
-    dispatch(updateSelectedNode(qGetNodes.data[0]));
-  }
+  useEffect(() => {
+    if (
+      !sSelectedNodeId &&
+      Array.isArray(qGetNodes?.data) &&
+      qGetNodes.data.length > 0
+    ) {
+      dispatch(updateSelectedNodeId(qGetNodes.data[0].id));
+    }
+  }, [sSelectedNodeId, qGetNodes]);
 
-  // todo: modal with confirm & delete data warning,etc.
-  const onClickRemoveNode = async (nodeId: NodeId) => {
-    const node = await electron.removeNode(nodeId);
-    console.log('removed node: ', node);
-    qGetNodes.refetch();
-  };
+  useEffect(() => {
+    console.log('LSB: new qGetNodes', qGetNodes);
+    if (qGetNodes.data) {
+      console.log('LSB: new qGetNodes.data', qGetNodes.data);
+    }
+  }, [qGetNodes]);
 
   return (
     <div
@@ -55,7 +57,7 @@ const LeftSideBar = () => {
             } else if (node.status.includes('stopped')) {
               statusColor = 'grey';
             }
-            const isSelectedNode = sSelectedNode?.id === node.id;
+            const isSelectedNode = sSelectedNodeId === node.id;
             return (
               <DivButton
                 key={node.id}
@@ -64,7 +66,7 @@ const LeftSideBar = () => {
                   padding: 2,
                   borderRadius: 5,
                 }}
-                onClick={() => dispatch(updateSelectedNode(node))}
+                onClick={() => dispatch(updateSelectedNodeId(node.id))}
               >
                 <img
                   src={node.iconUrl}
@@ -80,27 +82,6 @@ const LeftSideBar = () => {
                     flexDirection: 'row',
                   }}
                 >
-                  {/* <IconButton
-                    type="button"
-                    onClick={() => electron.startNode(node.id)}
-                    style={{ padding: 2 }}
-                  >
-                    <FaPlayCircle />
-                  </IconButton>
-                  <IconButton
-                    type="button"
-                    onClick={() => electron.stopNode(node.id)}
-                    style={{ padding: 2 }}
-                  >
-                    <FaPauseCircle />
-                  </IconButton>
-                  <IconButton
-                    type="button"
-                    onClick={() => onClickRemoveNode(node.id)}
-                    style={{ padding: 2 }}
-                  >
-                    <MdDelete />
-                  </IconButton> */}
                   <span
                     className="colored-circle"
                     style={{ background: statusColor }}

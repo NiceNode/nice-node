@@ -1,39 +1,50 @@
-import { MdDelete } from 'react-icons/md';
+// import { MdDelete } from 'react-icons/md';
 import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
-import ReactTooltip from 'react-tooltip';
 
-import Node, {
-  DockerOptions,
-  NodeId,
-  NodeOptions,
-  NodeStatus,
-} from '../main/node';
+import Node, { NodeStatus } from '../main/node';
 import electron from './electronGlobal';
-import IconButton from './IconButton';
 import { useGetNodesQuery } from './state/nodeService';
-import AddNode from './AddNode/AddNode';
-import DivButton from './DivButton';
 import { useAppSelector } from './state/hooks';
-import { selectSelectedNode } from './state/node';
+import { selectSelectedNodeId } from './state/node';
 
 const NodeScreen = () => {
-  const sSelectedNode = useAppSelector(selectSelectedNode);
-  if (!sSelectedNode) {
+  const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
+  // Will select the Node with the given id, and will only rerender if the given Node data changes
+  const { selectedNode } = useGetNodesQuery(undefined, {
+    selectFromResult: ({ data }: { data: Node[] }) => {
+      return {
+        selectedNode: data?.find((node) => node.id === sSelectedNodeId),
+      };
+    },
+  });
+  if (!sSelectedNodeId || !selectedNode) {
+    console.log(
+      '!sSelectedNodeId || !selectedNode',
+      sSelectedNodeId,
+      selectedNode
+    );
     return <div>No node selected</div>;
   }
-  const { displayName, status, category } = sSelectedNode;
+
+  const { displayName, status, category } = selectedNode;
+
+  // todo: modal with confirm & delete data warning,etc.
+  // const onClickRemoveNode = async (nodeId: NodeId) => {
+  //   const node = await electron.removeNode(nodeId);
+  //   console.log('removed node: ', node);
+  //   qGetNodes.refetch();
+  // };
 
   return (
     <div>
-      <div style={{ wordBreak: 'break-word' }}>
-        {JSON.stringify(sSelectedNode, null, '\n')}
-      </div>
+      {/* <div style={{ wordBreak: 'break-word' }}>
+        {JSON.stringify(selectedNode, null, '\n')}
+      </div> */}
       <div>
         <h2>{category} Node</h2>
         <h2>{displayName}</h2>
         <h3>Status: {status}</h3>
-        {status === 'running' && (
+        {/* {status === 'running' && (
           <>
             <h4 data-tip data-for="nodeInfo">
               {detectExecutionClient(sNodeInfo, true)}
@@ -47,12 +58,12 @@ const NodeScreen = () => {
               <span style={{ fontSize: 16 }}>{sNodeInfo}</span>
             </ReactTooltip>
           </>
-        )}
+        )} */}
       </div>
       <div className="Hello">
         <button
           type="button"
-          onClick={() => electron.startNode(sSelectedNode.id)}
+          onClick={() => electron.startNode(selectedNode.id)}
           disabled={
             !(
               status === NodeStatus.created ||
@@ -62,15 +73,21 @@ const NodeScreen = () => {
             )
           }
         >
-          <span>Start</span>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <FaPlayCircle style={{ marginRight: 5 }} />
+            Start
+          </div>
         </button>
         &nbsp;
         <button
           type="button"
-          onClick={() => electron.stopNode(sSelectedNode.id)}
+          onClick={() => electron.stopNode(selectedNode.id)}
           disabled={status !== NodeStatus.running}
         >
-          <span>Stop</span>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <FaPauseCircle style={{ marginRight: 5 }} />
+            Stop
+          </div>
         </button>
       </div>
     </div>

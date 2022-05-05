@@ -1,8 +1,9 @@
-import logger from '../logger';
+// eslint-disable-next-line import/no-cycle
+import { send } from '../messenger';
 import Node, { DockerNode, isDockerNode, NodeId, NodeStatus } from '../node';
 import store from './store';
 
-const USER_NODES_KEY = 'userNodes';
+export const USER_NODES_KEY = 'userNodes';
 const NODES_KEY = 'nodes';
 const NODE_IDS_KEY = 'nodeIds';
 /**
@@ -36,6 +37,11 @@ const initialize = () => {
   if (!Array.isArray(userNodes.nodeIds)) {
     store.set(`${USER_NODES_KEY}.${NODE_IDS_KEY}`, []);
   }
+
+  // Notify the UI when values change
+  store.onDidChange(USER_NODES_KEY, (newValue: UserNodes) => {
+    send('userNodes', newValue);
+  });
 };
 initialize();
 
@@ -70,8 +76,7 @@ export const addNode = (newNode: Node) => {
 // todo: put a lock on anything that changes nodes array
 //  or process events in a queue?
 export const updateNode = (node: Node) => {
-  store.set(`${USER_NODES_KEY}.${NODES_KEY}.${node.id}`, node);
-  logger.info(`Node::updateNode::${JSON.stringify(node)}`);
+  store.set(`${USER_NODES_KEY}.${NODES_KEY}.${node.id}`, { ...node });
   return getNode(node.id);
 };
 
@@ -90,7 +95,6 @@ export const setDockerNodeStatus = (
   const nodeToUpdate = nodes.find((node) => {
     if (isDockerNode(node)) {
       const dockerNode = node as DockerNode;
-      console.log('FOUND THE NODE!!!!!!!!!!!!!!!!!!!1');
       return dockerNode.containerIds?.includes(containerId);
     }
     return false;

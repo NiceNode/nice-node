@@ -12,8 +12,6 @@ import path from 'path';
 import { app, BrowserWindow, dialog, shell } from 'electron';
 
 import { autoUpdater, UpdateInfo } from 'electron-updater';
-// import log from 'electron-log';
-// import debug from 'electron-debug';
 import * as Sentry from '@sentry/electron/main';
 import sleep from 'await-sleep';
 // import { CaptureConsole } from '@sentry/integrations';
@@ -22,15 +20,12 @@ import logger, { autoUpdateLogger } from './logger';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { setWindow } from './messenger';
-import { initialize as initGeth } from './geth';
 import { initialize as initDocker } from './docker';
 import { initialize as initNodeManager } from './nodeManager';
 import * as ipc from './ipc';
 import * as power from './power';
 
 // import * as processExit from './processExit';
-
-// import { dontSuspendSystem } from './power';
 
 require('dotenv').config();
 // debug({ isEnabled: true });
@@ -259,7 +254,6 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
 // no blocking work
 const initialize = () => {
   logger.info('Initializing main process work...');
-  initGeth();
   ipc.initialize();
   power.initialize();
   initDocker();

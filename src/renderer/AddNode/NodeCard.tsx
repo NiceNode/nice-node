@@ -7,7 +7,7 @@ const NodeCard = (props: {
 }) => {
   // eslint-disable-next-line react/destructuring-assignment
   const { nodeOptions, onSelected } = props;
-  const { displayName, iconUrl, category, executionType } = nodeOptions;
+  const { displayName, iconUrl } = nodeOptions;
   return (
     <DivButton
       key={displayName}

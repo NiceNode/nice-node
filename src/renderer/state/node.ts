@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from './store';
-import { NODE_STATUS } from '../messages';
 import { NodeConfig } from '../../main/state/nodeConfig';
-import Node from '../../main/node';
+import { NodeId, NodeStatus } from '../../main/node';
 
 // Define a type for the slice state
 export interface NodeState {
-  selectedNode?: Node;
+  selectedNodeId?: NodeId;
   config?: NodeConfig;
   numGethDiskUsedGB: number | undefined;
   numFreeDiskGB: number | undefined;
@@ -17,7 +16,7 @@ export interface NodeState {
 
 // Define the initial state using that type
 export const initialState: NodeState = {
-  selectedNode: undefined,
+  selectedNodeId: undefined,
   numGethDiskUsedGB: undefined,
   numFreeDiskGB: undefined,
   status: 'loading',
@@ -30,7 +29,7 @@ console.log('Intial node state: ', initialState);
  * @param state NodeState
  */
 const setIsAvailableForPolling = (state: NodeState) => {
-  if (state.status === NODE_STATUS.running && state?.config?.http === true) {
+  if (state.status === NodeStatus.running && state?.config?.http === true) {
     state.isAvailableForPolling = true;
     console.log('Starting polling node for data');
   } else {
@@ -44,8 +43,11 @@ export const nodeSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    updateSelectedNode: (state, action: PayloadAction<Node | undefined>) => {
-      state.selectedNode = action.payload;
+    updateSelectedNodeId: (
+      state,
+      action: PayloadAction<NodeId | undefined>
+    ) => {
+      state.selectedNodeId = action.payload;
     },
     updateNodeNumGethDiskUsedGB: (
       state,
@@ -74,16 +76,15 @@ export const nodeSlice = createSlice({
 });
 
 export const {
-  updateSelectedNode,
+  updateSelectedNodeId,
   updateNodeConfig,
   updateNodeNumGethDiskUsedGB,
   updateSystemNumFreeDiskGB,
   updateNodeStatus,
 } = nodeSlice.actions;
 
-// Other code such as selectors can use the imported `RootState` type
-export const selectSelectedNode = (state: RootState): Node | undefined =>
-  state.node.selectedNode;
+export const selectSelectedNodeId = (state: RootState): NodeId | undefined =>
+  state.node.selectedNodeId;
 export const selectNodeConfig = (state: RootState) => state.node.config;
 export const selectNumGethDiskUsedGB = (state: RootState): number | undefined =>
   state.node.numGethDiskUsedGB;

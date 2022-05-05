@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
+import { CHANNELS_ARRAY } from './messenger';
 import { NodeId, NodeOptions } from './node';
 import { NodeConfig } from './state/nodeConfig';
 
@@ -7,10 +8,12 @@ contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     on(channel: string, func: (...args: any[]) => void) {
-      const validChannels = ['GETH'];
+      const validChannels = CHANNELS_ARRAY;
       if (validChannels.includes(channel)) {
         // Deliberately strip event as it includes `sender`
         ipcRenderer.on(channel, (_event, ...args) => func(...args));
+      } else {
+        console.error('IPC message not on a valid channel!');
       }
     },
   },

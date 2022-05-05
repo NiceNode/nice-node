@@ -1,8 +1,7 @@
 import { BsPlusSquareDotted } from 'react-icons/bs';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import Node, { DockerOptions, NodeId, NodeOptions } from '../../main/node';
-import electron from '../electronGlobal';
+import { NodeOptions } from '../../main/node';
 import IconButton from '../IconButton';
 import { Modal } from '../Modal';
 import NodeCard from './NodeCard';
@@ -146,6 +145,7 @@ const AddNode = () => {
               {sExecutionClientLibrary.map((nodeOptions: NodeOptions) => {
                 return (
                   <NodeCard
+                    key={nodeOptions.displayName}
                     nodeOptions={nodeOptions}
                     onSelected={() => onNodeSelected(nodeOptions)}
                   />
@@ -163,6 +163,7 @@ const AddNode = () => {
               {sBeaconNodeLibrary.map((nodeOptions: NodeOptions) => {
                 return (
                   <NodeCard
+                    key={nodeOptions.displayName}
                     nodeOptions={nodeOptions}
                     onSelected={() => onNodeSelected(nodeOptions)}
                   />
@@ -180,6 +181,7 @@ const AddNode = () => {
               {sLayer2ClientLibrary.map((nodeOptions: NodeOptions) => {
                 return (
                   <NodeCard
+                    key={nodeOptions.displayName}
                     nodeOptions={nodeOptions}
                     onSelected={() => onNodeSelected(nodeOptions)}
                   />
