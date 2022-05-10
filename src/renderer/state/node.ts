@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from './store';
 import { NodeConfig } from '../../main/state/nodeConfig';
-import { NodeId, NodeStatus } from '../../main/node';
+import { NodeId, NodeStatus } from '../../common/node';
 
 // Define a type for the slice state
 export interface NodeState {

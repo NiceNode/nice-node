@@ -3,7 +3,7 @@ import { FiExternalLink } from 'react-icons/fi';
 
 import { NodeConfig } from '../../main/state/nodeConfig';
 import electron from '../electronGlobal';
-import { NodeStatus } from '../../main/node';
+import { NodeStatus } from '../../common/node';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
 import { selectNodeStatus, updateNodeConfig } from '../state/node';
 import metamaskLogo from '../../../assets/metamaskLogo.svg';

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Node, NodeId } from '../main/node';
+import { NodeSpecification } from '../common/nodeSpec';
+import { Node, NodeId } from '../common/node';
 import { NodeConfig } from '../main/state/nodeConfig';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
@@ -46,7 +47,7 @@ declare global {
 
       // Multi-node
       getNodes(): Node[];
-      addNode(nodeOptions: nodeOptions): Node;
+      addNode(nodeSpec: NodeSpecification): Node;
       removeNode(nodeId: NodeId): Node;
       startNode(nodeId: NodeId): void;
       stopNode(nodeId: NodeId): void;

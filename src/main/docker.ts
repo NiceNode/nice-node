@@ -4,7 +4,8 @@ import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
 
 import logger from './logger';
-import { DockerNode, DockerOptions, NodeStatus } from './node';
+import Node, { NodeStatus } from '../common/node';
+import { DockerExecution } from '../common/nodeSpec';
 import { setDockerNodeStatus } from './state/nodes';
 
 // const options = {
@@ -161,9 +162,9 @@ export const initialize = async () => {
   //   console.log('beacon node data parsedData: ', parsedData);
 };
 
-export const startDockerNode = async (node: DockerNode): Promise<string[]> => {
+export const startDockerNode = async (node: Node): Promise<string[]> => {
   // pull image
-  const { imageName } = node;
+  const { imageName, input } = node.spec.execution as DockerExecution;
   await runCommand(`pull ${imageName}`);
 
   // todo: custom setup: ex. create data directory
@@ -171,10 +172,18 @@ export const startDockerNode = async (node: DockerNode): Promise<string[]> => {
 
   // run
   // todo: use node options to create docker and node input
-  const dockerInput =
-    '-d -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052 -v /home/johns/.lighthouse:/root/.lighthouse';
-  const nodeInput =
-    'lighthouse --network mainnet beacon --http --http-address 0.0.0.0';
+  // const dockerInput =
+  //   '-d -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052 -v /home/johns/.lighthouse:/root/.lighthouse';
+  // const nodeInput =
+  //   'lighthouse --network mainnet beacon --http --http-address 0.0.0.0';
+  let dockerInput = '';
+  if (input?.docker) {
+    dockerInput = input?.docker;
+  }
+  let nodeInput = '';
+  if (input?.default) {
+    nodeInput = input?.default.join(' ');
+  }
   const runData = await runCommand(
     `run ${dockerInput} ${imageName} ${nodeInput}`
   );
@@ -183,14 +192,17 @@ export const startDockerNode = async (node: DockerNode): Promise<string[]> => {
   return [containerId];
 };
 
-export const stopDockerNode = async (node: DockerOptions) => {
+export const stopDockerNode = async (node: Node) => {
   // run
   // todo: use node options to create docker and node input
   // todo: loop
   let containerIds;
-  if (Array.isArray(node.containerIds) && node.containerIds.length > 0) {
-    containerIds = node.containerIds;
-    await runCommand(`stop ${node.containerIds[0]}`);
+  if (
+    Array.isArray(node.monitoring.processIds) &&
+    node.monitoring.processIds.length > 0
+  ) {
+    containerIds = node.monitoring.processIds;
+    await runCommand(`stop ${containerIds[0]}`);
   } else {
     throw new Error('Unable to stop the node. No containerIds found.');
   }

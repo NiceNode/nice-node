@@ -1,10 +1,7 @@
 import { MdDelete } from 'react-icons/md';
-import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 
-import Node, { DockerOptions, NodeId, NodeOptions } from '../main/node';
-import electron from './electronGlobal';
-import IconButton from './IconButton';
+import Node from '../common/node';
 import { useGetNodesQuery } from './state/nodeService';
 import AddNode from './AddNode/AddNode';
 import DivButton from './DivButton';
@@ -27,7 +24,7 @@ const LeftSideBar = () => {
     ) {
       dispatch(updateSelectedNodeId(qGetNodes.data[0].id));
     }
-  }, [sSelectedNodeId, qGetNodes]);
+  }, [sSelectedNodeId, qGetNodes, dispatch]);
 
   useEffect(() => {
     console.log('LSB: new qGetNodes', qGetNodes);
@@ -69,12 +66,12 @@ const LeftSideBar = () => {
                 onClick={() => dispatch(updateSelectedNodeId(node.id))}
               >
                 <img
-                  src={node.iconUrl}
-                  alt={node.displayName}
+                  src={node.spec.iconUrl}
+                  alt={node.spec.displayName}
                   style={{ width: 50 }}
                 />
                 <span style={{ textOverflow: 'ellipsis' }}>
-                  {node.displayName}
+                  {node.spec.displayName}
                 </span>
                 <div
                   style={{

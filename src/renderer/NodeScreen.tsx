@@ -1,7 +1,7 @@
 // import { MdDelete } from 'react-icons/md';
 import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 
-import Node, { NodeStatus } from '../main/node';
+import Node, { NodeStatus } from '../common/node';
 import electron from './electronGlobal';
 import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector } from './state/hooks';

@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-cycle
 import { send } from '../messenger';
-import Node, { DockerNode, isDockerNode, NodeId, NodeStatus } from '../node';
+import Node, { isDockerNode, NodeId, NodeStatus } from '../../common/node';
 import store from './store';
 
 export const USER_NODES_KEY = 'userNodes';
@@ -94,8 +94,8 @@ export const setDockerNodeStatus = (
   const nodes = getNodes();
   const nodeToUpdate = nodes.find((node) => {
     if (isDockerNode(node)) {
-      const dockerNode = node as DockerNode;
-      return dockerNode.containerIds?.includes(containerId);
+      const dockerNode = node;
+      return dockerNode.monitoring?.processIds?.includes(containerId);
     }
     return false;
   });

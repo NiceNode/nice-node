@@ -25,7 +25,8 @@ import {
 } from './monitor';
 import { addNode, startNode, stopNode } from './nodeManager';
 import { getNodes, getNode, removeNode } from './state/nodes';
-import { NodeId, NodeOptions } from './node';
+import { NodeId } from '../common/node';
+import { NodeSpecification } from '../common/nodeSpec';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -78,8 +79,8 @@ export const initialize = () => {
 
   // Multi-node
   ipcMain.handle('getNodes', getNodes);
-  ipcMain.handle('addNode', (_event, nodeOptions: NodeOptions) => {
-    return addNode(nodeOptions);
+  ipcMain.handle('addNode', (_event, nodeSpec: NodeSpecification) => {
+    return addNode(nodeSpec);
   });
   ipcMain.handle('removeNode', (_event, nodeId: NodeId) => {
     return removeNode(nodeId);

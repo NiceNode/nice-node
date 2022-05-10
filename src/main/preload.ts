@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
+import { NodeSpecification } from '../common/nodeSpec';
 import { CHANNELS_ARRAY } from './messenger';
-import { NodeId, NodeOptions } from './node';
+import { NodeId } from '../common/node';
 import { NodeConfig } from './state/nodeConfig';
 
 contextBridge.exposeInMainWorld('electron', {
@@ -52,8 +53,8 @@ contextBridge.exposeInMainWorld('electron', {
 
   // Multi-node
   getNodes: () => ipcRenderer.invoke('getNodes'),
-  addNode: (nodeOptions: NodeOptions) =>
-    ipcRenderer.invoke('addNode', nodeOptions),
+  addNode: (nodeSpec: NodeSpecification) =>
+    ipcRenderer.invoke('addNode', nodeSpec),
   removeNode: (nodeId: NodeId) => ipcRenderer.invoke('removeNode', nodeId),
   startNode: (nodeId: NodeId) => {
     ipcRenderer.invoke('startNode', nodeId);

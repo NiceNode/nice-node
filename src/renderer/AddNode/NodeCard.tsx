@@ -1,13 +1,13 @@
-import { NodeOptions } from '../../main/node';
+import { NodeSpecification } from '../../common/nodeSpec';
 import DivButton from '../DivButton';
 
 const NodeCard = (props: {
-  nodeOptions: NodeOptions;
+  nodeSpec: NodeSpecification;
   onSelected: () => void;
 }) => {
   // eslint-disable-next-line react/destructuring-assignment
-  const { nodeOptions, onSelected } = props;
-  const { displayName, iconUrl } = nodeOptions;
+  const { nodeSpec, onSelected } = props;
+  const { displayName, iconUrl } = nodeSpec;
   return (
     <DivButton
       key={displayName}

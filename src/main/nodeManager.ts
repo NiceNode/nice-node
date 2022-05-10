@@ -1,17 +1,16 @@
+import { NodeSpecification } from '../common/nodeSpec';
 import { getContainerDetails, startDockerNode, stopDockerNode } from './docker';
 import logger from './logger';
 import Node, {
   createNode,
-  DockerNode,
   isDockerNode,
   NodeId,
-  NodeOptions,
   NodeStatus,
-} from './node';
+} from '../common/node';
 import * as nodeStore from './state/nodes';
 
-export const addNode = (nodeOptions: NodeOptions) => {
-  const node: Node = createNode(nodeOptions);
+export const addNode = (nodeSpec: NodeSpecification) => {
+  const node: Node = createNode(nodeSpec);
   nodeStore.addNode(node);
   return node;
 };
@@ -26,11 +25,11 @@ export const startNode = async (nodeId: NodeId) => {
   nodeStore.updateNode(node);
 
   try {
-    if (node.executionType === 'docker') {
-      const dockerNode = node as DockerNode;
+    if (isDockerNode(node)) {
+      const dockerNode = node;
       // startDockerNode(dockerNode);
       const containerIds = await startDockerNode(dockerNode);
-      dockerNode.containerIds = containerIds;
+      dockerNode.monitoring.processIds = containerIds;
       dockerNode.status = NodeStatus.running;
       nodeStore.updateNode(dockerNode);
     } else {
@@ -52,8 +51,8 @@ export const stopNode = async (nodeId: NodeId) => {
   node.status = NodeStatus.stopping;
   nodeStore.updateNode(node);
 
-  if (node.executionType === 'docker') {
-    const containerIds = await stopDockerNode(node as DockerNode);
+  if (isDockerNode(node)) {
+    const containerIds = await stopDockerNode(node);
     logger.info(`${containerIds} stopped`);
     node.status = NodeStatus.stopped;
     nodeStore.updateNode(node);
@@ -71,12 +70,12 @@ export const initialize = async () => {
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     if (isDockerNode(node)) {
-      const dockerNode = node as DockerNode;
-      if (Array.isArray(dockerNode?.containerIds)) {
+      const dockerNode = node;
+      if (Array.isArray(dockerNode?.monitoring?.processIds)) {
         try {
           // eslint-disable-next-line no-await-in-loop
           const containerDetails = await getContainerDetails(
-            dockerNode.containerIds
+            dockerNode.monitoring.processIds
           );
           // {..."State": {
           //     "Status": "exited",

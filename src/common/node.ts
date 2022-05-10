@@ -1,41 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import { v4 as uuidv4 } from 'uuid';
+import { ExecutionTypes, NodeSpecification } from './nodeSpec';
 
 export type NodeId = string;
-/**
- * @param dataPath where the node's data will be stored
- */
-export type NodeOptions = {
-  displayName: string;
-  executionType: 'docker' | 'binary';
-  runInBackground?: boolean; // default to true
-  dataPath?: string; // defaults to NiceNode app route
-  rpcTranslation?: string;
-  // todo: define a standard for translating rpc calls for common node data
-  //  which NiceNode uses to show the state of the node.
-  //  (ex. peers, syncing, latest block num, etc.)
-  iconUrl?: string;
-  category?: string;
-  input?: { default?: string[] };
-  architectures?: { docker?: string[] };
-  documentation?: { default?: string; docker?: string; binary?: string };
-};
-
-export type DockerOptions = NodeOptions & {
-  executionType: 'docker';
-  imageName: string; // todo: support multi-image node
-  // todo: support non-docker hub
-  containerIds?: string[];
-};
-
-/**
- * @param downloadUrl binary must end in .tar.gz or .zip
- */
-export type BinaryOptions = NodeOptions & {
-  executionType: 'binary';
-  downloadUrl: string;
-  // todo: could be file path
-};
 
 export enum NodeStatus {
   created = 'created',
@@ -53,24 +20,53 @@ export enum NodeStatus {
   errorStopping = 'error stopping',
 }
 
-type Node = NodeOptions & {
+export type NodeUserConfig = {
+  executionType?: ExecutionTypes;
+};
+
+/**
+ * @property processIds is either containerIds or childProcessIds
+ */
+export type NodeMonitoring = {
+  processIds?: string[];
+};
+
+type Node = {
   id: NodeId;
+  spec: NodeSpecification;
+  userConfig: NodeUserConfig;
+  monitoring: NodeMonitoring;
   status: NodeStatus;
   lastStarted?: string;
   lastStopped?: string;
 };
 
-export type DockerNode = Node & DockerOptions;
-
-export type BinaryNode = Node & BinaryOptions;
-
-export const isDockerNode = (node: Node) => node.executionType === 'docker';
-export const isBinaryNode = (node: Node) => node.executionType === 'binary';
-
-export const createNode = (opts: NodeOptions): Node => {
+export const isDockerNode = (node: Node) => {
+  // userConfig takes priority, then default type, then the first option
+  if (node.userConfig.executionType) {
+    return node.userConfig.executionType === 'docker';
+  }
+  if (node.spec.execution.defaultExecutionType) {
+    return node.spec.execution.defaultExecutionType === 'docker';
+  }
+  return node.spec.execution.executionTypes[0] === 'docker';
+};
+export const isBinaryNode = (node: Node) => {
+  // userConfig takes priority, then default type, then the first option
+  if (node.userConfig.executionType) {
+    return node.userConfig.executionType === 'binary';
+  }
+  if (node.spec.execution.defaultExecutionType) {
+    return node.spec.execution.defaultExecutionType === 'binary';
+  }
+  return node.spec.execution.executionTypes[0] === 'binary';
+};
+export const createNode = (spec: NodeSpecification): Node => {
   const node: Node = {
-    ...opts,
     id: uuidv4(),
+    spec,
+    userConfig: {},
+    monitoring: {},
     status: NodeStatus.created,
   };
   return node;

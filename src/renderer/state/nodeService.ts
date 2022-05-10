@@ -1,5 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import Node, { NodeId, NodeOptions } from '../../main/node';
+import { NodeSpecification } from '../../common/nodeSpec';
+import Node from '../../common/node';
 import electron from '../electronGlobal';
 
 type CustomerErrorType = {
@@ -28,11 +29,11 @@ export const RtkqNodeService: any = createApi({
         return { data };
       },
     }),
-    addNode: builder.query<ProviderResponse, NodeOptions>({
-      queryFn: async (nodeOptions: NodeOptions) => {
+    addNode: builder.query<ProviderResponse, NodeSpecification>({
+      queryFn: async (nodeSpec: NodeSpecification) => {
         let data;
         try {
-          data = await electron.addNode(nodeOptions);
+          data = await electron.addNode(nodeSpec);
         } catch (e) {
           const error = { message: 'Unable to addNode' };
           console.log(e);
