@@ -34,6 +34,16 @@ const AddNode = () => {
       imageName: 'nethermind/nethermind',
       category: 'L1/ExecutionClient',
       executionType: 'docker',
+      input: {
+        default: ['--JsonRpc.Enabled', 'true'],
+      },
+      architectures: {
+        docker: ['amd64', 'arm64'],
+      },
+      documentation: {
+        default: 'https://docs.nethermind.io/nethermind/',
+        docker: 'https://docs.nethermind.io/nethermind/ethereum-client/docker',
+      },
       iconUrl:
         'https://clientdiversity.org/assets/img/execution-clients/nethermind-logo.png',
     },
@@ -89,9 +99,22 @@ const AddNode = () => {
     },
     {
       displayName: 'Lighthouse',
-      imageName: 'sigp/lighthouse',
+      imageName: 'sigp/lighthouse:latest-modern',
       category: 'L1/ConsensusClient/BeaconNode',
       executionType: 'docker',
+      input: {
+        default:
+          'lighthouse --network mainnet beacon --http --http-address 0.0.0.0',
+        docker:
+          '-d -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052 -v /home/johns/.lighthouse:/root/.lighthouse',
+      },
+      architectures: {
+        docker: ['amd64', 'arm64'],
+      },
+      documentation: {
+        default: 'https://lighthouse-book.sigmaprime.io/intro.html',
+        docker: 'https://lighthouse-book.sigmaprime.io/docker.html',
+      },
       iconUrl:
         'https://clientdiversity.org/assets/img/consensus-clients/lighthouse-logo.png',
     },
@@ -120,6 +143,18 @@ const AddNode = () => {
       executionType: 'docker',
       iconUrl:
         'https://equilibrium.co/_next/image?url=%2Fimages%2Fcasestudies%2Fsquare-pathfinder.png&w=640&q=75',
+    },
+    {
+      displayName: 'Arbitrum One',
+      imageName: 'offchainlabs/arb-node:v1.3.0-d994f7d',
+      category: 'L2/ArbitrumOne',
+      executionType: 'docker',
+      documentation: {
+        default: 'https://arbitrum.io/',
+        docker: 'https://developer.offchainlabs.com/docs/running_node',
+      },
+      iconUrl:
+        'https://arbitrum.io/wp-content/uploads/2021/08/Arbitrum_Symbol-Full-color-White-background-937x1024.png',
     },
   ]);
   const onClickAddNodeButton = async () => {

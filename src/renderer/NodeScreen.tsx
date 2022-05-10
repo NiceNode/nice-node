@@ -10,6 +10,7 @@ import { selectSelectedNodeId } from './state/node';
 const NodeScreen = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   // Will select the Node with the given id, and will only rerender if the given Node data changes
+  // https://redux-toolkit.js.org/rtk-query/usage/queries#selecting-data-from-a-query-result
   const { selectedNode } = useGetNodesQuery(undefined, {
     selectFromResult: ({ data }: { data: Node[] }) => {
       return {
