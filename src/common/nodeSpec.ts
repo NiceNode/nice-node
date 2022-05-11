@@ -145,7 +145,6 @@ export type ConfigTranslationEx = {
   // get peers
   //
 };
-export type NodeId = string;
 type BaseNodeExecution = {
   executionTypes: ExecutionTypes[];
   defaultExecutionType?: ExecutionTypes;

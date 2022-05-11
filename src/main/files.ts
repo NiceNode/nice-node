@@ -65,10 +65,10 @@ export const getSystemDiskSize = async (): Promise<number> => {
   return sizeInGBs;
 };
 
-export const tryGetGethUsedDiskSpace = async () => {
+export const tryCalcDiskSpace = async (dirPath: string) => {
   let diskUsedInGBs;
   try {
-    diskUsedInGBs = (await du(gethDataDir())) * 1e-9;
+    diskUsedInGBs = (await du(dirPath)) * 1e-9;
   } catch (err) {
     console.info(
       'Cannot calculate geth disk usage. Likely geth is changing files.'
@@ -77,11 +77,17 @@ export const tryGetGethUsedDiskSpace = async () => {
   return diskUsedInGBs;
 };
 
-export const getGethUsedDiskSpace = async (): Promise<number | undefined> => {
-  let diskUsedInGBs = await tryGetGethUsedDiskSpace();
+/**
+ * May return undefined if files are changining while trying to calculate
+ * disk usage.
+ */
+export const getUsedDiskSpace = async (
+  dirPath: string
+): Promise<number | undefined> => {
+  let diskUsedInGBs = await tryCalcDiskSpace(dirPath);
   // geth may cleanup mid calculation
   if (diskUsedInGBs === undefined) {
-    diskUsedInGBs = await tryGetGethUsedDiskSpace();
+    diskUsedInGBs = await tryCalcDiskSpace(dirPath);
   }
   // logger.info(`Geth disk used (GBs): ${diskUsedInGBs}`);
   return diskUsedInGBs;

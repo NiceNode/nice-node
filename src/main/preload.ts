@@ -22,7 +22,8 @@ contextBridge.exposeInMainWorld('electron', {
   startGeth: () => ipcRenderer.invoke('startGeth'),
   stopGeth: () => ipcRenderer.invoke('stopGeth'),
   deleteGethDisk: () => ipcRenderer.invoke('deleteGethDisk'),
-  getGethDiskUsed: () => ipcRenderer.invoke('getGethDiskUsed'),
+  updateNodeUsedDiskSpace: (nodeId: NodeId) =>
+    ipcRenderer.invoke('updateNodeUsedDiskSpace', nodeId),
   getSystemFreeDiskSpace: () => ipcRenderer.invoke('getSystemFreeDiskSpace'),
   getDebugInfo: () => ipcRenderer.invoke('getDebugInfo'),
   getStoreValue: (key: string) => ipcRenderer.invoke('getStoreValue', key),

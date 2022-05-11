@@ -30,6 +30,9 @@ export type NodeUserConfig = {
 export type NodeRuntime = {
   dataDir: string;
   processIds?: string[];
+  usage: {
+    diskGBs?: number;
+  };
 };
 
 type Node = {

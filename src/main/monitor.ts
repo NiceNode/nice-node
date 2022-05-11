@@ -1,8 +1,10 @@
 import { net } from 'electron';
-import { getSystemDiskSize } from './files';
+import { getSystemDiskSize, getUsedDiskSpace } from './files';
 
+import { NodeId } from '../common/node';
 import { getPid } from './geth';
 import logger from './logger';
+import * as storeNodes from './state/nodes';
 
 const pidusage = require('pidusage');
 
@@ -67,4 +69,17 @@ export const checkSystemHardware = async () => {
   }
   logger.info(warnings);
   return warnings;
+};
+
+export const updateNodeUsedDiskSpace = async (nodeId: NodeId) => {
+  const node = storeNodes.getNode(nodeId);
+  if (node) {
+    const { dataDir } = node.runtime;
+    const diskGBs = await getUsedDiskSpace(dataDir);
+    if (diskGBs !== undefined) {
+      logger.info(`Disk usaged ${diskGBs}GBs calculated for nodeId ${nodeId}`);
+      node.runtime.usage.diskGBs = diskGBs;
+      storeNodes.updateNode(node);
+    }
+  }
 };

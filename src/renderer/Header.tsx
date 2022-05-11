@@ -20,13 +20,13 @@ import { useGetNetworkConnectedQuery } from './state/network';
 import { hexToDecimal } from './utils';
 import { useAppSelector } from './state/hooks';
 import {
-  selectNumGethDiskUsedGB,
   selectIsAvailableForPolling,
   selectNodeConfig,
+  selectSelectedNode,
 } from './state/node';
 
 const Header = () => {
-  const sGethDiskUsed = useAppSelector(selectNumGethDiskUsedGB);
+  const selectedNode = useAppSelector(selectSelectedNode);
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
@@ -48,6 +48,8 @@ const Header = () => {
     pollingInterval: typeof sPeers === 'number' && sPeers === 0 ? 30000 : 0,
   });
 
+  const diskUsed = selectedNode?.runtime?.usage?.diskGBs ?? undefined;
+  // if (selectedNode?.runtime?.usage?.diskGBs)
   useEffect(() => {
     if (!sIsAvailableForPolling) {
       // clear all node data when it becomes unavailable to get
@@ -172,7 +174,7 @@ const Header = () => {
             </span>
           </div>
         )}
-        {sGethDiskUsed && (
+        {diskUsed && (
           <div
             style={{
               display: 'flex',
@@ -182,7 +184,7 @@ const Header = () => {
           >
             <FiHardDrive />
             <span style={{ marginLeft: 5, marginRight: 10 }}>
-              {sGethDiskUsed.toFixed(1)}GB
+              {diskUsed.toFixed(1)}GB
             </span>
           </div>
         )}

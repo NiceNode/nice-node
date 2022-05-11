@@ -3,7 +3,6 @@ import getDebugInfo from './debug';
 import {
   getGethLogs,
   getGethErrorLogs,
-  getGethUsedDiskSpace,
   getSystemFreeDiskSpace,
   deleteGethDisk,
 } from './files';
@@ -22,6 +21,7 @@ import {
   checkSystemHardware,
   getMainProcessUsage,
   getNodeUsage,
+  updateNodeUsedDiskSpace,
 } from './monitor';
 import { addNode, startNode, stopNode, removeNode } from './nodeManager';
 import { getNodes, getNode, getUserNodes } from './state/nodes';
@@ -34,7 +34,9 @@ export const initialize = () => {
   ipcMain.handle('startGeth', startGeth);
   ipcMain.handle('stopGeth', stopGeth);
   ipcMain.handle('deleteGethDisk', deleteGethDisk);
-  ipcMain.handle('getGethDiskUsed', getGethUsedDiskSpace);
+  ipcMain.handle('updateNodeUsedDiskSpace', (_event, nodeId: NodeId) => {
+    return updateNodeUsedDiskSpace(nodeId);
+  });
   ipcMain.handle('getSystemFreeDiskSpace', getSystemFreeDiskSpace);
   ipcMain.handle('getDebugInfo', getDebugInfo);
   ipcMain.handle('getStoreValue', (_event, key: string) => {

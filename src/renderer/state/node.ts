@@ -7,6 +7,7 @@ import Node, { NodeId, NodeStatus, UserNodes } from '../../common/node';
 export interface NodeState {
   userNodes?: UserNodes;
   selectedNodeId?: NodeId;
+  selectedNode?: Node;
   config?: NodeConfig;
   numGethDiskUsedGB: number | undefined;
   numFreeDiskGB: number | undefined;
@@ -19,6 +20,7 @@ export interface NodeState {
 export const initialState: NodeState = {
   userNodes: undefined,
   selectedNodeId: undefined,
+  selectedNode: undefined,
   numGethDiskUsedGB: undefined,
   numFreeDiskGB: undefined,
   status: 'loading',
@@ -44,6 +46,13 @@ const setIsAvailableForPolling = (state: NodeState) => {
   state.isAvailableForPolling = false;
 };
 
+const setSelectedNode = (state: NodeState) => {
+  const { selectedNodeId, userNodes } = state;
+  if (selectedNodeId && userNodes && userNodes.nodes[selectedNodeId]) {
+    state.selectedNode = userNodes.nodes[selectedNodeId];
+  }
+};
+
 export const nodeSlice = createSlice({
   name: 'node',
   // `createSlice` will infer the state type from the `initialState` argument
@@ -51,6 +60,7 @@ export const nodeSlice = createSlice({
   reducers: {
     updateUserNodes: (state, action: PayloadAction<UserNodes | undefined>) => {
       state.userNodes = action.payload;
+      setSelectedNode(state);
       setIsAvailableForPolling(state);
     },
     updateSelectedNodeId: (
@@ -58,6 +68,7 @@ export const nodeSlice = createSlice({
       action: PayloadAction<NodeId | undefined>
     ) => {
       state.selectedNodeId = action.payload;
+      setSelectedNode(state);
       setIsAvailableForPolling(state);
     },
     updateNodeNumGethDiskUsedGB: (
@@ -97,6 +108,8 @@ export const selectUserNodes = (state: RootState): UserNodes | undefined =>
   state.node.userNodes;
 export const selectSelectedNodeId = (state: RootState): NodeId | undefined =>
   state.node.selectedNodeId;
+export const selectSelectedNode = (state: RootState): Node | undefined =>
+  state.node.selectedNode;
 export const selectNodeConfig = (state: RootState) => state.node.config;
 export const selectNumGethDiskUsedGB = (state: RootState): number | undefined =>
   state.node.numGethDiskUsedGB;

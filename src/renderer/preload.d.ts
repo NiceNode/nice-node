@@ -28,7 +28,7 @@ declare global {
       startGeth(): void;
       stopGeth(): void;
       deleteGethDisk(): boolean;
-      getGethDiskUsed(): number;
+      update(): number;
       getSystemFreeDiskSpace(): number;
       getDebugInfo(): any;
       getStoreValue(key: string): any;
@@ -52,6 +52,7 @@ declare global {
       removeNode(nodeId: NodeId): Node;
       startNode(nodeId: NodeId): void;
       stopNode(nodeId: NodeId): void;
+      updateNodeUsedDiskSpace(nodeId: NodeId): void;
     };
 
     performance: Performance;

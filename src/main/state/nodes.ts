@@ -56,7 +56,7 @@ export const getNodes = (): Node[] => {
   return nodes;
 };
 
-export const getNode = (nodeId: NodeId) => {
+export const getNode = (nodeId: NodeId): Node => {
   return store.get(`${USER_NODES_KEY}.${NODES_KEY}.${nodeId}`);
 };
 

@@ -20,6 +20,7 @@ export const addNode = async (nodeSpec: NodeSpecification): Promise<Node> => {
   const dataDir = await makeNodeDir(nodeSpec.specId);
   const nodeRuntime: NodeRuntime = {
     dataDir,
+    usage: {},
   };
   const node: Node = createNode({ spec: nodeSpec, runtime: nodeRuntime });
   nodeStore.addNode(node);
@@ -90,13 +91,6 @@ export const removeNode = async (nodeId: NodeId): Promise<Node> => {
   // todo: delete data
   const removedNode = nodeStore.removeNode(nodeId);
   return removedNode;
-};
-
-export const getNodeDataDir = (nodeSpec: NodeSpecification) => {
-  // check user settings
-  const node: Node = createNode(nodeSpec);
-  nodeStore.addNode(node);
-  return node;
 };
 
 /**

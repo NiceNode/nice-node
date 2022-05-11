@@ -15,7 +15,8 @@ import { initialize as initializeIpcListeners } from './ipc';
 import { selectIsAvailableForPolling, selectNodeStatus } from './state/node';
 import LeftSideBar from './LeftSideBar';
 import NodeScreen from './NodeScreen';
-import { useGetNodesQuery } from './state/nodeService';
+import DataRefresher from './DataRefresher';
+// import { useGetNodesQuery } from './state/nodeService';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -40,7 +41,7 @@ const MainScreen = () => {
   useEffect(() => {
     console.log('App loaded. Initializing...');
     initializeIpcListeners(dispatch);
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (typeof qNodeInfo?.data === 'string') {
@@ -106,6 +107,7 @@ const MainScreen = () => {
       </div>
 
       <Footer />
+      <DataRefresher />
     </div>
   );
 };

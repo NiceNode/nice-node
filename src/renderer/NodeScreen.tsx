@@ -6,10 +6,15 @@ import Node, { NodeId, NodeStatus } from '../common/node';
 import electron from './electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector } from './state/hooks';
-import { selectSelectedNodeId, selectUserNodes } from './state/node';
+import {
+  selectSelectedNode,
+  selectSelectedNodeId,
+  selectUserNodes,
+} from './state/node';
 
 const NodeScreen = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
+  const selectedNode = useAppSelector(selectSelectedNode);
   const sUserNodes = useAppSelector(selectUserNodes);
 
   // Will select the Node with the given id, and will only rerender if the given Node data changes
@@ -21,14 +26,7 @@ const NodeScreen = () => {
   //     };
   //   },
   // });
-  let selectedNode: Node;
-  if (
-    sSelectedNodeId &&
-    sUserNodes?.nodes &&
-    sUserNodes.nodes[sSelectedNodeId]
-  ) {
-    selectedNode = sUserNodes.nodes[sSelectedNodeId];
-  } else {
+  if (!selectedNode) {
     return <div>No node selected</div>;
   }
 
