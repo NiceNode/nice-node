@@ -20,7 +20,9 @@ export const RtkqNodeService: any = createApi({
       queryFn: async () => {
         let data;
         try {
+          console.log('RtkqNodeService getNodes() calling..');
           data = await electron.getNodes();
+          console.log('RtkqNodeService getNodes() returned ', data);
         } catch (e) {
           const error = { message: 'Unable to getNodes' };
           console.log(e);

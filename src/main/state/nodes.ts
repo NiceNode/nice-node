@@ -1,6 +1,11 @@
 // eslint-disable-next-line import/no-cycle
 import { send } from '../messenger';
-import Node, { isDockerNode, NodeId, NodeStatus } from '../../common/node';
+import Node, {
+  isDockerNode,
+  NodeId,
+  NodeStatus,
+  UserNodes,
+} from '../../common/node';
 import store from './store';
 
 export const USER_NODES_KEY = 'userNodes';
@@ -16,11 +21,6 @@ const NODE_IDS_KEY = 'nodeIds';
  * }
  * nodeIds = [id2, id3, id1] // stored in display order
  */
-type NodeMap = Record<string, Node>;
-type UserNodes = {
-  nodes: NodeMap;
-  nodeIds: string[];
-};
 
 /**
  * Called on app launch.
@@ -95,7 +95,7 @@ export const setDockerNodeStatus = (
   const nodeToUpdate = nodes.find((node) => {
     if (isDockerNode(node)) {
       const dockerNode = node;
-      return dockerNode.monitoring?.processIds?.includes(containerId);
+      return dockerNode.runtime?.processIds?.includes(containerId);
     }
     return false;
   });
@@ -120,6 +120,7 @@ export const setDockerNodeStatus = (
 
 export const removeNode = (nodeId: NodeId) => {
   // todo: check if node can be removed. Is it stopped?
+  // todo: stop & remove container
   const userNodes = getUserNodes();
   const { nodes, nodeIds } = userNodes;
   const nodeToRemove = nodes[nodeId];

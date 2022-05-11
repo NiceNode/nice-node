@@ -30,12 +30,17 @@ const AddNode = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sExecutionClientLibrary] = useState<NodeSpecification[]>([
     {
+      specId: 'nethermind',
       displayName: 'Nethermind',
       execution: {
         executionTypes: ['docker'],
         defaultExecutionType: 'docker',
         input: {
-          default: ['--JsonRpc.Enabled', 'true'],
+          default: ['--JsonRpc.Enabled', 'true', '--datadir', 'data'],
+          docker: {
+            containerVolumePath: '/nethermind/data',
+            raw: '--network host',
+          },
         },
         architectures: {
           docker: ['amd64', 'arm64'],
@@ -51,6 +56,7 @@ const AddNode = () => {
         'https://clientdiversity.org/assets/img/execution-clients/nethermind-logo.png',
     },
     {
+      specId: 'erigon',
       displayName: 'Erigon',
       execution: {
         executionTypes: ['docker'],
@@ -62,6 +68,7 @@ const AddNode = () => {
         'https://clientdiversity.org/assets/img/execution-clients/erigon-text-logo.png',
     },
     {
+      specId: 'besu',
       displayName: 'Besu',
       execution: {
         executionTypes: ['docker'],
@@ -73,6 +80,7 @@ const AddNode = () => {
         'https://clientdiversity.org/assets/img/execution-clients/besu-text-logo.png',
     },
     {
+      specId: 'geth',
       displayName: 'Geth',
       execution: {
         executionTypes: ['binary'],
@@ -87,6 +95,7 @@ const AddNode = () => {
   ]);
   const [sBeaconNodeLibrary] = useState<NodeSpecification[]>([
     {
+      specId: 'lodestar-beacon',
       displayName: 'Lodestar',
       execution: {
         executionTypes: ['docker'],
@@ -103,6 +112,7 @@ const AddNode = () => {
         'https://clientdiversity.org/assets/img/consensus-clients/lodestar-logo-text.png',
     },
     {
+      specId: 'teku-beacon',
       displayName: 'Teku',
       execution: {
         executionTypes: ['docker'],
@@ -119,6 +129,7 @@ const AddNode = () => {
         'https://clientdiversity.org/assets/img/consensus-clients/teku-logo.png',
     },
     {
+      specId: 'nimbus-beacon',
       displayName: 'Nimbus',
       execution: {
         executionTypes: ['docker'],
@@ -134,6 +145,7 @@ const AddNode = () => {
         'https://clientdiversity.org/assets/img/consensus-clients/nimbus-logo-text.png',
     },
     {
+      specId: 'lighthouse-beacon',
       displayName: 'Lighthouse',
       execution: {
         executionTypes: ['docker'],
@@ -148,8 +160,11 @@ const AddNode = () => {
             '--http-address',
             '0.0.0.0',
           ],
-          docker:
-            '-d -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052 -v /home/johns/.lighthouse:/root/.lighthouse',
+          docker: {
+            // pref host path /home/johns/.lighthouse
+            containerVolumePath: '/root/.lighthouse',
+            raw: '-d -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052',
+          },
         },
         architectures: {
           docker: ['amd64', 'arm64'],
@@ -165,11 +180,18 @@ const AddNode = () => {
         'https://clientdiversity.org/assets/img/consensus-clients/lighthouse-logo.png',
     },
     {
+      specId: 'prysm-beacon',
       displayName: 'Prysm',
       execution: {
         executionTypes: ['docker'],
         defaultExecutionType: 'docker',
         imageName: 'gcr.io/prysmaticlabs/prysm/beacon-chain:stable',
+        input: {
+          docker: {
+            containerVolumePath: '/data',
+            raw: '-p 4000:4000 -p 13000:13000 -p 12000:12000/udp',
+          },
+        },
       },
       category: 'L1/ConsensusClient/BeaconNode',
       documentation: {
@@ -183,6 +205,7 @@ const AddNode = () => {
   ]);
   const [sLayer2ClientLibrary] = useState<NodeSpecification[]>([
     {
+      specId: 'optimism',
       displayName: 'Optimism Replica',
       execution: {
         executionTypes: ['docker'],
@@ -194,6 +217,7 @@ const AddNode = () => {
         'https://github.com/ethereum-optimism/brand-kit/blob/main/assets/images/Profile-Logo.png?raw=true',
     },
     {
+      specId: 'pathfinder',
       displayName: 'StarkNet, Pathfinder',
       execution: {
         executionTypes: ['docker'],
@@ -205,6 +229,7 @@ const AddNode = () => {
         'https://equilibrium.co/_next/image?url=%2Fimages%2Fcasestudies%2Fsquare-pathfinder.png&w=640&q=75',
     },
     {
+      specId: 'arbitrum',
       displayName: 'Arbitrum One',
       execution: {
         executionTypes: ['docker'],
@@ -212,8 +237,10 @@ const AddNode = () => {
         imageName: 'offchainlabs/arb-node:v1.3.0-d994f7d',
         input: {
           default: ['--l1.url', 'http://0.0.0.0:8545'],
-          docker:
-            '-d -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548',
+          docker: {
+            containerVolumePath: '/home/user/.arbitrum/mainnet',
+            raw: '-p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548',
+          },
         },
         dependencies: ['L1/ExecutionClient'],
       },

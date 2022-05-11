@@ -27,7 +27,8 @@ export type NodeUserConfig = {
 /**
  * @property processIds is either containerIds or childProcessIds
  */
-export type NodeMonitoring = {
+export type NodeRuntime = {
+  dataDir: string;
   processIds?: string[];
 };
 
@@ -35,10 +36,15 @@ type Node = {
   id: NodeId;
   spec: NodeSpecification;
   userConfig: NodeUserConfig;
-  monitoring: NodeMonitoring;
+  runtime: NodeRuntime;
   status: NodeStatus;
   lastStarted?: string;
   lastStopped?: string;
+};
+type NodeMap = Record<string, Node>;
+export type UserNodes = {
+  nodes: NodeMap;
+  nodeIds: string[];
 };
 
 export const isDockerNode = (node: Node) => {
@@ -61,12 +67,16 @@ export const isBinaryNode = (node: Node) => {
   }
   return node.spec.execution.executionTypes[0] === 'binary';
 };
-export const createNode = (spec: NodeSpecification): Node => {
+export const createNode = (input: {
+  spec: NodeSpecification;
+  runtime: NodeRuntime;
+}): Node => {
+  // get default node data dir, make data dir, (clear?)
   const node: Node = {
     id: uuidv4(),
-    spec,
+    spec: input.spec,
     userConfig: {},
-    monitoring: {},
+    runtime: input.runtime,
     status: NodeStatus.created,
   };
   return node;

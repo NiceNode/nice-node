@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from './store';
 import { NodeConfig } from '../../main/state/nodeConfig';
-import { NodeId, NodeStatus } from '../../common/node';
+import Node, { NodeId, NodeStatus, UserNodes } from '../../common/node';
 
 // Define a type for the slice state
 export interface NodeState {
+  userNodes?: UserNodes;
   selectedNodeId?: NodeId;
   config?: NodeConfig;
   numGethDiskUsedGB: number | undefined;
@@ -16,6 +17,7 @@ export interface NodeState {
 
 // Define the initial state using that type
 export const initialState: NodeState = {
+  userNodes: undefined,
   selectedNodeId: undefined,
   numGethDiskUsedGB: undefined,
   numFreeDiskGB: undefined,
@@ -29,13 +31,17 @@ console.log('Intial node state: ', initialState);
  * @param state NodeState
  */
 const setIsAvailableForPolling = (state: NodeState) => {
-  if (state.status === NodeStatus.running && state?.config?.http === true) {
-    state.isAvailableForPolling = true;
-    console.log('Starting polling node for data');
-  } else {
-    state.isAvailableForPolling = false;
-    console.log('Stop polling node for data');
+  // todo: add http check
+  if (state.userNodes && state.selectedNodeId && state.userNodes.nodes) {
+    const node = state.userNodes.nodes[state.selectedNodeId];
+    if (node && node.status === NodeStatus.running) {
+      console.log('Starting polling node for data');
+      state.isAvailableForPolling = true;
+      return;
+    }
   }
+  console.log('Stop polling node for data');
+  state.isAvailableForPolling = false;
 };
 
 export const nodeSlice = createSlice({
@@ -43,11 +49,16 @@ export const nodeSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    updateUserNodes: (state, action: PayloadAction<UserNodes | undefined>) => {
+      state.userNodes = action.payload;
+      setIsAvailableForPolling(state);
+    },
     updateSelectedNodeId: (
       state,
       action: PayloadAction<NodeId | undefined>
     ) => {
       state.selectedNodeId = action.payload;
+      setIsAvailableForPolling(state);
     },
     updateNodeNumGethDiskUsedGB: (
       state,
@@ -61,28 +72,29 @@ export const nodeSlice = createSlice({
     ) => {
       state.numFreeDiskGB = action.payload;
     },
-    updateNodeStatus: (state, action: PayloadAction<string | undefined>) => {
-      state.status = action.payload;
-      setIsAvailableForPolling(state);
-    },
-    updateNodeConfig: (
-      state,
-      action: PayloadAction<NodeConfig | undefined>
-    ) => {
-      state.config = action.payload;
-      setIsAvailableForPolling(state);
-    },
+    // updateNodeStatus: (state, action: PayloadAction<string | undefined>) => {
+    //   state.status = action.payload;
+    //   setIsAvailableForPolling(state);
+    // },
+    // updateNodeConfig: (
+    //   state,
+    //   action: PayloadAction<NodeConfig | undefined>
+    // ) => {
+    //   state.config = action.payload;
+    //   setIsAvailableForPolling(state);
+    // },
   },
 });
 
 export const {
+  updateUserNodes,
   updateSelectedNodeId,
-  updateNodeConfig,
   updateNodeNumGethDiskUsedGB,
   updateSystemNumFreeDiskGB,
-  updateNodeStatus,
 } = nodeSlice.actions;
 
+export const selectUserNodes = (state: RootState): UserNodes | undefined =>
+  state.node.userNodes;
 export const selectSelectedNodeId = (state: RootState): NodeId | undefined =>
   state.node.selectedNodeId;
 export const selectNodeConfig = (state: RootState) => state.node.config;

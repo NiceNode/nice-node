@@ -1,6 +1,6 @@
 import checkDiskSpace from 'check-disk-space';
 import { app } from 'electron';
-import { readFile, rm } from 'fs/promises';
+import { access, mkdir, readFile, rm } from 'fs/promises';
 import path from 'path';
 // eslint-disable-next-line import/no-cycle
 import { stopGeth } from './geth';
@@ -18,6 +18,36 @@ export const getNNDirPath = (): string => {
   // Linux: ~/.config/NiceNode
   // macOS: ~/Library/Application Support/NiceNode (space causes issues)
   return app.getPath('userData');
+};
+
+/**
+ *
+ * @returns getNNDirPath + '/nodes'
+ */
+export const getNodesDirPath = (): string => {
+  return path.join(getNNDirPath(), 'nodes');
+};
+
+const checkAndOrCreateDir = async (dirPath: string) => {
+  try {
+    await access(dirPath);
+    logger.info(`checkAndOrCreateDir dirPath ${dirPath} exists`);
+  } catch {
+    logger.info(`checkAndOrCreateDir making dirPath ${dirPath}...`);
+    await mkdir(dirPath, { recursive: true });
+    logger.info(`checkAndOrCreateDir making dirPath ${dirPath}...`);
+  }
+};
+
+/**
+ *
+ * @returns checkOrMakeNodeDir at getNodesDirPath() + nodeDirName
+ * @throws error if it cannot make the directory
+ */
+export const makeNodeDir = async (nodeDirName: string): Promise<string> => {
+  const nodeDir = path.join(getNodesDirPath(), nodeDirName);
+  await checkAndOrCreateDir(nodeDir);
+  return nodeDir;
 };
 
 export const gethDataDir = (): string => {

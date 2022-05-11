@@ -59,7 +59,7 @@ const Header = () => {
   }, [sIsAvailableForPolling]);
 
   useEffect(() => {
-    // console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
+    console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
     if (qExeuctionIsSyncing.isError) {
       setSyncPercent('');
       setIsSyncing(undefined);

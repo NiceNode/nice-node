@@ -162,46 +162,88 @@ export const initialize = async () => {
   //   console.log('beacon node data parsedData: ', parsedData);
 };
 
+export const removeDockerNode = async (node: Node) => {
+  // run
+  // todo: use node options to create docker and node input
+  // todo: loop
+  logger.info(`removeDockerNode node specId ${node.spec.specId}`);
+  let isRemoved = false;
+  try {
+    await runCommand(`container rm ${node.spec.specId}`);
+    logger.info(
+      `removeDockerNode container removed by name ${node.spec.specId}`
+    );
+    isRemoved = true;
+  } catch (err) {
+    logger.info('No containers to remove by name.');
+  }
+  if (isRemoved) {
+    return true;
+  }
+  if (
+    Array.isArray(node.runtime.processIds) &&
+    node.runtime.processIds.length > 0
+  ) {
+    const containerIds = node.runtime.processIds;
+    await runCommand(`container rm ${containerIds[0]}`);
+    logger.info(`removeDockerNode container removed ${containerIds[0]}`);
+    isRemoved = true;
+  } else {
+    logger.info('Unable to remove docker containers. No containerIds found.');
+  }
+
+  return isRemoved;
+};
+
 export const startDockerNode = async (node: Node): Promise<string[]> => {
   // pull image
-  const { imageName, input } = node.spec.execution as DockerExecution;
+  const { specId, execution } = node.spec;
+  const { imageName, input } = execution as DockerExecution;
   await runCommand(`pull ${imageName}`);
 
   // todo: custom setup: ex. create data directory
   // todo: check if there is a stopped container?
 
-  // run
-  // todo: use node options to create docker and node input
-  // const dockerInput =
-  //   '-d -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052 -v /home/johns/.lighthouse:/root/.lighthouse';
-  // const nodeInput =
-  //   'lighthouse --network mainnet beacon --http --http-address 0.0.0.0';
-  let dockerInput = '';
+  // remove possible previous docker container for this node
+  try {
+    await removeDockerNode(node);
+  } catch (err) {
+    logger.info('Continuing start node.');
+  }
+
+  let dockerRawInput = '';
+  let dockerVolumePath = '';
+  let finalDockerInput = '';
   if (input?.docker) {
-    dockerInput = input?.docker;
+    dockerRawInput = input?.docker.raw;
+    dockerVolumePath = input.docker.containerVolumePath;
+    if (dockerRawInput) {
+      finalDockerInput = dockerRawInput;
+    }
+    if (dockerVolumePath) {
+      finalDockerInput = `-v ${node.runtime.dataDir}:${dockerVolumePath} ${finalDockerInput}`;
+    }
   }
   let nodeInput = '';
   if (input?.default) {
     nodeInput = input?.default.join(' ');
   }
-  const runData = await runCommand(
-    `run ${dockerInput} ${imageName} ${nodeInput}`
-  );
+  const dockerCommand = `run -d --name ${specId} ${finalDockerInput} ${imageName} ${nodeInput}`;
+  logger.info(`docker startNode command ${dockerCommand}`);
+  // todo: test if input is empty string
+  const runData = await runCommand(dockerCommand);
 
   const { containerId, raw, command } = runData;
   return [containerId];
 };
 
 export const stopDockerNode = async (node: Node) => {
-  // run
-  // todo: use node options to create docker and node input
-  // todo: loop
   let containerIds;
   if (
-    Array.isArray(node.monitoring.processIds) &&
-    node.monitoring.processIds.length > 0
+    Array.isArray(node.runtime.processIds) &&
+    node.runtime.processIds.length > 0
   ) {
-    containerIds = node.monitoring.processIds;
+    containerIds = node.runtime.processIds;
     await runCommand(`stop ${containerIds[0]}`);
   } else {
     throw new Error('Unable to stop the node. No containerIds found.');

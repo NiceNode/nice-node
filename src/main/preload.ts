@@ -53,6 +53,7 @@ contextBridge.exposeInMainWorld('electron', {
 
   // Multi-node
   getNodes: () => ipcRenderer.invoke('getNodes'),
+  getUserNodes: () => ipcRenderer.invoke('getUserNodes'),
   addNode: (nodeSpec: NodeSpecification) =>
     ipcRenderer.invoke('addNode', nodeSpec),
   removeNode: (nodeId: NodeId) => ipcRenderer.invoke('removeNode', nodeId),

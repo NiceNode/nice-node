@@ -161,7 +161,10 @@ export type DockerExecution = BaseNodeExecution & {
   imageName: string; // todo: support multi-image node
   // todo: support non-docker hub
   // containerIds?: string[];
-  input?: { default?: string[]; docker?: string };
+  input?: {
+    default?: string[];
+    docker?: { containerVolumePath: string; raw: string };
+  };
 };
 
 /**
@@ -179,6 +182,7 @@ export type NodeExecution = DockerExecution | BinaryExecution;
  * @param dataPath where the node's data will be stored
  */
 export type NodeSpecification = {
+  specId: string;
   displayName: string;
   execution: NodeExecution;
   rpcTranslation?: string;

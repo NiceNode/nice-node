@@ -32,7 +32,6 @@ const MainScreen = () => {
   const qNodeInfo = useGetExecutionNodeInfoQuery(null, {
     pollingInterval,
   });
-  const qGetNodes = useGetNodesQuery();
 
   // const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
   // console.log('isStartOnLogin: ', isStartOnLogin);
@@ -40,8 +39,8 @@ const MainScreen = () => {
 
   useEffect(() => {
     console.log('App loaded. Initializing...');
-    initializeIpcListeners(qGetNodes);
-  }, [dispatch]);
+    initializeIpcListeners(dispatch);
+  }, []);
 
   useEffect(() => {
     if (typeof qNodeInfo?.data === 'string') {

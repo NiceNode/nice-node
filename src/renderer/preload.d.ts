@@ -47,6 +47,7 @@ declare global {
 
       // Multi-node
       getNodes(): Node[];
+      getUserNodes(): UserNodes;
       addNode(nodeSpec: NodeSpecification): Node;
       removeNode(nodeId: NodeId): Node;
       startNode(nodeId: NodeId): void;

@@ -23,8 +23,8 @@ import {
   getMainProcessUsage,
   getNodeUsage,
 } from './monitor';
-import { addNode, startNode, stopNode } from './nodeManager';
-import { getNodes, getNode, removeNode } from './state/nodes';
+import { addNode, startNode, stopNode, removeNode } from './nodeManager';
+import { getNodes, getNode, getUserNodes } from './state/nodes';
 import { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
 
@@ -77,8 +77,9 @@ export const initialize = () => {
   ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
 
-  // Multi-node
+  // Multi-nodegetUserNodes
   ipcMain.handle('getNodes', getNodes);
+  ipcMain.handle('getUserNodes', getUserNodes);
   ipcMain.handle('addNode', (_event, nodeSpec: NodeSpecification) => {
     return addNode(nodeSpec);
   });

@@ -1,38 +1,47 @@
 import { MdDelete } from 'react-icons/md';
 import { useEffect, useState } from 'react';
 
-import Node from '../common/node';
+import Node, { NodeId } from '../common/node';
 import { useGetNodesQuery } from './state/nodeService';
 import AddNode from './AddNode/AddNode';
 import DivButton from './DivButton';
 import { useAppDispatch, useAppSelector } from './state/hooks';
-import { selectSelectedNodeId, updateSelectedNodeId } from './state/node';
+import {
+  selectSelectedNodeId,
+  selectUserNodes,
+  updateSelectedNodeId,
+} from './state/node';
 
 const LeftSideBar = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
-  const qGetNodes = useGetNodesQuery(null, {
-    pollingInterval: 0,
-  });
+  const sUserNodes = useAppSelector(selectUserNodes);
+
+  // const qGetNodes = useGetNodesQuery(null, {
+  //   pollingInterval: 0,
+  // });
+  // const nodes = useAppSelector(qGetNodes.)
   const dispatch = useAppDispatch();
 
   // Default selected node to be the first node
   useEffect(() => {
     if (
       !sSelectedNodeId &&
-      Array.isArray(qGetNodes?.data) &&
-      qGetNodes.data.length > 0
+      sUserNodes &&
+      Array.isArray(sUserNodes?.nodeIds) &&
+      sUserNodes.nodeIds.length > 0
     ) {
-      dispatch(updateSelectedNodeId(qGetNodes.data[0].id));
+      dispatch(updateSelectedNodeId(sUserNodes.nodeIds[0]));
     }
-  }, [sSelectedNodeId, qGetNodes, dispatch]);
+  }, [sSelectedNodeId, sUserNodes, dispatch]);
 
   useEffect(() => {
-    console.log('LSB: new qGetNodes', qGetNodes);
-    if (qGetNodes.data) {
-      console.log('LSB: new qGetNodes.data', qGetNodes.data);
+    console.log('LSB: new sUserNodes', sUserNodes);
+    if (sUserNodes) {
+      console.log('LSB: new sUserNodes.data', sUserNodes);
     }
-  }, [qGetNodes]);
+  }, [sUserNodes]);
 
+  console.log('rerender lsb', sUserNodes);
   return (
     <div
       style={{
@@ -43,11 +52,12 @@ const LeftSideBar = () => {
       }}
     >
       <AddNode />
-      {qGetNodes.error && <>Oh no, there was an error getting nodes</>}
-      {qGetNodes.isLoading && <>Loading nodes...</>}
-      {qGetNodes.data ? (
+      {/* {qGetNodes.error && <>Oh no, there was an error getting nodes</>}
+      {qGetNodes.isLoading && <>Loading nodes...</>} */}
+      {sUserNodes?.nodeIds ? (
         <>
-          {qGetNodes.data.map((node: Node) => {
+          {sUserNodes.nodeIds.map((nodeId: NodeId) => {
+            const node = sUserNodes.nodes[nodeId];
             let statusColor = node.status === 'running' ? 'green' : 'black';
             if (node.status.includes('error')) {
               statusColor = 'red';
@@ -89,7 +99,7 @@ const LeftSideBar = () => {
           })}
         </>
       ) : (
-        <>nullnull</>
+        <>No nodes {JSON.stringify(sUserNodes)}</>
       )}
     </div>
   );

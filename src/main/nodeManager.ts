@@ -1,16 +1,27 @@
 import { NodeSpecification } from '../common/nodeSpec';
-import { getContainerDetails, startDockerNode, stopDockerNode } from './docker';
+import {
+  getContainerDetails,
+  removeDockerNode,
+  startDockerNode,
+  stopDockerNode,
+} from './docker';
 import logger from './logger';
 import Node, {
   createNode,
   isDockerNode,
   NodeId,
+  NodeRuntime,
   NodeStatus,
 } from '../common/node';
 import * as nodeStore from './state/nodes';
+import { makeNodeDir } from './files';
 
-export const addNode = (nodeSpec: NodeSpecification) => {
-  const node: Node = createNode(nodeSpec);
+export const addNode = async (nodeSpec: NodeSpecification): Promise<Node> => {
+  const dataDir = await makeNodeDir(nodeSpec.specId);
+  const nodeRuntime: NodeRuntime = {
+    dataDir,
+  };
+  const node: Node = createNode({ spec: nodeSpec, runtime: nodeRuntime });
   nodeStore.addNode(node);
   return node;
 };
@@ -29,7 +40,7 @@ export const startNode = async (nodeId: NodeId) => {
       const dockerNode = node;
       // startDockerNode(dockerNode);
       const containerIds = await startDockerNode(dockerNode);
-      dockerNode.monitoring.processIds = containerIds;
+      dockerNode.runtime.processIds = containerIds;
       dockerNode.status = NodeStatus.running;
       nodeStore.updateNode(dockerNode);
     } else {
@@ -59,6 +70,35 @@ export const stopNode = async (nodeId: NodeId) => {
   }
 };
 
+export const removeNode = async (nodeId: NodeId): Promise<Node> => {
+  // todo: check if node can be removed. Is it stopped?
+  // todo: stop & remove container
+  try {
+    await stopNode(nodeId);
+  } catch (err) {
+    logger.info(
+      'Unable to stop the node before removing. Continuing with removal.'
+    );
+  }
+  const node = nodeStore.getNode(nodeId);
+
+  // if docker, remove container
+  if (isDockerNode(node)) {
+    const isDockerRemoved = await removeDockerNode(node);
+    logger.info(`isDockerRemoved ${isDockerRemoved}`);
+  }
+  // todo: delete data
+  const removedNode = nodeStore.removeNode(nodeId);
+  return removedNode;
+};
+
+export const getNodeDataDir = (nodeSpec: NodeSpecification) => {
+  // check user settings
+  const node: Node = createNode(nodeSpec);
+  nodeStore.addNode(node);
+  return node;
+};
+
 /**
  * Called on app launch.
  * Check's node processes and updates internal NiceNode records.
@@ -71,11 +111,11 @@ export const initialize = async () => {
     const node = nodes[i];
     if (isDockerNode(node)) {
       const dockerNode = node;
-      if (Array.isArray(dockerNode?.monitoring?.processIds)) {
+      if (Array.isArray(dockerNode?.runtime?.processIds)) {
         try {
           // eslint-disable-next-line no-await-in-loop
           const containerDetails = await getContainerDetails(
-            dockerNode.monitoring.processIds
+            dockerNode.runtime.processIds
           );
           // {..."State": {
           //     "Status": "exited",

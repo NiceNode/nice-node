@@ -5,7 +5,7 @@ import { NodeConfig } from '../../main/state/nodeConfig';
 import electron from '../electronGlobal';
 import { NodeStatus } from '../../common/node';
 import { useAppDispatch, useAppSelector } from '../state/hooks';
-import { selectNodeStatus, updateNodeConfig } from '../state/node';
+import { selectNodeStatus } from '../state/node';
 import metamaskLogo from '../../../assets/metamaskLogo.svg';
 
 const METAMASK_CHROME_EXTENSION_ID =
@@ -26,7 +26,7 @@ const NodeConfiguration = () => {
 
   const getNodeConfig = useCallback(async () => {
     const nodeConfig = await electron.getNodeConfig(NODE);
-    dispatch(updateNodeConfig(nodeConfig));
+    // dispatch(updateNodeConfig(nodeConfig));
     setNodeConfig(nodeConfig);
     const strRepresentation = nodeConfig.useDirectInput
       ? nodeConfig.directInputConfig
