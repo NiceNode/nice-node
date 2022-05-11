@@ -1,3 +1,5 @@
+import { NiceNodeRpcTranslation } from './rpcTranslation';
+
 /* eslint-disable max-classes-per-file */
 export type ExecutionTypes = 'docker' | 'binary';
 export type Architectures = 'amd64' | 'arm64';
@@ -184,7 +186,7 @@ export type NodeSpecification = {
   specId: string;
   displayName: string;
   execution: NodeExecution;
-  rpcTranslation?: string;
+  rpcTranslation?: 'eth-l1' | 'eth-l2-beacon' | NiceNodeRpcTranslation;
   // todo: define a standard for translating rpc calls for common node data
   //  which NiceNode uses to show the state of the node.
   //  (ex. peers, syncing, latest block num, etc.)
