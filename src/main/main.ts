@@ -149,7 +149,8 @@ const createWindow = async () => {
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
     filter,
     (details, callback) => {
-      details.requestHeaders.Origin = `nice-node://`;
+      // details.requestHeaders.Origin = `nice-node://`;
+      // details.requestHeaders.Origin = `*`;
       callback({ requestHeaders: details.requestHeaders });
     }
   );
@@ -160,10 +161,10 @@ const createWindow = async () => {
         details.responseHeaders = {};
       }
 
-      details.responseHeaders['Access-Control-Allow-Origin'] = [
-        '*',
-        // 'http://localhost:1212', // URL your local electron app hosted
-      ];
+      // details.responseHeaders['Access-Control-Allow-Origin'] = [
+      //   // '*',
+      //   'http://localhost:1212', // URL your local electron app hosted
+      // ];
 
       callback({ responseHeaders: details.responseHeaders });
     }

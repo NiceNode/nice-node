@@ -3,7 +3,6 @@ import { NiceNodeRpcTranslation } from './rpcTranslation';
 /* eslint-disable max-classes-per-file */
 export type ExecutionTypes = 'docker' | 'binary';
 export type Architectures = 'amd64' | 'arm64';
-// export type RpcTranslation = eth1_openapi_spec
 
 // Create controls which output using translation.
 //  (Ex. https://github.com/daffl/jquery.dform or https://medium.com/swlh/how-to-generate-dynamic-form-from-json-with-react-5d70386bb38b)
@@ -186,7 +185,8 @@ export type NodeSpecification = {
   specId: string;
   displayName: string;
   execution: NodeExecution;
-  rpcTranslation?: 'eth-l1' | 'eth-l2-beacon' | NiceNodeRpcTranslation;
+  rpcTranslation?: NiceNodeRpcTranslation;
+  // rpcTranslation?: NiceNodeRpcTranslation;
   // todo: define a standard for translating rpc calls for common node data
   //  which NiceNode uses to show the state of the node.
   //  (ex. peers, syncing, latest block num, etc.)

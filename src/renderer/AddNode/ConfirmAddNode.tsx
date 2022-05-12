@@ -1,6 +1,8 @@
+import { updateSelectedNodeId } from '../state/node';
 import { NodeSpecification } from '../../common/nodeSpec';
 import electron from '../electronGlobal';
 import { Modal } from '../Modal';
+import { useAppDispatch } from '../state/hooks';
 
 type Props = {
   isOpen: boolean;
@@ -11,6 +13,7 @@ type Props = {
 };
 
 const ConfirmAddNode = (props: Props) => {
+  const dispatch = useAppDispatch();
   const { isOpen, onConfirm, onCancel, nodeSpec } = props;
   if (!nodeSpec) {
     return <></>;
@@ -18,7 +21,9 @@ const ConfirmAddNode = (props: Props) => {
 
   const onConfirmAddSpecificNode = async () => {
     const node = await electron.addNode(nodeSpec);
+
     console.log('addNode returned node: ', node);
+    dispatch(updateSelectedNodeId(node.id));
     onConfirm();
   };
 

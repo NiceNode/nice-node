@@ -41,7 +41,6 @@ const LeftSideBar = () => {
     }
   }, [sUserNodes]);
 
-  console.log('rerender lsb', sUserNodes);
   return (
     <div
       style={{

@@ -1,7 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { NiceNodeRpcTranslation } from '../../common/rpcTranslation';
 import { ethers } from '../ethers';
-import { executeTranslation } from './rpcExecuteTranslation';
 
 type CustomerErrorType = {
   message: string;
@@ -19,17 +18,11 @@ export const RtkqExecutionWs: any = createApi({
   reducerPath: 'RtkqExecutionWs',
   baseQuery: fakeBaseQuery<CustomerErrorType>(),
   endpoints: (builder) => ({
-    getExecutionLatestBlock: builder.query<
-      ProviderResponse,
-      NiceNodeRpcTranslation
-    >({
-      queryFn: async (rpcTranslation) => {
+    getExecutionLatestBlock: builder.query<ProviderResponse, string>({
+      queryFn: async () => {
         let data;
         try {
-          // data = await provider.send('eth_getBlockByNumber', ['latest', false]);
-          console.log('peers rpcTranslation', rpcTranslation);
-          data = await executeTranslation('latestBlock', rpcTranslation);
-          console.log('peers data', data);
+          data = await provider.send('eth_getBlockByNumber', ['latest', false]);
         } catch (e) {
           const error = { message: 'Unable to get syncing value' };
           console.log(e);
@@ -45,13 +38,10 @@ export const RtkqExecutionWs: any = createApi({
       queryFn: async (rpcTranslation) => {
         let data;
         try {
-          // if (!rpcTranslation.sync) {
-          //   console.log('No rpcTranslation found for sync');
-          // }
-          // data = await provider.send('eth_syncing');
-          console.log('sync rpcTranslation', rpcTranslation);
-          data = await executeTranslation('sync', rpcTranslation);
-          console.log('sync data', data);
+          if (!rpcTranslation.sync) {
+            console.log('No rpcTranslation found for sync');
+          }
+          data = await provider.send('eth_syncing');
         } catch (e) {
           const error = { message: 'Unable to get syncing value' };
           console.log(e);
@@ -80,16 +70,12 @@ export const RtkqExecutionWs: any = createApi({
         return { data };
       },
     }),
-    getExecutionPeers: builder.query<ProviderResponse, NiceNodeRpcTranslation>({
-      queryFn: async (rpcTranslation) => {
+    getExecutionPeers: builder.query<ProviderResponse, null>({
+      queryFn: async () => {
         let data;
         // let error;
         try {
-          console.log('peers rpcTranslation', rpcTranslation);
-          data = await executeTranslation('peers', rpcTranslation);
-          console.log('peers data', data);
-
-          // data = await provider.send('net_peerCount');
+          data = await provider.send('net_peerCount');
         } catch (e) {
           const error = { message: 'Unable to get peer count.' };
           console.log(e);

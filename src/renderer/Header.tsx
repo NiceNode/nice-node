@@ -34,12 +34,20 @@ const Header = () => {
   const sNodeConfig = useAppSelector(selectNodeConfig);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
-  const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(null, {
-    pollingInterval,
-  });
-  const qExecutionPeers = useGetExecutionPeersQuery(null, {
-    pollingInterval,
-  });
+  const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(
+    selectedNode?.spec.rpcTranslation,
+    {
+      pollingInterval,
+    }
+  );
+  // const isSelectedNode = selectedNode !== undefined;
+  // const peersPolling = isSelectedNode ? pollingInterval : 0;
+  const qExecutionPeers = useGetExecutionPeersQuery(
+    selectedNode?.spec.rpcTranslation,
+    {
+      pollingInterval,
+    }
+  );
   const qLatestBlock = useGetExecutionLatestBlockQuery(null, {
     pollingInterval,
   });
@@ -69,14 +77,15 @@ const Header = () => {
     }
     const syncingData = qExeuctionIsSyncing.data;
     if (typeof syncingData === 'object') {
-      const syncRatio = syncingData.currentBlock / syncingData.highestBlock;
-      setSyncPercent((syncRatio * 100).toFixed(1));
-      setIsSyncing(true);
-    } else if (syncingData === false) {
-      // light client geth, it is done syncing if data is false
-      setSyncPercent('');
-      setIsSyncing(false);
-    } else {
+      setSyncPercent(syncingData.syncPercent);
+      setIsSyncing(syncingData.isSyncing);
+    }
+    // else if (syncingData === false) {
+    //   // light client geth, it is done syncing if data is false
+    //   setSyncPercent('');
+    //   setIsSyncing(false);
+    // }
+    else {
       setSyncPercent('');
       setIsSyncing(undefined);
     }
@@ -88,7 +97,9 @@ const Header = () => {
       return;
     }
     if (typeof qExecutionPeers.data === 'string') {
-      setPeers(hexToDecimal(qExecutionPeers.data));
+      setPeers(qExecutionPeers.data);
+    } else if (typeof qExecutionPeers.data === 'number') {
+      setPeers(qExecutionPeers.data.toString());
     } else {
       setPeers(undefined);
     }

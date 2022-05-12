@@ -48,6 +48,7 @@ const AddNode = () => {
         imageName: 'nethermind/nethermind',
       },
       category: 'L1/ExecutionClient',
+      rpcTranslation: 'eth-l1',
       documentation: {
         default: 'https://docs.nethermind.io/nethermind/',
         docker: 'https://docs.nethermind.io/nethermind/ethereum-client/docker',
@@ -64,6 +65,7 @@ const AddNode = () => {
         imageName: 'thorax/erigon:latest',
       },
       category: 'L1/ExecutionClient',
+      rpcTranslation: 'eth-l1',
       iconUrl:
         'https://clientdiversity.org/assets/img/execution-clients/erigon-text-logo.png',
     },
@@ -76,6 +78,7 @@ const AddNode = () => {
         imageName: 'nethermind/nethermind',
       },
       category: 'L1/ExecutionClient',
+      rpcTranslation: 'eth-l1',
       iconUrl:
         'https://clientdiversity.org/assets/img/execution-clients/besu-text-logo.png',
     },
@@ -89,6 +92,7 @@ const AddNode = () => {
           'https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.17-25c9b49f',
       },
       category: 'L1/ExecutionClient',
+      rpcTranslation: 'eth-l1',
       iconUrl:
         'https://clientdiversity.org/assets/img/execution-clients/geth-logo.png',
     },
@@ -103,6 +107,7 @@ const AddNode = () => {
         imageName: 'chainsafe/lodestar:latest',
       },
       category: 'L1/ConsensusClient/BeaconNode',
+      rpcTranslation: 'eth-l2-beacon',
       documentation: {
         default: 'https://chainsafe.github.io/lodestar/',
         docker:
@@ -120,6 +125,7 @@ const AddNode = () => {
         imageName: 'consensys/teku:latest',
       },
       category: 'L1/ConsensusClient/BeaconNode',
+      rpcTranslation: 'eth-l2-beacon',
       documentation: {
         default: 'https://docs.teku.consensys.net/en/latest/',
         docker:
@@ -137,6 +143,7 @@ const AddNode = () => {
         imageName: 'statusim/nimbus-eth2:multiarch-latest',
       },
       category: 'L1/ConsensusClient/BeaconNode',
+      rpcTranslation: 'eth-l2-beacon',
       documentation: {
         default: 'https://nimbus.guide/',
         docker: 'https://nimbus.guide/docker.html',
@@ -159,6 +166,8 @@ const AddNode = () => {
             '--http',
             '--http-address',
             '0.0.0.0',
+            '--http-allow-origin',
+            '"*"',
           ],
           docker: {
             // pref host path /home/johns/.lighthouse
@@ -172,6 +181,7 @@ const AddNode = () => {
         imageName: 'sigp/lighthouse:latest-modern',
       },
       category: 'L1/ConsensusClient/BeaconNode',
+      rpcTranslation: 'eth-l2-beacon',
       documentation: {
         default: 'https://lighthouse-book.sigmaprime.io/intro.html',
         docker: 'https://lighthouse-book.sigmaprime.io/docker.html',
@@ -194,6 +204,7 @@ const AddNode = () => {
         },
       },
       category: 'L1/ConsensusClient/BeaconNode',
+      rpcTranslation: 'eth-l2-beacon',
       documentation: {
         default: 'https://docs.prylabs.network/docs/getting-started',
         docker:
