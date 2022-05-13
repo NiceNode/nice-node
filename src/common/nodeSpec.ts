@@ -176,7 +176,10 @@ export type BinaryExecution = BaseNodeExecution & {
   // todo: could be file path
 };
 
-export type NodeExecution = DockerExecution | BinaryExecution;
+export type NodeExecution =
+  | DockerExecution
+  | BinaryExecution
+  | BaseNodeExecution;
 
 /**
  * @param dataPath where the node's data will be stored

@@ -13,7 +13,8 @@ const MenuDrawerStyled = styled.div`
     bottom: calc(-100vh - 64px);
   }
   position: fixed;
-  width: 100vw;
+  width: (100vw-64px);
+  margin-left: 64px;
   // height of screen - footer height - header height
   height: calc(100vh - 64px - 48px);
   transition: bottom 0.2s ease-out 0s;

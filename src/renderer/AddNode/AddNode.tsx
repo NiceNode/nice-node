@@ -33,8 +33,8 @@ const AddNode = () => {
       specId: 'nethermind',
       displayName: 'Nethermind',
       execution: {
-        executionTypes: ['docker'],
-        defaultExecutionType: 'docker',
+        executionTypes: ['docker', 'binary'],
+        defaultExecutionType: 'binary',
         input: {
           default: ['--JsonRpc.Enabled', 'true', '--datadir', 'data'],
           docker: {
@@ -44,8 +44,16 @@ const AddNode = () => {
         },
         architectures: {
           docker: ['amd64', 'arm64'],
+          binary: ['amd64', 'arm64'],
         },
         imageName: 'nethermind/nethermind',
+        binaryDownload: {
+          type: 'githubReleases',
+          latestVersionUrl:
+            'https://api.github.com/repos/NethermindEth/nethermind/releases/latest',
+          excludeNameWith: 'portable',
+          responseFormat: 'githubReleases', // assets[i].name contains platform and arch
+        },
       },
       category: 'L1/ExecutionClient',
       rpcTranslation: 'eth-l1',
@@ -88,8 +96,28 @@ const AddNode = () => {
       execution: {
         executionTypes: ['binary'],
         defaultExecutionType: 'binary',
-        downloadUrl:
-          'https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.17-25c9b49f',
+        binaryDownload: {
+          type: 'static',
+          darwin: {
+            amd64:
+              'https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.17-25c9b49f',
+          },
+          linux: {
+            amd64:
+              'https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.17-25c9b49f',
+            amd32:
+              'https://gethstore.blob.core.windows.net/builds/geth-linux-386-1.10.17-25c9b49f',
+            arm64:
+              'https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.10.17-25c9b49f',
+            arm7: 'https://gethstore.blob.core.windows.net/builds/geth-linux-arm7-1.10.17-25c9b49f',
+          },
+          windows: {
+            amd64:
+              'https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.17-25c9b49f',
+            amd32:
+              'https://gethstore.blob.core.windows.net/builds/geth-windows-386-1.10.17-25c9b49f',
+          },
+        },
       },
       category: 'L1/ExecutionClient',
       rpcTranslation: 'eth-l1',
@@ -138,9 +166,15 @@ const AddNode = () => {
       specId: 'nimbus-beacon',
       displayName: 'Nimbus',
       execution: {
-        executionTypes: ['docker'],
-        defaultExecutionType: 'docker',
+        executionTypes: ['docker', 'binary'],
+        defaultExecutionType: 'binary',
         imageName: 'statusim/nimbus-eth2:multiarch-latest',
+        binaryDownload: {
+          type: 'githubReleases',
+          latestVersionUrl:
+            'https://api.github.com/repos/status-im/nimbus-eth2/releases/latest',
+          responseFormat: 'githubReleases', // assets[i].name contains platform and arch
+        },
       },
       category: 'L1/ConsensusClient/BeaconNode',
       rpcTranslation: 'eth-l2-beacon',
@@ -217,7 +251,7 @@ const AddNode = () => {
   const [sLayer2ClientLibrary] = useState<NodeSpecification[]>([
     {
       specId: 'optimism',
-      displayName: 'Optimism Replica',
+      displayName: 'Optimism',
       execution: {
         executionTypes: ['docker'],
         defaultExecutionType: 'docker',
@@ -349,3 +383,22 @@ const AddNode = () => {
   );
 };
 export default AddNode;
+
+/**
+ * geth binary format
+ *const baseURL = 'https://gethstore.blob.core.windows.net/builds/';
+const macOS = 'geth-darwin-amd64-1.10.17-25c9b49f';
+const windows32bit = 'geth-windows-386-1.10.17-25c9b49f';
+const windows64bit = 'geth-windows-amd64-1.10.17-25c9b49f';
+const linux32bit = 'geth-linux-386-1.10.17-25c9b49f';
+const linux64bit = 'geth-linux-amd64-1.10.17-25c9b49f';
+const linuxArm64 = 'geth-linux-arm64-1.10.17-25c9b49f';
+const linuxArm32v7 = 'geth-linux-arm7-1.10.17-25c9b49f';
+ *
+ *
+ * lighthouse binary downloads
+ *https://github.com/sigp/lighthouse/releases/download/v2.2.1/lighthouse-v2.2.1-x86_64-apple-darwin.tar.gz
+ *
+ *
+ * a way to fetch the latest version... and string format to plug in version, platform, arch
+ */
