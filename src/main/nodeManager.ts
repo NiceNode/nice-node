@@ -15,6 +15,7 @@ import Node, {
 } from '../common/node';
 import * as nodeStore from './state/nodes';
 import { makeNodeDir } from './files';
+import { startBinary } from './binary';
 
 export const addNode = async (nodeSpec: NodeSpecification): Promise<Node> => {
   const dataDir = await makeNodeDir(nodeSpec.specId);
@@ -45,7 +46,8 @@ export const startNode = async (nodeId: NodeId) => {
       dockerNode.status = NodeStatus.running;
       nodeStore.updateNode(dockerNode);
     } else {
-      logger.info('TODO: start a binary');
+      logger.info('nodeManager starting binary node');
+      await startBinary(node);
     }
   } catch (err) {
     logger.error(err);

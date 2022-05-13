@@ -167,12 +167,33 @@ export type DockerExecution = BaseNodeExecution & {
   };
 };
 
+type ArchOptsMap = {
+  amd64?: string;
+  amd32?: string;
+  arm64?: string;
+  arm7?: string;
+};
+// enum ArchOpts {
+//   amd64 = 'amd64',
+//   amd32 = 'amd32',
+// }
+
+export type BinaryDownload = {
+  type: 'static' | 'githubReleases';
+  darwin?: ArchOptsMap;
+  linux?: ArchOptsMap;
+  windows?: ArchOptsMap;
+  latestVersionUrl?: string;
+  responseFormat?: 'githubReleases';
+};
 /**
  * @param downloadUrl binary must end in .tar.gz or .zip
  */
 export type BinaryExecution = BaseNodeExecution & {
   executionTypes: ['binary'];
   downloadUrl: string;
+  execPath: string; // ex. geth
+  binaryDownload: BinaryDownload;
   // todo: could be file path
 };
 

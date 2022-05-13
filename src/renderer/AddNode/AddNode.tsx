@@ -96,26 +96,27 @@ const AddNode = () => {
       execution: {
         executionTypes: ['binary'],
         defaultExecutionType: 'binary',
+        execPath: 'geth',
         binaryDownload: {
           type: 'static',
           darwin: {
             amd64:
-              'https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.17-25c9b49f',
+              'https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.17-25c9b49f.tar.gz',
           },
           linux: {
             amd64:
-              'https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.17-25c9b49f',
+              'https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.17-25c9b49f.tar.gz',
             amd32:
-              'https://gethstore.blob.core.windows.net/builds/geth-linux-386-1.10.17-25c9b49f',
+              'https://gethstore.blob.core.windows.net/builds/geth-linux-386-1.10.17-25c9b49f.tar.gz',
             arm64:
-              'https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.10.17-25c9b49f',
-            arm7: 'https://gethstore.blob.core.windows.net/builds/geth-linux-arm7-1.10.17-25c9b49f',
+              'https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.10.17-25c9b49f.tar.gz',
+            arm7: 'https://gethstore.blob.core.windows.net/builds/geth-linux-arm7-1.10.17-25c9b49f.tar.gz',
           },
           windows: {
             amd64:
-              'https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.17-25c9b49f',
+              'https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.17-25c9b49f.zip',
             amd32:
-              'https://gethstore.blob.core.windows.net/builds/geth-windows-386-1.10.17-25c9b49f',
+              'https://gethstore.blob.core.windows.net/builds/geth-windows-386-1.10.17-25c9b49f.zip',
           },
         },
       },

@@ -7,6 +7,7 @@ export type NodeId = string;
 export enum NodeStatus {
   created = 'created',
   initializing = 'initializing',
+  checkingForUpdates = 'checkingForUpdates',
   downloading = 'downloading',
   downloaded = 'downloaded',
   errorDownloading = 'error downloading',
@@ -28,6 +29,8 @@ export type NodeUserConfig = {
  * @property processIds is either containerIds or childProcessIds
  */
 export type NodeRuntime = {
+  build?: string;
+  // execPath?: string;
   dataDir: string;
   processIds?: string[];
   usage: {
