@@ -3,7 +3,6 @@ import { app } from 'electron';
 
 import { getArch } from './arch';
 import { getPlatform } from './platform';
-import { gethBuildNameForPlatformAndArch } from './gethDownload';
 
 export default function getDebugInfo() {
   let niceNodeVersion = app.getVersion();
@@ -20,7 +19,7 @@ export default function getDebugInfo() {
     totalMemory: os.totalmem(),
     niceNodeVersion,
     niceNodeAppUsageMetrics: app.getAppMetrics(),
-    ethereumNodeVersion: gethBuildNameForPlatformAndArch(),
+    // ethereumNodeVersion: gethBuildNameForPlatformAndArch(),
   };
 }
 
@@ -37,7 +36,7 @@ const getDebugInfoShort = () => {
     arch: getArch(),
     totalMemory: os.totalmem(),
     niceNodeVersion,
-    ethereumNodeVersion: gethBuildNameForPlatformAndArch(),
+    // ethereumNodeVersion: gethBuildNameForPlatformAndArch(),
   };
 };
 

@@ -2,11 +2,14 @@ import { pipeline } from 'node:stream';
 import { promisify } from 'node:util';
 import path from 'node:path';
 import { createWriteStream } from 'fs';
-import { chmod } from 'fs/promises';
+import { access, chmod } from 'fs/promises';
 import { ChildProcess, spawn, SpawnOptions } from 'child_process';
+import process, { kill } from 'node:process';
+import sleep from 'await-sleep';
 
 import * as platform from './platform';
 import * as arch from './arch';
+import * as github from './github';
 import { BinaryDownload, BinaryExecution } from '../common/nodeSpec';
 import Node, { NodeStatus } from '../common/node';
 import logger, { gethLogger } from './logger';
@@ -14,6 +17,7 @@ import { httpGet } from './httpReq';
 import { execAwait } from './execHelper';
 import { getNodesDirPath } from './files';
 import { updateNode } from './state/nodes';
+import { getProcessUsageByPid } from './monitor';
 
 const streamPipeline = promisify(pipeline);
 
@@ -49,10 +53,7 @@ const getDownloadUrl = (binaryDownload: BinaryDownload) => {
   );
 };
 
-const parseFileNameFromDownloadURL = (
-  url: string,
-  excludeExension?: boolean
-) => {
+const parseFileNameFromUrlOrPath = (url: string, excludeExension?: boolean) => {
   // ex. 'https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.17-25c9b49f.tar.gz'
 
   if (excludeExension) {
@@ -68,7 +69,15 @@ export const unzipFile = async (filePath: string, directory: string) => {
   logger.info(`unzipFile ${filePath} to directory ${directory}`);
   // status = NODE_STATUS.extracting;
   // send(CHANNELS.geth, status);
-  const tarCommand = `tar --directory "${directory}" -xf "${filePath}"`;
+  let tarCommand = `tar --directory "${directory}" -xf "${filePath}"`;
+  if (filePath.includes('.zip')) {
+    // unzip doesn't create a directory with the zipped filename like tar does
+    const buildDir = path.join(
+      directory,
+      parseFileNameFromUrlOrPath(filePath, true)
+    );
+    tarCommand = `unzip "${filePath}" -d "${buildDir}"`;
+  }
   // let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
   // if (isWindows()) {
   //   tarCommand = `tar -C ${getNNDirPath()} -xf ${getNNDirPath()}/geth.zip`;
@@ -96,12 +105,13 @@ export const downloadBinary = async (
   directory: string
 ) => {
   logger.info(`downloading binary ${downloadUrl}`);
-  const downloadFileName = parseFileNameFromDownloadURL(downloadUrl);
+  const downloadFileName = parseFileNameFromUrlOrPath(downloadUrl);
   logger.info(`binary full filename ${downloadFileName}`);
   const fileOutPath = path.join(directory, downloadFileName);
-  // check if already downloaded and skip to chmod
   try {
-    const response = await httpGet(downloadUrl);
+    const response = await httpGet(downloadUrl, {
+      headers: [{ name: 'Accept', value: 'application/octet-stream' }],
+    });
 
     // if (!res.ok) throw new Error(`unexpected response ${res.statusText}`);
     logger.info('http response received');
@@ -144,28 +154,45 @@ export const checkOrDownloadLatestBinary = async (node: Node) => {
   updateNode(node);
   const { spec, runtime } = node;
   const binaryExecution = spec.execution as BinaryExecution;
+  let latestBuildUrl;
   if (binaryExecution.binaryDownload?.type === 'static') {
-    const latestBuildUrl = getDownloadUrl(binaryExecution.binaryDownload);
-    if (!latestBuildUrl) {
-      throw new Error(
-        `The node does not have a build for platform ${platform.getPlatform()} and arch ${arch.getArch()}.`
-      );
-    }
-    const excludeExension = true;
-    const latestBuildName = parseFileNameFromDownloadURL(
-      latestBuildUrl,
-      excludeExension
+    latestBuildUrl = getDownloadUrl(binaryExecution.binaryDownload);
+  } else if (binaryExecution.binaryDownload?.type === 'githubReleases') {
+    logger.info(`checkOrDownloadLatestBinary github`);
+    latestBuildUrl = await github.getLatestReleaseUrl(
+      binaryExecution.binaryDownload
     );
-    if (runtime.build === latestBuildName) {
-      return;
-    }
-    // download newer build
-    node.status = NodeStatus.downloading;
-    updateNode(node);
-    await downloadBinary(latestBuildUrl, runtime.dataDir);
+  }
+  if (!latestBuildUrl) {
+    throw new Error(
+      `The node does not have a build for platform ${platform.getPlatform()} and arch ${arch.getArch()}.`
+    );
+  }
+  const excludeExension = true;
+  const latestBuildName = parseFileNameFromUrlOrPath(
+    latestBuildUrl,
+    excludeExension
+  );
+  if (runtime.build === latestBuildName) {
+    return;
+  }
+  // check if already downloaded and skip to chmod
+  try {
+    const buildPath = path.join(runtime.dataDir, latestBuildName);
+    await access(buildPath);
+    logger.info('latest build is already downloaded and extracted');
     runtime.build = latestBuildName;
     updateNode(node);
+    return;
+  } catch {
+    // build is not downloaded and extracted
   }
+  // download newer build
+  node.status = NodeStatus.downloading;
+  updateNode(node);
+  await downloadBinary(latestBuildUrl, runtime.dataDir);
+  runtime.build = latestBuildName;
+  updateNode(node);
 };
 
 /**
@@ -218,6 +245,11 @@ export const startBinary = async (node: Node) => {
     logger.error(`Unable to start ${nodeSpecId} binary. No build found.`);
     throw new Error(`Unable to start ${nodeSpecId} binary. No build found.`);
   }
+  logger.info(
+    `Making binary exec path: ${getNodesDirPath()} ${spec.specId} ${
+      runtime.build
+    }${execution.execPath}`
+  );
   const execFileAbsolutePath = path.join(
     getNodesDirPath(),
     spec.specId,
@@ -228,9 +260,17 @@ export const startBinary = async (node: Node) => {
   logger.info(execFileAbsolutePath);
   const options: SpawnOptions = {
     stdio: [null, 'pipe', 'pipe'],
-    detached: false,
+    detached: true,
   };
-  const childProcess = spawn(execFileAbsolutePath, [], options);
+  let childProcess;
+  try {
+    childProcess = spawn(execFileAbsolutePath, [], options);
+  } catch (err) {
+    logger.error('Errors starting binary: ', err);
+    node.status = NodeStatus.errorStarting;
+    updateNode(node);
+    return;
+  }
   // gethProcess = childProcess;
   if (childProcess.pid) {
     node.runtime.processIds = [childProcess.pid.toString()];
@@ -288,4 +328,79 @@ export const startBinary = async (node: Node) => {
   updateNode(node);
   // logger.info('geth childProcess:', childProcess);
   logger.info(`${nodeSpecId} childProcess pid: ${childProcess.pid}`);
+};
+
+/**
+ * Given a node, starts the binary for the plat/arch
+ * Optionally, updates the binary before starting
+ * Uses node.spec and node.runtime
+ * @calls downloadBinary
+ */
+export const stopBinary = async (node: Node) => {
+  logger.info(`stopBinary called for node ${node.spec.specId}`);
+  // stopInitiatedAfterAStart = true;
+
+  if (
+    Array.isArray(node?.runtime?.processIds) &&
+    node.runtime.processIds.length > 0
+  ) {
+    const pid = parseInt(node.runtime.processIds[0], 10);
+    // try nice kill first
+    const signalSentResult = kill(pid, 'SIGINT');
+    console.log('killSignalSent?', signalSentResult);
+    await sleep(5000);
+    try {
+      const pidStats = await getProcessUsageByPid(pid);
+      console.log('found pidstates for', node.spec.specId, pidStats);
+      // force kill
+      node.status = NodeStatus.running;
+      updateNode(node);
+    } catch (err) {
+      // successfully stopped
+      node.status = NodeStatus.stopped;
+      updateNode(node);
+      return undefined;
+    }
+  } else {
+    // no processId for node
+    console.error(`stopBinary no pid found for node ${node.spec.specId}`);
+    node.status = NodeStatus.errorStopping;
+    updateNode(node);
+  }
+
+  // if (!gethProcess) {
+  //   logger.error("Can't stop geth, because it hasn't been started");
+  //   return;
+  // }
+
+  // let killResult = gethProcess.kill();
+  // if (killResult && gethProcess.killed) {
+  //   // todo: wait for geth onExit callback
+  //   // temp: wait 5 seconds for geth to shutdown properly
+  //   await sleep(5000);
+  //   logger.info('geth stopped successfully');
+  //   status = NODE_STATUS.stopped;
+  //   send(CHANNELS.geth, status);
+  // } else {
+  //   logger.info('sleeping 5s to confirm if geth stopped');
+  //   await sleep(5000);
+  //   if (!gethProcess.killed) {
+  //     logger.info("SIGTERM didn't kill geth in 5 seconds. sending SIGKILL");
+  //     killResult = gethProcess.kill(9);
+  //     await sleep(1000);
+  //     if (killResult) {
+  //       logger.info('geth stopped successfully from SIGKILL');
+  //       status = NODE_STATUS.stopped;
+  //       send(CHANNELS.geth, status);
+  //     } else {
+  //       status = NODE_STATUS.errorStopping;
+  //       send(CHANNELS.geth, status);
+  //       logger.error('error stopping geth');
+  //     }
+  //   } else {
+  //     logger.info('geth stopped successfully from SIGTERM');
+  //     status = NODE_STATUS.stopped;
+  //     send(CHANNELS.geth, status);
+  //   }
+  // }
 };

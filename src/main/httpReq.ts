@@ -1,25 +1,44 @@
 import http from 'node:http';
 import https from 'node:https';
-import { parse } from 'node:path';
 
 import logger from './logger';
 
 export const httpGet = (
   url: string,
-  isHttp?: boolean
+  options?: {
+    headers?: { name: string; value: string }[];
+    isHttp?: boolean;
+  }
 ): Promise<http.IncomingMessage> => {
   return new Promise((resolve, reject) => {
     try {
-      let request;
-      if (!isHttp) {
+      let request: http.ClientRequest;
+      if (!options?.isHttp) {
         request = https.request(url, (response: http.IncomingMessage) => {
+          console.log('http get response ', response);
+          // follow github release redirects
+          if (response.statusCode === 302 && response.headers.location) {
+            resolve(httpGet(response.headers.location, options));
+          }
           resolve(response);
         });
       } else {
         request = http.request(url, (response: http.IncomingMessage) => {
+          if (response.statusCode === 302 && response.headers.location) {
+            resolve(httpGet(response.headers.location, options));
+          }
           resolve(response);
         });
       }
+      if (Array.isArray(options?.headers)) {
+        options?.headers.forEach((header) => {
+          request.setHeader(header.name, header.value);
+        });
+      }
+      request.setHeader(
+        'User-Agent',
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.79 Safari/537.36'
+      );
       request.on('error', (err) => {
         logger.error('https request: ', err);
       });
@@ -34,7 +53,7 @@ export const httpGet = (
 export const httpGetJson = async (
   url: string,
   isHttp?: boolean
-): Promise<http.IncomingMessage> => {
+): Promise<any> => {
   const response = await httpGet(url, isHttp);
 
   return new Promise((resolve, reject) => {
@@ -45,9 +64,9 @@ export const httpGetJson = async (
     response.on('end', async () => {
       try {
         const parsedData = JSON.parse(rawData);
-        console.log(parsedData);
         resolve(parsedData);
       } catch (err) {
+        logger.error(`JSON.parse error: `, err);
         reject(err);
       }
     });

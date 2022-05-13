@@ -3,7 +3,6 @@ import { app } from 'electron';
 import { access, mkdir, readFile, rm } from 'fs/promises';
 import path from 'path';
 // eslint-disable-next-line import/no-cycle
-import { stopGeth } from './geth';
 
 import logger from './logger';
 
@@ -117,23 +116,23 @@ export const getGethErrorLogs = async () => {
   return undefined;
 };
 
-export const deleteGethDisk = async () => {
-  try {
-    // stop geth
-    await stopGeth();
-    const getGethDiskBefore = await tryGetGethUsedDiskSpace();
+// export const deleteGethDisk = async () => {
+//   try {
+//     // stop geth
+//     await stopGeth();
+//     const getGethDiskBefore = await tryGetGethUsedDiskSpace();
 
-    const gethDiskPath = gethDataDir();
-    logger.info(`---------  ${gethDiskPath} ---------------`);
-    const rmResult = await rm(gethDiskPath, { recursive: true, force: true });
-    logger.info(`---------  ${rmResult} ---------------`);
-    const getGethDiskAfter = await tryGetGethUsedDiskSpace();
-    logger.info(
-      `---------  after: ${getGethDiskAfter} before: ${getGethDiskBefore}---------------`
-    );
-    return getGethDiskAfter === undefined;
-  } catch (err) {
-    logger.error('getGethErrorLogs error:', err);
-  }
-  return false;
-};
+//     const gethDiskPath = gethDataDir();
+//     logger.info(`---------  ${gethDiskPath} ---------------`);
+//     const rmResult = await rm(gethDiskPath, { recursive: true, force: true });
+//     logger.info(`---------  ${rmResult} ---------------`);
+//     const getGethDiskAfter = await tryGetGethUsedDiskSpace();
+//     logger.info(
+//       `---------  after: ${getGethDiskAfter} before: ${getGethDiskBefore}---------------`
+//     );
+//     return getGethDiskAfter === undefined;
+//   } catch (err) {
+//     logger.error('getGethErrorLogs error:', err);
+//   }
+//   return false;
+// };

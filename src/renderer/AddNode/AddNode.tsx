@@ -48,6 +48,11 @@ const AddNode = () => {
         },
         imageName: 'nethermind/nethermind',
         binaryDownload: {
+          // type: 'static',
+          // linux: {
+          //   amd64:
+          //     'https://nethdev.blob.core.windows.net/builds/nethermind-linux-amd64-1.13.0-2e8910b.zip',
+          // },
           type: 'githubReleases',
           latestVersionUrl:
             'https://api.github.com/repos/NethermindEth/nethermind/releases/latest',
@@ -97,6 +102,16 @@ const AddNode = () => {
         executionTypes: ['binary'],
         defaultExecutionType: 'binary',
         execPath: 'geth',
+        input: {
+          default: [
+            '-http',
+            '--http.corsdomain',
+            'nice-node://,http://localhost',
+          ],
+          // binary: {
+          //   dataDirFlag: '--datadir',
+          // },
+        },
         binaryDownload: {
           type: 'static',
           darwin: {

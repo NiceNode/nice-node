@@ -15,7 +15,8 @@ import Node, {
 } from '../common/node';
 import * as nodeStore from './state/nodes';
 import { makeNodeDir } from './files';
-import { startBinary } from './binary';
+import { startBinary, stopBinary } from './binary';
+import { getProcessUsageByPid } from './monitor';
 
 export const addNode = async (nodeSpec: NodeSpecification): Promise<Node> => {
   const dataDir = await makeNodeDir(nodeSpec.specId);
@@ -68,6 +69,11 @@ export const stopNode = async (nodeId: NodeId) => {
   if (isDockerNode(node)) {
     const containerIds = await stopDockerNode(node);
     logger.info(`${containerIds} stopped`);
+    node.status = NodeStatus.stopped;
+    nodeStore.updateNode(node);
+  } else {
+    // assuming binary
+    await stopBinary(node);
     node.status = NodeStatus.stopped;
     nodeStore.updateNode(node);
   }
@@ -147,6 +153,36 @@ export const initialize = async () => {
       }
     } else {
       // todo: check binary process
+      const binaryNode = node;
+      if (
+        Array.isArray(binaryNode?.runtime?.processIds) &&
+        binaryNode.runtime.processIds.length > 0
+      ) {
+        try {
+          const pid = parseInt(binaryNode.runtime.processIds[0], 10);
+          // eslint-disable-next-line no-await-in-loop
+          const pidStats = await getProcessUsageByPid(pid);
+          console.log('found pidstates for', binaryNode.spec.specId, pidStats);
+          node.status = NodeStatus.running;
+          nodeStore.updateNode(node);
+        } catch (err) {
+          console.error(err);
+          node.status = NodeStatus.stopped;
+          nodeStore.updateNode(node);
+          return undefined;
+        }
+      } else {
+        node.status = NodeStatus.errorStopping;
+        nodeStore.updateNode(node);
+        // no process id so node is lost? set as stopped?
+      }
     }
   }
 };
+
+// logger.info(
+//   `process.env.NN_AUTOSTART_NODE: ${process.env.NN_AUTOSTART_NODE}`
+// );
+// if (getIsStartOnLogin() || process.env.NN_AUTOSTART_NODE === 'true') {
+//   startGeth();
+// }

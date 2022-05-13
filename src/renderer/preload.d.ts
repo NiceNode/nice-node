@@ -24,10 +24,6 @@ declare global {
         on(channel: string, func: (...args: any[]) => void): void;
         once(channel: string, func: (...args: any[]) => void): void;
       };
-      getGethStatus(): string;
-      startGeth(): void;
-      stopGeth(): void;
-      deleteGethDisk(): boolean;
       update(): number;
       getSystemFreeDiskSpace(): number;
       getDebugInfo(): any;

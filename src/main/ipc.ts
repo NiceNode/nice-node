@@ -1,12 +1,6 @@
 import { ipcMain } from 'electron';
 import getDebugInfo from './debug';
-import {
-  getGethLogs,
-  getGethErrorLogs,
-  getSystemFreeDiskSpace,
-  deleteGethDisk,
-} from './files';
-import { getStatus, startGeth, stopGeth } from './geth';
+import { getGethLogs, getGethErrorLogs, getSystemFreeDiskSpace } from './files';
 import {
   getDefaultNodeConfig,
   setToDefaultNodeConfig,
@@ -30,10 +24,6 @@ import { NodeSpecification } from '../common/nodeSpec';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
-  ipcMain.handle('getGethStatus', getStatus);
-  ipcMain.handle('startGeth', startGeth);
-  ipcMain.handle('stopGeth', stopGeth);
-  ipcMain.handle('deleteGethDisk', deleteGethDisk);
   ipcMain.handle('updateNodeUsedDiskSpace', (_event, nodeId: NodeId) => {
     return updateNodeUsedDiskSpace(nodeId);
   });

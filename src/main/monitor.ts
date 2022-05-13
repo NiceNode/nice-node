@@ -2,7 +2,6 @@ import { net } from 'electron';
 import { getSystemDiskSize, getUsedDiskSpace } from './files';
 
 import { NodeId } from '../common/node';
-import { getPid } from './geth';
 import logger from './logger';
 import * as storeNodes from './state/nodes';
 
@@ -13,8 +12,7 @@ export const getProcessUsageByPid = async (pid: number) => {
   return stats;
 };
 
-export const getNodeUsage = async () => {
-  const nodePid = await getPid();
+export const getNodeUsage = async (nodePid: number) => {
   if (typeof nodePid !== 'number') {
     return undefined;
   }

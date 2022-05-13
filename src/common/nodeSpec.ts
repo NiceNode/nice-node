@@ -184,6 +184,7 @@ export type BinaryDownload = {
   linux?: ArchOptsMap;
   windows?: ArchOptsMap;
   latestVersionUrl?: string;
+  excludeNameWith?: string;
   responseFormat?: 'githubReleases';
 };
 /**
