@@ -108,9 +108,9 @@ const AddNode = () => {
             '--http.corsdomain',
             'nice-node://,http://localhost',
           ],
-          // binary: {
-          //   dataDirFlag: '--datadir',
-          // },
+          binary: {
+            dataDirFlag: '--datadir',
+          },
         },
         binaryDownload: {
           type: 'static',
@@ -185,6 +185,13 @@ const AddNode = () => {
         executionTypes: ['docker', 'binary'],
         defaultExecutionType: 'binary',
         imageName: 'statusim/nimbus-eth2:multiarch-latest',
+        execPath: 'run-mainnet-beacon-node.sh',
+        input: {
+          default: ['--web3-url="http://localhost:8545"'],
+          binary: {
+            dataDirFlag: '--data-dir',
+          },
+        },
         binaryDownload: {
           type: 'githubReleases',
           latestVersionUrl:

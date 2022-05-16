@@ -11,15 +11,25 @@ import * as platform from './platform';
 import * as arch from './arch';
 import * as github from './github';
 import { BinaryDownload, BinaryExecution } from '../common/nodeSpec';
-import Node, { NodeStatus } from '../common/node';
+import Node, { isBinaryNode, NodeStatus } from '../common/node';
 import logger, { gethLogger } from './logger';
 import { httpGet } from './httpReq';
 import { execAwait } from './execHelper';
 import { getNodesDirPath } from './files';
 import { updateNode } from './state/nodes';
 import { getProcessUsageByPid } from './monitor';
-
+import {
+  startProccess,
+  getProcesses,
+  getProcess as pm2GetProcess,
+  stopProcess,
+  initialize as initPm2Manager,
+} from './pm2Manager';
+import * as nodeStore from './state/nodes';
+import { Proc } from 'pm2';
 const streamPipeline = promisify(pipeline);
+
+export const getProcess = pm2GetProcess;
 
 const getDownloadUrl = (binaryDownload: BinaryDownload) => {
   // get platform & arch
@@ -226,9 +236,17 @@ export const startBinary = async (node: Node) => {
   const nodeSpecId = spec.specId;
   const execution = spec.execution as BinaryExecution;
   const { input } = execution;
-  let nodeInput: string[] = [];
+  let nodeInput = '';
   if (input?.default) {
-    nodeInput = input.default;
+    // nodeInput = input.default.join(" ");
+    nodeInput = input.default.join(' ');
+  }
+  if (input.binary) {
+    // nodeInput =
+    //   nodeInput + ' ' + input?.binary.dataDirFlag + ' ' + node.runtime.dataDir;
+    // nimbus
+    nodeInput =
+      nodeInput + ' ' + input?.binary.dataDirFlag + '=' + node.runtime.dataDir;
   }
   logger.info(
     `Starting binary with input: ${nodeInput} and runtime: ${JSON.stringify(
@@ -248,7 +266,7 @@ export const startBinary = async (node: Node) => {
   logger.info(
     `Making binary exec path: ${getNodesDirPath()} ${spec.specId} ${
       runtime.build
-    }${execution.execPath}`
+    } ${execution.execPath}`
   );
   const execFileAbsolutePath = path.join(
     getNodesDirPath(),
@@ -257,14 +275,19 @@ export const startBinary = async (node: Node) => {
     execution.execPath
   );
   // `${gethBuildNameForPlatformAndArch()}\\geth.exe`;
-  logger.info(execFileAbsolutePath);
-  const options: SpawnOptions = {
-    stdio: [null, 'pipe', 'pipe'],
-    detached: true,
-  };
+  logger.info(`${execFileAbsolutePath} ${nodeInput}`);
+  // const options: SpawnOptions = {
+  //   stdio: [null, 'pipe', 'pipe'],
+  //   detached: true,
+  // };
   let childProcess;
+  let pmId;
   try {
-    childProcess = spawn(execFileAbsolutePath, [], options);
+    pmId = await startProccess(
+      `${execFileAbsolutePath} ${nodeInput}`,
+      spec.specId
+    );
+    // childProcess = spawn(execFileAbsolutePath, [], options);
   } catch (err) {
     logger.error('Errors starting binary: ', err);
     node.status = NodeStatus.errorStarting;
@@ -272,62 +295,64 @@ export const startBinary = async (node: Node) => {
     return;
   }
   // gethProcess = childProcess;
-  if (childProcess.pid) {
-    node.runtime.processIds = [childProcess.pid.toString()];
+  // if (childProcess.pid) {
+  if (pmId !== undefined) {
+    node.runtime.processIds = [pmId.toString()];
     updateNode(node);
   } else {
     logger.error(`No pid for ${nodeSpecId} binary child process! Lost child!`);
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleLogStream = (data: Buffer | string | any) => {
-    const logs = data?.toString().split('\n ');
-    logs.forEach((log: string) => {
-      // logger.log('getProcess:: log:: ', log);
-      if (log.includes('ERROR')) {
-        gethLogger.error(log);
-      } else {
-        gethLogger.info(log);
-      }
-    });
-  };
-  childProcess.stderr?.on('data', handleLogStream);
-  childProcess.stdout?.on('data', handleLogStream);
-  childProcess.on('error', (data) => {
-    logger.error(`${nodeSpecId}::error:: `, data);
-  });
-  childProcess.on('disconnect', () => {
-    logger.info(`${nodeSpecId}::disconnect::`);
-  });
-  childProcess.on('close', (code) => {
-    // code == 0, clean exit
-    // code == 1, crash
-    logger.info(`${nodeSpecId}::close:: ${code}`);
-    if (code !== 0) {
-      node.status = NodeStatus.errorStarting;
-      updateNode(node);
-      logger.error(`Error starting node ${nodeSpecId} code ${code}`);
-      // todo: determine the error and show geth error logs to user.
-    }
-  });
-  childProcess.on('exit', (code, signal) => {
-    // code == 0, clean exit
-    // code == 1, crash
-    logger.info(`${nodeSpecId}::exit:: ${code}, ${signal}`);
-    if (code === 1) {
-      // if (stopInitiatedAfterAStart && isWindows()) {
-      //   logger.info('Windows un-smooth stop');
-      //   return;
-      // }
-      node.status = NodeStatus.errorStarting;
-      updateNode(node);
-      logger.error('Geth::exit::error::');
-    }
-  });
+  // const handleLogStream = (data: Buffer | string | any) => {
+  //   const logs = data?.toString().split('\n ');
+  //   logs.forEach((log: string) => {
+  //     // logger.log('getProcess:: log:: ', log);
+  //     if (log.includes('ERROR')) {
+  //       gethLogger.error(log);
+  //     } else {
+  //       gethLogger.info(log);
+  //     }
+  //   });
+  // };
+  // childProcess.stderr?.on('data', handleLogStream);
+  // childProcess.stdout?.on('data', handleLogStream);
+  // childProcess.on('error', (data) => {
+  //   logger.error(`${nodeSpecId}::error:: `, data);
+  // });
+  // childProcess.on('disconnect', () => {
+  //   logger.info(`${nodeSpecId}::disconnect::`);
+  // });
+  // childProcess.on('close', (code) => {
+  //   // code == 0, clean exit
+  //   // code == 1, crash
+  //   logger.info(`${nodeSpecId}::close:: ${code}`);
+  //   if (code !== 0) {
+  //     node.status = NodeStatus.errorStarting;
+  //     updateNode(node);
+  //     logger.error(`Error starting node ${nodeSpecId} code ${code}`);
+  //     // todo: determine the error and show geth error logs to user.
+  //   }
+  // });
+  // childProcess.on('exit', (code, signal) => {
+  //   // code == 0, clean exit
+  //   // code == 1, crash
+  //   logger.info(`${nodeSpecId}::exit:: ${code}, ${signal}`);
+  //   if (code === 1) {
+  //     // if (stopInitiatedAfterAStart && isWindows()) {
+  //     //   logger.info('Windows un-smooth stop');
+  //     //   return;
+  //     // }
+  //     node.status = NodeStatus.errorStarting;
+  //     updateNode(node);
+  //     logger.error('Geth::exit::error::');
+  //   }
+  // });
   logger.info(`binary ${nodeSpecId} started successfully`);
   node.status = NodeStatus.running;
   updateNode(node);
   // logger.info('geth childProcess:', childProcess);
-  logger.info(`${nodeSpecId} childProcess pid: ${childProcess.pid}`);
+  // logger.info(`${nodeSpecId} childProcess pid: ${childProcess.pid}`);
+  logger.info(`${nodeSpecId} childProcess pid: ${pmId}`);
 };
 
 /**
@@ -346,7 +371,8 @@ export const stopBinary = async (node: Node) => {
   ) {
     const pid = parseInt(node.runtime.processIds[0], 10);
     // try nice kill first
-    const signalSentResult = kill(pid, 'SIGINT');
+    // const signalSentResult = kill(pid, 'SIGINT');
+    const signalSentResult = stopProcess(pid);
     console.log('killSignalSent?', signalSentResult);
     await sleep(5000);
     try {
@@ -403,4 +429,65 @@ export const stopBinary = async (node: Node) => {
   //     send(CHANNELS.geth, status);
   //   }
   // }
+};
+const watchProcessPollingInterval = 5000;
+let watchProcessesInterval;
+
+const watchBinaryProcesses = async () => {
+  logger.info('Checking binary processes for changes...');
+  // get all nodes and filter for binaries
+  const nodes = nodeStore.getNodes();
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    if (isBinaryNode(node)) {
+      if (Array.isArray(node?.runtime?.processIds)) {
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          const pid = parseInt(node.runtime.processIds[0], 10);
+          // eslint-disable-next-line no-await-in-loop
+          // const pidStats = await getProcessUsageByPid(pid);
+          const nodeStatus = await getBinaryStatus(pid);
+          logger.info(`NodeStatus for ${node.spec.specId} is ${nodeStatus}`);
+          node.status = nodeStatus;
+          nodeStore.updateNode(node);
+        } catch (err) {
+          // error getting proc status
+        }
+      } else {
+        // no processId for a node
+      }
+    }
+  }
+};
+// todoMemoryLeak delete interval
+export const initialize = () => {
+  initPm2Manager();
+  // watchPmProcesses
+  logger.info('Start watching binary processes...');
+  watchProcessesInterval = setInterval(
+    watchBinaryProcesses,
+    watchProcessPollingInterval
+  );
+};
+
+// type ProcessStatus = 'online' | 'stopping' | 'stopped' | 'launching' | 'errored' | 'one-launch-status';
+export const getBinaryStatus = async (pid: number): Promise<NodeStatus> => {
+  const proc = await getProcess(pid);
+  const procStatus = proc?.pm2_env?.status;
+  if (proc && procStatus) {
+    if (procStatus === 'online') {
+      return NodeStatus.running;
+    } else if (procStatus === 'errored') {
+      return NodeStatus.errorRunning;
+    } else if (procStatus === 'stopping') {
+      return NodeStatus.stopping;
+    } else if (procStatus === 'launching') {
+      return NodeStatus.starting;
+    } else if (procStatus === 'stopped') {
+      return NodeStatus.stopped;
+    }
+  }
+  console.log('unkown proc status! proc, procStatus', proc, procStatus);
+  return NodeStatus.unknown;
 };

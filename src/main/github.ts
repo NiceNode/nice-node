@@ -27,10 +27,11 @@ export const getLatestReleaseUrl = async (binaryDownload: BinaryDownload) => {
           // check if it should exclude a value
           if (
             binaryDownload?.excludeNameWith &&
-            !assetNameLowercase.includes(binaryDownload.excludeNameWith)
+            assetNameLowercase.includes(binaryDownload.excludeNameWith)
           ) {
-            return true;
+            return false;
           }
+          return true;
         }
       }
       return false;

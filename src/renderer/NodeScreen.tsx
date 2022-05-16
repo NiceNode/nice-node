@@ -73,8 +73,10 @@ const NodeScreen = () => {
               status === NodeStatus.created ||
               status === NodeStatus.readyToStart ||
               status === NodeStatus.errorStarting ||
+              status === NodeStatus.errorRunning ||
               status === NodeStatus.stopped ||
-              status === NodeStatus.errorStopping
+              status === NodeStatus.errorStopping ||
+              status === NodeStatus.unknown
             )
           }
         >

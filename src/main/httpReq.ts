@@ -15,7 +15,6 @@ export const httpGet = (
       let request: http.ClientRequest;
       if (!options?.isHttp) {
         request = https.request(url, (response: http.IncomingMessage) => {
-          console.log('http get response ', response);
           // follow github release redirects
           if (response.statusCode === 302 && response.headers.location) {
             resolve(httpGet(response.headers.location, options));

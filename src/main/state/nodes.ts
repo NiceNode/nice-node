@@ -60,6 +60,10 @@ export const getNode = (nodeId: NodeId): Node => {
   return store.get(`${USER_NODES_KEY}.${NODES_KEY}.${nodeId}`);
 };
 
+export const getNodeBySpecId = (specId: string): Node | undefined => {
+  return getNodes().find((node: Node) => node && node?.spec?.specId === specId);
+};
+
 export const addNode = (newNode: Node) => {
   const userNodes = getUserNodes();
   const { nodes, nodeIds } = userNodes;

@@ -20,7 +20,6 @@ import logger, { autoUpdateLogger } from './logger';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { setWindow } from './messenger';
-import { initialize as initDocker } from './docker';
 import { initialize as initNodeManager } from './nodeManager';
 import * as ipc from './ipc';
 import * as power from './power';
@@ -257,9 +256,9 @@ const initialize = () => {
   logger.info('Initializing main process work...');
   ipc.initialize();
   power.initialize();
-  initDocker();
   initNodeManager();
   // processExit.initialize();
+  console.log('app locale: ', app.getLocale());
 };
 
 logger.info(`app name: ${app.getName()}`);

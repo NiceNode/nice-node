@@ -71,14 +71,19 @@ const LeftSideBar = () => {
                   border: isSelectedNode ? '3px solid' : '1px solid',
                   padding: 2,
                   borderRadius: 5,
+                  width: 70,
+                  height: 100,
                 }}
                 onClick={() => dispatch(updateSelectedNodeId(node.id))}
               >
-                <img
-                  src={node.spec.iconUrl}
-                  alt={node.spec.displayName}
-                  style={{ width: 50 }}
-                />
+                <div style={{ width: 50, height: 50 }}>
+                  <img
+                    src={node.spec.iconUrl}
+                    alt={node.spec.displayName}
+                    style={{ maxWidth: '100%', maxHeight: '100%' }}
+                  />
+                </div>
+
                 <span style={{ textOverflow: 'ellipsis' }}>
                   {node.spec.displayName}
                 </span>

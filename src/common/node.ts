@@ -17,8 +17,10 @@ export enum NodeStatus {
   running = 'running',
   stopping = 'stopping',
   stopped = 'stopped',
+  errorRunning = 'error running',
   errorStarting = 'error starting',
   errorStopping = 'error stopping',
+  unknown = 'unknown',
 }
 
 export type NodeUserConfig = {

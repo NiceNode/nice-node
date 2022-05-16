@@ -15,8 +15,14 @@ import Node, {
 } from '../common/node';
 import * as nodeStore from './state/nodes';
 import { makeNodeDir } from './files';
-import { startBinary, stopBinary } from './binary';
-import { getProcessUsageByPid } from './monitor';
+import {
+  getProcess,
+  startBinary,
+  stopBinary,
+  initialize as initBinary,
+  getBinaryStatus,
+} from './binary';
+import { initialize as initDocker } from './docker';
 
 export const addNode = async (nodeSpec: NodeSpecification): Promise<Node> => {
   const dataDir = await makeNodeDir(nodeSpec.specId);
@@ -106,6 +112,9 @@ export const removeNode = async (nodeId: NodeId): Promise<Node> => {
  * Check's node processes and updates internal NiceNode records.
  */
 export const initialize = async () => {
+  initDocker();
+  initBinary();
+
   // get all nodes
   const nodes = nodeStore.getNodes();
   // eslint-disable-next-line no-plusplus
@@ -160,10 +169,11 @@ export const initialize = async () => {
       ) {
         try {
           const pid = parseInt(binaryNode.runtime.processIds[0], 10);
-          // eslint-disable-next-line no-await-in-loop
-          const pidStats = await getProcessUsageByPid(pid);
-          console.log('found pidstates for', binaryNode.spec.specId, pidStats);
-          node.status = NodeStatus.running;
+          const nodeStatus = await getBinaryStatus(pid);
+          logger.info(
+            `NodeStatus for ${binaryNode.spec.specId} is ${nodeStatus}`
+          );
+          node.status = nodeStatus;
           nodeStore.updateNode(node);
         } catch (err) {
           console.error(err);
