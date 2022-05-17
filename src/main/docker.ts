@@ -257,3 +257,7 @@ export const onExit = () => {
     dockerWatchProcess.kill(9);
   }
 };
+
+export const isDockerInstalled = () => {
+  return true;
+};

@@ -1,6 +1,8 @@
 import { NodeSpecification } from '../../common/nodeSpec';
 import DivButton from '../DivButton';
 
+import DockerLogo from '../../../assets/docker_400x400.jpg';
+
 const NodeCard = (props: {
   nodeSpec: NodeSpecification;
   onSelected: () => void;
@@ -8,6 +10,15 @@ const NodeCard = (props: {
   // eslint-disable-next-line react/destructuring-assignment
   const { nodeSpec, onSelected } = props;
   const { displayName, iconUrl } = nodeSpec;
+  // const isDisabled = true;
+  const isDockerInstalled = false;
+  const isDockerRequired =
+    nodeSpec.execution.executionTypes.length === 1 &&
+    nodeSpec.execution.executionTypes[0] === 'docker';
+
+  const isDisabled = isDockerRequired && !isDockerInstalled;
+  const opacity = isDisabled ? '0.5' : '1';
+
   return (
     <DivButton
       key={displayName}
@@ -19,6 +30,7 @@ const NodeCard = (props: {
         height: 100,
         marginLeft: 5,
         marginRight: 10,
+        opacity,
       }}
       onClick={onSelected}
     >
@@ -43,6 +55,24 @@ const NodeCard = (props: {
       >
         <span style={{ textOverflow: 'ellipsis' }}>{displayName}</span>
       </div>
+      {isDockerRequired && isDisabled && (
+        <div
+          style={{
+            width: 30,
+            height: 30,
+            position: 'relative',
+            opacity: 1,
+            bottom: 35,
+            left: 65,
+          }}
+        >
+          <img
+            src={DockerLogo}
+            alt="Docker"
+            style={{ maxWidth: '100%', maxHeight: 30 }}
+          />
+        </div>
+      )}
     </DivButton>
   );
 };

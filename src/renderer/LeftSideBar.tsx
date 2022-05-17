@@ -1,8 +1,6 @@
-import { MdDelete } from 'react-icons/md';
 import { useEffect, useState } from 'react';
 
 import Node, { NodeId } from '../common/node';
-import { useGetNodesQuery } from './state/nodeService';
 import AddNode from './AddNode/AddNode';
 import DivButton from './DivButton';
 import { useAppDispatch, useAppSelector } from './state/hooks';
@@ -15,11 +13,6 @@ import {
 const LeftSideBar = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const sUserNodes = useAppSelector(selectUserNodes);
-
-  // const qGetNodes = useGetNodesQuery(null, {
-  //   pollingInterval: 0,
-  // });
-  // const nodes = useAppSelector(qGetNodes.)
   const dispatch = useAppDispatch();
 
   // Default selected node to be the first node

@@ -27,7 +27,7 @@ import {
   onExit as onExitPm2Manager,
 } from './pm2Manager';
 import * as nodeStore from './state/nodes';
-import { Proc } from 'pm2';
+import { Proc, ProcessDescription } from 'pm2';
 const streamPipeline = promisify(pipeline);
 
 export const getProcess = pm2GetProcess;
@@ -242,8 +242,7 @@ export const startBinary = async (node: Node) => {
     nodeInput = input.default.join(' ');
   }
   if (input.binary) {
-    nodeInput =
-      nodeInput + ' ' + input?.binary.dataDirInput + node.runtime.dataDir;
+    nodeInput = `${nodeInput} ${input?.binary.dataDirInput}${node.runtime.dataDir}`;
   }
   logger.info(
     `Starting binary with input: ${nodeInput} and runtime: ${JSON.stringify(
@@ -388,8 +387,7 @@ export const stopBinary = async (node: Node) => {
 };
 
 // type ProcessStatus = 'online' | 'stopping' | 'stopped' | 'launching' | 'errored' | 'one-launch-status';
-export const getBinaryStatus = async (pid: number): Promise<NodeStatus> => {
-  const proc = await getProcess(pid);
+export const getBinaryStatus = (proc: ProcessDescription): NodeStatus => {
   const procStatus = proc?.pm2_env?.status;
   if (proc && procStatus) {
     if (procStatus === 'online') {
@@ -426,12 +424,22 @@ const watchBinaryProcesses = async () => {
         try {
           const pid = parseInt(node.runtime.processIds[0], 10);
           // eslint-disable-next-line no-await-in-loop
-          // const pidStats = await getProcessUsageByPid(pid);
-          // eslint-disable-next-line no-await-in-loop
-          const nodeStatus = await getBinaryStatus(pid);
-          // logger.info(`NodeStatus for ${node.spec.specId} is ${nodeStatus}`);
-          node.status = nodeStatus;
-          nodeStore.updateNode(node);
+          const proc = await getProcess(pid);
+          if (proc) {
+            const nodeStatus = getBinaryStatus(proc);
+            const proccessUsage = proc.monit;
+            if (proccessUsage) {
+              node.runtime.usage.memory = proccessUsage.memory ?? undefined;
+              node.runtime.usage.cpu = proccessUsage.cpu ?? undefined;
+            }
+            // logger.info(`NodeStatus for ${node.spec.specId} is ${nodeStatus}`);
+            node.status = nodeStatus;
+            nodeStore.updateNode(node);
+          } else {
+            logger.error(
+              `Unable to get process details. Proccess pid ${pid} not found.`
+            );
+          }
         } catch (err) {
           // error getting proc status
         }
