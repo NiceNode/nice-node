@@ -10,6 +10,8 @@ import {
   updateSelectedNodeId,
 } from './state/node';
 
+export const LEFT_SIDEBAR_WIDTH = 120;
+
 const LeftSideBar = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const sUserNodes = useAppSelector(selectUserNodes);
@@ -37,68 +39,73 @@ const LeftSideBar = () => {
   return (
     <div
       style={{
-        width: 100,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 30,
+        width: LEFT_SIDEBAR_WIDTH,
+        // borderRight: '1px solid grey',
       }}
     >
-      <AddNode />
-      {/* {qGetNodes.error && <>Oh no, there was an error getting nodes</>}
+      <div
+        style={{
+          paddingLeft: 10,
+          paddingTop: 30,
+        }}
+      >
+        <AddNode />
+        {/* {qGetNodes.error && <>Oh no, there was an error getting nodes</>}
       {qGetNodes.isLoading && <>Loading nodes...</>} */}
-      {sUserNodes?.nodeIds ? (
-        <>
-          {sUserNodes.nodeIds.map((nodeId: NodeId) => {
-            const node = sUserNodes.nodes[nodeId];
-            let statusColor = node.status === 'running' ? 'green' : 'black';
-            if (node.status.includes('error')) {
-              statusColor = 'red';
-            } else if (node.status.includes('stopped')) {
-              statusColor = 'grey';
-            }
-            const isSelectedNode = sSelectedNodeId === node.id;
-            return (
-              <DivButton
-                key={node.id}
-                style={{
-                  border: isSelectedNode ? '3px solid' : '1px solid',
-                  padding: 2,
-                  borderRadius: 5,
-                  marginBottom: 3,
-                  width: 100,
-                  height: 100,
-                }}
-                onClick={() => dispatch(updateSelectedNodeId(node.id))}
-              >
-                <div style={{ width: 90, height: 50 }}>
-                  <img
-                    src={node.spec.iconUrl}
-                    alt={node.spec.displayName}
-                    style={{ maxWidth: '100%', maxHeight: '100%' }}
-                  />
-                </div>
-
-                <span style={{ textOverflow: 'ellipsis' }}>
-                  {node.spec.displayName}
-                </span>
-                <div
+        {sUserNodes?.nodeIds ? (
+          <>
+            {sUserNodes.nodeIds.map((nodeId: NodeId) => {
+              const node = sUserNodes.nodes[nodeId];
+              let statusColor = node.status === 'running' ? 'green' : 'black';
+              if (node.status.includes('error')) {
+                statusColor = 'red';
+              } else if (node.status.includes('stopped')) {
+                statusColor = 'grey';
+              }
+              const isSelectedNode = sSelectedNodeId === node.id;
+              return (
+                <DivButton
+                  key={node.id}
                   style={{
-                    display: 'flex',
-                    flexDirection: 'row',
+                    border: isSelectedNode ? '3px solid' : '1px solid',
+                    padding: 2,
+                    borderRadius: 5,
+                    marginBottom: 3,
+                    width: 100,
+                    height: 100,
                   }}
+                  onClick={() => dispatch(updateSelectedNodeId(node.id))}
                 >
-                  <span
-                    className="colored-circle"
-                    style={{ background: statusColor }}
-                  />
-                </div>
-              </DivButton>
-            );
-          })}
-        </>
-      ) : (
-        <>No nodes {JSON.stringify(sUserNodes)}</>
-      )}
+                  <div style={{ width: 90, height: 50 }}>
+                    <img
+                      src={node.spec.iconUrl}
+                      alt={node.spec.displayName}
+                      style={{ maxWidth: '100%', maxHeight: '100%' }}
+                    />
+                  </div>
+
+                  <span style={{ textOverflow: 'ellipsis' }}>
+                    {node.spec.displayName}
+                  </span>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <span
+                      className="colored-circle"
+                      style={{ background: statusColor }}
+                    />
+                  </div>
+                </DivButton>
+              );
+            })}
+          </>
+        ) : (
+          <>No nodes {JSON.stringify(sUserNodes)}</>
+        )}
+      </div>
     </div>
   );
 };

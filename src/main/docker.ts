@@ -149,10 +149,16 @@ export const getContainerDetails = async (containerIds: string[]) => {
 };
 
 export const initialize = async () => {
-  docker = new Docker(options);
-  // const data = await docker.command('info');
-  // logger.info(`Docker info data: ${JSON.stringify(data)}`);
-  watchDockerEvents();
+  try {
+    docker = new Docker(options);
+    // const data = await docker.command('info');
+    // logger.info(`Docker info data: ${JSON.stringify(data)}`);
+    watchDockerEvents();
+    // todo: update docker node usages
+  } catch (err) {
+    // docker not installed?
+    logger.info('Unable to initialize Docker. Docker may not be installed.');
+  }
 
   //   console.log('fetching beacon node data...');
   //   const parsedData = await httpGetJson(
@@ -259,5 +265,6 @@ export const onExit = () => {
 };
 
 export const isDockerInstalled = () => {
+  logger.info('isDockerInstalled: true');
   return true;
 };

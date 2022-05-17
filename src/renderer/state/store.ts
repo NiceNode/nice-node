@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
 import { RtkqExecutionWs } from './services';
 import { RtkqNodeService } from './nodeService';
+import { RtkqSettingsService } from './settingsService';
 import { RtkqNetwork } from './network';
 import nodeReducer from './node';
 
@@ -9,6 +10,7 @@ export const store = configureStore({
   reducer: {
     node: nodeReducer,
     [RtkqNodeService.reducerPath]: RtkqNodeService.reducer,
+    [RtkqSettingsService.reducerPath]: RtkqSettingsService.reducer,
     [RtkqExecutionWs.reducerPath]: RtkqExecutionWs.reducer,
     [RtkqNetwork.reducerPath]: RtkqNetwork.reducer,
   },
@@ -17,6 +19,7 @@ export const store = configureStore({
       serializableCheck: false,
     })
       .concat(RtkqNodeService.middleware)
+      .concat(RtkqSettingsService.middleware)
       .concat(RtkqExecutionWs.middleware)
       .concat(RtkqNetwork.middleware),
 });

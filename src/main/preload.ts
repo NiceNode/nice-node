@@ -60,4 +60,7 @@ contextBridge.exposeInMainWorld('electron', {
   stopNode: (nodeId: NodeId) => {
     ipcRenderer.invoke('stopNode', nodeId);
   },
+
+  // Settings/Config
+  getIsDockerInstalled: () => ipcRenderer.invoke('getIsDockerInstalled'),
 });

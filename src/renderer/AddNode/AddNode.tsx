@@ -31,6 +31,7 @@ const AddNode = () => {
   const [sExecutionClientLibrary] = useState<NodeSpecification[]>([
     {
       specId: 'nethermind',
+      version: '1.0.0',
       displayName: 'Nethermind',
       execution: {
         executionTypes: ['docker', 'binary'],
@@ -71,6 +72,7 @@ const AddNode = () => {
     },
     {
       specId: 'erigon',
+      version: '1.0.0',
       displayName: 'Erigon',
       execution: {
         executionTypes: ['docker'],
@@ -84,6 +86,7 @@ const AddNode = () => {
     },
     {
       specId: 'besu',
+      version: '1.0.0',
       displayName: 'Besu',
       execution: {
         executionTypes: ['docker'],
@@ -97,6 +100,7 @@ const AddNode = () => {
     },
     {
       specId: 'geth',
+      version: '1.0.0',
       displayName: 'Geth',
       execution: {
         executionTypes: ['binary'],
@@ -137,6 +141,15 @@ const AddNode = () => {
       },
       category: 'L1/ExecutionClient',
       rpcTranslation: 'eth-l1',
+      configTranslation: {
+        type: 'EthNode', // defines datadir, http, ex. could be custom! which needs UI definitions here!
+        translation: {
+          dataDir: {
+            cliConfigPrefix: '--datadir ',
+            defaultValue: '~/.ethereum',
+          },
+        },
+      },
       iconUrl:
         'https://clientdiversity.org/assets/img/execution-clients/geth-logo.png',
     },
@@ -144,14 +157,24 @@ const AddNode = () => {
   const [sBeaconNodeLibrary] = useState<NodeSpecification[]>([
     {
       specId: 'lodestar-beacon',
+      version: '1.0.0',
       displayName: 'Lodestar',
       execution: {
         executionTypes: ['docker'],
         defaultExecutionType: 'docker',
         imageName: 'chainsafe/lodestar:latest',
+        input: {
+          default: ['beacon', '--rootDir /usr/app/data'],
+          docker: {
+            // containerVolumePath: '/root/.local/share/lodestar', // default?
+            containerVolumePath: '/usr/app/data',
+            raw: '-p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052',
+          },
+        },
       },
       category: 'L1/ConsensusClient/BeaconNode',
       rpcTranslation: 'eth-l2-beacon',
+      nodeReleasePhase: 'beta',
       documentation: {
         default: 'https://chainsafe.github.io/lodestar/',
         docker:
@@ -162,6 +185,7 @@ const AddNode = () => {
     },
     {
       specId: 'teku-beacon',
+      version: '1.0.0',
       displayName: 'Teku',
       execution: {
         executionTypes: ['docker'],
@@ -180,6 +204,7 @@ const AddNode = () => {
     },
     {
       specId: 'nimbus-beacon',
+      version: '1.0.0',
       displayName: 'Nimbus',
       execution: {
         executionTypes: ['docker', 'binary'],
@@ -214,6 +239,7 @@ const AddNode = () => {
     },
     {
       specId: 'lighthouse-beacon',
+      version: '1.0.0',
       displayName: 'Lighthouse',
       execution: {
         executionTypes: ['docker', 'binary'],
@@ -263,6 +289,7 @@ const AddNode = () => {
     },
     {
       specId: 'prysm-beacon',
+      version: '1.0.0',
       displayName: 'Prysm',
       execution: {
         executionTypes: ['docker'],
@@ -289,6 +316,7 @@ const AddNode = () => {
   const [sLayer2ClientLibrary] = useState<NodeSpecification[]>([
     {
       specId: 'optimism',
+      version: '1.0.0',
       displayName: 'Optimism',
       execution: {
         executionTypes: ['docker'],
@@ -301,6 +329,7 @@ const AddNode = () => {
     },
     {
       specId: 'pathfinder',
+      version: '1.0.0',
       displayName: 'StarkNet, Pathfinder',
       execution: {
         executionTypes: ['docker'],
@@ -313,6 +342,7 @@ const AddNode = () => {
     },
     {
       specId: 'arbitrum',
+      version: '1.0.0',
       displayName: 'Arbitrum One',
       execution: {
         executionTypes: ['docker'],

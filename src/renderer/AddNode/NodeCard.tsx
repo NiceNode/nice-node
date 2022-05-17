@@ -1,5 +1,6 @@
 import { NodeSpecification } from '../../common/nodeSpec';
 import DivButton from '../DivButton';
+import { useGetIsDockerInstalledQuery } from '../state/settingsService';
 
 import DockerLogo from '../../../assets/docker_400x400.jpg';
 
@@ -7,11 +8,12 @@ const NodeCard = (props: {
   nodeSpec: NodeSpecification;
   onSelected: () => void;
 }) => {
+  const qIsDockerInstalled = useGetIsDockerInstalledQuery();
   // eslint-disable-next-line react/destructuring-assignment
   const { nodeSpec, onSelected } = props;
   const { displayName, iconUrl } = nodeSpec;
   // const isDisabled = true;
-  const isDockerInstalled = false;
+  const isDockerInstalled = qIsDockerInstalled?.data;
   const isDockerRequired =
     nodeSpec.execution.executionTypes.length === 1 &&
     nodeSpec.execution.executionTypes[0] === 'docker';

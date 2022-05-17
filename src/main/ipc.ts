@@ -21,6 +21,7 @@ import { addNode, startNode, stopNode, removeNode } from './nodeManager';
 import { getNodes, getNode, getUserNodes } from './state/nodes';
 import { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
+import { isDockerInstalled } from './docker';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -84,4 +85,7 @@ export const initialize = () => {
   ipcMain.handle('stopNode', (_event, nodeId: NodeId) => {
     return stopNode(nodeId);
   });
+
+  // Settings/Config
+  ipcMain.handle('getIsDockerInstalled', isDockerInstalled);
 };

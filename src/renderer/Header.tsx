@@ -25,6 +25,8 @@ import {
   selectSelectedNode,
 } from './state/node';
 
+export const HEADER_HEIGHT = 48;
+
 const Header = () => {
   const selectedNode = useAppSelector(selectSelectedNode);
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
@@ -124,7 +126,7 @@ const Header = () => {
   return (
     <div
       style={{
-        height: 48,
+        height: HEADER_HEIGHT,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',

@@ -8,6 +8,9 @@ import Settings from './Settings';
 import Monitoring from './Monitoring';
 import Debugging from './Debugging';
 import electron from '../electronGlobal';
+import DynamicSettings from './DynamicSettings';
+
+export const FOOTER_HEIGHT = 64;
 
 const Footer = () => {
   const [sSelectedMenuDrawer, setSelectedMenuDrawer] = useState<string>();
@@ -34,7 +37,7 @@ const Footer = () => {
   return (
     <div
       style={{
-        height: 64,
+        height: FOOTER_HEIGHT,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -98,7 +101,7 @@ const Footer = () => {
         onClickCloseButton={onCloseDrawer}
       />
 
-      <Settings
+      <DynamicSettings
         isOpen={sSelectedMenuDrawer === 'settings'}
         onClickCloseButton={onCloseDrawer}
       />

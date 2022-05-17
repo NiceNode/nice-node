@@ -49,6 +49,9 @@ declare global {
       startNode(nodeId: NodeId): void;
       stopNode(nodeId: NodeId): void;
       updateNodeUsedDiskSpace(nodeId: NodeId): void;
+
+      // Settings/Config
+      getIsDockerInstalled(): boolean;
     };
 
     performance: Performance;
