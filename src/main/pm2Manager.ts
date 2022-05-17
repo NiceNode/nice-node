@@ -1,4 +1,3 @@
-import { NodeStatus } from 'common/node';
 import { promisify } from 'node:util';
 import {
   Proc,
@@ -9,7 +8,6 @@ import {
 } from 'pm2';
 
 import logger from './logger';
-import { getNodeBySpecId } from './state/nodes';
 
 const pm2 = require('pm2');
 
@@ -126,11 +124,11 @@ export const startProccess = async (command: string, name: string) => {
       `startProccess binary name and command ${name} and ${command} has pid ${startResult[0].pm_id}`
     );
     return startResult[0].pm_id;
-  } else {
-    logger.error(
-      `Unable to get pid for recently started binary name and command ${name} and ${command}`
-    );
   }
+  logger.error(
+    `Unable to get pid for recently started binary name and command ${name} and ${command}`
+  );
+
   // pm2Manager startResult:  [
   //   {
   //     name: 'gethpm2',
@@ -154,6 +152,10 @@ export const startProccess = async (command: string, name: string) => {
   //     '/home/johns/.config/Electron/geth-linux-amd64-1.10.17-25c9b49f/geth --http --http.corsdomain nice-node://,http://localhost',
   //   name: 'gethpm2',
   // },
+};
+
+export const onExit = () => {
+  pm2.disconnect();
 };
 
 // startProccess(

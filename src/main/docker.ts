@@ -251,3 +251,9 @@ export const stopDockerNode = async (node: Node) => {
 
   return containerIds;
 };
+
+export const onExit = () => {
+  if (dockerWatchProcess) {
+    dockerWatchProcess.kill(9);
+  }
+};

@@ -20,7 +20,7 @@ const callFetch = async (apiRoute: string) => {
     headers: {
       accept: 'application/json',
     },
-    // mode: 'no-cors',
+    // mode: 'no-cors', // no-cors works with nimbus
   });
   console.log(response);
   if (response) {

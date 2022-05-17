@@ -24,6 +24,7 @@ import {
   getProcess as pm2GetProcess,
   stopProcess,
   initialize as initPm2Manager,
+  onExit as onExitPm2Manager,
 } from './pm2Manager';
 import * as nodeStore from './state/nodes';
 import { Proc } from 'pm2';
@@ -238,15 +239,11 @@ export const startBinary = async (node: Node) => {
   const { input } = execution;
   let nodeInput = '';
   if (input?.default) {
-    // nodeInput = input.default.join(" ");
     nodeInput = input.default.join(' ');
   }
   if (input.binary) {
-    // nodeInput =
-    //   nodeInput + ' ' + input?.binary.dataDirFlag + ' ' + node.runtime.dataDir;
-    // nimbus
     nodeInput =
-      nodeInput + ' ' + input?.binary.dataDirFlag + '=' + node.runtime.dataDir;
+      nodeInput + ' ' + input?.binary.dataDirInput + node.runtime.dataDir;
   }
   logger.info(
     `Starting binary with input: ${nodeInput} and runtime: ${JSON.stringify(
@@ -276,11 +273,7 @@ export const startBinary = async (node: Node) => {
   );
   // `${gethBuildNameForPlatformAndArch()}\\geth.exe`;
   logger.info(`${execFileAbsolutePath} ${nodeInput}`);
-  // const options: SpawnOptions = {
-  //   stdio: [null, 'pipe', 'pipe'],
-  //   detached: true,
-  // };
-  let childProcess;
+
   let pmId;
   try {
     pmId = await startProccess(
@@ -294,8 +287,7 @@ export const startBinary = async (node: Node) => {
     updateNode(node);
     return;
   }
-  // gethProcess = childProcess;
-  // if (childProcess.pid) {
+
   if (pmId !== undefined) {
     node.runtime.processIds = [pmId.toString()];
     updateNode(node);
@@ -393,48 +385,37 @@ export const stopBinary = async (node: Node) => {
     node.status = NodeStatus.errorStopping;
     updateNode(node);
   }
-
-  // if (!gethProcess) {
-  //   logger.error("Can't stop geth, because it hasn't been started");
-  //   return;
-  // }
-
-  // let killResult = gethProcess.kill();
-  // if (killResult && gethProcess.killed) {
-  //   // todo: wait for geth onExit callback
-  //   // temp: wait 5 seconds for geth to shutdown properly
-  //   await sleep(5000);
-  //   logger.info('geth stopped successfully');
-  //   status = NODE_STATUS.stopped;
-  //   send(CHANNELS.geth, status);
-  // } else {
-  //   logger.info('sleeping 5s to confirm if geth stopped');
-  //   await sleep(5000);
-  //   if (!gethProcess.killed) {
-  //     logger.info("SIGTERM didn't kill geth in 5 seconds. sending SIGKILL");
-  //     killResult = gethProcess.kill(9);
-  //     await sleep(1000);
-  //     if (killResult) {
-  //       logger.info('geth stopped successfully from SIGKILL');
-  //       status = NODE_STATUS.stopped;
-  //       send(CHANNELS.geth, status);
-  //     } else {
-  //       status = NODE_STATUS.errorStopping;
-  //       send(CHANNELS.geth, status);
-  //       logger.error('error stopping geth');
-  //     }
-  //   } else {
-  //     logger.info('geth stopped successfully from SIGTERM');
-  //     status = NODE_STATUS.stopped;
-  //     send(CHANNELS.geth, status);
-  //   }
-  // }
 };
+
+// type ProcessStatus = 'online' | 'stopping' | 'stopped' | 'launching' | 'errored' | 'one-launch-status';
+export const getBinaryStatus = async (pid: number): Promise<NodeStatus> => {
+  const proc = await getProcess(pid);
+  const procStatus = proc?.pm2_env?.status;
+  if (proc && procStatus) {
+    if (procStatus === 'online') {
+      return NodeStatus.running;
+    }
+    if (procStatus === 'errored') {
+      return NodeStatus.errorRunning;
+    }
+    if (procStatus === 'stopping') {
+      return NodeStatus.stopping;
+    }
+    if (procStatus === 'launching') {
+      return NodeStatus.starting;
+    }
+    if (procStatus === 'stopped') {
+      return NodeStatus.stopped;
+    }
+  }
+  console.log('unkown proc status! proc, procStatus', proc, procStatus);
+  return NodeStatus.unknown;
+};
+
 const watchProcessPollingInterval = 5000;
-let watchProcessesInterval;
+let watchProcessesInterval: NodeJS.Timer;
 
 const watchBinaryProcesses = async () => {
-  logger.info('Checking binary processes for changes...');
   // get all nodes and filter for binaries
   const nodes = nodeStore.getNodes();
   // eslint-disable-next-line no-plusplus
@@ -443,12 +424,12 @@ const watchBinaryProcesses = async () => {
     if (isBinaryNode(node)) {
       if (Array.isArray(node?.runtime?.processIds)) {
         try {
-          // eslint-disable-next-line no-await-in-loop
           const pid = parseInt(node.runtime.processIds[0], 10);
           // eslint-disable-next-line no-await-in-loop
           // const pidStats = await getProcessUsageByPid(pid);
+          // eslint-disable-next-line no-await-in-loop
           const nodeStatus = await getBinaryStatus(pid);
-          logger.info(`NodeStatus for ${node.spec.specId} is ${nodeStatus}`);
+          // logger.info(`NodeStatus for ${node.spec.specId} is ${nodeStatus}`);
           node.status = nodeStatus;
           nodeStore.updateNode(node);
         } catch (err) {
@@ -471,23 +452,8 @@ export const initialize = () => {
   );
 };
 
-// type ProcessStatus = 'online' | 'stopping' | 'stopped' | 'launching' | 'errored' | 'one-launch-status';
-export const getBinaryStatus = async (pid: number): Promise<NodeStatus> => {
-  const proc = await getProcess(pid);
-  const procStatus = proc?.pm2_env?.status;
-  if (proc && procStatus) {
-    if (procStatus === 'online') {
-      return NodeStatus.running;
-    } else if (procStatus === 'errored') {
-      return NodeStatus.errorRunning;
-    } else if (procStatus === 'stopping') {
-      return NodeStatus.stopping;
-    } else if (procStatus === 'launching') {
-      return NodeStatus.starting;
-    } else if (procStatus === 'stopped') {
-      return NodeStatus.stopped;
-    }
-  }
-  console.log('unkown proc status! proc, procStatus', proc, procStatus);
-  return NodeStatus.unknown;
+// nicenode app close
+export const onExit = () => {
+  onExitPm2Manager();
+  clearInterval(watchProcessesInterval);
 };

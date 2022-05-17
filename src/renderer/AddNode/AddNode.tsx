@@ -109,7 +109,7 @@ const AddNode = () => {
             'nice-node://,http://localhost',
           ],
           binary: {
-            dataDirFlag: '--datadir',
+            dataDirInput: '--datadir ',
           },
         },
         binaryDownload: {
@@ -187,9 +187,13 @@ const AddNode = () => {
         imageName: 'statusim/nimbus-eth2:multiarch-latest',
         execPath: 'run-mainnet-beacon-node.sh',
         input: {
-          default: ['--web3-url="http://localhost:8545"'],
+          default: [
+            '--rest',
+            '--rest-allow-origin="http://localhost"',
+            '--web3-url="http://localhost:8545"',
+          ],
           binary: {
-            dataDirFlag: '--data-dir',
+            dataDirInput: '--data-dir=',
           },
         },
         binaryDownload: {

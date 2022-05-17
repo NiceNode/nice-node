@@ -20,11 +20,13 @@ import logger, { autoUpdateLogger } from './logger';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { setWindow } from './messenger';
-import { initialize as initNodeManager } from './nodeManager';
+import {
+  initialize as initNodeManager,
+  onExit as onExitNodeManager,
+} from './nodeManager';
 import * as ipc from './ipc';
 import * as power from './power';
-
-// import * as processExit from './processExit';
+import * as processExit from './processExit';
 
 require('dotenv').config();
 // debug({ isEnabled: true });
@@ -148,6 +150,7 @@ const createWindow = async () => {
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
     filter,
     (details, callback) => {
+      // details.requestHeaders.Origin = `http://localhost:1212`; // eh works for nimbus
       // details.requestHeaders.Origin = `nice-node://`;
       // details.requestHeaders.Origin = `*`;
       callback({ requestHeaders: details.requestHeaders });
@@ -159,11 +162,14 @@ const createWindow = async () => {
       if (!details.responseHeaders) {
         details.responseHeaders = {};
       }
-
-      // details.responseHeaders['Access-Control-Allow-Origin'] = [
-      //   // '*',
-      //   'http://localhost:1212', // URL your local electron app hosted
-      // ];
+      // '*',
+      details.responseHeaders['Access-Control-Allow-Origin'] = [
+        '*',
+        // 'http://localhost:1212', // eh works for nimbus, not for geth
+      ];
+      // for geth
+      details.responseHeaders['Access-Control-Allow-Headers'] = ['*'];
+      // details.responseHeaders['Access-Control-Allow-Origin'] = ['nice-node://'];
 
       callback({ responseHeaders: details.responseHeaders });
     }
@@ -251,13 +257,18 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
   });
 };
 
+const onExit = () => {
+  onExitNodeManager();
+};
+
 // no blocking work
 const initialize = () => {
   logger.info('Initializing main process work...');
   ipc.initialize();
   power.initialize();
   initNodeManager();
-  // processExit.initialize();
+  processExit.initialize();
+  processExit.registerExitHandler(onExit);
   console.log('app locale: ', app.getLocale());
 };
 

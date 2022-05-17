@@ -53,7 +53,7 @@ export const httpGetJson = async (
   url: string,
   isHttp?: boolean
 ): Promise<any> => {
-  const response = await httpGet(url, isHttp);
+  const response = await httpGet(url, { isHttp });
 
   return new Promise((resolve, reject) => {
     let rawData = '';

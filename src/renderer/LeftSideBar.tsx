@@ -71,12 +71,13 @@ const LeftSideBar = () => {
                   border: isSelectedNode ? '3px solid' : '1px solid',
                   padding: 2,
                   borderRadius: 5,
-                  width: 70,
+                  marginBottom: 3,
+                  width: 100,
                   height: 100,
                 }}
                 onClick={() => dispatch(updateSelectedNodeId(node.id))}
               >
-                <div style={{ width: 50, height: 50 }}>
+                <div style={{ width: 90, height: 50 }}>
                   <img
                     src={node.spec.iconUrl}
                     alt={node.spec.displayName}

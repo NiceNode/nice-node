@@ -20,9 +20,10 @@ import {
   startBinary,
   stopBinary,
   initialize as initBinary,
+  onExit as onExitBinary,
   getBinaryStatus,
 } from './binary';
-import { initialize as initDocker } from './docker';
+import { initialize as initDocker, onExit as onExitDocker } from './docker';
 
 export const addNode = async (nodeSpec: NodeSpecification): Promise<Node> => {
   const dataDir = await makeNodeDir(nodeSpec.specId);
@@ -188,6 +189,11 @@ export const initialize = async () => {
       }
     }
   }
+};
+
+export const onExit = () => {
+  onExitBinary();
+  onExitDocker();
 };
 
 // logger.info(
