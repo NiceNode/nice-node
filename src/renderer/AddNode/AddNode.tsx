@@ -56,7 +56,7 @@ const AddNode = () => {
           type: 'githubReleases',
           latestVersionUrl:
             'https://api.github.com/repos/NethermindEth/nethermind/releases/latest',
-          excludeNameWith: 'portable',
+          // excludeNameWith: 'portable',
           responseFormat: 'githubReleases', // assets[i].name contains platform and arch
         },
       },
@@ -216,7 +216,7 @@ const AddNode = () => {
       specId: 'lighthouse-beacon',
       displayName: 'Lighthouse',
       execution: {
-        executionTypes: ['docker'],
+        executionTypes: ['docker', 'binary'],
         defaultExecutionType: 'docker',
         input: {
           default: [
@@ -235,11 +235,22 @@ const AddNode = () => {
             containerVolumePath: '/root/.lighthouse',
             raw: '-d -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052',
           },
+          binary: {
+            // https://lighthouse-book.sigmaprime.io/advanced-datadir.html?highlight=--datadir#relative-paths
+            dataDirInput: '--datadir ',
+          },
         },
         architectures: {
           docker: ['amd64', 'arm64'],
         },
         imageName: 'sigp/lighthouse:latest-modern',
+        binaryDownload: {
+          type: 'githubReleases',
+          latestVersionUrl:
+            'https://api.github.com/repos/sigp/lighthouse/releases/latest',
+          excludeNameWith: 'portable',
+          responseFormat: 'githubReleases', // assets[i].name contains platform and arch
+        },
       },
       category: 'L1/ConsensusClient/BeaconNode',
       rpcTranslation: 'eth-l2-beacon',
