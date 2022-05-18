@@ -33,7 +33,6 @@ declare global {
       getGethErrorLogs(): any;
       getRendererProcessUsage(): any;
       getMainProcessUsage(): any;
-      getNodeUsage(): any;
       getNodeConfig(node: string): NodeConfig;
       changeNodeConfig(node: string, nodeConfig: NodeConfig): void;
       setDirectInputNodeConfig(node: string, directInput: string[]): void;
@@ -45,9 +44,11 @@ declare global {
       getNodes(): Node[];
       getUserNodes(): UserNodes;
       addNode(nodeSpec: NodeSpecification): Node;
+      updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;
       removeNode(nodeId: NodeId): Node;
       startNode(nodeId: NodeId): void;
       stopNode(nodeId: NodeId): void;
+      openDialogForNodeDataDir(nodeId: NodeId): void;
       updateNodeUsedDiskSpace(nodeId: NodeId): void;
 
       // Settings/Config

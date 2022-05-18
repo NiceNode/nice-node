@@ -16,9 +16,13 @@
 //         cliConfigPrefix: string;
 //       };
 // };
-type ControlTypes = 'filePath' | 'text' | 'select';
+// type ControlTypes = 'filePath' | 'text' | 'select';
 type FilePathControl = {
   type: 'filePath';
+  displayName: string;
+};
+type TextControl = {
+  type: 'text';
   displayName: string;
 };
 type SelectControl = {
@@ -33,7 +37,10 @@ type SelectControl = {
 //   default?: string;
 //   cliConfigPrefix: string;
 // };
-export type ConfigTranslationControl = FilePathControl | SelectControl;
+export type ConfigTranslationControl =
+  | FilePathControl
+  | SelectControl
+  | TextControl;
 // export type ConfigTranslation = {
 //   // set http
 //   http?: ConfigTranslationControl;
@@ -52,6 +59,15 @@ export type EthNodeSpecConfigTranslation = {
       defaultValue?: string;
       cliConfigPrefix: string;
     };
+    http: {
+      defaultValue?: string;
+      cliConfigPrefix: string;
+      onlyPassCliConfigPrefix?: boolean;
+    };
+    httpCorsDomains: {
+      defaultValue?: string;
+      cliConfigPrefix: string;
+    };
   };
 };
 export type CustomNodeSpecConfigTranslation = {
@@ -61,6 +77,8 @@ export type CustomNodeSpecConfigTranslation = {
     {
       cliConfigPrefix: string;
       defaultValue?: string;
+      onlyPassCliConfigPrefix?: boolean;
+      // exampleValue?: string;
       value?: string;
       uiControl: ConfigTranslationControl;
     }
@@ -76,8 +94,19 @@ export const EthNodeUIConfigTranslation: UIConfigTranslation = {
   type: 'EthNode',
   translation: {
     dataDir: {
-      displayName: 'Node data is stored in this folder',
+      displayName: 'Change where node data is stored',
       type: 'filePath',
+    },
+    http: {
+      displayName:
+        'Disable/enable node rpc http connections (*NiceNode requires http connections)',
+      type: 'select',
+      options: ['Enabled', 'Disabled'],
+    },
+    httpCorsDomains: {
+      displayName:
+        'Change where the node accepts http connections (use comma separated urls)',
+      type: 'text',
     },
   },
 };

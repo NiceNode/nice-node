@@ -12,19 +12,6 @@ export const getProcessUsageByPid = async (pid: number) => {
   return stats;
 };
 
-export const getNodeUsage = async (nodePid: number) => {
-  if (typeof nodePid !== 'number') {
-    return undefined;
-  }
-  try {
-    const gethUsage = await getProcessUsageByPid(nodePid);
-    return gethUsage;
-  } catch (err) {
-    console.error(err);
-    return undefined;
-  }
-};
-
 export const getMainProcessUsage = async () => {
   const memory = await process.getProcessMemoryInfo();
   const cpu = await process.getCPUUsage();

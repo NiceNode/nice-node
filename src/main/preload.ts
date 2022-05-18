@@ -34,7 +34,6 @@ contextBridge.exposeInMainWorld('electron', {
     const cpu = await process.getCPUUsage();
     return { memory, cpu };
   },
-  getNodeUsage: () => ipcRenderer.invoke('getNodeUsage'),
   getNodeConfig: (node: string) => ipcRenderer.invoke('getNodeConfig', node),
   changeNodeConfig: (node: string, config: NodeConfig) =>
     ipcRenderer.invoke('changeNodeConfig', node, config),
@@ -53,6 +52,8 @@ contextBridge.exposeInMainWorld('electron', {
   getUserNodes: () => ipcRenderer.invoke('getUserNodes'),
   addNode: (nodeSpec: NodeSpecification) =>
     ipcRenderer.invoke('addNode', nodeSpec),
+  updateNode: (nodeId: NodeId, propertiesToUpdate: any)  => ipcRenderer.invoke('updateNode', nodeId, propertiesToUpdate);
+
   removeNode: (nodeId: NodeId) => ipcRenderer.invoke('removeNode', nodeId),
   startNode: (nodeId: NodeId) => {
     ipcRenderer.invoke('startNode', nodeId);
@@ -60,6 +61,8 @@ contextBridge.exposeInMainWorld('electron', {
   stopNode: (nodeId: NodeId) => {
     ipcRenderer.invoke('stopNode', nodeId);
   },
+  openDialogForNodeDataDir: (nodeId: NodeId) =>
+    ipcRenderer.invoke('openDialogForNodeDataDir', nodeId),
 
   // Settings/Config
   getIsDockerInstalled: () => ipcRenderer.invoke('getIsDockerInstalled'),

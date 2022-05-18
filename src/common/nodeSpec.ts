@@ -19,7 +19,10 @@ type BaseNodeExecution = {
   defaultExecutionType?: ExecutionTypes;
   dataPath?: string; // defaults to NiceNode app route
   architectures?: { docker?: Architectures[]; binary?: Architectures[] };
-  input?: { default?: string[] };
+  input?: {
+    default?: string[];
+    defaultConfig?: Record<string, any>;
+  };
   dependencies?: any[]; // l1 full node w/ http rpc
   runInBackground?: boolean; // default to true
 };

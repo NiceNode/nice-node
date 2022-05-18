@@ -7,6 +7,7 @@ import Node, {
   UserNodes,
 } from '../../common/node';
 import store from './store';
+import logger from 'main/logger';
 
 export const USER_NODES_KEY = 'userNodes';
 const NODES_KEY = 'nodes';
@@ -75,6 +76,24 @@ export const addNode = (newNode: Node) => {
   nodeIds.push(newNode.id);
   store.set(USER_NODES_KEY, { nodes, nodeIds });
   return newNode;
+};
+
+export const updateNodeProperties = (
+  nodeId: NodeId,
+  propertiesToUpdate: any
+) => {
+  const node = getNode(nodeId);
+  const newNode = {
+    ...node,
+    ...propertiesToUpdate,
+  };
+  console.log(
+    'updateNodeProperties: newNode propertiesToUpdate',
+    newNode,
+    propertiesToUpdate
+  );
+  store.set(`${USER_NODES_KEY}.${NODES_KEY}.${node.id}`, newNode);
+  return getNode(node.id);
 };
 
 // todo: put a lock on anything that changes nodes array

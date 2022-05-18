@@ -107,11 +107,15 @@ const AddNode = () => {
         defaultExecutionType: 'binary',
         execPath: 'geth',
         input: {
-          default: [
-            '-http',
-            '--http.corsdomain',
-            'nice-node://,http://localhost',
-          ],
+          defaultConfig: {
+            http: 'Enabled',
+            httpCorsDomains: 'nice-node://,http://localhost',
+          },
+          // default: [
+          //   '-http',
+          //   '--http.corsdomain',
+          //   'nice-node://,http://localhost',
+          // ],
           binary: {
             dataDirInput: '--datadir ',
           },
@@ -147,6 +151,14 @@ const AddNode = () => {
           dataDir: {
             cliConfigPrefix: '--datadir ',
             defaultValue: '~/.ethereum',
+          },
+          http: {
+            cliConfigPrefix: '-http',
+            defaultValue: 'Disabled',
+            onlyPassCliConfigPrefix: true,
+          },
+          httpCorsDomains: {
+            cliConfigPrefix: '--http.corsdomain',
           },
         },
       },

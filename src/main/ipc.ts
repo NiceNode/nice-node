@@ -14,14 +14,19 @@ import logger from './logger';
 import {
   checkSystemHardware,
   getMainProcessUsage,
-  getNodeUsage,
   updateNodeUsedDiskSpace,
 } from './monitor';
 import { addNode, startNode, stopNode, removeNode } from './nodeManager';
-import { getNodes, getNode, getUserNodes } from './state/nodes';
+import {
+  getNodes,
+  getNode,
+  getUserNodes,
+  updateNodeProperties,
+} from './state/nodes';
 import { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
 import { isDockerInstalled } from './docker';
+import { openDialogForNodeDataDir } from './dialog';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -66,7 +71,6 @@ export const initialize = () => {
       return setDirectInputNodeConfig(node, directInput);
     }
   );
-  ipcMain.handle('getNodeUsage', getNodeUsage);
   ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
 
@@ -76,6 +80,12 @@ export const initialize = () => {
   ipcMain.handle('addNode', (_event, nodeSpec: NodeSpecification) => {
     return addNode(nodeSpec);
   });
+  ipcMain.handle(
+    'updateNode',
+    (_event, nodeId: NodeId, propertiesToUpdate: any) => {
+      return updateNodeProperties(nodeId, propertiesToUpdate);
+    }
+  );
   ipcMain.handle('removeNode', (_event, nodeId: NodeId) => {
     return removeNode(nodeId);
   });
@@ -84,6 +94,9 @@ export const initialize = () => {
   });
   ipcMain.handle('stopNode', (_event, nodeId: NodeId) => {
     return stopNode(nodeId);
+  });
+  ipcMain.handle('openDialogForNodeDataDir', (_event, nodeId: NodeId) => {
+    return openDialogForNodeDataDir(nodeId);
   });
 
   // Settings/Config

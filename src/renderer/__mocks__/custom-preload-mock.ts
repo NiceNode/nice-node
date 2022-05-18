@@ -31,9 +31,6 @@ export const getMainProcessUsage = (): any => {
   return { cpu: 200000, memory: 'high' };
 };
 
-export const getNodeUsage = (): any => {
-  return { cpu: 200000, memory: 'high' };
-};
 export const getNodeConfig = (): any => {
   return ['a config flag that a user set', '--http'];
 };
