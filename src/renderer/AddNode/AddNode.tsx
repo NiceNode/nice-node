@@ -35,12 +35,16 @@ const AddNode = () => {
       displayName: 'Nethermind',
       execution: {
         executionTypes: ['docker', 'binary'],
-        defaultExecutionType: 'binary',
+        defaultExecutionType: 'docker',
         input: {
-          default: ['--JsonRpc.Enabled', 'true', '--datadir', 'data'],
+          defaultConfig: {
+            http: 'Enabled',
+          },
+          // default: ['--JsonRpc.Enabled', 'true', '--datadir', 'data'],
           docker: {
             containerVolumePath: '/nethermind/data',
             raw: '--network host',
+            forcedRawNodeInput: '--datadir /nethermind/data',
           },
         },
         architectures: {
@@ -63,6 +67,88 @@ const AddNode = () => {
       },
       category: 'L1/ExecutionClient',
       rpcTranslation: 'eth-l1',
+      configTranslation: {
+        dataDir: {
+          displayName: 'Node data is stored in this folder',
+          cliConfigPrefix: '--datadir ',
+          defaultValue: undefined,
+          uiControl: {
+            type: 'filePath',
+          },
+        },
+        http: {
+          displayName:
+            'Disable/enable node rpc http connections (*NiceNode requires http connections)',
+          cliConfigPrefix: '--JsonRpc.Enabled ',
+          uiControl: {
+            type: 'select/single',
+            controlTranslations: [
+              {
+                value: 'Enabled',
+                config: 'true',
+              },
+              {
+                value: 'Disabled',
+                config: undefined,
+              },
+            ],
+          },
+          defaultValue: 'Disabled',
+        },
+        httpApis: {
+          displayName: 'Enabled HTTP APIs',
+          cliConfigPrefix: '--JsonRpc.EnabledModules ',
+          valuesJoinStr: ', ',
+          defaultValue:
+            'Eth, Subscribe, Trace, TxPool, Web3, Personal, Proof, Net, Parity, Health',
+          uiControl: {
+            type: 'select/multiple',
+            controlTranslations: [
+              {
+                value: 'Eth',
+                config: 'Eth',
+              },
+              {
+                value: 'Subscribe',
+                config: 'Subscribe',
+              },
+              {
+                value: 'Trace',
+                config: 'Trace',
+              },
+              {
+                value: 'TxPool',
+                config: 'TxPool',
+              },
+              {
+                value: 'Web3',
+                config: 'Web3',
+              },
+
+              {
+                value: 'Personal',
+                config: 'Personal',
+              },
+              {
+                value: 'Proof',
+                config: 'Proof',
+              },
+              {
+                value: 'Net',
+                config: 'Net',
+              },
+              {
+                value: 'Parity',
+                config: 'Parity',
+              },
+              {
+                value: 'Health',
+                config: 'Health',
+              },
+            ],
+          },
+        },
+      },
       documentation: {
         default: 'https://docs.nethermind.io/nethermind/',
         docker: 'https://docs.nethermind.io/nethermind/ethereum-client/docker',
@@ -146,19 +232,74 @@ const AddNode = () => {
       category: 'L1/ExecutionClient',
       rpcTranslation: 'eth-l1',
       configTranslation: {
-        type: 'EthNode', // defines datadir, http, ex. could be custom! which needs UI definitions here!
-        translation: {
-          dataDir: {
-            cliConfigPrefix: '--datadir ',
-            defaultValue: '~/.ethereum',
+        dataDir: {
+          displayName: 'Node data is stored in this folder',
+          cliConfigPrefix: '--datadir ',
+          defaultValue: '~/.ethereum',
+          uiControl: {
+            type: 'filePath',
           },
-          http: {
-            cliConfigPrefix: '-http',
-            defaultValue: 'Disabled',
-            onlyPassCliConfigPrefix: true,
+        },
+        http: {
+          displayName:
+            'Disable/enable node rpc http connections (*NiceNode requires http connections)',
+          uiControl: {
+            type: 'select/single',
+            controlTranslations: [
+              {
+                value: 'Enabled',
+                config: '-http',
+              },
+              {
+                value: 'Disabled',
+                config: undefined,
+              },
+            ],
           },
-          httpCorsDomains: {
-            cliConfigPrefix: '--http.corsdomain',
+          defaultValue: 'Disabled',
+        },
+        httpApis: {
+          displayName: 'Enabled HTTP APIs',
+          cliConfigPrefix: '--http.api ',
+          defaultValue: 'eth,net,web3',
+          uiControl: {
+            type: 'select/multiple',
+            join: ', ',
+            controlTranslations: [
+              {
+                value: 'eth',
+                config: 'Eth',
+              },
+              {
+                value: 'net',
+                config: 'Net',
+              },
+              {
+                value: 'web3',
+                config: 'Web3',
+              },
+              {
+                value: 'debug',
+                config: 'Debug',
+              },
+
+              {
+                value: 'personal',
+                config: 'Personal',
+              },
+              {
+                value: 'admin',
+                config: 'Admin',
+              },
+            ],
+          },
+        },
+        httpCorsDomains: {
+          displayName:
+            'Change where the node accepts http connections (use comma separated urls)',
+          cliConfigPrefix: '--http.corsdomain  ',
+          uiControl: {
+            type: 'text',
           },
         },
       },

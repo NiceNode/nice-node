@@ -82,6 +82,7 @@ export const updateNodeProperties = (
   nodeId: NodeId,
   propertiesToUpdate: any
 ) => {
+  console.log('updateNodeProperties: propertiesToUpdate', propertiesToUpdate);
   const node = getNode(nodeId);
   const newNode = {
     ...node,

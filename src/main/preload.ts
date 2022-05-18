@@ -52,7 +52,9 @@ contextBridge.exposeInMainWorld('electron', {
   getUserNodes: () => ipcRenderer.invoke('getUserNodes'),
   addNode: (nodeSpec: NodeSpecification) =>
     ipcRenderer.invoke('addNode', nodeSpec),
-  updateNode: (nodeId: NodeId, propertiesToUpdate: any)  => ipcRenderer.invoke('updateNode', nodeId, propertiesToUpdate);
+
+  updateNode: (nodeId: NodeId, propertiesToUpdate: any) =>
+    ipcRenderer.invoke('updateNode', nodeId, propertiesToUpdate),
 
   removeNode: (nodeId: NodeId) => ipcRenderer.invoke('removeNode', nodeId),
   startNode: (nodeId: NodeId) => {

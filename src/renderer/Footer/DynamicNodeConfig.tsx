@@ -3,76 +3,87 @@ import { useEffect, useState } from 'react';
 import { useAppSelector } from '../state/hooks';
 import { selectSelectedNode } from '../state/node';
 import {
-  UIConfigTranslation,
-  EthNodeUIConfigTranslation,
+  ConfigKey,
+  ConfigTranslationMap,
+  ConfigTranslation,
   ConfigTranslationControl,
 } from '../../common/nodeConfig';
 import electron from '../electronGlobal';
 import Select from '../DynamicControls/Select';
+import TextArea from '../DynamicControls/TextArea';
+import Warning from '../Warning';
 
 const DynamicNodeConfig = () => {
   const selectedNode = useAppSelector(selectSelectedNode);
   const [sIsConfigDisabled, setIsConfigDisabled] = useState<boolean>(true);
-  const [sUiConfig, setUiConfig] = useState<UIConfigTranslation>();
-
-  const [sText, setText] = useState<string>();
+  const [sConfigTranslationMap, setConfigTranslationMap] =
+    useState<ConfigTranslationMap>();
 
   useEffect(() => {
     let isDisabled = true;
-    let uiConfig;
+    let configTranslationMap;
+    console.log(selectedNode);
     if (selectedNode) {
       isDisabled = selectedNode.status === 'running';
-      if (selectedNode.spec.configTranslation?.type === 'EthNode') {
-        uiConfig = EthNodeUIConfigTranslation;
-      } else {
-        // todo: parse UiConfig translation from the spec?
-      }
+      configTranslationMap = selectedNode.spec.configTranslation;
     }
+    console.log('NodeConfig isDisabled? ', isDisabled);
     setIsConfigDisabled(isDisabled);
-    setUiConfig(uiConfig);
+    setConfigTranslationMap(configTranslationMap);
   }, [selectedNode]);
 
   if (!selectedNode) {
     return <>No node selected</>;
   }
 
-  const onChange = (text: string) => {
-    // updateNode
-    setText(text);
-  };
-
   const onNodeConfigChange = async (configKey: string, newValue: any) => {
     // updateNode
-    const { nodeConfigTranslationValues } = selectedNode.config;
-    nodeConfigTranslationValues[configKey] = newValue;
-    const updateNode = await electron.updateNode(selectedNode.id, {
-      config: {
-        nodeConfigTranslationValues,
+    console.log('updating node with newValue: ', newValue);
+    const { configValuesMap } = selectedNode.config;
+    const newConfig = {
+      ...selectedNode.config,
+      configValuesMap: {
+        ...configValuesMap,
+        [configKey]: newValue,
       },
+    };
+    // console.log('updating node with newConfig: ', newConfig);
+    const updateNode = await electron.updateNode(selectedNode.id, {
+      config: newConfig,
     });
-    console.log('updated node!!!: ', updateNode);
+    // console.log('updated node!!!: ', updateNode);
   };
 
   return (
     <>
       {selectedNode && (
         <>
-          <h2>Node</h2>
           {sIsConfigDisabled && (
-            <h5>The node must be stopped to make configuration changes.</h5>
+            <Warning>
+              <h3>The node must be stopped to make configuration changes.</h3>
+            </Warning>
           )}
-          {sUiConfig?.translation ? (
+          {sConfigTranslationMap ? (
             <>
-              {Object.keys(sUiConfig.translation).map((configKey) => {
-                const aUiConfig: ConfigTranslationControl =
-                  sUiConfig.translation[configKey];
+              {Object.keys(sConfigTranslationMap).map((configKey) => {
+                const configTranslation: ConfigTranslation =
+                  sConfigTranslationMap[configKey];
+
+                const configTranslationControl: ConfigTranslationControl =
+                  configTranslation.uiControl;
                 const currentValue =
-                  selectedNode.config?.nodeConfigTranslationValues[configKey];
+                  selectedNode.config?.configValuesMap?.[configKey];
+                console.log(
+                  'rendering config: ',
+                  configTranslation,
+                  currentValue
+                );
                 return (
                   <div key={configKey}>
-                    <p>{aUiConfig.displayName}</p>
-                    {aUiConfig.type === 'filePath' && (
+                    <p>{configTranslation.displayName}</p>
+                    {configTranslationControl?.type === 'filePath' && (
                       <>
+                        {`Current folder: ${currentValue}`}
                         <button
                           type="button"
                           onClick={() =>
@@ -84,27 +95,31 @@ const DynamicNodeConfig = () => {
                         </button>
                       </>
                     )}
-                    {aUiConfig.type === 'text' && (
-                      <>
-                        <textarea
-                          style={{
-                            minWidth: 400,
-                            minHeight: 30,
-                          }}
-                          value={sText}
-                          onChange={(e) => onChange(e.target.value)}
-                          disabled={sIsConfigDisabled}
-                        />
-                      </>
+                    {configTranslationControl?.type === 'text' && (
+                      <TextArea
+                        value={currentValue}
+                        onChange={(newValue: string) =>
+                          onNodeConfigChange(configKey, newValue)
+                        }
+                        isDisabled={sIsConfigDisabled}
+                      />
                     )}
-                    {aUiConfig.type === 'select' && (
+                    {(configTranslationControl?.type === 'select/single' ||
+                      configTranslationControl?.type === 'select/multiple') && (
                       <Select
                         value={currentValue}
                         onChange={(newValue) =>
                           onNodeConfigChange(configKey, newValue)
                         }
-                        options={aUiConfig.options}
+                        options={configTranslationControl.controlTranslations.map(
+                          ({ value }) => {
+                            return { value, label: value };
+                          }
+                        )}
                         isDisabled={sIsConfigDisabled}
+                        isMulti={
+                          configTranslationControl?.type === 'select/multiple'
+                        }
                       />
                     )}
                   </div>

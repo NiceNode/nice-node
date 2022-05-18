@@ -1,245 +1,176 @@
-// export type SelectControl = { value: 'string'; config: string[] | undefined };
-// export type ConfigTranslationControl = {
-//   // displayName: string; UI Only
-// type: 'filePath' | 'text' | 'select'; UI Only
-//   defaultValue: string;
-//   translation:
-//     | { value: 'string'; config: string[] | undefined }[]
-//     | {
-//         type: 'text/ipAddress';
-//         default: '0.0.0.0';
-//         config: ['--JsonRpc.Host'];
-//       }
-//     | {
-//         type: 'filePath';
-//         default: string;
-//         cliConfigPrefix: string;
-//       };
-// };
-// type ControlTypes = 'filePath' | 'text' | 'select';
 type FilePathControl = {
   type: 'filePath';
-  displayName: string;
 };
 type TextControl = {
   type: 'text';
-  displayName: string;
 };
+type SelectTranslation = { value: string; config: string };
 type SelectControl = {
-  type: 'select';
-  displayName: string;
-  options: any[];
-  isSingleSelect?: boolean;
+  type: 'select/single';
+  controlTranslations: SelectTranslation[];
 };
-// export type ConfigTranslationControl = {
-//   // displayName: string; UI Only
-//   // type: 'filePath' | 'text' | 'select';
-//   default?: string;
-//   cliConfigPrefix: string;
-// };
+type MultiSelectControl = {
+  type: 'select/multiple';
+  controlTranslations: SelectTranslation[];
+};
 export type ConfigTranslationControl =
   | FilePathControl
   | SelectControl
+  | MultiSelectControl
   | TextControl;
-// export type ConfigTranslation = {
-//   // set http
-//   http?: ConfigTranslationControl;
-//   dataDir?: ConfigTranslationControl;
-// };
-export type EthNodeConfigValues = {
-  type: 'EthNode';
-  dataDir: {
-    value?: string;
-  };
-};
-export type EthNodeSpecConfigTranslation = {
-  type: 'EthNode';
-  translation: {
-    dataDir: {
-      defaultValue?: string;
-      cliConfigPrefix: string;
-    };
-    http: {
-      defaultValue?: string;
-      cliConfigPrefix: string;
-      onlyPassCliConfigPrefix?: boolean;
-    };
-    httpCorsDomains: {
-      defaultValue?: string;
-      cliConfigPrefix: string;
-    };
-  };
-};
-export type CustomNodeSpecConfigTranslation = {
-  type: 'Custom';
-  translation: Record<
-    string,
-    {
-      cliConfigPrefix: string;
-      defaultValue?: string;
-      onlyPassCliConfigPrefix?: boolean;
-      // exampleValue?: string;
-      value?: string;
-      uiControl: ConfigTranslationControl;
-    }
-  >;
+
+export type ConfigTranslation = {
+  displayName: string;
+  cliConfigPrefix?: string;
+  valuesJoinStr?: string;
+  uiControl: ConfigTranslationControl;
+  defaultValue?: string;
 };
 
-export type UIConfigTranslation = {
-  type: 'EthNode' | 'OtherNode';
-  translation: Record<string, ConfigTranslationControl>;
-  // dataDir: FilePathControl;
-};
-export const EthNodeUIConfigTranslation: UIConfigTranslation = {
-  type: 'EthNode',
-  translation: {
-    dataDir: {
-      displayName: 'Change where node data is stored',
-      type: 'filePath',
-    },
-    http: {
-      displayName:
-        'Disable/enable node rpc http connections (*NiceNode requires http connections)',
-      type: 'select',
-      options: ['Enabled', 'Disabled'],
-    },
-    httpCorsDomains: {
-      displayName:
-        'Change where the node accepts http connections (use comma separated urls)',
-      type: 'text',
-    },
-  },
-};
-// export type EthNodeConfigTranslation = EthNodeSpecConfigTranslation &
-//   EthNodeUIConfigTranslation &
-//   EthNodeConfigValues;
+export type ConfigKey = string;
+export type ConfigValuesMap = Record<ConfigKey, string>;
+export type ConfigTranslationMap = Record<ConfigKey, ConfigTranslation>;
 
-// const test: EthNodeConfigTranslation = {
-//   type: 'EthNode',
-//   dataDir: {
-//     displayName: 'test',
+/**
+ * Returns cli config for the node config values using the config
+ * translations provide in the node spec
+ * @param configValue
+ * @param controlTranslations
+ * @returns
+ */
+const getConfigFromValue = (
+  configValue: string | string[],
+  controlTranslations: SelectTranslation[]
+) => {
+  const matchedControlTranslations = controlTranslations.filter((option) => {
+    return (
+      ((Array.isArray(configValue) && configValue.includes(option.value)) ||
+        configValue === option.value) &&
+      option.config !== undefined
+    );
+  });
+  return matchedControlTranslations.map((option) => option.config);
+};
+
+/**
+ * Exclude config keys is used when starting a node with docker and avoiding
+ * using the dataDir key because the dataDir key is used for the docker volume mount.
+ * @param param0
+ * @returns
+ */
+export const buildCliConfig = ({
+  configValuesMap,
+  configTranslationMap,
+  excludeConfigKeys,
+}: {
+  configValuesMap: ConfigValuesMap;
+  configTranslationMap: ConfigTranslationMap;
+  excludeConfigKeys?: string[];
+}): string => {
+  const cliConfigArray = Object.keys(configValuesMap).reduce(
+    (cliString, configKey) => {
+      if (excludeConfigKeys?.includes(configKey)) {
+        return cliString;
+      }
+      const configValue = configValuesMap[configKey];
+      const configTranslation: ConfigTranslation =
+        configTranslationMap[configKey];
+
+      if (configTranslation && configValue) {
+        let currCliString = '';
+        if (configTranslation.cliConfigPrefix) {
+          currCliString = configTranslation.cliConfigPrefix;
+        }
+        if (configTranslation.uiControl.type === 'select/multiple') {
+          const joinStr = configTranslation.valuesJoinStr ?? ',';
+          const cliConfigs = getConfigFromValue(
+            configValue,
+            configTranslation.uiControl.controlTranslations
+          );
+          currCliString += cliConfigs.join(joinStr);
+        } else if (typeof configValue === 'string') {
+          if (configTranslation.uiControl.type === 'select/single') {
+            const cliConfigs = getConfigFromValue(
+              configValue,
+              configTranslation.uiControl.controlTranslations
+            );
+            if (cliConfigs.length > 0) {
+              currCliString += cliConfigs[0];
+            } else {
+              console.error(
+                `Unable to add config value during buildCliConfig. No configs found for ${configValue}`
+              );
+            }
+          } else {
+            currCliString += configValue;
+          }
+        } else {
+          console.error(
+            `Unable to add config value during buildCliConfig. Encountered unknown value type for value ${configValue}`
+          );
+        }
+
+        console.log(
+          'cliString, currCliString: ',
+          JSON.stringify(cliString),
+          JSON.stringify(currCliString)
+        );
+        // join the current config with the previous and a space between
+        if (cliString) {
+          return `${cliString} ${currCliString}`;
+        }
+        return currCliString;
+      }
+      return cliString;
+    },
+    ''
+  );
+  return cliConfigArray;
+};
+// return cliConfigArray.join(" ")
+/// EXAMPLEEEEEEES
+
+// network: // | {
+//     values: ['mainnet', 'goerli', 'ropsten'];
+//     default: 'mainnet';
+//     config: ['--network']; //lighthouse
 //   }
+// |
+// {
+//   displayName: 'Ethereum network';
+//   defaultValue: 'mainnet';
+//   translation: [
+//     //geth
+//     {
+//       value: 'mainnet';
+//       config: ['--mainnet'];
+//     },
+//     {
+//       value: 'kiln';
+//       config: ['--kiln'];
+//     },
+//     {
+//       value: 'goerli';
+//       config: ['--goerli'];
+//     }
+//   ];
 // };
-export type DefaultConfigTranslation = {
-  // set http
-  http: {
-    displayName: 'Enable HTTP-RPC Server';
-    defaultValue: 'Enable';
-    translation: [
-      {
-        value: 'Enable';
-        config: ['--http']; // geth, ligthouse
-      },
-      {
-        value: 'Disable';
-        config: [];
-      }
-    ];
-  };
-};
-export type ConfigTranslationEx = {
-  // set http
-  http: {
-    displayName: 'Enable HTTP-RPC Server';
-    defaultValue: 'Enable';
-    translation: [
-      {
-        value: 'Enable';
-        config: ['--JsonRpc.Enabled', 'true']; // nethermind
-        // config: ['--http']; // lighthouse
-        // config: ['--http']; // geth
-      },
-      {
-        value: 'Disable';
-        config: [];
-      }
-    ];
-  };
-  httpAddress: {
-    displayName: 'HTTP-RPC server listening interface';
-    type: 'text/ipAddress';
-    default: '0.0.0.0';
-    config: ['--JsonRpc.Host']; // nethermind
-    // config: ['--http-address']; // lighthouse
-    // config: ['--http']; // geth
-  };
-  network: // | {
-  //     values: ['mainnet', 'goerli', 'ropsten'];
-  //     default: 'mainnet';
-  //     config: ['--network']; //lighthouse
-  //   }
-  // |
-  {
-    displayName: 'Ethereum network';
-    defaultValue: 'mainnet';
-    translation: [
-      //geth
-      {
-        value: 'mainnet';
-        config: ['--mainnet'];
-      },
-      {
-        value: 'kiln';
-        config: ['--kiln'];
-      },
-      {
-        value: 'goerli';
-        config: ['--goerli'];
-      }
-    ];
-  };
-  syncMode: {
-    displayName: 'Node sync mode';
-    defaultValue: 'snap';
-    translation: [
-      //geth
-      {
-        value: 'snap';
-        config: ['--syncmode', 'snap'];
-      },
-      {
-        value: 'fast';
-        config: ['--syncmode', 'fast'];
-      },
-      {
-        value: 'light';
-        config: ['--syncmode', 'light'];
-      }
-    ];
-  };
-  httpApis: {
-    displayName: "API's offered over the HTTP-RPC interface";
-    defaultValue: 'eth,web3,net';
-    type: 'select/multi';
-    join: ',';
-    config: ['--http.api'];
-    translation: [
-      //geth
-      {
-        value: 'eth';
-        config: 'eth';
-      },
-      {
-        value: 'web3';
-        config: 'web3';
-      },
-      {
-        value: 'net';
-        config: 'net';
-      },
-      {
-        value: 'admin';
-        config: 'admin';
-      },
-      {
-        value: 'net';
-        config: 'net';
-      }
-    ];
-  };
-  // set http port
-  // get peers
-  //
-};
-
-export type NiceNodeSpecConfigTranslation = EthNodeSpecConfigTranslation;
+// syncMode: {
+//   displayName: 'Node sync mode';
+//   defaultValue: 'snap';
+//   translation: [
+//     //geth
+//     {
+//       value: 'snap';
+//       config: ['--syncmode', 'snap'];
+//     },
+//     {
+//       value: 'fast';
+//       config: ['--syncmode', 'fast'];
+//     },
+//     {
+//       value: 'light';
+//       config: ['--syncmode', 'light'];
+//     }
+//   ];
+// };

@@ -18,10 +18,10 @@ import NodeScreen from './NodeScreen';
 import DataRefresher from './DataRefresher';
 // import { useGetNodesQuery } from './state/nodeService';
 
-Sentry.init({
-  dsn: electron.SENTRY_DSN,
-  debug: true,
-});
+// Sentry.init({
+//   dsn: electron.SENTRY_DSN,
+//   debug: true,
+// });
 
 const MainScreen = () => {
   const [sNodeInfo, setNodeInfo] = useState(undefined);

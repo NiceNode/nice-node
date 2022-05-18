@@ -41,6 +41,7 @@ export const openDialogForNodeDataDir = async (nodeId: NodeId) => {
     if (result.filePaths.length > 0) {
       const newDataDir = result.filePaths[0];
       node.runtime.dataDir = newDataDir;
+      node.config.configValuesMap.dataDir = newDataDir;
       updateNode(node);
     }
   }

@@ -1,5 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { v4 as uuidv4 } from 'uuid';
+import { runtime } from 'webpack';
+import { ConfigValuesMap } from './nodeConfig';
 import { ExecutionTypes, NodeSpecification } from './nodeSpec';
 
 export type NodeId = string;
@@ -25,7 +27,7 @@ export enum NodeStatus {
 
 export type NodeConfig = {
   executionType?: ExecutionTypes;
-  nodeConfigTranslationValues: Record<string, any>;
+  configValuesMap: ConfigValuesMap;
 };
 
 /**
@@ -82,19 +84,20 @@ export const createNode = (input: {
   spec: NodeSpecification;
   runtime: NodeRuntime;
 }): Node => {
-  // get default node data dir, make data dir, (clear?)
-  // parse spec.execution.input.defaultConfig : {
-  //  key, value
-  // }
-  let initialNodeConfigTranslationValues = {};
+  let initialConfigValues: ConfigValuesMap = {};
   if (input.spec.execution?.input?.defaultConfig) {
-    initialNodeConfigTranslationValues =
-      input.spec.execution?.input?.defaultConfig;
+    initialConfigValues = input.spec.execution?.input?.defaultConfig;
   }
+  // The data directory is default set to the NiceNode nodes directory
+  //  Config in the node spec can override this.
+  if (!initialConfigValues.dataDir) {
+    initialConfigValues.dataDir = input.runtime.dataDir;
+  }
+
   const node: Node = {
     id: uuidv4(),
     spec: input.spec,
-    config: { nodeConfigTranslationValues: initialNodeConfigTranslationValues },
+    config: { configValuesMap: initialConfigValues },
     runtime: input.runtime,
     status: NodeStatus.created,
   };

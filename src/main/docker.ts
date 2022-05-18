@@ -7,6 +7,7 @@ import logger from './logger';
 import Node, { NodeStatus } from '../common/node';
 import { DockerExecution } from '../common/nodeSpec';
 import { setDockerNodeStatus } from './state/nodes';
+import { buildCliConfig } from '../common/nodeConfig';
 
 // const options = {
 //   machineName: undefined, // uses local docker
@@ -221,7 +222,7 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
   let dockerVolumePath = '';
   let finalDockerInput = '';
   if (input?.docker) {
-    dockerRawInput = input?.docker.raw;
+    dockerRawInput = input?.docker.raw ?? '';
     dockerVolumePath = input.docker.containerVolumePath;
     if (dockerRawInput) {
       finalDockerInput = dockerRawInput;
@@ -230,9 +231,17 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
       finalDockerInput = `-v ${node.runtime.dataDir}:${dockerVolumePath} ${finalDockerInput}`;
     }
   }
-  let nodeInput = '';
-  if (input?.default) {
-    nodeInput = input?.default.join(' ');
+  // let nodeInput = '';
+  // if (input?.default) {
+  //   nodeInput = input?.default.join(' ');
+  // }
+  let nodeInput = buildCliConfig({
+    configValuesMap: node.config.configValuesMap,
+    configTranslationMap: node.spec.configTranslation,
+    excludeConfigKeys: ['dataDir'],
+  });
+  if (input?.docker?.forcedRawNodeInput) {
+    nodeInput += ' ' + input?.docker?.forcedRawNodeInput;
   }
   const dockerCommand = `run -d --name ${specId} ${finalDockerInput} ${imageName} ${nodeInput}`;
   logger.info(`docker startNode command ${dockerCommand}`);

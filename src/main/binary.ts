@@ -3,14 +3,13 @@ import { promisify } from 'node:util';
 import path from 'node:path';
 import { createWriteStream } from 'fs';
 import { access, chmod } from 'fs/promises';
-import { ChildProcess, spawn, SpawnOptions } from 'child_process';
-import process, { kill } from 'node:process';
 import sleep from 'await-sleep';
 
 import * as platform from './platform';
 import * as arch from './arch';
 import * as github from './github';
 import { BinaryDownload, BinaryExecution } from '../common/nodeSpec';
+import { buildCliConfig } from '../common/nodeConfig';
 import Node, { isBinaryNode, NodeStatus } from '../common/node';
 import logger, { gethLogger } from './logger';
 import { httpGet } from './httpReq';
@@ -237,13 +236,16 @@ export const startBinary = async (node: Node) => {
   const nodeSpecId = spec.specId;
   const execution = spec.execution as BinaryExecution;
   const { input } = execution;
-  let nodeInput = '';
-  if (input?.default) {
-    nodeInput = input.default.join(' ');
-  }
-  if (input.binary) {
-    nodeInput = `${nodeInput} ${input?.binary.dataDirInput}${node.runtime.dataDir}`;
-  }
+  let nodeInput = buildCliConfig({
+    configValuesMap: node.config.configValuesMap,
+    configTranslationMap: spec.configTranslation,
+  });
+  // if (input?.default) {
+  //   nodeInput = input.default.join(' ');
+  // }
+  // if (input.binary) {
+  //   nodeInput = `${nodeInput} ${input?.binary.dataDirInput}${node.runtime.dataDir}`;
+  // }
   logger.info(
     `Starting binary with input: ${nodeInput} and runtime: ${JSON.stringify(
       runtime

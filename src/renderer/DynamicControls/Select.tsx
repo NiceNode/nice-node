@@ -1,39 +1,74 @@
 import { useEffect, useState } from 'react';
+import ReactSelect, { MultiValue, SingleValue } from 'react-select';
 
-import { useAppSelector } from '../state/hooks';
-import { selectSelectedNode } from '../state/node';
-import {
-  UIConfigTranslation,
-  EthNodeUIConfigTranslation,
-  ConfigTranslationControl,
-} from '../../common/nodeConfig';
-import electron from '../electronGlobal';
+type SelectOption = { value: string; label: string };
 
 type Props = {
   isDisabled: boolean;
-  options: string[];
-  value: string;
-  onChange: (newValue: string) => void;
+  options: SelectOption[];
+  value: undefined | string | string[];
+  onChange: (newValue?: string | string[]) => void;
+  isMulti: boolean;
 };
-const Select = ({ isDisabled, options, value, onChange }: Props) => {
+const Select = ({ isDisabled, options, value, onChange, isMulti }: Props) => {
+  const [sSelectedOptions, setSelectedOptions] = useState<SelectOption[]>([]);
+
+  useEffect(() => {
+    if (Array.isArray(value)) {
+      // return array of values
+      setSelectedOptions(
+        options.filter((option) => {
+          return value.includes(option.value);
+        })
+      );
+      // onChange(newValue.value);
+    } else {
+      setSelectedOptions(
+        options.filter((option) => {
+          return value === option.value;
+        })
+      );
+    }
+  }, [value, options]);
+
   return (
-    <>
-      return (
-      <select
+    <div style={{ color: 'initial' }}>
+      <ReactSelect
+        value={sSelectedOptions}
+        options={options}
+        onChange={(
+          newValue: SingleValue<SelectOption> | MultiValue<SelectOption>
+        ) => {
+          console.log('onChange newValue: ', newValue);
+          if (Array.isArray(newValue)) {
+            // return array of values
+            onChange(
+              newValue.map((selectOption) => {
+                return selectOption.value;
+              })
+            );
+            // onChange(newValue.value);
+          } else {
+            onChange(newValue?.value ? newValue.value : undefined);
+          }
+        }}
+        isDisabled={isDisabled}
+        isMulti={isMulti}
+      />
+      {/* <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={isDisabled}
       >
         {options.map((option) => {
           return (
-            <option key={option} value={option}>
+            <option key={option.value} value={option.value}>
               {option}
             </option>
           );
         })}
-      </select>
-      );
-    </>
+      </select> */}
+    </div>
   );
 };
 export default Select;

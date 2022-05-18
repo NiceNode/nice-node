@@ -1,7 +1,4 @@
-import {
-  NiceNodeConfigTranslation,
-  NiceNodeSpecConfigTranslation,
-} from './nodeConfig';
+import { ConfigValuesMap, ConfigTranslationMap } from './nodeConfig';
 import { NiceNodeRpcTranslation } from './rpcTranslation';
 
 /* eslint-disable max-classes-per-file */
@@ -33,8 +30,13 @@ export type DockerExecution = BaseNodeExecution & {
   // todo: support non-docker hub
   // containerIds?: string[];
   input?: {
+    defaultConfig?: ConfigValuesMap;
     default?: string[];
-    docker?: { containerVolumePath: string; raw: string };
+    docker?: {
+      containerVolumePath: string;
+      raw?: string;
+      forcedRawNodeInput?: string;
+    };
   };
 };
 
@@ -88,7 +90,7 @@ export type NodeSpecification = {
   displayName: string;
   execution: NodeExecution;
   rpcTranslation?: NiceNodeRpcTranslation;
-  configTranslation?: NiceNodeSpecConfigTranslation;
+  configTranslation?: ConfigTranslationMap;
   nodeReleasePhase?: 'alpha' | 'beta';
   // rpcTranslation?: NiceNodeRpcTranslation;
   // todo: define a standard for translating rpc calls for common node data

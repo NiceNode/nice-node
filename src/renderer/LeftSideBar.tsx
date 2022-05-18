@@ -29,12 +29,12 @@ const LeftSideBar = () => {
     }
   }, [sSelectedNodeId, sUserNodes, dispatch]);
 
-  useEffect(() => {
-    console.log('LSB: new sUserNodes', sUserNodes);
-    if (sUserNodes) {
-      console.log('LSB: new sUserNodes.data', sUserNodes);
-    }
-  }, [sUserNodes]);
+  // useEffect(() => {
+  //   console.log('LSB: new sUserNodes', sUserNodes);
+  //   if (sUserNodes) {
+  //     console.log('LSB: new sUserNodes.data', sUserNodes);
+  //   }
+  // }, [sUserNodes]);
 
   return (
     <div
