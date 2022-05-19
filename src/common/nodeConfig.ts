@@ -4,7 +4,7 @@ type FilePathControl = {
 type TextControl = {
   type: 'text';
 };
-type SelectTranslation = { value: string; config: string };
+type SelectTranslation = { value: string; config?: string };
 type SelectControl = {
   type: 'select/single';
   controlTranslations: SelectTranslation[];
@@ -21,10 +21,12 @@ export type ConfigTranslationControl =
 
 export type ConfigTranslation = {
   displayName: string;
+  uiControl: ConfigTranslationControl;
+  category?: string;
   cliConfigPrefix?: string;
   valuesJoinStr?: string;
-  uiControl: ConfigTranslationControl;
   defaultValue?: string;
+  documentation?: string;
 };
 
 export type ConfigKey = string;

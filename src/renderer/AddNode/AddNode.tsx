@@ -70,6 +70,7 @@ const AddNode = () => {
       configTranslation: {
         dataDir: {
           displayName: 'Node data is stored in this folder',
+          category: 'Storage',
           cliConfigPrefix: '--datadir ',
           defaultValue: undefined,
           uiControl: {
@@ -79,6 +80,7 @@ const AddNode = () => {
         http: {
           displayName:
             'Disable/enable node rpc http connections (*NiceNode requires http connections)',
+          category: 'RPC APIs',
           cliConfigPrefix: '--JsonRpc.Enabled ',
           uiControl: {
             type: 'select/single',
@@ -94,13 +96,14 @@ const AddNode = () => {
             ],
           },
           defaultValue: 'Disabled',
+          documentation:
+            'https://docs.nethermind.io/nethermind/ethereum-client/json-rpc',
         },
         httpApis: {
           displayName: 'Enabled HTTP APIs',
+          category: 'RPC APIs',
           cliConfigPrefix: '--JsonRpc.EnabledModules ',
           valuesJoinStr: ', ',
-          defaultValue:
-            'Eth, Subscribe, Trace, TxPool, Web3, Personal, Proof, Net, Parity, Health',
           uiControl: {
             type: 'select/multiple',
             controlTranslations: [
@@ -147,6 +150,35 @@ const AddNode = () => {
               },
             ],
           },
+          defaultValue:
+            'Eth, Subscribe, Trace, TxPool, Web3, Personal, Proof, Net, Parity, Health',
+          documentation:
+            'https://docs.nethermind.io/nethermind/ethereum-client/json-rpc',
+        },
+        syncMode: {
+          displayName: 'Node synchronization mode',
+          category: 'Syncronization',
+          cliConfigPrefix: '--config ',
+          uiControl: {
+            type: 'select/single',
+            controlTranslations: [
+              {
+                value: 'fast',
+                config: 'mainnet',
+              },
+              {
+                value: 'beam',
+                config: 'mainnet_beam',
+              },
+              {
+                value: 'archive',
+                config: 'mainnet_archive',
+              },
+            ],
+          },
+          defaultValue: 'fast',
+          documentation:
+            'https://docs.nethermind.io/nethermind/ethereum-client/sync-modes',
         },
       },
       documentation: {
@@ -239,6 +271,8 @@ const AddNode = () => {
           uiControl: {
             type: 'filePath',
           },
+          infoDescription:
+            'Data directory for the databases and keystore (default: "~/.ethereum")',
         },
         http: {
           displayName:
@@ -301,6 +335,33 @@ const AddNode = () => {
           uiControl: {
             type: 'text',
           },
+        },
+        syncMode: {
+          displayName: 'Node synchronization mode',
+          infoDescription:
+            'Blockchain sync mode ("snap", "full" or "light") (default: snap)',
+          category: 'Syncronization',
+          cliConfigPrefix: '--config ',
+          uiControl: {
+            type: 'select/single',
+            controlTranslations: [
+              {
+                value: 'snap',
+                config: 'snap',
+              },
+              {
+                value: 'light',
+                config: 'light',
+              },
+              {
+                value: 'full',
+                config: 'full',
+              },
+            ],
+          },
+          defaultValue: 'snap',
+          documentation:
+            'https://docs.nethermind.io/nethermind/ethereum-client/sync-modes',
         },
       },
       iconUrl:

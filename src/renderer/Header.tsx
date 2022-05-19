@@ -59,7 +59,14 @@ const Header = () => {
   });
 
   const diskUsed = selectedNode?.runtime?.usage?.diskGBs ?? undefined;
-  // if (selectedNode?.runtime?.usage?.diskGBs)
+  // eslint-disable-next-line eqeqeq
+  const isHttpEnabled =
+    selectedNode?.config?.configValuesMap?.http &&
+    ['Enabled', 'enabled', 'true', true, 1].includes(
+      selectedNode?.config?.configValuesMap?.http
+    );
+  // todo: http apis
+
   useEffect(() => {
     if (!sIsAvailableForPolling) {
       // clear all node data when it becomes unavailable to get
@@ -146,7 +153,7 @@ const Header = () => {
           fontSize: '1.1rem',
         }}
       >
-        {!sNodeConfig?.http && (
+        {!isHttpEnabled && (
           <div
             style={{
               display: 'flex',

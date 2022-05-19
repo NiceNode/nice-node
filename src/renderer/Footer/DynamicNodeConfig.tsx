@@ -12,6 +12,7 @@ import electron from '../electronGlobal';
 import Select from '../DynamicControls/Select';
 import TextArea from '../DynamicControls/TextArea';
 import Warning from '../Warning';
+import { InfoModal } from 'renderer/InfoIconButton';
 
 const DynamicNodeConfig = () => {
   const selectedNode = useAppSelector(selectSelectedNode);
@@ -80,7 +81,17 @@ const DynamicNodeConfig = () => {
                 );
                 return (
                   <div key={configKey}>
-                    <p>{configTranslation.displayName}</p>
+                    <div>
+                      <span>{configTranslation.displayName}</span>
+                      {(configTranslation.infoDescription ||
+                        configTranslation.documentation) && (
+                        <InfoModal title={configTranslation.displayName}>
+                          {configTranslation.infoDescription}
+                          {configTranslation.documentation &&
+                            `More documentation at: ${configTranslation.documentation}`}
+                        </InfoModal>
+                      )}
+                    </div>
                     {configTranslationControl?.type === 'filePath' && (
                       <>
                         {`Current folder: ${currentValue}`}
