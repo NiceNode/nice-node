@@ -27,14 +27,29 @@ export const getNodesDirPath = (): string => {
   return path.join(getNNDirPath(), 'nodes');
 };
 
-const checkAndOrCreateDir = async (dirPath: string) => {
+export const checkAndOrCreateDir = async (dirPath: string) => {
   try {
-    await access(dirPath);
+    // Without the extra double quotes, Windows doesn't distinguish
+    //  between a dir and a zip file with the same name
+    await access(`"${dirPath}"`);
     logger.info(`checkAndOrCreateDir dirPath ${dirPath} exists`);
   } catch {
     logger.info(`checkAndOrCreateDir making dirPath ${dirPath}...`);
     await mkdir(dirPath, { recursive: true });
     logger.info(`checkAndOrCreateDir making dirPath ${dirPath}...`);
+  }
+};
+
+export const doesFileOrDirExist = async (
+  fileOrDirPath: string
+): Promise<boolean> => {
+  try {
+    await access(fileOrDirPath);
+    logger.info(`doesFileOrDirExist path ${fileOrDirPath} exists`);
+    return true;
+  } catch {
+    logger.info(`doesFileOrDirExist path ${fileOrDirPath} does NOT exist`);
+    return false;
   }
 };
 

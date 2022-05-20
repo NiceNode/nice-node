@@ -5,17 +5,19 @@ import { MdDelete } from 'react-icons/md';
 import Node, { NodeId, NodeStatus } from '../common/node';
 import electron from './electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
-import { useAppSelector } from './state/hooks';
+import { useAppDispatch, useAppSelector } from './state/hooks';
 import {
   selectSelectedNode,
   selectSelectedNodeId,
   selectUserNodes,
+  updateSelectedNodeId,
 } from './state/node';
 
 const NodeScreen = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const selectedNode = useAppSelector(selectSelectedNode);
   const sUserNodes = useAppSelector(selectUserNodes);
+  const dispatch = useAppDispatch();
 
   // Will select the Node with the given id, and will only rerender if the given Node data changes
   // https://redux-toolkit.js.org/rtk-query/usage/queries#selecting-data-from-a-query-result
@@ -37,6 +39,16 @@ const NodeScreen = () => {
   const onClickRemoveNode = async (nodeId: NodeId) => {
     const node = await electron.removeNode(nodeId);
     console.log('removed node: ', node);
+    // let newSelectedNode;
+    // if (
+    //   sUserNodes &&
+    //   Array.isArray(sUserNodes?.nodeIds) &&
+    //   sUserNodes.nodeIds.length > 0
+    // ) {
+    //   // eslint-disable-next-line prefer-destructuring
+    //   newSelectedNode = sUserNodes.nodeIds[0];
+    // }
+    // dispatch(updateSelectedNodeId(newSelectedNode));
   };
 
   return (

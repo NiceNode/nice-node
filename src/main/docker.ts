@@ -8,6 +8,7 @@ import Node, { NodeStatus } from '../common/node';
 import { DockerExecution } from '../common/nodeSpec';
 import { setDockerNodeStatus } from './state/nodes';
 import { buildCliConfig } from '../common/nodeConfig';
+import { isWindows } from './platform';
 
 // const options = {
 //   machineName: undefined, // uses local docker
@@ -50,7 +51,11 @@ const watchDockerEvents = async () => {
     detached: false,
     shell: true,
   };
-  const watchInput = ['--format', "'{{json .}}'"];
+  // --format '{{json .}}'
+  // let watchInput = ['--format', "'{{json .}}'"];
+  // if(isWindows()) {
+  const watchInput = ['--format', '"{{json .}}"'];
+  // }
   const childProcess = spawn('docker events', watchInput, spawnOptions);
   dockerWatchProcess = childProcess;
   if (!dockerWatchProcess.stdout) {
@@ -139,7 +144,7 @@ export const getRunningContainers = async () => {
 
 export const getContainerDetails = async (containerIds: string[]) => {
   const data = await runCommand(
-    `inspect ${containerIds.join(' ')} --format='{{json .}}'`
+    `inspect ${containerIds.join(' ')} --format="{{json .}}"`
   );
   let details;
   if (data?.object) {

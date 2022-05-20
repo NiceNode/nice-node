@@ -20,8 +20,10 @@ export const getLatestReleaseUrl = async (binaryDownload: BinaryDownload) => {
       if (typeof asset?.name === 'string') {
         const assetNameLowercase = asset.name.toLowerCase();
         console.log(platformLowercase, archLowercase, assetNameLowercase);
+        // doesStringIncludePlatform checks for variations of the platform and arch in the asset names
+        //  ex. a windows release asset can have win32 or windows in the name
         if (
-          assetNameLowercase.includes(platformLowercase) &&
+          platform.doesStringIncludePlatform(assetNameLowercase) &&
           arch.doesStringIncludeArch(assetNameLowercase)
         ) {
           // check if it should exclude a value

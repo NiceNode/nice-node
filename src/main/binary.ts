@@ -14,7 +14,7 @@ import Node, { isBinaryNode, NodeStatus } from '../common/node';
 import logger, { gethLogger } from './logger';
 import { httpGet } from './httpReq';
 import { execAwait } from './execHelper';
-import { getNodesDirPath } from './files';
+import { getNodesDirPath, doesFileOrDirExist, checkAndOrCreateDir } from './files';
 import { updateNode } from './state/nodes';
 import { getProcessUsageByPid } from './monitor';
 import {
@@ -63,7 +63,25 @@ const getDownloadUrl = (binaryDownload: BinaryDownload) => {
   );
 };
 
-const parseFileNameFromUrlOrPath = (url: string, excludeExension?: boolean) => {
+const parseFileNameFromPath = (path: string, excludeExension?: boolean) => {
+  // ex. 'C:\Windows\crazy\path'
+  // ex. '/root/usr/yay.zip
+
+  let pathSlash = '/';
+  if(platform.isWindows()) {
+    pathSlash = '\\';
+  }
+  if (excludeExension) {
+    const tarGzIndex = path.lastIndexOf('.tar.gz');
+    const zipIndex = path.lastIndexOf('.zip');
+    const extensionIndex = tarGzIndex > 0 ? tarGzIndex : zipIndex;
+
+    return path.substring(path.lastIndexOf(pathSlash) + 1, extensionIndex);
+  }
+  return path.substring(path.lastIndexOf(pathSlash) + 1);
+};
+
+const parseFileNameFromUrl = (url: string, excludeExension?: boolean) => {
   // ex. 'https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.17-25c9b49f.tar.gz'
 
   if (excludeExension) {
@@ -80,18 +98,19 @@ export const unzipFile = async (filePath: string, directory: string) => {
   // status = NODE_STATUS.extracting;
   // send(CHANNELS.geth, status);
   let tarCommand = `tar --directory "${directory}" -xf "${filePath}"`;
+  const buildDir = path.join(
+    directory,
+    parseFileNameFromPath(filePath, true)
+  );
+  await checkAndOrCreateDir(buildDir);
   if (filePath.includes('.zip')) {
     // unzip doesn't create a directory with the zipped filename like tar does
-    const buildDir = path.join(
-      directory,
-      parseFileNameFromUrlOrPath(filePath, true)
-    );
     tarCommand = `unzip "${filePath}" -d "${buildDir}"`;
   }
   // let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
-  // if (isWindows()) {
-  //   tarCommand = `tar -C ${getNNDirPath()} -xf ${getNNDirPath()}/geth.zip`;
-  // }
+  if (platform.isWindows()) {
+    tarCommand = `tar -C ${buildDir} -xf ${filePath}`;
+  }
   logger.info(`unzipFile running unzip command ${tarCommand}`);
   const result = await execAwait(tarCommand);
   if (!result.err) {
@@ -115,39 +134,45 @@ export const downloadBinary = async (
   directory: string
 ) => {
   logger.info(`downloading binary ${downloadUrl}`);
-  const downloadFileName = parseFileNameFromUrlOrPath(downloadUrl);
+  const downloadFileName = parseFileNameFromUrl(downloadUrl);
   logger.info(`binary full filename ${downloadFileName}`);
   const fileOutPath = path.join(directory, downloadFileName);
-  try {
-    const response = await httpGet(downloadUrl, {
-      headers: [{ name: 'Accept', value: 'application/octet-stream' }],
-    });
 
-    // if (!res.ok) throw new Error(`unexpected response ${res.statusText}`);
-    logger.info('http response received');
+  // if fileOutPath exists, use it, but we should delete and retry...
+  if(!await doesFileOrDirExist(fileOutPath)) {
+    try {
+      const response = await httpGet(downloadUrl, {
+        headers: [{ name: 'Accept', value: 'application/octet-stream' }],
+      });
 
-    // if (platform.isWindows()) {
-    //   fileOutPath = `${directory}/geth.zip`;
-    // }
-    const fileWriteStream = createWriteStream(fileOutPath);
+      // if (!res.ok) throw new Error(`unexpected response ${res.statusText}`);
+      logger.info('http response received');
 
-    logger.info('piping response to fileWriteStream');
-    // await streamPromises.pipeline(data, fileWriteStream);
-    await streamPipeline(response, fileWriteStream);
-    logger.info(
-      'done piping response to fileWriteStream. closing fileWriteStream.'
-    );
-    await fileWriteStream.close();
+      // if (platform.isWindows()) {
+      //   fileOutPath = `${directory}/geth.zip`;
+      // }
+      const fileWriteStream = createWriteStream(fileOutPath);
 
-    // allow anyone to read the file
-    logger.info('closed file');
-    await chmod(fileOutPath, 0o444);
-    logger.info('modified file permissions');
-  } catch (err) {
-    logger.error('error downloading binary', err);
-    // status = NODE_STATUS.errorDownloading;
-    // send(CHANNELS.geth, status);
-    throw err;
+      logger.info('piping response to fileWriteStream');
+      // await streamPromises.pipeline(data, fileWriteStream);
+      await streamPipeline(response, fileWriteStream);
+      logger.info(
+        'done piping response to fileWriteStream. closing fileWriteStream.'
+      );
+      await fileWriteStream.close();
+
+      // allow anyone to read the file
+      logger.info('closed file');
+      await chmod(fileOutPath, 0o444);
+      logger.info('modified file permissions');
+    } catch (err) {
+      logger.error('error downloading binary', err);
+      // status = NODE_STATUS.errorDownloading;
+      // send(CHANNELS.geth, status);
+      throw err;
+    }
+  } else {
+    logger.info("Downloaded binary already exists")
   }
 
   await unzipFile(fileOutPath, directory);
@@ -179,7 +204,7 @@ export const checkOrDownloadLatestBinary = async (node: Node) => {
     );
   }
   const excludeExension = true;
-  const latestBuildName = parseFileNameFromUrlOrPath(
+  const latestBuildName = parseFileNameFromUrl(
     latestBuildUrl,
     excludeExension
   );

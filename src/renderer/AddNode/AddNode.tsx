@@ -43,8 +43,10 @@ const AddNode = () => {
           // default: ['--JsonRpc.Enabled', 'true', '--datadir', 'data'],
           docker: {
             containerVolumePath: '/nethermind/data',
-            raw: '--network host',
-            forcedRawNodeInput: '--datadir /nethermind/data',
+            // raw: '--network host', // fine on linux
+            raw: '-p 0.0.0.0:8545:8545/tcp', // Windows
+            forcedRawNodeInput:
+              '--datadir /nethermind/data --JsonRpc.Host 0.0.0.0', // Host for Windows
           },
         },
         architectures: {
@@ -64,6 +66,7 @@ const AddNode = () => {
           // excludeNameWith: 'portable',
           responseFormat: 'githubReleases', // assets[i].name contains platform and arch
         },
+        execPath: 'Nethermind.Runner.exe', // Windows only?
       },
       category: 'L1/ExecutionClient',
       rpcTranslation: 'eth-l1',
@@ -223,7 +226,7 @@ const AddNode = () => {
       execution: {
         executionTypes: ['binary'],
         defaultExecutionType: 'binary',
-        execPath: 'geth',
+        execPath: 'geth', // windows has exe?
         input: {
           defaultConfig: {
             http: 'Enabled',
@@ -422,7 +425,7 @@ const AddNode = () => {
       displayName: 'Nimbus',
       execution: {
         executionTypes: ['docker', 'binary'],
-        defaultExecutionType: 'binary',
+        defaultExecutionType: 'docker',
         imageName: 'statusim/nimbus-eth2:multiarch-latest',
         execPath: 'run-mainnet-beacon-node.sh',
         input: {

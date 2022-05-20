@@ -66,9 +66,10 @@ export const buildCliConfig = ({
   excludeConfigKeys,
 }: {
   configValuesMap: ConfigValuesMap;
-  configTranslationMap: ConfigTranslationMap;
+  configTranslationMap?: ConfigTranslationMap;
   excludeConfigKeys?: string[];
 }): string => {
+  if (!configTranslationMap) return '';
   const cliConfigArray = Object.keys(configValuesMap).reduce(
     (cliString, configKey) => {
       if (excludeConfigKeys?.includes(configKey)) {

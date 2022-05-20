@@ -1,4 +1,5 @@
 // eslint-disable-next-line import/no-cycle
+import logger from 'main/logger';
 import { send } from '../messenger';
 import Node, {
   isDockerNode,
@@ -7,7 +8,6 @@ import Node, {
   UserNodes,
 } from '../../common/node';
 import store from './store';
-import logger from 'main/logger';
 
 export const USER_NODES_KEY = 'userNodes';
 const NODES_KEY = 'nodes';
@@ -28,8 +28,9 @@ const NODE_IDS_KEY = 'nodeIds';
  * Initializes internal data structures for readiness.
  */
 const initialize = () => {
-  const userNodes = store.get(USER_NODES_KEY);
+  let userNodes = store.get(USER_NODES_KEY);
   if (!userNodes || typeof userNodes !== 'object') {
+    userNodes = {};
     store.set(USER_NODES_KEY, {});
   }
   if (!userNodes.nodes || typeof userNodes.nodes !== 'object') {
@@ -124,6 +125,7 @@ export const setDockerNodeStatus = (
     return false;
   });
   if (!nodeToUpdate) {
+    // If it is a start event, this may not be an error.
     throw new Error(`No node found with containerId ${containerId}`);
   }
   // search all contianerIds for matching one
