@@ -1,5 +1,5 @@
 import { FaDocker } from 'react-icons/fa';
-import { FiExternalLink } from 'react-icons/fi';
+import ExternalLink from './Generics/ExternalLink';
 
 const InstallDocker = () => {
   return (
@@ -15,15 +15,10 @@ const InstallDocker = () => {
            install guide. Docker will quietly run in the background after installation."
         }
       </p>
-      <a
-        target="_blank"
-        href="https://docs.docker.com/desktop/#download-and-install"
-        rel="noreferrer"
-        style={{ fontSize: '1.2em' }}
-      >
-        Docker Desktop install guide
-        <FiExternalLink />
-      </a>
+      <ExternalLink
+        title="Docker Desktop install guide"
+        url="https://docs.docker.com/desktop/#download-and-install"
+      />
     </div>
   );
 };

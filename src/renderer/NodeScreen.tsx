@@ -2,24 +2,22 @@
 import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 
-import Node, { NodeId, NodeStatus } from '../common/node';
+import { NodeId, NodeStatus } from '../common/node';
 import electron from './electronGlobal';
 import InstallDocker from './InstallDocker';
 // import { useGetNodesQuery } from './state/nodeService';
-import { useAppDispatch, useAppSelector } from './state/hooks';
-import {
-  selectSelectedNode,
-  selectSelectedNodeId,
-  selectUserNodes,
-  updateSelectedNodeId,
-} from './state/node';
+import { useAppSelector } from './state/hooks';
+import { selectSelectedNode } from './state/node';
+import { useGetExecutionNodeInfoQuery } from './state/services';
 import { useGetIsDockerInstalledQuery } from './state/settingsService';
 
 const NodeScreen = () => {
   const selectedNode = useAppSelector(selectSelectedNode);
 
   const qIsDockerInstalled = useGetIsDockerInstalledQuery();
-
+  const qNodeInfo = useGetExecutionNodeInfoQuery(null, {
+    pollingInterval: 60000,
+  });
   // const isDisabled = true;
   const isDockerInstalled = qIsDockerInstalled?.data;
 
@@ -34,7 +32,7 @@ const NodeScreen = () => {
   // });
   if (!selectedNode) {
     // if docker is not installed, show prompt
-    if (true | !isDockerInstalled) {
+    if (!isDockerInstalled) {
       return <InstallDocker />;
     }
     return <div>No node selected</div>;
@@ -55,8 +53,12 @@ const NodeScreen = () => {
         {JSON.stringify(selectedNode, null, '\n')}
       </div> */}
       <div>
-        <h2>{category} Node</h2>
-        <h2>{displayName}</h2>
+        <h1>{displayName}</h1>
+        {qNodeInfo?.currentData && !qNodeInfo?.isError && (
+          <h4>Version: {qNodeInfo.currentData}</h4>
+        )}
+        <h4>Type: {category} Node</h4>
+
         <h3>Status: {status}</h3>
         {/* {status === 'running' && (
           <>

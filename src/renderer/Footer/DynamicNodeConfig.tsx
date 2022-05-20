@@ -12,7 +12,8 @@ import electron from '../electronGlobal';
 import Select from '../DynamicControls/Select';
 import TextArea from '../DynamicControls/TextArea';
 import Warning from '../Warning';
-import { InfoModal } from 'renderer/InfoIconButton';
+import { InfoModal } from '../InfoIconButton';
+import ExternalLink from '../Generics/ExternalLink';
 
 const DynamicNodeConfig = () => {
   const selectedNode = useAppSelector(selectSelectedNode);
@@ -72,8 +73,14 @@ const DynamicNodeConfig = () => {
 
                 const configTranslationControl: ConfigTranslationControl =
                   configTranslation.uiControl;
-                const currentValue =
+                let currentValue =
                   selectedNode.config?.configValuesMap?.[configKey];
+                if (
+                  currentValue === undefined &&
+                  configTranslation.defaultValue !== undefined
+                ) {
+                  currentValue = configTranslation.defaultValue;
+                }
                 console.log(
                   'rendering config: ',
                   configTranslation,
@@ -87,8 +94,12 @@ const DynamicNodeConfig = () => {
                         configTranslation.documentation) && (
                         <InfoModal title={configTranslation.displayName}>
                           {configTranslation.infoDescription}
-                          {configTranslation.documentation &&
-                            `More documentation at: ${configTranslation.documentation}`}
+                          {configTranslation.documentation && (
+                            <ExternalLink
+                              title={'Documentation Link'}
+                              url={configTranslation.documentation}
+                            />
+                          )}
                         </InfoModal>
                       )}
                     </div>
@@ -119,6 +130,7 @@ const DynamicNodeConfig = () => {
                       configTranslationControl?.type === 'select/multiple') && (
                       <Select
                         value={currentValue}
+                        // defaultValue={configTranslation.defaultValue}
                         onChange={(newValue) =>
                           onNodeConfigChange(configKey, newValue)
                         }

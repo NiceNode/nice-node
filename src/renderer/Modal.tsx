@@ -29,6 +29,10 @@ const ModalContent = styled.div`
   position: fixed;
   transform: translate(-50%, -50%);
   color: black;
+
+  a {
+    color: inherit;
+  }
 `;
 
 type Props = {

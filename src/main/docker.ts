@@ -67,7 +67,7 @@ const watchDockerEvents = async () => {
   });
 
   rl.on('line', (log: string) => {
-    console.log('dockerWatchProcess event::::::', log);
+    // console.log('dockerWatchProcess event::::::', log);
     // {"status":"start","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"start","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480501042702}
     // {"status":"die","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"die","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"exitCode":"0","git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480851573969}
     // a die without a stop or kill is a crash
@@ -279,6 +279,7 @@ export const onExit = () => {
 };
 
 export const isDockerInstalled = () => {
-  logger.info('isDockerInstalled: true');
-  return true;
+  const isDockerInstalled = true;
+  logger.info(`isDockerInstalled: ${isDockerInstalled}`);
+  return isDockerInstalled;
 };

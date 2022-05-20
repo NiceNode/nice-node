@@ -44,7 +44,7 @@ const AddNode = () => {
           docker: {
             containerVolumePath: '/nethermind/data',
             // raw: '--network host', // fine on linux
-            raw: '-p 0.0.0.0:8545:8545/tcp', // Windows
+            // raw: '-p 0.0.0.0:8545:8545/tcp', // Windows
             forcedRawNodeInput:
               '--datadir /nethermind/data --JsonRpc.Host 0.0.0.0', // Host for Windows
           },
@@ -153,8 +153,18 @@ const AddNode = () => {
               },
             ],
           },
-          defaultValue:
-            'Eth, Subscribe, Trace, TxPool, Web3, Personal, Proof, Net, Parity, Health',
+          defaultValue: [
+            'Eth',
+            'Subscribe',
+            'Trace',
+            'TxPool',
+            'Web3',
+            'Personal',
+            'Proof',
+            'Net',
+            'Parity',
+            'Health',
+          ],
           documentation:
             'https://docs.nethermind.io/nethermind/ethereum-client/json-rpc',
         },
@@ -205,6 +215,7 @@ const AddNode = () => {
       iconUrl:
         'https://clientdiversity.org/assets/img/execution-clients/erigon-text-logo.png',
     },
+    // --rpc-http-enabled --rpc-ws-enabled
     {
       specId: 'besu',
       version: '1.0.0',
@@ -212,10 +223,182 @@ const AddNode = () => {
       execution: {
         executionTypes: ['docker'],
         defaultExecutionType: 'docker',
-        imageName: 'nethermind/nethermind',
+        imageName: 'hyperledger/besu:latest',
+        input: {
+          defaultConfig: {
+            http: 'Enabled',
+            // httpCorsDomains: '"http://localhost:1212/","nice-node://"',
+            httpCorsDomains: '"*"',
+          },
+          docker: {
+            containerVolumePath: '/var/lib/besu',
+            raw: '-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546', // Windows cant use network host?
+            forcedRawNodeInput: '--data-path="/var/lib/besu"', // --JsonRpc.Host 0.0.0.0', // Host for Windows?
+          },
+        },
       },
       category: 'L1/ExecutionClient',
       rpcTranslation: 'eth-l1',
+      configTranslation: {
+        dataDir: {
+          displayName: 'Node data is stored in this folder',
+          category: 'Storage',
+          cliConfigPrefix: '--data-path=',
+          defaultValue: undefined,
+          uiControl: {
+            type: 'filePath',
+          },
+          documentation:
+            'https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#data-path',
+        },
+        http: {
+          displayName:
+            'Disable/enable node rpc http connections (*NiceNode requires http connections)',
+          category: 'RPC APIs',
+          uiControl: {
+            type: 'select/single',
+            controlTranslations: [
+              {
+                value: 'Enabled',
+                config: '--rpc-http-enabled',
+              },
+              {
+                value: 'Disabled',
+                config: undefined,
+              },
+            ],
+          },
+          defaultValue: 'Disabled',
+          documentation:
+            'https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-http-enabled',
+        },
+        httpCorsDomains: {
+          displayName:
+            'Change where the node accepts http connections (use comma separated urls wrapped in double quotes)',
+          cliConfigPrefix: '--rpc-http-cors-origins=',
+          valuesJoinStr: ',',
+          uiControl: {
+            type: 'text',
+          },
+        },
+        httpApis: {
+          displayName: 'Enabled certain HTTP APIs',
+          category: 'RPC APIs',
+          cliConfigPrefix: '--rpc-http-api=',
+          valuesJoinStr: ',',
+          uiControl: {
+            type: 'select/multiple',
+            controlTranslations: [
+              {
+                value: 'ADMIN',
+                config: 'ADMIN',
+              },
+              {
+                value: 'CLIQUE',
+                config: 'CLIQUE',
+              },
+              {
+                value: 'DEBUG',
+                config: 'DEBUG',
+              },
+              {
+                value: 'EEA',
+                config: 'EEA',
+              },
+              {
+                value: 'ETH',
+                config: 'ETH',
+              },
+              {
+                value: 'IBFT',
+                config: 'IBFT',
+              },
+              {
+                value: 'MINER',
+                config: 'MINER',
+              },
+              {
+                value: 'NET',
+                config: 'NET',
+              },
+              {
+                value: 'PERM',
+                config: 'PERM',
+              },
+              {
+                value: 'PLUGINS',
+                config: 'PLUGINS',
+              },
+
+              {
+                value: 'QBFT',
+                config: 'QBFT',
+              },
+              {
+                value: 'TRACE',
+                config: 'TRACE',
+              },
+              {
+                value: 'TXPOOL',
+                config: 'TXPOOL',
+              },
+              {
+                value: 'WEB3',
+                config: 'WEB3',
+              },
+            ],
+          },
+          defaultValue: ['ETH', 'NET', 'WEB3'],
+          documentation:
+            'https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-http-api',
+        },
+        syncMode: {
+          displayName: 'Node synchronization mode',
+          category: 'Syncronization',
+          cliConfigPrefix: '--sync-mode=',
+          uiControl: {
+            type: 'select/single',
+            controlTranslations: [
+              {
+                value: 'FAST',
+                config: 'FAST',
+              },
+              {
+                value: 'FULL',
+                config: 'FULL',
+              },
+            ],
+          },
+          defaultValue: 'FAST',
+          documentation:
+            'https://docs.nethermind.io/nethermind/ethereum-client/sync-modes',
+        },
+        dataStorageFormat: {
+          displayName: 'The data storage format to use',
+          category: 'Storage',
+          cliConfigPrefix: '--data-storage-format==',
+          uiControl: {
+            type: 'select/single',
+            controlTranslations: [
+              {
+                value: 'FOREST',
+                config: 'FOREST',
+              },
+              {
+                value: 'BONSAI',
+                config: 'BONSAI',
+              },
+            ],
+          },
+          defaultValue: 'FOREST',
+          documentation:
+            'https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#data-storage-format',
+        },
+      },
+      documentation: {
+        default: 'https://docs.nethermind.io/nethermind/',
+        docker: 'https://docs.nethermind.io/nethermind/ethereum-client/docker',
+      },
       iconUrl:
         'https://clientdiversity.org/assets/img/execution-clients/besu-text-logo.png',
     },
@@ -224,7 +407,7 @@ const AddNode = () => {
       version: '1.0.0',
       displayName: 'Geth',
       execution: {
-        executionTypes: ['binary'],
+        executionTypes: ['binary', 'docker'],
         defaultExecutionType: 'binary',
         execPath: 'geth', // windows has exe?
         input: {
@@ -299,9 +482,9 @@ const AddNode = () => {
           displayName: 'Enabled HTTP APIs',
           cliConfigPrefix: '--http.api ',
           defaultValue: 'eth,net,web3',
+          valuesJoinStr: ',',
           uiControl: {
             type: 'select/multiple',
-            join: ', ',
             controlTranslations: [
               {
                 value: 'eth',
@@ -531,19 +714,19 @@ const AddNode = () => {
     },
   ]);
   const [sLayer2ClientLibrary] = useState<NodeSpecification[]>([
-    {
-      specId: 'optimism',
-      version: '1.0.0',
-      displayName: 'Optimism',
-      execution: {
-        executionTypes: ['docker'],
-        defaultExecutionType: 'docker',
-        imageName: 'eqlabs/pathfinder:latest',
-      },
-      category: 'L2/StarkNet',
-      iconUrl:
-        'https://github.com/ethereum-optimism/brand-kit/blob/main/assets/images/Profile-Logo.png?raw=true',
-    },
+    // {
+    //   specId: 'optimism',
+    //   version: '1.0.0',
+    //   displayName: 'Optimism',
+    //   execution: {
+    //     executionTypes: ['docker'],
+    //     defaultExecutionType: 'docker',
+    //     imageName: 'eqlabs/pathfinder:latest',
+    //   },
+    //   category: 'L2/StarkNet',
+    //   iconUrl:
+    //     'https://github.com/ethereum-optimism/brand-kit/blob/main/assets/images/Profile-Logo.png?raw=true',
+    // },
     {
       specId: 'pathfinder',
       version: '1.0.0',

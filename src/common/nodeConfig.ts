@@ -25,7 +25,8 @@ export type ConfigTranslation = {
   category?: string;
   cliConfigPrefix?: string;
   valuesJoinStr?: string;
-  defaultValue?: string;
+  valuesWrapChar?: string;
+  defaultValue?: string | string[];
   documentation?: string;
   infoDescription?: string;
 };
@@ -91,7 +92,14 @@ export const buildCliConfig = ({
             configValue,
             configTranslation.uiControl.controlTranslations
           );
-          currCliString += cliConfigs.join(joinStr);
+          let cliConfigJoinedStr = cliConfigs.join(joinStr);
+          if (configTranslation.valuesWrapChar) {
+            cliConfigJoinedStr =
+              configTranslation.valuesWrapChar +
+              cliConfigJoinedStr +
+              configTranslation.valuesWrapChar;
+          }
+          currCliString += cliConfigJoinedStr;
         } else if (typeof configValue === 'string') {
           if (configTranslation.uiControl.type === 'select/single') {
             const cliConfigs = getConfigFromValue(

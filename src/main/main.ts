@@ -145,8 +145,11 @@ const createWindow = async () => {
 
   // [Start] Modifies the renderer's Origin header for all outgoing web requests.
   // This is done to simplify the allowed origins set for geth
+  // const filter = {
+  //   urls: ['http://localhost/', 'ws://localhost/'], // Remote API URS for which you are getting CORS error
+  // };
   const filter = {
-    urls: ['http://localhost/*', 'ws://localhost/'], // Remote API URS for which you are getting CORS error
+    urls: ['*'], // Remote API URS for which you are getting CORS error
   };
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
     filter,
@@ -164,13 +167,13 @@ const createWindow = async () => {
         details.responseHeaders = {};
       }
       // '*',
-      details.responseHeaders['Access-Control-Allow-Origin'] = [
-        '*',
-        // 'http://localhost:1212', // eh works for nimbus, not for geth
-      ];
+      // details.responseHeaders['Access-Control-Allow-Origin'] = [
+      //   '*',
+      //   // 'http://localhost:1212', // eh works for nimbus, not for geth
+      // ];
       // for geth
       details.responseHeaders['Access-Control-Allow-Headers'] = ['*'];
-      // details.responseHeaders['Access-Control-Allow-Origin'] = ['nice-node://'];
+      details.responseHeaders['Access-Control-Allow-Origin'] = ['*'];
 
       callback({ responseHeaders: details.responseHeaders });
     }

@@ -43,6 +43,7 @@ const DynamicSettings = ({ isOpen, onClickCloseButton }: Props) => {
           data to recover if deleted. Only delete node data if you do not intend
           to run a node.
         </p>
+        {/* todo */}
         <button
           type="button"
           onClick={async () => {
