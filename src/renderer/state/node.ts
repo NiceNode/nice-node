@@ -50,6 +50,8 @@ const setSelectedNode = (state: NodeState) => {
   const { selectedNodeId, userNodes } = state;
   if (selectedNodeId && userNodes && userNodes.nodes[selectedNodeId]) {
     state.selectedNode = userNodes.nodes[selectedNodeId];
+  } else {
+    state.selectedNode = undefined;
   }
 };
 

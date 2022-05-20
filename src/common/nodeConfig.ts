@@ -27,6 +27,7 @@ export type ConfigTranslation = {
   valuesJoinStr?: string;
   defaultValue?: string;
   documentation?: string;
+  infoDescription?: string;
 };
 
 export type ConfigKey = string;
