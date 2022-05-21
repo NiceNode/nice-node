@@ -6,9 +6,10 @@ import { Modal } from '../Modal';
 import NodeCard from './NodeCard';
 import ConfirmAddNode from './ConfirmAddNode';
 import { NodeSpecification } from '../../common/nodeSpec';
+import DivButton, { DopeButton } from '../DivButton';
 
 const AddNode = () => {
-  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>(false);
+  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>(true);
   const [sIsModalOpenConfirmAddNode, setIsModalOpenConfirmAddNode] =
     useState<boolean>(false);
   const [sSelectedNodeSpecification, setSelectedNodeSpecification] =
@@ -517,7 +518,7 @@ const AddNode = () => {
         httpCorsDomains: {
           displayName:
             'Change where the node accepts http connections (use comma separated urls)',
-          cliConfigPrefix: '--http.corsdomain  ',
+          cliConfigPrefix: '--http.corsdomain ',
           uiControl: {
             type: 'text',
           },
@@ -565,6 +566,9 @@ const AddNode = () => {
         imageName: 'chainsafe/lodestar:latest',
         input: {
           default: ['beacon', '--rootDir /usr/app/data'],
+          defaultConfig: {
+            http: 'Enabled',
+          },
           docker: {
             // containerVolumePath: '/root/.local/share/lodestar', // default?
             containerVolumePath: '/usr/app/data',
@@ -575,6 +579,95 @@ const AddNode = () => {
       category: 'L1/ConsensusClient/BeaconNode',
       rpcTranslation: 'eth-l2-beacon',
       nodeReleasePhase: 'beta',
+      configTranslation: {
+        dataDir: {
+          displayName: 'Node data is stored in this folder',
+          cliConfigPrefix: '--rootDir ',
+          uiControl: {
+            type: 'filePath',
+          },
+          infoDescription: 'Lodestar root directory',
+        },
+        http: {
+          displayName:
+            'Disable/enable node rpc http connections (*NiceNode requires http connections)',
+          cliConfigPrefix: '--api.rest.enabled ',
+          uiControl: {
+            type: 'select/single',
+            controlTranslations: [
+              {
+                value: 'Enabled',
+                config: 'true',
+              },
+              {
+                value: 'Disabled',
+                config: undefined,
+              },
+            ],
+          },
+          defaultValue: 'Disabled',
+        },
+        httpApis: {
+          displayName: 'Enabled HTTP APIs',
+          cliConfigPrefix: '--http.api ',
+          defaultValue: ['beacon', 'config', 'events', 'node', 'validator'],
+          valuesJoinStr: ',',
+          uiControl: {
+            type: 'select/multiple',
+            controlTranslations: [
+              {
+                value: 'beacon',
+                config: 'beacon',
+              },
+              {
+                value: 'config',
+                config: 'config',
+              },
+              {
+                value: 'events',
+                config: 'events',
+              },
+              {
+                value: 'node',
+                config: 'node',
+              },
+
+              {
+                value: 'validator',
+                config: 'validator',
+              },
+            ],
+          },
+        },
+        httpPort: {
+          displayName: 'Set port for HTTP API',
+          cliConfigPrefix: '--api.rest.port ',
+          defaultValue: '9596',
+          uiControl: {
+            type: 'text',
+          },
+        },
+        httpCorsDomains: {
+          displayName:
+            'Change where the node accepts http connections (use comma separated urls)',
+          cliConfigPrefix: '--http.corsdomain ',
+          defaultValue: '*',
+          uiControl: {
+            type: 'text',
+          },
+        },
+        // array?
+        eth1ProviderUrl: {
+          displayName: 'Url to Eth1 node with enabled rpc',
+          cliConfigPrefix: '--eth1.providerUrls ',
+          defaultValue: 'http://localhost:8545',
+          uiControl: {
+            type: 'text',
+          },
+          infoDescription:
+            'Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)',
+        },
+      },
       documentation: {
         default: 'https://chainsafe.github.io/lodestar/',
         docker:
@@ -591,13 +684,102 @@ const AddNode = () => {
         executionTypes: ['docker'],
         defaultExecutionType: 'docker',
         imageName: 'consensys/teku:latest',
+        input: {
+          docker: {
+            // containerVolumePath: '/root/.local/share/lodestar', // default?
+            containerVolumePath: '/var/lib/teku',
+            raw: '-p 9000:9000/tcp -p 9000:9000/udp -p 5051:5051',
+          },
+        },
       },
       category: 'L1/ConsensusClient/BeaconNode',
       rpcTranslation: 'eth-l2-beacon',
+      configTranslation: {
+        dataDir: {
+          displayName: 'Node data is stored in this folder',
+          cliConfigPrefix: '--data-path=',
+          uiControl: {
+            type: 'filePath',
+          },
+          infoDescription: 'Teku root directory',
+          documentation:
+            'https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#data-base-path-data-path',
+        },
+        http: {
+          displayName:
+            'Disable/enable node rpc http connections (*NiceNode requires http connections)',
+          uiControl: {
+            type: 'select/single',
+            controlTranslations: [
+              {
+                value: 'Enabled',
+                config: '--rest-api-enabled',
+              },
+              {
+                value: 'Disabled',
+                config: undefined,
+              },
+            ],
+          },
+          defaultValue: 'Disabled',
+          documentation:
+            'https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#rest-api-enabled',
+        },
+        httpPort: {
+          displayName: 'Specifies REST API listening port (HTTP).',
+          cliConfigPrefix: '--rest-api-port=',
+          defaultValue: '5051',
+          uiControl: {
+            type: 'text',
+          },
+          documentation:
+            'https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#rest-api-port',
+        },
+        httpCorsDomains: {
+          displayName:
+            'A comma-separated list of hostnames to allow access to the REST API.',
+          cliConfigPrefix: '--rest-api-host-allowlist=',
+          defaultValue: 'localhost,127.0.0.1',
+          uiControl: {
+            type: 'text',
+          },
+          infoDescription:
+            'A comma-separated list of hostnames to allow access to the REST API. By default, Teku accepts access from localhost and 127.0.0.1.',
+          warning:
+            'Only trusted parties should access the REST API. Do not directly expose these APIs publicly on production nodes. We don’t recommend allowing all hostnames ("*") for production environments.',
+          documentation:
+            'https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#rest-api-host-allowlist',
+        },
+        // array?
+        eth1ProviderUrl: {
+          displayName: 'Url to Eth1 node with enabled rpc',
+          cliConfigPrefix: '--eth1-endpoint=',
+          defaultValue: 'http://localhost:8545',
+          uiControl: {
+            type: 'text',
+          },
+          infoDescription:
+            'Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)',
+          documentation:
+            'https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#data-base-path-data-path',
+        },
+        executionEngineEndpoint: {
+          displayName: "URL of the execution client's Engine JSON-RPC APIs",
+          cliConfigPrefix: '--ee-endpoint=',
+          defaultValue: 'http://localhost:8550',
+          uiControl: {
+            type: 'text',
+          },
+          infoDescription:
+            "URL of the execution client's Engine JSON-RPC APIs. This replaces eth1-endpoint after The Merge.",
+          documentation:
+            'https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#ee-endpoint',
+        },
+      },
       documentation: {
-        default: 'https://docs.teku.consensys.net/en/latest/',
+        default: 'https://docs.teku.consensys.net/en/stable/',
         docker:
-          'https://docs.teku.consensys.net/en/latest/HowTo/Get-Started/Installation-Options/Run-Docker-Image/',
+          'https://docs.teku.consensys.net/en/stable/HowTo/Get-Started/Installation-Options/Run-Docker-Image/',
       },
       iconUrl:
         'https://clientdiversity.org/assets/img/consensus-clients/teku-logo.png',
@@ -787,8 +969,22 @@ const AddNode = () => {
       >
         <div>
           <h2>Ethereum Node (Execution client)</h2>
+
           {sExecutionClientLibrary ? (
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}
+            >
+              <DopeButton
+              // onClick={() => dispatch(updateSelectedNodeId(node.id))}
+              >
+                <span style={{ fontSize: '1.5em', color: 'white' }}>
+                  Minority Client
+                </span>
+              </DopeButton>
               {sExecutionClientLibrary.map((nodeSpec: NodeSpecification) => {
                 return (
                   <NodeCard
@@ -806,7 +1002,20 @@ const AddNode = () => {
         <div>
           <h2>Ethereum Beacon Node (Consensus client)</h2>
           {sBeaconNodeLibrary ? (
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}
+            >
+              <DopeButton
+              // onClick={() => dispatch(updateSelectedNodeId(node.id))}
+              >
+                <span style={{ fontSize: '1.5em', color: 'white' }}>
+                  Minority Client
+                </span>
+              </DopeButton>
               {sBeaconNodeLibrary.map((nodeSpec: NodeSpecification) => {
                 return (
                   <NodeCard
@@ -824,7 +1033,13 @@ const AddNode = () => {
         <div>
           <h2>Ethereum Layer 2</h2>
           {sLayer2ClientLibrary ? (
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}
+            >
               {sLayer2ClientLibrary.map((nodeSpec: NodeSpecification) => {
                 return (
                   <NodeCard

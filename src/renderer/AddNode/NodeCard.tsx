@@ -32,6 +32,7 @@ const NodeCard = (props: {
         height: 100,
         marginLeft: 5,
         marginRight: 10,
+        marginBottom: 10,
         opacity,
       }}
       onClick={onSelected}

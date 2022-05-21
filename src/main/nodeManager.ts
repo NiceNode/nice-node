@@ -100,10 +100,15 @@ export const removeNode = async (nodeId: NodeId): Promise<Node> => {
 
   // if docker, remove container
   if (isDockerNode(node)) {
-    const isDockerRemoved = await removeDockerNode(node);
-    logger.info(`isDockerRemoved ${isDockerRemoved}`);
+    try {
+      const isDockerRemoved = await removeDockerNode(node);
+      logger.info(`isDockerRemoved ${isDockerRemoved}`);
+    } catch (err) {
+      logger.error(err);
+      // todo: try to remove container with same name?
+    }
   }
-  // todo: delete data
+  // todo: delete data optional
   const removedNode = nodeStore.removeNode(nodeId);
   return removedNode;
 };

@@ -29,6 +29,7 @@ export type ConfigTranslation = {
   defaultValue?: string | string[];
   documentation?: string;
   infoDescription?: string;
+  warning?: string;
 };
 
 export type ConfigKey = string;
