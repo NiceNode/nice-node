@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
-import { useGetExecutionNodeInfoQuery } from '../state/services';
 import DynamicNodeConfig from './DynamicNodeConfig';
 import { useAppSelector } from '../state/hooks';
 import { selectSelectedNode } from '../state/node';
@@ -15,9 +14,6 @@ type Props = {
 
 const DynamicSettings = ({ isOpen, onClickCloseButton }: Props) => {
   const selectedNode = useAppSelector(selectSelectedNode);
-  const qNodeInfo = useGetExecutionNodeInfoQuery(null, {
-    pollingInterval: 60000,
-  });
   const [sGethDeleteResult, setGethDeleteResult] = useState<boolean>();
 
   let title = 'Settings';
@@ -31,10 +27,6 @@ const DynamicSettings = ({ isOpen, onClickCloseButton }: Props) => {
       onClickCloseButton={onClickCloseButton}
     >
       <DynamicNodeConfig />
-      {/* <NiceNodeSettings /> */}
-      {qNodeInfo?.currentData && !qNodeInfo?.isError && (
-        <h4>Running: {qNodeInfo.currentData}</h4>
-      )}
       <h2>Storage</h2>
       <div>
         <h3>Delete node data</h3>

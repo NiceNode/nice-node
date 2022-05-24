@@ -1,0 +1,13 @@
+{
+  "specId": "erigon",
+  "version": "1.0.0",
+  "displayName": "Erigon",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "imageName": "thorax/erigon:latest"
+  },
+  "category": "L1/ExecutionClient",
+  "rpcTranslation": "eth-l1",
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/erigon-text-logo.png"
+}

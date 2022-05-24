@@ -1,0 +1,154 @@
+{
+  "specId": "nethermind",
+  "version": "1.0.0",
+  "displayName": "Nethermind",
+  "execution": {
+    "executionTypes": ["docker", "binary"],
+    "defaultExecutionType": "docker",
+    "input": {
+      "defaultConfig": {
+        "http": "Enabled"
+      },
+      "docker": {
+        "containerVolumePath": "/nethermind/data",
+        "forcedRawNodeInput": "--datadir /nethermind/data --JsonRpc.Host 0.0.0.0"
+      }
+    },
+    "architectures": {
+      "docker": ["amd64", "arm64"],
+      "binary": ["amd64", "arm64"]
+    },
+    "imageName": "nethermind/nethermind",
+    "binaryDownload": {
+      "type": "githubReleases",
+      "latestVersionUrl": "https://api.github.com/repos/NethermindEth/nethermind/releases/latest",
+      "responseFormat": "githubReleases"
+    },
+    "execPath": "Nethermind.Runner.exe"
+  },
+  "category": "L1/ExecutionClient",
+  "rpcTranslation": "eth-l1",
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "Node data is stored in this folder",
+      "category": "Storage",
+      "cliConfigPrefix": "--datadir ",
+      "uiControl": {
+        "type": "filePath"
+      }
+    },
+    "http": {
+      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "category": "RPC APIs",
+      "cliConfigPrefix": "--JsonRpc.Enabled ",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "true"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/json-rpc"
+    },
+    "httpApis": {
+      "displayName": "Enabled HTTP APIs",
+      "category": "RPC APIs",
+      "cliConfigPrefix": "--JsonRpc.EnabledModules ",
+      "valuesJoinStr": ", ",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "Eth",
+            "config": "Eth"
+          },
+          {
+            "value": "Subscribe",
+            "config": "Subscribe"
+          },
+          {
+            "value": "Trace",
+            "config": "Trace"
+          },
+          {
+            "value": "TxPool",
+            "config": "TxPool"
+          },
+          {
+            "value": "Web3",
+            "config": "Web3"
+          },
+
+          {
+            "value": "Personal",
+            "config": "Personal"
+          },
+          {
+            "value": "Proof",
+            "config": "Proof"
+          },
+          {
+            "value": "Net",
+            "config": "Net"
+          },
+          {
+            "value": "Parity",
+            "config": "Parity"
+          },
+          {
+            "value": "Health",
+            "config": "Health"
+          }
+        ]
+      },
+      "defaultValue": [
+        "Eth",
+        "Subscribe",
+        "Trace",
+        "TxPool",
+        "Web3",
+        "Personal",
+        "Proof",
+        "Net",
+        "Parity",
+        "Health"
+      ],
+      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/json-rpc"
+    },
+    "syncMode": {
+      "displayName": "Node synchronization mode",
+      "category": "Syncronization",
+      "cliConfigPrefix": "--config ",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "fast",
+            "config": "mainnet"
+          },
+          {
+            "value": "beam",
+            "config": "mainnet_beam"
+          },
+          {
+            "value": "archive",
+            "config": "mainnet_archive"
+          }
+        ]
+      },
+      "defaultValue": "fast",
+      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/sync-modes"
+    }
+  },
+  "documentation": {
+    "default": "https://docs.nethermind.io/nethermind/",
+    "docker": "https://docs.nethermind.io/nethermind/ethereum-client/docker"
+  },
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/nethermind-logo.png"
+}

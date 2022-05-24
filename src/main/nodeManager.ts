@@ -23,6 +23,7 @@ import {
   onExit as onExitBinary,
   getBinaryStatus,
 } from './binary';
+import { initialize as initNodeLibrary } from './nodeLibraryManager';
 import { initialize as initDocker, onExit as onExitDocker } from './docker';
 
 export const addNode = async (nodeSpec: NodeSpecification): Promise<Node> => {
@@ -120,6 +121,7 @@ export const removeNode = async (nodeId: NodeId): Promise<Node> => {
 export const initialize = async () => {
   initDocker();
   initBinary();
+  initNodeLibrary();
 
   // get all nodes
   const nodes = nodeStore.getNodes();

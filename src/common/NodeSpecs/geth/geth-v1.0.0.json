@@ -1,0 +1,147 @@
+{
+  "specId": "geth",
+  "version": "1.0.0",
+  "displayName": "Geth",
+  "execution": {
+    "executionTypes": ["binary", "docker"],
+    "defaultExecutionType": "binary",
+    "execPath": "geth",
+    "input": {
+      "defaultConfig": {
+        "http": "Enabled",
+        "httpCorsDomains": "nice-node://,http://localhost",
+        "websockets": "Enabled"
+      }
+    },
+    "binaryDownload": {
+      "type": "static",
+      "darwin": {
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.17-25c9b49f.tar.gz"
+      },
+      "linux": {
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.17-25c9b49f.tar.gz",
+        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-linux-386-1.10.17-25c9b49f.tar.gz",
+        "arm64": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.10.17-25c9b49f.tar.gz",
+        "arm7": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm7-1.10.17-25c9b49f.tar.gz"
+      },
+      "windows": {
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.17-25c9b49f.zip",
+        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-windows-386-1.10.17-25c9b49f.zip"
+      }
+    }
+  },
+  "category": "L1/ExecutionClient",
+  "rpcTranslation": "eth-l1",
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "Node data is stored in this folder",
+      "cliConfigPrefix": "--datadir ",
+      "defaultValue": "~/.ethereum",
+      "uiControl": {
+        "type": "filePath"
+      },
+      "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
+    },
+    "http": {
+      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--http"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled"
+    },
+    "websockets": {
+      "displayName": "rpc websocket connections (*BeaconNodes may require websocket connections)",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--ws"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled"
+    },
+    "httpApis": {
+      "displayName": "Enabled HTTP APIs",
+      "cliConfigPrefix": "--http.api ",
+      "defaultValue": "eth,net,web3",
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "eth",
+            "config": "Eth"
+          },
+          {
+            "value": "net",
+            "config": "Net"
+          },
+          {
+            "value": "web3",
+            "config": "Web3"
+          },
+          {
+            "value": "debug",
+            "config": "Debug"
+          },
+
+          {
+            "value": "personal",
+            "config": "Personal"
+          },
+          {
+            "value": "admin",
+            "config": "Admin"
+          }
+        ]
+      }
+    },
+    "httpCorsDomains": {
+      "displayName": "Change where the node accepts http connections (use comma separated urls)",
+      "cliConfigPrefix": "--http.corsdomain ",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "syncMode": {
+      "displayName": "Node synchronization mode",
+      "infoDescription": "Blockchain sync mode (\"snap\", \"full\" or \"light\") (default: snap)",
+      "category": "Syncronization",
+      "cliConfigPrefix": "--config ",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "snap",
+            "config": "snap"
+          },
+          {
+            "value": "light",
+            "config": "light"
+          },
+          {
+            "value": "full",
+            "config": "full"
+          }
+        ]
+      },
+      "defaultValue": "snap",
+      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/sync-modes"
+    }
+  },
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"
+}

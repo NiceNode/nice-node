@@ -240,14 +240,17 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
   // if (input?.default) {
   //   nodeInput = input?.default.join(' ');
   // }
-  let nodeInput = buildCliConfig({
+  let nodeInput = '';
+  if (input?.docker?.forcedRawNodeInput) {
+    nodeInput = input?.docker?.forcedRawNodeInput;
+  }
+  const cliConfigInput = buildCliConfig({
     configValuesMap: node.config.configValuesMap,
     configTranslationMap: node.spec.configTranslation,
     excludeConfigKeys: ['dataDir'],
   });
-  if (input?.docker?.forcedRawNodeInput) {
-    nodeInput += ' ' + input?.docker?.forcedRawNodeInput;
-  }
+  nodeInput += ' ' + cliConfigInput;
+
   const dockerCommand = `run -d --name ${specId} ${finalDockerInput} ${imageName} ${nodeInput}`;
   logger.info(`docker startNode command ${dockerCommand}`);
   // todo: test if input is empty string

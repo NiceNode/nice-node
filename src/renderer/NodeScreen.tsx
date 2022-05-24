@@ -1,4 +1,5 @@
 // import { MdDelete } from 'react-icons/md';
+import { useEffect } from 'react';
 import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 
@@ -8,18 +9,20 @@ import InstallDocker from './InstallDocker';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector } from './state/hooks';
 import { selectSelectedNode } from './state/node';
-import { useGetExecutionNodeInfoQuery } from './state/services';
+import { useGetNodeVersionQuery } from './state/services';
 import { useGetIsDockerInstalledQuery } from './state/settingsService';
 
 const NodeScreen = () => {
   const selectedNode = useAppSelector(selectSelectedNode);
-
+  const qNodeVersion = useGetNodeVersionQuery(
+    selectedNode?.spec.rpcTranslation
+  );
   const qIsDockerInstalled = useGetIsDockerInstalledQuery();
-  const qNodeInfo = useGetExecutionNodeInfoQuery(null, {
-    pollingInterval: 60000,
-  });
   // const isDisabled = true;
   const isDockerInstalled = qIsDockerInstalled?.data;
+  // useEffect(() => {
+  //   qNodeInfo.refetch();
+  // }, [selectedNode]);
 
   // Will select the Node with the given id, and will only rerender if the given Node data changes
   // https://redux-toolkit.js.org/rtk-query/usage/queries#selecting-data-from-a-query-result
@@ -54,8 +57,8 @@ const NodeScreen = () => {
       </div> */}
       <div>
         <h1>{displayName}</h1>
-        {qNodeInfo?.currentData && !qNodeInfo?.isError && (
-          <h4>Version: {qNodeInfo.currentData}</h4>
+        {qNodeVersion?.currentData && !qNodeVersion?.isError && (
+          <h4>Version: {qNodeVersion.currentData}</h4>
         )}
         <h4>Type: {category} Node</h4>
 

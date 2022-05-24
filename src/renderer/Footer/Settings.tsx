@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
-import { useGetExecutionNodeInfoQuery } from '../state/services';
+import { useGetNodeVersionQuery } from '../state/services';
 import NodeConfig from './NodeConfig';
 // import NiceNodeSettings from './NiceNodeSettings';
 
@@ -12,9 +12,6 @@ type Props = {
 };
 
 const Settings = ({ isOpen, onClickCloseButton }: Props) => {
-  const qNodeInfo = useGetExecutionNodeInfoQuery(null, {
-    pollingInterval: 60000,
-  });
   const [sGethDeleteResult, setGethDeleteResult] = useState<boolean>();
 
   return (
@@ -24,10 +21,6 @@ const Settings = ({ isOpen, onClickCloseButton }: Props) => {
       onClickCloseButton={onClickCloseButton}
     >
       <NodeConfig />
-      {/* <NiceNodeSettings /> */}
-      {qNodeInfo?.currentData && !qNodeInfo?.isError && (
-        <h4>Running: {qNodeInfo.currentData}</h4>
-      )}
       <h2>Storage</h2>
       <div>
         <h3>Delete node data</h3>

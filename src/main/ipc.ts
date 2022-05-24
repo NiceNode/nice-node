@@ -27,6 +27,7 @@ import { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
 import { isDockerInstalled } from './docker';
 import { openDialogForNodeDataDir } from './dialog';
+import { getNodeLibrary } from './state/nodeLibrary';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -98,6 +99,9 @@ export const initialize = () => {
   ipcMain.handle('openDialogForNodeDataDir', (_event, nodeId: NodeId) => {
     return openDialogForNodeDataDir(nodeId);
   });
+
+  // Node library
+  ipcMain.handle('getNodeLibrary', getNodeLibrary);
 
   // Settings/Config
   ipcMain.handle('getIsDockerInstalled', isDockerInstalled);

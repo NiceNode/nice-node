@@ -62,7 +62,6 @@ export type BinaryDownload = {
 };
 /**
  * @param downloadUrl binary must end in .tar.gz or .zip
- * dataDirInput is directly concatenated with the dirPath
  */
 export type BinaryExecution = BaseNodeExecution & {
   executionTypes: ['binary'];
@@ -70,7 +69,6 @@ export type BinaryExecution = BaseNodeExecution & {
   execPath: string; // ex. geth
   input: {
     default?: string[];
-    binary: { dataDirInput: string }; // require data flag so nicenode can keep data in one place
   };
   binaryDownload: BinaryDownload;
   // todo: could be file path

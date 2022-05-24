@@ -66,6 +66,9 @@ contextBridge.exposeInMainWorld('electron', {
   openDialogForNodeDataDir: (nodeId: NodeId) =>
     ipcRenderer.invoke('openDialogForNodeDataDir', nodeId),
 
+  // Node library
+  getNodeLibrary: () => ipcRenderer.invoke('getNodeLibrary'),
+
   // Settings/Config
   getIsDockerInstalled: () => ipcRenderer.invoke('getIsDockerInstalled'),
 });

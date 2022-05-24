@@ -1,0 +1,24 @@
+{
+  "specId": "arbitrum",
+  "version": "1.0.0",
+  "displayName": "Arbitrum One",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "imageName": "offchainlabs/arb-node:v1.3.0-d994f7d",
+    "input": {
+      "default": ["--l1.url", "http://0.0.0.0:8545"],
+      "docker": {
+        "containerVolumePath": "/home/user/.arbitrum/mainnet",
+        "raw": "-p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548"
+      }
+    },
+    "dependencies": ["L1/ExecutionClient"]
+  },
+  "category": "L2/ArbitrumOne",
+  "documentation": {
+    "default": "https://arbitrum.io/",
+    "docker": "https://developer.offchainlabs.com/docs/running_node"
+  },
+  "iconUrl": "https://arbitrum.io/wp-content/uploads/2021/08/Arbitrum_Symbol-Full-color-White-background-937x1024.png"
+}

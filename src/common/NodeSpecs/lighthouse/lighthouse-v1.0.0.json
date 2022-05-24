@@ -1,0 +1,48 @@
+{
+  "specId": "lighthouse-beacon",
+  "version": "1.0.0",
+  "displayName": "Lighthouse",
+  "execution": {
+    "executionTypes": ["docker", "binary"],
+    "defaultExecutionType": "docker",
+    "input": {
+      "default": [
+        "lighthouse",
+        "--network",
+        "mainnet",
+        "beacon",
+        "--http",
+        "--http-address",
+        "0.0.0.0",
+        "--http-allow-origin",
+        "\"*\""
+      ],
+      "docker": {
+        "containerVolumePath": "/root/.lighthouse",
+        "raw": "-d -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052"
+      }
+    },
+    "architectures": {
+      "docker": ["amd64", "arm64"]
+    },
+    "imageName": "sigp/lighthouse:latest-modern",
+    "binaryDownload": {
+      "type": "githubReleases",
+      "latestVersionUrl": "https://api.github.com/repos/sigp/lighthouse/releases/latest",
+      "excludeNameWith": "portable",
+      "responseFormat": "githubReleases"
+    }
+  },
+  "configTranslation": {
+    "dataDir": {
+      "documentation": "https://lighthouse-book.sigmaprime.io/advanced-datadir.html?highlight=--datadir#relative-paths"
+    }
+  },
+  "category": "L1/ConsensusClient/BeaconNode",
+  "rpcTranslation": "eth-l2-beacon",
+  "documentation": {
+    "default": "https://lighthouse-book.sigmaprime.io/intro.html",
+    "docker": "https://lighthouse-book.sigmaprime.io/docker.html"
+  },
+  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/lighthouse-logo.png"
+}

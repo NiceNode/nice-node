@@ -91,7 +91,6 @@ export const {
   useGetExecutionLatestBlockQuery,
   useGetExecutionIsSyncingQuery,
   useGetExecutionNetworkInfoQuery,
-  useGetExecutionNodeInfoQuery,
   useGetExecutionChainIdQuery,
   useGetExecutionPeersQuery,
 } = RtkqExecutionWs;

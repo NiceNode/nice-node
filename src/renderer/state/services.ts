@@ -66,14 +66,15 @@ export const RtkqExecutionWs: any = createApi({
         return { data: network };
       },
     }),
-    getExecutionNodeInfo: builder.query<ProviderResponse, null>({
-      queryFn: async () => {
+    getNodeVersion: builder.query<ProviderResponse, NiceNodeRpcTranslation>({
+      queryFn: async (rpcTranslation) => {
         let data;
-        // let error;
         try {
-          data = await provider.send('web3_clientVersion');
+          console.log('clientVersion rpcTranslation', rpcTranslation);
+          data = await executeTranslation('clientVersion', rpcTranslation);
+          console.log('clientVersion data', data);
         } catch (e) {
-          const error = { message: 'Unable to get client version.' };
+          const error = { message: 'Unable to get node version.' };
           console.log(e);
           return { error };
         }
@@ -105,7 +106,7 @@ export const {
   useGetExecutionLatestBlockQuery,
   useGetExecutionIsSyncingQuery,
   useGetExecutionNetworkInfoQuery,
-  useGetExecutionNodeInfoQuery,
+  useGetNodeVersionQuery,
   useGetExecutionChainIdQuery,
   useGetExecutionPeersQuery,
 } = RtkqExecutionWs;

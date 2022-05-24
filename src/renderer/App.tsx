@@ -9,8 +9,6 @@ import electron from './electronGlobal';
 import Header from './Header';
 import Footer from './Footer/Footer';
 import Warnings from './Warnings';
-import { useGetExecutionNodeInfoQuery } from './state/services';
-import { detectExecutionClient } from './utils';
 import { initialize as initializeIpcListeners } from './ipc';
 import { selectIsAvailableForPolling, selectNodeStatus } from './state/node';
 import LeftSideBar from './LeftSideBar';
@@ -24,15 +22,7 @@ import DataRefresher from './DataRefresher';
 // });
 
 const MainScreen = () => {
-  const [sNodeInfo, setNodeInfo] = useState(undefined);
-  // const [sIsOpenOnLogin, setIsOpenOnLogin] = useState<boolean>(false);
-  const sNodeStatus = useAppSelector(selectNodeStatus);
   const dispatch = useAppDispatch();
-  const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
-  const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
-  const qNodeInfo = useGetExecutionNodeInfoQuery(null, {
-    pollingInterval,
-  });
 
   // const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
   // console.log('isStartOnLogin: ', isStartOnLogin);
@@ -42,14 +32,6 @@ const MainScreen = () => {
     console.log('App loaded. Initializing...');
     initializeIpcListeners(dispatch);
   }, [dispatch]);
-
-  useEffect(() => {
-    if (typeof qNodeInfo?.data === 'string') {
-      setNodeInfo(qNodeInfo.data);
-    } else {
-      setNodeInfo(undefined);
-    }
-  }, [qNodeInfo]);
 
   // const onChangeOpenOnLogin = (openOnLogin: boolean) => {
   //   electron.setStoreValue('isStartOnLogin', openOnLogin);
@@ -85,23 +67,6 @@ const MainScreen = () => {
           }}
         >
           <NodeScreen />
-          <div>
-            {sNodeStatus === 'running' && (
-              <>
-                <h4 data-tip data-for="nodeInfo">
-                  {detectExecutionClient(sNodeInfo, true)}
-                </h4>
-                <ReactTooltip
-                  place="bottom"
-                  type="light"
-                  effect="solid"
-                  id="nodeInfo"
-                >
-                  <span style={{ fontSize: 16 }}>{sNodeInfo}</span>
-                </ReactTooltip>
-              </>
-            )}
-          </div>
           <Warnings />
         </div>
       </div>

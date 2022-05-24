@@ -15,11 +15,25 @@ import { ethers } from '../ethers';
 //   const returnValue
 // };
 
+/**
+ * These calls do not get routed thru the webRequests in main
+ *       request.mode = 'cors';
+      request.cache = 'no-cache';
+      request.credentials = 'same-origin';
+      request.redirect = 'follow';
+      request.referrer = 'client';
+ */
+
 const callFetch = async (apiRoute: string) => {
-  const response = await fetch(apiRoute, {
+  const response = await window.fetch(apiRoute, {
     headers: {
       accept: 'application/json',
     },
+    // mode: 'cors',
+    // cache: 'no-cache',
+    // credentials: 'same-origin',
+    redirect: 'follow',
+    referrer: 'client',
     // mode: 'no-cors', // no-cors works with nimbus
   });
   console.log(response);
@@ -33,7 +47,7 @@ const callFetch = async (apiRoute: string) => {
 
 const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
 
-type RpcCall = 'sync' | 'peers' | 'latestBlock';
+type RpcCall = 'sync' | 'peers' | 'latestBlock' | 'clientVersion';
 export const executeTranslation = async (
   rpcCall: RpcCall,
   rpcTranslation: string
@@ -68,6 +82,13 @@ export const executeTranslation = async (
         false,
       ]);
       return resp;
+    } else if (rpcCall === 'clientVersion') {
+      const resp = await provider.send('web3_clientVersion');
+      if (resp) {
+        return resp;
+      } else {
+        return undefined;
+      }
     }
   } else if (rpcTranslation === 'eth-l2-beacon') {
     // call beacon api
@@ -99,6 +120,12 @@ export const executeTranslation = async (
       console.log('latestBlock fetch resp ', resp);
       if (resp?.data?.connected !== undefined) {
         return resp.data.connected;
+      }
+    } else if (rpcCall === 'clientVersion') {
+      const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/version`);
+      console.log('peers fetch resp ', resp);
+      if (resp?.data?.version !== undefined) {
+        return resp.data.version;
       }
     }
   }

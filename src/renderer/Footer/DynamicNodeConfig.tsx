@@ -81,11 +81,11 @@ const DynamicNodeConfig = () => {
                 ) {
                   currentValue = configTranslation.defaultValue;
                 }
-                console.log(
-                  'rendering config: ',
-                  configTranslation,
-                  currentValue
-                );
+                // console.log(
+                //   'rendering config: ',
+                //   configTranslation,
+                //   currentValue
+                // );
                 return (
                   <div key={configKey}>
                     <div>
@@ -94,6 +94,11 @@ const DynamicNodeConfig = () => {
                         configTranslation.documentation) && (
                         <InfoModal title={configTranslation.displayName}>
                           {configTranslation.infoDescription}
+                          {configTranslation.defaultValue && (
+                            <p>
+                              Default value: {configTranslation.defaultValue}
+                            </p>
+                          )}
                           {configTranslation.documentation && (
                             <ExternalLink
                               title={'Documentation Link'}

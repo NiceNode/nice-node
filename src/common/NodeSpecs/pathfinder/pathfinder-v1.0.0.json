@@ -1,0 +1,12 @@
+{
+  "specId": "pathfinder",
+  "version": "1.0.0",
+  "displayName": "StarkNet, Pathfinder",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "imageName": "eqlabs/pathfinder:latest"
+  },
+  "category": "L2/StarkNet",
+  "iconUrl": "https://equilibrium.co/_next/image?url=%2Fimages%2Fcasestudies%2Fsquare-pathfinder.png&w=640&q=75"
+}
