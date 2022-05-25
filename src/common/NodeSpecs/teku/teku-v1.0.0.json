@@ -21,7 +21,7 @@
     }
   },
   "category": "L1/ConsensusClient/BeaconNode",
-  "rpcTranslation": "eth-l2-beacon",
+  "rpcTranslation": "eth-l1-beacon",
   "configTranslation": {
     "dataDir": {
       "displayName": "Node data is stored in this folder",

@@ -25,7 +25,7 @@
     }
   },
   "category": "L1/ConsensusClient/BeaconNode",
-  "rpcTranslation": "eth-l2-beacon",
+  "rpcTranslation": "eth-l1-beacon",
   "configTranslation": {
     "dataDir": {
       "displayName": "The directory where nimbus will store all blockchain data.",

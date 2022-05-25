@@ -28,36 +28,59 @@ const NodeCard = (props: {
         border: '1px solid',
         padding: 2,
         borderRadius: 5,
-        width: 100,
-        height: 100,
+        width: 120,
+        height: 120,
         marginLeft: 5,
         marginRight: 10,
         marginBottom: 10,
         opacity,
+        display: 'flex',
+        flexDirection: 'column',
       }}
       onClick={onSelected}
     >
       <div
         style={{
           height: 50,
+          width: 100,
           display: 'flex',
-          alignItems: 'center',
+          alignSelf: 'center',
           justifyContent: 'center',
         }}
       >
         <img
           src={iconUrl}
           alt={displayName}
-          style={{ maxWidth: '100%', maxHeight: 50 }}
+          style={{ maxWidth: '100%', maxHeight: 50, objectFit: 'contain' }}
         />
       </div>
       <div
         style={{
-          height: 50,
+          maxHeight: 45,
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          width: '100%',
+          overflow: 'hidden',
+          flexGrow: 1,
         }}
       >
-        <span style={{ textOverflow: 'ellipsis' }}>{displayName}</span>
+        {displayName}
       </div>
+      {nodeSpec.nodeReleasePhase &&
+        ['alpha', 'beta'].includes(nodeSpec.nodeReleasePhase) && (
+          <div
+            style={{
+              display: 'inline-block',
+              background: 'yellow',
+              borderRadius: 5,
+              padding: 3,
+              alignSelf: 'flex-start',
+            }}
+          >
+            <span>{nodeSpec.nodeReleasePhase}</span>
+          </div>
+        )}
       {isDockerRequired && isDisabled && (
         <div
           style={{

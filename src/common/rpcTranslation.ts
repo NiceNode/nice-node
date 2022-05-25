@@ -1,4 +1,4 @@
-// NodeSpecification.rpcTranslation?: 'eth-l1' | 'eth-l2-beacon' | object;
+// NodeSpecification.rpcTranslation?: 'eth-l1' | 'eth-l1-beacon' | object;
 
 export type RpcTranslation = {
   request: {
@@ -18,7 +18,11 @@ export type RpcTranslation = {
 //   sync?: RpcTranslation;
 // };
 
-export type NiceNodeRpcTranslation = 'eth-l1' | 'eth-l2-beacon';
+export type NiceNodeRpcTranslation =
+  | 'eth-l1'
+  | 'eth-l1-beacon'
+  | 'eth-l2-starknet'
+  | 'eth-l2-arbitrum';
 // | {
 //     peerCount?: RpcTranslation;
 //     sync?: RpcTranslation;

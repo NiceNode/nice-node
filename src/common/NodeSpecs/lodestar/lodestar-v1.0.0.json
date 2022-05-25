@@ -9,17 +9,18 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpPort": "5052"
+        "httpPort": "5052",
+        "eth1ProviderUrl": "http://host.docker.internal:8545"
       },
       "docker": {
         "containerVolumePath": "/usr/app/data",
-        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
+        "raw": "--add-host host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
         "forcedRawNodeInput": "beacon --rootDir /usr/app/data"
       }
     }
   },
   "category": "L1/ConsensusClient/BeaconNode",
-  "rpcTranslation": "eth-l2-beacon",
+  "rpcTranslation": "eth-l1-beacon",
   "nodeReleasePhase": "beta",
   "configTranslation": {
     "dataDir": {

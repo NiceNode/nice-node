@@ -25,7 +25,7 @@ import { ethers } from '../ethers';
  */
 
 const callFetch = async (apiRoute: string) => {
-  const response = await window.fetch(apiRoute, {
+  const response = await fetch(apiRoute, {
     headers: {
       accept: 'application/json',
     },
@@ -46,6 +46,10 @@ const callFetch = async (apiRoute: string) => {
 };
 
 const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
+// const provider9545 = new ethers.providers.JsonRpcProvider(
+//   'http://localhost:9545'
+// );
+// const provider = new ethers.providers.JsonRpcProvider('http://localhost:9545');
 
 type RpcCall = 'sync' | 'peers' | 'latestBlock' | 'clientVersion';
 export const executeTranslation = async (
@@ -55,7 +59,11 @@ export const executeTranslation = async (
   if (rpcTranslation === 'eth-l1') {
     // use provider
     if (rpcCall === 'sync') {
-      const resp = await provider.send('eth_syncing');
+      let methodName = 'eth_syncing';
+      if (rpcTranslation === 'eth-l2-starknet') {
+        methodName = 'starknet_syncing';
+      }
+      const resp = await provider.send(methodName);
       let isSyncing;
       let syncPercent;
       if (resp) {
@@ -77,10 +85,11 @@ export const executeTranslation = async (
         return undefined;
       }
     } else if (rpcCall === 'latestBlock') {
-      const resp = await provider.send('eth_getBlockByNumber', [
-        'latest',
-        false,
-      ]);
+      let methodName = 'eth_getBlockByNumber';
+      if (rpcTranslation === 'eth-l2-starknet') {
+        methodName = 'starknet_getBlockByNumber';
+      }
+      const resp = await provider.send(methodName, ['latest', false]);
       return resp;
     } else if (rpcCall === 'clientVersion') {
       const resp = await provider.send('web3_clientVersion');
@@ -90,7 +99,45 @@ export const executeTranslation = async (
         return undefined;
       }
     }
-  } else if (rpcTranslation === 'eth-l2-beacon') {
+  } else if (rpcTranslation === 'eth-l1-beacon') {
+    // call beacon api
+    const beaconBaseUrl = 'http://localhost:5052';
+    if (rpcCall === 'sync') {
+      const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/syncing`);
+      if (resp?.data?.is_syncing !== undefined) {
+        let syncPercent;
+        if (resp.data.is_syncing) {
+          const syncRatio =
+            parseInt(resp.data.head_slot, 10) /
+            (parseInt(resp.data.sync_distance, 10) +
+              parseInt(resp.data.head_slot, 10));
+          syncPercent = (syncRatio * 100).toFixed(1);
+        }
+
+        return { isSyncing: resp.data.is_syncing, syncPercent };
+      }
+    } else if (rpcCall === 'peers') {
+      const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/peer_count`);
+      console.log('peers fetch resp ', resp);
+      if (resp?.data?.connected !== undefined) {
+        return resp.data.connected;
+      }
+    } else if (rpcCall === 'latestBlock') {
+      const resp = await callFetch(
+        `${beaconBaseUrl}​/eth​/v2​/beacon​/blocks​/head`
+      );
+      console.log('latestBlock fetch resp ', resp);
+      if (resp?.data?.connected !== undefined) {
+        return resp.data.connected;
+      }
+    } else if (rpcCall === 'clientVersion') {
+      const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/version`);
+      console.log('peers fetch resp ', resp);
+      if (resp?.data?.version !== undefined) {
+        return resp.data.version;
+      }
+    }
+  } else if (rpcTranslation === 'eth-l2-starknet') {
     // call beacon api
     const beaconBaseUrl = 'http://localhost:5052';
     if (rpcCall === 'sync') {

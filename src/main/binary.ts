@@ -14,7 +14,11 @@ import Node, { isBinaryNode, NodeStatus } from '../common/node';
 import logger, { gethLogger } from './logger';
 import { httpGet } from './httpReq';
 import { execAwait } from './execHelper';
-import { getNodesDirPath, doesFileOrDirExist, checkAndOrCreateDir } from './files';
+import {
+  getNodesDirPath,
+  doesFileOrDirExist,
+  checkAndOrCreateDir,
+} from './files';
 import { updateNode } from './state/nodes';
 import { getProcessUsageByPid } from './monitor';
 import {
@@ -68,7 +72,7 @@ const parseFileNameFromPath = (path: string, excludeExension?: boolean) => {
   // ex. '/root/usr/yay.zip
 
   let pathSlash = '/';
-  if(platform.isWindows()) {
+  if (platform.isWindows()) {
     pathSlash = '\\';
   }
   if (excludeExension) {
@@ -98,10 +102,7 @@ export const unzipFile = async (filePath: string, directory: string) => {
   // status = NODE_STATUS.extracting;
   // send(CHANNELS.geth, status);
   let tarCommand = `tar --directory "${directory}" -xf "${filePath}"`;
-  const buildDir = path.join(
-    directory,
-    parseFileNameFromPath(filePath, true)
-  );
+  const buildDir = path.join(directory, parseFileNameFromPath(filePath, true));
   await checkAndOrCreateDir(buildDir);
   if (filePath.includes('.zip')) {
     // unzip doesn't create a directory with the zipped filename like tar does
@@ -139,7 +140,7 @@ export const downloadBinary = async (
   const fileOutPath = path.join(directory, downloadFileName);
 
   // if fileOutPath exists, use it, but we should delete and retry...
-  if(!await doesFileOrDirExist(fileOutPath)) {
+  if (!(await doesFileOrDirExist(fileOutPath))) {
     try {
       const response = await httpGet(downloadUrl, {
         headers: [{ name: 'Accept', value: 'application/octet-stream' }],
@@ -172,7 +173,7 @@ export const downloadBinary = async (
       throw err;
     }
   } else {
-    logger.info("Downloaded binary already exists")
+    logger.info('Downloaded binary already exists');
   }
 
   await unzipFile(fileOutPath, directory);
@@ -204,10 +205,7 @@ export const checkOrDownloadLatestBinary = async (node: Node) => {
     );
   }
   const excludeExension = true;
-  const latestBuildName = parseFileNameFromUrl(
-    latestBuildUrl,
-    excludeExension
-  );
+  const latestBuildName = parseFileNameFromUrl(latestBuildUrl, excludeExension);
   if (runtime.build === latestBuildName) {
     return;
   }
@@ -463,6 +461,7 @@ const watchBinaryProcesses = async () => {
             node.status = nodeStatus;
             nodeStore.updateNode(node);
           } else {
+            // todo: fix: this happens on computer restart
             logger.error(
               `Unable to get process details. Proccess pid ${pid} not found.`
             );

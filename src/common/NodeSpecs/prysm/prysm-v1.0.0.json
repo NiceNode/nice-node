@@ -14,7 +14,7 @@
     }
   },
   "category": "L1/ConsensusClient/BeaconNode",
-  "rpcTranslation": "eth-l2-beacon",
+  "rpcTranslation": "eth-l1-beacon",
   "documentation": {
     "default": "https://docs.prylabs.network/docs/getting-started",
     "docker": "https://docs.prylabs.network/docs/install/install-with-docker/"

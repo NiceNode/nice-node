@@ -35,11 +35,92 @@
   },
   "configTranslation": {
     "dataDir": {
+      "displayName": "Node data is stored in this folder",
+      "cliConfigPrefix": "--rootDir ",
+      "uiControl": {
+        "type": "filePath"
+      },
+      "infoDescription": "Lodestar root directory",
       "documentation": "https://lighthouse-book.sigmaprime.io/advanced-datadir.html?highlight=--datadir#relative-paths"
+    },
+    "http": {
+      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "cliConfigPrefix": "--api.rest.enabled ",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "true"
+          },
+          {
+            "value": "Disabled",
+            "config": "false"
+          }
+        ]
+      },
+      "defaultValue": "Disabled"
+    },
+    "httpApis": {
+      "displayName": "Enabled HTTP APIs",
+      "cliConfigPrefix": "--http.api ",
+      "defaultValue": ["beacon", "config", "events", "node", "validator"],
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "beacon",
+            "config": "beacon"
+          },
+          {
+            "value": "config",
+            "config": "config"
+          },
+          {
+            "value": "events",
+            "config": "events"
+          },
+          {
+            "value": "node",
+            "config": "node"
+          },
+
+          {
+            "value": "validator",
+            "config": "validator"
+          }
+        ]
+      }
+    },
+    "httpPort": {
+      "displayName": "Set port for HTTP API",
+      "cliConfigPrefix": "--api.rest.port ",
+      "defaultValue": "9596",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "httpCorsDomains": {
+      "displayName": "Change where the node accepts http connections (use comma separated urls)",
+      "cliConfigPrefix": "--http.corsdomain ",
+      "defaultValue": "*",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "eth1ProviderUrl": {
+      "displayName": "Url to Eth1 node with enabled rpc",
+      "cliConfigPrefix": "--eth1.providerUrls ",
+      "defaultValue": "http://localhost:8545",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)"
     }
   },
   "category": "L1/ConsensusClient/BeaconNode",
-  "rpcTranslation": "eth-l2-beacon",
+  "rpcTranslation": "eth-l1-beacon",
   "documentation": {
     "default": "https://lighthouse-book.sigmaprime.io/intro.html",
     "docker": "https://lighthouse-book.sigmaprime.io/docker.html"
