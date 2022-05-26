@@ -79,6 +79,7 @@ const DynamicNodeConfig = () => {
                   currentValue === undefined &&
                   configTranslation.defaultValue !== undefined
                 ) {
+                  // todo for mutli select?
                   currentValue = configTranslation.defaultValue;
                 }
                 // console.log(

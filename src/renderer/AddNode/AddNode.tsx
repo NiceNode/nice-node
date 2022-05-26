@@ -45,7 +45,7 @@ const categorizeNodeLibrary = (
 };
 
 const AddNode = () => {
-  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>(true);
+  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
   const [sIsModalOpenConfirmAddNode, setIsModalOpenConfirmAddNode] =
     useState<boolean>(false);
   const [sSelectedNodeSpecification, setSelectedNodeSpecification] =

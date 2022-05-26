@@ -7,9 +7,11 @@
     "defaultExecutionType": "docker",
     "input": {
       "defaultConfig": {
-        "http": "Enabled"
+        "http": "Enabled",
+        "syncMode": "snap"
       },
       "docker": {
+        "raw": "-p 8545:8545 -p 8546:8546",
         "containerVolumePath": "/nethermind/data",
         "forcedRawNodeInput": "--datadir /nethermind/data --JsonRpc.Host 0.0.0.0"
       }
@@ -124,21 +126,16 @@
     "syncMode": {
       "displayName": "Node synchronization mode",
       "category": "Syncronization",
-      "cliConfigPrefix": "--config ",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
             "value": "fast",
-            "config": "mainnet"
+            "config": "--Sync.FastSync true"
           },
           {
-            "value": "beam",
-            "config": "mainnet_beam"
-          },
-          {
-            "value": "archive",
-            "config": "mainnet_archive"
+            "value": "snap",
+            "config": "--Sync.SnapSync true"
           }
         ]
       },

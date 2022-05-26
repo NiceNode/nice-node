@@ -99,8 +99,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 1624,
+    height: 1024,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -145,11 +145,14 @@ const createWindow = async () => {
 
   // [Start] Modifies the renderer's Origin header for all outgoing web requests.
   // This is done to simplify the allowed origins set for geth
+
+  // Only modify headers going to nodes at localhost
   const filter = {
     urls: [
-      'http://localhost/',
+      // '*://*/*',
+      'http://localhost/*',
       'ws://localhost/',
-      'http://localhost:*/',
+      'http://localhost:*/*',
       // '*://localhost*/',
     ], // Remote API URS for which you are getting CORS error
   };
@@ -159,10 +162,18 @@ const createWindow = async () => {
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
     filter,
     (details, callback) => {
-      // details.requestHeaders.Origin = `http://localhost:1212`; // eh works for nimbus
+      // console.log('request onBeforeSendHeaders details: ', details);
+      // console.log(
+      //   'request onBeforeSendHeaders host, url, method: ',
+      //   details.referrer,
+      //   details.url,
+      //   details.method
+      // );
+
+      details.requestHeaders.Origin = `http://localhost`; // eh works for nimbus
+      // details.requestHeaders.Referer = `http://localhost`;
       // details.requestHeaders.Origin = `nice-node://`;
-      console.log('Setting Access-Control-Allow-Origin on requested header');
-      details.requestHeaders.Origin = `*`;
+      // details.requestHeaders.Origin = `*`;
       callback({ requestHeaders: details.requestHeaders });
     }
   );
@@ -172,15 +183,28 @@ const createWindow = async () => {
       if (!details.responseHeaders) {
         details.responseHeaders = {};
       }
-      // '*',
-      // details.responseHeaders['Access-Control-Allow-Origin'] = [
-      //   '*',
-      //   // 'http://localhost:1212', // eh works for nimbus, not for geth
-      // ];
-      // for geth
-      console.log('Setting Access-Control-Allow-Origin on response header');
+      // console.log('request onHeadersReceived details: ', details);
+      // console.log(
+      //   'request onBeforeSendHeaders host, url, method, code, status: ',
+      //   details.referrer,
+      //   details.url,
+      //   details.method,
+      //   details.statusCode,
+      //   details.statusLine
+      // );
       details.responseHeaders['Access-Control-Allow-Headers'] = ['*'];
+      if (
+        !details.responseHeaders['Access-Control-Allow-Origin'] ||
+        !details.responseHeaders['access-control-allow-origin']
+      ) {
+        // console.log('API SENT NO CORS HEADER! details: ', details);
+      }
       details.responseHeaders['Access-Control-Allow-Origin'] = ['*'];
+      // Some api servers use lower-case.
+      //  Chrome will combine both headers and throw a CORS error for having 2 values.
+      //  So just delete the lower-case value
+      delete details.responseHeaders['access-control-allow-origin'];
+      // console.log('API SENT NO CORS HEADER! after: ', details);
 
       callback({ responseHeaders: details.responseHeaders });
     }

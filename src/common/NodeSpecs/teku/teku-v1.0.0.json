@@ -10,8 +10,8 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpHostAddress": "0.0.0.0",
-        "httpCorsDomains": "\"http://localhost:1212\"",
-        "eth1ProviderUrl": "http://localhost:8545"
+        "httpCorsDomains": "\"http://localhost\"",
+        "eth1ProviderUrl": "http://host.docker.internal:8545"
       },
       "docker": {
         "containerVolumePath": "/var/lib/teku",

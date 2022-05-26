@@ -16,17 +16,17 @@
     "binaryDownload": {
       "type": "static",
       "darwin": {
-        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.17-25c9b49f.tar.gz"
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.18-de23cf91.tar.gz"
       },
       "linux": {
-        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.17-25c9b49f.tar.gz",
-        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-linux-386-1.10.17-25c9b49f.tar.gz",
-        "arm64": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.10.17-25c9b49f.tar.gz",
-        "arm7": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm7-1.10.17-25c9b49f.tar.gz"
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.18-de23cf91.tar.gz",
+        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-linux-386-1.10.18-de23cf91.tar.gz",
+        "arm64": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.10.18-de23cf91.tar.gz",
+        "arm7": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm7-1.10.18-de23cf91.tar.gz"
       },
       "windows": {
-        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.17-25c9b49f.zip",
-        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-windows-386-1.10.17-25c9b49f.zip"
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.18-de23cf91.zip",
+        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-windows-386-1.10.18-de23cf91.zip"
       }
     }
   },
@@ -77,7 +77,7 @@
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
       "cliConfigPrefix": "--http.api ",
-      "defaultValue": "eth,net,web3",
+      "defaultValue": ["eth", "net", "web3"],
       "valuesJoinStr": ",",
       "uiControl": {
         "type": "select/multiple",
@@ -121,7 +121,7 @@
       "displayName": "Node synchronization mode",
       "infoDescription": "Blockchain sync mode (\"snap\", \"full\" or \"light\") (default: snap)",
       "category": "Syncronization",
-      "cliConfigPrefix": "--config ",
+      "cliConfigPrefix": "--syncmode ",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -140,7 +140,7 @@
         ]
       },
       "defaultValue": "snap",
-      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/sync-modes"
+      "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
     }
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"

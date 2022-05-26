@@ -6,20 +6,17 @@
     "executionTypes": ["docker", "binary"],
     "defaultExecutionType": "docker",
     "input": {
-      "default": [
-        "lighthouse",
-        "--network",
-        "mainnet",
-        "beacon",
-        "--http",
-        "--http-address",
-        "0.0.0.0",
-        "--http-allow-origin",
-        "\"*\""
-      ],
+      "defaultConfig": {
+        "http": "Enabled",
+        "httpHostAddress": "0.0.0.0",
+        "httpCorsDomains": "nice-node://*,http://localhost*",
+        "websockets": "Enabled",
+        "eth1ProviderUrl": "http://host.docker.internal:8545"
+      },
       "docker": {
         "containerVolumePath": "/root/.lighthouse",
-        "raw": "-d -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052"
+        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052",
+        "forcedRawNodeInput": "lighthouse --network mainnet beacon --eth1"
       }
     },
     "architectures": {
@@ -36,87 +33,75 @@
   "configTranslation": {
     "dataDir": {
       "displayName": "Node data is stored in this folder",
-      "cliConfigPrefix": "--rootDir ",
+      "cliConfigPrefix": "--datadir ",
       "uiControl": {
         "type": "filePath"
       },
-      "infoDescription": "Lodestar root directory",
+      "infoDescription": "Used to specify a custom root data directory for lighthouse keys and databases. Defaults to $HOME/.lighthouse/{network} where network is the value of the `network` flag Note: Users should specify separate custom datadirs for different networks.",
       "documentation": "https://lighthouse-book.sigmaprime.io/advanced-datadir.html?highlight=--datadir#relative-paths"
     },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",
-      "cliConfigPrefix": "--api.rest.enabled ",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
             "value": "Enabled",
-            "config": "true"
+            "config": "--http"
           },
           {
-            "value": "Disabled",
-            "config": "false"
+            "value": "Disabled"
           }
         ]
       },
-      "defaultValue": "Disabled"
+      "defaultValue": "Disabled",
+      "documentation": "https://lighthouse-book.sigmaprime.io/api-bn.html#starting-the-server"
     },
-    "httpApis": {
-      "displayName": "Enabled HTTP APIs",
-      "cliConfigPrefix": "--http.api ",
-      "defaultValue": ["beacon", "config", "events", "node", "validator"],
-      "valuesJoinStr": ",",
+    "httpHostAddress": {
+      "displayName": "Listening address of the REST server.",
+      "cliConfigPrefix": "--http-address ",
+      "defaultValue": "127.0.0.1",
       "uiControl": {
-        "type": "select/multiple",
-        "controlTranslations": [
-          {
-            "value": "beacon",
-            "config": "beacon"
-          },
-          {
-            "value": "config",
-            "config": "config"
-          },
-          {
-            "value": "events",
-            "config": "events"
-          },
-          {
-            "value": "node",
-            "config": "node"
-          },
-
-          {
-            "value": "validator",
-            "config": "validator"
-          }
-        ]
-      }
+        "type": "text"
+      },
+      "infoDescription": "Limit the access to the REST API to a particular hostname (for CORS-enabled clients such as browsers)."
     },
     "httpPort": {
       "displayName": "Set port for HTTP API",
-      "cliConfigPrefix": "--api.rest.port ",
-      "defaultValue": "9596",
+      "cliConfigPrefix": "--http-port ",
+      "defaultValue": "5052",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "documentation": "https://lighthouse-book.sigmaprime.io/api-bn.html#starting-the-server"
     },
     "httpCorsDomains": {
       "displayName": "Change where the node accepts http connections (use comma separated urls)",
-      "cliConfigPrefix": "--http.corsdomain ",
-      "defaultValue": "*",
+      "cliConfigPrefix": "--http-allow-origin ",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "infoDescription": "Set the value of the Access-Control-Allow-Origin response HTTP header. Use * to allow any origin (not recommended in production). If no value is supplied, the CORS allowed origin is set to the listen address of this server (e.g., http://localhost:5052)",
+      "documentation": "https://lighthouse-book.sigmaprime.io/api-bn.html#starting-the-server"
     },
     "eth1ProviderUrl": {
       "displayName": "Url to Eth1 node with enabled rpc",
-      "cliConfigPrefix": "--eth1.providerUrls ",
+      "cliConfigPrefix": "--eth1-endpoints ",
       "defaultValue": "http://localhost:8545",
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)"
+      "infoDescription": "One or more comma-delimited server endpoints for web3 connection. If multiple endpoints are given the endpoints are used as fallback in the given order. Also enables the --eth1 flag. Defaults to http://127.0.0.1:8545."
+    },
+    "executionEngineEndpoint": {
+      "displayName": "URL of the execution client's Engine JSON-RPC APIs",
+      "cliConfigPrefix": "--execution-endpoints ",
+      "defaultValue": "http://127.0.0.1:8545",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "One or more comma-delimited server endpoints for HTTP JSON-RPC connection. If multiple endpoints are given the endpoints are used as fallback in the given order. Also enables the --merge flag. If this flag is omitted and the --eth1-endpoints is supplied, those values will be used. Defaults to http://127.0.0.1:8545.",
+      "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#ee-endpoint"
     }
   },
   "category": "L1/ConsensusClient/BeaconNode",

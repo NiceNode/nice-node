@@ -10,10 +10,12 @@ type CustomerErrorType = {
 type ProviderResponse = any;
 
 // const provider = new ethers.providers.WebSocketProvider('ws://localhost:8546');
-const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
-const provider9545 = new ethers.providers.JsonRpcProvider(
-  'http://localhost:9545'
-);
+// const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
+// const provider9545 = new ethers.providers.JsonRpcProvider(
+//   'http://localhost:9545'
+// );
+// const provider9545 =
+const provider = new ethers.providers.JsonRpcProvider('http://localhost:8547');
 
 // Define a service using a base URL and expected endpoints
 // lots of issues in RTKQ github complaining about typescript breaking changes
@@ -30,11 +32,11 @@ export const RtkqExecutionWs: any = createApi({
         let data;
         try {
           // data = await provider.send('eth_getBlockByNumber', ['latest', false]);
-          console.log('peers rpcTranslation', rpcTranslation);
+          console.log('latestBlock rpcTranslation', rpcTranslation);
           data = await executeTranslation('latestBlock', rpcTranslation);
-          console.log('peers data', data);
+          console.log('latestBlock data', data);
         } catch (e) {
-          const error = { message: 'Unable to get syncing value' };
+          const error = { message: 'Unable to get latestBlock value' };
           console.log(e);
           return { error };
         }

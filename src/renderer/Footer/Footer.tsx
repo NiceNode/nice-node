@@ -4,7 +4,6 @@ import { MdSettings } from 'react-icons/md';
 import { useEffect, useState } from 'react';
 
 import IconButton from '../IconButton';
-import Settings from './Settings';
 import Monitoring from './Monitoring';
 import Debugging from './Debugging';
 import electron from '../electronGlobal';

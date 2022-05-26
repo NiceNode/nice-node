@@ -50,9 +50,12 @@ const Header = () => {
       pollingInterval,
     }
   );
-  const qLatestBlock = useGetExecutionLatestBlockQuery(null, {
-    pollingInterval,
-  });
+  const qLatestBlock = useGetExecutionLatestBlockQuery(
+    selectedNode?.spec.rpcTranslation,
+    {
+      pollingInterval,
+    }
+  );
   const qNetwork = useGetNetworkConnectedQuery(null, {
     // Only polls network connection if there are exactly 0 peers
     pollingInterval: typeof sPeers === 'number' && sPeers === 0 ? 30000 : 0,

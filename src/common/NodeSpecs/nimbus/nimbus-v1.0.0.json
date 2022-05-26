@@ -11,7 +11,8 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpHostAddress": "0.0.0.0",
-        "httpCorsDomains": "\"http://localhost:1212\""
+        "httpCorsDomains": "\"http://localhost\"",
+        "eth1ProviderUrl": "\"ws://host.docker.internal:8546\""
       },
       "docker": {
         "containerVolumePath": "/home/user/nimbus-eth2/build/data",

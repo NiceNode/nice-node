@@ -1,19 +1,93 @@
 {
   "specId": "arbitrum",
   "version": "1.0.0",
-  "displayName": "Arbitrum One",
+  "displayName": "Arbitrum Nitro (Goerli testnet)",
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "offchainlabs/arb-node:v1.3.0-d994f7d",
+    "imageName": "offchainlabs/nitro-node:v2.0.0-alpha.4",
     "input": {
-      "default": ["--l1.url", "http://0.0.0.0:8545"],
+      "defaultConfig": {
+        "eth1ProviderUrl": "https://goerli.infura.io/v3/97fa4206f9bd4ea9957f9a82a2b2e4d0",
+        "httpCorsDomains": "http://localhost"
+      },
       "docker": {
-        "containerVolumePath": "/home/user/.arbitrum/mainnet",
-        "raw": "-p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548"
+        "containerVolumePath": "/home/user/.arbitrum/goerli",
+        "raw": "-p 8547:8547 -p 8548:8548"
       }
     },
     "dependencies": ["L1/ExecutionClient"]
+  },
+  "rpcTranslation": "eth-l1",
+  "configTranslation": {
+    "eth1ProviderUrl": {
+      "displayName": "This should point to the HTTP RPC endpoint of your Ethereum entry-point",
+      "cliConfigPrefix": "--l1.url ",
+      "defaultValue": "http://localhost:8545",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "This should point to the HTTP RPC endpoint of your Ethereum entry-point, typically a local Ethereum client or a hosted gateway service such as Infura or Cloudflare. Examples: infura: https://goerli.infura.io/v3/<PROJECT_ID>, local EC (nethermind/besu/geth): http://localhost:8545"
+    },
+    "websockets": {
+      "displayName": "rpc websocket connections (*BeaconNodes may require websocket connections)",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--ws"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled"
+    },
+    "httpApis": {
+      "displayName": "Enabled HTTP APIs",
+      "cliConfigPrefix": "--http.api ",
+      "defaultValue": "eth,net,web3",
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "eth",
+            "config": "Eth"
+          },
+          {
+            "value": "net",
+            "config": "Net"
+          },
+          {
+            "value": "web3",
+            "config": "Web3"
+          },
+          {
+            "value": "debug",
+            "config": "Debug"
+          },
+
+          {
+            "value": "personal",
+            "config": "Personal"
+          },
+          {
+            "value": "admin",
+            "config": "Admin"
+          }
+        ]
+      }
+    },
+    "httpCorsDomains": {
+      "displayName": "Change where the node accepts http connections (use comma separated urls)",
+      "cliConfigPrefix": "--http.corsdomain ",
+      "uiControl": {
+        "type": "text"
+      }
+    }
   },
   "category": "L2/ArbitrumOne",
   "documentation": {

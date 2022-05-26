@@ -87,9 +87,12 @@ export const initialize = () => {
       return updateNodeProperties(nodeId, propertiesToUpdate);
     }
   );
-  ipcMain.handle('removeNode', (_event, nodeId: NodeId) => {
-    return removeNode(nodeId);
-  });
+  ipcMain.handle(
+    'removeNode',
+    (_event, nodeId: NodeId, options: { isDeleteStorage: boolean }) => {
+      return removeNode(nodeId, options);
+    }
+  );
   ipcMain.handle('startNode', (_event, nodeId: NodeId) => {
     return startNode(nodeId);
   });

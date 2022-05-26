@@ -5,7 +5,6 @@ import MenuDrawer from './MenuDrawer';
 import DynamicNodeConfig from './DynamicNodeConfig';
 import { useAppSelector } from '../state/hooks';
 import { selectSelectedNode } from '../state/node';
-// import NiceNodeSettings from './NiceNodeSettings';
 
 type Props = {
   isOpen: boolean | undefined;
@@ -33,7 +32,7 @@ const DynamicSettings = ({ isOpen, onClickCloseButton }: Props) => {
         <p>
           Your node requires this data to run and will require time and internet
           data to recover if deleted. Only delete node data if you do not intend
-          to run a node.
+          to run this node.
         </p>
         {/* todo */}
         <button
