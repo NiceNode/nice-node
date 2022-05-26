@@ -2,7 +2,7 @@
 import { NodeSpecification } from '../common/nodeSpec';
 import { Node, NodeId } from '../common/node';
 import { NodeConfig } from '../main/state/nodeConfig';
-import { NodeLibrary } from 'main/state/nodeLibrary';
+import { NodeLibrary } from '../main/state/nodeLibrary';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
 //  we extend window.performance to include Chrome's memory stats
@@ -46,11 +46,12 @@ declare global {
       getUserNodes(): UserNodes;
       addNode(nodeSpec: NodeSpecification): Node;
       updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;
-      removeNode(nodeId: NodeId): Node;
+      removeNode(nodeId: NodeId, options: { isDeleteStorage: boolean }): Node;
       startNode(nodeId: NodeId): void;
       stopNode(nodeId: NodeId): void;
       openDialogForNodeDataDir(nodeId: NodeId): void;
       updateNodeUsedDiskSpace(nodeId: NodeId): void;
+      deleteNodeStorage(nodeId: NodeId): boolean;
 
       // Node library
       getNodeLibrary(): NodeLibrary;

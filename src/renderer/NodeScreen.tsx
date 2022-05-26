@@ -6,6 +6,7 @@ import { MdDelete } from 'react-icons/md';
 import { NodeId, NodeStatus } from '../common/node';
 import electron from './electronGlobal';
 import InstallDocker from './InstallDocker';
+import RemoveNodeButton from './AddNode/RemoveNodeButton';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector } from './state/hooks';
 import { selectSelectedNode } from './state/node';
@@ -43,12 +44,6 @@ const NodeScreen = () => {
 
   const { status, spec } = selectedNode;
   const { category, displayName } = spec;
-
-  // todo: modal with confirm & delete data warning,etc.
-  const onClickRemoveNode = async (nodeId: NodeId) => {
-    const node = await electron.removeNode(nodeId);
-    console.log('removed node: ', node);
-  };
 
   return (
     <div>
@@ -112,15 +107,7 @@ const NodeScreen = () => {
           </div>
         </button>
         &nbsp;
-        <button
-          type="button"
-          onClick={() => onClickRemoveNode(selectedNode.id)}
-        >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <MdDelete style={{ marginRight: 5 }} />
-            Remove
-          </div>
-        </button>
+        <RemoveNodeButton node={selectedNode} />
       </div>
     </div>
   );

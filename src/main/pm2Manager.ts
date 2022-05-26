@@ -1,11 +1,5 @@
 import { promisify } from 'node:util';
-import {
-  Proc,
-  ProcessDescription,
-  StartOptions,
-  Pm2Env,
-  ProcessStatus,
-} from 'pm2';
+import { Proc, ProcessDescription } from 'pm2';
 
 import logger from './logger';
 
@@ -16,6 +10,7 @@ pm2.describe = promisify(pm2.describe);
 
 pm2.start = promisify(pm2.start);
 pm2.stop = promisify(pm2.stop);
+pm2.delete = promisify(pm2.delete);
 pm2.list = promisify(pm2.list);
 pm2.restart = promisify(pm2.restart);
 pm2.monit = promisify(pm2.monit);
@@ -28,6 +23,9 @@ pm2.monit = promisify(pm2.monit);
 //   restart: promisify(pm2.restart),
 //   monit: promisify(pm2.monit),
 
+export const deleteProcess = async (pmId: number) => {
+  return pm2.delete(pmId);
+};
 export const getProcesses = async (): Promise<ProcessDescription[]> => {
   return pm2.list();
 };
@@ -56,31 +54,6 @@ export const initialize = async () => {
   } catch (err) {
     logger.error('initialize pm2Manager error:', err);
   }
-
-  // pm2.describe('gethpm2', (err, dscribeData) => {
-  //   console.log(err, dscribeData);
-  // });
-  // pm2.start(
-  //   {
-  //     script:
-  //       '/home/johns/.config/Electron/geth-linux-amd64-1.10.17-25c9b49f/geth --http --http.corsdomain nice-node://,http://localhost',
-  //     name: 'gethpm2',
-  //   },
-  //   function (err, apps) {
-  //     if (err) {
-  //       console.error(err);
-  //     }
-
-  //     pm2.list((err, list) => {
-  //       console.log(err, list);
-
-  //       // pm2.restart('api', (err, proc) => {
-  //       //   // Disconnects from PM2
-  //       //   pm2.disconnect();
-  //       // });
-  //     });
-  //   }
-  // );
 };
 export const stopProcess = async (pm_id: number): Promise<Proc> => {
   const stopResult = await pm2.stop(pm_id);

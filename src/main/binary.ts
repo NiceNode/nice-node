@@ -28,6 +28,7 @@ import {
   stopProcess,
   initialize as initPm2Manager,
   onExit as onExitPm2Manager,
+  deleteProcess,
 } from './pm2Manager';
 import * as nodeStore from './state/nodes';
 import { Proc, ProcessDescription } from 'pm2';
@@ -408,6 +409,17 @@ export const stopBinary = async (node: Node) => {
     console.error(`stopBinary no pid found for node ${node.spec.specId}`);
     node.status = NodeStatus.errorStopping;
     updateNode(node);
+  }
+};
+
+export const removeBinaryNode = async (node: Node) => {
+  if (
+    Array.isArray(node.runtime.processIds) &&
+    node.runtime.processIds[0] !== undefined
+  ) {
+    // assume only one process
+    const pmId = node.runtime.processIds[0];
+    return await deleteProcess(parseInt(pmId));
   }
 };
 

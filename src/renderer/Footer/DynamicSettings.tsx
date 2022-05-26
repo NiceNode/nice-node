@@ -13,7 +13,8 @@ type Props = {
 
 const DynamicSettings = ({ isOpen, onClickCloseButton }: Props) => {
   const selectedNode = useAppSelector(selectSelectedNode);
-  const [sGethDeleteResult, setGethDeleteResult] = useState<boolean>();
+  const [sDeleteNodeStorageResult, setDeleteNodeStorageResult] =
+    useState<boolean>();
 
   let title = 'Settings';
   if (selectedNode) {
@@ -34,22 +35,29 @@ const DynamicSettings = ({ isOpen, onClickCloseButton }: Props) => {
           data to recover if deleted. Only delete node data if you do not intend
           to run this node.
         </p>
-        {/* todo */}
+        {/* todo fix: This deletes the entire node.runtime.dataDir.. hmm */}
         <button
           type="button"
+          disabled={selectedNode === undefined}
           onClick={async () => {
-            console.log('Deleting Geth Data');
+            console.log('Deleting node storage...');
             // clear result while waiting for delete to return
-            setGethDeleteResult(undefined);
-            setGethDeleteResult(await electron.deleteGethDisk());
+            setDeleteNodeStorageResult(undefined);
+            if (selectedNode?.id) {
+              setDeleteNodeStorageResult(
+                await electron.deleteNodeStorage(selectedNode?.id)
+              );
+            } else {
+              console.error('Unable to delete storage. No selected node.');
+            }
           }}
           style={{ marginLeft: 10, backgroundColor: 'red', color: 'white' }}
         >
           <span>Delete</span>
         </button>
-        {sGethDeleteResult !== undefined && (
+        {sDeleteNodeStorageResult !== undefined && (
           <>
-            {sGethDeleteResult ? (
+            {sDeleteNodeStorageResult ? (
               <span>Delete successful</span>
             ) : (
               <span>Delete failed</span>

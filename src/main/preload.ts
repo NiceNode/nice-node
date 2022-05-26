@@ -56,7 +56,8 @@ contextBridge.exposeInMainWorld('electron', {
   updateNode: (nodeId: NodeId, propertiesToUpdate: any) =>
     ipcRenderer.invoke('updateNode', nodeId, propertiesToUpdate),
 
-  removeNode: (nodeId: NodeId) => ipcRenderer.invoke('removeNode', nodeId),
+  removeNode: (nodeId: NodeId, options: { isDeleteStorage: boolean }) =>
+    ipcRenderer.invoke('removeNode', nodeId, options),
   startNode: (nodeId: NodeId) => {
     ipcRenderer.invoke('startNode', nodeId);
   },
@@ -65,6 +66,8 @@ contextBridge.exposeInMainWorld('electron', {
   },
   openDialogForNodeDataDir: (nodeId: NodeId) =>
     ipcRenderer.invoke('openDialogForNodeDataDir', nodeId),
+  deleteNodeStorage: (nodeId: NodeId) =>
+    ipcRenderer.invoke('deleteNodeStorage', nodeId),
 
   // Node library
   getNodeLibrary: () => ipcRenderer.invoke('getNodeLibrary'),

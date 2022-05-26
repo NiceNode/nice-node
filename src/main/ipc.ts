@@ -16,7 +16,13 @@ import {
   getMainProcessUsage,
   updateNodeUsedDiskSpace,
 } from './monitor';
-import { addNode, startNode, stopNode, removeNode } from './nodeManager';
+import {
+  addNode,
+  startNode,
+  stopNode,
+  removeNode,
+  deleteNodeStorage,
+} from './nodeManager';
 import {
   getNodes,
   getNode,
@@ -101,6 +107,9 @@ export const initialize = () => {
   });
   ipcMain.handle('openDialogForNodeDataDir', (_event, nodeId: NodeId) => {
     return openDialogForNodeDataDir(nodeId);
+  });
+  ipcMain.handle('deleteNodeStorage', (_event, nodeId: NodeId) => {
+    return deleteNodeStorage(nodeId);
   });
 
   // Node library

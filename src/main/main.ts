@@ -33,7 +33,6 @@ require('dotenv').config();
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   maxBreadcrumbs: 50,
-  debug: true,
   // integrations: [
   //   new CaptureConsole({
   //     levels: ['error', 'warn'],

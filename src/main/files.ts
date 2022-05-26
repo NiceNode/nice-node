@@ -85,7 +85,7 @@ export const tryCalcDiskSpace = async (dirPath: string) => {
     diskUsedInGBs = (await du(dirPath)) * 1e-9;
   } catch (err) {
     console.info(
-      'Cannot calculate geth disk usage. Likely geth is changing files.'
+      `Cannot calculate disk usage at ${dirPath}. Could be changing files.`
     );
   }
   return diskUsedInGBs;
@@ -131,23 +131,19 @@ export const getGethErrorLogs = async () => {
   return undefined;
 };
 
-// export const deleteGethDisk = async () => {
-//   try {
-//     // stop geth
-//     await stopGeth();
-//     const getGethDiskBefore = await tryGetGethUsedDiskSpace();
-
-//     const gethDiskPath = gethDataDir();
-//     logger.info(`---------  ${gethDiskPath} ---------------`);
-//     const rmResult = await rm(gethDiskPath, { recursive: true, force: true });
-//     logger.info(`---------  ${rmResult} ---------------`);
-//     const getGethDiskAfter = await tryGetGethUsedDiskSpace();
-//     logger.info(
-//       `---------  after: ${getGethDiskAfter} before: ${getGethDiskBefore}---------------`
-//     );
-//     return getGethDiskAfter === undefined;
-//   } catch (err) {
-//     logger.error('getGethErrorLogs error:', err);
-//   }
-//   return false;
-// };
+export const deleteDisk = async (fileOrDirPath: string) => {
+  try {
+    const diskBefore = await getUsedDiskSpace(fileOrDirPath);
+    logger.info(`---------  ${fileOrDirPath} ---------------`);
+    const rmResult = await rm(fileOrDirPath, { recursive: true, force: true });
+    logger.info(`---------  ${rmResult} ---------------`);
+    const diskAfter = await getUsedDiskSpace(fileOrDirPath);
+    logger.info(
+      `---------  after: ${diskAfter} before: ${diskBefore}---------------`
+    );
+    return diskAfter === undefined;
+  } catch (err) {
+    logger.error(`deleteDisk for ${fileOrDirPath} error:`, err);
+  }
+  return false;
+};

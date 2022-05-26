@@ -14,7 +14,7 @@ import Node, {
   NodeStatus,
 } from '../common/node';
 import * as nodeStore from './state/nodes';
-import { makeNodeDir } from './files';
+import { deleteDisk, makeNodeDir } from './files';
 import {
   getProcess,
   startBinary,
@@ -22,6 +22,7 @@ import {
   initialize as initBinary,
   onExit as onExitBinary,
   getBinaryStatus,
+  removeBinaryNode,
 } from './binary';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
 import { initialize as initDocker, onExit as onExitDocker } from './docker';
@@ -87,7 +88,18 @@ export const stopNode = async (nodeId: NodeId) => {
   }
 };
 
-export const removeNode = async (nodeId: NodeId): Promise<Node> => {
+export const deleteNodeStorage = async (nodeId: NodeId) => {
+  const node = nodeStore.getNode(nodeId);
+  const nodeDataDirPath = node.runtime.dataDir;
+  const deleteDiskResult = await deleteDisk(nodeDataDirPath);
+  logger.info(`Remove node deleteDiskResult ${deleteDiskResult}`);
+  return deleteDiskResult;
+};
+
+export const removeNode = async (
+  nodeId: NodeId,
+  options: { isDeleteStorage: boolean }
+): Promise<Node> => {
   // todo: check if node can be removed. Is it stopped?
   // todo: stop & remove container
   try {
@@ -108,7 +120,20 @@ export const removeNode = async (nodeId: NodeId): Promise<Node> => {
       logger.error(err);
       // todo: try to remove container with same name?
     }
+  } else {
+    // assuming binary
+    try {
+      const isBinaryNode = await removeBinaryNode(node);
+      logger.info(`isBinaryNode ${isBinaryNode}`);
+    } catch (err) {
+      logger.error(err);
+    }
   }
+
+  if (options?.isDeleteStorage) {
+    await deleteNodeStorage(nodeId);
+  }
+
   // todo: delete data optional
   const removedNode = nodeStore.removeNode(nodeId);
   return removedNode;
@@ -177,7 +202,7 @@ export const initialize = async () => {
       ) {
         try {
           const pid = parseInt(binaryNode.runtime.processIds[0], 10);
-          const nodeStatus = await getBinaryStatus(pid);
+          const nodeStatus = getBinaryStatus(pid);
           logger.info(
             `NodeStatus for ${binaryNode.spec.specId} is ${nodeStatus}`
           );
