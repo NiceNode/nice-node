@@ -5,6 +5,7 @@ import { createWriteStream } from 'fs';
 import { access, chmod } from 'fs/promises';
 import sleep from 'await-sleep';
 
+import { Proc, ProcessDescription } from 'pm2';
 import * as platform from './platform';
 import * as arch from './arch';
 import * as github from './github';
@@ -31,7 +32,7 @@ import {
   deleteProcess,
 } from './pm2Manager';
 import * as nodeStore from './state/nodes';
-import { Proc, ProcessDescription } from 'pm2';
+
 const streamPipeline = promisify(pipeline);
 
 export const getProcess = pm2GetProcess;
@@ -260,7 +261,7 @@ export const startBinary = async (node: Node) => {
   const nodeSpecId = spec.specId;
   const execution = spec.execution as BinaryExecution;
   const { input } = execution;
-  let nodeInput = buildCliConfig({
+  const nodeInput = buildCliConfig({
     configValuesMap: node.config.configValuesMap,
     configTranslationMap: spec.configTranslation,
   });
@@ -302,7 +303,7 @@ export const startBinary = async (node: Node) => {
   let pmId;
   try {
     pmId = await startProccess(
-      `${execFileAbsolutePath} ${nodeInput}`,
+      `"${execFileAbsolutePath}" ${nodeInput}`,
       spec.specId
     );
     // childProcess = spawn(execFileAbsolutePath, [], options);
@@ -419,7 +420,7 @@ export const removeBinaryNode = async (node: Node) => {
   ) {
     // assume only one process
     const pmId = node.runtime.processIds[0];
-    return await deleteProcess(parseInt(pmId));
+    return deleteProcess(parseInt(pmId));
   }
 };
 

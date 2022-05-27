@@ -99,6 +99,7 @@ export const startProccess = async (
     });
     logger.info(`pm2Manager startResult ${JSON.stringify(startResult)}`);
 
+    // todo: pm_id is undefined some times, can be fixed with another start
     if (Array.isArray(startResult) && startResult[0]) {
       logger.info(
         `startProccess binary name and command ${name} and ${command} has pid ${startResult[0].pm_id}`

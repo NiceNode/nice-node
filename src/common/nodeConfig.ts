@@ -114,6 +114,9 @@ export const buildCliConfig = ({
                 `Unable to add config value during buildCliConfig. No configs found for ${configValue}`
               );
             }
+          } else if (configTranslation.uiControl.type === 'filePath') {
+            // wrap filePath's in double quotes to support file paths with spaces (macOS requirement)
+            currCliString += `"${configValue}"`;
           } else {
             currCliString += configValue;
           }

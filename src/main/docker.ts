@@ -8,7 +8,6 @@ import Node, { NodeStatus } from '../common/node';
 import { DockerExecution } from '../common/nodeSpec';
 import { setDockerNodeStatus } from './state/nodes';
 import { buildCliConfig } from '../common/nodeConfig';
-import { isWindows } from './platform';
 
 // const options = {
 //   machineName: undefined, // uses local docker
@@ -155,13 +154,13 @@ export const getContainerDetails = async (containerIds: string[]) => {
 };
 
 export const initialize = async () => {
+  logger.info('Connecting to local docker dameon...');
   try {
     docker = new Docker(options);
-    // const data = await docker.command('info');
-    // logger.info(`Docker info data: ${JSON.stringify(data)}`);
     watchDockerEvents();
     // todo: update docker node usages
   } catch (err) {
+    console.error(err);
     // docker not installed?
     logger.info('Unable to initialize Docker. Docker may not be installed.');
   }
@@ -233,7 +232,7 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
       finalDockerInput = dockerRawInput;
     }
     if (dockerVolumePath) {
-      finalDockerInput = `-v ${node.runtime.dataDir}:${dockerVolumePath} ${finalDockerInput}`;
+      finalDockerInput = `-v "${node.runtime.dataDir}":${dockerVolumePath} ${finalDockerInput}`;
     }
   }
   // let nodeInput = '';
@@ -249,7 +248,7 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
     configTranslationMap: node.spec.configTranslation,
     excludeConfigKeys: ['dataDir'],
   });
-  nodeInput += ' ' + cliConfigInput;
+  nodeInput += ` ${cliConfigInput}`;
 
   const dockerCommand = `run -d --name ${specId} ${finalDockerInput} ${imageName} ${nodeInput}`;
   logger.info(`docker startNode command ${dockerCommand}`);
@@ -281,8 +280,23 @@ export const onExit = () => {
   }
 };
 
-export const isDockerInstalled = () => {
-  const isDockerInstalled = true;
-  logger.info(`isDockerInstalled: ${isDockerInstalled}`);
-  return isDockerInstalled;
+// todo: check docker version. check docker desktop is installed
+export const isDockerInstalled = async () => {
+  let bIsDockerInstalled;
+  logger.info('Checking isDockerInstalled...');
+  try {
+    const infoResult = await runCommand('-v');
+    console.log('docker infoResult: ', infoResult);
+    bIsDockerInstalled = true;
+    logger.info(
+      'Docker is installed. Docker version command did not throw error.'
+    );
+  } catch (err) {
+    console.error(err);
+    bIsDockerInstalled = false;
+    // docker not installed?
+    logger.info('Docker install not found.');
+  }
+  logger.info(`isDockerInstalled: ${bIsDockerInstalled}`);
+  return bIsDockerInstalled;
 };

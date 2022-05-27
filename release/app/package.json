@@ -14,5 +14,8 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts",
     "postinstall": "npm run electron-rebuild && npm run link-modules"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "pm2": "^5.2.0"
+  }
 }

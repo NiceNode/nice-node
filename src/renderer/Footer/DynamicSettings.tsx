@@ -27,7 +27,9 @@ const DynamicSettings = ({ isOpen, onClickCloseButton }: Props) => {
       onClickCloseButton={onClickCloseButton}
     >
       <DynamicNodeConfig />
-      <h2>Storage</h2>
+      {/* todo fix: This deletes the entire node.runtime.dataDir.. hmm */}
+
+      {/* <h2>Storage</h2>
       <div>
         <h3>Delete node data</h3>
         <p>
@@ -35,7 +37,6 @@ const DynamicSettings = ({ isOpen, onClickCloseButton }: Props) => {
           data to recover if deleted. Only delete node data if you do not intend
           to run this node.
         </p>
-        {/* todo fix: This deletes the entire node.runtime.dataDir.. hmm */}
         <button
           type="button"
           disabled={selectedNode === undefined}
@@ -64,7 +65,7 @@ const DynamicSettings = ({ isOpen, onClickCloseButton }: Props) => {
             )}
           </>
         )}
-      </div>
+      </div> */}
     </MenuDrawer>
   );
 };
