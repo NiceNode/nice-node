@@ -12,7 +12,7 @@ import * as github from './github';
 import { BinaryDownload, BinaryExecution } from '../common/nodeSpec';
 import { buildCliConfig } from '../common/nodeConfig';
 import Node, { isBinaryNode, NodeStatus } from '../common/node';
-import logger, { gethLogger } from './logger';
+import logger from './logger';
 import { httpGet } from './httpReq';
 import { execAwait } from './execHelper';
 import {
@@ -24,7 +24,6 @@ import { updateNode } from './state/nodes';
 import { getProcessUsageByPid } from './monitor';
 import {
   startProccess,
-  getProcesses,
   getProcess as pm2GetProcess,
   stopProcess,
   initialize as initPm2Manager,
@@ -260,17 +259,10 @@ export const startBinary = async (node: Node) => {
   const { spec, runtime } = node;
   const nodeSpecId = spec.specId;
   const execution = spec.execution as BinaryExecution;
-  const { input } = execution;
   const nodeInput = buildCliConfig({
     configValuesMap: node.config.configValuesMap,
     configTranslationMap: spec.configTranslation,
   });
-  // if (input?.default) {
-  //   nodeInput = input.default.join(' ');
-  // }
-  // if (input.binary) {
-  //   nodeInput = `${nodeInput} ${input?.binary.dataDirInput}${node.runtime.dataDir}`;
-  // }
   logger.info(
     `Starting binary with input: ${nodeInput} and runtime: ${JSON.stringify(
       runtime

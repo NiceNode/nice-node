@@ -8,6 +8,7 @@ import Node, { NodeStatus } from '../common/node';
 import { DockerExecution } from '../common/nodeSpec';
 import { setDockerNodeStatus } from './state/nodes';
 import { buildCliConfig } from '../common/nodeConfig';
+import { send } from './messenger';
 
 // const options = {
 //   machineName: undefined, // uses local docker
@@ -153,12 +154,107 @@ export const getContainerDetails = async (containerIds: string[]) => {
   return details;
 };
 
+let sendDockerLogsToUIProc: ChildProcess;
+
+const sendDockerLogsToUI = () => {
+  logger.info('Starting sendDockerLogsToUI');
+
+  // sendDockerLogsToUI is killed if (killed || exitCode === null)
+  if (sendDockerLogsToUIProc && !sendDockerLogsToUIProc.killed) {
+    logger.error(
+      'sendDockerLogsToUI process still running. Wait to stop or stop first.'
+    );
+    return;
+  }
+  const spawnOptions: SpawnOptions = {
+    stdio: [null, 'pipe', 'pipe'],
+    detached: false,
+    shell: true,
+  };
+  // --format '{{json .}}'
+  // let watchInput = ['--format', "'{{json .}}'"];
+  // if(isWindows()) {
+  // const watchInput = ['--format', '"{{json .}}"'];
+  const watchInput = [''];
+  // }
+  const childProcess = spawn(
+    'docker logs -f -n 100 nethermind',
+    watchInput,
+    spawnOptions
+  );
+  sendDockerLogsToUIProc = childProcess;
+  if (!sendDockerLogsToUIProc.stdout) {
+    throw new Error('Docker watch events stdout stream is undefined.');
+    return;
+  }
+  const rl = readline.createInterface({
+    input: sendDockerLogsToUIProc.stdout,
+  });
+
+  rl.on('line', (log: string) => {
+    // console.log('sendDockerLogsToUI event::::::', log);
+    // {"status":"start","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"start","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480501042702}
+    // {"status":"die","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"die","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"exitCode":"0","git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480851573969}
+    // a die without a stop or kill is a crash
+    try {
+      // const dockerEvent = JSON.parse(log);
+      send('nodeLogs', log);
+
+      // if (dockerEvent.Action === 'die' && dockerEvent.Type === 'container') {
+      //   // mark node as stopped
+      //   logger.info('Docker container die event');
+      //   setDockerNodeStatus(dockerEvent.id, NodeStatus.stopped);
+      // } else if (
+      //   dockerEvent.Action === 'start' &&
+      //   dockerEvent.Type === 'container'
+      // ) {
+      //   logger.info('Docker container start event');
+      //   // mark node as started
+      //   setDockerNodeStatus(dockerEvent.id, NodeStatus.running);
+      // }
+    } catch (err) {
+      logger.error(`Error parsing docker event log ${log}`, err);
+    }
+  });
+
+  sendDockerLogsToUIProc.stderr?.on('data', (data) => {
+    logger.error(`sendDockerLogsToUI::error:: `, data);
+  });
+
+  sendDockerLogsToUIProc.on('error', (data) => {
+    logger.error(`sendDockerLogsToUI::error:: `, data);
+  });
+  sendDockerLogsToUIProc.on('disconnect', () => {
+    logger.info(`sendDockerLogsToUI::disconnect::`);
+  });
+  // todo: restart?
+  sendDockerLogsToUIProc.on('close', (code) => {
+    // code == 0, clean exit
+    // code == 1, crash
+    logger.info(`sendDockerLogsToUI::close:: ${code}`);
+    if (code !== 0) {
+      logger.error(`Error starting node (geth) ${code}`);
+      // todo: determine the error and show geth error logs to user.
+    }
+  });
+  sendDockerLogsToUIProc.on('exit', (code, signal) => {
+    // code == 0, clean exit
+    // code == 1, crash
+    logger.info(`sendDockerLogsToUI::exit:: ${code}, ${signal}`);
+    if (code === 1) {
+      logger.error('sendDockerLogsToUI::exit::error::');
+    }
+  });
+};
+
 export const initialize = async () => {
   logger.info('Connecting to local docker dameon...');
   try {
     docker = new Docker(options);
     watchDockerEvents();
     // todo: update docker node usages
+
+    // sendDockerLogsToUI();
   } catch (err) {
     console.error(err);
     // docker not installed?
@@ -277,6 +373,9 @@ export const stopDockerNode = async (node: Node) => {
 export const onExit = () => {
   if (dockerWatchProcess) {
     dockerWatchProcess.kill(9);
+  }
+  if (sendDockerLogsToUIProc) {
+    sendDockerLogsToUIProc.kill(9);
   }
 };
 

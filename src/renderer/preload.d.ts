@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NodeSpecification } from '../common/nodeSpec';
 import { Node, NodeId } from '../common/node';
-import { NodeConfig } from '../main/state/nodeConfig';
 import { NodeLibrary } from '../main/state/nodeLibrary';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
@@ -25,7 +24,6 @@ declare global {
         on(channel: string, func: (...args: any[]) => void): void;
         once(channel: string, func: (...args: any[]) => void): void;
       };
-      update(): number;
       getSystemFreeDiskSpace(): number;
       getDebugInfo(): any;
       getStoreValue(key: string): any;
@@ -34,11 +32,6 @@ declare global {
       getGethErrorLogs(): any;
       getRendererProcessUsage(): any;
       getMainProcessUsage(): any;
-      getNodeConfig(node: string): NodeConfig;
-      changeNodeConfig(node: string, nodeConfig: NodeConfig): void;
-      setDirectInputNodeConfig(node: string, directInput: string[]): void;
-      getDefaultNodeConfig(node: string): NodeConfig;
-      setToDefaultNodeConfig(node: string): void;
       checkSystemHardware(): string[];
 
       // Multi-node

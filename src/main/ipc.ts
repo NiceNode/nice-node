@@ -1,14 +1,6 @@
 import { ipcMain } from 'electron';
 import getDebugInfo from './debug';
 import { getGethLogs, getGethErrorLogs, getSystemFreeDiskSpace } from './files';
-import {
-  getDefaultNodeConfig,
-  setToDefaultNodeConfig,
-  getNodeConfig,
-  NodeConfig,
-  setDirectInputNodeConfig,
-  changeNodeConfig,
-} from './state/nodeConfig';
 import store from './state/store';
 import logger from './logger';
 import {
@@ -23,12 +15,7 @@ import {
   removeNode,
   deleteNodeStorage,
 } from './nodeManager';
-import {
-  getNodes,
-  getNode,
-  getUserNodes,
-  updateNodeProperties,
-} from './state/nodes';
+import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
 import { isDockerInstalled } from './docker';
@@ -54,30 +41,6 @@ export const initialize = () => {
   });
   ipcMain.handle('getGethLogs', getGethLogs);
   ipcMain.handle('getGethErrorLogs', getGethErrorLogs);
-  ipcMain.handle('getNodeConfig', (_event, node: string) => {
-    console.log('ipc main handle getNodeConfig: ', node);
-    return getNodeConfig(node);
-  });
-  ipcMain.handle(
-    'changeNodeConfig',
-    (_event, node: string, nodeConfig: NodeConfig) => {
-      return changeNodeConfig(node, nodeConfig);
-    }
-  );
-  ipcMain.handle('getDefaultNodeConfig', (_event, node: string) => {
-    console.log('main handle getDefaultNodeConfig');
-    return getDefaultNodeConfig(node);
-  });
-  ipcMain.handle('setToDefaultNodeConfig', (_event, node: string) => {
-    console.log('main node: ', node);
-    return setToDefaultNodeConfig(node);
-  });
-  ipcMain.handle(
-    'setDirectInputNodeConfig',
-    (_event, node: string, directInput: string[]) => {
-      return setDirectInputNodeConfig(node, directInput);
-    }
-  );
   ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
 

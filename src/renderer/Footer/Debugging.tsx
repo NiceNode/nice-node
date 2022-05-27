@@ -11,13 +11,17 @@ type Props = {
 
 const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [sLogs, setLogs] = useState<any>();
+  const [sLogs, setLogs] = useState<string[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sGethErrorLogs, setGethErrorLogs] = useState<any>();
 
   const getGethLogs = async () => {
-    const gethLogs = await electron.getGethLogs();
-    setLogs(gethLogs);
+    // electron.ipcRenderer.on('nodeLogs', (message: any) => {
+    //   // console.log(`IPC::nodeLogs:: message received: `, message);
+    //   console.log('sLogs: ', sLogs);
+    //   // setLogs([...sLogs, message[0]]);
+    //   sLogs.push(message);
+    // });
   };
   const getGethErrorLogs = async () => {
     const gethLogs = await electron.getGethErrorLogs();
@@ -29,12 +33,12 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
     getGethErrorLogs();
   }, []);
 
-  useEffect(() => {
-    if (isOpen) {
-      getGethLogs();
-      getGethErrorLogs();
-    }
-  }, [isOpen]);
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     getGethLogs();
+  //     getGethErrorLogs();
+  //   }
+  // }, [isOpen]);
 
   return (
     <MenuDrawer
@@ -42,24 +46,8 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
       isSelected={!!isOpen}
       onClickCloseButton={onClickCloseButton}
     >
-      <h4>Geth Info Logs</h4>
-      <ReactJson
-        style={{ overflow: 'auto', maxHeight: '80%' }}
-        src={{ logs: sLogs }}
-        theme="monokai"
-        displayDataTypes={false}
-        enableClipboard={false}
-        collapsed
-      />
-      <h4>Geth Error Logs</h4>
-      <ReactJson
-        style={{ overflow: 'auto', maxHeight: '80%' }}
-        src={{ logs: sGethErrorLogs }}
-        theme="monokai"
-        displayDataTypes={false}
-        enableClipboard={false}
-        collapsed
-      />
+      <h4>Node Logs</h4>
+      <div>{JSON.stringify(sLogs, null, 4)}</div>
     </MenuDrawer>
   );
 };

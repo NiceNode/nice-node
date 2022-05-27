@@ -1,9 +1,6 @@
-// import { MdDelete } from 'react-icons/md';
-import { useEffect } from 'react';
 import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
-import { MdDelete } from 'react-icons/md';
 
-import { NodeId, NodeStatus } from '../common/node';
+import { NodeStatus } from '../common/node';
 import electron from './electronGlobal';
 import InstallDocker from './InstallDocker';
 import RemoveNodeButton from './AddNode/RemoveNodeButton';

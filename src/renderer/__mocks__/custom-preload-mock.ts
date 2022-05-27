@@ -31,16 +31,9 @@ export const getMainProcessUsage = (): any => {
   return { cpu: 200000, memory: 'high' };
 };
 
-export const getNodeConfig = (): any => {
-  return ['a config flag that a user set', '--http'];
-};
 export const getDebugInfo = (): any => {
   return { niceNodeVersion: '0.0.0-zeta' };
 };
-export const getDefaultNodeConfig = (): any => {
-  return ['a config flag', '--http'];
-};
-export const setToDefaultNodeConfig = (): void => {};
 
 export const checkSystemHardware = (): string[] => {
   return ['Yo internet no bueno'];
