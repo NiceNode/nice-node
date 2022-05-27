@@ -1,7 +1,10 @@
 import { promisify } from 'node:util';
 import { Proc, ProcessDescription } from 'pm2';
+import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
+import * as readline from 'node:readline';
 
 import logger from './logger';
+import { send } from './messenger';
 
 const pm2 = require('pm2');
 
@@ -14,14 +17,6 @@ pm2.delete = promisify(pm2.delete);
 pm2.list = promisify(pm2.list);
 pm2.restart = promisify(pm2.restart);
 pm2.monit = promisify(pm2.monit);
-
-//   connect: promisify(pm2.connect),
-//   describe: promisify(pm2.describe),
-//   start: promisify(pm2.start),
-//   stop: promisify(pm2.stop),
-//   list: promisify(pm2.list),
-//   restart: promisify(pm2.restart),
-//   monit: promisify(pm2.monit),
 
 export const deleteProcess = async (pmId: number) => {
   return pm2.delete(pmId);
@@ -40,6 +35,72 @@ export const getProcess = async (
   return undefined;
 };
 
+let sendLogsToUIProc: ChildProcess;
+
+const sendLogsToUI = () => {
+  logger.info('Starting sendLogsToUI');
+
+  // sendLogsToUI is killed if (killed || exitCode === null)
+  if (sendLogsToUIProc && !sendLogsToUIProc.killed) {
+    logger.error(
+      'sendLogsToUI process still running. Wait to stop or stop first.'
+    );
+    return;
+  }
+  const spawnOptions: SpawnOptions = {
+    stdio: [null, 'pipe', 'pipe'],
+    detached: false,
+    shell: true,
+  };
+  const watchInput = [''];
+  const childProcess = spawn('pm2 logs --raw 0', watchInput, spawnOptions);
+  sendLogsToUIProc = childProcess;
+  if (!sendLogsToUIProc.stderr) {
+    throw new Error('Process stream logs stderr stream is undefined.');
+    return;
+  }
+  const rl = readline.createInterface({
+    input: sendLogsToUIProc.stderr,
+  });
+
+  rl.on('line', (log: string) => {
+    try {
+      send('nodeLogs', log);
+    } catch (err) {
+      logger.error(`Error parsing docker event log ${log}`, err);
+    }
+  });
+
+  sendLogsToUIProc.stderr?.on('data', (data) => {
+    logger.error(`sendLogsToUI::error:: `, data);
+  });
+
+  sendLogsToUIProc.on('error', (data) => {
+    logger.error(`sendLogsToUI::error:: `, data);
+  });
+  sendLogsToUIProc.on('disconnect', () => {
+    logger.info(`sendLogsToUI::disconnect::`);
+  });
+  // todo: restart?
+  sendLogsToUIProc.on('close', (code) => {
+    // code == 0, clean exit
+    // code == 1, crash
+    logger.info(`sendLogsToUI::close:: ${code}`);
+    if (code !== 0) {
+      logger.error(`Error starting node (geth) ${code}`);
+      // todo: determine the error and show geth error logs to user.
+    }
+  });
+  sendLogsToUIProc.on('exit', (code, signal) => {
+    // code == 0, clean exit
+    // code == 1, crash
+    logger.info(`sendLogsToUI::exit:: ${code}, ${signal}`);
+    if (code === 1) {
+      logger.error('sendLogsToUI::exit::error::');
+    }
+  });
+};
+
 /**
  * Called on app launch.
  * Check's node processes and updates internal NiceNode records.
@@ -49,6 +110,7 @@ export const initialize = async () => {
   try {
     const result = await pm2.connect();
     logger.info('pm2Manager connected to the pm2 instance');
+    sendLogsToUI();
     // const listAllPm2 = await pm2.list();
     // console.log('listAllPm2', listAllPm2);
   } catch (err) {
@@ -143,6 +205,9 @@ export const startProccess = async (
 
 export const onExit = () => {
   pm2.disconnect();
+  if (sendLogsToUIProc) {
+    sendLogsToUIProc.kill(9);
+  }
 };
 
 // startProccess(

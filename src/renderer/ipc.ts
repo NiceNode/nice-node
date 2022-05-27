@@ -1,6 +1,7 @@
 import { UserNodes } from '../common/node';
 import electron from './electronGlobal';
 import { updateUserNodes } from './state/node';
+import { updateNodeLogs } from './state/node';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const initialize = async (dispatch: any) => {

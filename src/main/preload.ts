@@ -16,6 +16,14 @@ contextBridge.exposeInMainWorld('electron', {
         console.error('IPC message not on a valid channel!');
       }
     },
+    removeListener(channel: string, listener: (...args: any[]) => void) {
+      ipcRenderer.removeListener(channel, listener);
+      console.log(`Removed ${channel} channel listener.`);
+    },
+    removeAllListeners(channel: string) {
+      ipcRenderer.removeAllListeners(channel);
+      console.log(`Removed all listeners on ${channel} channel.`);
+    },
   },
   updateNodeUsedDiskSpace: (nodeId: NodeId) =>
     ipcRenderer.invoke('updateNodeUsedDiskSpace', nodeId),

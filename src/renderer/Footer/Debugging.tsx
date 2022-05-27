@@ -15,30 +15,32 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sGethErrorLogs, setGethErrorLogs] = useState<any>();
 
-  const getGethLogs = async () => {
-    // electron.ipcRenderer.on('nodeLogs', (message: any) => {
-    //   // console.log(`IPC::nodeLogs:: message received: `, message);
-    //   console.log('sLogs: ', sLogs);
-    //   // setLogs([...sLogs, message[0]]);
-    //   sLogs.push(message);
-    // });
+  const nodeLogsListener = (message: any) => {
+    // console.log(`IPC::nodeLogs:: message received: `, message);
+    console.log('sLogs: ', message);
+    setLogs((prevState: any) => {
+      if (prevState.length < 1000) {
+        return [...prevState, message[0]];
+      } else {
+        return [message[0]];
+      }
+    });
+    // sLogs.push(message);
   };
-  const getGethErrorLogs = async () => {
-    const gethLogs = await electron.getGethErrorLogs();
-    setGethErrorLogs(gethLogs);
+
+  const listenForNodeLogs = async () => {
+    electron.ipcRenderer.on('nodeLogs', nodeLogsListener);
   };
 
   useEffect(() => {
-    getGethLogs();
-    getGethErrorLogs();
-  }, []);
-
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     getGethLogs();
-  //     getGethErrorLogs();
-  //   }
-  // }, [isOpen]);
+    if (isOpen) {
+      listenForNodeLogs();
+    } else {
+      // rerender might register adiitional listeners..
+      electron.ipcRenderer.removeAllListeners('nodeLogs');
+    }
+    return () => electron.ipcRenderer.removeAllListeners('nodeLogs');
+  }, [isOpen]);
 
   return (
     <MenuDrawer
@@ -47,7 +49,11 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
       onClickCloseButton={onClickCloseButton}
     >
       <h4>Node Logs</h4>
-      <div>{JSON.stringify(sLogs, null, 4)}</div>
+      <div>
+        {sLogs.map((log, index) => {
+          return <p key={index}>{log}</p>;
+        })}
+      </div>
     </MenuDrawer>
   );
 };

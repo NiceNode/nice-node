@@ -254,7 +254,7 @@ export const initialize = async () => {
     watchDockerEvents();
     // todo: update docker node usages
 
-    // sendDockerLogsToUI();
+    sendDockerLogsToUI();
   } catch (err) {
     console.error(err);
     // docker not installed?

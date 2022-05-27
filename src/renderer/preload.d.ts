@@ -23,6 +23,11 @@ declare global {
       ipcRenderer: {
         on(channel: string, func: (...args: any[]) => void): void;
         once(channel: string, func: (...args: any[]) => void): void;
+        removeListener(
+          channel: string,
+          listener: (...args: any[]) => void
+        ): void;
+        removeAllListeners(channel: string): void;
       };
       getSystemFreeDiskSpace(): number;
       getDebugInfo(): any;

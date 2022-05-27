@@ -19,7 +19,7 @@ const MenuDrawerStyled = styled.div`
     bottom: calc(-100vh - ${FOOTER_HEIGHT}px);
   }
   position: fixed;
-  width: (100vw-${LEFT_SIDEBAR_WIDTH}px);
+  width: calc(100vw - ${LEFT_SIDEBAR_WIDTH}px);
   margin-left: ${LEFT_SIDEBAR_WIDTH}px;
   // height of screen - footer height - header height
   height: calc(100vh - ${FOOTER_HEIGHT}px - ${HEADER_HEIGHT}px);
