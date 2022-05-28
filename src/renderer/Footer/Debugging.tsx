@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import ReactJson from 'react-json-view';
+import { useAppSelector } from '../state/hooks';
+import { selectSelectedNode, selectSelectedNodeId } from '../state/node';
 
 import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
@@ -10,14 +11,12 @@ type Props = {
 };
 
 const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
+  const sSelectedNode = useAppSelector(selectSelectedNode);
   const [sLogs, setLogs] = useState<string[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [sGethErrorLogs, setGethErrorLogs] = useState<any>();
 
   const nodeLogsListener = (message: any) => {
-    // console.log(`IPC::nodeLogs:: message received: `, message);
-    console.log('sLogs: ', message);
+    // console.log('sLogs: ', message);
     setLogs((prevState: any) => {
       if (prevState.length < 1000) {
         return [...prevState, message[0]];
@@ -25,7 +24,6 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
         return [message[0]];
       }
     });
-    // sLogs.push(message);
   };
 
   const listenForNodeLogs = async () => {
@@ -34,22 +32,55 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
 
   useEffect(() => {
     if (isOpen) {
+      console.log('Debugging.tsx: isOpen. Listening for logs.');
       listenForNodeLogs();
     } else {
-      // rerender might register adiitional listeners..
+      setLogs([]);
+      console.log(
+        'Debugging.tsx: isclosed. Clear logs and removeAllListeners.'
+      );
       electron.ipcRenderer.removeAllListeners('nodeLogs');
     }
     return () => electron.ipcRenderer.removeAllListeners('nodeLogs');
   }, [isOpen]);
 
+  useEffect(() => {
+    // when switching selected nodes...
+    // if none selected, send stop
+    // if one is selected, ask for those logs
+    setLogs([]);
+    console.log('Debugging.tsx: isOpen, sSelectedNodeId changed. Clear logs.');
+    if (isOpen && sSelectedNodeId) {
+      electron.sendNodeLogs(sSelectedNodeId);
+      console.log(
+        'Debugging.tsx: isOpen && sSelectedNodeId truthy. Send selected node logs'
+      );
+    } else {
+      console.log(
+        'Debugging.tsx: isOpen && sSelectedNodeId falsy. stopSendingNodeLogs'
+      );
+      electron.stopSendingNodeLogs();
+    }
+    return () => {
+      electron.stopSendingNodeLogs();
+    };
+  }, [isOpen, sSelectedNodeId]);
+
   return (
     <MenuDrawer
-      title="App and Node Logs"
+      title={`${sSelectedNode?.spec.displayName} Logs`}
       isSelected={!!isOpen}
       onClickCloseButton={onClickCloseButton}
     >
-      <h4>Node Logs</h4>
-      <div>
+      {/* <h4>Node Logs</h4> */}
+      <em>Newest logs at the top</em>
+      <div
+        style={{
+          overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column-reverse',
+        }}
+      >
         {sLogs.map((log, index) => {
           return <p key={index}>{log}</p>;
         })}

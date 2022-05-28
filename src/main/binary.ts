@@ -28,6 +28,8 @@ import {
   stopProcess,
   initialize as initPm2Manager,
   onExit as onExitPm2Manager,
+  sendLogsToUI as pm2SendLogsToUI,
+  stopSendingLogsToUI as pm2StopSendingLogsToUI,
   deleteProcess,
 } from './pm2Manager';
 import * as nodeStore from './state/nodes';
@@ -35,6 +37,8 @@ import * as nodeStore from './state/nodes';
 const streamPipeline = promisify(pipeline);
 
 export const getProcess = pm2GetProcess;
+export const sendLogsToUI = pm2SendLogsToUI;
+export const stopSendingLogsToUI = pm2StopSendingLogsToUI;
 
 const getDownloadUrl = (binaryDownload: BinaryDownload) => {
   // get platform & arch
@@ -312,56 +316,9 @@ export const startBinary = async (node: Node) => {
   } else {
     logger.error(`No pid for ${nodeSpecId} binary child process! Lost child!`);
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const handleLogStream = (data: Buffer | string | any) => {
-  //   const logs = data?.toString().split('\n ');
-  //   logs.forEach((log: string) => {
-  //     // logger.log('getProcess:: log:: ', log);
-  //     if (log.includes('ERROR')) {
-  //       gethLogger.error(log);
-  //     } else {
-  //       gethLogger.info(log);
-  //     }
-  //   });
-  // };
-  // childProcess.stderr?.on('data', handleLogStream);
-  // childProcess.stdout?.on('data', handleLogStream);
-  // childProcess.on('error', (data) => {
-  //   logger.error(`${nodeSpecId}::error:: `, data);
-  // });
-  // childProcess.on('disconnect', () => {
-  //   logger.info(`${nodeSpecId}::disconnect::`);
-  // });
-  // childProcess.on('close', (code) => {
-  //   // code == 0, clean exit
-  //   // code == 1, crash
-  //   logger.info(`${nodeSpecId}::close:: ${code}`);
-  //   if (code !== 0) {
-  //     node.status = NodeStatus.errorStarting;
-  //     updateNode(node);
-  //     logger.error(`Error starting node ${nodeSpecId} code ${code}`);
-  //     // todo: determine the error and show geth error logs to user.
-  //   }
-  // });
-  // childProcess.on('exit', (code, signal) => {
-  //   // code == 0, clean exit
-  //   // code == 1, crash
-  //   logger.info(`${nodeSpecId}::exit:: ${code}, ${signal}`);
-  //   if (code === 1) {
-  //     // if (stopInitiatedAfterAStart && isWindows()) {
-  //     //   logger.info('Windows un-smooth stop');
-  //     //   return;
-  //     // }
-  //     node.status = NodeStatus.errorStarting;
-  //     updateNode(node);
-  //     logger.error('Geth::exit::error::');
-  //   }
-  // });
   logger.info(`binary ${nodeSpecId} started successfully`);
   node.status = NodeStatus.running;
   updateNode(node);
-  // logger.info('geth childProcess:', childProcess);
-  // logger.info(`${nodeSpecId} childProcess pid: ${childProcess.pid}`);
   logger.info(`${nodeSpecId} childProcess pid: ${pmId}`);
 };
 
@@ -416,7 +373,6 @@ export const removeBinaryNode = async (node: Node) => {
   }
 };
 
-// type ProcessStatus = 'online' | 'stopping' | 'stopped' | 'launching' | 'errored' | 'one-launch-status';
 export const getBinaryStatus = (proc: ProcessDescription): NodeStatus => {
   const procStatus = proc?.pm2_env?.status;
   if (proc && procStatus) {

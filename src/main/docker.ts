@@ -154,81 +154,86 @@ export const getContainerDetails = async (containerIds: string[]) => {
   return details;
 };
 
-let sendDockerLogsToUIProc: ChildProcess;
-
-const sendDockerLogsToUI = () => {
-  logger.info('Starting sendDockerLogsToUI');
+let sendLogsToUIProc: ChildProcess;
+export const stopSendingLogsToUI = () => {
+  logger.info(`docker.stopSendingLogsToUI`);
+  if (sendLogsToUIProc) {
+    sendLogsToUIProc.kill(9);
+  }
+};
+export const sendLogsToUI = (node: Node) => {
+  logger.info(`Starting docker.sendLogsToUI for node ${node.spec.specId}`);
 
   // sendDockerLogsToUI is killed if (killed || exitCode === null)
-  if (sendDockerLogsToUIProc && !sendDockerLogsToUIProc.killed) {
-    logger.error(
-      'sendDockerLogsToUI process still running. Wait to stop or stop first.'
+  if (sendLogsToUIProc && !sendLogsToUIProc.killed) {
+    logger.info(
+      'sendLogsToUI process was running for another node. Killing that process.'
     );
-    return;
+    sendLogsToUIProc.kill(9);
   }
   const spawnOptions: SpawnOptions = {
     stdio: [null, 'pipe', 'pipe'],
     detached: false,
     shell: true,
   };
-  // --format '{{json .}}'
-  // let watchInput = ['--format', "'{{json .}}'"];
-  // if(isWindows()) {
-  // const watchInput = ['--format', '"{{json .}}"'];
   const watchInput = [''];
-  // }
+  if (
+    !Array.isArray(node.runtime.processIds) ||
+    node.runtime.processIds.length < 1
+  ) {
+    logger.info('No logs to send if there is no container.');
+    return;
+  }
+  const containerId = node.runtime.processIds[0];
   const childProcess = spawn(
-    'docker logs -f -n 100 nethermind',
+    `docker logs -f -n 100 ${containerId}`,
     watchInput,
     spawnOptions
   );
-  sendDockerLogsToUIProc = childProcess;
-  if (!sendDockerLogsToUIProc.stdout) {
+  sendLogsToUIProc = childProcess;
+  // todo some containers send to stderr, some send to stdout!
+  //  ex. lighthouse sends logs to stderr
+  if (!sendLogsToUIProc.stderr && !sendLogsToUIProc.stdout) {
     throw new Error('Docker watch events stdout stream is undefined.');
     return;
   }
-  const rl = readline.createInterface({
-    input: sendDockerLogsToUIProc.stdout,
-  });
+  if (sendLogsToUIProc.stderr) {
+    const rlStdErr = readline.createInterface({
+      input: sendLogsToUIProc.stderr,
+    });
+    rlStdErr.on('line', (log: string) => {
+      try {
+        send('nodeLogs', log);
+      } catch (err) {
+        logger.error(`Error parsing docker event log ${log}`, err);
+      }
+    });
+  }
+  if (sendLogsToUIProc.stdout) {
+    const rlStdOut = readline.createInterface({
+      input: sendLogsToUIProc.stdout,
+    });
+    rlStdOut.on('line', (log: string) => {
+      try {
+        send('nodeLogs', log);
+      } catch (err) {
+        logger.error(`Error parsing docker event log ${log}`, err);
+      }
+    });
+  }
 
-  rl.on('line', (log: string) => {
-    // console.log('sendDockerLogsToUI event::::::', log);
-    // {"status":"start","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"start","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480501042702}
-    // {"status":"die","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"die","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"exitCode":"0","git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480851573969}
-    // a die without a stop or kill is a crash
-    try {
-      // const dockerEvent = JSON.parse(log);
-      send('nodeLogs', log);
-
-      // if (dockerEvent.Action === 'die' && dockerEvent.Type === 'container') {
-      //   // mark node as stopped
-      //   logger.info('Docker container die event');
-      //   setDockerNodeStatus(dockerEvent.id, NodeStatus.stopped);
-      // } else if (
-      //   dockerEvent.Action === 'start' &&
-      //   dockerEvent.Type === 'container'
-      // ) {
-      //   logger.info('Docker container start event');
-      //   // mark node as started
-      //   setDockerNodeStatus(dockerEvent.id, NodeStatus.running);
-      // }
-    } catch (err) {
-      logger.error(`Error parsing docker event log ${log}`, err);
-    }
-  });
-
-  sendDockerLogsToUIProc.stderr?.on('data', (data) => {
+  sendLogsToUIProc.stderr?.on('data', (data) => {
     logger.error(`sendDockerLogsToUI::error:: `, data);
   });
 
-  sendDockerLogsToUIProc.on('error', (data) => {
+  sendLogsToUIProc.on('error', (data) => {
     logger.error(`sendDockerLogsToUI::error:: `, data);
   });
-  sendDockerLogsToUIProc.on('disconnect', () => {
+  sendLogsToUIProc.on('disconnect', () => {
     logger.info(`sendDockerLogsToUI::disconnect::`);
   });
   // todo: restart?
-  sendDockerLogsToUIProc.on('close', (code) => {
+  sendLogsToUIProc.on('close', (code) => {
     // code == 0, clean exit
     // code == 1, crash
     logger.info(`sendDockerLogsToUI::close:: ${code}`);
@@ -237,7 +242,7 @@ const sendDockerLogsToUI = () => {
       // todo: determine the error and show geth error logs to user.
     }
   });
-  sendDockerLogsToUIProc.on('exit', (code, signal) => {
+  sendLogsToUIProc.on('exit', (code, signal) => {
     // code == 0, clean exit
     // code == 1, crash
     logger.info(`sendDockerLogsToUI::exit:: ${code}, ${signal}`);
@@ -253,26 +258,14 @@ export const initialize = async () => {
     docker = new Docker(options);
     watchDockerEvents();
     // todo: update docker node usages
-
-    sendDockerLogsToUI();
   } catch (err) {
     console.error(err);
     // docker not installed?
     logger.info('Unable to initialize Docker. Docker may not be installed.');
   }
-
-  //   console.log('fetching beacon node data...');
-  //   const parsedData = await httpGetJson(
-  //     'http://localhost:5052/eth/v1/config/spec',
-  //     true
-  //   );
-  //   console.log('beacon node data parsedData: ', parsedData);
 };
 
 export const removeDockerNode = async (node: Node) => {
-  // run
-  // todo: use node options to create docker and node input
-  // todo: loop
   logger.info(`removeDockerNode node specId ${node.spec.specId}`);
   let isRemoved = false;
   try {
@@ -370,15 +363,6 @@ export const stopDockerNode = async (node: Node) => {
   return containerIds;
 };
 
-export const onExit = () => {
-  if (dockerWatchProcess) {
-    dockerWatchProcess.kill(9);
-  }
-  if (sendDockerLogsToUIProc) {
-    sendDockerLogsToUIProc.kill(9);
-  }
-};
-
 // todo: check docker version. check docker desktop is installed
 export const isDockerInstalled = async () => {
   let bIsDockerInstalled;
@@ -398,4 +382,13 @@ export const isDockerInstalled = async () => {
   }
   logger.info(`isDockerInstalled: ${bIsDockerInstalled}`);
   return bIsDockerInstalled;
+};
+
+export const onExit = () => {
+  if (dockerWatchProcess) {
+    dockerWatchProcess.kill(9);
+  }
+  if (sendLogsToUIProc) {
+    sendLogsToUIProc.kill(9);
+  }
 };

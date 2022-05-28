@@ -4,6 +4,8 @@ import {
   removeDockerNode,
   startDockerNode,
   stopDockerNode,
+  sendLogsToUI as dockerSendLogsToUI,
+  stopSendingLogsToUI as dockerStopSendingLogsToUI,
 } from './docker';
 import logger from './logger';
 import Node, {
@@ -16,13 +18,14 @@ import Node, {
 import * as nodeStore from './state/nodes';
 import { deleteDisk, makeNodeDir } from './files';
 import {
-  getProcess,
   startBinary,
   stopBinary,
   initialize as initBinary,
   onExit as onExitBinary,
   getBinaryStatus,
   removeBinaryNode,
+  sendLogsToUI as binarySendLogsToUI,
+  stopSendingLogsToUI as binaryStopSendingLogsToUI,
 } from './binary';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
 import { initialize as initDocker, onExit as onExitDocker } from './docker';
@@ -137,6 +140,31 @@ export const removeNode = async (
   // todo: delete data optional
   const removedNode = nodeStore.removeNode(nodeId);
   return removedNode;
+};
+
+export const stopSendingNodeLogs = (nodeId?: NodeId) => {
+  if (nodeId === undefined) {
+    dockerStopSendingLogsToUI();
+    binaryStopSendingLogsToUI();
+    return;
+  }
+  const node = nodeStore.getNode(nodeId);
+  if (isDockerNode(node)) {
+    dockerStopSendingLogsToUI();
+  } else {
+    // assume binary
+    binaryStopSendingLogsToUI();
+  }
+};
+
+export const sendNodeLogs = (nodeId: NodeId) => {
+  const node = nodeStore.getNode(nodeId);
+  if (isDockerNode(node)) {
+    dockerSendLogsToUI(node);
+  } else {
+    // assume binary
+    binarySendLogsToUI(node);
+  }
 };
 
 /**

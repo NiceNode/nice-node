@@ -50,6 +50,8 @@ declare global {
       openDialogForNodeDataDir(nodeId: NodeId): void;
       updateNodeUsedDiskSpace(nodeId: NodeId): void;
       deleteNodeStorage(nodeId: NodeId): boolean;
+      sendNodeLogs(nodeId: NodeId): void;
+      stopSendingNodeLogs(nodeId?: NodeId): void;
 
       // Node library
       getNodeLibrary(): NodeLibrary;

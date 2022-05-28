@@ -3,6 +3,7 @@ import { Proc, ProcessDescription } from 'pm2';
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
 
+import Node from '../common/node';
 import logger from './logger';
 import { send } from './messenger';
 
@@ -36,16 +37,22 @@ export const getProcess = async (
 };
 
 let sendLogsToUIProc: ChildProcess;
+export const stopSendingLogsToUI = () => {
+  logger.info(`pm2.stopSendingLogsToUI`);
+  if (sendLogsToUIProc) {
+    sendLogsToUIProc.kill(9);
+  }
+};
 
-const sendLogsToUI = () => {
-  logger.info('Starting sendLogsToUI');
+export const sendLogsToUI = (node: Node) => {
+  logger.info(`Starting pm2.sendLogsToUI for node ${node.spec.specId}`);
 
   // sendLogsToUI is killed if (killed || exitCode === null)
   if (sendLogsToUIProc && !sendLogsToUIProc.killed) {
-    logger.error(
-      'sendLogsToUI process still running. Wait to stop or stop first.'
+    logger.info(
+      'sendLogsToUI process was running for another node. Killing that process.'
     );
-    return;
+    sendLogsToUIProc.kill(9);
   }
   const spawnOptions: SpawnOptions = {
     stdio: [null, 'pipe', 'pipe'],
@@ -53,7 +60,19 @@ const sendLogsToUI = () => {
     shell: true,
   };
   const watchInput = [''];
-  const childProcess = spawn('pm2 logs --raw 0', watchInput, spawnOptions);
+  if (
+    !Array.isArray(node.runtime.processIds) ||
+    node.runtime.processIds.length < 1
+  ) {
+    logger.info('No logs to send if there is no container.');
+    return;
+  }
+  const processId = node.runtime.processIds[0];
+  const childProcess = spawn(
+    `pm2 logs --raw ${processId}`,
+    watchInput,
+    spawnOptions
+  );
   sendLogsToUIProc = childProcess;
   if (!sendLogsToUIProc.stderr) {
     throw new Error('Process stream logs stderr stream is undefined.');
@@ -110,9 +129,6 @@ export const initialize = async () => {
   try {
     const result = await pm2.connect();
     logger.info('pm2Manager connected to the pm2 instance');
-    sendLogsToUI();
-    // const listAllPm2 = await pm2.list();
-    // console.log('listAllPm2', listAllPm2);
   } catch (err) {
     logger.error('initialize pm2Manager error:', err);
   }
@@ -120,7 +136,6 @@ export const initialize = async () => {
 export const stopProcess = async (pm_id: number): Promise<Proc> => {
   const stopResult = await pm2.stop(pm_id);
   console.log('pm2Manager stopResult: ', stopResult);
-  // if (Array.isArray(stopResult) && stopResult[0]) {
   return stopResult;
   // }
   // pm2Manager startResult:  [

@@ -13,7 +13,7 @@ export const send = (channel: string, ...args: any[]): void => {
   if (!mainWindow) {
     return;
   }
-  console.log('sending', channel, args);
+  // console.log('sending', channel, args);
   mainWindow.webContents.send(channel, args);
 };
 

@@ -64,6 +64,12 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('openDialogForNodeDataDir', nodeId),
   deleteNodeStorage: (nodeId: NodeId) =>
     ipcRenderer.invoke('deleteNodeStorage', nodeId),
+  sendNodeLogs: (nodeId: NodeId) => {
+    ipcRenderer.invoke('sendNodeLogs', nodeId);
+  },
+  stopSendingNodeLogs: (nodeId?: NodeId) => {
+    ipcRenderer.invoke('stopSendingNodeLogs', nodeId);
+  },
 
   // Node library
   getNodeLibrary: () => ipcRenderer.invoke('getNodeLibrary'),
