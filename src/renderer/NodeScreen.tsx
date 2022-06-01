@@ -34,6 +34,9 @@ const NodeScreen = () => {
   if (!selectedNode) {
     // if docker is not installed, show prompt
     if (!isDockerInstalled) {
+      if (qIsDockerInstalled.isLoading) {
+        return <>Loading...</>;
+      }
       return <InstallDocker />;
     }
     return <div>No node selected</div>;
@@ -44,32 +47,24 @@ const NodeScreen = () => {
 
   return (
     <div>
-      {/* <div style={{ wordBreak: 'break-word' }}>
-        {JSON.stringify(selectedNode, null, '\n')}
-      </div> */}
       <div>
         <h1>{displayName}</h1>
-        {qNodeVersion?.currentData && !qNodeVersion?.isError && (
-          <h4>Version: {qNodeVersion.currentData}</h4>
+        {status === 'running' && qNodeVersion && (
+          <h4>
+            Version:{' '}
+            <>
+              {qNodeVersion.isLoading ? (
+                <>Loading...</>
+              ) : (
+                <>
+                  {qNodeVersion.isError ? <>Error</> : qNodeVersion.currentData}
+                </>
+              )}
+            </>
+          </h4>
         )}
         <h4>Type: {category} Node</h4>
-
         <h3>Status: {status}</h3>
-        {/* {status === 'running' && (
-          <>
-            <h4 data-tip data-for="nodeInfo">
-              {detectExecutionClient(sNodeInfo, true)}
-            </h4>
-            <ReactTooltip
-              place="bottom"
-              type="light"
-              effect="solid"
-              id="nodeInfo"
-            >
-              <span style={{ fontSize: 16 }}>{sNodeInfo}</span>
-            </ReactTooltip>
-          </>
-        )} */}
       </div>
       <div className="Hello">
         <button

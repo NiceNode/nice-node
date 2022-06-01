@@ -40,8 +40,8 @@ export type NodeRuntime = {
   processIds?: string[];
   usage: {
     diskGBs?: number;
-    memory?: number;
-    cpu?: number;
+    memoryBytes?: number;
+    cpuPercent?: number;
   };
 };
 

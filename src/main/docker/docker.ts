@@ -3,12 +3,13 @@ import path from 'node:path';
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
 
-import logger from './logger';
-import Node, { NodeStatus } from '../common/node';
-import { DockerExecution } from '../common/nodeSpec';
-import { setDockerNodeStatus } from './state/nodes';
-import { buildCliConfig } from '../common/nodeConfig';
-import { send } from './messenger';
+import logger from '../logger';
+import Node, { NodeStatus } from '../../common/node';
+import { DockerExecution } from '../../common/nodeSpec';
+import { setDockerNodeStatus } from '../state/nodes';
+import { buildCliConfig } from '../../common/nodeConfig';
+import { send } from '../messenger';
+import * as monitoring from './monitoring';
 
 // const options = {
 //   machineName: undefined, // uses local docker
@@ -30,9 +31,13 @@ let docker: Docker;
 let dockerWatchProcess: ChildProcess;
 
 const runCommand = async (command: string) => {
-  logger.info(`Running docker ${command}`);
+  if (!command.includes('stats')) {
+    logger.info(`Running docker ${command}`);
+  }
   const data = await docker.command(command);
-  logger.info(`DOCKER ${command} data: ${JSON.stringify(data)}`);
+  if (!command.includes('stats')) {
+    logger.info(`DOCKER ${command} data: ${JSON.stringify(data)}`);
+  }
   return data;
 };
 
@@ -158,7 +163,7 @@ let sendLogsToUIProc: ChildProcess;
 export const stopSendingLogsToUI = () => {
   logger.info(`docker.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
-    sendLogsToUIProc.kill(9);
+    sendLogsToUIProc.kill();
   }
 };
 export const sendLogsToUI = (node: Node) => {
@@ -169,7 +174,7 @@ export const sendLogsToUI = (node: Node) => {
     logger.info(
       'sendLogsToUI process was running for another node. Killing that process.'
     );
-    sendLogsToUIProc.kill(9);
+    sendLogsToUIProc.kill();
   }
   const spawnOptions: SpawnOptions = {
     stdio: [null, 'pipe', 'pipe'],
@@ -223,20 +228,20 @@ export const sendLogsToUI = (node: Node) => {
   }
 
   sendLogsToUIProc.stderr?.on('data', (data) => {
-    logger.error(`sendDockerLogsToUI::error:: `, data);
+    // logger.error(`sendDockerLogsToUI::error:: `, data);
   });
 
   sendLogsToUIProc.on('error', (data) => {
-    logger.error(`sendDockerLogsToUI::error:: `, data);
+    logger.error(`docker.sendLogsToUI::error:: `, data);
   });
   sendLogsToUIProc.on('disconnect', () => {
-    logger.info(`sendDockerLogsToUI::disconnect::`);
+    logger.info(`docker.sendLogsToUI::disconnect::`);
   });
   // todo: restart?
   sendLogsToUIProc.on('close', (code) => {
     // code == 0, clean exit
     // code == 1, crash
-    logger.info(`sendDockerLogsToUI::close:: ${code}`);
+    logger.info(`docker.sendLogsToUI::close:: ${code}`);
     if (code !== 0) {
       logger.error(`Error starting node (geth) ${code}`);
       // todo: determine the error and show geth error logs to user.
@@ -245,9 +250,9 @@ export const sendLogsToUI = (node: Node) => {
   sendLogsToUIProc.on('exit', (code, signal) => {
     // code == 0, clean exit
     // code == 1, crash
-    logger.info(`sendDockerLogsToUI::exit:: ${code}, ${signal}`);
+    logger.info(`docker.sendLogsToUI::exit:: ${code}, ${signal}`);
     if (code === 1) {
-      logger.error('sendDockerLogsToUI::exit::error::');
+      logger.error('docker.sendLogsToUI::exit::error::');
     }
   });
 };
@@ -257,6 +262,8 @@ export const initialize = async () => {
   try {
     docker = new Docker(options);
     watchDockerEvents();
+    monitoring.initialize(runCommand);
+
     // todo: update docker node usages
   } catch (err) {
     console.error(err);
@@ -299,6 +306,7 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
   // pull image
   const { specId, execution } = node.spec;
   const { imageName, input } = execution as DockerExecution;
+  // try catch? .. docker dameon might need to be restarted if a bad gateway error occurs
   await runCommand(`pull ${imageName}`);
 
   // todo: custom setup: ex. create data directory
@@ -385,10 +393,11 @@ export const isDockerInstalled = async () => {
 };
 
 export const onExit = () => {
+  monitoring.onExit();
   if (dockerWatchProcess) {
-    dockerWatchProcess.kill(9);
+    dockerWatchProcess.kill();
   }
   if (sendLogsToUIProc) {
-    sendLogsToUIProc.kill(9);
+    sendLogsToUIProc.kill();
   }
 };

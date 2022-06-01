@@ -9,13 +9,13 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpHostAddress": "0.0.0.0",
-        "httpCorsDomains": "nice-node://*,http://localhost*",
+        "httpCorsDomains": "http://localhost",
         "websockets": "Enabled",
-        "eth1ProviderUrl": "http://host.docker.internal:8545"
+        "eth1ProviderUrl": "http://localhost:8545"
       },
       "docker": {
         "containerVolumePath": "/root/.lighthouse",
-        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052",
+        "raw": "--add-host=host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052",
         "forcedRawNodeInput": "lighthouse --network mainnet beacon --eth1"
       }
     },

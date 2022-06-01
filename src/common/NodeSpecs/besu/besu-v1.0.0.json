@@ -9,7 +9,9 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpCorsDomains": "\"*\""
+        "websockets": "Enabled",
+        "httpCorsDomains": "\"http://localhost\"",
+        "hostAllowList": "localhost,host.docker.internal"
       },
       "docker": {
         "containerVolumePath": "/var/lib/besu",
@@ -47,6 +49,23 @@
       },
       "defaultValue": "Disabled",
       "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-http-enabled"
+    },
+    "websockets": {
+      "displayName": "Enables or disables the WebSocket JSON-RPC service. The default is false.",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--rpc-ws-enabled=true"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-ws-enabled"
     },
     "httpCorsDomains": {
       "displayName": "Change where the node accepts http connections (use comma separated urls wrapped in double quotes)",
@@ -124,6 +143,16 @@
       },
       "defaultValue": ["ETH", "NET", "WEB3"],
       "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-http-api"
+    },
+    "hostAllowList": {
+      "displayName": "A comma-separated list of hostnames to access the JSON-RPC API and pull Besu metrics. By default, Besu accepts requests from localhost and 127.0.0.1.",
+      "category": "RPC APIs",
+      "cliConfigPrefix": "--host-allowlist=",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: medomain.com,meotherdomain.com",
+      "defaultValue": "localhost,127.0.0.1"
     },
     "syncMode": {
       "displayName": "Node synchronization mode",

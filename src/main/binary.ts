@@ -396,7 +396,7 @@ export const getBinaryStatus = (proc: ProcessDescription): NodeStatus => {
   return NodeStatus.unknown;
 };
 
-const watchProcessPollingInterval = 5000;
+const watchProcessPollingInterval = 15000;
 let watchProcessesInterval: NodeJS.Timer;
 
 const watchBinaryProcesses = async () => {
@@ -415,8 +415,9 @@ const watchBinaryProcesses = async () => {
             const nodeStatus = getBinaryStatus(proc);
             const proccessUsage = proc.monit;
             if (proccessUsage) {
-              node.runtime.usage.memory = proccessUsage.memory ?? undefined;
-              node.runtime.usage.cpu = proccessUsage.cpu ?? undefined;
+              node.runtime.usage.memoryBytes =
+                proccessUsage.memory ?? undefined;
+              node.runtime.usage.cpuPercent = proccessUsage.cpu ?? undefined;
             }
             // logger.info(`NodeStatus for ${node.spec.specId} is ${nodeStatus}`);
             node.status = nodeStatus;

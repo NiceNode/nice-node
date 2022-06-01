@@ -50,16 +50,15 @@ const AddNode = () => {
     useState<boolean>(false);
   const [sSelectedNodeSpecification, setSelectedNodeSpecification] =
     useState<NodeSpecification>();
-  const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>({});
   const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
     NodeSpecification[]
   >([]);
   const [sBeaconNodeLibrary, setBeaconNodeLibrary] = useState<
     NodeSpecification[]
   >([]);
-  const [sLayer2ClientLibrary, setLayer2ClientLibrary] = useState<
-    NodeSpecification[]
-  >([]);
+  // const [sLayer2ClientLibrary, setLayer2ClientLibrary] = useState<
+  //   NodeSpecification[]
+  // >([]);
   const [sOtherNodeLibrary, setOtherNodeLibrary] = useState<
     NodeSpecification[]
   >([]);
@@ -72,7 +71,7 @@ const AddNode = () => {
       console.log('nodeLibrary categorized', categorized);
       setExecutionClientLibrary(categorized.ExecutionClient);
       setBeaconNodeLibrary(categorized.BeaconNode);
-      setLayer2ClientLibrary(categorized.L2);
+      // setLayer2ClientLibrary(categorized.L2);
       setOtherNodeLibrary(categorized.Other);
       // set exec, beacons, and layer 2s
     };
@@ -175,7 +174,7 @@ const AddNode = () => {
             <span>Unable to load beacon node library</span>
           )}
         </div>
-        <div>
+        {/* <div>
           <h2>Ethereum Layer 2</h2>
           {sLayer2ClientLibrary ? (
             <div
@@ -198,7 +197,7 @@ const AddNode = () => {
           ) : (
             <span>Unable to load layer 2 node library</span>
           )}
-        </div>
+        </div> */}
         {sOtherNodeLibrary.length > 0 && (
           <div>
             <h2>Other</h2>
@@ -233,22 +232,3 @@ const AddNode = () => {
   );
 };
 export default AddNode;
-
-/**
- * geth binary format
- *const baseURL = 'https://gethstore.blob.core.windows.net/builds/';
-const macOS = 'geth-darwin-amd64-1.10.17-25c9b49f';
-const windows32bit = 'geth-windows-386-1.10.17-25c9b49f';
-const windows64bit = 'geth-windows-amd64-1.10.17-25c9b49f';
-const linux32bit = 'geth-linux-386-1.10.17-25c9b49f';
-const linux64bit = 'geth-linux-amd64-1.10.17-25c9b49f';
-const linuxArm64 = 'geth-linux-arm64-1.10.17-25c9b49f';
-const linuxArm32v7 = 'geth-linux-arm7-1.10.17-25c9b49f';
- *
- *
- * lighthouse binary downloads
- *https://github.com/sigp/lighthouse/releases/download/v2.2.1/lighthouse-v2.2.1-x86_64-apple-darwin.tar.gz
- *
- *
- * a way to fetch the latest version... and string format to plug in version, platform, arch
- */

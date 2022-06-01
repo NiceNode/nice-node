@@ -10,7 +10,8 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpCorsDomains": "nice-node://,http://localhost",
-        "websockets": "Enabled"
+        "websockets": "Enabled",
+        "httpVirtualHosts": "localhost,host.docker.internal"
       }
     },
     "binaryDownload": {
@@ -141,6 +142,14 @@
       },
       "defaultValue": "snap",
       "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
+    },
+    "httpVirtualHosts": {
+      "displayName": "Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard. Default value (localhost)",
+      "cliConfigPrefix": "--http.vhosts ",
+      "uiControl": {
+        "type": "text"
+      },
+      "defaultValue": "localhost,host.docker.internal"
     }
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"

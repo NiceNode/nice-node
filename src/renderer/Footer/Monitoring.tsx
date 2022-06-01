@@ -26,8 +26,8 @@ const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
     let cpu;
     if (selectedNode) {
       diskUsed = selectedNode.runtime.usage.diskGBs ?? undefined;
-      memory = selectedNode.runtime.usage.memory ?? undefined;
-      cpu = selectedNode.runtime.usage.cpu ?? undefined;
+      memory = selectedNode.runtime.usage.memoryBytes ?? undefined;
+      cpu = selectedNode.runtime.usage.cpuPercent ?? undefined;
     }
     setNodeDiskUsed(diskUsed);
     setNodeMemoryUsed(memory);
@@ -114,7 +114,7 @@ const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
       <div style={{ flex: 1, overflow: 'auto' }}>
         <h2>Storage</h2>
         <div>
-          <p>Node: {selectedNode && JSON.stringify(selectedNode.runtime)}</p>
+          {/* <p>Node: {selectedNode && JSON.stringify(selectedNode.runtime)}</p> */}
           {sNodeDiskUsed !== undefined && (
             <h4>Storage used by node: {sNodeDiskUsed.toFixed(1)} GB</h4>
           )}

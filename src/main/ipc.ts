@@ -20,7 +20,7 @@ import {
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
-import { isDockerInstalled } from './docker';
+import { isDockerInstalled } from './docker/docker';
 import { openDialogForNodeDataDir } from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
 

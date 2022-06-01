@@ -5,8 +5,10 @@ import {
   startDockerNode,
   stopDockerNode,
   sendLogsToUI as dockerSendLogsToUI,
+  initialize as initDocker,
+  onExit as onExitDocker,
   stopSendingLogsToUI as dockerStopSendingLogsToUI,
-} from './docker';
+} from './docker/docker';
 import logger from './logger';
 import Node, {
   createNode,
@@ -28,7 +30,6 @@ import {
   stopSendingLogsToUI as binaryStopSendingLogsToUI,
 } from './binary';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
-import { initialize as initDocker, onExit as onExitDocker } from './docker';
 
 export const addNode = async (nodeSpec: NodeSpecification): Promise<Node> => {
   const dataDir = await makeNodeDir(nodeSpec.specId);

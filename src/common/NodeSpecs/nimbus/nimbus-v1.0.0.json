@@ -16,7 +16,7 @@
       },
       "docker": {
         "containerVolumePath": "/home/user/nimbus-eth2/build/data",
-        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052"
+        "raw": "--add-host=host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052"
       }
     },
     "binaryDownload": {
