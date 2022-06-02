@@ -1,13 +1,13 @@
 {
   "name": "nice-node",
-  "version": "0.8.0-alpha",
-  "description": "An app to easily run an Ethereum node",
+  "version": "1.0.0-alpha",
+  "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./dist/main/main.js",
   "author": {
     "name": "Johns",
     "email": "johns@nicenode.xyz",
-    "url": "https://github.com/jgresham/nice-node"
+    "url": "https://nicenode.xyz"
   },
   "scripts": {
     "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",

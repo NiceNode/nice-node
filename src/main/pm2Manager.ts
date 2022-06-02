@@ -128,7 +128,11 @@ export const initialize = async () => {
   logger.info('initialize pm2 connection');
   try {
     const result = await pm2.connect();
-    logger.info('pm2Manager connected to the pm2 instance');
+    logger.info(
+      `pm2Manager connected to the pm2 instance result: ${JSON.stringify(
+        result
+      )}`
+    );
   } catch (err) {
     logger.error('initialize pm2Manager error:', err);
   }
