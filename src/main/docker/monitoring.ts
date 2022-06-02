@@ -62,7 +62,7 @@ const updateNodeUsage = async () => {
           }
           nodeStore.updateNode(node);
         } catch (err) {
-          console.error(err);
+          console.error('Error setting monitoring stats for a node', err);
         }
       } else {
         // no processId for a node

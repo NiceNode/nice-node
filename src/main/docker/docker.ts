@@ -22,7 +22,7 @@ import * as monitoring from './monitoring';
 const options = new Options(
   undefined,
   path.join(__dirname),
-  true,
+  false,
   undefined,
   undefined
 );
@@ -161,7 +161,7 @@ export const getContainerDetails = async (containerIds: string[]) => {
 
 let sendLogsToUIProc: ChildProcess;
 export const stopSendingLogsToUI = () => {
-  logger.info(`docker.stopSendingLogsToUI`);
+  // logger.info(`docker.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
     sendLogsToUIProc.kill();
   }

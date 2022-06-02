@@ -38,7 +38,7 @@ export const getProcess = async (
 
 let sendLogsToUIProc: ChildProcess;
 export const stopSendingLogsToUI = () => {
-  logger.info(`pm2.stopSendingLogsToUI`);
+  // logger.info(`pm2.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
     sendLogsToUIProc.kill();
   }
