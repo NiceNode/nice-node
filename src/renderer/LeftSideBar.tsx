@@ -70,7 +70,7 @@ const LeftSideBar = () => {
                     border: isSelectedNode ? '3px solid' : '1px solid',
                     padding: 2,
                     borderRadius: 5,
-                    marginBottom: 3,
+                    marginBottom: 10,
                     width: 100,
                     height: 100,
                   }}
