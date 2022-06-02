@@ -371,7 +371,7 @@ export const stopDockerNode = async (node: Node) => {
   return containerIds;
 };
 
-// todo: check docker version. check docker desktop is installed
+// todo: check docker version. check docker desktop is installed but not running
 export const isDockerInstalled = async () => {
   let bIsDockerInstalled;
   logger.info('Checking isDockerInstalled...');

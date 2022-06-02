@@ -15,6 +15,9 @@ const InstallDocker = () => {
            install guide. Docker will quietly run in the background after installation."
         }
       </p>
+      <caption>
+        If you have Docker Desktop installed, ensure it is running.
+      </caption>
       <ExternalLink
         title="Docker Desktop install guide"
         url="https://docs.docker.com/desktop/#download-and-install"
