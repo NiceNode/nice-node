@@ -1,19 +1,19 @@
 {
   "specId": "arbitrum",
   "version": "1.0.0",
-  "displayName": "Arbitrum Nitro (Goerli testnet)",
+  "displayName": "Arbitrum One",
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "offchainlabs/nitro-node:v2.0.0-alpha.4",
+    "imageName": "offchainlabs/arb-node:v1.4.0-f4bbe91",
     "input": {
       "defaultConfig": {
-        "eth1ProviderUrl": "https://goerli.infura.io/v3/97fa4206f9bd4ea9957f9a82a2b2e4d0",
+        "eth1ProviderUrl": "http://host.docker.internal:8545",
         "httpCorsDomains": "http://localhost"
       },
       "docker": {
-        "containerVolumePath": "/home/user/.arbitrum/goerli",
-        "raw": "-p 8547:8547 -p 8548:8548"
+        "containerVolumePath": "/home/user/.arbitrum/mainnet",
+        "raw": "-p 8547:8547 -p 8548:8548 -p 9642:9642"
       }
     },
     "dependencies": ["L1/ExecutionClient"]
@@ -21,9 +21,9 @@
   "rpcTranslation": "eth-l1",
   "configTranslation": {
     "eth1ProviderUrl": {
-      "displayName": "This should point to the HTTP RPC endpoint of your Ethereum entry-point",
+      "displayName": "This should point to the HTTP RPC endpoint of your Ethereum entry-point (could be infura or other)",
       "cliConfigPrefix": "--l1.url ",
-      "defaultValue": "http://localhost:8545",
+      "niceNodeDefaultValue": "http://host.docker.internal:8545",
       "uiControl": {
         "type": "text"
       },

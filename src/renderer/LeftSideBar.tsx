@@ -67,7 +67,9 @@ const LeftSideBar = () => {
                 <DivButton
                   key={node.id}
                   style={{
-                    border: isSelectedNode ? '3px solid' : '1px solid',
+                    border: isSelectedNode
+                      ? '3px solid'
+                      : '1px solid lightgrey',
                     padding: 2,
                     borderRadius: 5,
                     marginBottom: 10,

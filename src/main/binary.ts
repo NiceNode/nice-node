@@ -33,6 +33,7 @@ import {
   deleteProcess,
 } from './pm2Manager';
 import * as nodeStore from './state/nodes';
+import { escapePath } from './util/escapePath';
 
 const streamPipeline = promisify(pipeline);
 
@@ -122,14 +123,12 @@ export const unzipFile = async (filePath: string, directory: string) => {
     }
   }
   logger.info(`unzipFile running unzip command ${tarCommand}`);
-  const result = await execAwait(tarCommand);
-  if (!result.err) {
+  try {
+    await execAwait(tarCommand);
     logger.info('unzipFile unzip complete succeeded');
-    // status = NODE_STATUS.readyToStart;
-    // send(CHANNELS.geth, status);
-  } else {
+  } catch (err) {
     logger.error('unzipFile unzip error');
-    logger.error(result.err);
+    logger.error(err);
     throw new Error(`Extracting the file failed.`);
   }
 };
@@ -304,12 +303,7 @@ export const startBinary = async (node: Node) => {
 
   let pmId;
   try {
-    // double quotes needed to escape dir names with spaces (macOS)
-    let pm2ScriptPath = `"${execFileAbsolutePath}"`;
-    // pm2 pre-pends the appDir on windows when using the script path in double quotes
-    if (platform.isWindows()) {
-      pm2ScriptPath = execFileAbsolutePath;
-    }
+    const pm2ScriptPath = escapePath(execFileAbsolutePath);
     pmId = await startProccess(pm2ScriptPath, nodeInput, spec.specId);
   } catch (err) {
     logger.error('Errors starting binary: ', err);

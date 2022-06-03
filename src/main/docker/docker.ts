@@ -11,7 +11,7 @@ import { setDockerNodeStatus } from '../state/nodes';
 import { buildCliConfig } from '../../common/nodeConfig';
 import { send } from '../messenger';
 import * as monitoring from './monitoring';
-
+import * as dockerCompose from './docker-compose';
 // const options = {
 //   machineName: undefined, // uses local docker
 //   currentWorkingDirectory: undefined, // uses current working directory
@@ -264,6 +264,7 @@ export const initialize = async () => {
     docker = new Docker(options);
     watchDockerEvents();
     monitoring.initialize(runCommand);
+    dockerCompose.initialize();
 
     // todo: update docker node usages
   } catch (err) {
