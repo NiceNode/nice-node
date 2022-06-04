@@ -116,6 +116,10 @@ export const unzipFile = async (filePath: string, directory: string) => {
   // let tarCommand = `tar --extract --file ${getNNDirPath()}/geth.tar.gz --directory ${getNNDirPath()}`;
   if (platform.isWindows()) {
     tarCommand = `tar -C ${buildDir} -xf ${filePath}`;
+    // tar to geth-windows.zip contains a buildDir already
+    if (filePath.includes('.zip')) {
+      tarCommand = `tar -C ${directory} -xf ${filePath}`;
+    }
   }
   logger.info(`unzipFile running unzip command ${tarCommand}`);
   const result = await execAwait(tarCommand);
@@ -277,7 +281,10 @@ export const startBinary = async (node: Node) => {
   //   gethBuildNameForPlatformAndArch(),
   //   'geth'
   // );
-  // if (isWindows()) {
+  let execScript = execution.execPath;
+  if (platform.isWindows()) {
+    execScript += '.exe';
+  }
   if (!runtime.build) {
     logger.error(`Unable to start ${nodeSpecId} binary. No build found.`);
     throw new Error(`Unable to start ${nodeSpecId} binary. No build found.`);
@@ -285,24 +292,25 @@ export const startBinary = async (node: Node) => {
   logger.info(
     `Making binary exec path: ${getNodesDirPath()} ${spec.specId} ${
       runtime.build
-    } ${execution.execPath}`
+    } ${execScript}`
   );
   const execFileAbsolutePath = path.join(
     getNodesDirPath(),
     spec.specId,
     runtime.build,
-    execution.execPath
+    execScript
   );
-  // `${gethBuildNameForPlatformAndArch()}\\geth.exe`;
   logger.info(`${execFileAbsolutePath} ${nodeInput}`);
 
   let pmId;
   try {
-    pmId = await startProccess(
-      `"${execFileAbsolutePath}" ${nodeInput}`,
-      spec.specId
-    );
-    // childProcess = spawn(execFileAbsolutePath, [], options);
+    // double quotes needed to escape dir names with spaces (macOS)
+    let pm2ScriptPath = `"${execFileAbsolutePath}"`;
+    // pm2 pre-pends the appDir on windows when using the script path in double quotes
+    if (platform.isWindows()) {
+      pm2ScriptPath = execFileAbsolutePath;
+    }
+    pmId = await startProccess(pm2ScriptPath, nodeInput, spec.specId);
   } catch (err) {
     logger.error('Errors starting binary: ', err);
     node.status = NodeStatus.errorStarting;

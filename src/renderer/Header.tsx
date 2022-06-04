@@ -197,7 +197,7 @@ const Header = () => {
             </span>
           </div>
         )}
-        {diskUsed && (
+        {diskUsed !== undefined && (
           <div
             style={{
               display: 'flex',

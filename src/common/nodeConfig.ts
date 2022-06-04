@@ -27,6 +27,7 @@ export type ConfigTranslation = {
   valuesJoinStr?: string;
   valuesWrapChar?: string;
   defaultValue?: string | string[];
+  niceNodeDefaultValue?: string | string[];
   documentation?: string;
   infoDescription?: string;
   warning?: string;

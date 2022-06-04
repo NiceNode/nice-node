@@ -145,13 +145,17 @@ export const stopProcess = async (pm_id: number): Promise<Proc> => {
 
 // todo: already started, running, idk
 export const startProccess = async (
-  command: string,
+  script: string,
+  args: string,
   name: string
 ): Promise<number> => {
-  logger.info(`pm2Manager startProccess ${name} with ${command}`);
+  logger.info(
+    `pm2Manager startProccess ${name} with ${script} and args ${args}`
+  );
   try {
     const startResult = await pm2.start({
-      script: command,
+      script,
+      args,
       name,
     });
     logger.info(`pm2Manager startResult ${JSON.stringify(startResult)}`);
@@ -159,13 +163,14 @@ export const startProccess = async (
     // todo: pm_id is undefined some times, can be fixed with another start
     if (Array.isArray(startResult) && startResult[0]) {
       logger.info(
-        `startProccess binary name and command ${name} and ${command} has pid ${startResult[0].pm_id}`
+        `startProccess binary name and command ${name} and ${script} has pid ${startResult[0].pm_id}`
       );
-      if (startResult[0].pm_id !== undefined) {
-        return startResult[0].pm_id;
+
+      if (startResult[0].pm2_env?.pm_id !== undefined) {
+        return startResult[0].pm2_env?.pm_id;
       }
     }
-    const errorMessage = `Unable to get pid for recently started binary name and command ${name} and ${command}`;
+    const errorMessage = `Unable to get pid for recently started binary name and command ${name} and ${script}`;
     logger.error(errorMessage);
     throw new Error(errorMessage);
   } catch (err: unknown) {

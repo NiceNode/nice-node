@@ -10,7 +10,7 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpCorsDomains": "nice-node://,http://localhost",
-        "websockets": "Enabled",
+        "webSockets": "Enabled",
         "httpVirtualHosts": "localhost,host.docker.internal"
       }
     },
@@ -57,9 +57,10 @@
           }
         ]
       },
-      "defaultValue": "Disabled"
+      "defaultValue": "Disabled",
+      "documentation" : "https://geth.ethereum.org/docs/rpc/server"
     },
-    "websockets": {
+    "webSockets": {
       "displayName": "rpc websocket connections (*BeaconNodes may require websocket connections)",
       "uiControl": {
         "type": "select/single",
@@ -73,7 +74,8 @@
           }
         ]
       },
-      "defaultValue": "Disabled"
+      "defaultValue": "Disabled",
+      "documentation" : "https://geth.ethereum.org/docs/rpc/server#websocket-server"
     },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
@@ -150,6 +152,15 @@
         "type": "text"
       },
       "defaultValue": "localhost,host.docker.internal"
+    },
+    "webSocketsPort": {
+      "displayName": "WS-RPC server listening port",
+      "cliConfigPrefix": "--ws.port ",
+      "defaultValue": "8546",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
     }
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"

@@ -9,7 +9,7 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "websockets": "Enabled",
+        "webSockets": "Enabled",
         "httpCorsDomains": "\"http://localhost\"",
         "hostAllowList": "localhost,host.docker.internal"
       },
@@ -70,7 +70,7 @@
       "defaultValue": "Disabled",
       "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-http-enabled"
     },
-    "websockets": {
+    "webSockets": {
       "displayName": "Enables or disables the WebSocket JSON-RPC service. The default is false.",
       "uiControl": {
         "type": "select/single",
@@ -86,6 +86,16 @@
       },
       "defaultValue": "Disabled",
       "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-ws-enabled"
+    },
+    "webSocketsPort": {
+      "displayName": "The port (TCP) on which WebSocket JSON-RPC listens.",
+      "cliConfigPrefix": "--rpc-ws-port=",
+      "defaultValue": "8546",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-ws-port",
+      "infoDescription" : "The port (TCP) on which WebSocket JSON-RPC listens. The default is 8546. You must expose ports appropriately (https://besu.hyperledger.org/en/stable/HowTo/Find-and-Connect/Configuring-Ports/)."
     },
     "httpCorsDomains": {
       "displayName": "Change where the node accepts http connections (use comma separated urls wrapped in double quotes)",

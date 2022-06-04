@@ -3,6 +3,7 @@ import path from 'node:path';
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
 
+import { isWindows } from '../platform';
 import logger from '../logger';
 import Node, { NodeStatus } from '../../common/node';
 import { DockerExecution } from '../../common/nodeSpec';
@@ -309,10 +310,10 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
   // try catch? .. docker dameon might need to be restarted if a bad gateway error occurs
   await runCommand(`pull ${imageName}`);
 
-  // todo: custom setup: ex. create data directory
+  // todo: custom setup: ex. use network specific data directory?
   // todo: check if there is a stopped container?
 
-  // remove possible previous docker container for this node
+  // (stop &) remove possible previous docker container for this node
   try {
     await removeDockerNode(node);
   } catch (err) {
@@ -332,10 +333,6 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
       finalDockerInput = `-v "${node.runtime.dataDir}":${dockerVolumePath} ${finalDockerInput}`;
     }
   }
-  // let nodeInput = '';
-  // if (input?.default) {
-  //   nodeInput = input?.default.join(' ');
-  // }
   let nodeInput = '';
   if (input?.docker?.forcedRawNodeInput) {
     nodeInput = input?.docker?.forcedRawNodeInput;
