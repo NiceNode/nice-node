@@ -52,6 +52,7 @@ export const httpGet = (
 export const httpGetJson = async (
   url: string,
   isHttp?: boolean
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
   const response = await httpGet(url, { isHttp });
 

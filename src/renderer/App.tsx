@@ -1,25 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
-import ReactTooltip from 'react-tooltip';
 
 import './App.css';
-import { useAppDispatch, useAppSelector } from './state/hooks';
-import electron from './electronGlobal';
+import { useAppDispatch } from './state/hooks';
 import Header from './Header';
 import Footer from './Footer/Footer';
 import Warnings from './Warnings';
 import { initialize as initializeIpcListeners } from './ipc';
-import { selectIsAvailableForPolling, selectNodeStatus } from './state/node';
 import LeftSideBar from './LeftSideBar';
 import NodeScreen from './NodeScreen';
 import DataRefresher from './DataRefresher';
-// import { useGetNodesQuery } from './state/nodeService';
+import electron from './electronGlobal';
 
-// Sentry.init({
-//   dsn: electron.SENTRY_DSN,
-//   debug: true,
-// });
+Sentry.init({
+  dsn: electron.SENTRY_DSN,
+  debug: true,
+});
 
 const MainScreen = () => {
   const dispatch = useAppDispatch();

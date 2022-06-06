@@ -1,26 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { CgCloseO } from 'react-icons/cg';
 import { ImWarning } from 'react-icons/im';
 
 import electron from './electronGlobal';
 import IconButton from './IconButton';
-import { useAppDispatch, useAppSelector } from './state/hooks';
-import {
-  selectNumFreeDiskGB,
-  updateSystemNumFreeDiskGB,
-  selectNodeConfig,
-} from './state/node';
+import { useAppDispatch } from './state/hooks';
+import { updateSystemNumFreeDiskGB } from './state/node';
 
 const Warnings = () => {
   const dispatch = useAppDispatch();
   // const sGethDiskUsed = useAppSelector(selectNumGethDiskUsedGB);
-  const sFreeDisk = useAppSelector(selectNumFreeDiskGB);
-  const sNodeConfig = useAppSelector(selectNodeConfig);
+  // const sFreeDisk = useAppSelector(selectNumFreeDiskGB);
 
   const [sIsOpen, setIsOpen] = useState<boolean>(false);
   const [sHasBeenClosed, setHasBeenClosed] = useState<boolean>(false);
   const [sWarnings, setWarnings] = useState<string[]>();
-  const [sStorageWarning, setStorageWarning] = useState<boolean>();
+  const [sStorageWarning] = useState<boolean>();
 
   const getSystemWarnings = async () => {
     const warnings = await electron.checkSystemHardware();
@@ -113,7 +109,7 @@ const Warnings = () => {
             </div>
           );
         })}
-        {sStorageWarning && (
+        {/* {sStorageWarning && (
           <div style={{ marginBottom: 5 }}>
             {sNodeConfig?.syncMode === 'light' ? (
               <span>
@@ -128,7 +124,7 @@ const Warnings = () => {
               </span>
             )}
           </div>
-        )}
+        )} */}
         {((sWarnings && sWarnings.length > 0) || sStorageWarning) && (
           <div style={{ marginTop: 5 }}>
             <span>

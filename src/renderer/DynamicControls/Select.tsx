@@ -48,7 +48,8 @@ const Select = ({ isDisabled, options, value, onChange, isMulti }: Props) => {
               })
             );
           } else {
-            onChange(newValue?.value ? newValue.value : undefined);
+            const singleValue = newValue as SingleValue<SelectOption>;
+            onChange(singleValue?.value ? singleValue.value : undefined);
           }
         }}
         isDisabled={isDisabled}

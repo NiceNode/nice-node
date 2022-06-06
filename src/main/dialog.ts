@@ -45,21 +45,4 @@ export const openDialogForNodeDataDir = async (nodeId: NodeId) => {
       updateNode(node);
     }
   }
-  // .then(async (buttonIndex) => {
-  //   if (buttonIndex.response === 0) {
-  //     console.log('update accepted by user');
-  //     console.log('starting download');
-  //     autoUpdater.downloadUpdate();
-  //     dialog.showMessageBox(browserWindow, {
-  //       type: 'info',
-  //       title: 'Updates for NiceNode available',
-  //       message: `Downloading NiceNode update...`,
-  //     });
-  //   } else {
-  //     console.log('update checkbox not checked');
-  //   }
-  // })
-  // .catch((err) => {
-  //   console.error('error in update available diaglog: ', err);
-  // });
 };

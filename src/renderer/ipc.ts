@@ -8,8 +8,7 @@ export const initialize = async (dispatch: any) => {
   console.log('Fetching initial userNodes');
   dispatch(updateUserNodes(initUserNodes));
   console.log('Listening to IPC channel userNodes');
-  electron.ipcRenderer.on('userNodes', (message: any) => {
-    console.log(`IPC::userNodes:: message received: `, message);
+  electron.ipcRenderer.on('userNodes', (message: UserNodes[]) => {
     const userNodes: UserNodes = message[0];
     dispatch(updateUserNodes(userNodes));
     // qGetNodes.refetch();

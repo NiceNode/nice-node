@@ -1,6 +1,7 @@
-import { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// import { useState } from 'react';
 
-import electron from '../electronGlobal';
+// import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
 import DynamicNodeConfig from './DynamicNodeConfig';
 import { useAppSelector } from '../state/hooks';
@@ -13,8 +14,8 @@ type Props = {
 
 const DynamicSettings = ({ isOpen, onClickCloseButton }: Props) => {
   const selectedNode = useAppSelector(selectSelectedNode);
-  const [sDeleteNodeStorageResult, setDeleteNodeStorageResult] =
-    useState<boolean>();
+  // const [sDeleteNodeStorageResult, setDeleteNodeStorageResult] =
+  //   useState<boolean>();
 
   let title = 'Settings';
   if (selectedNode) {

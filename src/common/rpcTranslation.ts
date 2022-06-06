@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // NodeSpecification.rpcTranslation?: 'eth-l1' | 'eth-l1-beacon' | object;
 
 export type RpcTranslation = {

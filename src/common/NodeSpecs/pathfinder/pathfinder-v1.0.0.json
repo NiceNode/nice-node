@@ -8,10 +8,10 @@
     "imageName": "eqlabs/pathfinder:latest",
     "input": {
       "defaultConfig": {
-        "eth1ProviderUrl": "https://mainnet.infura.io/v3/97fa4206f9bd4ea9957f9a82a2b2e4d0"
+        "eth1ProviderUrl": "http://host.docker.internal:8545"
       },
       "docker": {
-        "raw": "-p 9545:9545 -e RUST_LOG=info -e PATHFINDER_ETHEREUM_API_URL=\"https://mainnet.infura.io/v3/97fa4206f9bd4ea9957f9a82a2b2e4d0\"",
+        "raw": "-p 9545:9545 -e RUST_LOG=info -e PATHFINDER_ETHEREUM_API_URL=\"http://host.docker.internal:8545\"",
         "containerVolumePath": "/usr/share/pathfinder/data"
       }
     },

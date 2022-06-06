@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-cycle
-import logger from 'main/logger';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { send } from '../messenger';
 import Node, {
   isDockerNode,

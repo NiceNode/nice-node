@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ipcMain } from 'electron';
 import getDebugInfo from './debug';
 import { getGethLogs, getGethErrorLogs, getSystemFreeDiskSpace } from './files';
@@ -21,6 +22,7 @@ import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
 import { isDockerInstalled } from './docker/docker';
+// eslint-disable-next-line import/no-cycle
 import { openDialogForNodeDataDir } from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
 

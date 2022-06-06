@@ -6,7 +6,7 @@ import { Modal } from '../Modal';
 import NodeCard from './NodeCard';
 import ConfirmAddNode from './ConfirmAddNode';
 import { NodeSpecification } from '../../common/nodeSpec';
-import DivButton, { DopeButton } from '../DivButton';
+// import { DopeButton } from '../DivButton';
 import { NodeLibrary } from '../../main/state/nodeLibrary';
 import electron from '../electronGlobal';
 
@@ -118,7 +118,7 @@ const AddNode = () => {
                 flexWrap: 'wrap',
               }}
             >
-              <DopeButton
+              {/* <DopeButton
                 onClick={() =>
                   onNodeSelected(
                     Math.floor(Math.random() * 2) === 0 ? 'besu' : 'nethermind'
@@ -128,7 +128,7 @@ const AddNode = () => {
                 <span style={{ fontSize: '1.5em', color: 'white' }}>
                   Minority Client
                 </span>
-              </DopeButton>
+              </DopeButton> */}
               {sExecutionClientLibrary.map((nodeSpec: NodeSpecification) => {
                 return (
                   <NodeCard
@@ -153,13 +153,13 @@ const AddNode = () => {
                 flexWrap: 'wrap',
               }}
             >
-              <DopeButton
+              {/* <DopeButton
               // onClick={() => dispatch(updateSelectedNodeId(node.id))}
               >
                 <span style={{ fontSize: '1.5em', color: 'white' }}>
                   Minority Client
                 </span>
-              </DopeButton>
+              </DopeButton> */}
               {sBeaconNodeLibrary.map((nodeSpec: NodeSpecification) => {
                 return (
                   <NodeCard

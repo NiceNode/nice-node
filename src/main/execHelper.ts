@@ -12,17 +12,13 @@ export const execAwait = (
   }
 
   return new Promise((resolve, reject) => {
-    const childProcess = exec(
-      command,
-      { ...options },
-      (err, stdout, stderr) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve({ stdout, stderr });
+    exec(command, { ...options }, (err, stdout, stderr) => {
+      if (err) {
+        reject(err);
+        return;
       }
-    );
+
+      resolve({ stdout, stderr });
+    });
   });
 };

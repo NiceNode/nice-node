@@ -1,3 +1,4 @@
+import { ChildProcess } from 'child_process';
 import process from 'process';
 
 import logger from './logger';
@@ -23,4 +24,16 @@ export const initialize = () => {
 
 export const registerExitHandler = (exitHandler: ExitHandler) => {
   exitHandlers.push(exitHandler);
+};
+
+/**
+ * Kills child process (first with SIGINT, then SIGTERM) and closes any stdio
+ * @param childProcess
+ */
+export const killChildProcess = (childProcess: ChildProcess) => {
+  childProcess.kill('SIGINT');
+  childProcess.stdin?.destroy();
+  childProcess.stdout?.destroy();
+  childProcess.stderr?.destroy();
+  childProcess.kill('SIGTERM');
 };

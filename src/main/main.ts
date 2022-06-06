@@ -24,6 +24,7 @@ import {
   initialize as initNodeManager,
   onExit as onExitNodeManager,
 } from './nodeManager';
+// eslint-disable-next-line import/no-cycle
 import * as ipc from './ipc';
 import * as power from './power';
 import * as processExit from './processExit';

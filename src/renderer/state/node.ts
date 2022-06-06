@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from './store';
-import { NodeConfig } from '../../main/state/nodeConfig';
 import Node, { NodeId, NodeStatus, UserNodes } from '../../common/node';
 
 // Define a type for the slice state
@@ -8,7 +7,6 @@ export interface NodeState {
   userNodes?: UserNodes;
   selectedNodeId?: NodeId;
   selectedNode?: Node;
-  config?: NodeConfig;
   numGethDiskUsedGB: number | undefined;
   numFreeDiskGB: number | undefined;
   status: string | undefined;
@@ -85,17 +83,6 @@ export const nodeSlice = createSlice({
     ) => {
       state.numFreeDiskGB = action.payload;
     },
-    // updateNodeStatus: (state, action: PayloadAction<string | undefined>) => {
-    //   state.status = action.payload;
-    //   setIsAvailableForPolling(state);
-    // },
-    // updateNodeConfig: (
-    //   state,
-    //   action: PayloadAction<NodeConfig | undefined>
-    // ) => {
-    //   state.config = action.payload;
-    //   setIsAvailableForPolling(state);
-    // },
   },
 });
 
@@ -112,7 +99,6 @@ export const selectSelectedNodeId = (state: RootState): NodeId | undefined =>
   state.node.selectedNodeId;
 export const selectSelectedNode = (state: RootState): Node | undefined =>
   state.node.selectedNode;
-export const selectNodeConfig = (state: RootState) => state.node.config;
 export const selectNumGethDiskUsedGB = (state: RootState): number | undefined =>
   state.node.numGethDiskUsedGB;
 export const selectNumFreeDiskGB = (state: RootState): number | undefined =>

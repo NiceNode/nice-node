@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useAppSelector } from '../state/hooks';
 import { selectSelectedNode } from '../state/node';
 import {
-  ConfigKey,
+  ConfigValue,
   ConfigTranslationMap,
   ConfigTranslation,
   ConfigTranslationControl,
@@ -78,7 +78,10 @@ const DynamicNodeConfig = () => {
     return <>No node selected</>;
   }
 
-  const onNodeConfigChange = async (configKey: string, newValue: any) => {
+  const onNodeConfigChange = async (
+    configKey: string,
+    newValue: ConfigValue
+  ) => {
     // updateNode
     console.log('updating node with newValue: ', newValue);
     const { configValuesMap } = selectedNode.config;
@@ -90,10 +93,11 @@ const DynamicNodeConfig = () => {
       },
     };
     // console.log('updating node with newConfig: ', newConfig);
-    const updateNode = await electron.updateNode(selectedNode.id, {
+    await electron.updateNode(selectedNode.id, {
       config: newConfig,
     });
     // console.log('updated node!!!: ', updateNode);
+    // todo: show user a success notification
   };
 
   return (
@@ -118,14 +122,19 @@ const DynamicNodeConfig = () => {
 
                       const configTranslationControl: ConfigTranslationControl =
                         configTranslation.uiControl;
-                      let currentValue =
+                      let currentValue: string | string[] =
                         selectedNode.config?.configValuesMap?.[configKey];
-                      if (
-                        currentValue === undefined &&
-                        configTranslation.defaultValue !== undefined
-                      ) {
+                      if (currentValue === undefined) {
+                        if (
+                          configTranslation.niceNodeDefaultValue !== undefined
+                        ) {
+                          currentValue = configTranslation.niceNodeDefaultValue;
+                        } else if (
+                          configTranslation.defaultValue !== undefined
+                        ) {
+                          currentValue = configTranslation.defaultValue;
+                        }
                         // todo for mutli select?
-                        currentValue = configTranslation.defaultValue;
                       }
                       // console.log(
                       //   'rendering config: ',
@@ -148,7 +157,7 @@ const DynamicNodeConfig = () => {
                                 )}
                                 {configTranslation.documentation && (
                                   <ExternalLink
-                                    title={'Documentation Link'}
+                                    title="Documentation Link"
                                     url={configTranslation.documentation}
                                   />
                                 )}
@@ -173,7 +182,7 @@ const DynamicNodeConfig = () => {
                           )}
                           {configTranslationControl?.type === 'text' && (
                             <TextArea
-                              value={currentValue}
+                              value={currentValue as string}
                               onChange={(newValue: string) =>
                                 onNodeConfigChange(configKey, newValue)
                               }

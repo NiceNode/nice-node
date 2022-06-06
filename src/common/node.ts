@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import { v4 as uuidv4 } from 'uuid';
-import { runtime } from 'webpack';
 import { ConfigValuesMap } from './nodeConfig';
 import { ExecutionTypes, NodeSpecification } from './nodeSpec';
 

@@ -5,7 +5,7 @@ import { createWriteStream } from 'fs';
 import { access, chmod } from 'fs/promises';
 import sleep from 'await-sleep';
 
-import { Proc, ProcessDescription } from 'pm2';
+import { ProcessDescription } from 'pm2';
 import * as platform from './platform';
 import * as arch from './arch';
 import * as github from './github';
@@ -73,8 +73,8 @@ const getDownloadUrl = (binaryDownload: BinaryDownload) => {
   );
 };
 
-const parseFileNameFromPath = (path: string, excludeExension?: boolean) => {
-  // ex. 'C:\Windows\crazy\path'
+const parseFileNameFromPath = (inPath: string, excludeExension?: boolean) => {
+  // ex. 'C:\Windows\crazy\inPath'
   // ex. '/root/usr/yay.zip
 
   let pathSlash = '/';
@@ -82,13 +82,13 @@ const parseFileNameFromPath = (path: string, excludeExension?: boolean) => {
     pathSlash = '\\';
   }
   if (excludeExension) {
-    const tarGzIndex = path.lastIndexOf('.tar.gz');
-    const zipIndex = path.lastIndexOf('.zip');
+    const tarGzIndex = inPath.lastIndexOf('.tar.gz');
+    const zipIndex = inPath.lastIndexOf('.zip');
     const extensionIndex = tarGzIndex > 0 ? tarGzIndex : zipIndex;
 
-    return path.substring(path.lastIndexOf(pathSlash) + 1, extensionIndex);
+    return inPath.substring(inPath.lastIndexOf(pathSlash) + 1, extensionIndex);
   }
-  return path.substring(path.lastIndexOf(pathSlash) + 1);
+  return inPath.substring(inPath.lastIndexOf(pathSlash) + 1);
 };
 
 const parseFileNameFromUrl = (url: string, excludeExension?: boolean) => {
@@ -354,7 +354,6 @@ export const stopBinary = async (node: Node) => {
       // successfully stopped
       node.status = NodeStatus.stopped;
       updateNode(node);
-      return undefined;
     }
   } else {
     // no processId for node
@@ -364,6 +363,7 @@ export const stopBinary = async (node: Node) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
 export const removeBinaryNode = async (node: Node) => {
   if (
     Array.isArray(node.runtime.processIds) &&
@@ -371,7 +371,7 @@ export const removeBinaryNode = async (node: Node) => {
   ) {
     // assume only one process
     const pmId = node.runtime.processIds[0];
-    return deleteProcess(parseInt(pmId));
+    return deleteProcess(parseInt(pmId, 10));
   }
 };
 

@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import electron from '../electronGlobal';
 import { Modal } from '../Modal';
-import { useAppDispatch } from '../state/hooks';
 import Node from '../../common/node';
 
 type Props = {
@@ -14,7 +13,6 @@ type Props = {
 };
 
 const RemoveNode = (props: Props) => {
-  // const dispatch = useAppDispatch();
   const [sShouldDeleteNodeStorage, setShouldDeleteNodeStorage] =
     useState<boolean>(false);
   const [sError, setError] = useState<string>('');

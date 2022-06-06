@@ -1,7 +1,9 @@
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-else-return */
 import { hexToDecimal } from '../utils';
 import { ethers } from '../ethers';
-import StarkNetClient, { callJsonRpc } from '../jsonRpcClient';
+import { callJsonRpc } from '../jsonRpcClient';
 
 // export const executeTranslation = async (
 //   baseUrl: string,
@@ -47,9 +49,9 @@ const callFetch = async (apiRoute: string) => {
 };
 
 const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
-const arbProvider = new ethers.providers.JsonRpcProvider(
-  'http://localhost:8547'
-);
+// const arbProvider = new ethers.providers.JsonRpcProvider(
+//   'http://localhost:8547'
+// );
 
 // const provider9545 = new ethers.providers.JsonRpcProvider(
 //   'http://localhost:9545'
@@ -158,7 +160,6 @@ export const executeTranslation = async (
         return { isSyncing: resp.data.is_syncing, syncPercent };
       }
     } else if (rpcCall === 'peers') {
-      return undefined;
       const resp = await callJsonRpc('starknet_net_peerCount', []);
       if (resp) {
         return hexToDecimal(resp);
@@ -172,8 +173,7 @@ export const executeTranslation = async (
       ]);
       return resp;
     } else if (rpcCall === 'clientVersion') {
-      return undefined;
-      // const resp = await callJsonRpc('web3_clientVersion', []);
+      const resp = await callJsonRpc('web3_clientVersion', []);
       if (resp) {
         return resp;
       } else {

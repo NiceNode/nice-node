@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAppSelector } from '../state/hooks';
 import { selectSelectedNode, selectSelectedNodeId } from '../state/node';
 
@@ -15,20 +15,19 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
   const sSelectedNode = useAppSelector(selectSelectedNode);
   const [sLogs, setLogs] = useState<string[]>([]);
 
-  const nodeLogsListener = (message: any) => {
+  const nodeLogsListener = (message: string[]) => {
     // console.log('sLogs: ', message);
-    setLogs((prevState: any) => {
+    setLogs((prevState) => {
       if (prevState.length < 1000) {
         return [...prevState, message[0]];
-      } else {
-        return [message[0]];
       }
+      return [message[0]];
     });
   };
 
-  const listenForNodeLogs = async () => {
+  const listenForNodeLogs = useCallback(async () => {
     electron.ipcRenderer.on('nodeLogs', nodeLogsListener);
-  };
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -42,7 +41,7 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
       electron.ipcRenderer.removeAllListeners('nodeLogs');
     }
     return () => electron.ipcRenderer.removeAllListeners('nodeLogs');
-  }, [isOpen]);
+  }, [isOpen, listenForNodeLogs]);
 
   useEffect(() => {
     // when switching selected nodes...
@@ -72,7 +71,6 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
       isSelected={!!isOpen}
       onClickCloseButton={onClickCloseButton}
     >
-      {/* <h4>Node Logs</h4> */}
       <em>Newest logs at the top</em>
       <div
         style={{
@@ -82,7 +80,8 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
         }}
       >
         {sLogs.map((log, index) => {
-          return <p key={index}>{log}</p>;
+          // eslint-disable-next-line react/no-array-index-key
+          return <p key={`${index}${log}`}>{log}</p>;
         })}
       </div>
     </MenuDrawer>

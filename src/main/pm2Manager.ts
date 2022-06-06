@@ -6,6 +6,7 @@ import * as readline from 'node:readline';
 import Node from '../common/node';
 import logger from './logger';
 import { send } from './messenger';
+import { killChildProcess } from './processExit';
 
 const pm2 = require('pm2');
 
@@ -40,20 +41,17 @@ let sendLogsToUIProc: ChildProcess;
 export const stopSendingLogsToUI = () => {
   // logger.info(`pm2.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
-    sendLogsToUIProc.kill();
+    logger.info(
+      'sendLogsToUI process was running for a node. Killing that process.'
+    );
+    killChildProcess(sendLogsToUIProc);
   }
 };
 
 export const sendLogsToUI = (node: Node) => {
   logger.info(`Starting pm2.sendLogsToUI for node ${node.spec.specId}`);
 
-  // sendLogsToUI is killed if (killed || exitCode === null)
-  if (sendLogsToUIProc && !sendLogsToUIProc.killed) {
-    logger.info(
-      'sendLogsToUI process was running for another node. Killing that process.'
-    );
-    sendLogsToUIProc.kill();
-  }
+  stopSendingLogsToUI();
   const spawnOptions: SpawnOptions = {
     stdio: [null, 'pipe', 'pipe'],
     detached: false,
@@ -83,15 +81,12 @@ export const sendLogsToUI = (node: Node) => {
   });
 
   rl.on('line', (log: string) => {
+    logger.info(`docker log read for ${node.spec.specId}`);
     try {
       send('nodeLogs', log);
     } catch (err) {
       logger.error(`Error parsing docker event log ${log}`, err);
     }
-  });
-
-  sendLogsToUIProc.stderr?.on('data', (data) => {
-    // logger.error(`pm2.sendLogsToUI::error:: `, data);
   });
 
   sendLogsToUIProc.on('error', (data) => {
@@ -106,7 +101,7 @@ export const sendLogsToUI = (node: Node) => {
     // code == 1, crash
     logger.info(`pm2.sendLogsToUI::close:: ${code}`);
     if (code !== 0) {
-      logger.error(`Error starting node (geth) ${code}`);
+      logger.error(`pm2.sendLogsToUI::close:: with non-zero exit code ${code}`);
       // todo: determine the error and show geth error logs to user.
     }
   });
@@ -205,7 +200,5 @@ export const startProccess = async (
 
 export const onExit = () => {
   pm2.disconnect();
-  if (sendLogsToUIProc) {
-    sendLogsToUIProc.kill();
-  }
+  stopSendingLogsToUI();
 };

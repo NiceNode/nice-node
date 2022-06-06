@@ -19,6 +19,8 @@ export type ConfigTranslationControl =
   | MultiSelectControl
   | TextControl;
 
+export type ConfigValue = string | string[] | undefined;
+
 export type ConfigTranslation = {
   displayName: string;
   uiControl: ConfigTranslationControl;
@@ -26,8 +28,8 @@ export type ConfigTranslation = {
   cliConfigPrefix?: string;
   valuesJoinStr?: string;
   valuesWrapChar?: string;
-  defaultValue?: string | string[];
-  niceNodeDefaultValue?: string | string[];
+  defaultValue?: ConfigValue;
+  niceNodeDefaultValue?: ConfigValue;
   documentation?: string;
   infoDescription?: string;
   warning?: string;

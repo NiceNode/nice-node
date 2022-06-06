@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { ImWarning } from 'react-icons/im';
 import { HiUserGroup } from 'react-icons/hi';
-import { BsFillLightningChargeFill } from 'react-icons/bs';
+// import { BsFillLightningChargeFill } from 'react-icons/bs';
 import { FaSync } from 'react-icons/fa';
 import {
   MdSignalWifiStatusbarConnectedNoInternet,
@@ -19,11 +19,7 @@ import {
 import { useGetNetworkConnectedQuery } from './state/network';
 import { hexToDecimal } from './utils';
 import { useAppSelector } from './state/hooks';
-import {
-  selectIsAvailableForPolling,
-  selectNodeConfig,
-  selectSelectedNode,
-} from './state/node';
+import { selectIsAvailableForPolling, selectSelectedNode } from './state/node';
 
 export const HEADER_HEIGHT = 48;
 
@@ -33,7 +29,6 @@ const Header = () => {
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>();
-  const sNodeConfig = useAppSelector(selectNodeConfig);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
   const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(
@@ -147,109 +142,113 @@ const Header = () => {
       <div>
         <span style={{ fontSize: 24, fontWeight: 600 }}>NiceNode</span>
       </div>
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'end',
-          fontSize: '1.1rem',
-        }}
-      >
-        {!isHttpEnabled && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginRight: 20,
-            }}
-          >
-            <ImWarning />
-            <VscDebugDisconnect style={{ fontSize: '1.8rem' }} />
-            <MdHttp style={{ fontSize: '2.5rem' }} />
-          </div>
-        )}
-        {sNodeConfig?.syncMode === 'light' && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginRight: 10,
-            }}
-          >
-            <BsFillLightningChargeFill />
-            <span>Light client</span>
-          </div>
-        )}
-        {typeof sLatestBlockNumber === 'number' && sLatestBlockNumber > 0 && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <SiHiveBlockchain />
-            <span style={{ marginLeft: 5, marginRight: 10 }}>
-              {sLatestBlockNumber}
-            </span>
-          </div>
-        )}
-        {diskUsed !== undefined && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <FiHardDrive />
-            <span style={{ marginLeft: 5, marginRight: 10 }}>
-              {diskUsed.toFixed(1)}GB
-            </span>
-          </div>
-        )}
-        {qNetwork?.data?.isConnected === false && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <MdSignalWifiStatusbarConnectedNoInternet />
-            <span style={{ marginLeft: 5, marginRight: 10 }}>
-              check internet
-            </span>
-          </div>
-        )}
-        {/* {sIsSyncing !== false && ( */}
+      {selectedNode && (
         <div
           style={{
+            flex: 1,
             display: 'flex',
             flexDirection: 'row',
-            alignItems: 'center',
+            justifyContent: 'end',
+            fontSize: '1.1rem',
           }}
         >
-          <FaSync className={sIsSyncing ? 'spin' : ''} />
-          <span style={{ marginLeft: 5, marginRight: 10 }}>
-            {sSyncPercent}% synced
-          </span>
+          {!isHttpEnabled && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginRight: 20,
+              }}
+            >
+              <ImWarning />
+              <VscDebugDisconnect style={{ fontSize: '1.8rem' }} />
+              <MdHttp style={{ fontSize: '2.5rem' }} />
+            </div>
+          )}
+          {/* {sNodeConfig?.syncMode === 'light' && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginRight: 10,
+              }}
+            >
+              <BsFillLightningChargeFill />
+              <span>Light client</span>
+            </div>
+          )} */}
+          {typeof sLatestBlockNumber === 'number' && sLatestBlockNumber > 0 && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <SiHiveBlockchain />
+              <span style={{ marginLeft: 5, marginRight: 10 }}>
+                {sLatestBlockNumber}
+              </span>
+            </div>
+          )}
+          {diskUsed !== undefined && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <FiHardDrive />
+              <span style={{ marginLeft: 5, marginRight: 10 }}>
+                {diskUsed.toFixed(1)}GB
+              </span>
+            </div>
+          )}
+          {qNetwork?.data?.isConnected === false && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <MdSignalWifiStatusbarConnectedNoInternet />
+              <span style={{ marginLeft: 5, marginRight: 10 }}>
+                check internet
+              </span>
+            </div>
+          )}
+          {/* {sIsSyncing !== false && ( */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <FaSync className={sIsSyncing ? 'spin' : ''} />
+            <span style={{ marginLeft: 5, marginRight: 10 }}>
+              {sSyncPercent}% synced
+            </span>
+          </div>
+          {/* )} */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <HiUserGroup />
+            <span style={{ marginLeft: 5, marginRight: 10 }}>
+              {sPeers} peers
+            </span>
+          </div>
         </div>
-        {/* )} */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <HiUserGroup />
-          <span style={{ marginLeft: 5, marginRight: 10 }}>{sPeers} peers</span>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

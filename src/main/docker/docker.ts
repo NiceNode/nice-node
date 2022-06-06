@@ -3,7 +3,6 @@ import path from 'node:path';
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
 
-import { isWindows } from '../platform';
 import logger from '../logger';
 import Node, { NodeStatus } from '../../common/node';
 import { DockerExecution } from '../../common/nodeSpec';
@@ -12,6 +11,7 @@ import { buildCliConfig } from '../../common/nodeConfig';
 import { send } from '../messenger';
 import * as monitoring from './monitoring';
 import * as dockerCompose from './docker-compose';
+import { killChildProcess } from '../processExit';
 // const options = {
 //   machineName: undefined, // uses local docker
 //   currentWorkingDirectory: undefined, // uses current working directory
@@ -112,7 +112,9 @@ const watchDockerEvents = async () => {
     // code == 1, crash
     logger.info(`dockerWatchProcess::close:: ${code}`);
     if (code !== 0) {
-      logger.error(`Error starting node (geth) ${code}`);
+      logger.error(
+        `dockerWatchProcess::close:: with non-zero exit code ${code}`
+      );
       // todo: determine the error and show geth error logs to user.
     }
   });
@@ -164,19 +166,17 @@ let sendLogsToUIProc: ChildProcess;
 export const stopSendingLogsToUI = () => {
   // logger.info(`docker.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
-    sendLogsToUIProc.kill();
+    logger.info(
+      'sendLogsToUI process was running for another node. Killing that process.'
+    );
+    logger.info(sendLogsToUIProc);
+    killChildProcess(sendLogsToUIProc);
   }
 };
 export const sendLogsToUI = (node: Node) => {
   logger.info(`Starting docker.sendLogsToUI for node ${node.spec.specId}`);
 
-  // sendDockerLogsToUI is killed if (killed || exitCode === null)
-  if (sendLogsToUIProc && !sendLogsToUIProc.killed) {
-    logger.info(
-      'sendLogsToUI process was running for another node. Killing that process.'
-    );
-    sendLogsToUIProc.kill();
-  }
+  stopSendingLogsToUI();
   const spawnOptions: SpawnOptions = {
     stdio: [null, 'pipe', 'pipe'],
     detached: false,
@@ -208,6 +208,7 @@ export const sendLogsToUI = (node: Node) => {
       input: sendLogsToUIProc.stderr,
     });
     rlStdErr.on('line', (log: string) => {
+      // logger.info(`docker log read for ${node.spec.specId}`);
       try {
         send('nodeLogs', log);
       } catch (err) {
@@ -220,6 +221,8 @@ export const sendLogsToUI = (node: Node) => {
       input: sendLogsToUIProc.stdout,
     });
     rlStdOut.on('line', (log: string) => {
+      // logger.info(`docker log read for ${node.spec.specId}`);
+
       try {
         send('nodeLogs', log);
       } catch (err) {
@@ -227,10 +230,6 @@ export const sendLogsToUI = (node: Node) => {
       }
     });
   }
-
-  sendLogsToUIProc.stderr?.on('data', (data) => {
-    // logger.error(`sendDockerLogsToUI::error:: `, data);
-  });
 
   sendLogsToUIProc.on('error', (data) => {
     logger.error(`docker.sendLogsToUI::error:: `, data);
@@ -244,7 +243,9 @@ export const sendLogsToUI = (node: Node) => {
     // code == 1, crash
     logger.info(`docker.sendLogsToUI::close:: ${code}`);
     if (code !== 0) {
-      logger.error(`Error starting node (geth) ${code}`);
+      logger.error(
+        `docker.sendLogsToUI::close:: with non-zero exit code ${code}`
+      );
       // todo: determine the error and show geth error logs to user.
     }
   });
@@ -350,7 +351,7 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
   // todo: test if input is empty string
   const runData = await runCommand(dockerCommand);
 
-  const { containerId, raw, command } = runData;
+  const { containerId } = runData;
   return [containerId];
 };
 
@@ -393,9 +394,7 @@ export const isDockerInstalled = async () => {
 export const onExit = () => {
   monitoring.onExit();
   if (dockerWatchProcess) {
-    dockerWatchProcess.kill();
+    killChildProcess(dockerWatchProcess);
   }
-  if (sendLogsToUIProc) {
-    sendLogsToUIProc.kill();
-  }
+  stopSendingLogsToUI();
 };

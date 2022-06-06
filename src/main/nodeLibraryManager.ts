@@ -13,6 +13,7 @@ import pathfinderv1 from '../common/NodeSpecs/pathfinder/pathfinder-v1.0.0.json'
 
 import logger from './logger';
 import { NodeLibrary, updateNodeLibrary } from './state/nodeLibrary';
+import { NodeSpecification } from '../common/nodeSpec';
 
 export const initialize = async () => {
   // parse spec json for latest versions
@@ -32,7 +33,7 @@ export const initialize = async () => {
   ];
   specs.forEach((spec) => {
     try {
-      nodeSpecBySpecId[spec.specId] = spec;
+      nodeSpecBySpecId[spec.specId] = spec as NodeSpecification;
     } catch (err) {
       logger.error(err);
     }

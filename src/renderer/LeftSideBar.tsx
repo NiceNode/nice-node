@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import Node, { NodeId } from '../common/node';
+import { NodeId } from '../common/node';
 import AddNode from './AddNode/AddNode';
 import DivButton from './DivButton';
 import { useAppDispatch, useAppSelector } from './state/hooks';
@@ -28,13 +28,6 @@ const LeftSideBar = () => {
       dispatch(updateSelectedNodeId(sUserNodes.nodeIds[0]));
     }
   }, [sSelectedNodeId, sUserNodes, dispatch]);
-
-  // useEffect(() => {
-  //   console.log('LSB: new sUserNodes', sUserNodes);
-  //   if (sUserNodes) {
-  //     console.log('LSB: new sUserNodes.data', sUserNodes);
-  //   }
-  // }, [sUserNodes]);
 
   return (
     <div

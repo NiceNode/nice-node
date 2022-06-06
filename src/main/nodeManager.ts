@@ -28,6 +28,7 @@ import {
   removeBinaryNode,
   sendLogsToUI as binarySendLogsToUI,
   stopSendingLogsToUI as binaryStopSendingLogsToUI,
+  getProcess,
 } from './binary';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
 
@@ -231,17 +232,20 @@ export const initialize = async () => {
       ) {
         try {
           const pid = parseInt(binaryNode.runtime.processIds[0], 10);
-          const nodeStatus = getBinaryStatus(pid);
-          logger.info(
-            `NodeStatus for ${binaryNode.spec.specId} is ${nodeStatus}`
-          );
-          node.status = nodeStatus;
-          nodeStore.updateNode(node);
+          // eslint-disable-next-line no-await-in-loop
+          const proc = await getProcess(pid);
+          if (proc) {
+            const nodeStatus = getBinaryStatus(proc);
+            logger.info(
+              `NodeStatus for ${binaryNode.spec.specId} is ${nodeStatus}`
+            );
+            node.status = nodeStatus;
+            nodeStore.updateNode(node);
+          }
         } catch (err) {
           console.error(err);
           node.status = NodeStatus.stopped;
           nodeStore.updateNode(node);
-          return undefined;
         }
       } else {
         node.status = NodeStatus.errorStopping;

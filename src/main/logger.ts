@@ -1,7 +1,6 @@
 import { app } from 'electron';
 import path from 'path';
 import { format, transports, createLogger } from 'winston';
-import { ConsoleTransportOptions } from 'winston/lib/winston/transports';
 // import DailyRotateFile from 'winston-daily-rotate-file';
 
 const logsPath = path.join(app.getPath('userData'), 'logs');

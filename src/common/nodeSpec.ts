@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ConfigValuesMap, ConfigTranslationMap } from './nodeConfig';
 import { NiceNodeRpcTranslation } from './rpcTranslation';
 

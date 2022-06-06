@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '../logger';
 import { isDockerNode } from '../../common/node';
 import * as nodeStore from '../state/nodes';

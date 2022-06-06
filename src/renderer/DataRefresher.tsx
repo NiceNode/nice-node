@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useAppSelector } from './state/hooks';
 import { selectSelectedNode, selectSelectedNodeId } from './state/node';
 import electron from './electronGlobal';
@@ -23,12 +23,16 @@ const DataRefresher = () => {
     return () => clearInterval(intveral);
   }, [sSelectedNodeId]);
 
+  const refetchCallback = useCallback(() => {
+    qNodeVersion.refetch();
+  }, [qNodeVersion]);
+
   useEffect(() => {
     console.log(
       'DataRefresher: selected node or nodeVersion query changed. Refetching node version.'
     );
-    qNodeVersion.refetch();
-  }, [selectedNode]);
+    refetchCallback();
+  }, [refetchCallback, selectedNode]);
   return <></>;
 };
 export default DataRefresher;
