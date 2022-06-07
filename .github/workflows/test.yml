@@ -6,7 +6,9 @@ env:
   USE_HARD_LINKS: false
 
 jobs:
-  release:
+  test:
+    timeout-minutes: 25
+
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -21,7 +23,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
-          cache: 'npm'
+          cache: npm
 
       - name: npm install
         run: |
