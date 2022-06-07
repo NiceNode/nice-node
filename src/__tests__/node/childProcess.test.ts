@@ -20,7 +20,7 @@ describe('Nodejs process testing', () => {
       // kill process
       childProcess.kill();
       console.log('wait 5 sec to see if process is killed');
-      sleep(2000);
+      await sleep(2000);
 
       // check that process is killed
       expect(childProcess.exitCode).toBe(null);

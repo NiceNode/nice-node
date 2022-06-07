@@ -1,7 +1,12 @@
 import { opendir, rm, mkdir } from 'fs/promises';
 import path from 'path';
 
-import { removeBinaryNode, startBinary, stopBinary } from '../../main/binary';
+import {
+  removeBinaryNode,
+  startBinary,
+  stopBinary,
+  onExit,
+} from '../../main/binary';
 import gethv1 from '../../common/NodeSpecs/geth/geth-v1.0.0.json';
 import Node, { createNode } from '../../common/node';
 import { NodeSpecification } from '../../common/nodeSpec';
@@ -87,6 +92,9 @@ describe('Tests the core cycle of a geth binary node (download, unzip, start, st
       await removeBinaryNode(gethNode);
 
       expect(gethNode.status).toBe('stopped');
+
+      // cleanup binary.ts adjacent services
+      onExit();
     } catch (err) {
       console.error(err);
     }
