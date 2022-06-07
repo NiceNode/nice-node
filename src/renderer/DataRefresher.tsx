@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAppSelector } from './state/hooks';
 import { selectSelectedNode, selectSelectedNodeId } from './state/node';
 import electron from './electronGlobal';
@@ -23,16 +23,14 @@ const DataRefresher = () => {
     return () => clearInterval(intveral);
   }, [sSelectedNodeId]);
 
-  const refetchCallback = useCallback(() => {
-    qNodeVersion.refetch();
-  }, [qNodeVersion]);
-
   useEffect(() => {
     console.log(
       'DataRefresher: selected node or nodeVersion query changed. Refetching node version.'
     );
-    refetchCallback();
-  }, [refetchCallback, selectedNode]);
+    qNodeVersion.refetch();
+    // RTKQ does not work as a dependency. Will cause an infinite loop if included.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedNode]);
   return <></>;
 };
 export default DataRefresher;
