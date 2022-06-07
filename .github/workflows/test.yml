@@ -2,6 +2,9 @@ name: Test
 
 on: [push, pull_request]
 
+env:
+  USE_HARD_LINKS: false
+
 jobs:
   release:
     runs-on: ${{ matrix.os }}
