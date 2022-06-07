@@ -57,7 +57,11 @@ const NodeScreen = () => {
                 <>Loading...</>
               ) : (
                 <>
-                  {qNodeVersion.isError ? <>Error</> : qNodeVersion.currentData}
+                  {qNodeVersion.isError ? (
+                    <>Loading..</>
+                  ) : (
+                    qNodeVersion.currentData
+                  )}
                 </>
               )}
             </>

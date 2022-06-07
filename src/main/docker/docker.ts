@@ -169,7 +169,6 @@ export const stopSendingLogsToUI = () => {
     logger.info(
       'sendLogsToUI process was running for another node. Killing that process.'
     );
-    logger.info(sendLogsToUIProc);
     killChildProcess(sendLogsToUIProc);
   }
 };

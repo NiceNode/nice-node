@@ -80,8 +80,12 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
         }}
       >
         {sLogs.map((log, index) => {
-          // eslint-disable-next-line react/no-array-index-key
-          return <p key={`${index}${log}`}>{log}</p>;
+          return (
+            // eslint-disable-next-line react/no-array-index-key
+            <p key={`${index} ${log}`} style={{ marginBlockEnd: 0 }}>
+              {log}
+            </p>
+          );
         })}
       </div>
     </MenuDrawer>

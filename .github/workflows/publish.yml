@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - docker-working-check-ins
 
 jobs:
   publish:
