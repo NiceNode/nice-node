@@ -1,13 +1,9 @@
-import { opendir, access, mkdir } from 'fs/promises';
-import { constants } from 'fs';
-
+import { opendir, rm, mkdir } from 'fs/promises';
 import path from 'path';
 
-// import { gethBuildNameForPlatformAndArch } from '../main/gethDownload';
-import { getNNDirPath } from '../../main/files';
-import { startBinary } from '../../main/binary';
+import { startBinary, stopBinary } from '../../main/binary';
 import gethv1 from '../../common/NodeSpecs/geth/geth-v1.0.0.json';
-import { createNode } from '../../common/node';
+import Node, { createNode } from '../../common/node';
 import { NodeSpecification } from '../../common/nodeSpec';
 
 jest.mock('electron', () => {
@@ -30,63 +26,66 @@ jest.mock('electron', () => {
 });
 
 const mockAppDir = path.join(__dirname, 'NiceNode');
+const gethDir = path.join(mockAppDir, 'nodes', 'geth');
+let gethNode: Node;
 beforeAll(async () => {
   try {
-    await mkdir(mockAppDir);
+    await mkdir(gethDir, { recursive: true });
+    gethNode = createNode({
+      spec: gethv1 as NodeSpecification,
+      runtime: { dataDir: gethDir, usage: {} },
+    });
   } catch (err) {
     console.log('mkdir NiceNode err: ', err);
   }
 });
 
-// afterAll(async () => {
-//   try {
-//     await rm(mockAppDir, { recursive: true });
-//   } catch (err) {
-//     console.log('rm NiceNode err: ', err);
-//   }
-// });
+afterAll(async () => {
+  try {
+    await rm(mockAppDir, { recursive: true });
+  } catch (err) {
+    console.log('rm NiceNode err: ', err);
+  }
+});
 
-jest.setTimeout(60000);
-describe('Downloading geth', () => {
+jest.setTimeout(120000);
+describe('Tests the core cycle of a geth binary node (download, unzip, start, stop)', () => {
   it('Successfully downloads', async () => {
-    const gethNode = createNode({
-      spec: gethv1 as NodeSpecification,
-      runtime: { dataDir: mockAppDir, usage: {} },
-    });
     // download & unzip (if necessary), and start the node
     await startBinary(gethNode);
 
-    // expect that a geth.tar.gz or geth.zip file exists in app directory
-    const dirPath = getNNDirPath();
+    // in nodes/geth...
+    // expect a geth-<build-platform>.compressedFormat
+    // expect a geth-<build-platform> dir with geth exec
+    // expect some geth data (given that geth has been running for a few seconds)
+    const dirPath = gethDir;
     console.log('dirPath: ', dirPath);
     try {
       const dir = await opendir(dirPath);
       let count = 0;
+      let isCompressedGethDownload = false;
+      let isGethUnzipped = false;
       // eslint-disable-next-line no-restricted-syntax
       for await (const dirent of dir) {
         console.log('NNdir file or dir: ', dirent.name);
+        if (dirent.name.includes('tar.gz') || dirent.name.includes('zip')) {
+          isCompressedGethDownload = true;
+        }
+        if (dirent.name.includes('geth-') && dirent.name.includes('1.')) {
+          isGethUnzipped = true;
+        }
         count += 1;
       }
       expect(count).toBeGreaterThan(0);
+      expect(isCompressedGethDownload).toBeTruthy();
+      expect(isGethUnzipped).toBeTruthy();
 
-      // returns undefined on success
-      const accessResZip = await access(
-        path.join(dirPath, 'geth.tar.gz'),
-        constants.F_OK
-      );
-      expect(accessResZip).toBeUndefined();
+      expect(gethNode.status).toBe('running');
+      expect(gethNode.runtime.processIds?.length).toBeGreaterThan(0);
 
-      // stop node
-      // can check for some data
-      // could check for a start log
+      await stopBinary(gethNode);
 
-      // test unzip successful
-      // const unzippedGethDir = path.join(
-      //   dirPath,
-      //   gethBuildNameForPlatformAndArch()
-      // );
-      // const accessResUnzipped = await access(unzippedGethDir, constants.F_OK);
-      // expect(accessResUnzipped).toBeUndefined();
+      expect(gethNode.status).toBe('stopped');
     } catch (err) {
       console.error(err);
     }
