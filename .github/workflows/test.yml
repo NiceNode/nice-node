@@ -37,13 +37,10 @@ jobs:
       - name: npm lint
         run: |
           npm run lint
-          npm exec tsc --verbose
-          npm test
 
       - name: npm exec tsc
         run: |
           npm exec tsc --verbose
-          npm test
 
       - name: npm test
         run: |
