@@ -6,6 +6,7 @@ import * as readline from 'node:readline';
 import Node from '../common/node';
 import logger from './logger';
 import { send } from './messenger';
+import { isMac } from './platform';
 
 const pm2 = require('pm2');
 
@@ -153,12 +154,22 @@ export const startProccess = async (
     `pm2Manager startProccess ${name} with ${script} and args ${args}`
   );
   try {
-    const startResult = await pm2.start({
-      script,
-      args,
-      name,
-    });
-    logger.info(`pm2Manager startResult ${JSON.stringify(startResult)}`);
+    let startResult;
+    if (isMac()) {
+      // pm2 seems to ignore args on mac, so include them in the script string
+      startResult = await pm2.start({
+        script: `${script}  ${args}`,
+        name,
+      });
+    } else {
+      startResult = await pm2.start({
+        script,
+        args,
+        name,
+      });
+    }
+    logger.info(`pm2Manager startResult: `);
+    logger.info(startResult);
 
     // todo: pm_id is undefined some times, can be fixed with another start
     if (Array.isArray(startResult) && startResult[0]) {
