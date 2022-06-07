@@ -30,6 +30,7 @@ afterAll(() => {
   console.error = originalError;
 });
 
+jest.setTimeout(20000);
 describe('App', () => {
   it('should render', () => {
     expect(render(<App />)).toBeTruthy();
