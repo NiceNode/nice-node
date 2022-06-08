@@ -100,6 +100,7 @@ export const sendLogsToUI = (node: Node) => {
   sendLogsToUIProc.on('close', (code) => {
     // code == 0, clean exit
     // code == 1, crash
+    rl.close();
     logger.info(`pm2.sendLogsToUI::close:: ${code}`);
     if (code !== 0) {
       logger.error(`pm2.sendLogsToUI::close:: with non-zero exit code ${code}`);

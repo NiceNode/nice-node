@@ -21,7 +21,6 @@ import {
   checkAndOrCreateDir,
 } from './files';
 import { updateNode } from './state/nodes';
-import { getProcessUsageByPid } from './monitor';
 import {
   startProccess,
   getProcess as pm2GetProcess,
@@ -71,6 +70,29 @@ const getDownloadUrl = (binaryDownload: BinaryDownload) => {
   throw new Error(
     `Platform ${platform.getPlatform()} and arch ${arch.getArch()} is not supported by NiceNode.`
   );
+};
+
+export const getBinaryStatus = (proc: ProcessDescription): NodeStatus => {
+  const procStatus = proc?.pm2_env?.status;
+  if (proc && procStatus) {
+    if (procStatus === 'online') {
+      return NodeStatus.running;
+    }
+    if (procStatus === 'errored') {
+      return NodeStatus.errorRunning;
+    }
+    if (procStatus === 'stopping') {
+      return NodeStatus.stopping;
+    }
+    if (procStatus === 'launching') {
+      return NodeStatus.starting;
+    }
+    if (procStatus === 'stopped') {
+      return NodeStatus.stopped;
+    }
+  }
+  console.log('unkown proc status! proc, procStatus', proc, procStatus);
+  return NodeStatus.unknown;
 };
 
 const parseFileNameFromPath = (inPath: string, excludeExension?: boolean) => {
@@ -343,13 +365,26 @@ export const stopBinary = async (node: Node) => {
     // const signalSentResult = kill(pid, 'SIGINT');
     const signalSentResult = stopProcess(pid);
     console.log('killSignalSent?', signalSentResult);
-    await sleep(5000);
+    await sleep(2000);
     try {
-      const pidStats = await getProcessUsageByPid(pid);
-      console.log('found pidstates for', node.spec.specId, pidStats);
-      // force kill
-      node.status = NodeStatus.running;
-      updateNode(node);
+      const proc = await getProcess(pid);
+      if (proc) {
+        const nodeStatus = getBinaryStatus(proc);
+        const proccessUsage = proc.monit;
+        if (proccessUsage) {
+          node.runtime.usage.memoryBytes = proccessUsage.memory ?? undefined;
+          node.runtime.usage.cpuPercent = proccessUsage.cpu ?? undefined;
+        }
+        node.status = nodeStatus;
+        nodeStore.updateNode(node);
+      } else {
+        // todo: fix: this happens on computer restart
+        logger.error(
+          `Unable to get process details. Proccess pid ${pid} not found.`
+        );
+        node.status = NodeStatus.unknown;
+        updateNode(node);
+      }
     } catch (err) {
       // successfully stopped
       node.status = NodeStatus.stopped;
@@ -373,29 +408,6 @@ export const removeBinaryNode = async (node: Node) => {
     const pmId = node.runtime.processIds[0];
     return deleteProcess(parseInt(pmId, 10));
   }
-};
-
-export const getBinaryStatus = (proc: ProcessDescription): NodeStatus => {
-  const procStatus = proc?.pm2_env?.status;
-  if (proc && procStatus) {
-    if (procStatus === 'online') {
-      return NodeStatus.running;
-    }
-    if (procStatus === 'errored') {
-      return NodeStatus.errorRunning;
-    }
-    if (procStatus === 'stopping') {
-      return NodeStatus.stopping;
-    }
-    if (procStatus === 'launching') {
-      return NodeStatus.starting;
-    }
-    if (procStatus === 'stopped') {
-      return NodeStatus.stopped;
-    }
-  }
-  console.log('unkown proc status! proc, procStatus', proc, procStatus);
-  return NodeStatus.unknown;
 };
 
 const watchProcessPollingInterval = 15000;

@@ -1,5 +1,6 @@
 import { opendir, rm, mkdir } from 'fs/promises';
 import path from 'path';
+import sleep from 'await-sleep';
 
 import {
   removeBinaryNode,
@@ -90,6 +91,7 @@ describe('Tests the core cycle of a geth binary node (download, unzip, start, st
 
       await stopBinary(gethNode);
       await removeBinaryNode(gethNode);
+      await sleep(2000);
 
       expect(gethNode.status).toBe('stopped');
 

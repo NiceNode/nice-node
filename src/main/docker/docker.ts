@@ -110,6 +110,7 @@ const watchDockerEvents = async () => {
   dockerWatchProcess.on('close', (code) => {
     // code == 0, clean exit
     // code == 1, crash
+    rl.close();
     logger.info(`dockerWatchProcess::close:: ${code}`);
     if (code !== 0) {
       logger.error(
@@ -202,8 +203,9 @@ export const sendLogsToUI = (node: Node) => {
     throw new Error('Docker watch events stdout stream is undefined.');
     return;
   }
+  let rlStdErr: readline.Interface;
   if (sendLogsToUIProc.stderr) {
-    const rlStdErr = readline.createInterface({
+    rlStdErr = readline.createInterface({
       input: sendLogsToUIProc.stderr,
     });
     rlStdErr.on('line', (log: string) => {
@@ -215,8 +217,9 @@ export const sendLogsToUI = (node: Node) => {
       }
     });
   }
+  let rlStdOut: readline.Interface;
   if (sendLogsToUIProc.stdout) {
-    const rlStdOut = readline.createInterface({
+    rlStdOut = readline.createInterface({
       input: sendLogsToUIProc.stdout,
     });
     rlStdOut.on('line', (log: string) => {
@@ -240,6 +243,12 @@ export const sendLogsToUI = (node: Node) => {
   sendLogsToUIProc.on('close', (code) => {
     // code == 0, clean exit
     // code == 1, crash
+    if (rlStdErr) {
+      rlStdErr.close();
+    }
+    if (rlStdOut) {
+      rlStdOut.close();
+    }
     logger.info(`docker.sendLogsToUI::close:: ${code}`);
     if (code !== 0) {
       logger.error(
