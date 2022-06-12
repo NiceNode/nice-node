@@ -101,13 +101,6 @@
         "provider": "github",
         "owner": "jgresham",
         "repo": "nice-node"
-      },
-      {
-        "provider": "snapStore",
-        "repo": "nice-node",
-        "channels": [
-          "edge"
-        ]
       }
     ]
   },
