@@ -283,9 +283,44 @@ export const initialize = async () => {
   }
 };
 
+export const stopDockerNode = async (node: Node) => {
+  // todo: could try stopping container by name using node spec
+  let isRemoved = false;
+  try {
+    await runCommand(`stop ${node.spec.specId}`);
+    logger.info(`stopDockerNode container stopped by name ${node.spec.specId}`);
+    isRemoved = true;
+  } catch (err) {
+    // todo: returns an error?
+    logger.info('No containers to stop by name.');
+  }
+  if (isRemoved) {
+    return true;
+  }
+  let containerIds;
+  if (
+    Array.isArray(node.runtime.processIds) &&
+    node.runtime.processIds.length > 0
+  ) {
+    containerIds = node.runtime.processIds;
+    await runCommand(`stop ${containerIds[0]}`);
+  } else {
+    throw new Error('Unable to stop the node. No containerIds found.');
+  }
+
+  return containerIds;
+};
+
 export const removeDockerNode = async (node: Node) => {
   logger.info(`removeDockerNode node specId ${node.spec.specId}`);
   let isRemoved = false;
+  // (stop &) remove possible previous docker container for this node
+  try {
+    await stopDockerNode(node);
+  } catch (err) {
+    logger.error(err);
+    logger.info('Error in stopping docker node. Continuing remove node.');
+  }
   try {
     await runCommand(`container rm ${node.spec.specId}`);
     logger.info(
@@ -293,6 +328,7 @@ export const removeDockerNode = async (node: Node) => {
     );
     isRemoved = true;
   } catch (err) {
+    // todo: returns an error when the container is running
     logger.info('No containers to remove by name.');
   }
   if (isRemoved) {
@@ -363,21 +399,6 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
   return [containerId];
 };
 
-export const stopDockerNode = async (node: Node) => {
-  let containerIds;
-  if (
-    Array.isArray(node.runtime.processIds) &&
-    node.runtime.processIds.length > 0
-  ) {
-    containerIds = node.runtime.processIds;
-    await runCommand(`stop ${containerIds[0]}`);
-  } else {
-    throw new Error('Unable to stop the node. No containerIds found.');
-  }
-
-  return containerIds;
-};
-
 // todo: check docker version. check docker desktop is installed but not running
 export const isDockerInstalled = async () => {
   let bIsDockerInstalled;
@@ -390,7 +411,7 @@ export const isDockerInstalled = async () => {
       'Docker is installed. Docker version command did not throw error.'
     );
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     bIsDockerInstalled = false;
     // docker not installed?
     logger.info('Docker install not found.');

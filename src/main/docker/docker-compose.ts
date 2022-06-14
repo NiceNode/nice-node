@@ -15,5 +15,10 @@ export const getVersion = async () => {
  */
 export const initialize = async () => {
   // run "docker-compose --version"
-  logger.info(`${VERSION_COMMAND} result: ${await getVersion()}`);
+  try {
+    logger.info(`${VERSION_COMMAND} result: ${await getVersion()}`);
+  } catch (err) {
+    logger.error(err);
+    logger.info('Unable to get the docker compose version.');
+  }
 };

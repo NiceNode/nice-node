@@ -19,6 +19,7 @@ import sleep from 'await-sleep';
 import logger, { autoUpdateLogger } from './logger';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { fixPathEnvVar } from './util/fixPathEnvVar';
 import { setWindow } from './messenger';
 import {
   initialize as initNodeManager,
@@ -30,6 +31,8 @@ import * as power from './power';
 import * as processExit from './processExit';
 
 require('dotenv').config();
+
+fixPathEnvVar();
 // debug({ isEnabled: true });
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
