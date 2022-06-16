@@ -73,7 +73,9 @@
           "type": "link",
           "path": "/Applications"
         }
-      ]
+      ],
+      "icon": "installer.icns",
+      "title": "${productName} ${version} installer"
     },
     "win": {
       "target": [
@@ -86,7 +88,7 @@
         "AppImage"
       ],
       "category": "Network",
-      "icon": "assets/icons/256x256.png"
+      "icon": "icons"
     },
     "directories": {
       "app": "release/app",
