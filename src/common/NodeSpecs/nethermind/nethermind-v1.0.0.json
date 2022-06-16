@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "displayName": "Nethermind",
   "execution": {
-    "executionTypes": ["docker", "binary"],
+    "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
     "input": {
       "defaultConfig": {
@@ -147,12 +147,12 @@
       "displayName": "Port number for JSON RPC web sockets calls",
       "cliConfigPrefix": "--JsonRpc.WebSocketsPort ",
       "defaultValue": "8545",
-      "niceNodeDefaultValue" : "8546",
+      "niceNodeDefaultValue": "8546",
       "uiControl": {
         "type": "text"
       },
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/configuration/jsonrpc",
-      "infoDescription" : "Port number for JSON RPC web sockets calls. By default same port is used as regular HTTP JSON RPC. Ensure the firewall is configured when enabling JSON RPC."
+      "infoDescription": "Port number for JSON RPC web sockets calls. By default same port is used as regular HTTP JSON RPC. Ensure the firewall is configured when enabling JSON RPC."
     }
   },
   "documentation": {

@@ -17,17 +17,17 @@
     "binaryDownload": {
       "type": "static",
       "darwin": {
-        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.18-de23cf91.tar.gz"
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.19-23bee162.tar.gz"
       },
       "linux": {
-        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.18-de23cf91.tar.gz",
-        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-linux-386-1.10.18-de23cf91.tar.gz",
-        "arm64": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.10.18-de23cf91.tar.gz",
-        "arm7": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm7-1.10.18-de23cf91.tar.gz"
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.19-23bee162.tar.gz",
+        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-linux-386-1.10.19-23bee162.tar.gz",
+        "arm64": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.10.19-23bee162.tar.gz",
+        "arm7": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm7-1.10.19-23bee162.tar.gz"
       },
       "windows": {
-        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.18-de23cf91.zip",
-        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-windows-386-1.10.18-de23cf91.zip"
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.19-23bee162.zip",
+        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-windows-386-1.10.19-23bee162.zip"
       }
     }
   },
@@ -58,7 +58,7 @@
         ]
       },
       "defaultValue": "Disabled",
-      "documentation" : "https://geth.ethereum.org/docs/rpc/server"
+      "documentation": "https://geth.ethereum.org/docs/rpc/server"
     },
     "webSockets": {
       "displayName": "rpc websocket connections (*BeaconNodes may require websocket connections)",
@@ -75,7 +75,7 @@
         ]
       },
       "defaultValue": "Disabled",
-      "documentation" : "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
     },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
