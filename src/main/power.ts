@@ -1,6 +1,6 @@
 import { app, powerSaveBlocker, powerMonitor } from 'electron';
 
-import { getIsStartOnLogin, watchIsStartOnLogin } from './state/store';
+// import { getIsStartOnLogin, watchIsStartOnLogin } from './state/store';
 import logger from './logger';
 
 let id: number | undefined;
@@ -21,12 +21,13 @@ export const allowSuspendSystem = () => {
 
 export const initialize = () => {
   // get saved settings and make sure app values are up to date
-  const isStartOnLogin = getIsStartOnLogin();
-  logger.info(`isStartOnLogin: ${isStartOnLogin}`);
-  app.setLoginItemSettings({ openAtLogin: isStartOnLogin });
-  watchIsStartOnLogin((openAtLogin: boolean) => {
-    app.setLoginItemSettings({ openAtLogin });
-  });
+  // const isStartOnLogin = getIsStartOnLogin();
+  // logger.info(`isStartOnLogin: ${isStartOnLogin}`);
+  app.setLoginItemSettings({ openAtLogin: false });
+  // app.setLoginItemSettings({ openAtLogin: isStartOnLogin });
+  // watchIsStartOnLogin((openAtLogin: boolean) => {
+  //   app.setLoginItemSettings({ openAtLogin });
+  // });
 };
 
 logger.info(`Is on battery: ${powerMonitor.isOnBatteryPower()}`);
@@ -37,4 +38,4 @@ powerMonitor.on('on-battery', () => {
 powerMonitor.on('on-ac', () => {
   logger.info('PowerChange: On power!');
 });
-dontSuspendSystem();
+// dontSuspendSystem();
