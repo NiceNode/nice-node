@@ -124,7 +124,9 @@ export const sendLogsToUI = (node: Node) => {
 export const initialize = async () => {
   logger.info('initialize pm2 connection');
   try {
-    const result = await pm2.connect();
+    const isNoDaemonMode = isMac();
+    logger.info(`Starting pm2 in daemon mode? : ${!isNoDaemonMode}`);
+    const result = await pm2.connect(isNoDaemonMode);
     logger.info(
       `pm2Manager connected to the pm2 instance result: ${JSON.stringify(
         result

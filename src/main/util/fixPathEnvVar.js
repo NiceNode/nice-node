@@ -2,7 +2,7 @@ import process from 'node:process';
 import { isMac } from '../platform';
 
 export const fixPathEnvVar = () => {
-  if (!isMac) {
+  if (!isMac()) {
     return;
   }
   // fix path env variable so that child processes paths
@@ -10,7 +10,7 @@ export const fixPathEnvVar = () => {
   console.log('Env var PATH before change: ', process.env.PATH);
   process.env.PATH = [
     './node_modules/.bin',
-    '/.nodebrew/current/bin',
+    // '/.nodebrew/current/bin',
     '/usr/local/bin',
     process.env.PATH,
   ].join(':');

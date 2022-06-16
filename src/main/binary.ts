@@ -363,7 +363,7 @@ export const stopBinary = async (node: Node) => {
     const pid = parseInt(node.runtime.processIds[0], 10);
     // try nice kill first
     // const signalSentResult = kill(pid, 'SIGINT');
-    const signalSentResult = stopProcess(pid);
+    const signalSentResult = await stopProcess(pid);
     console.log('killSignalSent?', signalSentResult);
     await sleep(2000);
     try {
@@ -420,7 +420,10 @@ const watchBinaryProcesses = async () => {
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     if (isBinaryNode(node)) {
-      if (Array.isArray(node?.runtime?.processIds)) {
+      if (
+        Array.isArray(node?.runtime?.processIds) &&
+        node.runtime.processIds.length > 0
+      ) {
         try {
           const pid = parseInt(node.runtime.processIds[0], 10);
           // eslint-disable-next-line no-await-in-loop
@@ -441,12 +444,18 @@ const watchBinaryProcesses = async () => {
             logger.error(
               `Unable to get process details. Proccess pid ${pid} not found.`
             );
+            node.status = NodeStatus.unknown;
+            updateNode(node);
           }
         } catch (err) {
           // error getting proc status
+          node.status = NodeStatus.unknown;
+          updateNode(node);
         }
       } else {
         // no processId for a node
+        node.status = NodeStatus.stopped;
+        nodeStore.updateNode(node);
       }
     }
   }
