@@ -54,7 +54,7 @@ export default class AppUpdater {
     //  testing purposes. Devs can set this to true and create
     //  a "pre-release" to test the auto update functionality.
     // https://www.electron.build/auto-update#appupdater-moduleeventseventemitter
-    autoUpdater.allowPrerelease = false;
+    autoUpdater.allowPrerelease = true;
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
