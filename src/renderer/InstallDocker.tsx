@@ -15,13 +15,20 @@ const InstallDocker = () => {
            install guide. Docker will quietly run in the background after installation."
         }
       </p>
-      <caption>
-        If you have Docker Desktop installed, ensure it is running.
-      </caption>
-      <ExternalLink
-        title="Docker Desktop install guide"
-        url="https://docs.docker.com/desktop/#download-and-install"
-      />
+      <p>Restart NiceNode when Docker is installed and running.</p>
+      <p>If you have Docker Desktop installed, ensure it is running.</p>
+      <div
+        style={{
+          background: 'rgba(0, 0, 0, 0.1)',
+          padding: 20,
+          display: 'inline-block',
+        }}
+      >
+        <ExternalLink
+          title="Docker Desktop install guide"
+          url="https://docs.docker.com/desktop/#download-and-install"
+        />
+      </div>
     </div>
   );
 };
