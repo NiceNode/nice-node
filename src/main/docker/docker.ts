@@ -390,7 +390,7 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
   });
   nodeInput += ` ${cliConfigInput}`;
 
-  const dockerCommand = `run -d --name ${specId} ${finalDockerInput} ${imageName} ${nodeInput}`;
+  const dockerCommand = `run -d --restart unless-stopped --name ${specId} ${finalDockerInput} ${imageName} ${nodeInput}`;
   logger.info(`docker startNode command ${dockerCommand}`);
   // todo: test if input is empty string
   const runData = await runCommand(dockerCommand);
