@@ -9,7 +9,7 @@ import {
   onExit,
 } from '../../main/binary';
 import gethv1 from '../../common/NodeSpecs/geth/geth-v1.0.0.json';
-import Node, { createNode } from '../../common/node';
+import Node, { createNode, NodeStatus } from '../../common/node';
 import { NodeSpecification } from '../../common/nodeSpec';
 
 jest.mock('electron', () => {
@@ -57,6 +57,8 @@ afterAll(async () => {
 jest.setTimeout(120000);
 describe('Tests the core cycle of a geth binary node (download, unzip, start, stop)', () => {
   it('Successfully downloads', async () => {
+    expect(gethNode.status).toBe(NodeStatus.created);
+
     // download & unzip (if necessary), and start the node
     await startBinary(gethNode);
 
@@ -86,14 +88,14 @@ describe('Tests the core cycle of a geth binary node (download, unzip, start, st
       expect(isCompressedGethDownload).toBeTruthy();
       expect(isGethUnzipped).toBeTruthy();
 
-      expect(gethNode.status).toBe('running');
+      expect(gethNode.status).toBe(NodeStatus.running);
       expect(gethNode.runtime.processIds?.length).toBeGreaterThan(0);
 
       await stopBinary(gethNode);
       await removeBinaryNode(gethNode);
       await sleep(2000);
 
-      expect(gethNode.status).toBe('stopped');
+      expect(gethNode.status).toBe(NodeStatus.stopped);
 
       // cleanup binary.ts adjacent services
       onExit();

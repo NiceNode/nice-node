@@ -1,12 +1,12 @@
 # NiceNode
 
-"A one-click-to-start Ethereum node"
+"Run a node, just press start"
 
 <strong>Mission: </strong>2x the number of Ethereum nodes by making a one-click-to-start Ethereum node
 
 [![Discord](https://badgen.net/badge/icon/alpha?label=downloads)](https://www.nicenode.xyz/downloads) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/Juchd4th)
 
-![NiceNodeScreenshot](https://www.nicenode.xyz/img/screenshot.png "NiceNodeScreenshot")
+![NiceNodeScreenshot](https://www.nicenode.xyz/img/screenshot.png 'NiceNodeScreenshot')
 
 <strong>Why?: </strong>The light client roadmap for Ethereum depends on access to reliable full nodes. Increasing the number and availability of full nodes is therefore important for the future of Ethereum.
 
