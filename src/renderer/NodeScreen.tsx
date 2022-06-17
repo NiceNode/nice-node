@@ -3,7 +3,6 @@ import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 import { NodeStatus } from '../common/node';
 import electron from './electronGlobal';
 import InstallDocker from './InstallDocker';
-import RemoveNodeButton from './AddNode/RemoveNodeButton';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector } from './state/hooks';
 import { selectSelectedNode } from './state/node';
@@ -102,8 +101,6 @@ const NodeScreen = () => {
             Stop
           </div>
         </button>
-        &nbsp;
-        <RemoveNodeButton node={selectedNode} />
       </div>
     </div>
   );

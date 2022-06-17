@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { MdDelete } from 'react-icons/md';
 
 import electron from '../electronGlobal';
 import { Modal } from '../Modal';
@@ -55,8 +56,12 @@ const RemoveNode = (props: Props) => {
         Removing a node will stop the node, remove it from your nodes, and
         custom settings for the node will be removed.
       </h2>
+      <h2>
+        <MdDelete />
+        Delete node data?
+      </h2>
       <h3>
-        Node storage{' '}
+        Node data storage size:{' '}
         {node?.runtime?.usage?.diskGBs &&
           `${(node?.runtime?.usage?.diskGBs).toFixed(1)}GB`}
       </h3>
@@ -86,7 +91,9 @@ const RemoveNode = (props: Props) => {
         style={{ margin: 5, display: 'flex', justifyContent: 'space-between' }}
       >
         <button type="button" onClick={onConfirmRemoveNode}>
-          <span>Confirm</span>
+          <span>
+            Confirm {sShouldDeleteNodeStorage ? 'and delete data' : ''}
+          </span>
         </button>
         &nbsp;
         <button type="button" onClick={onCancel}>

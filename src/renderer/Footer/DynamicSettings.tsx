@@ -6,6 +6,7 @@ import MenuDrawer from './MenuDrawer';
 import DynamicNodeConfig from './DynamicNodeConfig';
 import { useAppSelector } from '../state/hooks';
 import { selectSelectedNode } from '../state/node';
+import RemoveNodeButton from '../AddNode/RemoveNodeButton';
 
 type Props = {
   isOpen: boolean | undefined;
@@ -28,8 +29,17 @@ const DynamicSettings = ({ isOpen, onClickCloseButton }: Props) => {
       onClickCloseButton={onClickCloseButton}
     >
       <DynamicNodeConfig />
+      &nbsp;
+      {selectedNode && (
+        <>
+          <h2 style={{ marginBlockEnd: 0 }}>Remove node from NiceNode</h2>
+          <p> (optionally delete node storage in confirmation dialog)</p>
+          <div style={{ padding: 20 }}>
+            <RemoveNodeButton node={selectedNode} />
+          </div>
+        </>
+      )}
       {/* todo fix: This deletes the entire node.runtime.dataDir.. hmm */}
-
       {/* <h2>Storage</h2>
       <div>
         <h3>Delete node data</h3>

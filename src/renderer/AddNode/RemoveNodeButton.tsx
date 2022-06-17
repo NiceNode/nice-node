@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { MdDelete } from 'react-icons/md';
+import { MdRemoveCircleOutline } from 'react-icons/md';
 import ConfirmRemoveNode from './ConfirmRemoveNode';
 import Node from '../../common/node';
 
@@ -21,7 +21,7 @@ const RemoveNodeButton = (props: { node: Node }) => {
         onClick={() => setIsModalOpenConfirmRemoveNode(true)}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <MdDelete style={{ marginRight: 5 }} />
+          <MdRemoveCircleOutline style={{ marginRight: 5 }} />
           Remove
         </div>
       </button>
