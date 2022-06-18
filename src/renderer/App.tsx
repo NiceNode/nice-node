@@ -1,82 +1,39 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
-import ReactTooltip from 'react-tooltip';
 
 import './App.css';
-import { useAppDispatch, useAppSelector } from './state/hooks';
-import electron from './electronGlobal';
+import { useAppDispatch } from './state/hooks';
 import Header from './Header';
 import Footer from './Footer/Footer';
 import Warnings from './Warnings';
-import { useGetExecutionNodeInfoQuery } from './state/services';
-import { detectExecutionClient } from './utils';
 import { initialize as initializeIpcListeners } from './ipc';
-import {
-  selectIsAvailableForPolling,
-  selectNodeStatus,
-  updateNodeStatus,
-} from './state/node';
-import { NODE_STATUS } from './messages';
+import LeftSideBar from './LeftSideBar';
+import NodeScreen from './NodeScreen';
+import DataRefresher from './DataRefresher';
+import electron from './electronGlobal';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
   debug: true,
 });
 
-// start services to poll node, os, etc.?
-
 const MainScreen = () => {
-  const [sNodeInfo, setNodeInfo] = useState(undefined);
-  const [sIsOpenOnLogin, setIsOpenOnLogin] = useState<boolean>(false);
-  const sNodeStatus = useAppSelector(selectNodeStatus);
   const dispatch = useAppDispatch();
-  const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
-  const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
-  const qNodeInfo = useGetExecutionNodeInfoQuery(null, {
-    pollingInterval,
-  });
 
-  const refreshGethStatus = useCallback(async () => {
-    const status = await electron.getGethStatus();
-    dispatch(updateNodeStatus(status));
-    const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
-    console.log('isStartOnLogin: ', isStartOnLogin);
-    setIsOpenOnLogin(isStartOnLogin);
-  }, [dispatch]);
+  // const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
+  // console.log('isStartOnLogin: ', isStartOnLogin);
+  // setIsOpenOnLogin(isStartOnLogin);
 
   useEffect(() => {
     console.log('App loaded. Initializing...');
     initializeIpcListeners(dispatch);
-    refreshGethStatus();
-  }, [dispatch, refreshGethStatus]);
+  }, [dispatch]);
 
-  useEffect(() => {
-    if (typeof qNodeInfo?.data === 'string') {
-      setNodeInfo(qNodeInfo.data);
-    } else {
-      setNodeInfo(undefined);
-    }
-  }, [qNodeInfo]);
-
-  // Wait for message that says Geth is ready to start
-
-  const onClickStartGeth = async () => {
-    // Send message to main process to start Geth
-    await electron.startGeth();
-    refreshGethStatus();
-  };
-
-  const onClickStopGeth = async () => {
-    // Send message to main process to start Geth
-    await electron.stopGeth();
-    refreshGethStatus();
-  };
-
-  const onChangeOpenOnLogin = (openOnLogin: boolean) => {
-    electron.setStoreValue('isStartOnLogin', openOnLogin);
-    setIsOpenOnLogin(openOnLogin);
-  };
+  // const onChangeOpenOnLogin = (openOnLogin: boolean) => {
+  //   electron.setStoreValue('isStartOnLogin', openOnLogin);
+  //   setIsOpenOnLogin(openOnLogin);
+  // };
 
   return (
     <div
@@ -88,86 +45,31 @@ const MainScreen = () => {
       }}
     >
       <Header />
-
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          flexDirection: 'row',
           flex: 1,
-          justifyContent: 'center',
         }}
       >
-        <div>
-          <h2>An Ethereum Node</h2>
-          <h3>Status: {sNodeStatus}</h3>
-          {sNodeStatus === 'running' && (
-            <>
-              <h4 data-tip data-for="nodeInfo">
-                {detectExecutionClient(sNodeInfo, true)}
-              </h4>
-              <ReactTooltip
-                place="bottom"
-                type="light"
-                effect="solid"
-                id="nodeInfo"
-              >
-                <span style={{ fontSize: 16 }}>{sNodeInfo}</span>
-              </ReactTooltip>
-            </>
-          )}
-        </div>
-        <div className="Hello">
-          <button
-            type="button"
-            onClick={onClickStartGeth}
-            disabled={
-              !(
-                sNodeStatus === NODE_STATUS.readyToStart ||
-                sNodeStatus === NODE_STATUS.stopped ||
-                sNodeStatus === NODE_STATUS.errorStopping
-              )
-            }
-          >
-            <span>Start</span>
-          </button>
-          &nbsp;
-          <button
-            type="button"
-            onClick={onClickStopGeth}
-            disabled={sNodeStatus !== NODE_STATUS.running}
-          >
-            <span>Stop</span>
-          </button>
-        </div>
+        <LeftSideBar />
+
         <div
           style={{
             display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'start',
-            marginBottom: 10,
+            flexDirection: 'column',
+            alignItems: 'center',
+            flex: 1,
+            justifyContent: 'center',
           }}
         >
-          <form>
-            <label htmlFor="openOnLogin">
-              <input
-                id="openOnLogin"
-                type="checkbox"
-                name="openOnLogin"
-                checked={sIsOpenOnLogin}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  onChangeOpenOnLogin(e.target.checked)
-                }
-              />
-              Start when your computer starts (Windows and macOS only)
-            </label>
-
-            {/* <label htmlFor="openOnLogin">Start when your computer starts</label> */}
-          </form>
+          <NodeScreen />
+          <Warnings />
         </div>
-        <Warnings />
       </div>
+
       <Footer />
+      <DataRefresher />
     </div>
   );
 };

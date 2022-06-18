@@ -1,0 +1,167 @@
+{
+  "specId": "geth",
+  "version": "1.0.0",
+  "displayName": "Geth",
+  "execution": {
+    "executionTypes": ["binary", "docker"],
+    "defaultExecutionType": "binary",
+    "execPath": "geth",
+    "input": {
+      "defaultConfig": {
+        "http": "Enabled",
+        "httpCorsDomains": "nice-node://,http://localhost",
+        "webSockets": "Enabled",
+        "httpVirtualHosts": "localhost,host.docker.internal"
+      }
+    },
+    "binaryDownload": {
+      "type": "static",
+      "darwin": {
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.19-23bee162.tar.gz"
+      },
+      "linux": {
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.19-23bee162.tar.gz",
+        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-linux-386-1.10.19-23bee162.tar.gz",
+        "arm64": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.10.19-23bee162.tar.gz",
+        "arm7": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm7-1.10.19-23bee162.tar.gz"
+      },
+      "windows": {
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.19-23bee162.zip",
+        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-windows-386-1.10.19-23bee162.zip"
+      }
+    }
+  },
+  "category": "L1/ExecutionClient",
+  "rpcTranslation": "eth-l1",
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "Node data is stored in this folder",
+      "cliConfigPrefix": "--datadir ",
+      "defaultValue": "~/.ethereum",
+      "uiControl": {
+        "type": "filePath"
+      },
+      "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
+    },
+    "http": {
+      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--http"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://geth.ethereum.org/docs/rpc/server"
+    },
+    "webSockets": {
+      "displayName": "rpc websocket connections (*BeaconNodes may require websocket connections)",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--ws"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+    },
+    "httpApis": {
+      "displayName": "Enabled HTTP APIs",
+      "cliConfigPrefix": "--http.api ",
+      "defaultValue": ["eth", "net", "web3"],
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "eth",
+            "config": "Eth"
+          },
+          {
+            "value": "net",
+            "config": "Net"
+          },
+          {
+            "value": "web3",
+            "config": "Web3"
+          },
+          {
+            "value": "debug",
+            "config": "Debug"
+          },
+
+          {
+            "value": "personal",
+            "config": "Personal"
+          },
+          {
+            "value": "admin",
+            "config": "Admin"
+          }
+        ]
+      }
+    },
+    "httpCorsDomains": {
+      "displayName": "Change where the node accepts http connections (use comma separated urls)",
+      "cliConfigPrefix": "--http.corsdomain ",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "syncMode": {
+      "displayName": "Node synchronization mode",
+      "infoDescription": "Blockchain sync mode (\"snap\", \"full\" or \"light\") (default: snap)",
+      "category": "Syncronization",
+      "cliConfigPrefix": "--syncmode ",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "snap",
+            "config": "snap"
+          },
+          {
+            "value": "light",
+            "config": "light"
+          },
+          {
+            "value": "full",
+            "config": "full"
+          }
+        ]
+      },
+      "defaultValue": "snap",
+      "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
+    },
+    "httpVirtualHosts": {
+      "displayName": "Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard. Default value (localhost)",
+      "cliConfigPrefix": "--http.vhosts ",
+      "uiControl": {
+        "type": "text"
+      },
+      "defaultValue": "localhost,host.docker.internal"
+    },
+    "webSocketsPort": {
+      "displayName": "WS-RPC server listening port",
+      "cliConfigPrefix": "--ws.port ",
+      "defaultValue": "8546",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+    }
+  },
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"
+}

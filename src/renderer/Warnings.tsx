@@ -1,45 +1,40 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { CgCloseO } from 'react-icons/cg';
 import { ImWarning } from 'react-icons/im';
 
 import electron from './electronGlobal';
 import IconButton from './IconButton';
-import { useAppDispatch, useAppSelector } from './state/hooks';
-import {
-  selectNumGethDiskUsedGB,
-  selectNumFreeDiskGB,
-  updateNodeNumGethDiskUsedGB,
-  updateSystemNumFreeDiskGB,
-  selectNodeConfig,
-} from './state/node';
+import { useAppDispatch } from './state/hooks';
+import { updateSystemNumFreeDiskGB } from './state/node';
 
 const Warnings = () => {
   const dispatch = useAppDispatch();
-  const sGethDiskUsed = useAppSelector(selectNumGethDiskUsedGB);
-  const sFreeDisk = useAppSelector(selectNumFreeDiskGB);
-  const sNodeConfig = useAppSelector(selectNodeConfig);
+  // const sGethDiskUsed = useAppSelector(selectNumGethDiskUsedGB);
+  // const sFreeDisk = useAppSelector(selectNumFreeDiskGB);
 
   const [sIsOpen, setIsOpen] = useState<boolean>(false);
   const [sHasBeenClosed, setHasBeenClosed] = useState<boolean>(false);
   const [sWarnings, setWarnings] = useState<string[]>();
-  const [sStorageWarning, setStorageWarning] = useState<boolean>();
+  const [sStorageWarning] = useState<boolean>();
 
   const getSystemWarnings = async () => {
     const warnings = await electron.checkSystemHardware();
     setWarnings(warnings);
   };
 
-  useEffect(() => {
-    const updateGethDiskUsed = async () => {
-      const gethDiskUsed = await electron.getGethDiskUsed();
-      if (gethDiskUsed) {
-        dispatch(updateNodeNumGethDiskUsedGB(gethDiskUsed));
-      }
-    };
-    updateGethDiskUsed();
-    const intveral = setInterval(updateGethDiskUsed, 30000);
-    return () => clearInterval(intveral);
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const updateGethDiskUsed = async () => {
+  //     // todo: fix warnings for multi-client
+  //     const gethDiskUsed = await electron.getGethDiskUsed();
+  //     if (gethDiskUsed) {
+  //       dispatch(updateNodeNumGethDiskUsedGB(gethDiskUsed));
+  //     }
+  //   };
+  //   updateGethDiskUsed();
+  //   const intveral = setInterval(updateGethDiskUsed, 30000);
+  //   return () => clearInterval(intveral);
+  // }, [dispatch]);
 
   useEffect(() => {
     const updateFreeDisk = async () => {
@@ -53,24 +48,24 @@ const Warnings = () => {
     return () => clearInterval(intveral);
   }, [dispatch]);
 
-  useEffect(() => {
-    if (sFreeDisk !== undefined && sGethDiskUsed !== undefined) {
-      if (sNodeConfig?.syncMode === 'light') {
-        if (sFreeDisk < 2) {
-          setStorageWarning(true);
-        } else {
-          setStorageWarning(false);
-        }
-      } else {
-        // eslint-disable-next-line no-lonely-if
-        if (sGethDiskUsed + sFreeDisk > 1000) {
-          setStorageWarning(false);
-        } else {
-          setStorageWarning(true);
-        }
-      }
-    }
-  }, [sGethDiskUsed, sFreeDisk, sStorageWarning, sNodeConfig]);
+  // useEffect(() => {
+  //   if (sFreeDisk !== undefined && sGethDiskUsed !== undefined) {
+  //     if (sNodeConfig?.syncMode === 'light') {
+  //       if (sFreeDisk < 2) {
+  //         setStorageWarning(true);
+  //       } else {
+  //         setStorageWarning(false);
+  //       }
+  //     } else {
+  //       // eslint-disable-next-line no-lonely-if
+  //       if (sGethDiskUsed + sFreeDisk > 1000) {
+  //         setStorageWarning(false);
+  //       } else {
+  //         setStorageWarning(true);
+  //       }
+  //     }
+  //   }
+  // }, [sGethDiskUsed, sFreeDisk, sStorageWarning, sNodeConfig]);
 
   useEffect(() => {
     // don't show the warning if it has already been closed
@@ -114,7 +109,7 @@ const Warnings = () => {
             </div>
           );
         })}
-        {sStorageWarning && (
+        {/* {sStorageWarning && (
           <div style={{ marginBottom: 5 }}>
             {sNodeConfig?.syncMode === 'light' ? (
               <span>
@@ -129,7 +124,7 @@ const Warnings = () => {
               </span>
             )}
           </div>
-        )}
+        )} */}
         {((sWarnings && sWarnings.length > 0) || sStorageWarning) && (
           <div style={{ marginTop: 5 }}>
             <span>

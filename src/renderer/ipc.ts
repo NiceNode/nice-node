@@ -1,16 +1,16 @@
+import { UserNodes } from '../common/node';
 import electron from './electronGlobal';
-import { CHANNELS } from './messages';
-import { updateNodeStatus } from './state/node';
-import { AppDispatch } from './state/store';
+import { updateUserNodes } from './state/node';
 
-export const initialize = (dispatch: AppDispatch) => {
-  electron.ipcRenderer.on(CHANNELS.geth, (message) => {
-    console.log('Geth status received: ', message);
-    if (Array.isArray(message) && message.length === 1) {
-      dispatch(updateNodeStatus(message[0]));
-      return;
-    }
-    dispatch(updateNodeStatus(message));
-    // setStatus(message);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const initialize = async (dispatch: any) => {
+  const initUserNodes = await electron.getUserNodes();
+  console.log('Fetching initial userNodes');
+  dispatch(updateUserNodes(initUserNodes));
+  console.log('Listening to IPC channel userNodes');
+  electron.ipcRenderer.on('userNodes', (message: UserNodes[]) => {
+    const userNodes: UserNodes = message[0];
+    dispatch(updateUserNodes(userNodes));
+    // qGetNodes.refetch();
   });
 };

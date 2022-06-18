@@ -2,8 +2,15 @@ name: Test
 
 on: [push, pull_request]
 
+# asar is disabled for pm2 & electron build to work
+#   with asar disabled, hard links needs to be disabled
+env:
+  USE_HARD_LINKS: false
+
 jobs:
-  release:
+  test:
+    timeout-minutes: 25
+
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -12,13 +19,13 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Install Node.js and NPM
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
+          cache: npm
 
       - name: npm install
         run: |
@@ -34,13 +41,10 @@ jobs:
       - name: npm lint
         run: |
           npm run lint
-          npm exec tsc --verbose
-          npm test
 
       - name: npm exec tsc
         run: |
           npm exec tsc --verbose
-          npm test
 
       - name: npm test
         run: |

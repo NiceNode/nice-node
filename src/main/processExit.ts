@@ -1,26 +1,39 @@
-import process from 'process';
 import { ChildProcess } from 'child_process';
+import process from 'process';
 
 import logger from './logger';
 
-const childProcesses: ChildProcess[] = [];
+type ExitHandler = (signal?: string) => void;
+const exitHandlers: ExitHandler[] = [];
 
 export const initialize = () => {
   logger.info('Initializing process exit handlers...');
   process.on('SIGINT', () => {
     logger.info('SIGINT received!');
-    childProcesses.forEach((childProcess) => {
-      childProcess.kill();
+    exitHandlers.forEach((exitHandler) => {
+      exitHandler('SIGINT');
     });
   });
   process.on('SIGTERM', () => {
     logger.info('SIGTERM received!');
-    childProcesses.forEach((childProcess) => {
-      childProcess.kill();
+    exitHandlers.forEach((exitHandler) => {
+      exitHandler('SIGTERM');
     });
   });
 };
 
-export const registerChildProcess = (childProcess: ChildProcess) => {
-  childProcesses.push(childProcess);
+export const registerExitHandler = (exitHandler: ExitHandler) => {
+  exitHandlers.push(exitHandler);
+};
+
+/**
+ * Kills child process (first with SIGINT, then SIGTERM) and closes any stdio
+ * @param childProcess
+ */
+export const killChildProcess = (childProcess: ChildProcess) => {
+  childProcess.kill('SIGINT');
+  childProcess.stdin?.destroy();
+  childProcess.stdout?.destroy();
+  childProcess.stderr?.destroy();
+  childProcess.kill('SIGTERM');
 };

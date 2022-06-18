@@ -1,13 +1,16 @@
-import { opendir, access, mkdir, rm } from 'fs/promises';
-import { constants } from 'fs';
-
+import { opendir, rm, mkdir } from 'fs/promises';
 import path from 'path';
+import sleep from 'await-sleep';
 
-// import { gethBuildNameForPlatformAndArch } from '../main/gethDownload';
-import { getNNDirPath } from '../../main/files';
-import { downloadGeth, getStatus, startGeth, stopGeth } from '../../main/geth';
-import { gethBuildNameForPlatformAndArch } from '../../main/gethDownload';
-import { NODE_STATUS } from '../../main/messenger';
+import {
+  removeBinaryNode,
+  startBinary,
+  stopBinary,
+  onExit,
+} from '../../main/binary';
+import gethv1 from '../../common/NodeSpecs/geth/geth-v1.0.0.json';
+import Node, { createNode, NodeStatus } from '../../common/node';
+import { NodeSpecification } from '../../common/nodeSpec';
 
 jest.mock('electron', () => {
   return {
@@ -29,9 +32,15 @@ jest.mock('electron', () => {
 });
 
 const mockAppDir = path.join(__dirname, 'NiceNode');
+const gethDir = path.join(mockAppDir, 'nodes', 'geth');
+let gethNode: Node;
 beforeAll(async () => {
   try {
-    await mkdir(mockAppDir);
+    await mkdir(gethDir, { recursive: true });
+    gethNode = createNode({
+      spec: gethv1 as NodeSpecification,
+      runtime: { dataDir: gethDir, usage: {} },
+    });
   } catch (err) {
     console.log('mkdir NiceNode err: ', err);
   }
@@ -46,52 +55,52 @@ afterAll(async () => {
 });
 
 jest.setTimeout(120000);
-describe('Downloading geth', () => {
+describe('Tests the core cycle of a geth binary node (download, unzip, start, stop)', () => {
   it('Successfully downloads', async () => {
-    // spawn child process
-    await downloadGeth();
+    expect(gethNode.status).toBe(NodeStatus.created);
 
-    // expect that a geth.tar.gz or geth.zip file exists in app directory
-    const dirPath = getNNDirPath();
+    // download & unzip (if necessary), and start the node
+    await startBinary(gethNode);
+
+    // in nodes/geth...
+    // expect a geth-<build-platform>.compressedFormat
+    // expect a geth-<build-platform> dir with geth exec
+    // expect some geth data (given that geth has been running for a few seconds)
+    const dirPath = gethDir;
     console.log('dirPath: ', dirPath);
     try {
       const dir = await opendir(dirPath);
       let count = 0;
+      let isCompressedGethDownload = false;
+      let isGethUnzipped = false;
       // eslint-disable-next-line no-restricted-syntax
       for await (const dirent of dir) {
         console.log('NNdir file or dir: ', dirent.name);
+        if (dirent.name.includes('tar.gz') || dirent.name.includes('zip')) {
+          isCompressedGethDownload = true;
+        }
+        if (dirent.name.includes('geth-') && dirent.name.includes('1.')) {
+          isGethUnzipped = true;
+        }
         count += 1;
       }
       expect(count).toBeGreaterThan(0);
+      expect(isCompressedGethDownload).toBeTruthy();
+      expect(isGethUnzipped).toBeTruthy();
 
-      // returns undefined on success
-      const accessResZip = await access(
-        path.join(dirPath, 'geth.tar.gz'),
-        constants.F_OK
-      );
-      expect(accessResZip).toBeUndefined();
+      expect(gethNode.status).toBe(NodeStatus.running);
+      expect(gethNode.runtime.processIds?.length).toBeGreaterThan(0);
 
-      // test unzip successful
-      const unzippedGethDir = path.join(
-        dirPath,
-        gethBuildNameForPlatformAndArch()
-      );
-      const accessResUnzipped = await access(unzippedGethDir, constants.F_OK);
-      expect(accessResUnzipped).toBeUndefined();
+      await stopBinary(gethNode);
+      await removeBinaryNode(gethNode);
+      await sleep(2000);
+
+      expect(gethNode.status).toBe(NodeStatus.stopped);
+
+      // cleanup binary.ts adjacent services
+      onExit();
     } catch (err) {
       console.error(err);
     }
-  });
-});
-
-describe('Starting and stopping geth', () => {
-  it('Successfully starts and stops', async () => {
-    // start child process
-    await startGeth();
-    expect(getStatus()).toBe(NODE_STATUS.running);
-
-    // stop child process
-    await stopGeth();
-    expect(getStatus()).toBe(NODE_STATUS.stopped);
   });
 });

@@ -1,6 +1,6 @@
 import { app } from 'electron';
 import path from 'path';
-import * as winston from 'winston';
+import { format, transports, createLogger } from 'winston';
 // import DailyRotateFile from 'winston-daily-rotate-file';
 
 const logsPath = path.join(app.getPath('userData'), 'logs');
@@ -19,21 +19,22 @@ console.log(
 //   maxFiles: 1,
 // });
 
-const logger = winston.createLogger({
+const defaultFormat = format.combine(format.timestamp(), format.prettyPrint());
+const logger = createLogger({
   level: 'info',
-  format: winston.format.json(),
+  format: defaultFormat,
   defaultMeta: { service: 'nice-node-service' },
   transports: [
     //
     // - Write all logs with importance level of `error` or less to `error.log`
     // - Write all logs with importance level of `info` or less to `application.log`
     //
-    new winston.transports.File({
+    new transports.File({
       filename: path.join(app.getPath('logs'), 'application.log'),
       level: 'info',
       maxsize: 50000000, // 50 MB
     }),
-    new winston.transports.File({
+    new transports.File({
       filename: path.join(app.getPath('logs'), 'error.log'),
       level: 'error',
       maxsize: 50000000, // 50 MB
@@ -41,17 +42,17 @@ const logger = winston.createLogger({
   ],
 });
 
-export const autoUpdateLogger = winston.createLogger({
+export const autoUpdateLogger = createLogger({
   level: 'info',
-  format: winston.format.json(),
+  format: defaultFormat,
   defaultMeta: { service: 'auto-updater-service' },
   transports: [
-    new winston.transports.File({
+    new transports.File({
       filename: path.join(app.getPath('logs'), 'auto-updater-application.log'),
       level: 'info',
       maxsize: 10000000, // 50 MB
     }),
-    new winston.transports.File({
+    new transports.File({
       filename: path.join(app.getPath('logs'), 'auto-updater-error.log'),
       level: 'error',
       maxsize: 10000000, // 50 MB
@@ -82,18 +83,18 @@ export const autoUpdateLogger = winston.createLogger({
 //   );
 // });
 
-export const gethLogger = winston.createLogger({
+export const gethLogger = createLogger({
   level: 'info',
-  format: winston.format.json(),
+  format: defaultFormat,
   defaultMeta: { service: 'geth-service' },
   // transports: [gethRotateTransport, gethErrorRotateTransport],
   transports: [
-    new winston.transports.File({
+    new transports.File({
       filename: path.join(app.getPath('logs'), 'geth', 'application.log'),
       level: 'info',
       maxsize: 20000000, // 50 MB
     }),
-    new winston.transports.File({
+    new transports.File({
       filename: path.join(app.getPath('logs'), 'geth', 'error.log'),
       level: 'error',
       maxsize: 20000000, // 50 MB
@@ -106,18 +107,18 @@ export const gethLogger = winston.createLogger({
 // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
-    new winston.transports.Console({
-      format: winston.format.simple(),
+    new transports.Console({
+      format: defaultFormat,
     })
   );
   autoUpdateLogger.add(
-    new winston.transports.Console({
-      format: winston.format.simple(),
+    new transports.Console({
+      format: defaultFormat,
     })
   );
   gethLogger.add(
-    new winston.transports.Console({
-      format: winston.format.simple(),
+    new transports.Console({
+      format: defaultFormat,
     })
   );
 }

@@ -16,19 +16,26 @@ import * as Sentry from '@sentry/electron/main';
 import logger from './logger';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { fixPathEnvVar } from './util/fixPathEnvVar';
 import { setWindow } from './messenger';
-import { initialize as initGeth } from './geth';
+import {
+  initialize as initNodeManager,
+  onExit as onExitNodeManager,
+} from './nodeManager';
+// eslint-disable-next-line import/no-cycle
 import * as ipc from './ipc';
 import * as power from './power';
+import * as processExit from './processExit';
 import { setCorsForNiceNode } from './corsMiddleware';
 import * as updater from './updater';
 
 require('dotenv').config();
+
+fixPathEnvVar();
 // debug({ isEnabled: true });
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   maxBreadcrumbs: 50,
-  debug: true,
   // integrations: [
   //   new CaptureConsole({
   //     levels: ['error', 'warn'],
@@ -37,6 +44,7 @@ Sentry.init({
 });
 
 let mainWindow: BrowserWindow | null = null;
+export const getMainWindow = () => mainWindow;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -78,8 +86,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 1200,
+    height: 820,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -152,13 +160,19 @@ app
   })
   .catch(logger.info);
 
+const onExit = () => {
+  onExitNodeManager();
+};
+
 // no blocking work
 const initialize = () => {
   logger.info('Initializing main process work...');
-  initGeth();
   ipc.initialize();
   power.initialize();
-  // processExit.initialize();
+  initNodeManager();
+  processExit.initialize();
+  processExit.registerExitHandler(onExit);
+  console.log('app locale: ', app.getLocale());
 };
 
 logger.info(`app name: ${app.getName()}`);

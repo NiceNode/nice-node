@@ -1,28 +1,15 @@
 import { net } from 'electron';
-import { getSystemDiskSize } from './files';
+import { getSystemDiskSize, getUsedDiskSpace } from './files';
 
-import { getPid } from './geth';
+import { NodeId } from '../common/node';
 import logger from './logger';
+import * as storeNodes from './state/nodes';
 
 const pidusage = require('pidusage');
 
 export const getProcessUsageByPid = async (pid: number) => {
   const stats = await pidusage(pid);
   return stats;
-};
-
-export const getNodeUsage = async () => {
-  const nodePid = await getPid();
-  if (typeof nodePid !== 'number') {
-    return undefined;
-  }
-  try {
-    const gethUsage = await getProcessUsageByPid(nodePid);
-    return gethUsage;
-  } catch (err) {
-    console.error(err);
-    return undefined;
-  }
 };
 
 export const getMainProcessUsage = async () => {
@@ -67,4 +54,17 @@ export const checkSystemHardware = async () => {
   }
   logger.info(warnings);
   return warnings;
+};
+
+export const updateNodeUsedDiskSpace = async (nodeId: NodeId) => {
+  const node = storeNodes.getNode(nodeId);
+  if (node) {
+    const { dataDir } = node.runtime;
+    const diskGBs = await getUsedDiskSpace(dataDir);
+    if (diskGBs !== undefined) {
+      logger.info(`Disk usaged ${diskGBs}GBs calculated for nodeId ${nodeId}`);
+      node.runtime.usage.diskGBs = diskGBs;
+      storeNodes.updateNode(node);
+    }
+  }
 };

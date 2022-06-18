@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron';
 
-import logger from './logger';
+// import logger from './logger';
 
 let mainWindow: BrowserWindow;
 
@@ -13,25 +13,12 @@ export const send = (channel: string, ...args: any[]): void => {
   if (!mainWindow) {
     return;
   }
-  logger.info('sending ', channel, args);
+  // console.log('sending', channel, args);
   mainWindow.webContents.send(channel, args);
 };
 
 export const CHANNELS = {
-  geth: 'GETH',
+  userNodes: 'userNodes',
+  nodeLogs: 'nodeLogs',
 };
-
-export const NODE_STATUS = {
-  initializing: 'initializing',
-  downloading: 'downloading',
-  downloaded: 'downloaded',
-  errorDownloading: 'error downloading',
-  extracting: 'extracting',
-  readyToStart: 'ready to start',
-  starting: 'starting',
-  running: 'running',
-  stopping: 'stopping',
-  stopped: 'stopped',
-  errorStarting: 'error starting',
-  errorStopping: 'error stopping',
-};
+export const CHANNELS_ARRAY = ['userNodes', 'nodeLogs'];

@@ -3,19 +3,26 @@ import React from 'react';
 import styled from 'styled-components';
 
 import IconButton from '../IconButton';
+import { LEFT_SIDEBAR_WIDTH } from '../LeftSideBar';
+import { HEADER_HEIGHT } from '../Header';
+// eslint-disable-next-line import/no-cycle
+// import { FOOTER_HEIGHT } from './Footer';
+
+const FOOTER_HEIGHT = 64;
 
 const MenuDrawerStyled = styled.div`
   display: box;
   &.show {
-    bottom: 64px;
+    bottom: ${FOOTER_HEIGHT}px;
   }
   &.hidde {
-    bottom: calc(-100vh - 64px);
+    bottom: calc(-100vh - ${FOOTER_HEIGHT}px);
   }
   position: fixed;
-  width: 100vw;
+  width: calc(100vw - ${LEFT_SIDEBAR_WIDTH}px);
+  margin-left: ${LEFT_SIDEBAR_WIDTH}px;
   // height of screen - footer height - header height
-  height: calc(100vh - 64px - 48px);
+  height: calc(100vh - ${FOOTER_HEIGHT}px - ${HEADER_HEIGHT}px);
   transition: bottom 0.2s ease-out 0s;
   background: linear-gradient(
     -160.96deg,
@@ -27,6 +34,7 @@ const MenuDrawerStyled = styled.div`
   padding-bottom: 20px;
   padding-left: 10px;
   padding-right: 10px;
+  box-sizing: border-box;
 `;
 
 type Props = {

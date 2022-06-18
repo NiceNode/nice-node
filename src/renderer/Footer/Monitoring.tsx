@@ -4,7 +4,7 @@ import ReactJson from 'react-json-view';
 import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
 import { useAppSelector } from '../state/hooks';
-import { selectNumFreeDiskGB, selectNumGethDiskUsedGB } from '../state/node';
+import { selectNumFreeDiskGB, selectSelectedNode } from '../state/node';
 
 type Props = {
   isOpen: boolean | undefined;
@@ -12,67 +12,83 @@ type Props = {
 };
 
 const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
-  const sGethDiskUsed = useAppSelector(selectNumGethDiskUsedGB);
+  const selectedNode = useAppSelector(selectSelectedNode);
   const sFreeDisk = useAppSelector(selectNumFreeDiskGB);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [sMonitoringData, setMonitoringData] = useState<any>();
+  const [sNodeDiskUsed, setNodeDiskUsed] = useState<number>();
+  const [sNodeMemoryUsed, setNodeMemoryUsed] = useState<number>();
+  const [sNodeCpuUsed, setNodeCpuUsed] = useState<number>();
+
+  useEffect(() => {
+    let diskUsed;
+    let memory;
+    let cpu;
+    if (selectedNode) {
+      diskUsed = selectedNode.runtime.usage.diskGBs ?? undefined;
+      memory = selectedNode.runtime.usage.memoryBytes ?? undefined;
+      cpu = selectedNode.runtime.usage.cpuPercent ?? undefined;
+    }
+    setNodeDiskUsed(diskUsed);
+    setNodeMemoryUsed(memory);
+    setNodeCpuUsed(cpu);
+  }, [selectedNode]);
 
   const getMonitoringData = async () => {
     const rendererProcessUsage = await electron.getRendererProcessUsage();
     const mainProcessUsage = await electron.getMainProcessUsage();
-    const nodeUsage = await electron.getNodeUsage();
 
     // --- Memory ---
-    let totalMemoryUsed = 0;
-    if (nodeUsage?.memory) {
-      nodeUsage.memory *= 1e-9;
-      totalMemoryUsed += nodeUsage.memory;
-    }
+    // let totalMemoryUsed = 0;
+    // if (nodeUsage?.memory) {
+    //   nodeUsage.memory *= 1e-9;
+    //   totalMemoryUsed += nodeUsage.memory;
+    // }
     if (rendererProcessUsage?.memory?.residentSet) {
       rendererProcessUsage.memory.residentSet *= 1e-9;
-      totalMemoryUsed += rendererProcessUsage.memory.residentSet;
+      // totalMemoryUsed += rendererProcessUsage.memory.residentSet;
     }
     if (mainProcessUsage?.memory?.residentSet) {
       mainProcessUsage.memory.residentSet *= 1e-9;
-      totalMemoryUsed += mainProcessUsage.memory.residentSet;
+      // totalMemoryUsed += mainProcessUsage.memory.residentSet;
     }
     let uiMemoryUsage;
     // https://thewebdev.info/2022/01/08/how-to-programmatically-get-memory-usage-in-chrome-with-javascript/
     if (typeof window?.performance?.memory?.usedJSHeapSize === 'number') {
       uiMemoryUsage = window.performance.memory.usedJSHeapSize * 1e-9;
-      totalMemoryUsed += uiMemoryUsage;
+      // totalMemoryUsed += uiMemoryUsage;
     }
     if (uiMemoryUsage) {
       uiMemoryUsage = `${uiMemoryUsage.toFixed(3)}GB`;
     }
-    let totalMemoryUsedStr;
-    if (totalMemoryUsed) {
-      totalMemoryUsedStr = `Total memory used: ${totalMemoryUsed.toFixed(3)}GB`;
-    }
+    // let totalMemoryUsedStr;
+    // if (totalMemoryUsed) {
+    //   totalMemoryUsedStr = `Total memory used: ${totalMemoryUsed.toFixed(3)}GB`;
+    // }
 
     // --- CPU ---
-    let totalCpuUsed = 0;
-    if (nodeUsage?.cpu) {
-      totalCpuUsed += nodeUsage.cpu;
-    }
-    if (rendererProcessUsage?.cpu?.percentCPUUsage) {
-      totalCpuUsed += rendererProcessUsage.cpu.percentCPUUsage;
-    }
-    if (mainProcessUsage?.cpu?.percentCPUUsage) {
-      totalCpuUsed += rendererProcessUsage.cpu.percentCPUUsage;
-    }
-    let totalCpuUsedStr;
-    if (totalCpuUsed) {
-      totalCpuUsedStr = `Total cpu used: ${totalCpuUsed.toFixed(
-        1
-      )}% of virtual CPU cores`;
-    }
+    // let totalCpuUsed = 0;
+    // if (nodeUsage?.cpu) {
+    //   totalCpuUsed += nodeUsage.cpu;
+    // }
+    // if (rendererProcessUsage?.cpu?.percentCPUUsage) {
+    //   totalCpuUsed += rendererProcessUsage.cpu.percentCPUUsage;
+    // }
+    // if (mainProcessUsage?.cpu?.percentCPUUsage) {
+    //   totalCpuUsed += rendererProcessUsage.cpu.percentCPUUsage;
+    // }
+    // let totalCpuUsedStr;
+    // if (totalCpuUsed) {
+    //   totalCpuUsedStr = `Total cpu used: ${totalCpuUsed.toFixed(
+    //     1
+    //   )}% of virtual CPU cores`;
+    // }
     setMonitoringData({
-      total: {
-        memory: totalMemoryUsedStr,
-        cpu: totalCpuUsedStr,
-      },
-      nodeProcess: nodeUsage,
+      // total: {
+      //   memory: totalMemoryUsedStr,
+      //   cpu: totalCpuUsedStr,
+      // },
+      // nodeProcess: nodeUsage,
       uiMemoryUsage,
       rendererProcess: rendererProcessUsage,
       mainProcess: mainProcessUsage,
@@ -98,17 +114,28 @@ const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
       <div style={{ flex: 1, overflow: 'auto' }}>
         <h2>Storage</h2>
         <div>
-          {sGethDiskUsed !== undefined && (
-            <h4>Storage used by node: {sGethDiskUsed.toFixed(1)} GB</h4>
+          {/* <p>Node: {selectedNode && JSON.stringify(selectedNode.runtime)}</p> */}
+          {sNodeDiskUsed !== undefined && (
+            <h4>Storage used by node: {sNodeDiskUsed.toFixed(1)} GB</h4>
           )}
           {sFreeDisk !== undefined && (
             <h4>Storage available: {sFreeDisk.toFixed(1)} GB</h4>
           )}
         </div>
         <h2>Memory</h2>
-        {sMonitoringData?.total?.memory}
+        <p>{sMonitoringData?.total?.memory}</p>
+        <p>
+          {`Memory used by ${selectedNode?.spec.displayName}: `}
+          {sNodeMemoryUsed
+            ? `${(sNodeMemoryUsed * 1e-9).toFixed(2)} GB`
+            : 'N/A'}
+        </p>
         <h2>CPU</h2>
-        {sMonitoringData?.total?.cpu}
+        <p>{sMonitoringData?.total?.cpu}</p>
+        <p>
+          {`CPU used by ${selectedNode?.spec.displayName}: `}
+          {sNodeCpuUsed ? `${sNodeCpuUsed}%` : 'N/A'}
+        </p>
         <h2>All available metrics</h2>
         <ReactJson
           src={sMonitoringData}

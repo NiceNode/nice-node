@@ -1,0 +1,97 @@
+{
+  "specId": "nimbus-beacon",
+  "version": "1.0.0",
+  "displayName": "Nimbus",
+  "execution": {
+    "executionTypes": ["docker", "binary"],
+    "defaultExecutionType": "docker",
+    "imageName": "statusim/nimbus-eth2:multiarch-latest",
+    "execPath": "run-mainnet-beacon-node.sh",
+    "input": {
+      "defaultConfig": {
+        "http": "Enabled",
+        "httpHostAddress": "0.0.0.0",
+        "httpCorsDomains": "\"http://localhost\"",
+        "eth1ProviderUrl": "\"ws://host.docker.internal:8546\""
+      },
+      "docker": {
+        "containerVolumePath": "/home/user/nimbus-eth2/build/data",
+        "raw": "--add-host=host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052"
+      }
+    },
+    "binaryDownload": {
+      "type": "githubReleases",
+      "latestVersionUrl": "https://api.github.com/repos/status-im/nimbus-eth2/releases/latest",
+      "responseFormat": "githubReleases"
+    }
+  },
+  "category": "L1/ConsensusClient/BeaconNode",
+  "rpcTranslation": "eth-l1-beacon",
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "The directory where nimbus will store all blockchain data.",
+      "cliConfigPrefix": "--data-dir=",
+      "uiControl": {
+        "type": "filePath"
+      },
+      "infoDescription": "Lodestar root directory",
+      "documentation": "https://nimbus.guide/options.html"
+    },
+    "http": {
+      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--rest"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled"
+    },
+    "httpPort": {
+      "displayName": "Set port for HTTP API",
+      "cliConfigPrefix": "--rest-port=",
+      "defaultValue": "5052",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "httpCorsDomains": {
+      "displayName": "Change where the node accepts http connections (use comma separated urls)",
+      "cliConfigPrefix": "--rest-allow-origin=",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Limit the access to the REST API to a particular hostname (for CORS-enabled clients such as browsers)."
+    },
+    "httpHostAddress": {
+      "displayName": "Listening address of the REST server.",
+      "cliConfigPrefix": "--rest-address=",
+      "defaultValue": "127.0.0.1",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Limit the access to the REST API to a particular hostname (for CORS-enabled clients such as browsers)."
+    },
+    "eth1ProviderUrl": {
+      "displayName": "One or more Web3 provider URLs used for obtaining deposit contract data.",
+      "cliConfigPrefix": "--web3-url=",
+      "defaultValue": "\"ws://127.0.0.1:8546\"",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)",
+      "documentation": "https://nimbus.guide/web3-backup.html?highlight=--web3-url#add-a-backup-web3-provider"
+    }
+  },
+  "documentation": {
+    "default": "https://nimbus.guide/",
+    "docker": "https://nimbus.guide/docker.html"
+  },
+  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/nimbus-logo-text.png"
+}

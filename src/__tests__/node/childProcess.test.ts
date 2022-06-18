@@ -1,6 +1,7 @@
 import { spawn, SpawnOptions } from 'child_process';
 import sleep from 'await-sleep';
 
+jest.setTimeout(10000);
 describe('Nodejs process testing', () => {
   it('Successfully Kill never ending node process', async () => {
     // spawn child process
@@ -19,8 +20,9 @@ describe('Nodejs process testing', () => {
 
       // kill process
       childProcess.kill();
-      console.log('wait 5 sec to see if process is killed');
-      sleep(2000);
+      console.log('wait 2 sec to see if process is killed');
+      await sleep(2000);
+      console.log('done waiting');
 
       // check that process is killed
       expect(childProcess.exitCode).toBe(null);

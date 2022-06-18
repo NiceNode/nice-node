@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { NodeConfig } from '../main/state/nodeConfig';
+import { NodeSpecification } from '../common/nodeSpec';
+import { Node, NodeId } from '../common/node';
+import { NodeLibrary } from '../main/state/nodeLibrary';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
 //  we extend window.performance to include Chrome's memory stats
@@ -22,12 +23,12 @@ declare global {
       ipcRenderer: {
         on(channel: string, func: (...args: any[]) => void): void;
         once(channel: string, func: (...args: any[]) => void): void;
+        removeListener(
+          channel: string,
+          listener: (...args: any[]) => void
+        ): void;
+        removeAllListeners(channel: string): void;
       };
-      getGethStatus(): string;
-      startGeth(): void;
-      stopGeth(): void;
-      deleteGethDisk(): boolean;
-      getGethDiskUsed(): number;
       getSystemFreeDiskSpace(): number;
       getDebugInfo(): any;
       getStoreValue(key: string): any;
@@ -36,13 +37,27 @@ declare global {
       getGethErrorLogs(): any;
       getRendererProcessUsage(): any;
       getMainProcessUsage(): any;
-      getNodeUsage(): any;
-      getNodeConfig(node: string): NodeConfig;
-      changeNodeConfig(node: string, nodeConfig: NodeConfig): void;
-      setDirectInputNodeConfig(node: string, directInput: string[]): void;
-      getDefaultNodeConfig(node: string): NodeConfig;
-      setToDefaultNodeConfig(node: string): void;
       checkSystemHardware(): string[];
+
+      // Multi-node
+      getNodes(): Node[];
+      getUserNodes(): UserNodes;
+      addNode(nodeSpec: NodeSpecification): Node;
+      updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;
+      removeNode(nodeId: NodeId, options: { isDeleteStorage: boolean }): Node;
+      startNode(nodeId: NodeId): void;
+      stopNode(nodeId: NodeId): void;
+      openDialogForNodeDataDir(nodeId: NodeId): void;
+      updateNodeUsedDiskSpace(nodeId: NodeId): void;
+      deleteNodeStorage(nodeId: NodeId): boolean;
+      sendNodeLogs(nodeId: NodeId): void;
+      stopSendingNodeLogs(nodeId?: NodeId): void;
+
+      // Node library
+      getNodeLibrary(): NodeLibrary;
+
+      // Settings/Config
+      getIsDockerInstalled(): boolean;
     };
 
     performance: Performance;

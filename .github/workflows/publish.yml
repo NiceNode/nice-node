@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+      - multi-nodes-and-docker
+      - teest-new-github-action-vs
+
+# asar is disabled for pm2 & electron build to work
+#   with asar disabled, hard links needs to be disabled
+env:
+  USE_HARD_LINKS: false
 
 jobs:
   publish:
@@ -19,13 +26,13 @@ jobs:
 
     steps:
       - name: Checkout git repo
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Install Node and NPM
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
+          cache: npm
 
       - name: Install dependencies
         run: |

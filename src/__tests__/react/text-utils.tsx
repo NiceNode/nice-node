@@ -5,9 +5,11 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 // Import your own reducer
 import { RtkqExecutionWs } from '../../renderer/state/services';
+import { RtkqNodeService } from '../../renderer/state/nodeService';
 // import appStore from '../renderer/state/store';
 import { RtkqNetwork } from '../../renderer/state/network';
 import nodeReducer from '../../renderer/state/node';
+import { RtkqSettingsService } from '../../renderer/state/settingsService';
 // import { RtkqNetwork } from '../renderer/state/network';
 
 function render(
@@ -16,6 +18,8 @@ function render(
     store = configureStore({
       reducer: {
         node: nodeReducer,
+        [RtkqNodeService.reducerPath]: RtkqNodeService.reducer,
+        [RtkqSettingsService.reducerPath]: RtkqSettingsService.reducer,
         [RtkqExecutionWs.reducerPath]: RtkqExecutionWs.reducer,
         [RtkqNetwork.reducerPath]: RtkqNetwork.reducer,
       },
@@ -23,9 +27,26 @@ function render(
         getDefaultMiddleware({
           serializableCheck: false,
         })
+          .concat(RtkqNodeService.middleware)
+          .concat(RtkqSettingsService.middleware)
           .concat(RtkqExecutionWs.middleware)
           .concat(RtkqNetwork.middleware),
     }),
+    // store = configureStore({
+    //   reducer: {
+    //     node: nodeReducer,
+    //     [RtkqNodeService.reducerPath]: RtkqNodeService.reducer,
+    //     [RtkqExecutionWs.reducerPath]: RtkqExecutionWs.reducer,
+    //     [RtkqNetwork.reducerPath]: RtkqNetwork.reducer,
+    //   },
+    //   middleware: (getDefaultMiddleware) =>
+    //     getDefaultMiddleware({
+    //       serializableCheck: false,
+    //     })
+    //       .concat(RtkqNodeService.middleware)
+    //       .concat(RtkqExecutionWs.middleware)
+    //       .concat(RtkqNetwork.middleware),
+    // }),
     // store: appStore,
     ...renderOptions
   } = {}

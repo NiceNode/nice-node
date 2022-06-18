@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { ImWarning } from 'react-icons/im';
 import { HiUserGroup } from 'react-icons/hi';
-import { BsFillLightningChargeFill } from 'react-icons/bs';
+// import { BsFillLightningChargeFill } from 'react-icons/bs';
 import { FaSync } from 'react-icons/fa';
 import {
   MdSignalWifiStatusbarConnectedNoInternet,
@@ -19,34 +19,51 @@ import {
 import { useGetNetworkConnectedQuery } from './state/network';
 import { hexToDecimal } from './utils';
 import { useAppSelector } from './state/hooks';
-import {
-  selectNumGethDiskUsedGB,
-  selectIsAvailableForPolling,
-  selectNodeConfig,
-} from './state/node';
+import { selectIsAvailableForPolling, selectSelectedNode } from './state/node';
+
+export const HEADER_HEIGHT = 48;
 
 const Header = () => {
-  const sGethDiskUsed = useAppSelector(selectNumGethDiskUsedGB);
+  const selectedNode = useAppSelector(selectSelectedNode);
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>();
-  const sNodeConfig = useAppSelector(selectNodeConfig);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
-  const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(null, {
-    pollingInterval,
-  });
-  const qExecutionPeers = useGetExecutionPeersQuery(null, {
-    pollingInterval,
-  });
-  const qLatestBlock = useGetExecutionLatestBlockQuery(null, {
-    pollingInterval,
-  });
+  const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(
+    selectedNode?.spec.rpcTranslation,
+    {
+      pollingInterval,
+    }
+  );
+  // const isSelectedNode = selectedNode !== undefined;
+  // const peersPolling = isSelectedNode ? pollingInterval : 0;
+  const qExecutionPeers = useGetExecutionPeersQuery(
+    selectedNode?.spec.rpcTranslation,
+    {
+      pollingInterval,
+    }
+  );
+  const qLatestBlock = useGetExecutionLatestBlockQuery(
+    selectedNode?.spec.rpcTranslation,
+    {
+      pollingInterval,
+    }
+  );
   const qNetwork = useGetNetworkConnectedQuery(null, {
     // Only polls network connection if there are exactly 0 peers
     pollingInterval: typeof sPeers === 'number' && sPeers === 0 ? 30000 : 0,
   });
+
+  const diskUsed = selectedNode?.runtime?.usage?.diskGBs ?? undefined;
+  // eslint-disable-next-line eqeqeq
+  const isHttpEnabled =
+    selectedNode?.config?.configValuesMap?.http &&
+    ['Enabled', 'enabled', 'true', true, 1].includes(
+      selectedNode?.config?.configValuesMap?.http
+    );
+  // todo: http apis
 
   useEffect(() => {
     if (!sIsAvailableForPolling) {
@@ -59,7 +76,7 @@ const Header = () => {
   }, [sIsAvailableForPolling]);
 
   useEffect(() => {
-    // console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
+    console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
     if (qExeuctionIsSyncing.isError) {
       setSyncPercent('');
       setIsSyncing(undefined);
@@ -67,14 +84,15 @@ const Header = () => {
     }
     const syncingData = qExeuctionIsSyncing.data;
     if (typeof syncingData === 'object') {
-      const syncRatio = syncingData.currentBlock / syncingData.highestBlock;
-      setSyncPercent((syncRatio * 100).toFixed(1));
-      setIsSyncing(true);
-    } else if (syncingData === false) {
-      // light client geth, it is done syncing if data is false
-      setSyncPercent('');
-      setIsSyncing(false);
-    } else {
+      setSyncPercent(syncingData.syncPercent);
+      setIsSyncing(syncingData.isSyncing);
+    }
+    // else if (syncingData === false) {
+    //   // light client geth, it is done syncing if data is false
+    //   setSyncPercent('');
+    //   setIsSyncing(false);
+    // }
+    else {
       setSyncPercent('');
       setIsSyncing(undefined);
     }
@@ -86,7 +104,9 @@ const Header = () => {
       return;
     }
     if (typeof qExecutionPeers.data === 'string') {
-      setPeers(hexToDecimal(qExecutionPeers.data));
+      setPeers(qExecutionPeers.data);
+    } else if (typeof qExecutionPeers.data === 'number') {
+      setPeers(qExecutionPeers.data.toString());
     } else {
       setPeers(undefined);
     }
@@ -111,7 +131,7 @@ const Header = () => {
   return (
     <div
       style={{
-        height: 48,
+        height: HEADER_HEIGHT,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -122,109 +142,113 @@ const Header = () => {
       <div>
         <span style={{ fontSize: 24, fontWeight: 600 }}>NiceNode</span>
       </div>
-      <div
-        style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'end',
-          fontSize: '1.1rem',
-        }}
-      >
-        {!sNodeConfig?.http && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginRight: 20,
-            }}
-          >
-            <ImWarning />
-            <VscDebugDisconnect style={{ fontSize: '1.8rem' }} />
-            <MdHttp style={{ fontSize: '2.5rem' }} />
-          </div>
-        )}
-        {sNodeConfig?.syncMode === 'light' && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginRight: 10,
-            }}
-          >
-            <BsFillLightningChargeFill />
-            <span>Light client</span>
-          </div>
-        )}
-        {typeof sLatestBlockNumber === 'number' && sLatestBlockNumber > 0 && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <SiHiveBlockchain />
-            <span style={{ marginLeft: 5, marginRight: 10 }}>
-              {sLatestBlockNumber}
-            </span>
-          </div>
-        )}
-        {sGethDiskUsed && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <FiHardDrive />
-            <span style={{ marginLeft: 5, marginRight: 10 }}>
-              {sGethDiskUsed.toFixed(1)}GB
-            </span>
-          </div>
-        )}
-        {qNetwork?.data?.isConnected === false && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}
-          >
-            <MdSignalWifiStatusbarConnectedNoInternet />
-            <span style={{ marginLeft: 5, marginRight: 10 }}>
-              check internet
-            </span>
-          </div>
-        )}
-        {/* {sIsSyncing !== false && ( */}
+      {selectedNode && (
         <div
           style={{
+            flex: 1,
             display: 'flex',
             flexDirection: 'row',
-            alignItems: 'center',
+            justifyContent: 'end',
+            fontSize: '1.1rem',
           }}
         >
-          <FaSync className={sIsSyncing ? 'spin' : ''} />
-          <span style={{ marginLeft: 5, marginRight: 10 }}>
-            {sSyncPercent}% synced
-          </span>
+          {!isHttpEnabled && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginRight: 20,
+              }}
+            >
+              <ImWarning />
+              <VscDebugDisconnect style={{ fontSize: '1.8rem' }} />
+              <MdHttp style={{ fontSize: '2.5rem' }} />
+            </div>
+          )}
+          {/* {sNodeConfig?.syncMode === 'light' && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginRight: 10,
+              }}
+            >
+              <BsFillLightningChargeFill />
+              <span>Light client</span>
+            </div>
+          )} */}
+          {typeof sLatestBlockNumber === 'number' && sLatestBlockNumber > 0 && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <SiHiveBlockchain />
+              <span style={{ marginLeft: 5, marginRight: 10 }}>
+                {sLatestBlockNumber}
+              </span>
+            </div>
+          )}
+          {diskUsed !== undefined && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <FiHardDrive />
+              <span style={{ marginLeft: 5, marginRight: 10 }}>
+                {diskUsed.toFixed(1)}GB
+              </span>
+            </div>
+          )}
+          {qNetwork?.data?.isConnected === false && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <MdSignalWifiStatusbarConnectedNoInternet />
+              <span style={{ marginLeft: 5, marginRight: 10 }}>
+                check internet
+              </span>
+            </div>
+          )}
+          {/* {sIsSyncing !== false && ( */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <FaSync className={sIsSyncing ? 'spin' : ''} />
+            <span style={{ marginLeft: 5, marginRight: 10 }}>
+              {sSyncPercent}% synced
+            </span>
+          </div>
+          {/* )} */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <HiUserGroup />
+            <span style={{ marginLeft: 5, marginRight: 10 }}>
+              {sPeers} peers
+            </span>
+          </div>
         </div>
-        {/* )} */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <HiUserGroup />
-          <span style={{ marginLeft: 5, marginRight: 10 }}>{sPeers} peers</span>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

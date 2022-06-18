@@ -1,0 +1,54 @@
+{
+  "specId": "pathfinder",
+  "version": "1.0.0",
+  "displayName": "StarkNet, Pathfinder",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "imageName": "eqlabs/pathfinder:latest",
+    "input": {
+      "defaultConfig": {
+        "eth1ProviderUrl": "http://host.docker.internal:8545"
+      },
+      "docker": {
+        "raw": "-p 9545:9545 -e RUST_LOG=info -e PATHFINDER_ETHEREUM_API_URL=\"http://host.docker.internal:8545\"",
+        "containerVolumePath": "/usr/share/pathfinder/data"
+      }
+    },
+    "configTranslation": {
+      "dataDir": {
+        "displayName": "Node data is stored in this folder",
+        "cliConfigPrefix": "--data-directory ",
+        "uiControl": {
+          "type": "filePath"
+        },
+        "infoDescription": "Lodestar root directory"
+      },
+      "httpAddress": {
+        "displayName": "HTTP-RPC listening address. Specify <IP address>:<port #>",
+        "cliConfigPrefix": "--http-rpc ",
+        "defaultValue": "127.0.0.1.9545",
+        "uiControl": {
+          "type": "text"
+        },
+        "infoDescription": "HTTP-RPC listening address [default: 127.0.0.1:9545]"
+      },
+      "eth1ProviderUrl": {
+        "displayName": "This should point to the HTTP RPC endpoint of your Ethereum entry-point",
+        "cliConfigPrefix": "--ethereum.url ",
+        "defaultValue": "http://localhost:8545",
+        "uiControl": {
+          "type": "text"
+        },
+        "infoDescription": "This should point to the HTTP RPC endpoint of your Ethereum entry-point, typically a local Ethereum client or a hosted gateway service such as Infura or Cloudflare. Examples: infura: https://goerli.infura.io/v3/<PROJECT_ID>, local EC (nethermind/besu/geth): http://localhost:8545"
+      }
+    }
+  },
+  "rpcTranslation": "eth-l2-starknet",
+  "documentation": {
+    "default": "https://github.com/eqlabs/pathfinder#features",
+    "docker": "https://github.com/eqlabs/pathfinder#running-with-docker"
+  },
+  "category": "L2/StarkNet",
+  "iconUrl": "https://equilibrium.co/_next/image?url=%2Fimages%2Fcasestudies%2Fsquare-pathfinder.png&w=640&q=75"
+}

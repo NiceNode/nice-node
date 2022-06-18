@@ -1,0 +1,101 @@
+{
+  "specId": "teku-beacon",
+  "version": "1.0.0",
+  "displayName": "Teku",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "imageName": "consensys/teku:latest",
+    "input": {
+      "defaultConfig": {
+        "http": "Enabled",
+        "httpPort": "5052",
+        "httpHostAddress": "0.0.0.0",
+        "httpCorsDomains": "\"http://localhost\"",
+        "eth1ProviderUrl": "http://host.docker.internal:8545"
+      },
+      "docker": {
+        "containerVolumePath": "/var/lib/teku",
+        "raw": "--add-host=host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
+        "forcedRawNodeInput": "--data-path=\"/var/lib/teku\""
+      }
+    }
+  },
+  "category": "L1/ConsensusClient/BeaconNode",
+  "rpcTranslation": "eth-l1-beacon",
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "Node data is stored in this folder",
+      "cliConfigPrefix": "--data-path=",
+      "uiControl": {
+        "type": "filePath"
+      },
+      "infoDescription": "Teku root directory",
+      "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#data-base-path-data-path"
+    },
+    "http": {
+      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "cliConfigPrefix": "--rest-api-enabled=",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "true"
+          },
+          {
+            "value": "Disabled",
+            "config": "false"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#rest-api-enabled"
+    },
+    "httpPort": {
+      "displayName": "Specifies REST API listening port (HTTP).",
+      "cliConfigPrefix": "--rest-api-port=",
+      "defaultValue": "5052",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#rest-api-port"
+    },
+    "httpCorsDomains": {
+      "displayName": "A comma-separated list of hostnames to allow access to the REST API.",
+      "cliConfigPrefix": "--rest-api-cors-origins=",
+      "defaultValue": "none",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "A comma-separated list of hostnames to allow access to the REST API. By default, Teku accepts access from localhost and 127.0.0.1.",
+      "warning": "Only trusted parties should access the REST API. Do not directly expose these APIs publicly on production nodes. We don’t recommend allowing all hostnames (\"*\") for production environments.",
+      "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#rest-api-host-allowlist"
+    },
+    "eth1ProviderUrl": {
+      "displayName": "Url to Eth1 node with enabled rpc",
+      "cliConfigPrefix": "--eth1-endpoint=",
+      "defaultValue": "http://localhost:8545",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)",
+      "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#data-base-path-data-path"
+    },
+    "executionEngineEndpoint": {
+      "displayName": "URL of the execution client's Engine JSON-RPC APIs",
+      "cliConfigPrefix": "--ee-endpoint=",
+      "defaultValue": "http://localhost:8550",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "URL of the execution client's Engine JSON-RPC APIs. This replaces eth1-endpoint after The Merge.",
+      "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#ee-endpoint"
+    }
+  },
+  "documentation": {
+    "default": "https://docs.teku.consensys.net/en/stable/",
+    "docker": "https://docs.teku.consensys.net/en/stable/HowTo/Get-Started/Installation-Options/Run-Docker-Image/"
+  },
+  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/teku-logo.png"
+}
