@@ -50,7 +50,7 @@
         ]
       },
       "defaultValue": "FAST",
-      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/sync-modes"
+      "documentation": "https://besu.hyperledger.org/en/stable/Concepts/Node-Types/"
     },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",
@@ -215,8 +215,8 @@
     }
   },
   "documentation": {
-    "default": "https://docs.nethermind.io/nethermind/",
-    "docker": "https://docs.nethermind.io/nethermind/ethereum-client/docker"
+    "default": "https://besu.hyperledger.org/en/stable/",
+    "docker": "https://besu.hyperledger.org/en/stable/HowTo/Get-Started/Installation-Options/Run-Docker-Image/"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/besu-text-logo.png"
 }
