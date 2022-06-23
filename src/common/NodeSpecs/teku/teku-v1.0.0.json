@@ -91,6 +91,15 @@
       },
       "infoDescription": "URL of the execution client's Engine JSON-RPC APIs. This replaces eth1-endpoint after The Merge.",
       "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#ee-endpoint"
+    },
+    "maxPeerCount": {
+      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--p2p-peer-upper-bound=",
+      "defaultValue": "74",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#p2p-peer-upper-bound"
     }
   },
   "documentation": {

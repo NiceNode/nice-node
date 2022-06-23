@@ -203,6 +203,15 @@
       },
       "defaultValue": "FOREST",
       "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#data-storage-format"
+    },
+    "maxPeerCount": {
+      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--max-peers=",
+      "defaultValue": "25",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://besu.hyperledger.org/en/stable/HowTo/Find-and-Connect/Managing-Peers/#limit-peers"
     }
   },
   "documentation": {

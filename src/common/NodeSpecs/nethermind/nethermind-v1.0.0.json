@@ -153,6 +153,15 @@
       },
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/configuration/jsonrpc",
       "infoDescription": "Port number for JSON RPC web sockets calls. By default same port is used as regular HTTP JSON RPC. Ensure the firewall is configured when enabling JSON RPC."
+    },
+    "maxPeerCount": {
+      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--Network.ActivePeersMaxCount ",
+      "defaultValue": "50",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/configuration/network"
     }
   },
   "documentation": {

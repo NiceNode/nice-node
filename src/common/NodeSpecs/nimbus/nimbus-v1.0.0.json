@@ -87,6 +87,14 @@
       },
       "infoDescription": "Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)",
       "documentation": "https://nimbus.guide/web3-backup.html?highlight=--web3-url#add-a-backup-web3-provider"
+    },
+    "maxPeerCount": {
+      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--max-peers=",
+      "defaultValue": "160",
+      "uiControl": {
+        "type": "text"
+      }
     }
   },
   "documentation": {
