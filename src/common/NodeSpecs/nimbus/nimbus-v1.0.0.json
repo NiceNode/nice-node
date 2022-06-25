@@ -34,7 +34,7 @@
       "uiControl": {
         "type": "filePath"
       },
-      "infoDescription": "Lodestar root directory",
+      "infoDescription": "Nimbus root directory",
       "documentation": "https://nimbus.guide/options.html"
     },
     "http": {
