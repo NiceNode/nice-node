@@ -9,12 +9,88 @@
     "input": {
       "docker": {
         "containerVolumePath": "/data",
-        "raw": "-p 4000:4000 -p 13000:13000 -p 12000:12000/udp"
+        "raw": "-p 4000:4000 -p 13000:13000 -p 12000:12000/udp",
+        "forcedRawNodeInput": "--accept-terms-of-use=true"
       }
     }
   },
   "category": "L1/ConsensusClient/BeaconNode",
   "rpcTranslation": "eth-l1-beacon",
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "The directory where nimbus will store all blockchain data.",
+      "cliConfigPrefix": "--data-dir=",
+      "uiControl": {
+        "type": "filePath"
+      },
+      "infoDescription": "Prysm root directory",
+      "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters/"
+    },
+    "httpPort": {
+      "displayName": "The host on which the gateway server runs on",
+      "cliConfigPrefix": "--grpc-gateway-port=",
+      "defaultValue": "3500",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "httpCorsDomains": {
+      "displayName": "Comma separated list of domains from which to accept cross origin requests (browser enforced). This flag has no effect if not used with --grpc-gateway-port.",
+      "cliConfigPrefix": "--grpc-gateway-corsdomain=",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "httpHostAddress": {
+      "displayName": "The host on which the gateway server runs on",
+      "cliConfigPrefix": "--grpc-gateway-host=",
+      "defaultValue": "127.0.0.1",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "httpApis": {
+      "displayName": "Enabled HTTP APIs",
+      "category": "RPC APIs",
+      "cliConfigPrefix": "--http-modules=",
+      "valuesJoinStr": ", ",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "Prysm",
+            "config": "prysm"
+          },
+          {
+            "value": "Eth",
+            "config": "eth"
+          }
+        ]
+      },
+      "defaultValue": [
+        "Prysm",
+        "Eth"
+      ],
+      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/json-rpc"
+    },
+    "eth1ProviderUrl": {
+      "displayName": "One or more Web3 provider URLs used for obtaining deposit contract data.",
+      "cliConfigPrefix": "--http-web3provider=",
+      "defaultValue": "http://localhost:8545",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "A mainchain web3 provider string http endpoint. Can contain auth header as well in the format"
+    },
+    "maxPeerCount": {
+      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--p2p-max-peers=",
+      "defaultValue": "45",
+      "uiControl": {
+        "type": "text"
+      }
+    }
+  },
   "documentation": {
     "default": "https://docs.prylabs.network/docs/getting-started",
     "docker": "https://docs.prylabs.network/docs/install/install-with-docker/"

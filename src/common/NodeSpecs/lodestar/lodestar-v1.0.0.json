@@ -105,6 +105,14 @@
         "type": "text"
       },
       "infoDescription": "Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)"
+    },
+    "maxPeerCount": {
+      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--network.maxPeers ",
+      "defaultValue": "55",
+      "uiControl": {
+        "type": "text"
+      }
     }
   },
   "documentation": {

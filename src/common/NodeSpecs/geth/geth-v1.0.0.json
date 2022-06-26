@@ -161,6 +161,23 @@
         "type": "text"
       },
       "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+    },
+    "lightModeMaxPeerCount": {
+      "displayName": "Light Mode Max Peer Count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--light.maxpeers ",
+      "defaultValue": "100",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "maxPeerCount": {
+      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--maxpeers ",
+      "defaultValue": "50",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/interface/peer-to-peer#peer-limit"
     }
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"
