@@ -4,7 +4,7 @@
 
 <strong>Mission: </strong>2x the number of Ethereum nodes by making a one-click-to-start Ethereum node
 
-[![Discord](https://badgen.net/badge/icon/alpha?label=downloads)](https://www.nicenode.xyz/downloads) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/Juchd4th)
+[![Downloads](https://badgen.net/badge/icon/alpha?label=downloads)](https://www.nicenode.xyz/downloads) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/k3dpYU4Pn9)
 
 ![NiceNodeScreenshot](https://www.nicenode.xyz/img/screenshot.png 'NiceNodeScreenshot')
 
