@@ -161,7 +161,8 @@
         "type": "text"
       },
       "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
-    },"httpPort": {
+    },
+    "httpPort": {
       "displayName": "HTTP-RPC server listening port",
       "cliConfigPrefix": "--http.port ",
       "defaultValue": "8546",
