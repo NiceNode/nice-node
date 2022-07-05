@@ -8,11 +8,13 @@ import Monitoring from './Monitoring';
 import Debugging from './Debugging';
 import electron from '../electronGlobal';
 import DynamicSettings from './DynamicSettings';
+import Docker from './Docker';
 
 export const FOOTER_HEIGHT = 64;
 
 const Footer = () => {
-  const [sSelectedMenuDrawer, setSelectedMenuDrawer] = useState<string>();
+  const [sSelectedMenuDrawer, setSelectedMenuDrawer] =
+    useState<string>('docker');
   const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
 
   const onCloseDrawer = () => {
@@ -91,6 +93,20 @@ const Footer = () => {
       >
         <VscDebugConsole />
       </IconButton>
+      <IconButton
+        type="button"
+        onClick={() => {
+          setSelectedMenuDrawer(
+            sSelectedMenuDrawer === 'docker' ? undefined : 'docker'
+          );
+        }}
+        style={{
+          borderBottom: sSelectedMenuDrawer === 'docker' ? '2px solid' : 'none',
+          borderTop: sSelectedMenuDrawer === 'docker' ? '2px solid' : 'none',
+        }}
+      >
+        <span>Docker</span>
+      </IconButton>
       <div style={{ position: 'fixed', right: 10, fontSize: 14 }}>
         <span>v{sNiceNodeVersion}</span>
       </div>
@@ -107,6 +123,11 @@ const Footer = () => {
 
       <Monitoring
         isOpen={sSelectedMenuDrawer === 'monitoring'}
+        onClickCloseButton={onCloseDrawer}
+      />
+
+      <Docker
+        isOpen={sSelectedMenuDrawer === 'docker'}
         onClickCloseButton={onCloseDrawer}
       />
     </div>

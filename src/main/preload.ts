@@ -75,6 +75,7 @@ contextBridge.exposeInMainWorld('electron', {
   // Node library
   getNodeLibrary: () => ipcRenderer.invoke('getNodeLibrary'),
 
-  // Settings/Config
+  // Docker
   getIsDockerInstalled: () => ipcRenderer.invoke('getIsDockerInstalled'),
+  installDocker: () => ipcRenderer.invoke('installDocker'),
 });

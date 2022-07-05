@@ -1,4 +1,4 @@
-import { exec } from 'node:child_process';
+import { exec, ExecOptions } from 'node:child_process';
 
 import logger from './logger';
 
@@ -11,8 +11,13 @@ export const execAwait = (
     logger.info(command);
   }
 
+  // const eO: ExecOptions = {
+  //   encoding:
+  // cwd
+  // }
+
   return new Promise((resolve, reject) => {
-    exec(command, { ...options }, (err, stdout, stderr) => {
+    exec(command, { ...options, encoding: 'utf8' }, (err, stdout, stderr) => {
       if (err) {
         reject(err);
         return;

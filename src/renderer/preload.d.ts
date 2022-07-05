@@ -56,8 +56,9 @@ declare global {
       // Node library
       getNodeLibrary(): NodeLibrary;
 
-      // Settings/Config
+      // Docker
       getIsDockerInstalled(): boolean;
+      installDocker(): void;
     };
 
     performance: Performance;
