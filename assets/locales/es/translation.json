@@ -1,0 +1,13 @@
+{
+  "Add Node": "Agregar Nodo",
+  "Remove Node": "Eliminar Nodo",
+  "Install Docker": "Instalar Docker",
+  "Type": "Tipo",
+  "Status": "Estado",
+  "Start": "Empezar",
+  "Stop": "Parar",
+  "Remove": "Eliminar",
+  "Delete": "Borrar",
+  "Synced": "sincronizado",
+  "Peers": "pares"
+}

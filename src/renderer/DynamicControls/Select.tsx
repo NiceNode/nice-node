@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import ReactSelect, { MultiValue, SingleValue } from 'react-select';
+import ReactSelect, {
+  MenuPlacement,
+  MultiValue,
+  SingleValue,
+} from 'react-select';
 
 type SelectOption = { value: string; label: string };
 
@@ -9,8 +13,16 @@ type Props = {
   value: undefined | string | string[];
   onChange: (newValue?: string | string[]) => void;
   isMulti: boolean;
+  menuPlacement?: string;
 };
-const Select = ({ isDisabled, options, value, onChange, isMulti }: Props) => {
+const Select = ({
+  isDisabled,
+  options,
+  value,
+  onChange,
+  isMulti,
+  menuPlacement,
+}: Props) => {
   const [sSelectedOptions, setSelectedOptions] = useState<SelectOption[]>([]);
 
   useEffect(() => {
@@ -54,8 +66,12 @@ const Select = ({ isDisabled, options, value, onChange, isMulti }: Props) => {
         }}
         isDisabled={isDisabled}
         isMulti={isMulti}
+        menuPlacement={menuPlacement as MenuPlacement}
       />
     </div>
   );
+};
+Select.defaultProps = {
+  menuPlacement: 'bottom',
 };
 export default Select;

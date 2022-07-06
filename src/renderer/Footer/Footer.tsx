@@ -10,6 +10,7 @@ import Debugging from './Debugging';
 import electron from '../electronGlobal';
 import DynamicSettings from './DynamicSettings';
 import Docker from './Docker';
+import LanguageSelect from '../LanguageSelect';
 
 export const FOOTER_HEIGHT = 64;
 
@@ -130,6 +131,7 @@ const Footer = () => {
         isOpen={sSelectedMenuDrawer === 'docker'}
         onClickCloseButton={onCloseDrawer}
       />
+      <LanguageSelect />
     </div>
   );
 };
