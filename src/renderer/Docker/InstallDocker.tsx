@@ -1,5 +1,6 @@
 import { FaDocker } from 'react-icons/fa';
-import ExternalLink from './Generics/ExternalLink';
+import ExternalLink from '../Generics/ExternalLink';
+import InstallDockerButton from './InstallDockerButton';
 
 const InstallDocker = () => {
   return (
@@ -9,14 +10,15 @@ const InstallDocker = () => {
       </h1>
       <p style={{ fontSize: '1.2em' }}>
         {
-          "Docker helps NiceNode provide many nodes for users to choose from. \
+          'Docker helps NiceNode provide many nodes for users to choose from. \
            Docker is supported by most node development teams and is free for users to install. \
-           Installing Docker will give you access to all of the Ethereum nodes! Follow Docker's \
-           install guide. Docker will quietly run in the background after installation."
+           Installing Docker will give you access to all of the Ethereum nodes! Docker will quietly run in the background after installation.'
         }
       </p>
+      <InstallDockerButton />
       <p>Restart NiceNode when Docker is installed and running.</p>
       <p>If you have Docker Desktop installed, ensure it is running.</p>
+      <h3>Install Docker on your own</h3>
       <div
         style={{
           background: 'rgba(0, 0, 0, 0.1)',

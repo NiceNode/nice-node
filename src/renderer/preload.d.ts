@@ -58,7 +58,7 @@ declare global {
 
       // Docker
       getIsDockerInstalled(): boolean;
-      installDocker(): void;
+      installDocker(): any;
     };
 
     performance: Performance;

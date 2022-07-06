@@ -1,31 +1,43 @@
+import path from 'node:path';
+import { pipeline } from 'node:stream';
+import { promisify } from 'node:util';
+import { createWriteStream } from 'fs';
+import { chmod } from 'fs/promises';
+
+import { doesFileOrDirExist } from './files';
+import logger from './logger';
+import { parseFileNameFromUrl } from './util/parseFileNameFromUrl';
+import { httpGet } from './httpReq';
+
+const streamPipeline = promisify(pipeline);
+
 /**
  * Downloads the file to directory.
  * @param downloadUrl
  * @param directory
+ * @returns path of the downloaded file
  */
-export const downloadFile = async (downloadUrl: string, directory: string) => {
-  logger.info(`downloading binary ${downloadUrl}`);
+export const downloadFile = async (
+  downloadUrl: string,
+  directory: string
+): Promise<string> => {
+  logger.info(`downloading file ${downloadUrl}`);
+  // todo: return error if no file in url
   const downloadFileName = parseFileNameFromUrl(downloadUrl);
-  logger.info(`binary full filename ${downloadFileName}`);
+  logger.info(`file full filename ${downloadFileName}`);
   const fileOutPath = path.join(directory, downloadFileName);
 
-  // if fileOutPath exists, use it, but we should delete and retry...
+  // if fileOutPath exists, use it, but we should delete and retry...?
   if (!(await doesFileOrDirExist(fileOutPath))) {
     try {
       const response = await httpGet(downloadUrl, {
         headers: [{ name: 'Accept', value: 'application/octet-stream' }],
       });
-
       // if (!res.ok) throw new Error(`unexpected response ${res.statusText}`);
       logger.info('http response received');
-
-      // if (platform.isWindows()) {
-      //   fileOutPath = `${directory}/geth.zip`;
-      // }
       const fileWriteStream = createWriteStream(fileOutPath);
 
       logger.info('piping response to fileWriteStream');
-      // await streamPromises.pipeline(data, fileWriteStream);
       await streamPipeline(response, fileWriteStream);
       logger.info(
         'done piping response to fileWriteStream. closing fileWriteStream.'
@@ -37,14 +49,11 @@ export const downloadFile = async (downloadUrl: string, directory: string) => {
       await chmod(fileOutPath, 0o444);
       logger.info('modified file permissions');
     } catch (err) {
-      logger.error('error downloading binary', err);
-      // status = NODE_STATUS.errorDownloading;
-      // send(CHANNELS.geth, status);
+      logger.error('error downloading file', err);
       throw err;
     }
   } else {
-    logger.info('Downloaded binary already exists');
+    logger.info('Downloaded file already exists');
   }
-
-  await unzipFile(fileOutPath, directory);
+  return fileOutPath;
 };

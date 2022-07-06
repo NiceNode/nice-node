@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
 import { useGetIsDockerInstalledQuery } from '../state/settingsService';
+import InstallDockerButton from '../Docker/InstallDockerButton';
 
 type Props = {
   isOpen: boolean | undefined;
@@ -29,20 +29,13 @@ const Docker = ({ isOpen, onClickCloseButton }: Props) => {
     >
       <div style={{ flex: 1, overflow: 'auto' }}>
         {qIsDockerInstalled.isLoading && <>Loading...</>}
-        <div>Is docker installed? {JSON.stringify(isDockerInstalled)}</div>
+        <div>
+          {isDockerInstalled
+            ? 'Docker is installed'
+            : 'Docker is not installed or it is not running.'}
+        </div>
         {/* todo: if win */}
-        <button
-          type="button"
-          onClick={async () => {
-            console.log('calling installDocker');
-            await electron.installDocker();
-            console.log('installDocker finished');
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            Install Docker
-          </div>
-        </button>
+        <InstallDockerButton />
       </div>
     </MenuDrawer>
   );

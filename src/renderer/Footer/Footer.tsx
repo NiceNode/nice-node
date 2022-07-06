@@ -1,6 +1,7 @@
 import { VscDebugConsole } from 'react-icons/vsc';
 import { AiOutlineAreaChart } from 'react-icons/ai';
 import { MdSettings } from 'react-icons/md';
+import { FaDocker } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 
 import IconButton from '../IconButton';
@@ -13,8 +14,7 @@ import Docker from './Docker';
 export const FOOTER_HEIGHT = 64;
 
 const Footer = () => {
-  const [sSelectedMenuDrawer, setSelectedMenuDrawer] =
-    useState<string>('docker');
+  const [sSelectedMenuDrawer, setSelectedMenuDrawer] = useState<string>();
   const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
 
   const onCloseDrawer = () => {
@@ -105,7 +105,7 @@ const Footer = () => {
           borderTop: sSelectedMenuDrawer === 'docker' ? '2px solid' : 'none',
         }}
       >
-        <span>Docker</span>
+        <FaDocker />
       </IconButton>
       <div style={{ position: 'fixed', right: 10, fontSize: 14 }}>
         <span>v{sNiceNodeVersion}</span>
