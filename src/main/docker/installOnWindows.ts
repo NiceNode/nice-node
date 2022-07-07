@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import logger from '../logger';
-import { execAwait, execFileAwait } from '../execHelper';
+import { execAwait } from '../execHelper';
 import * as arch from '../arch';
 import { downloadFile } from '../downloadFile';
 import { getNNDirPath } from '../files';
