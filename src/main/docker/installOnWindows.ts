@@ -1,5 +1,8 @@
 import logger from '../logger';
 import { execAwait } from '../execHelper';
+import * as arch from '../arch';
+import { downloadFile } from '../downloadFile';
+import { getNNDirPath } from '../files';
 
 const iconv = require('iconv-lite');
 
@@ -12,7 +15,9 @@ const installOnWindows = async (): Promise<any> => {
 
   try {
     // check if wsl is installed and install
-    let { stdout, stderr } = await execAwait('wsl -l -v', { log: true });
+    let stdout;
+    let stderr;
+    ({ stdout, stderr } = await execAwait('wsl -l -v', { log: true }));
     console.log('stdout', stdout);
     // const decoder = new StringDecoder('utf8');
     const stdoutStr = iconv.decode(Buffer.from(stdout), 'ucs2');
@@ -42,7 +47,30 @@ const installOnWindows = async (): Promise<any> => {
     }
 
     // todo: download docker
-    // win, amd64: https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe
+    // win, amd64:
+    let downloadUrl;
+    if (arch.isX86And64bit()) {
+      downloadUrl =
+        'https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe';
+    } else {
+      return {
+        error:
+          'Unable to install docker. Unsupported computer hardware (CPU is non-x86_64).',
+      };
+    }
+    logger.info(`Downloading Docker from url ${downloadUrl}`);
+    const dockerExeFilePath = await downloadFile(downloadUrl, getNNDirPath());
+    ({ stdout, stderr } = await execAwait(
+      `start /w "" "${dockerExeFilePath}" install --quiet --accept-license --backend=wsl-2`,
+      { log: true }
+    ));
+    console.log('docker install stdout, stderr', stdout, stderr);
+    ({ stdout, stderr } = await execAwait(
+      // eslint-disable-next-line no-useless-escape
+      `"C:\Program Files\Docker\Docker\Docker Desktop.exe"`,
+      { log: true }
+    ));
+    console.log('docker exe start stdout, stderr', stdout, stderr);
     return true;
   } catch (err) {
     console.log(err);
