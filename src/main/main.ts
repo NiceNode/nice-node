@@ -173,6 +173,7 @@ const initialize = () => {
   processExit.initialize();
   processExit.registerExitHandler(onExit);
   console.log('app locale: ', app.getLocale());
+  console.log('app LocaleCountryCode: ', app.getLocaleCountryCode());
 };
 
 logger.info(`app name: ${app.getName()}`);

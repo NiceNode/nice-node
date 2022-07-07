@@ -2,6 +2,7 @@
 import { NodeSpecification } from '../common/nodeSpec';
 import { Node, NodeId } from '../common/node';
 import { NodeLibrary } from '../main/state/nodeLibrary';
+import { Settings } from '../main/state/settings';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
 //  we extend window.performance to include Chrome's memory stats
@@ -59,6 +60,10 @@ declare global {
       // Docker
       getIsDockerInstalled(): boolean;
       installDocker(): any;
+
+      // Settings
+      getSettings(): Settings;
+      setLanguage(languageCode: string): void;
     };
 
     performance: Performance;

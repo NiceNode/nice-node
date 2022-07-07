@@ -78,4 +78,10 @@ contextBridge.exposeInMainWorld('electron', {
   // Docker
   getIsDockerInstalled: () => ipcRenderer.invoke('getIsDockerInstalled'),
   installDocker: () => ipcRenderer.invoke('installDocker'),
+
+  // Settings
+  getSettings: () => ipcRenderer.invoke('getSettings'),
+  setLanguage: (languageCode: string) => {
+    ipcRenderer.invoke('setLanguage', languageCode);
+  },
 });
