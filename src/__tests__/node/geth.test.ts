@@ -93,7 +93,7 @@ describe('Tests the core cycle of a geth binary node (download, unzip, start, st
 
       await stopBinary(gethNode);
       await removeBinaryNode(gethNode);
-      await sleep(2000);
+      await sleep(5000);
 
       expect(gethNode.status).toBe(NodeStatus.stopped);
 
@@ -101,6 +101,7 @@ describe('Tests the core cycle of a geth binary node (download, unzip, start, st
       onExit();
     } catch (err) {
       console.error(err);
+      throw err;
     }
   });
 });

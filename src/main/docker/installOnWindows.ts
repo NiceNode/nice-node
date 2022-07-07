@@ -1,5 +1,9 @@
+import { spawn } from 'node:child_process';
 import logger from '../logger';
 import { execAwait } from '../execHelper';
+import * as arch from '../arch';
+import { downloadFile } from '../downloadFile';
+import { getNNDirPath } from '../files';
 
 const iconv = require('iconv-lite');
 
@@ -12,12 +16,11 @@ const installOnWindows = async (): Promise<any> => {
 
   try {
     // check if wsl is installed and install
-    let { stdout, stderr } = await execAwait('wsl -l -v', { log: true });
+    let stdout;
+    let stderr;
+    ({ stdout, stderr } = await execAwait('wsl -l -v', { log: true }));
     console.log('stdout', stdout);
-    // const decoder = new StringDecoder('utf8');
     const stdoutStr = iconv.decode(Buffer.from(stdout), 'ucs2');
-    // const stdoutStr = decoder.end();
-    // console.log('stdoutStr', stdoutStr);
 
     console.log('stdoutStr', JSON.stringify(stdoutStr));
     console.log('tet', JSON.stringify('test'));
@@ -41,8 +44,32 @@ const installOnWindows = async (): Promise<any> => {
       }
     }
 
-    // todo: download docker
-    // win, amd64: https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe
+    // download and install docker
+    let downloadUrl;
+    if (arch.isX86And64bit()) {
+      downloadUrl =
+        'https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe';
+    } else {
+      return {
+        error:
+          'Unable to install docker. Unsupported computer hardware (CPU is non-x86_64).',
+      };
+    }
+    logger.info(`Downloading Docker from url ${downloadUrl}`);
+    const dockerExeFilePath = await downloadFile(downloadUrl, getNNDirPath());
+    ({ stdout, stderr } = await execAwait(
+      `start /w "" "${dockerExeFilePath}" install --quiet --accept-license --backend=wsl-2`,
+      { log: true }
+    ));
+    console.log('docker install stdout, stderr', stdout, stderr);
+    // To start an exe does not return after it starts.
+    //  It returns when the exe stops, in this case, we don't want to wait.
+    //  Use spawn here so that if NiceNode is closed, Docker continues running
+    spawn('C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe', [], {
+      detached: true,
+      stdio: 'ignore',
+    });
+    console.log('docker exe start stdout, stderr', stdout, stderr);
     return true;
   } catch (err) {
     console.log(err);

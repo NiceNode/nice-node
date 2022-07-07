@@ -8,7 +8,9 @@ const LanguageSelect = () => {
   const { i18n } = useTranslation();
   const qSettings = useGetSettingsQuery();
 
-  const onChangeLanguage = async (newLang: string) => {
+  // always is string, but type can be string | string[] | undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onChangeLanguage = async (newLang: any) => {
     console.log('language selected: ', newLang);
     i18n.changeLanguage(newLang);
     await electron.setLanguage(newLang);

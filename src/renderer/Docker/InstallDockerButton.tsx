@@ -6,7 +6,6 @@ import { useGetIsDockerInstalledQuery } from '../state/settingsService';
 const InstallDockerButton = () => {
   const [sDockerInstallStatus, setDockerInstallStatus] = useState<string>();
   const qIsDockerInstalled = useGetIsDockerInstalledQuery();
-  // const isDisabled = true;
   const isDockerInstalled = qIsDockerInstalled?.data;
 
   if (isDockerInstalled) {
@@ -20,7 +19,7 @@ const InstallDockerButton = () => {
         onClick={async () => {
           console.log('calling installDocker');
           setDockerInstallStatus(
-            'Installing... (this may take 5 or more minutes). There will be a password prompt on Mac to give permissions to install Docker.'
+            'Installing... (this may take 5 or more minutes). There will be a password prompt on Mac and a pop-up on Windows to give permissions to install Docker.'
           );
           const installResult = await electron.installDocker();
           if (installResult && installResult.error) {
@@ -32,6 +31,7 @@ const InstallDockerButton = () => {
             'installDocker finished. Install result: ',
             installResult
           );
+          qIsDockerInstalled.refetch();
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
