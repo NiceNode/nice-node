@@ -2,7 +2,7 @@ import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 
 import { NodeStatus } from '../common/node';
 import electron from './electronGlobal';
-import InstallDocker from './InstallDocker';
+import InstallDocker from './Docker/InstallDocker';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector } from './state/hooks';
 import { selectSelectedNode } from './state/node';

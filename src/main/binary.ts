@@ -6,6 +6,7 @@ import { access, chmod } from 'fs/promises';
 import sleep from 'await-sleep';
 
 import { ProcessDescription } from 'pm2';
+import { parseFileNameFromPath } from './util/parseFileNameFromPath';
 import * as platform from './platform';
 import * as arch from './arch';
 import * as github from './github';
@@ -33,6 +34,7 @@ import {
 } from './pm2Manager';
 import * as nodeStore from './state/nodes';
 import { escapePath } from './util/escapePath';
+import { parseFileNameFromUrl } from './util/parseFileNameFromUrl';
 
 const streamPipeline = promisify(pipeline);
 
@@ -93,36 +95,6 @@ export const getBinaryStatus = (proc: ProcessDescription): NodeStatus => {
   }
   console.log('unkown proc status! proc, procStatus', proc, procStatus);
   return NodeStatus.unknown;
-};
-
-const parseFileNameFromPath = (inPath: string, excludeExension?: boolean) => {
-  // ex. 'C:\Windows\crazy\inPath'
-  // ex. '/root/usr/yay.zip
-
-  let pathSlash = '/';
-  if (platform.isWindows()) {
-    pathSlash = '\\';
-  }
-  if (excludeExension) {
-    const tarGzIndex = inPath.lastIndexOf('.tar.gz');
-    const zipIndex = inPath.lastIndexOf('.zip');
-    const extensionIndex = tarGzIndex > 0 ? tarGzIndex : zipIndex;
-
-    return inPath.substring(inPath.lastIndexOf(pathSlash) + 1, extensionIndex);
-  }
-  return inPath.substring(inPath.lastIndexOf(pathSlash) + 1);
-};
-
-const parseFileNameFromUrl = (url: string, excludeExension?: boolean) => {
-  // ex. 'https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.17-25c9b49f.tar.gz'
-
-  if (excludeExension) {
-    const tarGzIndex = url.lastIndexOf('.tar.gz');
-    const zipIndex = url.lastIndexOf('.zip');
-    const extensionIndex = tarGzIndex > 0 ? tarGzIndex : zipIndex;
-    return url.substring(url.lastIndexOf('/') + 1, extensionIndex);
-  }
-  return url.substring(url.lastIndexOf('/') + 1);
 };
 
 export const unzipFile = async (filePath: string, directory: string) => {

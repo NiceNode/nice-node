@@ -167,7 +167,6 @@ export const startProccess = async (
       });
     }
     logger.info(`pm2Manager startResult: `);
-    logger.info(startResult);
 
     // todo: pm_id is undefined some times, can be fixed with another start
     if (Array.isArray(startResult) && startResult[0]) {

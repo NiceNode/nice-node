@@ -22,6 +22,7 @@ import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
 import { isDockerInstalled } from './docker/docker';
+import installDocker from './docker/install';
 // eslint-disable-next-line import/no-cycle
 import { openDialogForNodeDataDir } from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
@@ -88,6 +89,7 @@ export const initialize = () => {
   // Node library
   ipcMain.handle('getNodeLibrary', getNodeLibrary);
 
-  // Settings/Config
+  // Docker
   ipcMain.handle('getIsDockerInstalled', isDockerInstalled);
+  ipcMain.handle('installDocker', installDocker);
 };
