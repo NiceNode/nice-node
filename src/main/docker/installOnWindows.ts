@@ -1,5 +1,6 @@
+import { spawn } from 'node:child_process';
 import logger from '../logger';
-import { execAwait } from '../execHelper';
+import { execAwait, execFileAwait } from '../execHelper';
 import * as arch from '../arch';
 import { downloadFile } from '../downloadFile';
 import { getNNDirPath } from '../files';
@@ -19,10 +20,7 @@ const installOnWindows = async (): Promise<any> => {
     let stderr;
     ({ stdout, stderr } = await execAwait('wsl -l -v', { log: true }));
     console.log('stdout', stdout);
-    // const decoder = new StringDecoder('utf8');
     const stdoutStr = iconv.decode(Buffer.from(stdout), 'ucs2');
-    // const stdoutStr = decoder.end();
-    // console.log('stdoutStr', stdoutStr);
 
     console.log('stdoutStr', JSON.stringify(stdoutStr));
     console.log('tet', JSON.stringify('test'));
@@ -46,8 +44,7 @@ const installOnWindows = async (): Promise<any> => {
       }
     }
 
-    // todo: download docker
-    // win, amd64:
+    // download and install docker
     let downloadUrl;
     if (arch.isX86And64bit()) {
       downloadUrl =
@@ -65,11 +62,13 @@ const installOnWindows = async (): Promise<any> => {
       { log: true }
     ));
     console.log('docker install stdout, stderr', stdout, stderr);
-    ({ stdout, stderr } = await execAwait(
-      // eslint-disable-next-line no-useless-escape
-      `"C:\Program Files\Docker\Docker\Docker Desktop.exe"`,
-      { log: true }
-    ));
+    // To start an exe does not return after it starts.
+    //  It returns when the exe stops, in this case, we don't want to wait.
+    //  Use spawn here so that if NiceNode is closed, Docker continues running
+    spawn('C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe', [], {
+      detached: true,
+      stdio: 'ignore',
+    });
     console.log('docker exe start stdout, stderr', stdout, stderr);
     return true;
   } catch (err) {

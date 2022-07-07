@@ -10,12 +10,15 @@ import Debugging from './Debugging';
 import electron from '../electronGlobal';
 import DynamicSettings from './DynamicSettings';
 import Docker from './Docker';
+import { useGetIsDockerInstalledQuery } from '../state/settingsService';
 
 export const FOOTER_HEIGHT = 64;
 
 const Footer = () => {
   const [sSelectedMenuDrawer, setSelectedMenuDrawer] = useState<string>();
   const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
+  const qIsDockerInstalled = useGetIsDockerInstalledQuery();
+  const isDockerInstalled = qIsDockerInstalled?.data;
 
   const onCloseDrawer = () => {
     setSelectedMenuDrawer(undefined);
@@ -93,20 +96,23 @@ const Footer = () => {
       >
         <VscDebugConsole />
       </IconButton>
-      <IconButton
-        type="button"
-        onClick={() => {
-          setSelectedMenuDrawer(
-            sSelectedMenuDrawer === 'docker' ? undefined : 'docker'
-          );
-        }}
-        style={{
-          borderBottom: sSelectedMenuDrawer === 'docker' ? '2px solid' : 'none',
-          borderTop: sSelectedMenuDrawer === 'docker' ? '2px solid' : 'none',
-        }}
-      >
-        <FaDocker />
-      </IconButton>
+      {!isDockerInstalled && (
+        <IconButton
+          type="button"
+          onClick={() => {
+            setSelectedMenuDrawer(
+              sSelectedMenuDrawer === 'docker' ? undefined : 'docker'
+            );
+          }}
+          style={{
+            borderBottom:
+              sSelectedMenuDrawer === 'docker' ? '2px solid' : 'none',
+            borderTop: sSelectedMenuDrawer === 'docker' ? '2px solid' : 'none',
+          }}
+        >
+          <FaDocker />
+        </IconButton>
+      )}
       <div style={{ position: 'fixed', right: 10, fontSize: 14 }}>
         <span>v{sNiceNodeVersion}</span>
       </div>
@@ -126,10 +132,12 @@ const Footer = () => {
         onClickCloseButton={onCloseDrawer}
       />
 
-      <Docker
-        isOpen={sSelectedMenuDrawer === 'docker'}
-        onClickCloseButton={onCloseDrawer}
-      />
+      {!isDockerInstalled && (
+        <Docker
+          isOpen={sSelectedMenuDrawer === 'docker'}
+          onClickCloseButton={onCloseDrawer}
+        />
+      )}
     </div>
   );
 };

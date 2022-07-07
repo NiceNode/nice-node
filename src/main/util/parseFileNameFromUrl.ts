@@ -12,8 +12,9 @@ export const parseFileNameFromUrl = (
       url.lastIndexOf('/') + 1,
       extensionIndex
     );
+  } else {
+    urlEncodedFilename = url.substring(url.lastIndexOf('/') + 1);
   }
-  urlEncodedFilename = url.substring(url.lastIndexOf('/') + 1);
-  const filename = urlEncodedFilename.replace('%20', '');
+  const filename = urlEncodedFilename.replaceAll('%20', '');
   return filename;
 };
