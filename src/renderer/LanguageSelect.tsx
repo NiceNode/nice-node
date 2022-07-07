@@ -8,7 +8,7 @@ const LanguageSelect = () => {
   const { i18n } = useTranslation();
   const qSettings = useGetSettingsQuery();
 
-  const onChangeLanguage = async (newLang: any) => {
+  const onChangeLanguage = async (newLang: string) => {
     console.log('language selected: ', newLang);
     i18n.changeLanguage(newLang);
     await electron.setLanguage(newLang);
