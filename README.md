@@ -40,3 +40,11 @@ To package apps for the local platform:
 ```bash
 npm run package
 ```
+
+## Running Storybook
+
+To run Storybook locally:
+
+```bash
+npm run storybook
+```
