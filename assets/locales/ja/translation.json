@@ -1,0 +1,13 @@
+{
+  "Add Node": "ノードを追加する",
+  "Remove Node": "ノードを削除する",
+  "Install Docker": "Docker をインストールする",
+  "Type": "タイプ",
+  "Status": "ステータス",
+  "Start": "開始",
+  "Stop": "停止",
+  "Remove": "削除",
+  "Delete": "削除",
+  "Synced": "同期済み",
+  "Peers": "ピア"
+}

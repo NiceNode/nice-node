@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import Node from '../../common/node';
+import { Settings } from '../../main/state/settings';
 import electron from '../electronGlobal';
 
 type CustomerErrorType = {
@@ -13,7 +13,22 @@ export const RtkqSettingsService: any = createApi({
   reducerPath: 'RtkqSettingsService',
   baseQuery: fakeBaseQuery<CustomerErrorType>(),
   endpoints: (builder) => ({
-    getIsDockerInstalled: builder.query<boolean, Node[]>({
+    getSettings: builder.query<Settings, null>({
+      queryFn: async () => {
+        let data;
+        try {
+          console.log('RtkqSettingsService getSettings() calling..');
+          data = await electron.getSettings();
+          console.log('RtkqSettingsService getSettings() returned ', data);
+        } catch (e) {
+          const error = { message: 'Unable to getSettings' };
+          console.log(e);
+          return { error };
+        }
+        return { data };
+      },
+    }),
+    getIsDockerInstalled: builder.query<boolean, null>({
       queryFn: async () => {
         let data;
         try {
@@ -34,4 +49,5 @@ export const RtkqSettingsService: any = createApi({
   }),
 });
 
-export const { useGetIsDockerInstalledQuery } = RtkqSettingsService;
+export const { useGetSettingsQuery, useGetIsDockerInstalledQuery } =
+  RtkqSettingsService;

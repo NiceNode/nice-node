@@ -1,5 +1,6 @@
 import { BsPlusSquareDotted } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import IconButton from '../IconButton';
 import { Modal } from '../Modal';
@@ -45,6 +46,7 @@ const categorizeNodeLibrary = (
 };
 
 const AddNode = () => {
+  const { t } = useTranslation();
   const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
   const [sIsModalOpenConfirmAddNode, setIsModalOpenConfirmAddNode] =
     useState<boolean>(false);
@@ -97,7 +99,7 @@ const AddNode = () => {
 
   return (
     <div>
-      <span>Add node</span>
+      <span>{t('Add Node')}</span>
       <IconButton type="button" onClick={onClickAddNodeButton}>
         <BsPlusSquareDotted />
       </IconButton>

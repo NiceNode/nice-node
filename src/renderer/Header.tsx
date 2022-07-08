@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ImWarning } from 'react-icons/im';
 import { HiUserGroup } from 'react-icons/hi';
@@ -24,6 +25,7 @@ import { selectIsAvailableForPolling, selectSelectedNode } from './state/node';
 export const HEADER_HEIGHT = 48;
 
 const Header = () => {
+  const { t } = useTranslation();
   const selectedNode = useAppSelector(selectSelectedNode);
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
@@ -231,7 +233,7 @@ const Header = () => {
           >
             <FaSync className={sIsSyncing ? 'spin' : ''} />
             <span style={{ marginLeft: 5, marginRight: 10 }}>
-              {sSyncPercent}% synced
+              {sSyncPercent}% {t('Synced')}
             </span>
           </div>
           {/* )} */}
@@ -244,7 +246,7 @@ const Header = () => {
           >
             <HiUserGroup />
             <span style={{ marginLeft: 5, marginRight: 10 }}>
-              {sPeers} peers
+              {sPeers} {t('Peers')}
             </span>
           </div>
         </div>

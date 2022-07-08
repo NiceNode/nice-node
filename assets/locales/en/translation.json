@@ -1,0 +1,13 @@
+{
+  "Add Node": "Add Node",
+  "Remove Node": "Remove Node",
+  "Install Docker": "Install Docker",
+  "Type": "Type",
+  "Status": "Status",
+  "Start": "Start",
+  "Stop": "Stop",
+  "Remove": "Remove",
+  "Delete": "Delete",
+  "Synced": "synced",
+  "Peers": "peers"
+}

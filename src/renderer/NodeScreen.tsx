@@ -1,4 +1,5 @@
 import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 import { NodeStatus } from '../common/node';
 import electron from './electronGlobal';
@@ -10,6 +11,7 @@ import { useGetNodeVersionQuery } from './state/services';
 import { useGetIsDockerInstalledQuery } from './state/settingsService';
 
 const NodeScreen = () => {
+  const { t } = useTranslation();
   const selectedNode = useAppSelector(selectSelectedNode);
   const qNodeVersion = useGetNodeVersionQuery(
     selectedNode?.spec.rpcTranslation
@@ -66,8 +68,12 @@ const NodeScreen = () => {
             </>
           </h4>
         )}
-        <h4>Type: {category} Node</h4>
-        <h3>Status: {status}</h3>
+        <h4>
+          {t('Type')}: {category} Node
+        </h4>
+        <h3>
+          {t('Status')}: {status}
+        </h3>
       </div>
       <div className="Hello">
         <button
@@ -87,7 +93,7 @@ const NodeScreen = () => {
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <FaPlayCircle style={{ marginRight: 5 }} />
-            Start
+            {t('Start')}
           </div>
         </button>
         &nbsp;
@@ -98,7 +104,7 @@ const NodeScreen = () => {
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <FaPauseCircle style={{ marginRight: 5 }} />
-            Stop
+            {t('Stop')}
           </div>
         </button>
       </div>

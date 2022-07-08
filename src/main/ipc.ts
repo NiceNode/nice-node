@@ -26,6 +26,7 @@ import installDocker from './docker/install';
 // eslint-disable-next-line import/no-cycle
 import { openDialogForNodeDataDir } from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
+import { getSettings, setLanguage } from './state/settings';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -92,4 +93,10 @@ export const initialize = () => {
   // Docker
   ipcMain.handle('getIsDockerInstalled', isDockerInstalled);
   ipcMain.handle('installDocker', installDocker);
+
+  // Settings
+  ipcMain.handle('getSettings', getSettings);
+  ipcMain.handle('setLanguage', (_event, languageCode: string) => {
+    return setLanguage(languageCode);
+  });
 };
