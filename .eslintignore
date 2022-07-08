@@ -35,3 +35,6 @@ npm-debug.log.*
 
 # minified dependency doesn't satisfy eslint
 src/renderer/ethers.js
+
+# ignore just for now
+src/stories
