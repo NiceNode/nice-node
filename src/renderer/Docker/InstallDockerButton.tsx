@@ -22,10 +22,14 @@ const InstallDockerButton = () => {
             'Installing... (this may take 5 or more minutes). There will be a password prompt on Mac and a pop-up on Windows to give permissions to install Docker.'
           );
           const installResult = await electron.installDocker();
-          if (installResult && installResult.error) {
+          if (installResult?.error) {
             setDockerInstallStatus(`Error: ${installResult.error}`);
+          } else if (installResult?.message) {
+            setDockerInstallStatus(`${installResult.message}`);
           } else {
-            setDockerInstallStatus(`Installed successfully!`);
+            setDockerInstallStatus(
+              `Installed successfully! Please restart NiceNode.`
+            );
           }
           console.log(
             'installDocker finished. Install result: ',
