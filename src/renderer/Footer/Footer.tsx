@@ -117,28 +117,25 @@ const Footer = () => {
       <div style={{ position: 'fixed', right: 10, fontSize: 14 }}>
         <span>v{sNiceNodeVersion}</span>
       </div>
-
       <Debugging
         isOpen={sSelectedMenuDrawer === 'debugging'}
         onClickCloseButton={onCloseDrawer}
       />
-
       <DynamicSettings
         isOpen={sSelectedMenuDrawer === 'settings'}
         onClickCloseButton={onCloseDrawer}
       />
-
       <Monitoring
         isOpen={sSelectedMenuDrawer === 'monitoring'}
         onClickCloseButton={onCloseDrawer}
       />
-
       {!isDockerInstalled && (
         <Docker
           isOpen={sSelectedMenuDrawer === 'docker'}
           onClickCloseButton={onCloseDrawer}
         />
       )}
+      &nbsp; &nbsp;
       <LanguageSelect />
     </div>
   );
