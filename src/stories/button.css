@@ -1,30 +1,97 @@
+@font-face {
+  font-family: 'Inter';
+  src: local('Inter'), url(./assets/fonts/Inter.ttf) format('truetype');
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
+}
+
 .storybook-button {
-  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 700;
-  border: 0;
-  border-radius: 3em;
-  cursor: pointer;
-  display: inline-block;
-  line-height: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  border: 0px;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
 }
+
 .storybook-button--primary {
-  color: white;
-  background-color: #1ea7fd;
+  color: #FFFFFF;
 }
+
+.storybook-button--primary.idle {
+  background: #6057F0;
+}
+
+.storybook-button--primary.hover {
+  background: rgba(96, 87, 240, 0.9);
+}
+
+.storybook-button--primary.active {
+  background: rgba(96, 87, 240, 0.85);
+}
+
 .storybook-button--secondary {
-  color: #333;
-  background-color: transparent;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
+  color: rgba(0, 0, 2, 0.7);
 }
+
+.storybook-button--secondary.darkMode {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.storybook-button--secondary.idle {
+  background: rgba(0, 0, 2, 0.04);
+}
+
+.storybook-button--secondary.idle.darkMode {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.storybook-button--secondary.hover {
+  background: rgba(0, 0, 2, 0.08);
+}
+
+.storybook-button--secondary.hover.darkMode {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.storybook-button--secondary.active {
+  background: rgba(0, 0, 2, 0.1);
+}
+
+.storybook-button--secondary.active.darkMode {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.disabled {
+  color: rgba(0, 0, 2, 0.25);
+  background: rgba(0, 0, 2, 0.04);
+}
+
+.disabled.darkMode {
+  color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.04);
+}
+
 .storybook-button--small {
-  font-size: 12px;
-  padding: 10px 16px;
+  font-size: 13px;
+  padding: 6px 10px;
+  gap: 8px;
 }
+
 .storybook-button--medium {
-  font-size: 14px;
-  padding: 11px 20px;
+  font-size: 13px;
+  padding: 8px 12px;
+  gap: 10px;
 }
+
 .storybook-button--large {
-  font-size: 16px;
-  padding: 12px 24px;
+  font-size: 13px;
+  padding: 10px 14px;
+  gap: 12px;
 }

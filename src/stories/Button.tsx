@@ -7,6 +7,14 @@ interface ButtonProps {
    */
   primary?: boolean;
   /**
+   * What state is the button in?
+   */
+  state?: 'idle' | 'hover' | 'active' | 'disabled';
+  /**
+   * Is this dark mode?
+   */
+  darkMode?: boolean;
+  /**
    * What background color to use
    */
   backgroundColor?: string;
@@ -30,15 +38,18 @@ interface ButtonProps {
 export const Button = ({
   primary = false,
   size = 'medium',
+  state = 'idle',
+  darkMode = false,
   backgroundColor,
   label,
   ...props
 }: ButtonProps) => {
   const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
+  const darkStyle = darkMode ? 'darkMode' : '';
   return (
     <button
       type="button"
-      className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
+    className={['storybook-button', `storybook-button--${size}`, mode, `${state}`, `${darkStyle}`].join(' ')}
       style={{ backgroundColor }}
       {...props}
     >
