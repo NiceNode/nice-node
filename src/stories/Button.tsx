@@ -23,6 +23,14 @@ interface ButtonProps {
    */
   size?: 'small' | 'medium' | 'large';
   /**
+   * Text only, with icon, or just icon?
+   */
+  variant?: 'text' | 'icon-left' | 'icon-right' | 'icon';
+  /**
+   * Which icon? // TODO: Change this to drop down eventually
+   */
+  icon?: 'Settings' | 'Home';
+  /**
    * Button contents
    */
   label: string;
@@ -40,6 +48,8 @@ export const Button = ({
   size = 'medium',
   state = 'idle',
   darkMode = false,
+  variant = 'text',
+  icon,
   backgroundColor,
   label,
   ...props
@@ -49,11 +59,16 @@ export const Button = ({
   return (
     <button
       type="button"
-    className={['storybook-button', `storybook-button--${size}`, mode, `${state}`, `${darkStyle}`].join(' ')}
+      className={['storybook-button', `storybook-button--${size}`, mode, `${state}`, `${darkStyle}`, `${variant}`].join(' ')}
       style={{ backgroundColor }}
       {...props}
     >
-      {label}
+      {variant !== 'text' &&
+        <span className={['storybook-button-icon', `${variant}`].join(' ')}>i</span>
+      }
+      {variant !== 'icon' &&
+        <span className={['storybook-button-text', `${variant}`].join(' ')}>{label}</span>
+      }
     </button>
   );
 };
