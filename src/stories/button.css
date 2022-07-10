@@ -12,6 +12,7 @@
   align-items: center;
   border-radius: 5px;
   border: 0px;
+  gap: 6px;
 
   font-family: 'Inter';
   font-style: normal;
@@ -24,16 +25,32 @@
   color: #FFFFFF;
 }
 
+.storybook-button--primary .storybook-button-icon {
+  background-color: #FFFFFF;
+}
+
 .storybook-button--primary.idle {
   background: #6057F0;
+}
+
+.storybook-button--primary.idle.darkMode {
+  background: #766EF2;
 }
 
 .storybook-button--primary.hover {
   background: rgba(96, 87, 240, 0.9);
 }
 
+.storybook-button--primary.hover.darkMode {
+  background: #766EF2E5;
+}
+
 .storybook-button--primary.active {
   background: rgba(96, 87, 240, 0.85);
+}
+
+.storybook-button--primary.active.darkMode {
+  background: #766EF2D9
 }
 
 .storybook-button--secondary {
@@ -48,24 +65,52 @@
   background: rgba(0, 0, 2, 0.04);
 }
 
+.storybook-button--secondary.idle .storybook-button-icon {
+  background-color: rgba(0, 0, 2, 0.7);
+}
+
 .storybook-button--secondary.idle.darkMode {
   background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.storybook-button--secondary.idle.darkMode .storybook-button-icon {
+  background-color: rgba(255, 255, 255, 0.85);
 }
 
 .storybook-button--secondary.hover {
   background: rgba(0, 0, 2, 0.08);
 }
 
+.storybook-button--secondary.hover .storybook-button-icon {
+  background-color: rgba(0, 0, 2, 0.7);
+}
+
 .storybook-button--secondary.hover.darkMode {
   background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.storybook-button--secondary.hover.darkMode .storybook-button-icon {
+  background-color: rgba(255, 255, 255, 0.85);
 }
 
 .storybook-button--secondary.active {
   background: rgba(0, 0, 2, 0.1);
+  color: rgba(0, 0, 2, 0.85);
+}
+
+.storybook-button--secondary.active .storybook-button-icon {
+  background-color: rgba(0, 0, 2, 0.85);
 }
 
 .storybook-button--secondary.active.darkMode {
   background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.storybook-button--secondary.active.darkMode .storybook-button-icon {
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .disabled {
@@ -73,15 +118,22 @@
   background: rgba(0, 0, 2, 0.04);
 }
 
+.disabled .storybook-button-icon {
+  background: rgba(0, 0, 2, 0.25);
+}
+
 .disabled.darkMode {
   color: rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.04);
 }
 
+.disabled.darkMode .storybook-button-icon {
+  background: rgba(255, 255, 255, 0.25);
+}
+
 .storybook-button--small {
   font-size: 13px;
   padding: 6px 10px;
-  gap: 8px;
 }
 
 .storybook-button--small.icon {
@@ -91,7 +143,6 @@
 .storybook-button--medium {
   font-size: 13px;
   padding: 8px 12px;
-  gap: 10px;
 }
 
 .storybook-button--medium.icon {
@@ -101,7 +152,6 @@
 .storybook-button--large {
   font-size: 13px;
   padding: 10px 14px;
-  gap: 12px;
 }
 
 .storybook-button--large.icon {
@@ -109,6 +159,9 @@
 }
 
 .storybook-button-icon {
+  -webkit-mask-size: cover;
+  mask-size: cover;
+
   width: 16px;
   height: 16px;
 

@@ -29,7 +29,7 @@ interface ButtonProps {
   /**
    * Which icon? // TODO: Change this to drop down eventually
    */
-  icon?: 'Settings' | 'Home';
+  icon?: 'settings' | 'play';
   /**
    * Button contents
    */
@@ -49,7 +49,7 @@ export const Button = ({
   state = 'idle',
   darkMode = false,
   variant = 'text',
-  icon,
+  icon = 'settings',
   backgroundColor,
   label,
   ...props
@@ -64,7 +64,10 @@ export const Button = ({
       {...props}
     >
       {variant !== 'text' &&
-        <span className={['storybook-button-icon', `${variant}`].join(' ')}>i</span>
+        <i style={{
+          WebkitMaskImage: 'url(static/media/src/stories/assets/icons/' + icon + '.svg)',
+          maskImage: 'url(static/media/src/stories/assets/icons/' + icon + '.svg)',
+        }} className={['storybook-button-icon', `${variant}`].join(' ')}></i>
       }
       {variant !== 'icon' &&
         <span className={['storybook-button-text', `${variant}`].join(' ')}>{label}</span>
