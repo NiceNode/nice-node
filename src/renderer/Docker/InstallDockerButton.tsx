@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import electron from '../electronGlobal';
 import { useGetIsDockerInstalledQuery } from '../state/settingsService';
 
 const InstallDockerButton = () => {
+  const { t } = useTranslation();
   const [sDockerInstallStatus, setDockerInstallStatus] = useState<string>();
   const qIsDockerInstalled = useGetIsDockerInstalledQuery();
   const isDockerInstalled = qIsDockerInstalled?.data;
@@ -18,9 +20,7 @@ const InstallDockerButton = () => {
         type="button"
         onClick={async () => {
           console.log('calling installDocker');
-          setDockerInstallStatus(
-            'Installing... (this may take 5 or more minutes). There will be a password prompt on Mac and a pop-up on Windows to give permissions to install Docker.'
-          );
+          setDockerInstallStatus(t('dockerInstallingMessage'));
           const installResult = await electron.installDocker();
           if (installResult?.error) {
             setDockerInstallStatus(`Error: ${installResult.error}`);
@@ -39,11 +39,13 @@ const InstallDockerButton = () => {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          Install Docker
+          {t('Install Docker')}
         </div>
       </button>
       {sDockerInstallStatus !== undefined && (
-        <div>Docker install status: {sDockerInstallStatus}</div>
+        <div>
+          {t('dockerInstallStatus')} {sDockerInstallStatus}
+        </div>
       )}
     </>
   );

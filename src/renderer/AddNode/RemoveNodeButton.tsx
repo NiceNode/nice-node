@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { MdRemoveCircleOutline } from 'react-icons/md';
 import ConfirmRemoveNode from './ConfirmRemoveNode';
 import Node from '../../common/node';
 
 const RemoveNodeButton = (props: { node: Node }) => {
+  const { t } = useTranslation();
   const [sIsModalOpenConfirmRemoveNode, setIsModalOpenConfirmRemoveNode] =
     useState<boolean>(false);
 
@@ -22,7 +24,7 @@ const RemoveNodeButton = (props: { node: Node }) => {
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <MdRemoveCircleOutline style={{ marginRight: 5 }} />
-          Remove
+          {t('Remove')}
         </div>
       </button>
       {node && (

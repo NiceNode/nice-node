@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { updateSelectedNodeId } from '../state/node';
 import { NodeSpecification } from '../../common/nodeSpec';
 import electron from '../electronGlobal';
@@ -13,6 +15,7 @@ type Props = {
 };
 
 const ConfirmAddNode = (props: Props) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { isOpen, onConfirm, onCancel, nodeSpec } = props;
   if (!nodeSpec) {
@@ -31,7 +34,7 @@ const ConfirmAddNode = (props: Props) => {
   return (
     <Modal
       isOpen={isOpen}
-      title={`Add ${displayName}`}
+      title={`${t('Add Node')} ${displayName}`}
       onClickCloseButton={onCancel}
     >
       <div
@@ -43,14 +46,14 @@ const ConfirmAddNode = (props: Props) => {
         </div>
         {category}
       </div>
-      <div>The node will not be started yet.</div>
+      <div>{t('nodeNotStartedYet')}</div>
       <div>
         <button type="button" onClick={onConfirmAddSpecificNode}>
-          <span>Confirm</span>
+          <span>{t('Confirm')}</span>
         </button>
         &nbsp;
         <button type="button" onClick={onCancel}>
-          <span>Cancel</span>
+          <span>{t('Cancel')}</span>
         </button>
       </div>
     </Modal>

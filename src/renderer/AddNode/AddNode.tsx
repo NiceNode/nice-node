@@ -106,7 +106,7 @@ const AddNode = () => {
 
       <Modal
         isOpen={sIsModalOpenAddNode}
-        title="Add Node"
+        title={t('Add Node')}
         onClickCloseButton={() => setIsModalOpenAddNode(false)}
       >
         <div>

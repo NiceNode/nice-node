@@ -42,6 +42,8 @@ const LanguageSelect = () => {
       options={[
         { label: 'English', value: 'en' },
         { label: 'Español', value: 'es' },
+        { label: 'French', value: 'fr' },
+        { label: 'German', value: 'de' },
         { label: 'Japanese', value: 'ja' },
       ]}
       onChange={onChangeLanguage}
