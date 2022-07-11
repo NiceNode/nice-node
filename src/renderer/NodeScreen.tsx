@@ -72,7 +72,7 @@ const NodeScreen = () => {
           {t('Type')}: {category} Node
         </h4>
         <h3>
-          {t('Status')}: {status}
+          {t('Status')}: {t(status)}
         </h3>
       </div>
       <div className="Hello">

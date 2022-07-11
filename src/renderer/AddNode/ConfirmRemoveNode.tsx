@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { MdDelete } from 'react-icons/md';
+import { useTranslation } from 'react-i18next';
 
 import electron from '../electronGlobal';
 import { Modal } from '../Modal';
@@ -14,6 +15,7 @@ type Props = {
 };
 
 const RemoveNode = (props: Props) => {
+  const { t } = useTranslation();
   const [sShouldDeleteNodeStorage, setShouldDeleteNodeStorage] =
     useState<boolean>(false);
   const [sError, setError] = useState<string>('');
@@ -41,7 +43,7 @@ const RemoveNode = (props: Props) => {
   return (
     <Modal
       isOpen={isOpen}
-      title={`Remove ${displayName}?`}
+      title={`${t('Remove')} ${displayName}?`}
       onClickCloseButton={onCancel}
     >
       <div
@@ -92,12 +94,12 @@ const RemoveNode = (props: Props) => {
       >
         <button type="button" onClick={onConfirmRemoveNode}>
           <span>
-            Confirm {sShouldDeleteNodeStorage ? 'and delete data' : ''}
+            {t('Confirm')} {sShouldDeleteNodeStorage ? 'and delete data' : ''}
           </span>
         </button>
         &nbsp;
         <button type="button" onClick={onCancel}>
-          <span>Cancel</span>
+          <span>{t('Cancel')}</span>
         </button>
       </div>
     </Modal>

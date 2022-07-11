@@ -3,8 +3,10 @@ import { initReactI18next } from 'react-i18next';
 
 // import Backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import deTranslations from '../../assets/locales/de/translation.json';
 import enTranslations from '../../assets/locales/en/translation.json';
 import esTranslations from '../../assets/locales/es/translation.json';
+import frTranslations from '../../assets/locales/fr/translation.json';
 import jaTranslations from '../../assets/locales/ja/translation.json';
 // don't want to use this?
 // have a look at the Quick start guide
@@ -30,11 +32,17 @@ i18n
       escapeValue: false, // not needed for react as it escapes by default
     },
     resources: {
+      de: {
+        translation: deTranslations,
+      },
       en: {
         translation: enTranslations,
       },
       es: {
         translation: esTranslations,
+      },
+      fr: {
+        translation: frTranslations,
       },
       ja: {
         translation: jaTranslations,
