@@ -34,3 +34,6 @@ npm-debug.log.*
 
 # Test file i/o
 src/__tests__/node/NiceNode/*
+
+# storybook build files
+storybook-static
