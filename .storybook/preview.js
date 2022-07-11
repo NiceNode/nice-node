@@ -1,3 +1,6 @@
+// Todo: Import redesign theme
+//  ex. import "../src/renderer/App.css"
+
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
