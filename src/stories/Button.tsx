@@ -1,8 +1,7 @@
-import React from 'react';
 import { ICONS } from './assets/icons';
 import './button.css';
 
-interface ButtonProps {
+export interface ButtonProps {
   /**
    * Is this the principal call to action on the page?
    */
