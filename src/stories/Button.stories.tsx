@@ -42,9 +42,3 @@ SecondaryMedium.args = {
   size: 'medium',
   label: 'Button',
 };
-
-export const SecondarySmallDark = Template.bind({});
-SecondarySmallDark.args = {
-  size: 'small',
-  label: 'Button',
-};

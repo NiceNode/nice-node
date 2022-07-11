@@ -1,4 +1,5 @@
 import React from 'react';
+import { ICONS } from './assets/icons';
 import './button.css';
 
 interface ButtonProps {
@@ -66,10 +67,11 @@ export const Button = ({
     >
       {variant !== 'text' &&
         <i style={{
-          WebkitMaskImage: 'url(static/media/src/stories/assets/icons/' + icon + '.svg)',
-          maskImage: 'url(static/media/src/stories/assets/icons/' + icon + '.svg)',
+          WebkitMaskImage: "url(" + ICONS[icon] + ")",
+          maskImage: "url(" + ICONS[icon] + ")",
         }} className={['storybook-button-icon', `${variant}`].join(' ')}></i>
       }
+
       {variant !== 'icon' &&
         <span className={['storybook-button-text', `${variant}`].join(' ')}>{label}</span>
       }
