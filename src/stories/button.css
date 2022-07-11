@@ -21,35 +21,32 @@
   line-height: 16px;
 }
 
-.storybook-button--primary {
-  color: #FFFFFF;
-}
-
 .storybook-button--primary .storybook-button-icon {
   background-color: #FFFFFF;
 }
 
-.storybook-button--primary.idle {
+.storybook-button--primary {
   background: #6057F0;
+  color: #FFFFFF;
 }
 
-.storybook-button--primary.idle.darkMode {
+.storybook-button--primary.darkMode {
   background: #766EF2;
 }
 
-.storybook-button--primary.hover {
+.storybook-button--primary:hover:not([disabled]) {
   background: rgba(96, 87, 240, 0.9);
 }
 
-.storybook-button--primary.hover.darkMode {
+.storybook-button--primary.darkMode:hover:not([disabled]) {
   background: #766EF2E5;
 }
 
-.storybook-button--primary.active {
+.storybook-button--primary:active:not([disabled]) {
   background: rgba(96, 87, 240, 0.85);
 }
 
-.storybook-button--primary.active.darkMode {
+.storybook-button--primary.darkMode:active:not([disabled]) {
   background: #766EF2D9
 }
 
@@ -61,24 +58,24 @@
   color: rgba(255, 255, 255, 0.85);
 }
 
-.storybook-button--secondary.idle {
+.storybook-button--secondary {
   background: rgba(0, 0, 2, 0.04);
 }
 
-.storybook-button--secondary.idle .storybook-button-icon {
+.storybook-button--secondary .storybook-button-icon {
   background-color: rgba(0, 0, 2, 0.7);
 }
 
-.storybook-button--secondary.idle.darkMode {
+.storybook-button--secondary.darkMode {
   background: rgba(255, 255, 255, 0.04);
   color: rgba(255, 255, 255, 0.85);
 }
 
-.storybook-button--secondary.idle.darkMode .storybook-button-icon {
+.storybook-button--secondary.darkMode .storybook-button-icon {
   background-color: rgba(255, 255, 255, 0.85);
 }
 
-.storybook-button--secondary.hover {
+.storybook-button--secondary:hover:not([disabled]) {
   background: rgba(0, 0, 2, 0.08);
 }
 
@@ -86,48 +83,48 @@
   background-color: rgba(0, 0, 2, 0.7);
 }
 
-.storybook-button--secondary.hover.darkMode {
+.storybook-button--secondary.darkMode:hover:not([disabled]) {
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.85);
 }
 
-.storybook-button--secondary.hover.darkMode .storybook-button-icon {
+.storybook-button--secondary.darkMode:hover:not([disabled]) .storybook-button-icon {
   background-color: rgba(255, 255, 255, 0.85);
 }
 
-.storybook-button--secondary.active {
+.storybook-button--secondary:active:not([disabled]) {
   background: rgba(0, 0, 2, 0.1);
   color: rgba(0, 0, 2, 0.85);
 }
 
-.storybook-button--secondary.active .storybook-button-icon {
+.storybook-button--secondary:active:not([disabled]) .storybook-button-icon {
   background-color: rgba(0, 0, 2, 0.85);
 }
 
-.storybook-button--secondary.active.darkMode {
+.storybook-button--secondary.darkMode:active:not([disabled]) {
   background: rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.9);
 }
 
-.storybook-button--secondary.active.darkMode .storybook-button-icon {
+.storybook-button--secondary.darkMode:active:not([disabled]) .storybook-button-icon {
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-.disabled {
+.storybook-button:disabled {
   color: rgba(0, 0, 2, 0.25);
   background: rgba(0, 0, 2, 0.04);
 }
 
-.disabled .storybook-button-icon {
+.storybook-button:disabled .storybook-button-icon {
   background: rgba(0, 0, 2, 0.25);
 }
 
-.disabled.darkMode {
+.storybook-button.darkMode:disabled {
   color: rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.04);
 }
 
-.disabled.darkMode .storybook-button-icon {
+.storybook-button.darkMode:disabled .storybook-button-icon {
   background: rgba(255, 255, 255, 0.25);
 }
 

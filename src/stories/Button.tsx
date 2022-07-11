@@ -9,7 +9,7 @@ interface ButtonProps {
   /**
    * What state is the button in?
    */
-  state?: 'idle' | 'hover' | 'active' | 'disabled';
+  disabled?: boolean;
   /**
    * Is this dark mode?
    */
@@ -46,7 +46,7 @@ interface ButtonProps {
 export const Button = ({
   primary = false,
   size = 'medium',
-  state = 'idle',
+  disabled = false,
   darkMode = false,
   variant = 'text',
   icon = 'settings',
@@ -59,7 +59,8 @@ export const Button = ({
   return (
     <button
       type="button"
-      className={['storybook-button', `storybook-button--${size}`, mode, `${state}`, `${darkStyle}`, `${variant}`].join(' ')}
+      className={['storybook-button', `storybook-button--${size}`, mode, `${darkStyle}`, `${variant}`].join(' ')}
+      disabled={disabled}
       style={{ backgroundColor }}
       {...props}
     >
