@@ -1,5 +1,4 @@
-// Todo: Import redesign theme
-//  ex. import "../src/renderer/App.css"
+import '../src/renderer/sass/components/button.css';
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },

@@ -1,10 +1,3 @@
-@font-face {
-  font-family: 'Inter';
-  src: local('Inter'), url(./assets/fonts/Inter.ttf) format('truetype');
-  /* other formats include: 'woff2', 'truetype, 'opentype',
-                            'embedded-opentype', and 'svg' */
-}
-
 .storybook-button {
   display: flex;
   flex-direction: row;
@@ -22,16 +15,16 @@
 }
 
 .storybook-button--primary .storybook-button-icon {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 .storybook-button--primary {
-  background: #6057F0;
-  color: #FFFFFF;
+  background: #6057f0;
+  color: #ffffff;
 }
 
 .storybook-button--primary.darkMode {
-  background: #766EF2;
+  background: #766ef2;
 }
 
 .storybook-button--primary:hover:not([disabled]) {
@@ -39,7 +32,7 @@
 }
 
 .storybook-button--primary.darkMode:hover:not([disabled]) {
-  background: #766EF2E5;
+  background: #766ef2e5;
 }
 
 .storybook-button--primary:active:not([disabled]) {
@@ -47,7 +40,7 @@
 }
 
 .storybook-button--primary.darkMode:active:not([disabled]) {
-  background: #766EF2D9
+  background: #766ef2d9;
 }
 
 .storybook-button--secondary {
@@ -85,7 +78,8 @@
   color: rgba(255, 255, 255, 0.85);
 }
 
-.storybook-button--secondary.darkMode:hover:not([disabled]) .storybook-button-icon {
+.storybook-button--secondary.darkMode:hover:not([disabled])
+  .storybook-button-icon {
   background-color: rgba(255, 255, 255, 0.85);
 }
 
@@ -103,7 +97,8 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
-.storybook-button--secondary.darkMode:active:not([disabled]) .storybook-button-icon {
+.storybook-button--secondary.darkMode:active:not([disabled])
+  .storybook-button-icon {
   background-color: rgba(255, 255, 255, 0.9);
 }
 
