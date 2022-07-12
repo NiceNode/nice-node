@@ -1,4 +1,4 @@
-import { ICONS } from '../assets/icons';
+import { ICONS } from '../../assets/icons';
 
 export interface ButtonProps {
   /**
