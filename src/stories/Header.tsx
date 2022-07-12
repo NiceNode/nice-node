@@ -1,4 +1,4 @@
-import { Button } from '../renderer/Generics/Button';
+import { Button } from '../renderer/Generics/redesign/Button';
 import './header.css';
 
 type User = {
