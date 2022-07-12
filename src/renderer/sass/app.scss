@@ -1,9 +1,11 @@
 // Abstract files
-@import 'abstracts/all' // Core files
-  @import 'core/all';
+@import 'abstracts/_variables';
+
+// Core files
+@import 'core/_typography';
 
 // Components
-@import 'components/all';
+@import 'components/_button';
 
 // // Layout
 // @import "layout/all";
