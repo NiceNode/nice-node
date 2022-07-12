@@ -1,4 +1,4 @@
-import '../src/renderer/sass/components/button.css';
+import '../src/renderer/sass/main.scss';
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
