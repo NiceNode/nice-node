@@ -7,6 +7,7 @@ NiceNode’s mission is to simplify running nodes
 <strong>Why is it important for users to run nodes?</strong> Read here https://www.notion.so/nicenode/NiceNode-Home-5c48ccbc50c4416cbca0ce31c037971d
 
 [![Downloads](https://badgen.net/badge/icon/alpha?label=downloads)](https://www.nicenode.xyz/downloads) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/k3dpYU4Pn9)
+[![gitpoap badge](https://public-api.gitpoap.io/v1/repo/jgresham/nice-node/badge)](https://www.gitpoap.io/gh/jgresham/nice-node)
 
 ![NiceNodeScreenshot](https://www.nicenode.xyz/img/screenshot.png 'NiceNodeScreenshot')
 
