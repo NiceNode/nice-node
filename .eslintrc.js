@@ -10,6 +10,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     '@typescript-eslint/lines-between-class-members': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'react/require-default-props': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

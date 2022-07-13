@@ -4,31 +4,31 @@ export interface ButtonProps {
   /**
    * Is this the principal call to action on the page?
    */
-  primary: boolean;
+  primary?: boolean;
   /**
    * What state is the button in?
    */
-  disabled: boolean;
+  disabled?: boolean;
   /**
    * Is this dark mode?
    */
-  darkMode: boolean;
+  darkMode?: boolean;
   /**
    * What background color to use
    */
-  backgroundColor: string;
+  backgroundColor?: string;
   /**
    * How large should the button be?
    */
-  size: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large';
   /**
    * Text only, with icon, or just icon?
    */
-  variant: 'text' | 'icon-left' | 'icon-right' | 'icon';
+  variant?: 'text' | 'icon-left' | 'icon-right' | 'icon';
   /**
    * Which icon? // TODO: Change this to drop down eventually
    */
-  icon: 'settings' | 'play';
+  icon?: 'settings' | 'play';
   /**
    * Button contents
    */
@@ -36,7 +36,7 @@ export interface ButtonProps {
   /**
    * Optional click handler
    */
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 /**
