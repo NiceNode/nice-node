@@ -45,6 +45,7 @@ const LanguageSelect = () => {
         { label: 'French', value: 'fr' },
         { label: 'German', value: 'de' },
         { label: 'Japanese', value: 'ja' },
+        { label: 'Vietnamese', value: 'vi' },
       ]}
       onChange={onChangeLanguage}
       menuPlacement="top"

@@ -8,6 +8,7 @@ import enTranslations from '../../assets/locales/en/translation.json';
 import esTranslations from '../../assets/locales/es/translation.json';
 import frTranslations from '../../assets/locales/fr/translation.json';
 import jaTranslations from '../../assets/locales/ja/translation.json';
+import viTranslations from '../../assets/locales/vi/translation.json';
 // don't want to use this?
 // have a look at the Quick start guide
 // for passing in lng and translations on init
@@ -46,6 +47,9 @@ i18n
       },
       ja: {
         translation: jaTranslations,
+      },
+      vi: {
+        translation: viTranslations,
       },
     },
   });
