@@ -41,6 +41,7 @@ const LanguageSelect = () => {
       isMulti={false}
       options={[
         { label: 'English', value: 'en' },
+        { label: 'Chinese', value: 'cn' },
         { label: 'Español', value: 'es' },
         { label: 'French', value: 'fr' },
         { label: 'German', value: 'de' },
