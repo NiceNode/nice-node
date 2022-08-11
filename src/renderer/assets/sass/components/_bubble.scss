@@ -1,0 +1,19 @@
+.storybook-bubble {
+  flex:none;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 2px 6px;
+  gap: 10px;
+
+  font-family: 'Inter';
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 14px;
+  text-align: center;
+  color: #FFFFFF;
+  max-width: fit-content;
+
+  background: #EB493D;
+  border-radius: 9px;
+}
