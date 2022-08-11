@@ -2,14 +2,6 @@ import { useState } from 'react';
 
 export interface ToggleProps {
   /**
-   * What background color to use
-   */
-  backgroundColor?: string;
-  /**
-   * Button contents
-   */
-  label?: string | number;
-  /**
    * Is it disabled?
    */
   disabled?: boolean;
@@ -26,41 +18,24 @@ export interface ToggleProps {
 /**
  * Primary UI component for user interaction
  */
-export const Toggle = ({
-  backgroundColor,
-  label = '',
-  checked,
-  disabled,
-  onChange,
-  ...props
-}: ToggleProps) => {
+export const Toggle = ({ checked, disabled, onChange }: ToggleProps) => {
   const [isChecked, setChecked] = useState(checked);
   return (
-    <div className="storybook-toggle">
-      {/* {label && (
-        <label
-          className="storybook-toggle-label"
-          htmlFor="flexSwitchCheckDefault"
-        >
-          {label}
-        </label>
-      )} */}
-      <input
-        {...{
-          className: 'storybook-toggle-input',
-          type: 'checkbox',
-          role: 'switch',
-          id: 'flexSwitchCheckDefault',
-          defaultChecked: isChecked,
-          ...(disabled && { disabled }),
-          onChange: () => {
-            setChecked(!isChecked);
-            if (onChange) {
-              onChange(!isChecked);
-            }
-          },
-        }}
-      />
-    </div>
+    <input
+      {...{
+        className: 'storybook-toggle-input',
+        type: 'checkbox',
+        role: 'switch',
+        id: 'flexSwitchCheckDefault',
+        defaultChecked: isChecked,
+        ...(disabled && { disabled }),
+        onChange: () => {
+          setChecked(!isChecked);
+          if (onChange) {
+            onChange(!isChecked);
+          }
+        },
+      }}
+    />
   );
 };
