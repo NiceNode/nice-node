@@ -6,20 +6,20 @@ export interface BubbleProps {
   /**
    * Button contents
    */
-  label: string | number;
+  count: number;
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const Bubble = ({ backgroundColor, label, ...props }: BubbleProps) => {
+export const Bubble = ({ backgroundColor, count, ...props }: BubbleProps) => {
   return (
     <div
       className={['storybook-bubble'].join(' ')}
       style={{ backgroundColor }}
       {...props}
     >
-      {label}
+      {count}
     </div>
   );
 };

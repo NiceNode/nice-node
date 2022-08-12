@@ -1,4 +1,4 @@
-import { ICONS } from '../../assets/icons';
+import { Icon } from './Icon';
 
 export interface ButtonProps {
   /**
@@ -26,9 +26,9 @@ export interface ButtonProps {
    */
   variant?: 'text' | 'icon-left' | 'icon-right' | 'icon';
   /**
-   * Which icon? // TODO: Change this to drop down eventually
+   * Which iconId? // TODO: Change this to drop down eventually
    */
-  icon?: 'settings' | 'play';
+  iconId?: 'settings' | 'play';
   /**
    * Button contents
    */
@@ -48,7 +48,7 @@ export const Button = ({
   disabled = false,
   darkMode = false,
   variant = 'text',
-  icon = 'settings',
+  iconId = 'settings',
   backgroundColor,
   label,
   ...props
@@ -71,15 +71,7 @@ export const Button = ({
       style={{ backgroundColor }}
       {...props}
     >
-      {variant !== 'text' && (
-        <i
-          style={{
-            WebkitMaskImage: `url(${ICONS[icon]})`,
-            maskImage: `url(${ICONS[icon]})`,
-          }}
-          className={['storybook-button-icon', `${variant}`].join(' ')}
-        />
-      )}
+      {variant !== 'text' && <Icon iconId={iconId} variant={variant} />}
 
       {variant !== 'icon' && (
         <span className={['storybook-button-text', `${variant}`].join(' ')}>

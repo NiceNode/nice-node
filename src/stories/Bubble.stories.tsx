@@ -18,5 +18,5 @@ const Template: ComponentStory<typeof Bubble> = (args) => <Bubble {...args} />;
 export const Primary = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
-  label: 1,
+  count: 23,
 };
