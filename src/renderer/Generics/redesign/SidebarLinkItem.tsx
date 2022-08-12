@@ -42,7 +42,7 @@ export const SidebarLinkItem = ({
       <div className="storybook-sidebar-link-item-label">{label}</div>
       {count && (
         <div className="storybook-sidebar-link-item-bubble">
-          <Bubble label={count} />
+          <Bubble count={count} />
         </div>
       )}
     </div>
