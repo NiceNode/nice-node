@@ -12,22 +12,26 @@
         "httpCorsDomains": "nice-node://,http://localhost",
         "webSockets": "Enabled",
         "httpVirtualHosts": "localhost,host.docker.internal"
+      },
+      "docker": {
+        "containerVolumePath": "/root/.ethereum",
+        "raw": "-p 30303:30303 -p 8545:8545 -p 8546:8546"
       }
     },
     "binaryDownload": {
       "type": "static",
       "darwin": {
-        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.20-8f2416a8.tar.gz"
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.23-d901d853.tar.gz"
       },
       "linux": {
-        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.20-8f2416a8.tar.gz",
-        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-linux-386-1.10.20-8f2416a8.tar.gz",
-        "arm64": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.10.20-8f2416a8.tar.gz",
-        "arm7": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm7-1.10.20-8f2416a8.tar.gz"
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.10.23-d901d853.tar.gz",
+        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-linux-386-1.10.23-d901d853.tar.gz",
+        "arm64": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm64-1.10.23-d901d853.tar.gz",
+        "arm7": "https://gethstore.blob.core.windows.net/builds/geth-linux-arm7-1.10.23-d901d853.tar.gz"
       },
       "windows": {
-        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.20-8f2416a8.zip",
-        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-windows-386-1.10.20-8f2416a8.zip"
+        "amd64": "https://gethstore.blob.core.windows.net/builds/geth-windows-amd64-1.10.23-d901d853.zip",
+        "amd32": "https://gethstore.blob.core.windows.net/builds/geth-windows-386-1.10.23-d901d853.zip"
       }
     }
   },
@@ -165,7 +169,7 @@
     "httpPort": {
       "displayName": "HTTP-RPC server listening port",
       "cliConfigPrefix": "--http.port ",
-      "defaultValue": "8546",
+      "defaultValue": "8545",
       "uiControl": {
         "type": "text"
       },
