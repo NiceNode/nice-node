@@ -1,0 +1,96 @@
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.storybook-node {
+  position: relative;
+
+  &.small {
+    width: 32px;
+    height: 32px;
+
+    .storybook-node-image {
+      width: 32px;
+      height: 32px;
+      background-size: 32px;
+    }
+
+  }
+
+  &.medium {
+    width: 40px;
+    height: 40px;
+
+    .storybook-node-image {
+      width: 40px;
+      height: 40px;
+      background-size: 40px;
+    }
+  }
+
+  &.large {
+    width: 56px;
+    height: 56px;
+
+    .storybook-node-image {
+      width: 56px;
+      height: 56px;
+      background-size: 56px;
+    }
+  }
+}
+
+.storybook-node-status {
+  box-sizing: border-box;
+
+  position: absolute;
+  left: 75%;
+  right: 0%;
+  top: 0%;
+  bottom: 75%;
+
+  &.sync {
+    animation: rotation 2s infinite linear;
+  }
+
+  &.small {
+    width: 8px;
+    height: 8px;
+    background-size: 8px;
+
+    &.sync {
+      width: 10px;
+      height: 8px;
+      background-size: 10px 8px;
+    }
+  }
+
+  &.medium {
+    width: 10px;
+    height: 10px;
+    background-size: 10px;
+
+    &.sync {
+      width: 10px;
+      height: 8px;
+      background-size: 10px 8px;
+    }
+  }
+
+  &.large {
+    width: 14px;
+    height: 14px;
+    background-size: 14px;
+
+    &.sync {
+      width: 17px;
+      height: 13px;
+      background-size: 17px 13px;
+    }
+  }
+}

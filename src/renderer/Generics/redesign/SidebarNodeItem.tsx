@@ -1,23 +1,27 @@
 import { Bubble } from './Bubble';
 import { Icon } from './Icon';
 
-export interface SidebarLinkItemProps {
+export interface SidebarNodeItemProps {
   /**
-   * Button contents
+   * Node title
    */
-  label: string;
+  title: string;
   /**
-   * Button contents
+   * Node info
    */
-  count?: number;
+  info?: number;
   /**
    * Which icon? // TODO: Change this to drop down eventually
    */
-  iconId?: 'bell' | 'add' | 'preferences';
+  iconId?: 'ethereum' | 'ethereumValidator' | 'arbitrum';
   /**
    * Is this dark mode?
    */
   darkMode?: boolean;
+  /**
+   * What's the status?
+   */
+  status?: 'healthy' | 'warning' | 'error' | 'sync';
   /**
    * Optional click handler
    */
@@ -27,21 +31,22 @@ export interface SidebarLinkItemProps {
 /**
  * Primary UI component for user interaction
  */
-export const SidebarLinkItem = ({
+export const SidebarNodeItem = ({
   onClick,
   darkMode,
-  label,
-  count,
-  iconId = 'bell',
-}: SidebarLinkItemProps) => {
+  title,
+  info,
+  iconId,
+  status,
+}: SidebarNodeItemProps) => {
   const darkStyle = darkMode ? 'darkMode' : '';
   return (
     <div className={['storybook-sidebar-link-item', `${darkStyle}`].join(' ')}>
       <Icon iconId={iconId} />
-      <div className="storybook-sidebar-link-item-label">{label}</div>
-      {count && (
+      <div className="storybook-sidebar-link-item-title">{title}</div>
+      {info && (
         <div className="storybook-sidebar-link-item-bubble">
-          <Bubble count={count} />
+          <Bubble info={info} />
         </div>
       )}
     </div>

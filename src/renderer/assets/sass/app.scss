@@ -2,12 +2,14 @@
 @import 'abstracts/_variables';
 
 // Core files
+@import 'core/_reset';
 @import 'core/_typography';
 
 // Components
 @import 'components/_button';
 @import 'components/_bubble';
 @import 'components/_toggle';
+@import 'components/_nodeIcon';
 @import 'components/_sidebarLinkItem';
 
 // // Layout
