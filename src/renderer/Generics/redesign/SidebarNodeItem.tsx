@@ -1,5 +1,4 @@
-import { Bubble } from './Bubble';
-import { Icon } from './Icon';
+import { NodeIcon } from './NodeIcon';
 
 export interface SidebarNodeItemProps {
   /**
@@ -9,11 +8,11 @@ export interface SidebarNodeItemProps {
   /**
    * Node info
    */
-  info?: number;
+  info?: string;
   /**
    * Which icon? // TODO: Change this to drop down eventually
    */
-  iconId?: 'ethereum' | 'ethereumValidator' | 'arbitrum';
+  iconId: 'ethereum' | 'ethereumValidator' | 'arbitrum';
   /**
    * Is this dark mode?
    */
@@ -41,14 +40,12 @@ export const SidebarNodeItem = ({
 }: SidebarNodeItemProps) => {
   const darkStyle = darkMode ? 'darkMode' : '';
   return (
-    <div className={['storybook-sidebar-link-item', `${darkStyle}`].join(' ')}>
-      <Icon iconId={iconId} />
-      <div className="storybook-sidebar-link-item-title">{title}</div>
-      {info && (
-        <div className="storybook-sidebar-link-item-bubble">
-          <Bubble info={info} />
-        </div>
-      )}
+    <div className={['storybook-sidebar-node-item', `${darkStyle}`].join(' ')}>
+      <NodeIcon iconId={iconId} status={status} size="small" />
+      <div className="storybook-sidebar-node-item-container">
+        <div className="storybook-sidebar-node-item-title">{title}</div>
+        <div className="storybook-sidebar-node-item-info">{info}</div>
+      </div>
     </div>
   );
 };
