@@ -1,4 +1,6 @@
 import '../src/renderer/assets/sass/app.scss';
+import '../src/renderer/Generics/redesign/globalStyle.css';
+import RedesignContainer from "../src/renderer/Generics/redesign/RedesignContainer"
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -9,3 +11,11 @@ export const parameters = {
     },
   },
 }
+
+export const decorators = [
+  (Story) => (
+    <RedesignContainer>
+      <Story />
+    </RedesignContainer>
+  ),
+];

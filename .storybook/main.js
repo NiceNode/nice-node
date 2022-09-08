@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   "stories": ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
-  "addons": ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/addon-interactions"],
+  "addons": [path.resolve('./.storybook/vanilla-extract.js'), "@storybook/addon-links", "@storybook/addon-essentials", "@storybook/addon-interactions"],
   "framework": "@storybook/react",
   webpackFinal: async (config, { configType }) => {
     // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
