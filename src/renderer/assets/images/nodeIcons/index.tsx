@@ -1,4 +1,4 @@
-const ethereum = require('./ethereum.svg');
+const ethereum = require('./ethereum.png');
 const ethereumValidator = require('./ethereum.svg');
 const arbitrum = require('./ethereum.svg');
 const healthy = require('./healthy.svg');

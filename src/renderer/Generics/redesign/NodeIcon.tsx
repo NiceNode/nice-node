@@ -19,14 +19,9 @@ export interface NodeIconProps {
  * Primary UI component for user interaction
  */
 export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
+  const hasStatus = status ? 'status' : '';
   return (
     <div className={['storybook-node', `${size}`].join(' ')}>
-      <div
-        style={{
-          backgroundImage: `url(${NODE_ICONS[iconId]})`,
-        }}
-        className="storybook-node-image"
-      />
       {status && (
         <i
           style={{
@@ -37,6 +32,17 @@ export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
           )}
         />
       )}
+      <div
+        className={['storybook-node-icon', hasStatus, `${size}`].join(' ')}
+        style={{ backgroundColor: '#6DA3F9' }}
+      >
+        <i
+          style={{
+            backgroundImage: `url(${NODE_ICONS[iconId]})`,
+          }}
+          className={['storybook-node-image', `${size}`].join(' ')}
+        />
+      </div>
     </div>
   );
 };
