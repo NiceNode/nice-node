@@ -107,9 +107,18 @@
   right: 0;
   top: 0;
 
+  &.darkMode {
+    &.sync {
+      background-color: rgba(255, 255, 255, 1);
+    }
+  }
+
   &.sync {
     animation: rotation 2s infinite linear;
     right: -1px;
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    background-color: rgba(0, 0, 2, 0.95);
   }
 
   &.small {
@@ -142,10 +151,9 @@
     background-size: 14px;
 
     &.sync {
-      width: 17px;
+      width: 16px;
       height: 13px;
-      background-size: 17px 13px;
-      top: 1px;
+      background-size: 16px 13px;
     }
   }
 }

@@ -13,23 +13,38 @@ export interface NodeIconProps {
    * What size should the icon be?
    */
   size: 'small' | 'medium' | 'large';
+  /**
+   * Is this dark mode?
+   */
+  darkMode?: boolean;
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
+export const NodeIcon = ({ iconId, status, size, darkMode }: NodeIconProps) => {
   const hasStatus = status ? 'status' : '';
+  const darkStyle = darkMode ? 'darkMode' : '';
+  let imageProps = {};
+  if (status === 'sync') {
+    imageProps = {
+      WebkitMaskImage: `url(${NODE_ICONS[status]})`,
+      maskImage: `url(${NODE_ICONS[status]})`,
+    };
+  } else if (status) {
+    imageProps = { backgroundImage: `url(${NODE_ICONS[status]})` };
+  }
   return (
     <div className={['storybook-node', `${size}`].join(' ')}>
       {status && (
         <i
-          style={{
-            backgroundImage: `url(${NODE_ICONS[status]})`,
-          }}
-          className={['storybook-node-status', `${size}`, `${status}`].join(
-            ' '
-          )}
+          style={imageProps}
+          className={[
+            'storybook-node-status',
+            `${size}`,
+            `${status}`,
+            `${darkStyle}`,
+          ].join(' ')}
         />
       )}
       <div

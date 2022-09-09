@@ -41,7 +41,12 @@ export const SidebarNodeItem = ({
   const darkStyle = darkMode ? 'darkMode' : '';
   return (
     <div className={['storybook-sidebar-node-item', `${darkStyle}`].join(' ')}>
-      <NodeIcon iconId={iconId} status={status} size="small" />
+      <NodeIcon
+        iconId={iconId}
+        status={status}
+        darkMode={darkMode}
+        size="small"
+      />
       <div className="storybook-sidebar-node-item-container">
         <div className="storybook-sidebar-node-item-title">{title}</div>
         <div className="storybook-sidebar-node-item-info">{info}</div>
