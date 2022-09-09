@@ -27,11 +27,11 @@
     }
 
     &.medium {
-      -webkit-mask-image: radial-gradient(circle 10px at calc(100% - 5px) calc(100% - 35px), transparent 8px, #000 0);
+      -webkit-mask-image: radial-gradient(circle 10px at calc(100% - 5px) calc(100% - 35px), transparent 7px, #000 0);
     }
 
     &.large{
-      -webkit-mask-image: radial-gradient(circle 26px at calc(100% - 7px) calc(100% - 49px), transparent 11px, #000 0);
+      -webkit-mask-image: radial-gradient(circle 26px at calc(100% - 7px) calc(100% - 49px), transparent 10px, #000 0);
     }
   }
 }
