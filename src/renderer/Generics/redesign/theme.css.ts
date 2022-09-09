@@ -21,7 +21,7 @@ export const darkTheme = createTheme(vars, {
   },
 });
 
-export const brandText = style({
-  color: vars.color.font,
-  background: vars.color.background,
-});
+// export const brandText = style({
+//   color: vars.color.font,
+//   background: vars.color.background,
+// });

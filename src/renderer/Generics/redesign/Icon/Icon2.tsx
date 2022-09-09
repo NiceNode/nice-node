@@ -1,4 +1,5 @@
-import { ICONS, IconId } from '../../assets/images/icons';
+import { ICONS, IconId } from '../../../assets/images/icons';
+import { container } from './icon.css.ts';
 
 export interface IconProps {
   /**
@@ -16,12 +17,12 @@ export interface IconProps {
  */
 export const Icon = ({ iconId, variant = 'icon' }: IconProps) => {
   return (
-    <i
+    <div
       style={{
-        WebkitMaskImage: `url(${ICONS[iconId]})`,
-        maskImage: `url(${ICONS[iconId]})`,
+        background: `url(${ICONS[iconId]})`,
+        // maskImage: `url(${ICONS[iconId]})`,
       }}
-      className={['storybook-button-icon', `${variant}`].join(' ')}
+      className={container}
     />
   );
 };
