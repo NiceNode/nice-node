@@ -23,7 +23,8 @@ export const RadioButtonBackground = ({
         ' '
       )}
     >
-      {/* TODO: Modify the value/name here */}
+      {/* TODO: Add dark mode CSS */}
+      {/* TODO: Make value and name flexible to handle different data */}
       {/* TODO: Add click handle */}
       <input type="radio" name="gender" value="male" />
       <div className="value">{children}</div>

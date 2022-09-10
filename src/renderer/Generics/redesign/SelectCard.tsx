@@ -15,6 +15,10 @@ export interface SelectCardProps {
    */
   iconId: 'ethereum' | 'ethereumValidator' | 'arbitrum';
   /**
+   * Is this dark mode?
+   */
+  darkMode?: boolean;
+  /**
    * Optional click handler
    */
   onClick?: () => void;
@@ -28,17 +32,19 @@ export const SelectCard = ({
   title,
   info,
   iconId,
+  darkMode,
 }: SelectCardProps) => {
   return (
     <div className="storybook-select-card">
-      <RadioButtonBackground>
+      <RadioButtonBackground darkMode={darkMode}>
         <div className={['storybook-select-card-contents'].join(' ')}>
           <NodeIcon iconId={iconId} size="medium" />
           <div className="storybook-select-card-container">
-            {/* TODO: Vertical center align contents */}
+            {/* TODO: Vertical center align contents, fix height to 60px */}
             <div className="storybook-select-card-title">{title}</div>
             <div className="storybook-select-card-info">{info}</div>
           </div>
+          {/* TODO: Add Tag and dropdown options */}
         </div>
       </RadioButtonBackground>
     </div>
