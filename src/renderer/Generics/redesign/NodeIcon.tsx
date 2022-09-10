@@ -1,10 +1,15 @@
-import { NODE_ICONS } from '../../assets/images/nodeIcons';
+import {
+  NODE_ICONS,
+  IconId,
+  NODE_STATUS,
+  NODE_COLORS,
+} from '../../assets/images/nodeIcons';
 
 export interface NodeIconProps {
   /**
    * Which icon? // TODO: Change this to drop down eventually
    */
-  iconId: 'ethereum' | 'ethereumValidator' | 'arbitrum';
+  iconId: IconId;
   /**
    * What's the status?
    */
@@ -28,14 +33,15 @@ export const NodeIcon = ({ iconId, status, size, darkMode }: NodeIconProps) => {
   let imageProps = {};
   if (status === 'sync') {
     imageProps = {
-      WebkitMaskImage: `url(${NODE_ICONS[status]})`,
-      maskImage: `url(${NODE_ICONS[status]})`,
+      WebkitMaskImage: `url(${NODE_STATUS[status]})`,
+      maskImage: `url(${NODE_STATUS[status]})`,
     };
   } else if (status) {
-    imageProps = { backgroundImage: `url(${NODE_ICONS[status]})` };
+    imageProps = { backgroundImage: `url(${NODE_STATUS[status]})` };
   }
   return (
     <div className={['storybook-node', `${size}`].join(' ')}>
+      {/* TODO: Replace image with CSS, and add pulsating effect */}
       {status && (
         <i
           style={imageProps}
@@ -49,7 +55,7 @@ export const NodeIcon = ({ iconId, status, size, darkMode }: NodeIconProps) => {
       )}
       <div
         className={['storybook-node-icon', hasStatus, `${size}`].join(' ')}
-        style={{ backgroundColor: '#6DA3F9' }}
+        style={{ backgroundColor: NODE_COLORS[iconId] }}
       >
         <i
           style={{

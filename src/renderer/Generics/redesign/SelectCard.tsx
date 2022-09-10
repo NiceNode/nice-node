@@ -40,7 +40,7 @@ export const SelectCard = ({
         <div className={['storybook-select-card-contents'].join(' ')}>
           <NodeIcon iconId={iconId} size="medium" />
           <div className="storybook-select-card-container">
-            {/* TODO: Vertical center align contents, fix height to 60px */}
+            {/* TODO: Fix height to 60px, fix width when tag doesn't exist */}
             <div className="storybook-select-card-title">{title}</div>
             <div className="storybook-select-card-info">{info}</div>
           </div>
