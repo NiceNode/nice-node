@@ -1,3 +1,4 @@
+import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { NodeIcon } from './NodeIcon';
 import { RadioButtonBackground } from './RadioButtonBackground';
 
@@ -13,7 +14,7 @@ export interface SelectCardProps {
   /**
    * Which icon? // TODO: Change this to drop down eventually
    */
-  iconId: 'ethereum' | 'ethereumValidator' | 'arbitrum';
+  iconId: NodeIconId;
   /**
    * Is this dark mode?
    */

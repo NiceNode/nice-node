@@ -1,6 +1,6 @@
 import {
   NODE_ICONS,
-  IconId,
+  NodeIconId,
   NODE_STATUS,
   NODE_COLORS,
 } from '../../assets/images/nodeIcons';
@@ -9,7 +9,7 @@ export interface NodeIconProps {
   /**
    * Which icon? // TODO: Change this to drop down eventually
    */
-  iconId: IconId;
+  iconId: NodeIconId;
   /**
    * What's the status?
    */

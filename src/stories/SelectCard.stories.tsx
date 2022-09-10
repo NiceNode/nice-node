@@ -12,7 +12,7 @@ export default {
   },
 } as ComponentMeta<typeof SelectCard>;
 
-const selectCards = [
+const networksCards = [
   { iconId: 'ethereum', title: 'Ethereum', info: 'The world computer' },
   {
     iconId: 'zkSync',
@@ -39,25 +39,37 @@ const selectCards = [
     title: 'Radicle',
     info: 'Build software together. Manage your codebases on Ethereum.',
   },
+];
+
+const clientsCards = [
+  { iconId: 'geth', title: 'Geth', info: 'Execution Client' },
+  { iconId: 'erigon', title: 'Erigon', info: 'Execution Client' },
   { iconId: 'nethermind', title: 'Nethermind', info: 'Execution Client' },
   { iconId: 'besu', title: 'Besu', info: 'Execution Client' },
+  { iconId: 'prysm', title: 'Prysm', info: 'Consensus Client' },
+  { iconId: 'teku', title: 'Teku', info: 'Consensus Client' },
+  { iconId: 'lighthouse', title: 'Lighthouse', info: 'Consensus Client' },
   { iconId: 'lodestar', title: 'Lodestar', info: 'Consensus Client' },
   { iconId: 'nimbus', title: 'Nimbus', info: 'Consensus Client' },
 ];
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof SelectCard> = (args) => (
+const NetworksTemplate: ComponentStory<typeof SelectCard> = (args) => (
   <>
-    {selectCards.map((obj) => {
+    {networksCards.map((obj) => {
       return <SelectCard {...obj} />;
     })}
   </>
 );
 
-export const Ethereum = Template.bind({});
+const ClientsTemplate: ComponentStory<typeof SelectCard> = (args) => (
+  <>
+    {clientsCards.map((obj) => {
+      return <SelectCard {...obj} />;
+    })}
+  </>
+);
+
+export const Networks = NetworksTemplate.bind({});
+export const Clients = ClientsTemplate.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Ethereum.args = {
-  iconId: 'ethereum',
-  title: 'Ethereum node',
-  info: 'Mainnet',
-};
