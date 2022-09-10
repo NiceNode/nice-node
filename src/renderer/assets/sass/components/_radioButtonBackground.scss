@@ -1,0 +1,42 @@
+.storybook-radio-button-background {
+  label {
+    display: flex;
+    padding: 5px 0;
+    cursor: pointer;
+  }
+
+  input[type="radio"] {
+    opacity: 0;
+  }
+
+  .value{
+    position: relative;
+    display: flex;
+    /* padding: 5px 20px 5px 20px; */
+    box-sizing: border-box;
+    background: rgba(0, 0, 2, 0.04);
+    border-radius: 5px;
+  }
+
+  .value:hover {
+    background: rgba(0, 0, 2, 0.08);
+  }
+
+  input[type="radio"]:checked~.value {
+    border-width: 5px;
+    background: rgba(115, 81, 235, 0.08);
+    box-shadow: inset 0px 0px 0px 4px #FFFFFF;
+  }
+
+  input[type="radio"]:checked~.value::before {
+    content: "";
+    position: absolute;
+    width: -webkit-fill-available;
+    left: 0;
+    top: 0;
+    height: -webkit-fill-available;
+    border: 2px solid #7A64EE;
+    border-radius: 5px;
+  }
+}
+

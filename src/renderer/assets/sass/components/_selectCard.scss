@@ -1,0 +1,65 @@
+.storybook-select-card {
+  width: 516px;
+}
+
+.storybook-select-card-contents {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 8px 10px;
+  gap: 12px;
+  width: 516px;
+  border-radius: 5px;
+
+  & > * {
+    &:first-child {
+      flex: none;
+      order: 0;
+      flex-grow: 0;
+    }
+    font-family: 'Inter';
+    font-style: normal;
+  }
+}
+
+.storybook-select-card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 2px;
+
+  width: 340px;
+  height: 34px;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.storybook-select-card-title {
+  order: 0;
+  flex: none;
+  align-self: stretch;
+  flex-grow: 0;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 16px;
+  color: rgba(0, 0, 2, 0.85);
+}
+
+.storybook-select-card-info {
+  order: 1;
+  flex: none;
+  align-self: stretch;
+  flex-grow: 0;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  color: rgba(0, 0, 2, 0.7);
+
+}
+
+.darkMode .storybook-select-card-info {
+  color: rgba(255, 255, 255, 0.5);
+}
