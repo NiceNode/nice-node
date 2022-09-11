@@ -3,7 +3,7 @@
   display: block;
   width: 100%;
   padding: 6px 8px;
-  /* font-family: 'Inter'; */
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 13px;
@@ -35,5 +35,5 @@ border: 1px solid rgba(0, 0, 2, 0.08);
   background-color: #fff;
   border-color: #7351EB;
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(115, 81, 235, 0.25);
+  box-shadow: 0 0 0 2px rgba(115, 81, 235, 0.25);
 }

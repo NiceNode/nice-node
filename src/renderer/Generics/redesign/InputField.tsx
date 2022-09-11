@@ -17,6 +17,10 @@ export interface InputFieldProps {
    *  Is this input field required?
    */
   required?: boolean;
+  /**
+   *  Is this input field disabled?
+   */
+  disabled?: boolean;
 }
 
 /**
@@ -27,16 +31,18 @@ export const InputField = ({
   iconId,
   placeholder,
   required,
+  disabled,
 }: InputFieldProps) => {
-  // const isRequired = required ? 'required' : '';
   return (
     <div className={['storybook-input-field', `${required}`].join(' ')}>
       <input
-        type="text"
-        className="storybook-input-field-input"
-        placeholder={placeholder}
-        aria-label={placeholder}
-        aria-describedby={placeholder}
+        {...{
+          type: 'text',
+          className: 'storybook-input-field-input',
+          placeholder,
+          ...(disabled && { disabled }),
+          ...(required && { required }),
+        }}
       />
       <span className="icon-inside">
         <i className="fas fa-map-marker-alt" />
