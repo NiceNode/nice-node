@@ -20,3 +20,5 @@ export const ICONS: Icons = {
   add,
   preferences,
 };
+
+export type IconId = keyof Icons;

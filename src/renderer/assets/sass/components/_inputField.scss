@@ -1,0 +1,39 @@
+.storybook-input-field-input {
+  height:16px;
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  /* font-family: 'Inter'; */
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.storybook-input-field-input::placeholder {
+color: rgba(0, 0, 2, 0.25);
+}
+
+.storybook-input-field-input:invalid {
+border: 1px solid #F47671;
+}
+
+.storybook-input-field-input:disabled {
+background: rgba(0, 0, 2, 0.04);
+border: 1px solid rgba(0, 0, 2, 0.08);
+}
+
+.storybook-input-field-input:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #7351EB;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(115, 81, 235, 0.25);
+}
