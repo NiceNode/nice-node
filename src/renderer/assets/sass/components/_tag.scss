@@ -1,0 +1,35 @@
+.storybook-tag {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 3px 6px;
+  gap: 4px;
+  border-radius: 5px;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  width: fit-content;
+
+  &.pink {
+    background: #FFCCFA;
+    color: rgba(0, 0, 2, 0.7);
+  }
+
+  &.pink2 {
+    background: #FEE3F9;
+    color: #EC429F;
+  }
+
+  &.green {
+    background: #DFFBE8;
+    color: #3EBB64;
+  }
+}

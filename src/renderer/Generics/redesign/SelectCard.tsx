@@ -1,6 +1,7 @@
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { NodeIcon } from './NodeIcon';
 import { RadioButtonBackground } from './RadioButtonBackground';
+import { Tag } from './Tag';
 
 export interface SelectCardProps {
   /**
@@ -20,6 +21,10 @@ export interface SelectCardProps {
    */
   darkMode?: boolean;
   /**
+   * Is this a major or minority client?
+   */
+  type?: 'major' | 'minority';
+  /**
    * Optional click handler
    */
   onClick?: () => void;
@@ -34,6 +39,7 @@ export const SelectCard = ({
   info,
   iconId,
   darkMode,
+  type,
 }: SelectCardProps) => {
   return (
     <div className="storybook-select-card">
@@ -45,6 +51,12 @@ export const SelectCard = ({
             <div className="storybook-select-card-title">{title}</div>
             <div className="storybook-select-card-info">{info}</div>
           </div>
+          {type && (
+            // Use CSS to hide/show dropdown depending on hover
+            <div className="storybook-select-card-type">
+              <Tag type="pink" label="Minority Client" />
+            </div>
+          )}
           {/* TODO: Add Tag and dropdown options */}
         </div>
       </RadioButtonBackground>

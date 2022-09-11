@@ -29,7 +29,6 @@
   padding: 0px;
   gap: 2px;
 
-  width: 340px;
   height: 100%;
 
   justify-content: center;
@@ -64,4 +63,12 @@
 
 .darkMode .storybook-select-card-info {
   color: rgba(255, 255, 255, 0.5);
+}
+
+.storybook-select-card-type {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: auto
 }
