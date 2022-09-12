@@ -72,7 +72,8 @@ const clientsCards = [
 const NetworksTemplate: ComponentStory<typeof SelectCard> = (args) => (
   <>
     {networksCards.map((obj) => {
-      return <SelectCard {...obj} />;
+      const darkMode = args.darkMode;
+      return <SelectCard {...obj} darkMode={darkMode} />;
     })}
   </>
 );
@@ -80,7 +81,8 @@ const NetworksTemplate: ComponentStory<typeof SelectCard> = (args) => (
 const ClientsTemplate: ComponentStory<typeof SelectCard> = (args) => (
   <>
     {clientsCards.map((obj) => {
-      return <SelectCard {...obj} />;
+      const darkMode = args.darkMode;
+      return <SelectCard {...obj} darkMode={darkMode} />;
     })}
   </>
 );

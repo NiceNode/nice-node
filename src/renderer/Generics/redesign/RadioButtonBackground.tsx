@@ -24,12 +24,7 @@ export const RadioButtonBackground = ({
   const darkStyle = darkMode ? 'darkMode' : '';
   return (
     // eslint-disable-next-line jsx-a11y/label-has-associated-control
-    <label
-      className={['storybook-radio-button-background', `${darkStyle}`].join(
-        ' '
-      )}
-    >
-      {/* TODO: Add dark mode CSS */}
+    <label className="storybook-radio-button-background">
       {/* TODO: Make value and name flexible to handle different data */}
       <input
         type="radio"
@@ -41,7 +36,14 @@ export const RadioButtonBackground = ({
           }
         }}
       />
-      <div className="value">{children}</div>
+      <div
+        className={[
+          'storybook-radio-button-background-contents',
+          `${darkStyle}`,
+        ].join(' ')}
+      >
+        {children}
+      </div>
     </label>
   );
 };

@@ -1,3 +1,4 @@
+// TODO: Consolidate CSS
 .storybook-select-card {
   width: 516px;
 }
@@ -49,6 +50,20 @@
   color: rgba(0, 0, 2, 0.85);
 }
 
+.darkMode {
+  .storybook-select-card-title {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .storybook-select-card-info, .storybook-select-card-selection {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .storybook-select-card-icon .storybook-button-icon {
+    background: rgba(255, 255, 255, 0.7);
+  }
+}
+
 .storybook-select-card-info {
   order: 1;
   flex: none;
@@ -59,10 +74,6 @@
   line-height: 16px;
   color: rgba(0, 0, 2, 0.7);
 
-}
-
-.darkMode .storybook-select-card-info {
-  color: rgba(255, 255, 255, 0.5);
 }
 
 .storybook-select-card-type {
@@ -95,7 +106,7 @@
   height: 100%;
 }
 
-.storybook-radio-button-background .value:hover {
+.storybook-radio-button-background .storybook-radio-button-background-contents:hover {
   .storybook-select-card-type {
     display:flex;
     &.selection {
@@ -107,7 +118,7 @@
   }
 }
 
-.storybook-radio-button-background input[type=radio]:checked ~ .value {
+.storybook-radio-button-background input[type=radio]:checked ~ .storybook-radio-button-background-contents {
   .storybook-select-card-type {
     display:flex;
     &.selection {
