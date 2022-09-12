@@ -66,11 +66,12 @@
 }
 
 .storybook-select-card-type {
-  height: 100%;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: auto
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
 }
 
 .storybook-select-card-selection {
@@ -80,12 +81,14 @@
   line-height: 14px;
   color: rgba(0, 0, 2, 0.4);
   height: 100%;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: auto
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .storybook-select-card-icon {
+  margin-left: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -42,7 +42,14 @@ const networksCards = [
 ];
 
 const clientsCards = [
-  { iconId: 'geth', title: 'Geth', info: 'Execution Client' },
+  {
+    iconId: 'geth',
+    title: 'Geth',
+    info: 'Execution Client',
+    onClick: function () {
+      console.log('hello');
+    },
+  },
   { iconId: 'erigon', title: 'Erigon', info: 'Execution Client' },
   { iconId: 'nethermind', title: 'Nethermind', info: 'Execution Client' },
   {
