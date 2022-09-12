@@ -12,12 +12,20 @@
 
   border-radius: 9999px;
   appearance: none;
-}
 
-.storybook-toggle-input:checked {
-  background-color: #7D56D7;
-  border-color: #7D56D7;
-  background-position: 100%;
+  &.darkMode {
+    background-color: rgba(255 255 255/var(--opacity));
+  }
+
+  &:checked {
+    background-color: #7D56D7;
+    border-color: #7D56D7;
+    background-position: 100%;
+
+    &.darkMode {
+      background-color: #8267EF;
+    }
+  }
 }
 
 .storybook-toggle-input:disabled {

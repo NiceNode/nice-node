@@ -106,7 +106,7 @@
   height: 100%;
 }
 
-.storybook-radio-button-background .storybook-radio-button-background-contents:hover {
+.storybook-radio-button-background-contents:hover {
   .storybook-select-card-type {
     display:flex;
     &.selection {
@@ -118,7 +118,7 @@
   }
 }
 
-.storybook-radio-button-background input[type=radio]:checked ~ .storybook-radio-button-background-contents {
+input[type=radio]:checked ~ .storybook-radio-button-background-contents {
   .storybook-select-card-type {
     display:flex;
     &.selection {
