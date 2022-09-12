@@ -1,9 +1,5 @@
 .storybook-radio-button-background {
-  label {
-    display: flex;
-    padding: 5px 0;
-    cursor: pointer;
-  }
+  cursor: pointer;
 
   input[type="radio"] {
     opacity: 0;

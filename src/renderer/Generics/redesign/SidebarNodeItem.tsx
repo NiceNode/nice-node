@@ -1,3 +1,4 @@
+import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { NodeIcon } from './NodeIcon';
 
 export interface SidebarNodeItemProps {
@@ -12,7 +13,7 @@ export interface SidebarNodeItemProps {
   /**
    * Which icon? // TODO: Change this to drop down eventually
    */
-  iconId: 'ethereum' | 'ethereumValidator' | 'arbitrum';
+  iconId: NodeIconId;
   /**
    * Is this dark mode?
    */

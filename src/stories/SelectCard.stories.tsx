@@ -45,9 +45,17 @@ const clientsCards = [
   { iconId: 'geth', title: 'Geth', info: 'Execution Client' },
   { iconId: 'erigon', title: 'Erigon', info: 'Execution Client' },
   { iconId: 'nethermind', title: 'Nethermind', info: 'Execution Client' },
-  { iconId: 'besu', title: 'Besu', info: 'Execution Client', type: 'minority' },
+  {
+    iconId: 'besu',
+    title: 'Besu',
+    info: 'Execution Client',
+    minority: true,
+    onClick: function () {
+      console.log('hello');
+    },
+  },
   { iconId: 'prysm', title: 'Prysm', info: 'Consensus Client' },
-  { iconId: 'teku', title: 'Teku', info: 'Consensus Client', type: 'minority' },
+  { iconId: 'teku', title: 'Teku', info: 'Consensus Client', minority: true },
   { iconId: 'lighthouse', title: 'Lighthouse', info: 'Consensus Client' },
   { iconId: 'lodestar', title: 'Lodestar', info: 'Consensus Client' },
   { iconId: 'nimbus', title: 'Nimbus', info: 'Consensus Client' },

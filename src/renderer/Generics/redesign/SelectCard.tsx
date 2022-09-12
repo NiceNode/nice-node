@@ -1,4 +1,5 @@
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
+import { Icon } from './Icon';
 import { NodeIcon } from './NodeIcon';
 import { RadioButtonBackground } from './RadioButtonBackground';
 import { Tag } from './Tag';
@@ -21,9 +22,9 @@ export interface SelectCardProps {
    */
   darkMode?: boolean;
   /**
-   * Is this a major or minority client?
+   * Is this a minority client?
    */
-  type?: 'major' | 'minority';
+  minority?: boolean;
   /**
    * Optional click handler
    */
@@ -39,25 +40,49 @@ export const SelectCard = ({
   info,
   iconId,
   darkMode,
-  type,
+  minority = false,
 }: SelectCardProps) => {
+  // if onClick exists, we want to enable hover states to allow selecting other items
+  const selection = onClick ? 'selection' : '';
+
+  const getSelectionComponents = () => {
+    const components = [];
+    if (minority) {
+      components.push(
+        <div
+          className={['storybook-select-card-type', `${selection}`].join(' ')}
+        >
+          <Tag type="pink" label="Minority Client" />
+        </div>
+      );
+    }
+    if (selection !== '') {
+      components.push(
+        <>
+          <div className="storybook-select-card-selection">
+            See alternatives
+          </div>
+          <div className="storybook-select-card-icon">
+            <Icon iconId="popup" />
+          </div>
+        </>
+      );
+    }
+    return components;
+  };
+
   return (
-    <div className="storybook-select-card">
-      <RadioButtonBackground darkMode={darkMode}>
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+    <div className={['storybook-select-card'].join(' ')}>
+      <RadioButtonBackground darkMode={darkMode} onClick={onClick}>
         <div className={['storybook-select-card-contents'].join(' ')}>
           <NodeIcon iconId={iconId} size="medium" />
           <div className="storybook-select-card-container">
-            {/* TODO: Fix height to 60px, fix width when tag doesn't exist */}
+            {/* TODO: Fix height to 60px */}
             <div className="storybook-select-card-title">{title}</div>
             <div className="storybook-select-card-info">{info}</div>
           </div>
-          {type && (
-            // Use CSS to hide/show dropdown depending on hover
-            <div className="storybook-select-card-type">
-              <Tag type="pink" label="Minority Client" />
-            </div>
-          )}
-          {/* TODO: Add Tag and dropdown options */}
+          {getSelectionComponents()}
         </div>
       </RadioButtonBackground>
     </div>

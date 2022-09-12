@@ -34,7 +34,7 @@ export const InputField = ({
   disabled,
 }: InputFieldProps) => {
   return (
-    <div className={['storybook-input-field', `${required}`].join(' ')}>
+    <div className={['storybook-input-field'].join(' ')}>
       <input
         {...{
           type: 'text',

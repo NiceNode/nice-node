@@ -7,6 +7,10 @@ export interface RadioButtonBackgroundProps {
    * Is there a children component?
    */
   children?: JSX.Element;
+  /**
+   * Optional click handler
+   */
+  onClick?: () => void;
 }
 
 /**
@@ -15,9 +19,11 @@ export interface RadioButtonBackgroundProps {
 export const RadioButtonBackground = ({
   darkMode,
   children,
+  onClick,
 }: RadioButtonBackgroundProps) => {
   const darkStyle = darkMode ? 'darkMode' : '';
   return (
+    // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label
       className={['storybook-radio-button-background', `${darkStyle}`].join(
         ' '
@@ -25,8 +31,16 @@ export const RadioButtonBackground = ({
     >
       {/* TODO: Add dark mode CSS */}
       {/* TODO: Make value and name flexible to handle different data */}
-      {/* TODO: Add click handle */}
-      <input type="radio" name="gender" value="male" />
+      <input
+        type="radio"
+        name="gender"
+        value="male"
+        onClick={() => {
+          if (onClick) {
+            onClick();
+          }
+        }}
+      />
       <div className="value">{children}</div>
     </label>
   );
