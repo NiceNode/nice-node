@@ -1,21 +1,83 @@
-import { container, iconCss } from './checklistItem.css.ts';
-// import CheckCircleFill from '../../../assets/images/icons/CheckCircleFill.svg';
+import {
+  container,
+  textContainer,
+  checkTitleClass,
+  valueTextClass,
+  captionTextClass,
+  successIcon,
+  warningIcon,
+  errorIcon,
+} from './checklistItem.css';
+import WarningCircleFill from '../Icons/WarningCircleFill';
 import CheckCircleFillIcon from '../Icons/CheckCircleFill';
+import SpinnerIcon from '../Icons/SpinnerIcon';
 
 // import { Icon } from '../Icon/Icon2';
 // import { ReactComponent as Logo } from './logo.svg';
 
+export interface ChecklistItemProps {
+  /**
+   * Status of the check
+   */
+  status: 'complete' | 'incomplete' | 'loading' | 'error';
+  /**
+   * The description of what is being checked
+   */
+  checkTitle: string;
+  /**
+   * The value of what is being checked
+   */
+  valueText?: string;
+  /**
+   * Additional information as a caption
+   */
+  captionText?: string;
+}
+
 /**
  * Primary UI component for user interaction
  */
-const ChecklistItem = (props: any) => {
+const ChecklistItem = ({
+  status,
+  checkTitle,
+  valueText,
+  captionText,
+  ...rest
+}: ChecklistItemProps) => {
+  let statusIcon = <></>;
+  if (status === 'complete') {
+    statusIcon = (
+      <span className={successIcon}>
+        <CheckCircleFillIcon />
+      </span>
+    );
+  } else if (status === 'incomplete') {
+    statusIcon = (
+      <span className={warningIcon}>
+        <WarningCircleFill />
+      </span>
+    );
+  } else if (status === 'loading') {
+    statusIcon = (
+      <span>
+        <SpinnerIcon />
+      </span>
+    );
+  } else if (status === 'error') {
+    statusIcon = (
+      <span className={errorIcon}>
+        <WarningCircleFill />
+      </span>
+    );
+  }
   return (
-    <div className={container} {...props}>
-      {/* <p className={iconCss}> */}
-      {/* <Icon iconId="settings" variant="icon-left" /> */}
-      <CheckCircleFillIcon />
-      {/* </p> */}
-      <p>Checklist Item</p>
+    <div className={container} {...rest}>
+      {statusIcon}
+      <div className={textContainer}>
+        <p className={checkTitleClass}>{checkTitle}</p>
+        <p className={valueTextClass}>{valueText}</p>
+        <p className={captionTextClass}>{captionText}</p>
+      </div>
     </div>
   );
 };
