@@ -7,6 +7,45 @@
   }
 }
 
+.storybook-node-icon {
+  position: relative;
+  display: flex; /* establish flex container */
+  flex-direction: column; /* make main axis vertical */
+  justify-content: center; /* center items vertically, in this case */
+  align-items: center; /* center items horizontally, in this case */
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+.storybook-node-icon {
+  &.status {
+    &.small {
+      -webkit-mask-image: radial-gradient(
+        circle 8px at calc(100% - 4px) calc(100% - 28px),
+        transparent 6px,
+        #000 0
+      );
+    }
+
+    &.medium {
+      -webkit-mask-image: radial-gradient(
+        circle 10px at calc(100% - 5px) calc(100% - 35px),
+        transparent 7px,
+        #000 0
+      );
+    }
+
+    &.large {
+      -webkit-mask-image: radial-gradient(
+        circle 26px at calc(100% - 7px) calc(100% - 49px),
+        transparent 10px,
+        #000 0
+      );
+    }
+  }
+}
+
 .storybook-node {
   position: relative;
 
@@ -14,22 +53,39 @@
     width: 32px;
     height: 32px;
 
+    .storybook-node-icon {
+      border: 1px solid rgba(0, 0, 2, 0.04);
+      width: 32px;
+      height: 32px;
+      background-size: 32px;
+      border-radius: 12px;
+    }
+
     .storybook-node-image {
       width: 32px;
       height: 32px;
       background-size: 32px;
+      background-position: center center;
     }
-
   }
 
   &.medium {
     width: 40px;
     height: 40px;
 
+    .storybook-node-icon {
+      border: 1px solid rgba(0, 0, 2, 0.04);
+      width: 40px;
+      height: 40px;
+      background-size: 40px;
+      border-radius: 14px;
+    }
+
     .storybook-node-image {
       width: 40px;
       height: 40px;
       background-size: 40px;
+      background-position: center center;
     }
   }
 
@@ -37,25 +93,41 @@
     width: 56px;
     height: 56px;
 
-    .storybook-node-image {
+    .storybook-node-icon {
+      border: 1px solid rgba(0, 0, 2, 0.1);
       width: 56px;
       height: 56px;
       background-size: 56px;
+      border-radius: 18px;
+    }
+
+    .storybook-node-image {
+      width: 54px;
+      height: 54px;
+      background-size: 54px;
+      background-position: center center;
     }
   }
 }
 
 .storybook-node-status {
   box-sizing: border-box;
-
   position: absolute;
-  left: 75%;
-  right: 0%;
-  top: 0%;
-  bottom: 75%;
+  right: 0;
+  top: 0;
+
+  &.darkMode {
+    &.sync {
+      background-color: rgba(255, 255, 255, 1);
+    }
+  }
 
   &.sync {
     animation: rotation 2s infinite linear;
+    right: -1px;
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    background-color: rgba(0, 0, 2, 0.95);
   }
 
   &.small {
@@ -76,9 +148,9 @@
     background-size: 10px;
 
     &.sync {
-      width: 10px;
-      height: 8px;
-      background-size: 10px 8px;
+      width: 12px;
+      height: 10px;
+      background-size: 12px 10px;
     }
   }
 
@@ -88,9 +160,9 @@
     background-size: 14px;
 
     &.sync {
-      width: 17px;
+      width: 16px;
       height: 13px;
-      background-size: 17px 13px;
+      background-size: 16px 13px;
     }
   }
 }

@@ -6,22 +6,30 @@
   background-repeat: no-repeat;
   background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='%23fff'/></svg>");
   background-position: 0;
-  transition: background-position .15s ease-in-out;
+  transition: background-position 0.15s ease-in-out;
 
-  background-color: rgba(0 0 2/var(--opacity));
+  background-color: rgba(0 0 2 / var(--opacity));
 
   border-radius: 9999px;
   appearance: none;
-}
 
-.storybook-toggle-input:checked {
-  background-color: #7D56D7;
-  border-color: #7D56D7;
-  background-position: 100%;
+  &.darkMode {
+    background-color: rgba(255 255 255 / var(--opacity));
+  }
+
+  &:checked {
+    background-color: #7d56d7;
+    border-color: #7d56d7;
+    background-position: 100%;
+
+    &.darkMode {
+      background-color: #8267ef;
+    }
+  }
 }
 
 .storybook-toggle-input:disabled {
   pointer-events: none;
   filter: none;
-  opacity: .5;
+  opacity: 0.5;
 }
