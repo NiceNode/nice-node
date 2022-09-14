@@ -1,19 +1,6 @@
-import { createThemeContract, createTheme, style } from '@vanilla-extract/css';
+import { createTheme } from '@vanilla-extract/css';
 
-export const vars = createThemeContract({
-  color: {
-    font: null,
-    font10: null,
-    font50: null,
-    font70: null,
-    background: null,
-    green: null,
-    yellow: null,
-    red: null,
-  },
-});
-
-export const lightTheme = createTheme(vars, {
+export const [lightTheme, vars] = createTheme({
   color: {
     font: 'rgba(0, 0, 2, 0.85)',
     font10: 'rgba(0, 0, 2, 0.10)',
@@ -38,8 +25,3 @@ export const darkTheme = createTheme(vars, {
     red: 'rgba(235, 83, 76, 1)',
   },
 });
-
-// export const brandText = style({
-//   color: vars.color.font,
-//   background: vars.color.background,
-// });

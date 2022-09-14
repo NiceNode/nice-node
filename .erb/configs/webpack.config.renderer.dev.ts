@@ -7,11 +7,10 @@ import chalk from 'chalk';
 import { merge } from 'webpack-merge';
 import { execSync, spawn } from 'child_process';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import { VanillaExtractPlugin } from '@vanilla-extract/webpack-plugin';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
-
-const { VanillaExtractPlugin } = require('@vanilla-extract/webpack-plugin');
 
 // When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
 // at the dev webpack config is not accidentally run in a production environment
@@ -65,6 +64,27 @@ const configuration: webpack.Configuration = {
 
   module: {
     rules: [
+      {
+        test: /\.(js|ts|tsx)$/,
+        exclude: [/node_modules/],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: false,
+              presets: [
+                '@babel/preset-typescript',
+                ['@babel/preset-react', { runtime: 'automatic' }],
+                [
+                  '@babel/preset-env',
+                  { targets: { node: 14 }, modules: false },
+                ],
+              ],
+              plugins: ['@vanilla-extract/babel-plugin'],
+            },
+          },
+        ],
+      },
       {
         test: /\.s?css$/,
         use: [
@@ -133,6 +153,8 @@ const configuration: webpack.Configuration = {
 
     new ReactRefreshWebpackPlugin(),
 
+    new VanillaExtractPlugin({ identifiers: 'debug' }),
+
     new HtmlWebpackPlugin({
       filename: path.join('index.html'),
       template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
@@ -146,7 +168,6 @@ const configuration: webpack.Configuration = {
       isDevelopment: process.env.NODE_ENV !== 'production',
       nodeModules: webpackPaths.appNodeModulesPath,
     }),
-    new VanillaExtractPlugin(),
   ],
 
   node: {

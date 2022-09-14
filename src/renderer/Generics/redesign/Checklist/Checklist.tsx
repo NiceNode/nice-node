@@ -8,6 +8,8 @@ import HorizontalLine from '../HorizontalLine/HorizontalLine';
 export const Checklist = (props: any) => {
   return (
     <div className={container} {...props}>
+      <h2>Node hardware requirements</h2>
+
       <ChecklistItem
         status="loading"
         checkTitle="Processor supported by clients"

@@ -12,9 +12,6 @@ import WarningCircleFill from '../Icons/WarningCircleFill';
 import CheckCircleFillIcon from '../Icons/CheckCircleFill';
 import SpinnerIcon from '../Icons/SpinnerIcon';
 
-// import { Icon } from '../Icon/Icon2';
-// import { ReactComponent as Logo } from './logo.svg';
-
 export interface ChecklistItemProps {
   /**
    * Status of the check
@@ -74,9 +71,9 @@ const ChecklistItem = ({
     <div className={container} {...rest}>
       {statusIcon}
       <div className={textContainer}>
-        <p className={checkTitleClass}>{checkTitle}</p>
-        <p className={valueTextClass}>{valueText}</p>
-        <p className={captionTextClass}>{captionText}</p>
+        <span className={checkTitleClass}>{checkTitle}</span>
+        <span className={valueTextClass}>{valueText}</span>
+        <span className={captionTextClass}>{captionText}</span>
       </div>
     </div>
   );

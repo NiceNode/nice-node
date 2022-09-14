@@ -5,6 +5,10 @@ import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
 import { useAppSelector } from '../state/hooks';
 import { selectNumFreeDiskGB, selectSelectedNode } from '../state/node';
+import { Checklist } from '../Generics/redesign/Checklist/Checklist';
+
+// todo: remove when new ui/ux redesign is further along
+import { darkTheme, lightTheme } from '../Generics/redesign/theme.css';
 
 type Props = {
   isOpen: boolean | undefined;
@@ -105,6 +109,8 @@ const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
     }
   }, [isOpen]);
 
+  console.log('monitoring lightTheme: ', lightTheme);
+
   return (
     <MenuDrawer
       title="Monitoring"
@@ -144,6 +150,10 @@ const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
           enableClipboard={false}
           style={{ overflow: 'auto', maxHeight: '80%' }}
         />
+      </div>
+      <hr />
+      <div id="onBoarding" className={darkTheme}>
+        <Checklist />
       </div>
     </MenuDrawer>
   );
