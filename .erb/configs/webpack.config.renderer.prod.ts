@@ -46,6 +46,7 @@ const configuration: webpack.Configuration = {
 
   module: {
     rules: [
+      // Required for vanilla-extract to set classes on components
       {
         test: /\.(js|ts|tsx)$/,
         exclude: [/node_modules/],
@@ -95,8 +96,28 @@ const configuration: webpack.Configuration = {
       },
       // Images
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
+      },
+      // SVGs - converts svg files to React Components
+      {
+        test: /\.svg$/,
+        issuer: /\.[jt]sx?$/,
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              prettier: false,
+              svgo: false,
+              svgoConfig: {
+                plugins: [{ removeViewBox: false }],
+              },
+              titleProp: true,
+              ref: true,
+            },
+          },
+          'file-loader',
+        ],
       },
     ],
   },

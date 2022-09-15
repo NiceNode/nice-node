@@ -8,8 +8,8 @@ import {
   warningIcon,
   errorIcon,
 } from './checklistItem.css';
-import WarningCircleFill from '../Icons/WarningCircleFill';
-import CheckCircleFillIcon from '../Icons/CheckCircleFill';
+import { ReactComponent as WarningCircleFill } from '../../../assets/images/icons/Warning-circle-filled.svg';
+import { ReactComponent as CheckCircleFillIcon } from '../../../assets/images/icons/Check-circle-filled.svg';
 import SpinnerIcon from '../Icons/SpinnerIcon';
 
 export interface ChecklistItemProps {
