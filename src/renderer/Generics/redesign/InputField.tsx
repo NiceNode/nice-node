@@ -27,8 +27,6 @@ export interface InputFieldProps {
  * Primary UI component for user interaction
  */
 export const InputField = ({
-  type,
-  iconId,
   placeholder,
   required,
   disabled,

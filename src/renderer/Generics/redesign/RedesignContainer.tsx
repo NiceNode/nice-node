@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { darkTheme, lightTheme } from './theme.css';
 
-const RedesignContainerStoryBook = ({ children }: any) => {
+const RedesignContainerStoryBook: React.FC = ({ children }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   return (
     <div>
       <p>Toggle dark mode</p>
       <button
+        type="button"
         onClick={() => setIsDarkTheme((currentValue: boolean) => !currentValue)}
       >
         Switch to {isDarkTheme ? 'light' : 'dark'} theme
@@ -23,4 +24,3 @@ const RedesignContainerStoryBook = ({ children }: any) => {
   );
 };
 export default RedesignContainerStoryBook;
-/* Shape */
