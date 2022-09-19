@@ -3,6 +3,7 @@ import { vars } from './theme.css';
 
 globalStyle('#onBoarding', {
   fontFamily: 'Inter',
+  fontSize: 13,
   background: vars.color.background,
   color: vars.color.font,
 });
