@@ -21,14 +21,13 @@ export interface SidebarLinkItemProps {
   /**
    * Optional click handler
    */
-  onClick?: () => void;
+  // onClick?: () => void;
 }
 
 /**
  * Primary UI component for user interaction
  */
 export const SidebarLinkItem = ({
-  onClick,
   darkMode,
   label,
   count,

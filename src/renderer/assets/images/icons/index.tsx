@@ -1,8 +1,8 @@
-const settings = require('./Settings.svg');
-const play = require('./Play.svg');
-const bell = require('./Bell.svg');
-const add = require('./Add.svg');
-const preferences = require('./Preferences.svg');
+const settings = require('./settings.svg');
+const play = require('./play.svg');
+const bell = require('./bell.svg');
+const add = require('./add.svg');
+const preferences = require('./preferences.svg');
 const popup = require('./Popup.svg');
 
 export interface Icons {

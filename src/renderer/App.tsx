@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
 
+import './Generics/redesign/InterFont.css';
 import './Generics/redesign/globalStyle.css';
 import './App.css';
 import { useAppDispatch } from './state/hooks';
