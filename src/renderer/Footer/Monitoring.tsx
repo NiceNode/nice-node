@@ -5,10 +5,11 @@ import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
 import { useAppSelector } from '../state/hooks';
 import { selectNumFreeDiskGB, selectSelectedNode } from '../state/node';
-import { Checklist } from '../Generics/redesign/Checklist/Checklist';
+// import { Checklist } from '../Generics/redesign/Checklist/Checklist';
 
 // todo: remove when new ui/ux redesign is further along
 import { darkTheme, lightTheme } from '../Generics/redesign/theme.css';
+import { SystemMonitor } from '../Generics/redesign/SystemMonitor/SystemMonitor';
 
 type Props = {
   isOpen: boolean | undefined;
@@ -153,7 +154,8 @@ const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
       </div>
       <hr />
       <div id="onBoarding" className={darkTheme}>
-        <Checklist
+        <SystemMonitor />
+        {/* <Checklist
           items={[
             {
               status: 'loading',
@@ -181,7 +183,7 @@ const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
             },
           ]}
           title="Node requirements"
-        />
+        /> */}
       </div>
     </MenuDrawer>
   );

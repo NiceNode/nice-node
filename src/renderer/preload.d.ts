@@ -1,3 +1,5 @@
+import si from 'systeminformation';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NodeSpecification } from '../common/nodeSpec';
 import { Node, NodeId } from '../common/node';
@@ -39,6 +41,7 @@ declare global {
       getRendererProcessUsage(): any;
       getMainProcessUsage(): any;
       checkSystemHardware(): string[];
+      getSystemInfo(): si.Systeminformation.StaticData;
 
       // Multi-node
       getNodes(): Node[];

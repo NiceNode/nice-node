@@ -27,6 +27,7 @@ import installDocker from './docker/install';
 import { openDialogForNodeDataDir } from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
 import { getSettings, setLanguage } from './state/settings';
+import { getSystemInfo } from './systemInfo';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -49,6 +50,7 @@ export const initialize = () => {
   ipcMain.handle('getGethErrorLogs', getGethErrorLogs);
   ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
+  ipcMain.handle('getSystemInfo', getSystemInfo);
 
   // Multi-nodegetUserNodes
   ipcMain.handle('getNodes', getNodes);

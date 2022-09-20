@@ -26,6 +26,7 @@ import {
 import * as ipc from './ipc';
 import * as power from './power';
 import * as processExit from './processExit';
+import * as systemInfo from './systemInfo';
 import { setCorsForNiceNode } from './corsMiddleware';
 import * as updater from './updater';
 
@@ -170,6 +171,7 @@ const initialize = () => {
   ipc.initialize();
   power.initialize();
   initNodeManager();
+  systemInfo.initialize();
   processExit.initialize();
   processExit.registerExitHandler(onExit);
   console.log('app locale: ', app.getLocale());
