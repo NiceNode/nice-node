@@ -1,0 +1,13 @@
+{
+  "processorCoresTitle" : "Processor has {{minCores}} cores or more",
+  "processorCoresDescription" : "Processor cores: {{cores}}",
+  "memorySizeTitle" : "At least {{minSize}}GB of system memory (RAM)",
+  "memorySizeDescription" : "System memory: {{size}}GB",
+  "storageTypeTitle" : "Storage type is {{type}}",
+  "storageTypeDescription" : "Storage type: {{type}}",
+  "storageSizeTitle" : "Available storage space is {{minSize}}GB or more",
+  "storageSizeDescription" : "Selected storage: {{storageName}} with {{freeSize}}GB space",
+  "internetDownloadSpeedTitle" : "Internet connection bandwidth is {{minDownloadSpeed}}Mbit/s",
+  "internetDownloadSpeedDescription" : "Internet connection: {{speed}}Mbit/s download"
+  "dockerInstalled" : "Docker Desktop installed"
+}

@@ -12,6 +12,9 @@ import { ReactComponent as WarningCircleFill } from '../../../assets/images/icon
 import { ReactComponent as CheckCircleFillIcon } from '../../../assets/images/icons/Check-circle-filled.svg';
 import SpinnerIcon from '../Icons/SpinnerIcon';
 
+/**
+ * checkTitle and status required
+ */
 export interface ChecklistItemProps {
   /**
    * Status of the check

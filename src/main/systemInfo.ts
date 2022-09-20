@@ -1,5 +1,6 @@
 import si from 'systeminformation';
 
+export type SystemData = si.Systeminformation.StaticData;
 // const getCpuInfo = async (): Promise<si.Systeminformation.CpuData> => {
 //   const data = await si.cpu();
 //   console.log('Cpu data: ', data);
@@ -53,7 +54,7 @@ import si from 'systeminformation';
 //   return data;
 // };
 
-const getAllStaticInfo = async (): Promise<si.Systeminformation.StaticData> => {
+const getAllStaticInfo = async (): Promise<SystemData> => {
   const data = await si.getStaticData();
   console.log('getStaticData data: ', data);
   return data;
@@ -63,22 +64,21 @@ const getAllStaticInfo = async (): Promise<si.Systeminformation.StaticData> => {
  * Returns detailed system information and sends async info
  * over a channel to the UI when it is determined.
  */
-export const getSystemInfo =
-  async (): Promise<si.Systeminformation.StaticData> => {
-    const data = await si.getStaticData();
-    console.log('getStaticData data: ', data);
-    return data;
-    // start monitoring sys_usage?
-    // getCpuInfo();
-    // getMemInfo();
-    // getBatteryInfo();
-    // getGraphicsInfo();
-    // getOperatingSystemInfo();
-    // getCurrentLoadInfo();
-    // getDiskLayoutInfo();
-    // getUsbInfo();
-    // return getAllStaticInfo();
-  };
+export const getSystemInfo = async (): Promise<SystemData> => {
+  const data = await si.getStaticData();
+  console.log('getStaticData data: ', data);
+  return data;
+  // start monitoring sys_usage?
+  // getCpuInfo();
+  // getMemInfo();
+  // getBatteryInfo();
+  // getGraphicsInfo();
+  // getOperatingSystemInfo();
+  // getCurrentLoadInfo();
+  // getDiskLayoutInfo();
+  // getUsbInfo();
+  // return getAllStaticInfo();
+};
 
 export const initialize = async () => {
   // start monitoring sys_usage?
