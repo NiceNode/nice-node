@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import {
   container,
   textContainer,
@@ -30,6 +31,10 @@ export interface ChecklistItemProps {
    */
   valueText?: string;
   /**
+   * A custom React component to include
+   */
+  valueComponent?: FC;
+  /**
    * Additional information as a caption
    */
   captionText?: string;
@@ -42,6 +47,7 @@ const ChecklistItem = ({
   status,
   checkTitle,
   valueText,
+  valueComponent,
   captionText,
   ...rest
 }: ChecklistItemProps) => {
@@ -82,7 +88,10 @@ const ChecklistItem = ({
       {statusIcon}
       <div className={textContainer}>
         <span className={checkTitleClass}>{checkTitle}</span>
-        <span className={valueTextClass}>{valueText}</span>
+        <span className={valueTextClass}>
+          {valueText} <br />
+          {valueComponent}
+        </span>
         <span className={captionTextClass}>{captionText}</span>
       </div>
     </div>

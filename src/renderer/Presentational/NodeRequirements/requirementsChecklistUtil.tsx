@@ -33,6 +33,7 @@ export const makeCheckList = (
     //    if minSpeed doesn't meet
     let checkTitle = '';
     let valueText = '';
+    let valueComponent: any;
     let captionText = '';
     let status: ChecklistItemProps['status'] = 'loading';
     if (nodeReqKey === 'cpu') {
@@ -135,7 +136,14 @@ export const makeCheckList = (
         });
         valueText =
           'Please do your own internet speed test to ensure it meets these requirements!';
-        status = 'information';
+          valueComponent = (
+            <>
+              You can check the speed at one of the following websites{' '}
+              <a href="https://www.google.com/search?q=speed+test" target="_blank" >Google Speed Test</a>
+              {' '}or{' '}
+              <a href="https://speedtest.net" target="_blank" >Speedtest by Ookla</a>
+            </>)
+          status = 'information';
       }
     }
     if (nodeReqKey === 'docker') {
@@ -169,6 +177,7 @@ export const makeCheckList = (
     const checkListItem: ChecklistItemProps = {
       checkTitle,
       valueText,
+      valueComponent,
       captionText,
       status,
     };
