@@ -23,12 +23,17 @@ export const makeCheckList = (
   // eslint-disable-next-line no-restricted-syntax
   for (const [nodeReqKey, nodeReqValue] of Object.entries(nodeRequirements)) {
     console.log(`${nodeReqKey}: ${nodeReqValue}`);
+    if (nodeReqKey === 'documentationUrl' || nodeReqKey === 'description') {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
     // title and desc depends on req type
     // title and desc depends on whether the req is met or not
     // if cpu, if cores meets, add success
     //    if minSpeed doesn't meet
     let checkTitle = '';
     let valueText = '';
+    let captionText = '';
     let status: ChecklistItemProps['status'] = 'loading';
     if (nodeReqKey === 'cpu') {
       const req = nodeReqValue as CpuRequirements;
@@ -80,12 +85,12 @@ export const makeCheckList = (
         if (disk?.type || disk?.name) {
           if (disk?.type.includes('SSD') || disk?.name.includes('SSD')) {
             valueText = t('storageTypeDescription', {
-              size: 'SSD',
+              type: 'SSD',
             });
             status = 'complete';
           } else if (disk?.type.includes('HDD') || disk?.name.includes('HDD')) {
             valueText = t('storageTypeDescription', {
-              size: 'HDD',
+              type: 'HDD',
             });
           } else {
             status = 'incomplete';
@@ -124,30 +129,39 @@ export const makeCheckList = (
     if (nodeReqKey === 'internet') {
       const req = nodeReqValue as InternetRequirements;
       if (req.minDownloadSpeed !== undefined) {
-        checkTitle = t('internetDownloadSpeedTitle', {
-          minSize: req.minDownloadSpeed,
+        checkTitle = t('internetSpeedTitle', {
+          minDownloadSpeed: req.minDownloadSpeed,
+          minUploadSpeed: req.minUploadSpeed,
         });
-        valueText = 'Give permissions to run an internet speed test';
-        status = 'loading';
+        valueText =
+          'Please do your own internet speed test to ensure it meets these requirements!';
+        status = 'information';
       }
     }
-    if (nodeReqKey === 'memory') {
+    if (nodeReqKey === 'docker') {
       const req = nodeReqValue as DockerRequirements;
       if (req.required === true) {
-        checkTitle = t('memorySizeTitle', {
-          minSize: bytesToGB(req.required),
-        });
-        if (systemData.memLayout[0]?.size) {
-          valueText = t('memorySizeDescription', {
-            size: bytesToGB(systemData.memLayout[0]?.size),
+        if (req.minVersion) {
+          checkTitle = t('dockerVersionInstalledTitle', {
+            minVersion: req.minVersion,
           });
-          if (systemData.memLayout[0]?.size >= req.minSize) {
+        } else {
+          // case where no specific docker version is required
+          checkTitle = t('dockerInstalledTitle');
+        }
+        if (systemData.versions.docker) {
+          // !req.minVersion: case where no specific docker version is required
+          if (!req.minVersion || systemData.versions.docker >= req.minVersion) {
+            valueText = t('dockerVersionInstalledDescription', {
+              version: systemData.versions.docker,
+            });
             status = 'complete';
           } else {
+            captionText = t('dockerVersionInstalledNeedsUpdateCaption');
             status = 'incomplete';
           }
         } else {
-          status = 'error';
+          status = 'incomplete';
         }
       }
     }
@@ -155,6 +169,7 @@ export const makeCheckList = (
     const checkListItem: ChecklistItemProps = {
       checkTitle,
       valueText,
+      captionText,
       status,
     };
     newChecklistItems.push(checkListItem);

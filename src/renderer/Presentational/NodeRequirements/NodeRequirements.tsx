@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { container } from './nodeRequirements.css';
+import { container, descriptionFont, titleFont } from './nodeRequirements.css';
 import { SystemData } from '../../../main/systemInfo';
 import { ChecklistItemProps } from '../../Generics/redesign/Checklist/ChecklistItem';
 import { Checklist } from '../../Generics/redesign/Checklist/Checklist';
@@ -47,7 +47,27 @@ const NodeRequirements = ({
 
   return (
     <div className={container}>
-      <Checklist title="Node requirements" items={sItems} />
+      <div className={titleFont}>Node Requirements</div>
+      <div className={descriptionFont}>
+        {nodeRequirements.description ? (
+          nodeRequirements.description
+        ) : (
+          <>
+            Your computer is checked with the recommended requirements for the
+            selected node.
+          </>
+        )}
+      </div>
+      {nodeRequirements.documentationUrl && (
+        <a
+          href={nodeRequirements.documentationUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Learn more about the requirements
+        </a>
+      )}
+      <Checklist items={sItems} />
     </div>
   );
 };

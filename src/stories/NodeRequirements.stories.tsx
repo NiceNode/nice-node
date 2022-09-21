@@ -18,6 +18,8 @@ export const Primary = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
   nodeRequirements: {
+    documentationUrl: 'https://nicenode.xyz',
+    description: 'Your system is checked with the recommended requirements for the selected clients. You are able to launch a node with lower specifications but expect some hickups now and then.',
     cpu: {
       cores: 4,
       minSpeed: 2.4
@@ -32,11 +34,11 @@ Primary.args = {
     },
     internet: {
       minDownloadSpeed: 25,
-      minUploadSpeed: 3
+      minUploadSpeed: 3,
     },
     docker: {
       required: true,
-      minEngineVersion: '20.10',
+      minVersion: '20.10',
     }
   },
   systemData: {

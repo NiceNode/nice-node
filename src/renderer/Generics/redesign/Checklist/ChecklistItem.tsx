@@ -8,6 +8,7 @@ import {
   warningIcon,
   errorIcon,
 } from './checklistItem.css';
+import { ReactComponent as InfoCircleFill } from '../../../assets/images/icons/Info-circle-filled.svg';
 import { ReactComponent as WarningCircleFill } from '../../../assets/images/icons/Warning-circle-filled.svg';
 import { ReactComponent as CheckCircleFillIcon } from '../../../assets/images/icons/Check-circle-filled.svg';
 import SpinnerIcon from '../Icons/SpinnerIcon';
@@ -19,7 +20,7 @@ export interface ChecklistItemProps {
   /**
    * Status of the check
    */
-  status: 'complete' | 'incomplete' | 'loading' | 'error';
+  status: 'complete' | 'information' | 'incomplete' | 'loading' | 'error';
   /**
    * The description of what is being checked
    */
@@ -49,6 +50,12 @@ const ChecklistItem = ({
     statusIcon = (
       <span className={successIcon}>
         <CheckCircleFillIcon />
+      </span>
+    );
+  } else if (status === 'information') {
+    statusIcon = (
+      <span>
+        <InfoCircleFill />
       </span>
     );
   } else if (status === 'incomplete') {
