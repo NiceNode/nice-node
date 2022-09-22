@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import {
   container,
   textContainer,
@@ -8,15 +9,19 @@ import {
   warningIcon,
   errorIcon,
 } from './checklistItem.css';
+import { ReactComponent as InfoCircleFill } from '../../../assets/images/icons/Info-circle-filled.svg';
 import { ReactComponent as WarningCircleFill } from '../../../assets/images/icons/Warning-circle-filled.svg';
 import { ReactComponent as CheckCircleFillIcon } from '../../../assets/images/icons/Check-circle-filled.svg';
 import SpinnerIcon from '../Icons/SpinnerIcon';
 
+/**
+ * checkTitle and status required
+ */
 export interface ChecklistItemProps {
   /**
    * Status of the check
    */
-  status: 'complete' | 'incomplete' | 'loading' | 'error';
+  status: 'complete' | 'information' | 'incomplete' | 'loading' | 'error';
   /**
    * The description of what is being checked
    */
@@ -25,6 +30,10 @@ export interface ChecklistItemProps {
    * The value of what is being checked
    */
   valueText?: string;
+  /**
+   * A custom React component to include
+   */
+  valueComponent?: FC;
   /**
    * Additional information as a caption
    */
@@ -38,6 +47,7 @@ const ChecklistItem = ({
   status,
   checkTitle,
   valueText,
+  valueComponent,
   captionText,
   ...rest
 }: ChecklistItemProps) => {
@@ -46,6 +56,12 @@ const ChecklistItem = ({
     statusIcon = (
       <span className={successIcon}>
         <CheckCircleFillIcon />
+      </span>
+    );
+  } else if (status === 'information') {
+    statusIcon = (
+      <span>
+        <InfoCircleFill />
       </span>
     );
   } else if (status === 'incomplete') {
@@ -72,7 +88,10 @@ const ChecklistItem = ({
       {statusIcon}
       <div className={textContainer}>
         <span className={checkTitleClass}>{checkTitle}</span>
-        <span className={valueTextClass}>{valueText}</span>
+        <span className={valueTextClass}>
+          {valueText} <br />
+          {valueComponent}
+        </span>
         <span className={captionTextClass}>{captionText}</span>
       </div>
     </div>

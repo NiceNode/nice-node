@@ -1,6 +1,8 @@
 import '../src/renderer/assets/sass/app.scss';
 import '../src/renderer/Generics/redesign/globalStyle.css';
 import '../src/renderer/Generics/redesign/InterFont.css';
+import '../src/renderer/i18n';
+
 import RedesignContainer from "../src/renderer/Generics/redesign/RedesignContainer"
 
 export const parameters = {

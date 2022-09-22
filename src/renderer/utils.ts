@@ -27,3 +27,7 @@ export const detectExecutionClient = (
   }
   return clientName;
 };
+
+export const bytesToGB = (bytes: number) => {
+  return Math.round(bytes * 1e-9);
+};

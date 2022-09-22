@@ -25,14 +25,14 @@ export interface SidebarNodeItemProps {
   /**
    * Optional click handler
    */
-  onClick?: () => void;
+  // onClick?: () => void;
 }
 
 /**
  * Primary UI component for user interaction
  */
 export const SidebarNodeItem = ({
-  onClick,
+  // onClick,
   darkMode,
   title,
   info,

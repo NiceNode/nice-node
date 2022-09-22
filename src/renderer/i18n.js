@@ -6,6 +6,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import cnTranslations from '../../assets/locales/cn/translation.json';
 import deTranslations from '../../assets/locales/de/translation.json';
 import enTranslations from '../../assets/locales/en/translation.json';
+import enSystemRequirements from '../../assets/locales/en/systemRequirements.json';
 import esTranslations from '../../assets/locales/es/translation.json';
 import frTranslations from '../../assets/locales/fr/translation.json';
 import jaTranslations from '../../assets/locales/ja/translation.json';
@@ -42,6 +43,7 @@ i18n
       },
       en: {
         translation: enTranslations,
+        systemRequirements: enSystemRequirements,
       },
       es: {
         translation: esTranslations,

@@ -25,7 +25,7 @@ export const SystemMonitor = () => {
   //   memLayout: MemLayoutData[];
   //   diskLayout: DiskLayoutData[];
   // }
-  const [sData, setData] = useState<si.Systeminformation.StaticData>(undefined);
+  const [sData, setData] = useState<si.Systeminformation.StaticData>();
   const [sParsedData, setParsedData] = useState<LabelValuesSectionProps[]>([]);
 
   const getData = async () => {
