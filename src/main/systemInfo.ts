@@ -54,11 +54,11 @@ export type SystemData = si.Systeminformation.StaticData;
 //   return data;
 // };
 
-const getAllStaticInfo = async (): Promise<SystemData> => {
-  const data = await si.getStaticData();
-  console.log('getStaticData data: ', data);
-  return data;
-};
+// const getAllStaticInfo = async (): Promise<SystemData> => {
+//   const data = await si.getStaticData();
+//   console.log('getStaticData data: ', data);
+//   return data;
+// };
 
 /**
  * Returns detailed system information and sends async info

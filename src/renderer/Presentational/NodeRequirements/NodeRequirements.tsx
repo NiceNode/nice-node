@@ -8,6 +8,7 @@ import { Checklist } from '../../Generics/redesign/Checklist/Checklist';
 import { SystemRequirements } from '../../../common/systemRequirements';
 // eslint-disable-next-line import/no-cycle
 import { makeCheckList } from './requirementsChecklistUtil';
+import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 
 export interface NodeRequirementsProps {
   /**
@@ -59,13 +60,10 @@ const NodeRequirements = ({
         )}
       </div>
       {nodeRequirements.documentationUrl && (
-        <a
-          href={nodeRequirements.documentationUrl}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Learn more about the requirements
-        </a>
+        <ExternalLink
+          text="Learn more about the requirements"
+          url={nodeRequirements.documentationUrl}
+        />
       )}
       <Checklist items={sItems} />
     </div>

@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { TFunction } from 'react-i18next';
 import {
   CpuRequirements,
@@ -8,6 +9,7 @@ import {
 } from '../../../common/systemRequirements';
 
 import { ChecklistItemProps } from '../../Generics/redesign/Checklist/ChecklistItem';
+import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import { bytesToGB } from '../../utils';
 // eslint-disable-next-line import/no-cycle
 import { NodeRequirementsProps } from './NodeRequirements';
@@ -33,7 +35,7 @@ export const makeCheckList = (
     //    if minSpeed doesn't meet
     let checkTitle = '';
     let valueText = '';
-    let valueComponent: any;
+    let valueComponent: FC;
     let captionText = '';
     let status: ChecklistItemProps['status'] = 'loading';
     if (nodeReqKey === 'cpu') {
@@ -136,14 +138,23 @@ export const makeCheckList = (
         });
         valueText =
           'Please do your own internet speed test to ensure it meets these requirements!';
-          valueComponent = (
-            <>
-              You can check the speed at one of the following websites{' '}
-              <a href="https://www.google.com/search?q=speed+test" target="_blank" >Google Speed Test</a>
-              {' '}or{' '}
-              <a href="https://speedtest.net" target="_blank" >Speedtest by Ookla</a>
-            </>)
-          status = 'information';
+        valueComponent = (
+          <>
+            You can check the speed at one of the following websites{' '}
+            <ExternalLink
+              text="Google Speed Test"
+              url="https://www.google.com/search?q=speed+test"
+              inline
+            />{' '}
+            or{' '}
+            <ExternalLink
+              text="Speedtest by Ookla"
+              url="https://speedtest.net"
+              inline
+            />
+          </>
+        );
+        status = 'information';
       }
     }
     if (nodeReqKey === 'docker') {

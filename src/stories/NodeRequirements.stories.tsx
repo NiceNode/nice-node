@@ -18,7 +18,7 @@ export const Primary = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
   nodeRequirements: {
-    documentationUrl: 'https://nicenode.xyz',
+    documentationUrl: 'https://www.nicenode.xyz/#requirements',
     description: 'Your system is checked with the recommended requirements for the selected clients. You are able to launch a node with lower specifications but expect some hickups now and then.',
     cpu: {
       cores: 4,
