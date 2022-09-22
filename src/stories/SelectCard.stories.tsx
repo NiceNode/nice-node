@@ -1,4 +1,5 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { NodeIconId } from '../renderer/assets/images/nodeIcons';
 
 import { SelectCard } from '../renderer/Generics/redesign/SelectCard';
 
@@ -73,7 +74,8 @@ const NetworksTemplate: ComponentStory<typeof SelectCard> = (args) => (
   <>
     {networksCards.map((obj) => {
       const darkMode = args.darkMode;
-      return <SelectCard {...obj} darkMode={darkMode} />;
+      const { iconId, ...rest } = obj
+      return <SelectCard iconId={iconId as NodeIconId} {...rest} darkMode={darkMode} />;
     })}
   </>
 );
@@ -82,7 +84,8 @@ const ClientsTemplate: ComponentStory<typeof SelectCard> = (args) => (
   <>
     {clientsCards.map((obj) => {
       const darkMode = args.darkMode;
-      return <SelectCard {...obj} darkMode={darkMode} />;
+      const { iconId, ...rest } = obj
+      return <SelectCard iconId={iconId as NodeIconId} {...rest} darkMode={darkMode} />;
     })}
   </>
 );

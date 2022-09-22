@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { ReactElement } from 'react';
 import {
   container,
   textContainer,
@@ -33,7 +33,7 @@ export interface ChecklistItemProps {
   /**
    * A custom React component to include
    */
-  valueComponent?: FC;
+  valueComponent?: ReactElement;
   /**
    * Additional information as a caption
    */

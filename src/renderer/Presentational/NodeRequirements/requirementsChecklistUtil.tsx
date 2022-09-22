@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { ReactElement } from 'react';
 import { TFunction } from 'react-i18next';
 import {
   CpuRequirements,
@@ -35,7 +35,7 @@ export const makeCheckList = (
     //    if minSpeed doesn't meet
     let checkTitle = '';
     let valueText = '';
-    let valueComponent: FC;
+    let valueComponent: ReactElement = <></>;
     let captionText = '';
     let status: ChecklistItemProps['status'] = 'loading';
     if (nodeReqKey === 'cpu') {

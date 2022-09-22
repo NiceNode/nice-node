@@ -66,7 +66,7 @@ export type SystemData = si.Systeminformation.StaticData;
  */
 export const getSystemInfo = async (): Promise<SystemData> => {
   const data = await si.getStaticData();
-  console.log('getStaticData data: ', data);
+  console.log('getStaticData data: ', JSON.stringify(data, null, 4));
   return data;
   // start monitoring sys_usage?
   // getCpuInfo();
