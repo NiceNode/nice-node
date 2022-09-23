@@ -1,6 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Button } from '../renderer/Generics/redesign/Button';
+import { Button } from '../renderer/Generics/redesign/Button/Button';
+import { ReactComponent as SettingsIcon } from '../renderer/assets/images/icons/Settings.svg';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -22,6 +23,13 @@ PrimarySmall.args = {
   label: 'Button',
   size: 'small',
 };
+export const PrimarySmallIcon = Template.bind({});
+PrimarySmallIcon.args = {
+  primary: true,
+  label: 'Button',
+  size: 'small',
+  icon: <SettingsIcon/>
+};
 
 export const SecondarySmall = Template.bind({});
 SecondarySmall.args = {
@@ -40,4 +48,11 @@ export const SecondaryMedium = Template.bind({});
 SecondaryMedium.args = {
   size: 'medium',
   label: 'Button',
+};
+
+export const SecondaryMediumIcon = Template.bind({});
+SecondaryMediumIcon.args = {
+  size: 'medium',
+  label: 'Settings',
+  icon: <SettingsIcon/>
 };
