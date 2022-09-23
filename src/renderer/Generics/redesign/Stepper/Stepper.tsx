@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '../Button';
+import { Button } from '../Button/Button';
 import { bottomBar, previousButton, nextButton } from './stepper.css';
 
 export interface StepperProps {
@@ -18,12 +18,12 @@ const Stepper = ({ onChange, children }: StepperProps) => {
     <div>
       {children}
       <div className={bottomBar}>
-        <button type="button" className={previousButton}>
-          Previous
-        </button>
-        <button type="button" className={nextButton}>
-          Next
-        </button>
+        <div className={previousButton}>
+          <Button label="Previous" />
+        </div>
+        <div className={nextButton}>
+          <Button label="Next step" primary />
+        </div>
       </div>
     </div>
   );
