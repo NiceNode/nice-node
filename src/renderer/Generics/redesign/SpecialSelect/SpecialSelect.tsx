@@ -1,73 +1,34 @@
 /* eslint-disable react/destructuring-assignment */
 // Options replaceable component docs:
 // https://react-select.com/components#Option
-import Select, {
-  components,
-  OptionProps,
-  ValueContainerProps,
-} from 'react-select';
-import { child } from 'winston';
+import Select, { OptionProps, ValueContainerProps } from 'react-select';
 import { SelectCard } from '../SelectCard';
 
-const Option = (props: OptionProps<ColourOption>) => {
+const Option = (props: OptionProps) => {
   return (
-    // <Tooltip content="Customise your option component!" truncate>
-    //   <components.Option {...props} />
-    // </Tooltip>
     <div
-      style={{ height: 75, background: 'grey', border: '2px solid black' }}
-      {...props}
+      style={{ height: 75, background: 'grey' }}
+      ref={props.innerRef}
+      {...props.innerProps}
     >
       Test1
-      <components.Option {...props}>Test2</components.Option>
-    </div>
-  );
-};
-
-// const ControlContainer = ({ children, ...props }: ValueContainerProps) => {
-//   return (
-//     <div {...props}>
-//       {children}
-//       {/* {JSON.stringify(nething)} */}
-//     </div>
-//   );
-// };
-
-const ValueContainer = ({ children, ...props }: ValueContainerProps) => {
-  const nething = props.getValue();
-  const click = props.selectOption;
-
-  return (
-    <div
-      // style={{
-      //   height: 75,
-      //   background: 'grey',
-      //   border: '2px solid black',
-      //   width: '100%',
-      // }}
-      {...props}
-    >
-      {children}
-      {/* {JSON.stringify(nething)} */}
     </div>
   );
 };
 
 const SingleValue = ({ children, ...props }: ValueContainerProps) => {
   const nething = props.getValue();
-  const click = props.selectOption;
 
   return (
     <div
       style={{
         height: 75,
         background: 'grey',
-        border: '2px solid black',
         width: '100%',
       }}
-      {...props}
+      {...props.innerProps}
     >
-      {nething[0]?.label + nething[0]?.value}
+      {`${nething[0]?.label} ${nething[0]?.value}`}
     </div>
   );
 };
@@ -89,44 +50,32 @@ export interface SpecialSelectProps {
 const SpecialSelect = ({ onChange, ...props }: SpecialSelectProps) => {
   return (
     <>
-      {/* <SelectCard title="Teku" iconId="teku" /> */}
       <Select
+        // hideSelectedOptions
+        defaultValue={options[0]}
         options={options}
         isSearchable={false}
         components={{
           Option,
           SingleValue,
-          // ValueContainer,
-          // Control: ControlContainer,
+          IndicatorsContainer: () => <></>,
         }}
         styles={{
-          container: () => ({
-            background: 'blue',
+          control: (base) => ({
+            ...base,
             border: 'none',
           }),
-          control: () => ({ background: 'red', padding: 0, margin: 0 }),
           dropdownIndicator: () => ({
             display: 'none',
           }),
-          clearIndicator: () => ({
-            display: 'none',
-          }),
-          indicatorsContainer: () => ({
-            display: 'none',
-          }),
-          indicatorSeparator: () => ({
-            display: 'none',
-          }),
-          singleValue: (base) => ({
-            ...base,
-            padding: 0,
-            margin: 0,
-          }),
           valueContainer: (base) => ({
             ...base,
-            border: '1px solid red',
             padding: 0,
-            margin: 0,
+            // https://github.com/JedWatson/react-select/issues/3995#issuecomment-738470183
+            input: {
+              gridArea: 'auto',
+              height: 0,
+            },
           }),
         }}
       />
