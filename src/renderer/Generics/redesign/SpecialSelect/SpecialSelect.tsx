@@ -2,16 +2,13 @@
 // Options replaceable component docs:
 // https://react-select.com/components#Option
 import Select, { OptionProps, ValueContainerProps } from 'react-select';
-import { SelectCard } from '../SelectCard';
+import { NodeIconId } from '../../../assets/images/nodeIcons';
+import { SelectCard } from '../SelectCard/SelectCard';
 
 const Option = (props: OptionProps) => {
   return (
-    <div
-      style={{ height: 75, background: 'grey' }}
-      ref={props.innerRef}
-      {...props.innerProps}
-    >
-      Test1
+    <div style={{ height: 75 }} ref={props.innerRef} {...props.innerProps}>
+      <SelectCard {...props.data} />
     </div>
   );
 };
@@ -23,16 +20,54 @@ const SingleValue = ({ children, ...props }: ValueContainerProps) => {
     <div
       style={{
         height: 75,
-        background: 'grey',
         width: '100%',
       }}
       {...props.innerProps}
     >
-      {`${nething[0]?.label} ${nething[0]?.value}`}
+      <SelectCard {...nething[0]} />
+
+      {/* {`${nething[0]?.label} ${nething[0]?.value}`} */}
     </div>
   );
 };
 
+const ecOptions = [
+  {
+    iconId: 'geth',
+    value: 'geth',
+    label: 'Geth',
+    title: 'Geth',
+    info: 'Execution Client',
+    onClick() {
+      console.log('hello');
+    },
+  },
+  {
+    iconId: 'erigon',
+    value: 'erigon',
+    label: 'Erigon',
+    title: 'Erigon',
+    info: 'Execution Client',
+  },
+  {
+    iconId: 'nethermind',
+    value: 'nethermind',
+    label: 'Nethermind',
+    title: 'Nethermind',
+    info: 'Execution Client',
+  },
+  {
+    iconId: 'besu',
+    value: 'besu',
+    label: 'Besu',
+    title: 'Besu',
+    info: 'Execution Client',
+    minority: true,
+    onClick() {
+      console.log('hello');
+    },
+  },
+];
 const options = [
   { value: 'lodestar', label: 'lodestar', storage: 100, minory: true },
   { value: 'prysm', label: 'prysm', storage: 1000 },
@@ -51,9 +86,9 @@ const SpecialSelect = ({ onChange, ...props }: SpecialSelectProps) => {
   return (
     <>
       <Select
-        // hideSelectedOptions
-        defaultValue={options[0]}
-        options={options}
+        hideSelectedOptions
+        defaultValue={ecOptions[0]}
+        options={ecOptions}
         isSearchable={false}
         components={{
           Option,
