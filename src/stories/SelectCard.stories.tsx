@@ -6,7 +6,7 @@ import SelectCard from '../renderer/Generics/redesign/SelectCard/SelectCard';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/SelectCard',
+  title: 'Generic/SelectCard',
   component: SelectCard,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {

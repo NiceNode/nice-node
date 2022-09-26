@@ -4,7 +4,7 @@ import { Bubble } from '../renderer/Generics/redesign/Bubble';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/Bubble',
+  title: 'Generic/Bubble',
   component: Bubble,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {

@@ -4,7 +4,7 @@ import NodeRequirements from '../renderer/Presentational/NodeRequirements/NodeRe
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/NodeRequirements',
+  title: 'Presentational/NodeRequirements',
   component: NodeRequirements,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {

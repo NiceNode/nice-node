@@ -4,7 +4,7 @@ import { Checklist } from '../renderer/Generics/redesign/Checklist/Checklist';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/Checklist',
+  title: 'Generic/Checklist',
   component: Checklist,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {

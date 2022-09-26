@@ -4,7 +4,7 @@ import Splash from '../renderer/Generics/redesign/Splash/Splash';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/SplashScreen',
+  title: 'Generic/SplashScreen',
   component: Splash,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
 } as ComponentMeta<typeof Splash>;

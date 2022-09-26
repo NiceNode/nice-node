@@ -4,7 +4,7 @@ import { Select, Option } from '../renderer/Generics/redesign/Select';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/Select',
+  title: 'Generic/Select',
   component: Select,
 } as ComponentMeta<typeof Select>;
 

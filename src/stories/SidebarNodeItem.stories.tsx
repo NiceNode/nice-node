@@ -4,7 +4,7 @@ import { SidebarNodeItem } from '../renderer/Generics/redesign/SidebarNodeItem';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/SidebarNodeItem',
+  title: 'Generic/SidebarNodeItem',
   component: SidebarNodeItem,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
