@@ -4,7 +4,7 @@ import ExternalLink from '../renderer/Generics/redesign/Link/ExternalLink';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/ExternalLink',
+  title: 'Generic/ExternalLink',
   component: ExternalLink,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
 } as ComponentMeta<typeof ExternalLink>;

@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import SpecialSelect from '../renderer/Generics/redesign/SpecialSelect/SpecialSelect';
 
 export default {
-  title: 'Example/SpecialSelect',
+  title: 'Generic/SpecialSelect',
   component: SpecialSelect,
 } as ComponentMeta<typeof SpecialSelect>;
 

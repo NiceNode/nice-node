@@ -4,7 +4,7 @@ import { InputField } from '../renderer/Generics/redesign/InputField';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/InputField',
+  title: 'Generic/InputField',
   component: InputField,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
