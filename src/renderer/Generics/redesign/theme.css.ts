@@ -32,6 +32,7 @@ export const [lightTheme, vars] = createTheme({
   },
   components: {
     buttonBoxShadow: '0px 1px 2px rgba(0, 0, 0, 0.08)',
+    selectCardBackground: 'rgba(115, 81, 235, 0.08)',
   },
 });
 
@@ -56,5 +57,6 @@ export const darkTheme = createTheme(vars, {
   },
   components: {
     buttonBoxShadow: '0px 1px 2px rgba(0, 0, 0, 0.24)',
+    selectCardBackground: 'rgba(130, 103, 239, 0.08)',
   },
 });
