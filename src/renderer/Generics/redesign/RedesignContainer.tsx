@@ -16,7 +16,7 @@ const RedesignContainerStoryBook: React.FC = ({ children }) => {
       <div
         id="onBoarding"
         className={isDarkTheme ? darkTheme : lightTheme}
-        style={{ padding: '2em', border: '1px solid black' }}
+        style={{ padding: '2em', border: '1px solid black', minHeight: '80vh' }}
       >
         {children}
       </div>

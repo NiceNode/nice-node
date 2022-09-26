@@ -4,22 +4,22 @@ import { vars } from '../theme.css';
 export const container = style({
   margin: 5,
   cursor: 'pointer',
-  width: 400,
+  minWidth: 200,
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
   padding: '10px 12px',
   gap: '12px',
   borderRadius: '5px',
-  boxShadow: "inset 0px 0px 0px 4px rgba(255, 255, 255, 0.08)",
+  boxShadow: vars.components.selectCardBoxShadow,
   background: vars.color.background96,
-  ":hover": { background: vars.color.background92 }
+  ':hover': { background: vars.color.background92 },
 });
 
 export const selectedContainer = style({
-  border: "2px solid #7a64ee",
+  border: '2px solid #7a64ee',
   background: vars.components.selectCardBackground,
-  ":hover": { background: vars.components.selectCardBackground }
+  ':hover': { background: vars.components.selectCardBackground },
 });
 
 export const textContainer = style({
@@ -54,5 +54,5 @@ export const descriptionStyle = style({
 });
 
 export const tagStyle = style({
-  marginLeft: 'auto'
+  marginLeft: 'auto',
 });

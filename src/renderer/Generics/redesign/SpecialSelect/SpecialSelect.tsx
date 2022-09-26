@@ -3,11 +3,11 @@
 // https://react-select.com/components#Option
 import Select, { OptionProps, ValueContainerProps } from 'react-select';
 import { NodeIconId } from '../../../assets/images/nodeIcons';
-import { SelectCard } from '../SelectCard/SelectCard';
+import SelectCard from '../SelectCard/SelectCard';
 
 const Option = (props: OptionProps) => {
   return (
-    <div style={{ height: 75 }} ref={props.innerRef} {...props.innerProps}>
+    <div ref={props.innerRef} {...props.innerProps}>
       <SelectCard {...props.data} />
     </div>
   );
@@ -17,13 +17,7 @@ const SingleValue = ({ children, ...props }: ValueContainerProps) => {
   const nething = props.getValue();
 
   return (
-    <div
-      style={{
-        height: 75,
-        width: '100%',
-      }}
-      {...props.innerProps}
-    >
+    <div {...props.innerProps}>
       <SelectCard {...nething[0]} />
 
       {/* {`${nething[0]?.label} ${nething[0]?.value}`} */}
@@ -98,7 +92,20 @@ const SpecialSelect = ({ onChange, ...props }: SpecialSelectProps) => {
         styles={{
           control: (base) => ({
             ...base,
+            backgroundColor: 'inherit',
             border: 'none',
+            boxShadow: 'none',
+            ':hover': {
+              border: 'none',
+              boxShadow: 'none',
+            },
+          }),
+          menu: (base) => ({
+            ...base,
+            backgroundColor: 'inherit',
+            marginTop: 0,
+            borderTop: 0,
+            boxShadow: '0px 14px 16px rgba(0, 0, 0, 0.14)',
           }),
           dropdownIndicator: () => ({
             display: 'none',
