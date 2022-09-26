@@ -303,7 +303,7 @@
     "react-json-view": "^1.21.3",
     "react-redux": "^7.2.8",
     "react-router-dom": "^6.2.2",
-    "react-select": "^5.3.2",
+    "react-select": "^5.4.0",
     "react-tooltip": "^4.2.21",
     "styled-components": "^5.3.5",
     "systeminformation": "^5.12.6",
