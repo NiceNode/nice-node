@@ -1,7 +1,8 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { NodeIconId } from '../renderer/assets/images/nodeIcons';
 
-import { SelectCard } from '../renderer/Generics/redesign/SelectCard';
+import { SelectCard as OldSelectCard } from '../renderer/Generics/redesign/SelectCard';
+import SelectCard from '../renderer/Generics/redesign/SelectCard/SelectCard';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -75,7 +76,7 @@ const NetworksTemplate: ComponentStory<typeof SelectCard> = (args) => (
     {networksCards.map((obj) => {
       const darkMode = args.darkMode;
       const { iconId, ...rest } = obj
-      return <SelectCard iconId={iconId as NodeIconId} {...rest} darkMode={darkMode} />;
+      return <OldSelectCard iconId={iconId as NodeIconId} {...rest} darkMode={darkMode} />;
     })}
   </>
 );
