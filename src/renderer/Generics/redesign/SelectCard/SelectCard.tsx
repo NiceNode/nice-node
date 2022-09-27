@@ -61,6 +61,9 @@ const SelectCard = ({
           onClick();
         }
       }}
+      onKeyDown={onClick}
+      role="button"
+      tabIndex={0}
     >
       <NodeIcon iconId={iconId} size="medium" />
       <div className={textContainer}>

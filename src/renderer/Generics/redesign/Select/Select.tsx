@@ -58,7 +58,7 @@ const Select = ({ onChange }: SelectProps) => {
           }),
           menu: (base) => ({
             ...base,
-            backgroundColor: 'inherit',
+            backgroundColor: vars.color.background,
             marginTop: 0,
             borderTop: 0,
             boxShadow: '0px 14px 16px rgba(0, 0, 0, 0.14)',
@@ -66,7 +66,7 @@ const Select = ({ onChange }: SelectProps) => {
           option: (base) => ({
             ...base,
             backgroundColor: 'inherit',
-            ':active': {
+            ':hover': {
               backgroundColor: vars.color.background96,
             },
           }),
