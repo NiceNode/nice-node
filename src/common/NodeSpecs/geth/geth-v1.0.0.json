@@ -4,7 +4,7 @@
   "displayName": "Geth",
   "execution": {
     "executionTypes": ["binary", "docker"],
-    "defaultExecutionType": "binary",
+    "defaultExecutionType": "docker",
     "execPath": "geth",
     "input": {
       "defaultConfig": {
@@ -15,9 +15,11 @@
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
-        "raw": "-p 30303:30303 -p 8545:8545 -p 8546:8546"
+        "raw": "-p 30303:30303 -p 8545:8545 -p 8546:8546",
+        "forcedRawNodeInput": "--http.addr 0.0.0.0"
       }
     },
+    "imageName": "ethereum/client-go:stable",
     "binaryDownload": {
       "type": "static",
       "darwin": {
