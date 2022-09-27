@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -13,6 +13,7 @@ import electron from '../../electronGlobal';
 import { Button } from '../../Generics/redesign/Button/Button';
 import Input from '../../Generics/redesign/Input/Input';
 import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
+import Select from '../../Generics/redesign/Select/Select';
 
 export interface AddEthereumNodeProps {
   /**
@@ -49,9 +50,20 @@ const AddEthereumNode = ({ onChange }: AddEthereumNodeProps) => {
         isDown={!sIsOptionsOpen}
       />
       {sIsOptionsOpen && (
-        <div>
-          <span>Network</span>
-          <span />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            width: '100%',
+          }}
+        >
+          <span style={{ fontWeight: 600 }}>Network</span>{' '}
+          <div
+            style={{ width: 300, display: 'inline-block', marginLeft: 'auto' }}
+          >
+            <Select onChange={console.log} />
+          </div>
         </div>
       )}
       <div

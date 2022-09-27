@@ -2,8 +2,8 @@
 // Options replaceable component docs:
 // https://react-select.com/components#Option
 import Select, { OptionProps, ValueContainerProps } from 'react-select';
-import { NodeIconId } from '../../../assets/images/nodeIcons';
 import SelectCard from '../SelectCard/SelectCard';
+import { vars } from '../theme.css';
 
 const Option = (props: OptionProps) => {
   return (
@@ -62,13 +62,13 @@ const ecOptions = [
     },
   },
 ];
-const options = [
-  { value: 'lodestar', label: 'lodestar', storage: 100, minory: true },
-  { value: 'prysm', label: 'prysm', storage: 1000 },
-  { value: 'teku', label: 'teku', minory: true, storage: 9009 },
-  { value: 'lighthouse', label: 'lighthouse', storage: 1 },
-  { value: 'nimbus', label: 'nimbus', storage: 69 },
-];
+// const options = [
+//   { value: 'lodestar', label: 'lodestar', storage: 100, minory: true },
+//   { value: 'prysm', label: 'prysm', storage: 1000 },
+//   { value: 'teku', label: 'teku', minory: true, storage: 9009 },
+//   { value: 'lighthouse', label: 'lighthouse', storage: 1 },
+//   { value: 'nimbus', label: 'nimbus', storage: 69 },
+// ];
 export interface SpecialSelectProps {
   onChange?: (newValue: string) => void;
 }
@@ -96,6 +96,7 @@ const SpecialSelect = ({ onChange, ...props }: SpecialSelectProps) => {
           }),
           control: (base) => ({
             ...base,
+            backgroundColor: 'inherit',
             border: 'none',
             boxShadow: 'none',
             ':hover': {
@@ -105,6 +106,7 @@ const SpecialSelect = ({ onChange, ...props }: SpecialSelectProps) => {
           }),
           menu: (base) => ({
             ...base,
+            backgroundColor: vars.color.background,
             marginTop: 0,
             borderTop: 0,
             boxShadow: '0px 14px 16px rgba(0, 0, 0, 0.14)',
