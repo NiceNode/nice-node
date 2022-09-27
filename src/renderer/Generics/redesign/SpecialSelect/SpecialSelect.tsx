@@ -70,19 +70,20 @@ const ecOptions = [
 //   { value: 'nimbus', label: 'nimbus', storage: 69 },
 // ];
 export interface SpecialSelectProps {
+  options?: any[];
   onChange?: (newValue: string) => void;
 }
 
 /**
  * Use for selecting Ethereum node client
  */
-const SpecialSelect = ({ onChange, ...props }: SpecialSelectProps) => {
+const SpecialSelect = ({ options, onChange, ...props }: SpecialSelectProps) => {
   return (
     <>
       <Select
         hideSelectedOptions
-        defaultValue={ecOptions[0]}
-        options={ecOptions}
+        defaultValue={options ? options[0] : ecOptions[0]}
+        options={options || ecOptions}
         isSearchable={false}
         components={{
           Option,

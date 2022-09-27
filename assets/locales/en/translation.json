@@ -1,4 +1,6 @@
 {
+  "AddYourFirstNode": "Add your first node",
+  "AddYourFirstNodeDescription" : "Node requirements and settings come next. Also, you can add more nodes later!",
   "Add Node": "Add Node",
   "Remove Node": "Remove Node",
   "Install Docker": "Install Docker",
@@ -40,5 +42,6 @@
   "dockerInstallingMessage": "Installing... (this may take 5 or more minutes). There will be a password prompt on Mac and a pop-up on Windows to give permissions to install Docker.",
   "EthereumNode": "Ethereum Node",
   "LearnMoreClientDiversity": "Learn more about client diversity",
-  "AddEthereumNodeDescription" : "Running a full etherum node is a two part story. Choosing minority clients are important for the health of the network."
+  "AddEthereumNodeDescription" : "Running a full etherum node is a two part story. Choosing minority clients are important for the health of the network.",
+  "ChooseYourNetwork" : "Choose your network"
 }

@@ -28,11 +28,10 @@ export const textContainer = style({
   alignItems: 'flex-start',
   padding: '0px',
   gap: '2px',
-  height: '100%',
+  minHeight: '100%',
   justifyContent: 'center',
-  flex: 'none',
   order: 0,
-  flexGrow: 0,
+  flexGrow: 1,
 });
 
 export const titleStyle = style({
