@@ -25,7 +25,8 @@ export const [lightTheme, vars] = createTheme({
     backgroundActiveGradient:
       'linear-gradient(0deg, rgba(0, 0, 2, 0.04), rgba(0, 0, 2, 0.04)), #FFFFFF',
     backgroundDisabled: common.color.black4,
-    border: 'rgba(0, 0, 2, 0.1)',
+    border: 'rgba(0, 0, 2, 0.10)',
+    border15: 'rgba(0, 0, 2, 0.15)',
     primary: '#7351EB',
     primaryHover: '#482EB6',
     green: 'rgba(62, 187, 100, 1)',
@@ -54,6 +55,7 @@ export const darkTheme = createTheme(vars, {
       'linear-gradient(0deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.04)), #000000',
     backgroundDisabled: common.color.white4,
     border: 'rgba(255, 255, 255, 0.1)',
+    border15: 'rgba(255, 255, 255, 0.15)',
     primary: '#8267EF',
     primaryHover: '#998FF1',
     green: 'rgba(62, 187, 100, 1)',
