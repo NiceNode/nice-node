@@ -17,17 +17,15 @@ export interface InputProps {
 
 const Input = ({ placeholder, required, disabled }: InputProps) => {
   return (
-    <div>
-      <input
-        {...{
-          type: 'text',
-          className: [container].join(' '),
-          placeholder,
-          ...(disabled && { disabled }),
-          ...(required && { required }),
-        }}
-      />
-    </div>
+    <input
+      {...{
+        type: 'text',
+        className: [container].join(' '),
+        placeholder,
+        ...(disabled && { disabled }),
+        ...(required && { required }),
+      }}
+    />
   );
 };
 export default Input;

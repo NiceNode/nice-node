@@ -2,6 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { common, vars } from '../theme.css';
 
 export const baseButton = style({
+  cursor: 'pointer',
   boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'row',

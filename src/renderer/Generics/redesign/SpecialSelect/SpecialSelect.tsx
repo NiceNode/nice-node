@@ -70,7 +70,7 @@ const options = [
   { value: 'nimbus', label: 'nimbus', storage: 69 },
 ];
 export interface SpecialSelectProps {
-  onChange: (newValue: string) => void;
+  onChange?: (newValue: string) => void;
 }
 
 /**
@@ -90,9 +90,12 @@ const SpecialSelect = ({ onChange, ...props }: SpecialSelectProps) => {
           IndicatorsContainer: () => <></>,
         }}
         styles={{
+          container: (base) => ({
+            ...base,
+            width: '100%',
+          }),
           control: (base) => ({
             ...base,
-            backgroundColor: 'inherit',
             border: 'none',
             boxShadow: 'none',
             ':hover': {
@@ -102,7 +105,6 @@ const SpecialSelect = ({ onChange, ...props }: SpecialSelectProps) => {
           }),
           menu: (base) => ({
             ...base,
-            backgroundColor: 'inherit',
             marginTop: 0,
             borderTop: 0,
             boxShadow: '0px 14px 16px rgba(0, 0, 0, 0.14)',

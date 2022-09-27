@@ -4,7 +4,7 @@ import { vars } from '../theme.css';
 export const container = style({
   height: '16px',
   display: 'block',
-  width: '100%',
+  width: '-webkit-fill-available',
   padding: '6px 8px',
   backgroundColor: vars.color.background,
   backgroundClip: 'padding-box',

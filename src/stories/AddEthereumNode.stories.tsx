@@ -4,7 +4,7 @@ import AddEthereumNode from '../renderer/Presentational/AddEthereumNode/AddEther
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/AddEthereumNode',
+  title: 'Presentational/AddEthereumNode',
   component: AddEthereumNode,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
