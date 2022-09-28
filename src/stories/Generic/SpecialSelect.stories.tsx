@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import SpecialSelect from '../renderer/Generics/redesign/SpecialSelect/SpecialSelect';
+import SpecialSelect from '../../renderer/Generics/redesign/SpecialSelect/SpecialSelect';
 
 export default {
   title: 'Generic/SpecialSelect',

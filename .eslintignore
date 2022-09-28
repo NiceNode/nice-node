@@ -39,4 +39,6 @@ src/renderer/ethers.js
 # ignore storybook build files
 # ignore source for now
 src/stories
+src/stories/Generic
+src/stories/Presentational
 storybook-static
