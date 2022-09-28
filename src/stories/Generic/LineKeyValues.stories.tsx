@@ -1,21 +1,17 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import LabelValues from '../renderer/Generics/redesign/LabelValues/LabelValues';
+import LabelValues from '../../renderer/Generics/redesign/LabelValues/LabelValues';
 
-// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
   title: 'Generic/LabelValues',
   component: LabelValues,
-  // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
   },
 } as ComponentMeta<typeof LabelValues>;
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template: ComponentStory<typeof LabelValues> = (args) => <LabelValues {...args} />;
 
 export const Primary = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
   title: 'Node requirements',
   items: [

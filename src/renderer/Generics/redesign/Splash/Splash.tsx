@@ -1,6 +1,6 @@
 import { container, titleFont, descriptionFont, iconClass } from './splash.css';
 import icon from '../../../../../assets/icon.png';
-import { Button } from '../Button';
+import Button from '../Button/Button';
 
 export interface SplashProps {
   title: string;
@@ -13,7 +13,11 @@ const Splash = ({ title, description }: SplashProps) => {
       <img className={iconClass} alt="NiceNode logo" src={icon} />
       <div className={titleFont}>{title}</div>
       <div className={descriptionFont}>{description}</div>
-      <Button label="Get started" onClick={() => console.log('Get started')} />
+      <Button
+        label="Get started"
+        primary
+        onClick={() => console.log('Get started')}
+      />
     </div>
   );
 };

@@ -1,14 +1,11 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { NodeIconId } from '../renderer/assets/images/nodeIcons';
+import { NodeIconId } from '../../renderer/assets/images/nodeIcons';
 
-import { SelectCard as OldSelectCard } from '../renderer/Generics/redesign/SelectCard';
-import SelectCard from '../renderer/Generics/redesign/SelectCard/SelectCard';
+import SelectCard from '../../renderer/Generics/redesign/SelectCard/SelectCard';
 
-// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
   title: 'Generic/SelectCard',
   component: SelectCard,
-  // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     backgroundColor: { control: 'color' },
   },
@@ -70,13 +67,11 @@ const clientsCards = [
   { iconId: 'nimbus', title: 'Nimbus', info: 'Consensus Client' },
 ];
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const NetworksTemplate: ComponentStory<typeof SelectCard> = (args) => (
   <>
     {networksCards.map((obj) => {
-      const darkMode = args.darkMode;
       const { iconId, ...rest } = obj
-      return <OldSelectCard iconId={iconId as NodeIconId} {...rest} darkMode={darkMode} />;
+      return <SelectCard iconId={iconId as NodeIconId} {...rest} />;
     })}
   </>
 );
@@ -84,13 +79,11 @@ const NetworksTemplate: ComponentStory<typeof SelectCard> = (args) => (
 const ClientsTemplate: ComponentStory<typeof SelectCard> = (args) => (
   <>
     {clientsCards.map((obj) => {
-      const darkMode = args.darkMode;
       const { iconId, ...rest } = obj
-      return <SelectCard iconId={iconId as NodeIconId} {...rest} darkMode={darkMode} />;
+      return <SelectCard iconId={iconId as NodeIconId} {...rest} />;
     })}
   </>
 );
 
 export const Networks = NetworksTemplate.bind({});
 export const Clients = ClientsTemplate.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args

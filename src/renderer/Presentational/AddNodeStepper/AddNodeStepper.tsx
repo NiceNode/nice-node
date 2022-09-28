@@ -6,7 +6,7 @@ import {
   descriptionFont,
   sectionFont,
   titleFont,
-} from './addEthereumNode.css';
+} from './addNodeStepper.css';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import SpecialSelect from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import electron from '../../electronGlobal';
@@ -15,14 +15,14 @@ import Input from '../../Generics/redesign/Input/Input';
 import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import Select from '../../Generics/redesign/Select/Select';
 
-export interface AddEthereumNodeProps {
+export interface AddNodeStepperProps {
   /**
    * Listen to node config changes
    */
   onChange: (newValue: string) => void;
 }
 
-const AddEthereumNode = ({ onChange }: AddEthereumNodeProps) => {
+const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   const { t } = useTranslation();
   const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
 
@@ -30,7 +30,7 @@ const AddEthereumNode = ({ onChange }: AddEthereumNodeProps) => {
     <div className={container}>
       <div className={titleFont}>{t('EthereumNode')}</div>
       <div className={descriptionFont}>
-        <>{t('AddEthereumNodeDescription')}</>
+        <>{t('AddNodeStepperDescription')}</>
       </div>
       <ExternalLink
         text={t('LearnMoreClientDiversity')}
@@ -86,4 +86,4 @@ const AddEthereumNode = ({ onChange }: AddEthereumNodeProps) => {
   );
 };
 
-export default AddEthereumNode;
+export default AddNodeStepper;

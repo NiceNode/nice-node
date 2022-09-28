@@ -11,17 +11,8 @@ export interface ButtonProps {
    * Is this the principal call to action on the page?
    */
   primary?: boolean;
-  /**
-   * What state is the button in?
-   */
   disabled?: boolean;
-  /**
-   * What background color to use
-   */
   backgroundColor?: string;
-  /**
-   * How large should the button be?
-   */
   size?: 'small' | 'medium' | 'large';
   /**
    * Text only, with icon, or just icon?
@@ -32,19 +23,13 @@ export interface ButtonProps {
    */
   icon?: React.ReactNode;
   /**
-   * Button contents
+   * Button text content
    */
   label: string;
-  /**
-   * Optional click handler
-   */
   onClick?: () => void;
 }
 
-/**
- * Primary UI component for user interaction.
- */
-export const Button = ({
+const Button = ({
   primary = false,
   size = 'medium',
   disabled = false,
@@ -72,3 +57,5 @@ export const Button = ({
     </button>
   );
 };
+
+export default Button;

@@ -1,14 +1,14 @@
 import React from 'react';
-import { Button } from '../Button/Button';
+import Button from '../Button/Button';
 import { bottomBar, previousButton, nextButton } from './stepper.css';
 
 export interface StepperProps {
   /**
-   * When a step changes ('prev' or 'next')
+   * When a step changes ('previous' or 'next')
    */
-  onChange?: (change: string) => void;
+  onChange: (change: 'next' | 'previous') => void;
   /**
-   * The current step component to show
+   * Optional: Renders above buttons
    */
   children?: React.ReactNode;
 }
@@ -19,10 +19,10 @@ const Stepper = ({ onChange, children }: StepperProps) => {
       {children}
       <div className={bottomBar}>
         <div className={previousButton}>
-          <Button label="Previous" />
+          <Button label="Previous" onClick={() => onChange('previous')} />
         </div>
         <div className={nextButton}>
-          <Button label="Next step" primary />
+          <Button label="Next step" primary onClick={() => onChange('next')} />
         </div>
       </div>
     </div>
