@@ -22,9 +22,6 @@ export interface AddEthereumNodeProps {
   onChange: (newValue: string) => void;
 }
 
-/**
- * Primary UI component for user interaction
- */
 const AddEthereumNode = ({ onChange }: AddEthereumNodeProps) => {
   const { t } = useTranslation();
   const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
