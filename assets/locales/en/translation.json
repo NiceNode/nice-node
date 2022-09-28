@@ -33,7 +33,7 @@
   "unknown":"unknown",
   "nodeNotStartedYet": "The node will not be started yet.",
   "logs": "logs",
-  "dockerPurpose": "Docker helps NiceNode provide many nodes for users to choose from. Docker is supported by most node development teams and is free for users to install. Installing Docker will give you access to all of the Ethereum nodes! Docker will quietly run in the background after installation.",
+  "dockerPurpose": "Docker helps NiceNode provide more node and client options for users. Docker is free for users to install.",
   "restartDockerOnInstall": "Restart NiceNode when Docker is installed and running.",
   "ensureDockerIsRunning": "If you have Docker Desktop installed, ensure it is running.",
   "installDockerOnYourOwn": "Install Docker on your own.",
@@ -43,5 +43,8 @@
   "EthereumNode": "Ethereum Node",
   "LearnMoreClientDiversity": "Learn more about client diversity",
   "AddEthereumNodeDescription" : "Running a full etherum node is a two part story. Choosing minority clients are important for the health of the network.",
-  "ChooseYourNetwork" : "Choose your network"
+  "ChooseYourNetwork" : "Choose your network",
+  "DockerInstallation": "Docker installation",
+  "LearnMoreDocker": "Learn more about Docker",
+  "DownloadAndInstall": "Download and install"
 }

@@ -21,9 +21,6 @@ export interface NodeRequirementsProps {
   systemData: SystemData;
 }
 
-/**
- * Primary UI component for user interaction
- */
 const NodeRequirements = ({
   nodeRequirements,
   systemData,
