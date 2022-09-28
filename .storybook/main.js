@@ -22,27 +22,27 @@ module.exports = {
       use: ['style-loader', 'css-loader', 'sass-loader'],
       include: path.resolve(__dirname, '../'),
     },
-        // SVG
+    // SVG
+    {
+      test: /\.svg$/,
+      issuer: /\.[jt]sx?$/,
+      use: [
         {
-          test: /\.svg$/,
-          issuer: /\.[jt]sx?$/,
-          use: [
-            {
-              loader: '@svgr/webpack',
-              options: {
-                prettier: false,
-                svgo: false,
-                svgoConfig: {
-                  plugins: [{ removeViewBox: false }],
-                },
-                titleProp: true,
-                ref: true,
-              },
+          loader: '@svgr/webpack',
+          options: {
+            prettier: false,
+            svgo: false,
+            svgoConfig: {
+              plugins: [{ removeViewBox: false }],
             },
-            'file-loader',
-          ],
-          // include: path.resolve(__dirname, '../')
+            titleProp: true,
+            ref: true,
+          },
         },
+        'file-loader',
+      ],
+      // include: path.resolve(__dirname, '../')
+    },
     {
       test: /\.(png|woff|woff2|eot|ttf|svg)$/,
       include: path.resolve(__dirname, '../')
