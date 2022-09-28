@@ -14,11 +14,11 @@ export interface NodeRequirementsProps {
   /**
    * Node requirements
    */
-  nodeRequirements: SystemRequirements;
+  nodeRequirements?: SystemRequirements;
   /**
    * Title of the checklist
    */
-  systemData: SystemData;
+  systemData?: SystemData;
 }
 
 const NodeRequirements = ({
@@ -47,7 +47,7 @@ const NodeRequirements = ({
     <div className={container}>
       <div className={titleFont}>Node Requirements</div>
       <div className={descriptionFont}>
-        {nodeRequirements.description ? (
+        {nodeRequirements?.description ? (
           nodeRequirements.description
         ) : (
           <>
@@ -56,11 +56,16 @@ const NodeRequirements = ({
           </>
         )}
       </div>
-      {nodeRequirements.documentationUrl && (
+      {nodeRequirements?.documentationUrl && (
         <ExternalLink
           text="Learn more about the requirements"
           url={nodeRequirements.documentationUrl}
         />
+      )}
+      {!nodeRequirements && (
+        <>
+          The requirements are unavailable. Please check with the node provider.
+        </>
       )}
       <Checklist items={sItems} />
     </div>

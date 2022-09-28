@@ -19,7 +19,7 @@ export const [lightTheme, vars] = createTheme({
     font50: 'rgba(0, 0, 2, 0.50)',
     font70: 'rgba(0, 0, 2, 0.70)',
     fontDisabled: common.color.black25,
-    background: 'rgba(255, 255, 255, 1)',
+    background: common.color.white,
     background96: 'rgba(0, 0, 2, 0.04)',
     background92: 'rgba(0, 0, 2, 0.08)',
     backgroundActiveGradient:
@@ -37,6 +37,7 @@ export const [lightTheme, vars] = createTheme({
     buttonBoxShadow: '0px 1px 2px rgba(0, 0, 0, 0.08)',
     selectCardBackground: 'rgba(115, 81, 235, 0.08)',
     selectCardBoxShadow: 'inset 0px 0px 0px 4px rgba(255, 255, 255, 0.08)',
+    secondaryButtonBackground: common.color.white,
   },
 });
 
@@ -66,5 +67,6 @@ export const darkTheme = createTheme(vars, {
     buttonBoxShadow: '0px 1px 2px rgba(0, 0, 0, 0.24)',
     selectCardBackground: 'rgba(130, 103, 239, 0.08)',
     selectCardBoxShadow: 'none',
+    secondaryButtonBackground: common.color.white4,
   },
 });

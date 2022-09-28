@@ -572,3 +572,7 @@ Primary.args = {
     ]
   }
 };
+
+export const NoRequirements = Template.bind({});
+NoRequirements.args = {
+}

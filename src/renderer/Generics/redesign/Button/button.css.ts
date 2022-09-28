@@ -45,7 +45,7 @@ export const primaryButton = style([
 export const secondaryButton = style([
   {
     color: vars.color.font,
-    background: vars.color.background96,
+    background: vars.components.secondaryButtonBackground,
     boxShadow: vars.components.buttonBoxShadow,
     selectors: {
       '&:hover:enabled': {

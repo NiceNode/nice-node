@@ -2,10 +2,17 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '../../Generics/redesign/theme.css';
 
 export const container = style({
+  height: '100%',
+  width: '100%',
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: 16,
+});
+
+export const componentContainer = style({
+  width: '100%',
+  flexGrow: 1,
+  overflow: 'auto',
+  boxSizing: 'border-box',
 });
 
 export const titleFont = style({

@@ -9,7 +9,7 @@ import {
 } from './dockerInstallation.css';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import electron from '../../electronGlobal';
-import { Button } from '../../Generics/redesign/Button/Button';
+import Button from '../../Generics/redesign/Button/Button';
 import ProgressBar from '../../Generics/redesign/ProgressBar/ProgressBar';
 
 export interface DockerInstallationProps {
