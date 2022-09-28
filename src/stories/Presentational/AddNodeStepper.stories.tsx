@@ -13,5 +13,5 @@ const Template: ComponentStory<typeof AddNodeStepper> = (args) => <AddNodeSteppe
 
 export const Primary = Template.bind({});
 Primary.args = {
-  onChange: (newValue) => console.log(newValue)
+  onChange: (newValue: string) => console.log(newValue)
 };
