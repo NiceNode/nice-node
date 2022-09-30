@@ -9,6 +9,8 @@ import AddEthereumNode from '../AddEthereumNode/AddEthereumNode';
 import DockerInstallation from '../DockerInstallation/DockerInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import electron from '../../electronGlobal';
+import { NodeSpecification } from '../../../common/nodeSpec';
+import { categorizeNodeLibrary } from '../../utils';
 
 export interface AddNodeStepperProps {
   onChange: (newValue: 'done' | 'cancel') => void;
@@ -19,6 +21,12 @@ const TOTAL_STEPS = 3;
 const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   const { t } = useTranslation();
   const [sStep, setStep] = useState<number>(0);
+  const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
+    NodeSpecification[]
+  >([]);
+  const [sBeaconNodeLibrary, setBeaconNodeLibrary] = useState<
+    NodeSpecification[]
+  >([]);
 
   // Load ALL node spec's when AddNodeStepper is created
   //  This can later be optimized to only retrieve NodeSpecs as needed
@@ -26,10 +34,10 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
     const fetchNodeLibrary = async () => {
       const nodeLibrary = await electron.getNodeLibrary();
       console.log('nodeLibrary', nodeLibrary);
-      // const categorized = categorizeNodeLibrary(nodeLibrary);
+      const categorized = categorizeNodeLibrary(nodeLibrary);
       // console.log('nodeLibrary categorized', categorized);
-      // setExecutionClientLibrary(categorized.ExecutionClient);
-      // setBeaconNodeLibrary(categorized.BeaconNode);
+      setExecutionClientLibrary(categorized.ExecutionClient);
+      setBeaconNodeLibrary(categorized.BeaconNode);
       // // setLayer2ClientLibrary(categorized.L2);
       // setOtherNodeLibrary(categorized.Other);
       // set exec, beacons, and layer 2s
@@ -68,7 +76,11 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       <div className={componentContainer}>
         {/* Step 0 */}
         <div style={{ display: sStep === 0 ? '' : 'none' }}>
-          <AddEthereumNode onChange={onChangeAddEthereumNode} />
+          <AddEthereumNode
+            onChange={onChangeAddEthereumNode}
+            executionOptions={sExecutionClientLibrary}
+            beaconOptions={sBeaconNodeLibrary}
+          />
         </div>
 
         {/* Step 1 */}

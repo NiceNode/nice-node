@@ -19,71 +19,26 @@ const SingleValue = ({ children, ...props }: ValueContainerProps) => {
   return (
     <div {...props.innerProps}>
       <SelectCard {...nething[0]} />
-
-      {/* {`${nething[0]?.label} ${nething[0]?.value}`} */}
     </div>
   );
 };
-
-const ecOptions = [
-  {
-    iconId: 'geth',
-    value: 'geth',
-    label: 'Geth',
-    title: 'Geth',
-    info: 'Execution Client',
-    onClick() {
-      console.log('hello');
-    },
-  },
-  {
-    iconId: 'erigon',
-    value: 'erigon',
-    label: 'Erigon',
-    title: 'Erigon',
-    info: 'Execution Client',
-  },
-  {
-    iconId: 'nethermind',
-    value: 'nethermind',
-    label: 'Nethermind',
-    title: 'Nethermind',
-    info: 'Execution Client',
-  },
-  {
-    iconId: 'besu',
-    value: 'besu',
-    label: 'Besu',
-    title: 'Besu',
-    info: 'Execution Client',
-    minority: true,
-    onClick() {
-      console.log('hello');
-    },
-  },
-];
-// const options = [
-//   { value: 'lodestar', label: 'lodestar', storage: 100, minory: true },
-//   { value: 'prysm', label: 'prysm', storage: 1000 },
-//   { value: 'teku', label: 'teku', minory: true, storage: 9009 },
-//   { value: 'lighthouse', label: 'lighthouse', storage: 1 },
-//   { value: 'nimbus', label: 'nimbus', storage: 69 },
-// ];
 export interface SpecialSelectProps {
   options?: any[];
   onChange?: (newValue: string) => void;
 }
 
 /**
- * Use for selecting Ethereum node client
+ * Used for selecting Ethereum node client
  */
 const SpecialSelect = ({ options, onChange, ...props }: SpecialSelectProps) => {
   return (
     <>
       <Select
+        captureMenuScroll={false}
+        menuShouldScrollIntoView
         hideSelectedOptions
-        defaultValue={options ? options[0] : ecOptions[0]}
-        options={options || ecOptions}
+        defaultValue={options ? options[0] : null}
+        options={options}
         isSearchable={false}
         components={{
           Option,

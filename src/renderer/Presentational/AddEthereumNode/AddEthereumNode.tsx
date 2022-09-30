@@ -1,4 +1,5 @@
-import { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -14,18 +15,127 @@ import Button from '../../Generics/redesign/Button/Button';
 import Input from '../../Generics/redesign/Input/Input';
 import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import Select from '../../Generics/redesign/Select/Select';
+import { NodeSpecification } from '../../../common/nodeSpec';
+
+const ecOptions = [
+  {
+    iconId: 'nethermind',
+    value: 'nethermind',
+    label: 'Nethermind',
+    title: 'Nethermind',
+    info: 'Execution Client',
+    minority: true,
+  },
+  {
+    iconId: 'besu',
+    value: 'besu',
+    label: 'Besu',
+    title: 'Besu',
+    info: 'Execution Client',
+    minority: true,
+  },
+
+  {
+    iconId: 'geth',
+    value: 'geth',
+    label: 'Geth',
+    title: 'Geth',
+    info: 'Execution Client',
+  },
+  // {
+  //   iconId: 'erigon',
+  //   value: 'erigon',
+  //   label: 'Erigon',
+  //   title: 'Erigon',
+  //   info: 'Execution Client',
+  // },
+];
+
+const ccOptions = [
+  {
+    iconId: 'nimbus',
+    title: 'Nimbus',
+    value: 'nimbus',
+    label: 'Nimbus',
+    info: 'Consensus Client',
+    minority: true,
+  },
+  {
+    iconId: 'teku',
+    title: 'Teku',
+    info: 'Consensus Client',
+    value: 'prysm',
+    label: 'Prysm',
+    minority: true,
+  },
+  {
+    iconId: 'lighthouse',
+    title: 'Lighthouse',
+    value: 'lighthouse',
+    label: 'Lighthouse',
+    info: 'Consensus Client',
+  },
+  {
+    iconId: 'prysm',
+    title: 'Prysm',
+    info: 'Consensus Client',
+    value: 'prysm',
+    label: 'Prysm',
+  },
+  {
+    iconId: 'lodestar',
+    title: 'Lodestar',
+    value: 'lodestar',
+    label: 'Lodestar',
+    info: 'Consensus Client',
+    minority: true,
+  },
+];
 
 export interface AddEthereumNodeProps {
+  executionOptions: NodeSpecification[];
+  beaconOptions: NodeSpecification[];
   /**
    * Listen to node config changes
    */
   onChange: (newValue: string) => void;
 }
 
-const AddEthereumNode = ({ onChange }: AddEthereumNodeProps) => {
+const AddEthereumNode = ({
+  onChange,
+  executionOptions,
+  beaconOptions,
+}: AddEthereumNodeProps) => {
   const { t } = useTranslation();
   const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
+  // const [sExecutionOptions, setExecutionOptions] = useState<any[]>();
+  // const [sBeaconOptions, setBeaconOptions] = useState<any[]>();
 
+  // useEffect(() => {
+  //   const formattedExecutionOptions: any[] = [];
+  //   executionOptions.forEach((opt) => {
+  //     const formattedOption = {
+  //       ...opt,
+  //       label: opt.displayName,
+  //       value: opt.specId,
+  //     };
+  //     formattedExecutionOptions.push(formattedOption);
+  //   });
+  //   setExecutionOptions(formattedExecutionOptions);
+  // }, [executionOptions]);
+
+  // useEffect(() => {
+  //   const formattedBeaconOptions: any[] = [];
+  //   beaconOptions.forEach((opt) => {
+  //     const formattedOption = {
+  //       ...opt,
+  //       label: opt.displayName,
+  //       value: opt.specId,
+  //     };
+  //     formattedBeaconOptions.push(formattedOption);
+  //   });
+  //   setBeaconOptions(formattedBeaconOptions);
+  // }, [beaconOptions]);
   // on change client or setting, return NodeSpecIds, Node Settings, and storage location
   // NodeSpecs are only req'd in parent component until Node Settings
 
@@ -40,9 +150,15 @@ const AddEthereumNode = ({ onChange }: AddEthereumNodeProps) => {
         url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
       />
       <p className={sectionFont}>Recommended execution client</p>
-      <SpecialSelect onChange={(newEc) => console.log('val', newEc)} />
+      <SpecialSelect
+        onChange={(newEc) => console.log('val', newEc)}
+        options={ecOptions}
+      />
       <p className={sectionFont}>Recommended consensus client</p>
-      <SpecialSelect onChange={(newcc) => console.log('val', newcc)} />
+      <SpecialSelect
+        onChange={(newcc) => console.log('val', newcc)}
+        options={ccOptions}
+      />
       <p className={sectionFont}>Data location</p>
       <DropdownLink
         text={`${sIsOptionsOpen ? 'Hide' : 'Show'} advanced options`}
