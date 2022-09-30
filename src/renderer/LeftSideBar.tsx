@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { NodeId } from '../common/node';
-import AddNode from './AddNode/AddNode';
+import AddNode from './AddNode/AddNodeRedesign';
 import DivButton from './DivButton';
 import { useAppDispatch, useAppSelector } from './state/hooks';
 import {

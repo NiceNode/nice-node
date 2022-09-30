@@ -21,6 +21,7 @@ const RedesignContainerStoryBook: React.FC = ({ children }) => {
           marginTop: '1em',
           border: '1px dashed #E3E3E3',
           flexGrow: 1,
+          overflow: 'auto',
           /**
            * Then, because flex items cannot be smaller than the
            * size of their content – min-height: auto is the

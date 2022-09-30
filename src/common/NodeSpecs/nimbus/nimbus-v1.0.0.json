@@ -28,6 +28,19 @@
   },
   "category": "L1/ConsensusClient/BeaconNode",
   "rpcTranslation": "eth-l1-beacon",
+  "systemRequirements": {
+    "memory": {
+      "minSizeGB": 4
+    },
+    "storage" : {
+      "minSizeGB" : 200,
+      "ssdRequired": true
+    },
+    "internet" : {
+      "minDownloadSpeedMbps": 25,
+      "minUploadSpeedMbps": 3
+    }
+  },
   "configTranslation": {
     "dataDir": {
       "displayName": "The directory where nimbus will store all blockchain data.",

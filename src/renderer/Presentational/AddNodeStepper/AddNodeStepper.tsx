@@ -1,6 +1,6 @@
 // This component could be made into a Generic "FullScreenStepper" component
 // Just make sure to always render each child so that children component state isn't cleard
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { componentContainer, container } from './addNodeStepper.css';
@@ -8,6 +8,7 @@ import Stepper from '../../Generics/redesign/Stepper/Stepper';
 import AddEthereumNode from '../AddEthereumNode/AddEthereumNode';
 import DockerInstallation from '../DockerInstallation/DockerInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
+import electron from '../../electronGlobal';
 
 export interface AddNodeStepperProps {
   onChange: (newValue: 'done' | 'cancel') => void;
@@ -19,9 +20,28 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   const { t } = useTranslation();
   const [sStep, setStep] = useState<number>(0);
 
+  // Load ALL node spec's when AddNodeStepper is created
+  //  This can later be optimized to only retrieve NodeSpecs as needed
+  useEffect(() => {
+    const fetchNodeLibrary = async () => {
+      const nodeLibrary = await electron.getNodeLibrary();
+      console.log('nodeLibrary', nodeLibrary);
+      // const categorized = categorizeNodeLibrary(nodeLibrary);
+      // console.log('nodeLibrary categorized', categorized);
+      // setExecutionClientLibrary(categorized.ExecutionClient);
+      // setBeaconNodeLibrary(categorized.BeaconNode);
+      // // setLayer2ClientLibrary(categorized.L2);
+      // setOtherNodeLibrary(categorized.Other);
+      // set exec, beacons, and layer 2s
+    };
+    fetchNodeLibrary();
+  }, []);
+
   const onChangeAddEthereumNode = (newValue: string) => {
     console.log('onChangeAddEthereumNode newValue ', newValue);
   };
+
+  // implement function which takes a NodeSpec & NodeSettings and returns NodeRequirements
 
   const onStep = (newValue: string) => {
     console.log('onChangeAddEthereumNode newValue ', newValue);

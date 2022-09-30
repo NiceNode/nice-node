@@ -26,6 +26,9 @@ const AddEthereumNode = ({ onChange }: AddEthereumNodeProps) => {
   const { t } = useTranslation();
   const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
 
+  // on change client or setting, return NodeSpecIds, Node Settings, and storage location
+  // NodeSpecs are only req'd in parent component until Node Settings
+
   return (
     <div className={container}>
       <div className={titleFont}>{t('EthereumNode')}</div>
@@ -65,11 +68,12 @@ const AddEthereumNode = ({ onChange }: AddEthereumNodeProps) => {
       )}
       <div
         style={{
+          boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'flex-start',
           padding: '0px',
-          gap: '4px',
+          gap: 20,
           width: '100%',
         }}
       >

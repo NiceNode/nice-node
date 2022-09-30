@@ -22,6 +22,22 @@
   },
   "category": "L1/ExecutionClient",
   "rpcTranslation": "eth-l1",
+  "systemRequirements": {
+    "cpu" : {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGB": 8
+    },
+    "storage" : {
+      "minSizeGBs" : 750,
+      "ssdRequired": true
+    },
+    "internet" : {
+      "minDownloadSpeedMbps": 10,
+      "minUploadSpeedMbps": 10
+    }
+  },
   "configTranslation": {
     "dataDir": {
       "displayName": "Node data is stored in this folder",
