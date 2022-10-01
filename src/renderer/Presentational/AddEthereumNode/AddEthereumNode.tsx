@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -19,18 +19,18 @@ import { NodeSpecification } from '../../../common/nodeSpec';
 
 const ecOptions = [
   {
-    iconId: 'nethermind',
-    value: 'nethermind',
-    label: 'Nethermind',
-    title: 'Nethermind',
-    info: 'Execution Client',
-    minority: true,
-  },
-  {
     iconId: 'besu',
     value: 'besu',
     label: 'Besu',
     title: 'Besu',
+    info: 'Execution Client',
+    minority: true,
+  },
+  {
+    iconId: 'nethermind',
+    value: 'nethermind',
+    label: 'Nethermind',
+    title: 'Nethermind',
     info: 'Execution Client',
     minority: true,
   },
@@ -98,7 +98,7 @@ export interface AddEthereumNodeProps {
   /**
    * Listen to node config changes
    */
-  onChange: (newValue: string) => void;
+  onChange: (newValue: any) => void;
 }
 
 const AddEthereumNode = ({
@@ -108,6 +108,10 @@ const AddEthereumNode = ({
 }: AddEthereumNodeProps) => {
   const { t } = useTranslation();
   const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
+  const [sSelectedExecutionClient, setSelectedExecutionClient] =
+    useState<string>();
+  const [sSelectedConsensusClient, setSelectedConsensusClient] =
+    useState<string>();
   // const [sExecutionOptions, setExecutionOptions] = useState<any[]>();
   // const [sBeaconOptions, setBeaconOptions] = useState<any[]>();
 
@@ -139,6 +143,24 @@ const AddEthereumNode = ({
   // on change client or setting, return NodeSpecIds, Node Settings, and storage location
   // NodeSpecs are only req'd in parent component until Node Settings
 
+  const onChangeEc = useCallback((newEc: any) => {
+    console.log('new selected execution client: ', newEc);
+    setSelectedExecutionClient(newEc);
+  }, []);
+  const onChangeCc = useCallback((newCc: any) => {
+    console.log('new selected consensus client: ', newCc);
+    setSelectedConsensusClient(newCc);
+  }, []);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange({
+        executionClient: sSelectedExecutionClient,
+        consensusClient: sSelectedConsensusClient,
+      });
+    }
+  }, [sSelectedExecutionClient, sSelectedConsensusClient, onChange]);
+
   return (
     <div className={container}>
       <div className={titleFont}>{t('EthereumNode')}</div>
@@ -149,16 +171,10 @@ const AddEthereumNode = ({
         text={t('LearnMoreClientDiversity')}
         url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
       />
-      <p className={sectionFont}>Recommended execution client</p>
-      <SpecialSelect
-        onChange={(newEc) => console.log('val', newEc)}
-        options={ecOptions}
-      />
-      <p className={sectionFont}>Recommended consensus client</p>
-      <SpecialSelect
-        onChange={(newcc) => console.log('val', newcc)}
-        options={ccOptions}
-      />
+      <p className={sectionFont}>Execution client</p>
+      <SpecialSelect onChange={onChangeEc} options={ecOptions} />
+      <p className={sectionFont}>Consensus client</p>
+      <SpecialSelect onChange={onChangeCc} options={ccOptions} />
       <p className={sectionFont}>Data location</p>
       <DropdownLink
         text={`${sIsOptionsOpen ? 'Hide' : 'Show'} advanced options`}

@@ -27,7 +27,7 @@
       "cores": 4
     },
     "memory": {
-      "minSizeGB": 8
+      "minSizeGBs": 8
     },
     "storage" : {
       "minSizeGBs" : 750,

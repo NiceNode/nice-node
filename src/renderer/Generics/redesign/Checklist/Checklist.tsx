@@ -20,12 +20,12 @@ export interface ChecklistProps {
 export const Checklist = ({ title, items }: ChecklistProps) => {
   return (
     <div className={container}>
-      <h2>{title}</h2>
+      {title && <h2>{title}</h2>}
       {items &&
-        items.map((item) => (
+        items.map((item, index) => (
           <React.Fragment key={item.checkTitle}>
             <ChecklistItem {...item} />
-            <HorizontalLine />
+            {index !== items.length - 1 && <HorizontalLine />}
           </React.Fragment>
         ))}
     </div>

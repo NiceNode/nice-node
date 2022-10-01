@@ -30,7 +30,7 @@ const LabelValuesSection = ({
       </div>
       {items &&
         items.map((item) => (
-          <React.Fragment key={item.label}>
+          <React.Fragment key={item.label + item.value}>
             <div className={lineContainer}>
               <div className={lineKeyText}>{item.label}</div>
               <div className={lineValueText}>{item.value}</div>

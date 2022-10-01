@@ -1,6 +1,6 @@
 // This component could be made into a Generic "FullScreenStepper" component
 // Just make sure to always render each child so that children component state isn't cleard
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { componentContainer, container } from './addNodeStepper.css';
@@ -11,6 +11,8 @@ import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import electron from '../../electronGlobal';
 import { NodeSpecification } from '../../../common/nodeSpec';
 import { categorizeNodeLibrary } from '../../utils';
+import { SystemRequirements } from '../../../common/systemRequirements';
+import { SystemData } from '../../../main/systemInfo';
 
 export interface AddNodeStepperProps {
   onChange: (newValue: 'done' | 'cancel') => void;
@@ -27,6 +29,23 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   const [sBeaconNodeLibrary, setBeaconNodeLibrary] = useState<
     NodeSpecification[]
   >([]);
+  const [sNodeLibrary, setNodeLibrary] = useState<any>();
+  // <string, NodeSpecification>{}
+
+  const [sEthereumNodeConfig, setEthereumNodeConfig] = useState<any>();
+  const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
+    useState<SystemRequirements>();
+
+  const [sData, setData] = useState<SystemData>();
+
+  const getData = async () => {
+    setData(await electron.getSystemInfo());
+  };
+
+  useEffect(() => {
+    // on load, refresh the static data
+    getData();
+  }, []);
 
   // Load ALL node spec's when AddNodeStepper is created
   //  This can later be optimized to only retrieve NodeSpecs as needed
@@ -36,6 +55,7 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       console.log('nodeLibrary', nodeLibrary);
       const categorized = categorizeNodeLibrary(nodeLibrary);
       // console.log('nodeLibrary categorized', categorized);
+      setNodeLibrary(nodeLibrary);
       setExecutionClientLibrary(categorized.ExecutionClient);
       setBeaconNodeLibrary(categorized.BeaconNode);
       // // setLayer2ClientLibrary(categorized.L2);
@@ -45,14 +65,35 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
     fetchNodeLibrary();
   }, []);
 
-  const onChangeAddEthereumNode = (newValue: string) => {
-    console.log('onChangeAddEthereumNode newValue ', newValue);
+  const onChangeDockerInstall = (newValue: string) => {
+    console.log('onChangeDockerInstall newValue ', newValue);
   };
 
-  // implement function which takes a NodeSpec & NodeSettings and returns NodeRequirements
+  const onChangeAddEthereumNode = useCallback(
+    (newValue: any) => {
+      console.log('onChangeAddEthereumNode newValue ', newValue);
+      setEthereumNodeConfig(newValue);
+      let reqs;
+
+      if (newValue?.executionClient?.value) {
+        const ecValue = newValue?.executionClient?.value;
+        if (sNodeLibrary) {
+          reqs = sNodeLibrary?.[ecValue]?.systemRequirements;
+        }
+      }
+      setEthereumNodeRequirements(reqs);
+    },
+    [sNodeLibrary]
+  );
+
+  // useState when eth node changes, get node spec from value,
+  //   and call func below
+  // func: takes a NodeSpec & NodeSettings and returns NodeRequirements
+
+  // "mergeNodeSpecs?"
 
   const onStep = (newValue: string) => {
-    console.log('onChangeAddEthereumNode newValue ', newValue);
+    console.log('onStep: ', newValue);
     if (newValue === 'next') {
       // = sign because sStep index starts at 0
       if (sStep + 1 >= TOTAL_STEPS) {
@@ -86,14 +127,14 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
         {/* Step 1 */}
         <div style={{ display: sStep === 1 ? '' : 'none' }}>
           <NodeRequirements
-            nodeRequirements={undefined}
-            systemData={undefined}
+            nodeRequirements={sEthereumNodeRequirements}
+            systemData={sData}
           />
         </div>
 
         {/* Step 2 */}
         <div style={{ display: sStep === 2 ? '' : 'none' }}>
-          <DockerInstallation onChange={onChangeAddEthereumNode} />
+          <DockerInstallation onChange={onChangeDockerInstall} />
         </div>
       </div>
 

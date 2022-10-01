@@ -1,6 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 // Options replaceable component docs:
 // https://react-select.com/components#Option
+import { useEffect, useState } from 'react';
 import Select, { OptionProps, ValueContainerProps } from 'react-select';
 import SelectCard from '../SelectCard/SelectCard';
 import { vars } from '../theme.css';
@@ -24,20 +25,50 @@ const SingleValue = ({ children, ...props }: ValueContainerProps) => {
 };
 export interface SpecialSelectProps {
   options?: any[];
-  onChange?: (newValue: string) => void;
+  onChange?: (newValue: any) => void;
 }
 
 /**
  * Used for selecting Ethereum node client
  */
 const SpecialSelect = ({ options, onChange, ...props }: SpecialSelectProps) => {
+  const [sSelectedOption, setSelectedOption] = useState<any>();
+
+  useEffect(() => {
+    // if (onChange && options && options[0]) {
+    // todo: fix, may call multiple times
+    console.log('useEffect(sSelectedOption, options): ');
+
+    if (!sSelectedOption && options && options[0]) {
+      setSelectedOption(options[0]);
+    }
+    // }
+  }, [sSelectedOption, options]);
+
+  useEffect(() => {
+    // if (onChange && options && options[0]) {
+    // todo: fix, may call multiple times
+    console.log('useEffect(sSelectedOption, onChange): ');
+
+    if (onChange) {
+      onChange(sSelectedOption);
+    }
+    // }
+  }, [sSelectedOption, onChange]);
+
+  const onSelectChange = (newValue: any) => {
+    console.log('onSelectChange: ', newValue);
+    setSelectedOption(newValue);
+  };
+
   return (
     <>
       <Select
+        onChange={onSelectChange}
         captureMenuScroll={false}
         menuShouldScrollIntoView
         hideSelectedOptions
-        defaultValue={options ? options[0] : null}
+        value={sSelectedOption}
         options={options}
         isSearchable={false}
         components={{

@@ -20,4 +20,6 @@ export const linkText = style({
   ':hover': {
     color: vars.color.primaryHover,
   },
+  // todo: remove when app.css is removed. Legacy fix
+  margin: 0,
 });

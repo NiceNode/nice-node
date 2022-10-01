@@ -33,6 +33,11 @@ const NodeRequirements = ({
     // for each node req, determine if systemData meets it
     // Object.keys(nodeRequirements).forEach(key => {
     // })
+    console.log(
+      'useEffect: nodeRequirements, systemData, t',
+      nodeRequirements,
+      systemData
+    );
     const newChecklistItems = makeCheckList(
       {
         nodeRequirements,
