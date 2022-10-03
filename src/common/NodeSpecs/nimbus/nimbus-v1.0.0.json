@@ -30,15 +30,15 @@
   "rpcTranslation": "eth-l1-beacon",
   "systemRequirements": {
     "memory": {
-      "minSizeGB": 4
+      "minSizeGBs": 4
     },
     "storage" : {
-      "minSizeGB" : 200,
+      "minSizeGBs" : 200,
       "ssdRequired": true
     },
     "internet" : {
-      "minDownloadSpeedMbps": 25,
-      "minUploadSpeedMbps": 3
+      "minDownloadSpeedMbps": 8,
+      "minUploadSpeedMbps": 8
     }
   },
   "configTranslation": {

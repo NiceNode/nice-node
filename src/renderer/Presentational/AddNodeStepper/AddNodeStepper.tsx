@@ -13,6 +13,7 @@ import { NodeSpecification } from '../../../common/nodeSpec';
 import { categorizeNodeLibrary } from '../../utils';
 import { SystemRequirements } from '../../../common/systemRequirements';
 import { SystemData } from '../../../main/systemInfo';
+import { mergeSystemRequirements } from './mergeNodeRequirements';
 
 export interface AddNodeStepperProps {
   onChange: (newValue: 'done' | 'cancel') => void;
@@ -21,7 +22,6 @@ export interface AddNodeStepperProps {
 const TOTAL_STEPS = 3;
 
 const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
-  const { t } = useTranslation();
   const [sStep, setStep] = useState<number>(0);
   const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
     NodeSpecification[]
@@ -73,15 +73,27 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
     (newValue: any) => {
       console.log('onChangeAddEthereumNode newValue ', newValue);
       setEthereumNodeConfig(newValue);
-      let reqs;
+      let ecReqs;
+      let ccReqs;
 
       if (newValue?.executionClient?.value) {
         const ecValue = newValue?.executionClient?.value;
         if (sNodeLibrary) {
-          reqs = sNodeLibrary?.[ecValue]?.systemRequirements;
+          ecReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
         }
       }
-      setEthereumNodeRequirements(reqs);
+      if (newValue?.consensusClient?.value) {
+        const ccValue = newValue?.consensusClient?.value;
+        if (sNodeLibrary) {
+          ccReqs = sNodeLibrary?.[`${ccValue}-beacon`]?.systemRequirements;
+        }
+      }
+      try {
+        const mergedReqs = mergeSystemRequirements([ecReqs, ccReqs]);
+        setEthereumNodeRequirements(mergedReqs);
+      } catch (e) {
+        console.error(e);
+      }
     },
     [sNodeLibrary]
   );
@@ -132,7 +144,7 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
           />
         </div>
 
-        {/* Step 2 */}
+        {/* Step 2 - If Docker is not installed */}
         <div style={{ display: sStep === 2 ? '' : 'none' }}>
           <DockerInstallation onChange={onChangeDockerInstall} />
         </div>

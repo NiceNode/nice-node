@@ -13,14 +13,15 @@ export type StorageRequirements = {
   // NVMe?
 };
 export type InternetRequirements = {
-  minDownloadSpeedMbps: number;
-  minUploadSpeedMbps: number;
+  minDownloadSpeedMbps?: number;
+  minUploadSpeedMbps?: number;
+  noDataCapRecommended?: boolean;
   // and {{minUploadSpeed}} up
   // etherenetRequired?: boolean;
   // latency?
 };
 export type DockerRequirements = {
-  required: boolean;
+  required?: boolean;
   minVersion?: string;
 };
 
