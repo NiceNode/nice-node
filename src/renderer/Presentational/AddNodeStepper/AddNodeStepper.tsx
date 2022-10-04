@@ -1,7 +1,6 @@
 // This component could be made into a Generic "FullScreenStepper" component
 // Just make sure to always render each child so that children component state isn't cleard
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { componentContainer, container } from './addNodeStepper.css';
 import Stepper from '../../Generics/redesign/Stepper/Stepper';
