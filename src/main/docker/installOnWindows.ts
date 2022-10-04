@@ -4,6 +4,7 @@ import { execAwait } from '../execHelper';
 import * as arch from '../arch';
 import { downloadFile } from '../downloadFile';
 import { getNNDirPath } from '../files';
+import { sendMessageOnDownloadProgress } from './messageFrontEnd';
 
 const iconv = require('iconv-lite');
 
@@ -86,7 +87,11 @@ const installOnWindows = async (): Promise<any> => {
       };
     }
     logger.info(`Downloading Docker from url ${downloadUrl}`);
-    const dockerExeFilePath = await downloadFile(downloadUrl, getNNDirPath());
+    const dockerExeFilePath = await downloadFile(
+      downloadUrl,
+      getNNDirPath(),
+      sendMessageOnDownloadProgress
+    );
     ({ stdout, stderr } = await execAwait(
       `start /w "" "${dockerExeFilePath}" install --quiet --accept-license --backend=wsl-2`,
       { log: true }

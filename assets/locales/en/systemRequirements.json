@@ -12,5 +12,7 @@
   "dockerInstalledTitle" : "Docker is installed",
   "dockerVersionInstalledTitle" : "Docker version {{minVersion}} or later installed",
   "dockerVersionInstalledDescription" : "Docker version: {{version}}",
-  "dockerVersionInstalledNeedsUpdateCaption": "Please update Docker from the Docker app"
+  "dockerVersionInstalledNeedsUpdateCaption": "Please update Docker from the Docker app",
+  "dockerNotInstalledDescription": "Docker can be installed in the next step.",
+  "dockerCaption": "Docker helps software work on a wide range of computers."
 }

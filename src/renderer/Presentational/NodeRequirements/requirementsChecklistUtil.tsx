@@ -160,6 +160,7 @@ export const makeCheckList = (
     if (nodeReqKey === 'docker') {
       const req = nodeReqValue as DockerRequirements;
       if (req.required === true) {
+        captionText = t('dockerCaption');
         if (req.minVersion) {
           checkTitle = t('dockerVersionInstalledTitle', {
             minVersion: req.minVersion,
@@ -183,6 +184,9 @@ export const makeCheckList = (
             status = 'incomplete';
           }
         } else {
+          valueText = t('dockerNotInstalledDescription', {
+            version: systemData?.versions.docker,
+          });
           status = 'incomplete';
         }
       }

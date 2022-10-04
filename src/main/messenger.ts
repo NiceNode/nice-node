@@ -20,5 +20,6 @@ export const send = (channel: string, ...args: any[]): void => {
 export const CHANNELS = {
   userNodes: 'userNodes',
   nodeLogs: 'nodeLogs',
+  docker: 'docker',
 };
-export const CHANNELS_ARRAY = ['userNodes', 'nodeLogs'];
+export const CHANNELS_ARRAY = ['userNodes', 'nodeLogs', 'docker'];

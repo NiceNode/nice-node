@@ -307,6 +307,7 @@
     "react-tooltip": "^4.2.21",
     "styled-components": "^5.3.5",
     "systeminformation": "^5.12.6",
+    "throttle-debounce": "^5.0.0",
     "uuid": "^8.3.2",
     "winston": "^3.7.2",
     "winston-daily-rotate-file": "^4.6.1"

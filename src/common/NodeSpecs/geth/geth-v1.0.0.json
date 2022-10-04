@@ -48,6 +48,9 @@
     "internet" : {
       "minDownloadSpeedMbps": 25,
       "minUploadSpeedMbps": 10
+    },
+    "docker" : {
+      "required": true
     }
   },
   "configTranslation": {

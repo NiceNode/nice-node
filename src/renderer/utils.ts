@@ -35,6 +35,10 @@ export const bytesToGB = (bytes: number) => {
   return Math.round(bytes * 1e-9);
 };
 
+export const bytesToMB = (bytes: number) => {
+  return Math.round(bytes * 1e-6);
+};
+
 export const categorizeNodeLibrary = (
   nodeLibrary: NodeLibrary
 ): {
