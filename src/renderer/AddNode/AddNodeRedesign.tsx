@@ -14,7 +14,7 @@ import { darkTheme, lightTheme } from '../Generics/redesign/theme.css';
 
 const AddNode = () => {
   const { t } = useTranslation();
-  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>(true);
+  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
   const [sIsModalOpenConfirmAddNode, setIsModalOpenConfirmAddNode] =
     useState<boolean>(false);
   const [sSelectedNodeSpecification, setSelectedNodeSpecification] =
@@ -48,6 +48,7 @@ const AddNode = () => {
           title=""
           isOpen={sIsModalOpenAddNode}
           onClickCloseButton={() => setIsModalOpenAddNode(false)}
+          isFullScreen
         >
           <AddNodeStepper
             onChange={(newValue: 'done' | 'cancel') => {

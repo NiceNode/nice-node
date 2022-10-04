@@ -26,9 +26,7 @@ export interface DockerInstallationProps {
 
 const DockerInstallation = ({ onChange }: DockerInstallationProps) => {
   const { t } = useTranslation();
-  const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const [sHasStartedDownload, setHasStartedDownload] = useState<boolean>();
-  // todo: undo
   const [sDownloadComplete, setDownloadComplete] = useState<boolean>();
   const [sDownloadProgress, setDownloadProgress] = useState<number>(0);
   const [sTotalSizeBytes, setTotalSizeBytes] = useState<number>(0);

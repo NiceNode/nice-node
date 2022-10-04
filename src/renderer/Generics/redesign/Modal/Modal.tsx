@@ -8,6 +8,7 @@ type Props = {
   isOpen: boolean | undefined;
   onClickCloseButton: () => void;
   title: string;
+  isFullScreen?: boolean;
 };
 
 export const Modal = ({
@@ -15,10 +16,13 @@ export const Modal = ({
   isOpen,
   onClickCloseButton,
   title,
+  isFullScreen,
 }: Props) => {
   return (
     <div
-      style={{ display: isOpen ? 'block' : 'none' }}
+      style={{
+        display: isOpen ? 'block' : 'none',
+      }}
       className={modalBackdropStyle}
     >
       <div
@@ -26,6 +30,8 @@ export const Modal = ({
         style={{
           display: 'flex',
           flexDirection: 'column',
+          height: isFullScreen ? '95vh' : '',
+          width: isFullScreen ? '95vw' : '',
         }}
       >
         <div style={{ display: 'flex' }}>
