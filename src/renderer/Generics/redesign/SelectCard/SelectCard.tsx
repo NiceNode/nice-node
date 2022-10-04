@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
-import { NodeIcon } from '../NodeIcon';
+import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { Tag } from '../Tag';
 import {
   container,

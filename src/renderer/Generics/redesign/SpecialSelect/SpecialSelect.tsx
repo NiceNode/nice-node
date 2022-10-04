@@ -1,6 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 // Options replaceable component docs:
 // https://react-select.com/components#Option
+import { useEffect, useState } from 'react';
 import Select, { OptionProps, ValueContainerProps } from 'react-select';
 import SelectCard from '../SelectCard/SelectCard';
 import { vars } from '../theme.css';
@@ -19,71 +20,56 @@ const SingleValue = ({ children, ...props }: ValueContainerProps) => {
   return (
     <div {...props.innerProps}>
       <SelectCard {...nething[0]} />
-
-      {/* {`${nething[0]?.label} ${nething[0]?.value}`} */}
     </div>
   );
 };
-
-const ecOptions = [
-  {
-    iconId: 'geth',
-    value: 'geth',
-    label: 'Geth',
-    title: 'Geth',
-    info: 'Execution Client',
-    onClick() {
-      console.log('hello');
-    },
-  },
-  {
-    iconId: 'erigon',
-    value: 'erigon',
-    label: 'Erigon',
-    title: 'Erigon',
-    info: 'Execution Client',
-  },
-  {
-    iconId: 'nethermind',
-    value: 'nethermind',
-    label: 'Nethermind',
-    title: 'Nethermind',
-    info: 'Execution Client',
-  },
-  {
-    iconId: 'besu',
-    value: 'besu',
-    label: 'Besu',
-    title: 'Besu',
-    info: 'Execution Client',
-    minority: true,
-    onClick() {
-      console.log('hello');
-    },
-  },
-];
-// const options = [
-//   { value: 'lodestar', label: 'lodestar', storage: 100, minory: true },
-//   { value: 'prysm', label: 'prysm', storage: 1000 },
-//   { value: 'teku', label: 'teku', minory: true, storage: 9009 },
-//   { value: 'lighthouse', label: 'lighthouse', storage: 1 },
-//   { value: 'nimbus', label: 'nimbus', storage: 69 },
-// ];
 export interface SpecialSelectProps {
   options?: any[];
-  onChange?: (newValue: string) => void;
+  onChange?: (newValue: any) => void;
 }
 
 /**
- * Use for selecting Ethereum node client
+ * Used for selecting Ethereum node client
  */
 const SpecialSelect = ({ options, onChange, ...props }: SpecialSelectProps) => {
+  const [sSelectedOption, setSelectedOption] = useState<any>();
+
+  useEffect(() => {
+    // if (onChange && options && options[0]) {
+    // todo: fix, may call multiple times
+    console.log('useEffect(sSelectedOption, options): ');
+
+    if (!sSelectedOption && options && options[0]) {
+      setSelectedOption(options[0]);
+    }
+    // }
+  }, [sSelectedOption, options]);
+
+  useEffect(() => {
+    // if (onChange && options && options[0]) {
+    // todo: fix, may call multiple times
+    console.log('useEffect(sSelectedOption, onChange): ');
+
+    if (onChange) {
+      onChange(sSelectedOption);
+    }
+    // }
+  }, [sSelectedOption, onChange]);
+
+  const onSelectChange = (newValue: any) => {
+    console.log('onSelectChange: ', newValue);
+    setSelectedOption(newValue);
+  };
+
   return (
     <>
       <Select
+        onChange={onSelectChange}
+        captureMenuScroll={false}
+        menuShouldScrollIntoView
         hideSelectedOptions
-        defaultValue={options ? options[0] : ecOptions[0]}
-        options={options || ecOptions}
+        value={sSelectedOption}
+        options={options}
         isSearchable={false}
         components={{
           Option,

@@ -10,40 +10,7 @@ import { NodeSpecification } from '../../common/nodeSpec';
 // import { DopeButton } from '../DivButton';
 import { NodeLibrary } from '../../main/state/nodeLibrary';
 import electron from '../electronGlobal';
-
-const categorizeNodeLibrary = (
-  nodeLibrary: NodeLibrary
-): {
-  ExecutionClient: NodeSpecification[];
-  BeaconNode: NodeSpecification[];
-  L2: NodeSpecification[];
-  Other: NodeSpecification[];
-} => {
-  const ec: NodeSpecification[] = [];
-  const bn: NodeSpecification[] = [];
-  const l2: NodeSpecification[] = [];
-  const other: NodeSpecification[] = [];
-
-  const catgorized = {
-    ExecutionClient: ec,
-    BeaconNode: bn,
-    L2: l2,
-    Other: other,
-  };
-  Object.keys(nodeLibrary).forEach((specId) => {
-    const nodeSpec = nodeLibrary[specId];
-    if (nodeSpec.category === 'L1/ExecutionClient') {
-      catgorized.ExecutionClient.push(nodeSpec);
-    } else if (nodeSpec.category === 'L1/ConsensusClient/BeaconNode') {
-      catgorized.BeaconNode.push(nodeSpec);
-    } else if (nodeSpec.category?.includes('L2')) {
-      catgorized.L2.push(nodeSpec);
-    } else {
-      catgorized.Other.push(nodeSpec);
-    }
-  });
-  return catgorized;
-};
+import { categorizeNodeLibrary } from '../utils';
 
 const AddNode = () => {
   const { t } = useTranslation();

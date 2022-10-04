@@ -16,6 +16,26 @@
   },
   "category": "L1/ConsensusClient/BeaconNode",
   "rpcTranslation": "eth-l1-beacon",
+  "systemRequirements": {
+    "documentationUrl": "https://docs.prylabs.network/docs/install/install-with-script#step-1-review-prerequisites-and-best-practices",
+    "cpu" : {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage" : {
+      "minSizeGBs" : 200,
+      "ssdRequired": true
+    },
+    "internet" : {
+      "minDownloadSpeedMbps": 8,
+      "minUploadSpeedMbps": 8
+    },
+    "docker" : {
+      "required": true
+    }
+  },
   "configTranslation": {
     "dataDir": {
       "displayName": "The directory where nimbus will store all blockchain data.",

@@ -22,6 +22,26 @@
   },
   "category": "L1/ExecutionClient",
   "rpcTranslation": "eth-l1",
+  "systemRequirements": {
+    "documentationUrl": "https://besu.hyperledger.org/en/stable/public-networks/get-started/system-requirements/",
+    "cpu" : {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage" : {
+      "minSizeGBs" : 750,
+      "ssdRequired": true
+    },
+    "internet" : {
+      "minDownloadSpeedMbps": 10,
+      "minUploadSpeedMbps": 10
+    },
+    "docker" : {
+      "required": true
+    }
+  },
   "configTranslation": {
     "dataDir": {
       "displayName": "Node data is stored in this folder",

@@ -17,6 +17,10 @@ export const baseButton = style({
     color: vars.color.fontDisabled,
     background: vars.color.backgroundDisabled,
   },
+  // offsets legacy value in app.css
+  ':hover': {
+    transform: 'none',
+  },
   fontFamily: 'Inter',
   fontWeight: 500,
   fontSize: 13,

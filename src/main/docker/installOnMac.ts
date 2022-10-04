@@ -3,6 +3,7 @@ import * as arch from '../arch';
 import logger from '../logger';
 import { execAwait } from '../execHelper';
 import { downloadFile } from '../downloadFile';
+import { sendMessageOnDownloadProgress } from './messageFrontEnd';
 
 /**
  * Download docker.dmg, install docker, start docker
@@ -22,7 +23,11 @@ const installOnMac = async (): Promise<any> => {
       };
     }
     logger.info(`Downloading Docker from url ${downloadUrl}`);
-    const dockerDmgFilePath = await downloadFile(downloadUrl, getNNDirPath());
+    const dockerDmgFilePath = await downloadFile(
+      downloadUrl,
+      getNNDirPath(),
+      sendMessageOnDownloadProgress
+    );
     let stdout;
     let stderr;
     ({ stdout, stderr } = await execAwait(

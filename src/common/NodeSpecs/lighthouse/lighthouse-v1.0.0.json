@@ -30,6 +30,28 @@
       "responseFormat": "githubReleases"
     }
   },
+  "category": "L1/ConsensusClient/BeaconNode",
+  "rpcTranslation": "eth-l1-beacon",
+  "systemRequirements": {
+    "documentationUrl": "https://lighthouse-book.sigmaprime.io/system-requirements.html",
+    "cpu" : {
+      "cores": 2
+    },
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage" : {
+      "minSizeGBs" : 128,
+      "ssdRequired": true
+    },
+    "internet" : {
+      "minDownloadSpeedMbps": 10,
+      "minUploadSpeedMbps": 5
+    },
+    "docker" : {
+      "required": true
+    }
+  },
   "configTranslation": {
     "dataDir": {
       "displayName": "Node data is stored in this folder",
@@ -113,8 +135,6 @@
       "documentation": "https://lighthouse-book.sigmaprime.io/advanced_networking.html#target-peers"
     }
   },
-  "category": "L1/ConsensusClient/BeaconNode",
-  "rpcTranslation": "eth-l1-beacon",
   "documentation": {
     "default": "https://lighthouse-book.sigmaprime.io/intro.html",
     "docker": "https://lighthouse-book.sigmaprime.io/docker.html"

@@ -7,3 +7,10 @@ globalStyle('#onBoarding', {
   background: vars.color.background,
   color: vars.color.font,
 });
+
+globalStyle('.redesignComponent', {
+  fontFamily: 'Inter',
+  fontSize: 13,
+  background: vars.color.background,
+  color: vars.color.font,
+});

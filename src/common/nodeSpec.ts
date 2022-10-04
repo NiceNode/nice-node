@@ -1,3 +1,4 @@
+import { SystemRequirements } from './systemRequirements';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ConfigValuesMap, ConfigTranslationMap } from './nodeConfig';
 import { NiceNodeRpcTranslation } from './rpcTranslation';
@@ -88,6 +89,7 @@ export type NodeSpecification = {
   version: string;
   displayName: string;
   execution: NodeExecution;
+  systemRequirements?: SystemRequirements;
   rpcTranslation?: NiceNodeRpcTranslation;
   configTranslation?: ConfigTranslationMap;
   nodeReleasePhase?: 'alpha' | 'beta';

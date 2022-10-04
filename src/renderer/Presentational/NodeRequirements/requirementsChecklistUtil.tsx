@@ -44,11 +44,11 @@ export const makeCheckList = (
         checkTitle = t('processorCoresTitle', {
           minCores: req.cores,
         });
-        if (systemData.cpu?.cores) {
+        if (systemData?.cpu?.cores) {
           valueText = t('processorCoresDescription', {
-            cores: systemData.cpu.cores,
+            cores: systemData?.cpu.cores,
           });
-          if (systemData.cpu.cores >= req.cores) {
+          if (systemData?.cpu.cores >= req.cores) {
             status = 'complete';
           } else {
             status = 'incomplete';
@@ -60,15 +60,15 @@ export const makeCheckList = (
     }
     if (nodeReqKey === 'memory') {
       const req = nodeReqValue as MemoryRequirements;
-      if (req.minSize !== undefined) {
+      if (req.minSizeGBs !== undefined) {
         checkTitle = t('memorySizeTitle', {
-          minSize: bytesToGB(req.minSize),
+          minSize: req.minSizeGBs,
         });
-        if (systemData.memLayout[0]?.size) {
+        if (systemData?.memLayout[0]?.size) {
           valueText = t('memorySizeDescription', {
-            size: bytesToGB(systemData.memLayout[0]?.size),
+            size: bytesToGB(systemData?.memLayout[0]?.size),
           });
-          if (systemData.memLayout[0]?.size >= req.minSize) {
+          if (systemData?.memLayout[0]?.size >= req.minSizeGBs) {
             status = 'complete';
           } else {
             status = 'incomplete';
@@ -80,7 +80,7 @@ export const makeCheckList = (
     }
     if (nodeReqKey === 'storage') {
       const req = nodeReqValue as StorageRequirements;
-      const disk = systemData.diskLayout[0];
+      const disk = systemData?.diskLayout[0];
       if (req.ssdRequired === true) {
         checkTitle = t('storageTypeTitle', {
           type: 'SSD',
@@ -108,9 +108,9 @@ export const makeCheckList = (
         };
         newChecklistItems.push(checkListItem);
       }
-      if (req.minSize !== undefined) {
+      if (req.minSizeGBs !== undefined) {
         checkTitle = t('storageSizeTitle', {
-          minSize: req.minSize,
+          minSize: req.minSizeGBs,
         });
         if (disk?.size) {
           const diskSizeGbs = bytesToGB(disk.size);
@@ -119,7 +119,7 @@ export const makeCheckList = (
             freeSize: diskSizeGbs,
             storageName: disk.name,
           });
-          if (diskSizeGbs >= req.minSize) {
+          if (diskSizeGbs >= req.minSizeGBs) {
             status = 'complete';
           } else {
             status = 'incomplete';
@@ -131,10 +131,10 @@ export const makeCheckList = (
     }
     if (nodeReqKey === 'internet') {
       const req = nodeReqValue as InternetRequirements;
-      if (req.minDownloadSpeed !== undefined) {
+      if (req.minDownloadSpeedMbps !== undefined) {
         checkTitle = t('internetSpeedTitle', {
-          minDownloadSpeed: req.minDownloadSpeed,
-          minUploadSpeed: req.minUploadSpeed,
+          minDownloadSpeed: req.minDownloadSpeedMbps,
+          minUploadSpeed: req.minUploadSpeedMbps,
         });
         valueText =
           'Please do your own internet speed test to ensure it meets these requirements!';
@@ -160,6 +160,7 @@ export const makeCheckList = (
     if (nodeReqKey === 'docker') {
       const req = nodeReqValue as DockerRequirements;
       if (req.required === true) {
+        captionText = t('dockerCaption');
         if (req.minVersion) {
           checkTitle = t('dockerVersionInstalledTitle', {
             minVersion: req.minVersion,
@@ -168,11 +169,14 @@ export const makeCheckList = (
           // case where no specific docker version is required
           checkTitle = t('dockerInstalledTitle');
         }
-        if (systemData.versions.docker) {
+        if (systemData?.versions.docker) {
           // !req.minVersion: case where no specific docker version is required
-          if (!req.minVersion || systemData.versions.docker >= req.minVersion) {
+          if (
+            !req.minVersion ||
+            systemData?.versions.docker >= req.minVersion
+          ) {
             valueText = t('dockerVersionInstalledDescription', {
-              version: systemData.versions.docker,
+              version: systemData?.versions.docker,
             });
             status = 'complete';
           } else {
@@ -180,6 +184,9 @@ export const makeCheckList = (
             status = 'incomplete';
           }
         } else {
+          valueText = t('dockerNotInstalledDescription', {
+            version: systemData?.versions.docker,
+          });
           status = 'incomplete';
         }
       }

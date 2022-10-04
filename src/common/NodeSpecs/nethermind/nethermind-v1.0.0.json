@@ -31,6 +31,27 @@
   },
   "category": "L1/ExecutionClient",
   "rpcTranslation": "eth-l1",
+  "systemRequirements": {
+    "documentationUrl": "https://docs.nethermind.io/nethermind/guides-and-helpers/validator-setup/eth2-validator#hardware-and-network-requirements",
+    "cpu" : {
+      "cores": 4,
+      "minSpeedGHz": 2.4
+    },
+    "memory": {
+      "minSizeGBs": 16
+    },
+    "storage" : {
+      "minSizeGBs" : 900,
+      "ssdRequired": true
+    },
+    "internet" : {
+      "minDownloadSpeedMbps": 10,
+      "minUploadSpeedMbps": 10
+    },
+    "docker" : {
+      "required": true
+    }
+  },
   "configTranslation": {
     "dataDir": {
       "displayName": "Node data is stored in this folder",

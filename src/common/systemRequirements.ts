@@ -1,26 +1,27 @@
 export type CpuRequirements = {
   cores?: number;
-  minSpeed?: number;
+  minSpeedGHz?: number;
 };
 export type MemoryRequirements = {
-  minSize?: number;
-  minSpeed?: number;
+  minSizeGBs?: number;
+  minSpeedGHz?: number;
 };
 export type StorageRequirements = {
-  minSize?: number;
-  minWriteSpeed?: number;
+  minSizeGBs?: number;
+  minWriteSpeedMBps?: number;
   ssdRequired?: boolean;
   // NVMe?
 };
 export type InternetRequirements = {
-  minDownloadSpeed: number;
-  minUploadSpeed: number;
+  minDownloadSpeedMbps?: number;
+  minUploadSpeedMbps?: number;
+  noDataCapRecommended?: boolean;
   // and {{minUploadSpeed}} up
   // etherenetRequired?: boolean;
   // latency?
 };
 export type DockerRequirements = {
-  required: boolean;
+  required?: boolean;
   minVersion?: string;
 };
 
