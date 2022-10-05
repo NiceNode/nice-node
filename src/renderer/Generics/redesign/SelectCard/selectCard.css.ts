@@ -1,6 +1,8 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
 
+export const activeContainer = style({});
+
 export const container = style({
   margin: 5,
   cursor: 'pointer',
@@ -11,15 +13,29 @@ export const container = style({
   padding: '10px 12px',
   gap: '12px',
   borderRadius: '5px',
-  boxShadow: vars.components.selectCardBoxShadow,
+  position: 'relative',
   background: vars.color.background96,
   ':hover': { background: vars.color.background92 },
 });
 
 export const selectedContainer = style({
-  border: '2px solid #7a64ee',
-  background: vars.components.selectCardBackground,
-  ':hover': { background: vars.components.selectCardBackground },
+  selectors: {
+    [`${activeContainer} &`]: {
+      borderWidth: '5px',
+      background: vars.components.selectCardBackground,
+      boxShadow: vars.components.selectCardBoxShadow,
+    },
+    [`${activeContainer} &:before`]: {
+      content: '',
+      position: 'absolute',
+      width: '-webkit-fill-available',
+      left: '0',
+      top: '0',
+      height: '-webkit-fill-available',
+      border: '2px solid #7a64ee',
+      borderRadius: '5px',
+    },
+  },
 });
 
 export const textContainer = style({
