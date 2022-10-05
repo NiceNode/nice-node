@@ -25,7 +25,7 @@ PrimarySmallIcon.args = {
   primary: true,
   label: 'Button',
   size: 'small',
-  icon: <SettingsIcon/>
+  iconId: 'settings',
 };
 
 export const SecondarySmall = Template.bind({});
@@ -51,5 +51,6 @@ export const SecondaryMediumIcon = Template.bind({});
 SecondaryMediumIcon.args = {
   size: 'medium',
   label: 'Settings',
-  icon: <SettingsIcon/>
+  iconId: 'settings',
+  variant: 'icon-right',
 };

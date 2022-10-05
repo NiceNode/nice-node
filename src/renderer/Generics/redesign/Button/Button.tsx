@@ -1,3 +1,5 @@
+import { IconId } from 'renderer/assets/images/icons';
+import { Icon } from '../Icon';
 import {
   baseButton,
   primaryButton,
@@ -21,7 +23,7 @@ export interface ButtonProps {
   /**
    * Optional icon
    */
-  icon?: React.ReactNode;
+  iconId?: IconId;
   /**
    * Button text content
    */
@@ -34,7 +36,7 @@ const Button = ({
   size = 'medium',
   disabled = false,
   variant = 'text',
-  icon,
+  iconId = 'settings',
   backgroundColor,
   label,
   ...props
@@ -52,8 +54,10 @@ const Button = ({
       style={{ backgroundColor }}
       {...props}
     >
-      <span className={variant === 'icon-left' ? iconLeft : ''}>{label}</span>
-      {icon}
+      {variant !== 'icon' && (
+        <span className={variant === 'icon-left' ? iconLeft : ''}>{label}</span>
+      )}
+      {variant !== 'text' && <Icon iconId={iconId} />}
     </button>
   );
 };
