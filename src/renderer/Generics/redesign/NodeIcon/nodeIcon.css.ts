@@ -1,5 +1,5 @@
 import { style, keyframes } from '@vanilla-extract/css';
-import { common, vars } from '../theme.css';
+import { vars } from '../theme.css';
 
 export const imageStyle = style({
   position: 'relative',

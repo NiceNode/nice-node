@@ -1,5 +1,12 @@
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
+import {
+  container,
+  iconContainer,
+  textContainer,
+  titleStyle,
+  infoStyle,
+} from './sideBarNodeItem.css';
 
 export interface SidebarNodeItemProps {
   /**
@@ -30,11 +37,13 @@ export const SidebarNodeItem = ({
   status,
 }: SidebarNodeItemProps) => {
   return (
-    <div className={['storybook-sidebar-node-item'].join(' ')}>
-      <NodeIcon iconId={iconId} status={status} size="small" />
-      <div className="storybook-sidebar-node-item-container">
-        <div className="storybook-sidebar-node-item-title">{title}</div>
-        <div className="storybook-sidebar-node-item-info">{info}</div>
+    <div className={container}>
+      <div className={iconContainer}>
+        <NodeIcon iconId={iconId} status={status} size="small" />
+      </div>
+      <div className={textContainer}>
+        <div className={titleStyle}>{title}</div>
+        <div className={infoStyle}>{info}</div>
       </div>
     </div>
   );
