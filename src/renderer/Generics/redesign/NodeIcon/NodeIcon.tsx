@@ -17,6 +17,7 @@ import {
   healthy,
   warning,
 } from './nodeIcon.css';
+import SyncIcon from '../Icons/SyncIcon';
 
 export interface NodeIconProps {
   /**
@@ -54,16 +55,25 @@ export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
     statusColorStyle = sync;
   }
   let isStatusStyle;
+  let statusComponent = null;
   if (status) {
     isStatusStyle = hasStatusStyle;
+    statusComponent = (
+      <div className={[statusStyle, sizeStyle, statusColorStyle].join(' ')} />
+    );
+    if (status === 'sync') {
+      statusComponent = (
+        <div className={[statusStyle, sizeStyle, statusColorStyle].join(' ')}>
+          <SyncIcon />
+        </div>
+      );
+    }
   }
 
   return (
     <div className={[containerStyle, sizeStyle].join(' ')}>
       {/* TODO: Replace image with CSS, and add pulsating effect */}
-      {status && (
-        <div className={[statusStyle, sizeStyle, statusColorStyle].join(' ')} />
-      )}
+      {statusComponent}
       <div
         className={[iconBackground, sizeStyle, isStatusStyle].join(' ')}
         style={{ backgroundColor: NODE_COLORS[iconId] }}

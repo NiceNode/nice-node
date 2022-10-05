@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { style, keyframes } from '@vanilla-extract/css';
 import { common, vars } from '../theme.css';
 
 export const imageStyle = style({
@@ -8,6 +8,11 @@ export const imageStyle = style({
   objectFit: 'contain',
 });
 
+const rotate = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(359deg)' },
+});
+
 export const hasStatusStyle = style({});
 export const smallStyle = style({});
 export const mediumStyle = style({});
@@ -15,7 +20,7 @@ export const largeStyle = style({});
 export const healthy = style({ background: vars.color.green });
 export const warning = style({ background: vars.color.yellow });
 export const error = style({ background: vars.color.red });
-export const sync = style({ background: 'black' });
+export const sync = style({});
 
 export const iconBackground = style({
   position: 'relative',
@@ -110,6 +115,27 @@ export const statusStyle = style({
       width: 14,
       height: 14,
       borderRadius: 7,
+    },
+    [`&.${sync}`]: {
+      animationName: rotate,
+      animationDuration: '2s',
+      animationIterationCount: 'infinite',
+      animationTimingFunction: 'linear',
+      fill: vars.color.font,
+      right: '-1px',
+      top: '-1px',
+    },
+    [`&.${smallStyle}.${sync}`]: {
+      width: '10px',
+      height: '10px',
+    },
+    [`&.${mediumStyle}.${sync}`]: {
+      width: '12px',
+      height: '12px',
+    },
+    [`&.${largeStyle}.${sync}`]: {
+      width: '16px',
+      height: '16px',
     },
   },
   // '&.darkMode': { '&.sync': { backgroundColor: 'rgba(255, 255, 255, 1)' } },
