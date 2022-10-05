@@ -127,7 +127,8 @@ export const statusStyle = style({
     },
     [`&.${smallStyle}.${sync}`]: {
       width: '10px',
-      height: '10px',
+      height: '12px',
+      top: '-2px',
     },
     [`&.${mediumStyle}.${sync}`]: {
       width: '12px',
@@ -138,23 +139,4 @@ export const statusStyle = style({
       height: '16px',
     },
   },
-  // '&.darkMode': { '&.sync': { backgroundColor: 'rgba(255, 255, 255, 1)' } },
-  // selectors: {
-  //   '&.sync': {
-  //     animation: 'rotation 2s infinite linear',
-  //     right: '-1px',
-  //     WebkitMaskSize: 'cover',
-  //     maskSize: 'cover',
-  //     backgroundColor: 'rgba(0, 0, 2, 0.95)',
-  //   },
-  //   '&.small': {
-  //     // '&.sync': { width: '10px', height: '8px', backgroundSize: '10px 8px' },
-  //   },
-  //   '&.medium': {
-  //     // '&.sync': { width: '12px', height: '10px', backgroundSize: '12px 10px' },
-  //   },
-  //   '&.large': {
-  //     // '&.sync': { width: '16px', height: '13px', backgroundSize: '16px 13px' },
-  //   },
-  // },
 });
