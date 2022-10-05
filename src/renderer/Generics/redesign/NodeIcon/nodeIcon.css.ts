@@ -13,6 +13,51 @@ const rotate = keyframes({
   '100%': { transform: 'rotate(359deg)' },
 });
 
+const healthyPulse = keyframes({
+  '0%': {
+    transform: 'scale(0.95)',
+    boxShadow: '0 0 0 0 rgba(62, 187, 100, 0.7)',
+  },
+  '70%': {
+    transform: 'scale(1)',
+    boxShadow: '0 0 0 5px rgba(62, 187, 100, 0)',
+  },
+  '100%': {
+    transform: 'scale(0.95)',
+    boxShadow: '0 0 0 0 rgba(62, 187, 100, 0)',
+  },
+});
+
+const warningPulse = keyframes({
+  '0%': {
+    transform: 'scale(0.95)',
+    boxShadow: '0 0 0 0 rgba(251, 146, 65, 0.7)',
+  },
+  '70%': {
+    transform: 'scale(1)',
+    boxShadow: '0 0 0 5px rgba(251, 146, 65, 0)',
+  },
+  '100%': {
+    transform: 'scale(0.95)',
+    boxShadow: '0 0 0 0 rgba(251, 146, 65, 0)',
+  },
+});
+
+const errorPulse = keyframes({
+  '0%': {
+    transform: 'scale(0.95)',
+    boxShadow: '0 0 0 0 rgba(235, 83, 76, 0.7)',
+  },
+  '70%': {
+    transform: 'scale(1)',
+    boxShadow: '0 0 0 5px rgba(235, 83, 76, 0)',
+  },
+  '100%': {
+    transform: 'scale(0.95)',
+    boxShadow: '0 0 0 0 rgba(235, 83, 76, 0)',
+  },
+});
+
 export const hasStatusStyle = style({});
 export const smallStyle = style({});
 export const mediumStyle = style({});
@@ -100,7 +145,20 @@ export const statusStyle = style({
   right: '0',
   top: '0',
   zIndex: 1,
+  animationDuration: '2s',
+  animationIterationCount: 'infinite',
+  animationTimingFunction: 'linear',
+  transform: 'scale(0.5)',
   selectors: {
+    [`&.${healthy}`]: {
+      animationName: healthyPulse,
+    },
+    [`&.${warning}`]: {
+      animationName: warningPulse,
+    },
+    [`&.${error}`]: {
+      animationName: errorPulse,
+    },
     [`&.${smallStyle}`]: {
       width: 8,
       height: 8,

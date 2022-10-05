@@ -72,7 +72,6 @@ export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
 
   return (
     <div className={[containerStyle, sizeStyle].join(' ')}>
-      {/* TODO: Replace image with CSS, and add pulsating effect */}
       {statusComponent}
       <div
         className={[iconBackground, sizeStyle, isStatusStyle].join(' ')}
