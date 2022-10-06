@@ -17,7 +17,7 @@ import {
   healthy,
   warning,
 } from './nodeIcon.css';
-import SyncIcon from '../Icons/SyncIcon';
+import { Icon } from '../Icon';
 
 export interface NodeIconProps {
   /**
@@ -58,14 +58,15 @@ export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
   let statusComponent = null;
   if (status) {
     isStatusStyle = hasStatusStyle;
-    statusComponent = (
-      <div className={[statusStyle, sizeStyle, statusColorStyle].join(' ')} />
-    );
     if (status === 'sync') {
       statusComponent = (
         <div className={[statusStyle, sizeStyle, statusColorStyle].join(' ')}>
-          <SyncIcon />
+          <Icon iconId="sync" />
         </div>
+      );
+    } else {
+      statusComponent = (
+        <div className={[statusStyle, sizeStyle, statusColorStyle].join(' ')} />
       );
     }
   }
