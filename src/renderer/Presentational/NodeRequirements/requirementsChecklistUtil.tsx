@@ -91,10 +91,19 @@ export const makeCheckList = (
               type: 'SSD',
             });
             status = 'complete';
+          } else if (
+            disk?.type.includes('NVMe') ||
+            disk?.name.includes('NVMe')
+          ) {
+            valueText = t('storageTypeDescription', {
+              type: 'NVMe SSD',
+            });
+            status = 'complete';
           } else if (disk?.type.includes('HDD') || disk?.name.includes('HDD')) {
             valueText = t('storageTypeDescription', {
               type: 'HDD',
             });
+            status = 'error';
           } else {
             status = 'incomplete';
           }
