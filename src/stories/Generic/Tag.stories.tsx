@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Tag } from '../../renderer/Generics/redesign/Tag';
+import Tag from '../../renderer/Generics/redesign/Tag/Tag';
 
 export default {
   title: 'Generic/Tag',

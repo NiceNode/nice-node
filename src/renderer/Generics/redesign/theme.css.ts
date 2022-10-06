@@ -5,8 +5,10 @@ export const common = {
     white: '#FFFFFF',
     white4: 'rgba(255, 255, 255, 0.04)',
     white25: 'rgba(255, 255, 255, 0.25)',
+    white70: 'rgba(255, 255, 255, 0.70)',
     black4: 'rgba(0, 0, 2, 0.04)',
     black25: 'rgba(0, 0, 2, 0.25)',
+    black85: 'rgba(0, 0, 2, 0.85)',
     primary700: '#5A37D7',
   },
 };
@@ -38,6 +40,8 @@ export const [lightTheme, vars] = createTheme({
     selectCardBackground: 'rgba(115, 81, 235, 0.08)',
     selectCardBoxShadow: 'inset 0px 0px 0px 4px rgba(255, 255, 255, 0.08)',
     secondaryButtonBackground: common.color.white,
+    tagPinkBackground: 'rgba(255, 204, 250, 1)',
+    tagPinkFontColor: common.color.black85,
   },
 });
 
@@ -68,5 +72,7 @@ export const darkTheme = createTheme(vars, {
     selectCardBackground: 'rgba(130, 103, 239, 0.08)',
     selectCardBoxShadow: 'none',
     secondaryButtonBackground: common.color.white4,
+    tagPinkBackground: 'rgba(251, 116, 195, 0.25)',
+    tagPinkFontColor: common.color.white70,
   },
 });
