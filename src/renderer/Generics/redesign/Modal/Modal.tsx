@@ -21,7 +21,7 @@ export const Modal = ({
   return (
     <div
       style={{
-        display: isOpen ? 'block' : 'none',
+        display: isOpen ? 'flex' : 'none',
       }}
       className={modalBackdropStyle}
     >
