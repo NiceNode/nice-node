@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { SidebarLinkItem } from '../../renderer/Generics/redesign/SidebarLinkItem';
+import { SidebarLinkItem } from '../../renderer/Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 
 export default {
   title: 'Generic/SidebarLinkItem',

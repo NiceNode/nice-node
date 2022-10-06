@@ -23,7 +23,7 @@ export interface SelectCardProps {
    */
   info?: string;
   /**
-   * Which icon? // TODO: Change this to drop down eventually
+   * Which icon?
    */
   iconId: NodeIconId;
   /**
