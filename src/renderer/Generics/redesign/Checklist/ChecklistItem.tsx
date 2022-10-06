@@ -8,11 +8,9 @@ import {
   successIcon,
   warningIcon,
   errorIcon,
+  loadingIcon,
 } from './checklistItem.css';
-import { ReactComponent as InfoCircleFill } from '../../../assets/images/icons/Info-circle-filled.svg';
-import { ReactComponent as WarningCircleFill } from '../../../assets/images/icons/Warning-circle-filled.svg';
-import { ReactComponent as CheckCircleFillIcon } from '../../../assets/images/icons/Check-circle-filled.svg';
-import SpinnerIcon from '../Icons/SpinnerIcon';
+import { Icon } from '../Icon';
 
 /**
  * checkTitle and status required
@@ -55,31 +53,31 @@ const ChecklistItem = ({
   if (status === 'complete') {
     statusIcon = (
       <span className={successIcon}>
-        <CheckCircleFillIcon />
+        <Icon iconId="checkcirclefilled" />
       </span>
     );
   } else if (status === 'information') {
     statusIcon = (
       <span>
-        <InfoCircleFill />
+        <Icon iconId="infocirclefilled" />
       </span>
     );
   } else if (status === 'incomplete') {
     statusIcon = (
       <span className={warningIcon}>
-        <WarningCircleFill />
+        <Icon iconId="warningcirclefilled" />
       </span>
     );
   } else if (status === 'loading') {
     statusIcon = (
-      <span>
-        <SpinnerIcon />
+      <span className={loadingIcon}>
+        <Icon iconId="spinnerendless" />
       </span>
     );
   } else if (status === 'error') {
     statusIcon = (
       <span className={errorIcon}>
-        <WarningCircleFill />
+        <Icon iconId="warningcirclefilled" />
       </span>
     );
   }

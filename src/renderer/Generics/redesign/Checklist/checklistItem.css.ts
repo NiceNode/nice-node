@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { style, keyframes } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
 
 export const container = style({
@@ -56,6 +56,18 @@ export const successIcon = style({
 
 export const warningIcon = style({
   color: vars.color.yellow,
+});
+
+const rotate = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+});
+
+export const loadingIcon = style({
+  fill: vars.color.font,
+  animationName: rotate,
+  animationDuration: '3s',
+  animationIterationCount: 'infinite',
 });
 
 export const errorIcon = style({
