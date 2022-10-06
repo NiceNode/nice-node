@@ -1,5 +1,5 @@
 import { Bubble } from './Bubble';
-import { Icon } from './Icon';
+import { Icon } from './Icon/Icon';
 
 export interface SidebarLinkItemProps {
   /**

@@ -10,7 +10,7 @@ import {
   errorIcon,
   loadingIcon,
 } from './checklistItem.css';
-import { Icon } from '../Icon';
+import { Icon } from '../Icon/Icon';
 
 /**
  * checkTitle and status required

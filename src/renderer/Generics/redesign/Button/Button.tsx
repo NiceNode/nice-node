@@ -1,5 +1,5 @@
 import { IconId } from 'renderer/assets/images/icons';
-import { Icon } from '../Icon';
+import { Icon } from '../Icon/Icon';
 import {
   baseButton,
   primaryButton,
