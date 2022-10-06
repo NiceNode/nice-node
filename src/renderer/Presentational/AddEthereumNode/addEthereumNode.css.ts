@@ -24,4 +24,5 @@ export const descriptionFont = style({
 
 export const sectionFont = style({
   fontWeight: 600,
+  marginBottom: 0,
 });
