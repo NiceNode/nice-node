@@ -81,6 +81,7 @@ const Sidebar = ({ title, description }: SidebarProps) => {
               title={item.title}
               info={item.info}
               status={item.status}
+              key={item.title}
             />
           );
         })}

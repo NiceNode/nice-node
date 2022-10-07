@@ -8,7 +8,7 @@ export const container = style({
   padding: '0px',
   isolation: 'isolate',
   width: '268px',
-  height: '400px',
+  height: '100%',
   backgroundColor: 'rgba(0, 0, 2, 0.1)',
 });
 
@@ -24,7 +24,6 @@ export const titleItem = style({
 
 export const nodeList = style({
   padding: '0px 16px',
-  height: '428px',
   overflowY: 'scroll',
   order: '2',
   alignSelf: 'stretch',

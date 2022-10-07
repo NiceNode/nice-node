@@ -24,5 +24,5 @@ export const labelText = style({
   fontWeight: '500',
   fontSize: '13px',
   lineHeight: '16px',
-  color: 'rgba(0, 0, 2, 0.7)',
+  color: vars.color.font70,
 });
