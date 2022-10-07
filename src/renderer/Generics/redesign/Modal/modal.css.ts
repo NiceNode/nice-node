@@ -5,6 +5,8 @@ export const modalBackdropStyle = style({
   display: 'none',
   position: 'fixed',
   zIndex: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
   left: '0',
   top: '0',
   width: '100%',
@@ -24,8 +26,6 @@ export const modalContentStyle = style({
   width: '80%',
   top: '50%',
   left: '50%',
-  position: 'fixed',
-  transform: 'translate(-50%, -50%)',
   color: 'inherit',
   // a: { color: 'inherit' },
 });

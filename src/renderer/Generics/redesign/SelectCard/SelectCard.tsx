@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
-import { Tag } from '../Tag';
+import Tag from '../Tag/Tag';
 import {
   container,
   activeContainer,
