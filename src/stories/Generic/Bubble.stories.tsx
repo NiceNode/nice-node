@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Bubble } from '../../renderer/Generics/redesign/Bubble';
+import { Bubble } from '../../renderer/Generics/redesign/Bubble/Bubble';
 
 export default {
   title: 'Generic/Bubble',

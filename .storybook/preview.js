@@ -1,19 +1,18 @@
 import '../src/renderer/assets/sass/app.scss';
 import '../src/renderer/Generics/redesign/globalStyle.css';
-import '../src/renderer/Generics/redesign/InterFont.css';
 import '../src/renderer/i18n';
 
-import RedesignContainer from "../src/renderer/Generics/redesign/RedesignContainer"
+import RedesignContainer from '../src/renderer/Generics/redesign/RedesignContainer';
 
 export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
+  actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
       color: /(background|color)$/i,
       date: /Date$/,
     },
   },
-}
+};
 
 export const decorators = [
   (Story) => (

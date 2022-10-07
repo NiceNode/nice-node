@@ -1,3 +1,5 @@
+import { container } from './bubble.css';
+
 export interface BubbleProps {
   /**
    * What background color to use
@@ -14,11 +16,7 @@ export interface BubbleProps {
  */
 export const Bubble = ({ backgroundColor, count, ...props }: BubbleProps) => {
   return (
-    <div
-      className={['storybook-bubble'].join(' ')}
-      style={{ backgroundColor }}
-      {...props}
-    >
+    <div className={container} style={{ backgroundColor }} {...props}>
       {count}
     </div>
   );
