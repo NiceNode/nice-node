@@ -41,7 +41,11 @@ export const [lightTheme, vars] = createTheme({
     selectCardBoxShadow: 'inset 0px 0px 0px 4px rgba(255, 255, 255, 0.08)',
     secondaryButtonBackground: common.color.white,
     tagPinkBackground: 'rgba(255, 204, 250, 1)',
+    tagPink2Background: 'rgba(254, 227, 249, 1)',
+    tagGreenBackground: 'rgba(220, 250, 229, 1)',
     tagPinkFontColor: common.color.black85,
+    tagPink2FontColor: 'rgba(236, 66, 159, 1)',
+    tagGreenFontColor: 'rgba(55, 160, 85, 1)',
   },
 });
 
@@ -73,6 +77,10 @@ export const darkTheme = createTheme(vars, {
     selectCardBoxShadow: 'none',
     secondaryButtonBackground: common.color.white4,
     tagPinkBackground: 'rgba(251, 116, 195, 0.25)',
+    tagPink2Background: 'rgba(254, 227, 249, 1)',
+    tagGreenBackground: 'rgba(220, 250, 229, 1)',
     tagPinkFontColor: common.color.white70,
+    tagPink2FontColor: 'rgba(236, 66, 159, 1)',
+    tagGreenFontColor: 'rgba(55, 160, 85, 1)',
   },
 });
