@@ -1,6 +1,7 @@
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
-import { container, nodeList, itemList } from './sidebar.css';
+import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
+import { container, nodeList, itemList, titleItem } from './sidebar.css';
 
 export interface SidebarProps {
   title: string;
@@ -32,6 +33,18 @@ const nodeListData = [
     info: 'Testnet',
     status: 'error',
   },
+  {
+    iconId: 'arbitrum',
+    title: 'Arbitrum Nitro',
+    info: 'Testnet',
+    status: 'healthy',
+  },
+  {
+    iconId: 'arbitrum',
+    title: 'Arbitrum Nitro',
+    info: 'Testnet',
+    status: 'healthy',
+  },
 ];
 
 const itemListData = [
@@ -58,6 +71,9 @@ const Sidebar = ({ title, description }: SidebarProps) => {
   return (
     <div className={container}>
       <div className={nodeList}>
+        <div className={titleItem}>
+          <SidebarTitleItem title="Nodes" />
+        </div>
         {nodeListData.map((item) => {
           return (
             <SidebarNodeItem

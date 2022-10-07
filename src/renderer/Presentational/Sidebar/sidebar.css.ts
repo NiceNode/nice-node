@@ -12,6 +12,16 @@ export const container = style({
   backgroundColor: 'rgba(0, 0, 2, 0.1)',
 });
 
+export const titleItem = style({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  flex: 'none',
+  order: '0',
+  alignSelf: 'stretch',
+  flexGrow: '0',
+});
+
 export const nodeList = style({
   padding: '0px 16px',
   height: '428px',
