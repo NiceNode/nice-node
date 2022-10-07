@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
-import Tag from '../Tag/Tag';
+import { Label } from '../Label/Label';
 import {
   container,
   activeContainer,
@@ -84,7 +84,7 @@ const SelectCard = ({
         </div>
         {minority && (
           <div className={tagStyle}>
-            <Tag type="pink" label="Minority Client" />{' '}
+            <Label type="pink" label="Minority Client" />{' '}
           </div>
         )}
       </div>
