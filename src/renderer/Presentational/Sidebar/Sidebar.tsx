@@ -34,16 +34,10 @@ const nodeListData = [
     status: 'error',
   },
   {
-    iconId: 'arbitrum',
-    title: 'Arbitrum Nitro',
+    iconId: 'livepeer',
+    title: 'Livepeer Orchestrator',
     info: 'Testnet',
-    status: 'healthy',
-  },
-  {
-    iconId: 'arbitrum',
-    title: 'Arbitrum Nitro',
-    info: 'Testnet',
-    status: 'healthy',
+    status: 'warning',
   },
 ];
 

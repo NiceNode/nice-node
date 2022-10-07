@@ -16,7 +16,7 @@ const nimbus = require('./Logo-Nimbus.png');
 // L2
 const arbitrum = require('./Logo-Arbitrum.png');
 const starknet = require('./Logo-Starknet.png');
-const zkSync = require('./Logo-Starknet.png');
+const zkSync = require('./Logo-zkSync.png');
 
 // Other networks
 const radicle = require('./Logo-Radicle.png');

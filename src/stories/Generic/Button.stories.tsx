@@ -1,8 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import Button from '../../renderer/Generics/redesign/Button/Button';
-import { ReactComponent as SettingsIcon } from '../../renderer/assets/images/icons/Settings.svg';
-// import SettingsIcon from '../../renderer/assets/images/icons/Settings.svg';
 
 export default {
   title: 'Generic/Button',
