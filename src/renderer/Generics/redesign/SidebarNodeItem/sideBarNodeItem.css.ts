@@ -7,7 +7,7 @@ export const container = style({
   alignItems: 'flex-start',
   padding: '8px 10px',
   gap: '12px',
-  width: '236px',
+  width: 'auto',
   ':active': {
     background: vars.color.background96,
     borderRadius: '4px',

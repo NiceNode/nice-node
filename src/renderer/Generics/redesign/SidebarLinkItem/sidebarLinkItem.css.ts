@@ -9,7 +9,6 @@ export const container = style({
   alignItems: 'center',
   gap: '8px',
   padding: '6px 10px',
-  width: '236px',
   height: '18px',
   borderRadius: '5px',
   ':hover': {
