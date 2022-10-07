@@ -63,6 +63,8 @@ declare global {
       // Docker
       getIsDockerInstalled(): boolean;
       installDocker(): any;
+      getIsDockerRunning(): true;
+      startDocker(): any;
 
       // Settings
       getSettings(): Settings;

@@ -53,6 +53,9 @@ const AddNode = () => {
           <AddNodeStepper
             onChange={(newValue: 'done' | 'cancel') => {
               console.log(newValue);
+              if (newValue === 'done' || newValue === 'cancel') {
+                setIsModalOpenAddNode(false);
+              }
             }}
           />
         </Modal>

@@ -79,6 +79,8 @@ contextBridge.exposeInMainWorld('electron', {
   // Docker
   getIsDockerInstalled: () => ipcRenderer.invoke('getIsDockerInstalled'),
   installDocker: () => ipcRenderer.invoke('installDocker'),
+  getIsDockerRunning: () => ipcRenderer.invoke('getIsDockerRunning'),
+  startDocker: () => ipcRenderer.invoke('startDocker'),
 
   // Settings
   getSettings: () => ipcRenderer.invoke('getSettings'),

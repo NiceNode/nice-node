@@ -77,5 +77,6 @@ export const getNodeLibrary = (): NodeLibrary => {
 
 // Settings/Config
 export const getIsDockerInstalled = () => true;
+export const getIsDockerRunning = () => true;
 
 export const SENTRY_DSN = 'fake_sentry_dsn';

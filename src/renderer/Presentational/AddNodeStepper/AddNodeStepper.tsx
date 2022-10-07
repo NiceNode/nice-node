@@ -13,6 +13,8 @@ import { categorizeNodeLibrary } from '../../utils';
 import { SystemRequirements } from '../../../common/systemRequirements';
 import { SystemData } from '../../../main/systemInfo';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
+import { updateSelectedNodeId } from '../../state/node';
+import { useAppDispatch } from '../../state/hooks';
 
 export interface AddNodeStepperProps {
   onChange: (newValue: 'done' | 'cancel') => void;
@@ -21,6 +23,7 @@ export interface AddNodeStepperProps {
 const TOTAL_STEPS = 3;
 
 const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
+  const dispatch = useAppDispatch();
   const [sStep, setStep] = useState<number>(0);
   const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
     NodeSpecification[]
@@ -64,9 +67,9 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
     fetchNodeLibrary();
   }, []);
 
-  const onChangeDockerInstall = (newValue: string) => {
+  const onChangeDockerInstall = useCallback((newValue: string) => {
     console.log('onChangeDockerInstall newValue ', newValue);
-  };
+  }, []);
 
   const onChangeAddEthereumNode = useCallback(
     (newValue: any) => {
@@ -103,6 +106,37 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
 
   // "mergeNodeSpecs?"
 
+  const addNodes = async () => {
+    let ecNodeSpec;
+    let ccNodeSpec;
+    if (sEthereumNodeConfig?.executionClient?.value) {
+      const ecValue = sEthereumNodeConfig?.executionClient?.value;
+      if (sNodeLibrary) {
+        ecNodeSpec = sNodeLibrary?.[ecValue];
+      }
+    }
+    if (sEthereumNodeConfig?.consensusClient?.value) {
+      const ccValue = sEthereumNodeConfig?.consensusClient?.value;
+      if (sNodeLibrary) {
+        ccNodeSpec = sNodeLibrary?.[`${ccValue}-beacon`];
+      }
+    }
+    const ecNode = await electron.addNode(ecNodeSpec);
+    console.log('addNode returned node: ', ecNode);
+    const ccNode = await electron.addNode(ccNodeSpec);
+    console.log('addNode returned node: ', ccNode);
+    dispatch(updateSelectedNodeId(ecNode.id));
+    const startEcResult = await electron.startNode(ecNode.id);
+    console.log('startEcResult result: ', startEcResult);
+    const startCcResult = await electron.startNode(ccNode.id);
+    console.log('startCcResult result: ', startCcResult);
+
+    // close?
+
+    onChange('done');
+    setStep(0);
+  };
+
   const onStep = (newValue: string) => {
     console.log('onStep: ', newValue);
     if (newValue === 'next') {
@@ -110,6 +144,8 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       if (sStep + 1 >= TOTAL_STEPS) {
         // done
         onChange('done');
+        // if DockerInstallDone, add nodes, close modal (loading?)
+        addNodes();
       } else {
         setStep(sStep + 1);
       }

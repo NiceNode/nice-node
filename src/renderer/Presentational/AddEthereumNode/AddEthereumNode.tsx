@@ -92,13 +92,17 @@ const ccOptions = [
   },
 ];
 
+type AddEthereumNodeValues = {
+  executionClient?: string;
+  consensusClient?: string;
+};
 export interface AddEthereumNodeProps {
   executionOptions: NodeSpecification[];
   beaconOptions: NodeSpecification[];
   /**
    * Listen to node config changes
    */
-  onChange: (newValue: any) => void;
+  onChange: (newValue: AddEthereumNodeValues) => void;
 }
 
 const AddEthereumNode = ({
