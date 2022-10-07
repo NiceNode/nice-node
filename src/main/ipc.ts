@@ -21,13 +21,14 @@ import {
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
-import { isDockerInstalled } from './docker/docker';
+import { isDockerInstalled, isDockerRunning } from './docker/docker';
 import installDocker from './docker/install';
 // eslint-disable-next-line import/no-cycle
 import { openDialogForNodeDataDir } from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
 import { getSettings, setLanguage } from './state/settings';
 import { getSystemInfo } from './systemInfo';
+import startDocker from './docker/start';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -95,6 +96,8 @@ export const initialize = () => {
   // Docker
   ipcMain.handle('getIsDockerInstalled', isDockerInstalled);
   ipcMain.handle('installDocker', installDocker);
+  ipcMain.handle('getIsDockerRunning', isDockerRunning);
+  ipcMain.handle('startDocker', startDocker);
 
   // Settings
   ipcMain.handle('getSettings', getSettings);

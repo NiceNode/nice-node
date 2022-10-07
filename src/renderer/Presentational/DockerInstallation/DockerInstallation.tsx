@@ -14,6 +14,10 @@ import ProgressBar from '../../Generics/redesign/ProgressBar/ProgressBar';
 import { FileDownloadProgress } from '../../../main/downloadFile';
 import { bytesToMB } from '../../utils';
 import TimedProgressBar from '../../Generics/redesign/ProgressBar/TimedProgressBar';
+import {
+  useGetIsDockerInstalledQuery,
+  useGetIsDockerRunningQuery,
+} from '../../state/settingsService';
 
 // 6.5 min on 2022 MacbookPro 16inch, baseline
 const TOTAL_INSTALL_TIME_SEC = 7 * 60;
@@ -26,6 +30,12 @@ export interface DockerInstallationProps {
 
 const DockerInstallation = ({ onChange }: DockerInstallationProps) => {
   const { t } = useTranslation();
+  const qIsDockerInstalled = useGetIsDockerInstalledQuery();
+  const isDockerInstalled = qIsDockerInstalled?.data;
+  const qIsDockerRunning = useGetIsDockerRunningQuery(null, {
+    pollingInterval: 15000,
+  });
+  const isDockerRunning = qIsDockerRunning?.data;
   const [sHasStartedDownload, setHasStartedDownload] = useState<boolean>();
   const [sDownloadComplete, setDownloadComplete] = useState<boolean>();
   const [sDownloadProgress, setDownloadProgress] = useState<number>(0);
@@ -33,14 +43,29 @@ const DockerInstallation = ({ onChange }: DockerInstallationProps) => {
   const [sDownloadedBytes, setDownloadedBytes] = useState<number>(0);
   const [sInstallComplete, setInstallComplete] = useState<boolean>();
 
+  useEffect(() => {
+    if (isDockerRunning) {
+      onChange('done');
+    }
+  }, [isDockerRunning, onChange]);
+
   const onClickDownloadAndInstall = async () => {
     setHasStartedDownload(true);
     const installResult = await electron.installDocker();
+    qIsDockerInstalled.refetch();
+    qIsDockerRunning.refetch();
     if (installResult && !installResult.error) {
       setInstallComplete(true);
       // notify parent that everything is done
       // todo: confirm/check docker version installed?
     }
+    console.log('installDocker finished. Install result: ', installResult);
+  };
+
+  const onClickStartDocker = async () => {
+    setHasStartedDownload(true);
+    const installResult = await electron.startDocker();
+    qIsDockerRunning.refetch();
     console.log('installDocker finished. Install result: ', installResult);
   };
 
@@ -63,15 +88,15 @@ const DockerInstallation = ({ onChange }: DockerInstallationProps) => {
     }
   };
 
-  const listenForNodeLogs = useCallback(async () => {
+  const listenForDockerInstallUpdates = useCallback(async () => {
     electron.ipcRenderer.on('docker', nodeLogsListener);
   }, []);
 
   useEffect(() => {
-    console.log('DockerInstallation.tsx: isOpen. Listening for logs.');
-    listenForNodeLogs();
+    console.log('DockerInstallation.tsx: listenForDockerInstallUpdates .');
+    listenForDockerInstallUpdates();
     return () => electron.ipcRenderer.removeAllListeners('docker');
-  }, [listenForNodeLogs]);
+  }, [listenForDockerInstallUpdates]);
 
   // listen to docker install messages
   return (
@@ -84,37 +109,59 @@ const DockerInstallation = ({ onChange }: DockerInstallationProps) => {
         text={t('LearnMoreDocker')}
         url="https://www.docker.com/products/docker-desktop/"
       />
-      {!sDownloadComplete && !sInstallComplete && (
+      {/* Docker is not installed */}
+      {!isDockerInstalled && (
         <>
-          {!sHasStartedDownload ? (
-            <div>
-              <Button
-                primary
-                label={t('DownloadAndInstall')}
-                onClick={onClickDownloadAndInstall}
-              />
-              <div className={captionText}>~600MB {t('download')}</div>
-            </div>
-          ) : (
-            <ProgressBar
-              progress={sDownloadProgress}
-              title={t('DownloadingDocker')}
-              caption={t('DownloadedSomeMegaBytesOfTotal', {
-                downloadedBytes: bytesToMB(sDownloadedBytes),
-                totalBytes: bytesToMB(sTotalSizeBytes),
-              })}
+          {!sDownloadComplete && !sInstallComplete && (
+            <>
+              {!sHasStartedDownload ? (
+                <div>
+                  <Button
+                    primary
+                    label={t('DownloadAndInstall')}
+                    onClick={onClickDownloadAndInstall}
+                  />
+                  <div className={captionText}>~600MB {t('download')}</div>
+                </div>
+              ) : (
+                <ProgressBar
+                  progress={sDownloadProgress}
+                  title={t('DownloadingDocker')}
+                  caption={t('DownloadedSomeMegaBytesOfTotal', {
+                    downloadedBytes: bytesToMB(sDownloadedBytes),
+                    totalBytes: bytesToMB(sTotalSizeBytes),
+                  })}
+                />
+              )}
+            </>
+          )}
+          {sDownloadComplete && !sInstallComplete && (
+            <TimedProgressBar
+              totalTimeSeconds={TOTAL_INSTALL_TIME_SEC}
+              title={t('InstallingDocker')}
             />
           )}
         </>
       )}
-      {sDownloadComplete && !sInstallComplete && (
-        <TimedProgressBar
-          totalTimeSeconds={TOTAL_INSTALL_TIME_SEC}
-          title={t('InstallingDocker')}
-        />
-      )}
+
       {sDownloadComplete && sInstallComplete && (
         <p>{t('DockerInstallComplete')}</p>
+      )}
+      {/* Docker is installed but not running */}
+      {isDockerInstalled && !isDockerRunning && (
+        <>
+          <Button
+            primary
+            label={t('start docker')}
+            onClick={onClickStartDocker}
+          />
+          <div
+            className={captionText}
+          >{`Settings -> Unchceck "Open Docker at startup"`}</div>
+        </>
+      )}
+      {isDockerRunning && (
+        <>Docker is running. Please proceed to start your node.</>
       )}
     </div>
   );

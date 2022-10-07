@@ -46,8 +46,29 @@ export const RtkqSettingsService: any = createApi({
         return { data };
       },
     }),
+    getIsDockerRunning: builder.query<boolean, null>({
+      queryFn: async () => {
+        let data;
+        try {
+          console.log('RtkqSettingsService getIsDockerRunning() calling..');
+          data = await electron.getIsDockerRunning();
+          console.log(
+            'RtkqSettingsService getIsDockerRunning() returned ',
+            data
+          );
+        } catch (e) {
+          const error = { message: 'Unable to getIsDockerRunning' };
+          console.log(e);
+          return { error };
+        }
+        return { data };
+      },
+    }),
   }),
 });
 
-export const { useGetSettingsQuery, useGetIsDockerInstalledQuery } =
-  RtkqSettingsService;
+export const {
+  useGetSettingsQuery,
+  useGetIsDockerInstalledQuery,
+  useGetIsDockerRunningQuery,
+} = RtkqSettingsService;

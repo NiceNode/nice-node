@@ -399,7 +399,6 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
   return [containerId];
 };
 
-// todo: check docker version. check docker desktop is installed but not running
 export const isDockerInstalled = async () => {
   let bIsDockerInstalled;
   logger.info('Checking isDockerInstalled...');
@@ -419,6 +418,28 @@ export const isDockerInstalled = async () => {
   logger.info(`isDockerInstalled: ${bIsDockerInstalled}`);
   return bIsDockerInstalled;
 };
+
+export const isDockerRunning = async () => {
+  let bIsDockerRunning;
+  logger.info('Checking isDockerRunning...');
+  try {
+    const infoResult = await runCommand('info');
+    console.log('docker isDockerRunning infoResult: ', infoResult);
+    bIsDockerRunning = true;
+    logger.info('Docker is running. Docker info command did not throw error.');
+  } catch (err) {
+    // [mac verified] "error cannot connect to the docker dameon"
+    logger.error(err);
+    bIsDockerRunning = false;
+    logger.info('Docker engine not found.');
+  }
+  logger.info(`isDockerRunning: ${bIsDockerRunning}`);
+  return bIsDockerRunning;
+};
+
+setTimeout(() => {
+  isDockerRunning();
+}, 5000);
 
 export const onExit = () => {
   monitoring.onExit();
