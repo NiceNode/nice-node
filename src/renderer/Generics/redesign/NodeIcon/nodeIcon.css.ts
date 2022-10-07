@@ -184,9 +184,10 @@ export const statusStyle = style({
       top: '-1px',
     },
     [`&.${smallStyle}.${sync}`]: {
-      width: '10px',
-      height: '12px',
-      top: '-2px',
+      width: '9px',
+      height: '14px',
+      top: '-3px',
+      right: '0px',
     },
     [`&.${mediumStyle}.${sync}`]: {
       width: '12px',

@@ -11,6 +11,7 @@ export const container = style({
   padding: '6px 10px',
   height: '18px',
   borderRadius: '5px',
+  cursor: 'pointer',
   ':hover': {
     background: vars.color.background96,
   },

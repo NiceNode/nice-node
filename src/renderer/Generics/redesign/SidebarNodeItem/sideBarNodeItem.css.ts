@@ -8,6 +8,7 @@ export const container = style({
   padding: '8px 10px',
   gap: '12px',
   width: 'auto',
+  cursor: 'pointer',
   ':active': {
     background: vars.color.background96,
     borderRadius: '4px',
