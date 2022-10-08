@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Toggle } from '../../renderer/Generics/redesign/Toggle';
+import { Toggle } from '../../renderer/Generics/redesign/Toggle/Toggle';
 
 export default {
   title: 'Generic/Toggle',

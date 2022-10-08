@@ -6,6 +6,7 @@ export const activeContainer = style({});
 export const container = style({
   margin: 5,
   cursor: 'pointer',
+  userSelect: 'none',
   minWidth: 200,
   display: 'flex',
   flexDirection: 'row',

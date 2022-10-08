@@ -12,6 +12,7 @@ export const container = style({
   height: '18px',
   borderRadius: '5px',
   cursor: 'pointer',
+  userSelect: 'none',
   ':hover': {
     background: vars.color.background96,
   },

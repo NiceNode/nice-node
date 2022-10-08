@@ -21,7 +21,6 @@ export const baseButton = style({
   ':hover': {
     transform: 'none',
   },
-  fontFamily: 'Inter',
   fontWeight: 500,
   fontSize: 13,
   lineHeight: '16px',

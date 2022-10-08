@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { container } from './toggle.css';
 
 export interface ToggleProps {
   /**
@@ -10,10 +11,6 @@ export interface ToggleProps {
    */
   checked?: boolean;
   /**
-   * Is this dark mode?
-   */
-  darkMode?: boolean;
-  /**
    * Optional change handler
    */
   onChange?: (b: boolean) => void;
@@ -22,18 +19,12 @@ export interface ToggleProps {
 /**
  * Primary UI component for user interaction
  */
-export const Toggle = ({
-  checked,
-  disabled,
-  darkMode,
-  onChange,
-}: ToggleProps) => {
+export const Toggle = ({ checked, disabled, onChange }: ToggleProps) => {
   const [isChecked, setChecked] = useState(checked);
-  const darkStyle = darkMode ? 'darkMode' : '';
   return (
     <input
       {...{
-        className: ['storybook-toggle-input', `${darkStyle}`].join(' '),
+        className: container,
         type: 'checkbox',
         role: 'switch',
         id: 'flexSwitchCheckDefault',

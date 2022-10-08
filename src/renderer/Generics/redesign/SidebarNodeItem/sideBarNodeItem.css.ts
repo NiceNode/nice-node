@@ -9,6 +9,7 @@ export const container = style({
   gap: '12px',
   width: 'auto',
   cursor: 'pointer',
+  userSelect: 'none',
   ':active': {
     background: vars.color.background96,
     borderRadius: '4px',
