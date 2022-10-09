@@ -32,12 +32,17 @@ export interface NodeIconProps {
    * What size should the icon be?
    */
   size: 'small' | 'medium' | 'large';
+  /**
+   * Is it animated?
+   */
+  animate?: boolean;
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
+export const NodeIcon = ({ iconId, status, size, animate }: NodeIconProps) => {
+  const isAnimated = animate ? 'animate' : '';
   let sizeStyle = mediumStyle;
   if (size === 'small') {
     sizeStyle = smallStyle;
@@ -60,13 +65,27 @@ export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
     isStatusStyle = hasStatusStyle;
     if (status === 'sync') {
       statusComponent = (
-        <div className={[statusStyle, sizeStyle, statusColorStyle].join(' ')}>
+        <div
+          className={[
+            statusStyle,
+            sizeStyle,
+            statusColorStyle,
+            isAnimated,
+          ].join(' ')}
+        >
           <Icon iconId="sync" />
         </div>
       );
     } else {
       statusComponent = (
-        <div className={[statusStyle, sizeStyle, statusColorStyle].join(' ')} />
+        <div
+          className={[
+            statusStyle,
+            sizeStyle,
+            statusColorStyle,
+            isAnimated,
+          ].join(' ')}
+        />
       );
     }
   }

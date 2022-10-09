@@ -145,10 +145,6 @@ export const statusStyle = style({
   right: '0',
   top: '0',
   zIndex: 1,
-  animationDuration: '2s',
-  animationIterationCount: 'infinite',
-  animationTimingFunction: 'linear',
-  transform: 'scale(0.5)',
   selectors: {
     [`&.${healthy}`]: {
       animationName: healthyPulse,
@@ -174,7 +170,13 @@ export const statusStyle = style({
       height: 14,
       borderRadius: 7,
     },
-    [`&.${sync}`]: {
+    [`&.animate`]: {
+      animationDuration: '2s',
+      animationIterationCount: 'infinite',
+      animationTimingFunction: 'linear',
+      transform: 'scale(0.5)',
+    },
+    [`&.${sync}.animate`]: {
       animationName: rotate,
       animationDuration: '2s',
       animationIterationCount: 'infinite',
