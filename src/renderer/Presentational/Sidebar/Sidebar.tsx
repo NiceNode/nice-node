@@ -11,8 +11,10 @@ import {
 } from './sidebar.css';
 
 export interface SidebarProps {
-  title: string;
-  description: string;
+  /**
+   * Offline mode?
+   */
+  offline: boolean;
 }
 
 const nodeListData = [
@@ -63,12 +65,14 @@ const itemListData = [
   },
 ];
 
-const Sidebar = ({ title, description }: SidebarProps) => {
+const Sidebar = ({ offline }: SidebarProps) => {
   return (
     <div className={container}>
-      <div className={networkBanner}>
-        <Banner />
-      </div>
+      {offline && (
+        <div className={networkBanner}>
+          <Banner />
+        </div>
+      )}
       <div className={nodeList}>
         <div className={titleItem}>
           <SidebarTitleItem title="Nodes" />
