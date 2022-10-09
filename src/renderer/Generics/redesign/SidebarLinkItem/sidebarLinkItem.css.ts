@@ -13,11 +13,8 @@ export const container = style({
   borderRadius: '5px',
   cursor: 'pointer',
   userSelect: 'none',
-  ':hover': {
-    background: vars.color.background96,
-  },
   ':active': {
-    background: vars.color.background92,
+    background: vars.color.background96,
   },
 });
 
