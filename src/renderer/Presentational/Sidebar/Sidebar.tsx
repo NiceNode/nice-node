@@ -43,11 +43,6 @@ const nodeListData = [
 
 const itemListData = [
   {
-    iconId: 'bell',
-    label: 'Notifications',
-    count: 12,
-  },
-  {
     iconId: 'health',
     label: 'System Monitor',
   },
