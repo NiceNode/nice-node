@@ -1,14 +1,20 @@
 import { style } from '@vanilla-extract/css';
+import { vars } from '../../Generics/redesign/theme.css';
 
 export const container = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  padding: '0px',
+  boxSizing: 'border-box',
+  padding: '0px 16px 16px 16px',
   isolation: 'isolate',
   width: '268px',
   height: '100%',
-  backgroundColor: 'rgba(0, 0, 2, 0.1)',
+  backgroundColor: vars.components.sidebarBackground,
+});
+
+export const networkBanner = style({
+  padding: '8px 0px',
 });
 
 export const titleItem = style({
@@ -22,7 +28,6 @@ export const titleItem = style({
 });
 
 export const nodeList = style({
-  padding: '0px 16px',
   overflowY: 'scroll',
   order: '2',
   alignSelf: 'stretch',
@@ -30,7 +35,7 @@ export const nodeList = style({
 });
 
 export const itemList = style({
-  padding: '16px',
+  paddingTop: '16px',
   flex: 'none',
   order: '3',
   alignSelf: 'stretch',

@@ -1,7 +1,14 @@
+import { Banner } from '../../Generics/redesign/Banner/Banner';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
-import { container, nodeList, itemList, titleItem } from './sidebar.css';
+import {
+  container,
+  networkBanner,
+  nodeList,
+  itemList,
+  titleItem,
+} from './sidebar.css';
 
 export interface SidebarProps {
   title: string;
@@ -59,6 +66,9 @@ const itemListData = [
 const Sidebar = ({ title, description }: SidebarProps) => {
   return (
     <div className={container}>
+      <div className={networkBanner}>
+        <Banner />
+      </div>
       <div className={nodeList}>
         <div className={titleItem}>
           <SidebarTitleItem title="Nodes" />

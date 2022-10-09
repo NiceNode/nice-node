@@ -44,6 +44,9 @@ export const [lightTheme, vars] = createTheme({
     toggleCheckedBackground: '#7d56d7',
     secondaryButtonBackground: common.color.white,
     bannerBackground: common.color.white25,
+    bannerBoxShadow:
+      '0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px 1px 0px rgba(255, 255, 255, 0.25)',
+    sidebarBackground: 'rgba(232, 233, 233, 0.84)',
     tagPinkBackground: 'rgba(255, 204, 250, 1)',
     tagPink2Background: 'rgba(254, 227, 249, 1)',
     tagGreenBackground: 'rgba(220, 250, 229, 1)',
@@ -84,6 +87,9 @@ export const darkTheme = createTheme(vars, {
     toggleCheckedBackground: '#8267ef',
     secondaryButtonBackground: common.color.white4,
     bannerBackground: common.color.white4,
+    bannerBoxShadow:
+      '0px 1px 1px rgba(0, 0, 0, 0.15), inset 0px 1px 0px rgba(255, 255, 255, 0.08)',
+    sidebarBackground: 'rgba(38, 38, 39, 0.8)',
     tagPinkBackground: 'rgba(251, 116, 195, 0.25)',
     tagPink2Background: 'rgba(254, 227, 249, 1)',
     tagGreenBackground: 'rgba(220, 250, 229, 1)',

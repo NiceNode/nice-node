@@ -10,8 +10,7 @@ export const container = style({
   height: '56px',
   boxSizing: 'border-box',
   background: vars.components.bannerBackground,
-  boxShadow:
-    '0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px 1px 0px rgba(255, 255, 255, 0.25)',
+  boxShadow: vars.components.bannerBoxShadow,
   borderRadius: '5px',
   color: 'vars.color.font70',
   padding: '12px',
