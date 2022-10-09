@@ -2,7 +2,7 @@
 // React select docs at:
 // https://react-select.com/components#Option
 import ReactSelect, { ActionMeta, SingleValue } from 'react-select';
-import { ReactComponent as PopupIcon } from '../../../assets/images/icons/Popup.svg';
+import { Icon } from '../Icon/Icon';
 import { vars } from '../theme.css';
 
 const options = [
@@ -39,7 +39,7 @@ const Select = ({ onChange }: SelectProps) => {
         components={{
           IndicatorsContainer: () => (
             <div style={{ marginRight: 5 }}>
-              <PopupIcon />
+              <Icon iconId="popup" />
             </div>
           ),
         }}

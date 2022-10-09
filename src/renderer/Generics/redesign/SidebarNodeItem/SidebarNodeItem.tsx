@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import {
   container,
+  selectedContainer,
   iconContainer,
   textContainer,
   titleStyle,
@@ -25,19 +27,47 @@ export interface SidebarNodeItemProps {
    * What's the status?
    */
   status?: 'healthy' | 'warning' | 'error' | 'sync';
+  /**
+   * Optional click handler
+   */
+  onClick?: () => void;
 }
 
 /**
  * Primary UI component for user interaction
  */
 export const SidebarNodeItem = ({
+  onClick,
   title,
   info,
   iconId,
   status,
 }: SidebarNodeItemProps) => {
+  const [selected, setSelected] = useState(false);
+
+  const onClickAction = () => {
+    setSelected(true);
+    if (onClick) {
+      onClick();
+    }
+  };
+
+  const containerStyles = [container];
+  if (selected) {
+    containerStyles.push(selectedContainer);
+  }
+
   return (
-    <div className={container}>
+    <div
+      className={containerStyles.join(' ')}
+      onClick={onClickAction}
+      onBlur={() => {
+        setSelected(false);
+      }}
+      onKeyDown={onClickAction}
+      role="button"
+      tabIndex={0}
+    >
       <div className={iconContainer}>
         <NodeIcon iconId={iconId} status={status} size="small" />
       </div>

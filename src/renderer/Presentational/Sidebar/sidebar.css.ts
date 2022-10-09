@@ -10,7 +10,9 @@ export const container = style({
   isolation: 'isolate',
   width: '268px',
   height: '100%',
+  borderRight: vars.components.sidebarBorder,
   backgroundColor: vars.components.sidebarBackground,
+  // backdropFilter: 'blur(40px)',
 });
 
 export const networkBanner = style({

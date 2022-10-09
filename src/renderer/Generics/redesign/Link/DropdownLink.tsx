@@ -1,8 +1,7 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { blockContainer, inlineContainer, linkText } from './externalLink.css';
-import { ReactComponent as DownIcon } from '../../../assets/images/icons/Down.svg';
-import { ReactComponent as UpIcon } from '../../../assets/images/icons/Up.svg';
+import { Icon } from '../Icon/Icon';
 
 // todo: variants for downloads or internal links
 export interface DropdownLinkProps {
@@ -31,7 +30,7 @@ const DropdownLink = ({ text, inline, onClick, isDown }: DropdownLinkProps) => {
       <a className={linkText} href="javascript:void(0);">
         {text}
       </a>
-      {isDown === true ? <DownIcon /> : <UpIcon />}
+      {isDown === true ? <Icon iconId="down" /> : <Icon iconId="up" />}
     </div>
   );
 };

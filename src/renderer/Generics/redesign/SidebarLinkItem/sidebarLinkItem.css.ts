@@ -13,9 +13,10 @@ export const container = style({
   borderRadius: '5px',
   cursor: 'pointer',
   userSelect: 'none',
-  ':active': {
-    background: vars.color.background96,
-  },
+});
+
+export const selectedContainer = style({
+  background: vars.color.background96,
 });
 
 export const labelText = style({

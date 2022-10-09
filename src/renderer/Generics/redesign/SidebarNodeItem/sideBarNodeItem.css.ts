@@ -10,10 +10,11 @@ export const container = style({
   width: 'auto',
   cursor: 'pointer',
   userSelect: 'none',
-  ':active': {
-    background: vars.color.background96,
-    borderRadius: '4px',
-  },
+});
+
+export const selectedContainer = style({
+  background: vars.color.background96,
+  borderRadius: '4px',
 });
 
 export const iconContainer = style({

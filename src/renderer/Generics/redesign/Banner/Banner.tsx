@@ -1,4 +1,3 @@
-import { IconId } from 'renderer/assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import { container, textContainer, offline, reconnect } from './banner.css';
 
