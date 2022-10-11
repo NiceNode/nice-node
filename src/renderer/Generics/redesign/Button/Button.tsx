@@ -27,7 +27,7 @@ export interface ButtonProps {
   /**
    * Button text content
    */
-  label: string;
+  label?: string;
   onClick?: () => void;
 }
 

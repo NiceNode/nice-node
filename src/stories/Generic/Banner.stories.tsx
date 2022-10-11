@@ -13,7 +13,3 @@ export default {
 const Template: ComponentStory<typeof Banner> = (args) => <Banner {...args} />;
 
 export const Primary = Template.bind({});
-Primary.args = {
-  label: 'Minority Client',
-  type: 'pink',
-};

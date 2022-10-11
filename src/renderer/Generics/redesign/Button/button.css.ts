@@ -24,10 +24,12 @@ export const baseButton = style({
   fontWeight: 500,
   fontSize: 13,
   lineHeight: '16px',
+  height: '32px',
 });
 
 export const smallButton = style({
   padding: '6px 10px',
+  height: '28px',
 });
 
 export const primaryButton = style([
