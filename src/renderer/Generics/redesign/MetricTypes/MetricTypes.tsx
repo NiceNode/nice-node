@@ -25,14 +25,7 @@ export interface MetricTypesProps {
   /**
    * Secondary metric types
    */
-  secondaryType:
-    | 'blocks'
-    | 'stake'
-    | 'rewards'
-    | 'peers'
-    | 'cpu'
-    | 'balance'
-    | 'disk';
+  secondaryType?: 'slots' | 'peers' | 'cpu' | 'disks';
   /**
    * Status //TODO: match this with current status enum implementation
    */
@@ -62,9 +55,11 @@ export const MetricTypes = ({
   label,
   info,
 }: MetricTypesProps) => {
-  let statusComponent = null;
+  let iconComponent = null;
   let titleText = '';
   let labelText = '';
+
+  // TODO: abstract this out if it gets complex
 
   const processStatus = () => {
     let statusColorStyle;
@@ -92,16 +87,16 @@ export const MetricTypes = ({
       default:
         break;
     }
-    statusComponent = (
+    iconComponent = (
       <div className={[statusStyle, statusColorStyle].join(' ')}>
-        {status === 'sync' && <Icon iconId="sync" />}
+        {status === 'sync' && <Icon iconId="syncing" />}
       </div>
     );
   };
 
   const processSecondaryType = () => {
     switch (secondaryType) {
-      case 'blocks':
+      case 'slots':
         titleText = '4,456,158';
         labelText = 'Current slot';
         break;
@@ -113,13 +108,14 @@ export const MetricTypes = ({
         titleText = '83%';
         labelText = 'CPU load';
         break;
-      case 'disk':
+      case 'disks':
         titleText = '1.52 GB';
         labelText = 'Disk usage';
         break;
       default:
         break;
     }
+    iconComponent = <Icon iconId={secondaryType} />;
   };
 
   if (status) {
@@ -129,7 +125,7 @@ export const MetricTypes = ({
   }
   return (
     <div className={container}>
-      {status && <div className={iconContainer}>{statusComponent}</div>}
+      <div className={iconContainer}>{iconComponent}</div>
       <div className={textContainer}>
         <div className={titleContainer}>
           <div className={titleStyle}>{titleText}</div>

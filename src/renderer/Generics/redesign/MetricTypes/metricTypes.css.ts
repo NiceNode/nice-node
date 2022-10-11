@@ -88,7 +88,8 @@ export const statusStyle = style({
 });
 
 export const container = style({
-  height: '56px',
+  width: 155,
+  height: 38,
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'flex-start',
@@ -108,7 +109,6 @@ export const textContainer = style({
   flexDirection: 'column',
   alignItems: 'flex-start',
   paddingLeft: '12px',
-  gap: '6px',
   flex: 'none',
   order: '1',
   flexGrow: '1',

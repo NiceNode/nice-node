@@ -16,7 +16,9 @@ import { ReactComponent as CloseCircleFilled } from './Close-circle-filled.svg';
 import { ReactComponent as CloseCircle } from './Close-circle.svg';
 import { ReactComponent as Close } from './Close.svg';
 import { ReactComponent as Copy } from './Copy.svg';
+import { ReactComponent as Cpu } from './CPU.svg';
 import { ReactComponent as Disk } from './Disk.svg';
+import { ReactComponent as Disks } from './Disks.svg';
 import { ReactComponent as DownLarge } from './Down-large.svg';
 import { ReactComponent as Down } from './Down.svg';
 import { ReactComponent as Download1 } from './Download-1.svg';
@@ -35,6 +37,7 @@ import { ReactComponent as Mail } from './Mail.svg';
 import { ReactComponent as DarkMode } from './Nicenode-darkmode.svg';
 import { ReactComponent as LightMode } from './Nicenode-lightmode.svg';
 import { ReactComponent as Nodes } from './Nodes.svg';
+import { ReactComponent as Peers } from './Peers.svg';
 import { ReactComponent as Play } from './Play.svg';
 import { ReactComponent as Popup } from './Popup.svg';
 import { ReactComponent as Preferences } from './Preferences.svg';
@@ -44,11 +47,13 @@ import { ReactComponent as ScrollFill } from './Scroll-fill.svg';
 import { ReactComponent as Scroll } from './Scroll.svg';
 import { ReactComponent as Search } from './Search.svg';
 import { ReactComponent as Settings } from './Settings.svg';
+import { ReactComponent as Slots } from './Slots.svg';
 import { ReactComponent as Speedometer } from './Speedometer.svg';
 import { ReactComponent as SpinnerEndless } from './Spinner-endless.svg';
 import { ReactComponent as Stop } from './Stop.svg';
 import { ReactComponent as SyncSmall } from './Sync-small.svg';
 import { ReactComponent as Sync } from './Sync.svg';
+import { ReactComponent as Syncing } from './Syncing.svg';
 import { ReactComponent as UpLarge } from './Up-large.svg';
 import { ReactComponent as Up } from './Up.svg';
 import { ReactComponent as WarningCircleFilled } from './Warning-circle-filled.svg';
@@ -72,7 +77,9 @@ export interface Icons {
   closecircle?: React.ReactNode;
   close?: React.ReactNode;
   copy?: React.ReactNode;
+  cpu?: React.ReactNode;
   disk?: React.ReactNode;
+  disks?: React.ReactNode;
   downlarge?: React.ReactNode;
   down?: React.ReactNode;
   download1?: React.ReactNode;
@@ -91,6 +98,7 @@ export interface Icons {
   darkmode?: React.ReactNode;
   lightmode?: React.ReactNode;
   nodes?: React.ReactNode;
+  peers?: React.ReactNode;
   play?: React.ReactNode;
   popup?: React.ReactNode;
   preferences?: React.ReactNode;
@@ -100,11 +108,13 @@ export interface Icons {
   scroll?: React.ReactNode;
   search?: React.ReactNode;
   settings?: React.ReactNode;
+  slots?: React.ReactNode;
   speedometer?: React.ReactNode;
   spinnerendless?: React.ReactNode;
   stop?: React.ReactNode;
   syncsmall?: React.ReactNode;
   sync?: React.ReactNode;
+  syncing?: React.ReactNode;
   uplarge?: React.ReactNode;
   up?: React.ReactNode;
   warningcirclefilled?: React.ReactNode;
@@ -130,7 +140,9 @@ export const ICONS: Icons = {
   closecircle: <CloseCircle />,
   close: <Close />,
   copy: <Copy />,
+  cpu: <Cpu />,
   disk: <Disk />,
+  disks: <Disks />,
   downlarge: <DownLarge />,
   down: <Down />,
   download1: <Download1 />,
@@ -149,6 +161,7 @@ export const ICONS: Icons = {
   darkmode: <DarkMode />,
   lightmode: <LightMode />,
   nodes: <Nodes />,
+  peers: <Peers />,
   play: <Play />,
   popup: <Popup />,
   preferences: <Preferences />,
@@ -158,11 +171,13 @@ export const ICONS: Icons = {
   scroll: <Scroll />,
   search: <Search />,
   settings: <Settings />,
+  slots: <Slots />,
   speedometer: <Speedometer />,
   spinnerendless: <SpinnerEndless />,
   stop: <Stop />,
   syncsmall: <SyncSmall />,
   sync: <Sync />,
+  syncing: <Syncing />,
   uplarge: <UpLarge />,
   up: <Up />,
   warningcirclefilled: <WarningCircleFilled />,
