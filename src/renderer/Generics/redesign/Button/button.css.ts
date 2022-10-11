@@ -30,6 +30,7 @@ export const baseButton = style({
 export const smallButton = style({
   padding: '6px 10px',
   height: '28px',
+  gap: '6px',
 });
 
 export const primaryButton = style([

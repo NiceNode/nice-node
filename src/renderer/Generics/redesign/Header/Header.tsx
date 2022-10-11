@@ -29,12 +29,59 @@ export interface HeaderProps {
    * Which icon?
    */
   iconId: NodeIconId;
+  /**
+   * Is this header being shown on multiple clients screen? // TODO: Find a better way to do this
+   */
+  multiple: boolean;
+  /**
+   * Is the node running right now? // TODO: Differentiate between main screen vs node screen with different variable?
+   */
+  running?: boolean;
+  /**
+   * Is update available?
+   */
+  update?: boolean;
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const Header = ({ iconId, version, title, info }: HeaderProps) => {
+export const Header = ({
+  iconId,
+  version,
+  title,
+  info,
+  update,
+  running,
+  multiple,
+}: HeaderProps) => {
+  const buttonProps = {
+    label: '',
+    iconId: '',
+    onClick: () => {},
+  };
+  if (multiple) {
+    if (running) {
+      buttonProps.label = 'Stop';
+      buttonProps.iconId = 'stop';
+      buttonProps.onClick = () => {
+        console.log('stop node');
+      };
+    } else {
+      buttonProps.label = 'Start';
+      buttonProps.iconId = 'play';
+      buttonProps.onClick = () => {
+        console.log('start node');
+      };
+    }
+  } else {
+    buttonProps.label = 'Logs';
+    buttonProps.iconId = 'logs';
+    buttonProps.onClick = () => {
+      console.log('open logs');
+    };
+  }
+
   return (
     <div className={container}>
       <div className={iconContainer}>
@@ -48,14 +95,16 @@ export const Header = ({ iconId, version, title, info }: HeaderProps) => {
         <div className={infoStyle}>{info}</div>
       </div>
       <div className={buttonContainer}>
-        <Button
-          label="Update Available"
-          primary
-          iconId="down"
-          variant="icon-right"
-          size="small"
-        />
-        <Button label="Stop" iconId="stop" variant="icon-left" size="small" />
+        {update && (
+          <Button
+            label="Update Available"
+            primary
+            iconId="down"
+            variant="icon-right"
+            size="small"
+          />
+        )}
+        <Button {...buttonProps} variant="icon-left" size="small" />
         <Button iconId="settings" variant="icon" size="small" />
       </div>
     </div>
