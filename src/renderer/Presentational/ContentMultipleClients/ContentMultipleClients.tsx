@@ -1,5 +1,5 @@
 import { Header } from '../../Generics/redesign/Header/Header';
-import { container } from './contentClients.css';
+import { container } from './contentMultipleClients.css';
 
 const clientsData = {
   iconId: 'ethereum',
@@ -12,11 +12,11 @@ const clientsData = {
 };
 
 // TODO: Come up with a better name for this component..
-const ContentClients = () => {
+const ContentMultipleClients = () => {
   return (
     <div className={container}>
       <Header {...clientsData} />
     </div>
   );
 };
-export default ContentClients;
+export default ContentMultipleClients;
