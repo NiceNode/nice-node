@@ -1,16 +1,7 @@
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
-import Button from '../Button/Button';
-import { NodeIcon } from '../NodeIcon/NodeIcon';
-import {
-  container,
-  iconContainer,
-  textContainer,
-  titleContainer,
-  titleStyle,
-  versionContainer,
-  infoStyle,
-  buttonContainer,
-} from './headerMetrics.css';
+import { MetricTypes } from '../MetricTypes/MetricTypes';
+import { container } from './headerMetrics.css';
+import VerticalLine from '../VerticalLine/VerticalLine';
 
 export interface HeaderMetricsProps {
   /**
@@ -47,29 +38,13 @@ export const HeaderMetrics = ({
 }: HeaderMetricsProps) => {
   return (
     <div className={container}>
-      <div className={iconContainer}>
-        <NodeIcon iconId={iconId} size="large" />
-      </div>
-      <div className={textContainer}>
-        <div className={titleContainer}>
-          <div className={titleStyle}>{title}</div>
-          {version && <div className={versionContainer}>{version}</div>}
-        </div>
-        <div className={infoStyle}>{info}</div>
-      </div>
-      <div className={buttonContainer}>
-        {update && (
-          <Button
-            label="Update Available"
-            primary
-            iconId="down"
-            variant="icon-right"
-            size="small"
-          />
-        )}
-        <Button {...buttonProps} variant="icon-left" size="small" />
-        <Button iconId="settings" variant="icon" size="small" />
-      </div>
+      <MetricTypes status="sync" />
+      <VerticalLine />
+      <MetricTypes secondaryType="slots" />
+      <VerticalLine />
+      <MetricTypes secondaryType="cpu" />
+      <VerticalLine />
+      <MetricTypes secondaryType="disks" />
     </div>
   );
 };

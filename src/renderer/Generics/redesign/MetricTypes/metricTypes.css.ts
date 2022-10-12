@@ -94,6 +94,7 @@ export const container = style({
   flexDirection: 'row',
   alignItems: 'flex-start',
   position: 'relative',
+  flexGrow: 1,
 });
 
 export const iconContainer = style({

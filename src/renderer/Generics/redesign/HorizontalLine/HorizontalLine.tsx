@@ -1,6 +1,10 @@
 import { container } from './horizontalLine.css';
 
-const HorizontalLine = () => {
-  return <div className={container} />;
+export interface HorizontalLineProps {
+  type?: 'content';
+}
+
+const HorizontalLine = ({ type }: HorizontalLineProps) => {
+  return <div className={[container, `${type}`].join(' ')} />;
 };
 export default HorizontalLine;

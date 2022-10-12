@@ -1,5 +1,7 @@
+import HorizontalLine from '../../Generics/redesign/HorizontalLine/HorizontalLine';
+import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
-import { container } from './contentMultipleClients.css';
+import { container, horizontalLine } from './contentMultipleClients.css';
 
 const clientsData = {
   iconId: 'ethereum',
@@ -16,6 +18,9 @@ const ContentMultipleClients = () => {
   return (
     <div className={container}>
       <Header {...clientsData} />
+      <HorizontalLine type="content" />
+      <HeaderMetrics />
+      <HorizontalLine type="content" />
     </div>
   );
 };
