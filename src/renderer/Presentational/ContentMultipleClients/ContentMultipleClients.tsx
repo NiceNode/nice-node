@@ -2,7 +2,7 @@ import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt'
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
-import { container, horizontalLine } from './contentMultipleClients.css';
+import { container } from './contentMultipleClients.css';
 
 const clientsData = {
   iconId: 'ethereum',
@@ -20,7 +20,7 @@ const ContentMultipleClients = () => {
     <div className={container}>
       <Header {...clientsData} />
       <HorizontalLine type="content" />
-      <HeaderMetrics />
+      <HeaderMetrics status="sync" type="altruistic" />
       <HorizontalLine type="content" />
       <WalletPrompt />
     </div>
