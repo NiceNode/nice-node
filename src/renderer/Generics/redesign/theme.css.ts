@@ -42,6 +42,8 @@ export const [lightTheme, vars] = createTheme({
     selectCardBoxShadow: 'inset 0px 0px 0px 4px rgba(255, 255, 255, 0.08)',
     toggleBackground: 'rgba(0 0 2 / 0.15)',
     toggleCheckedBackground: '#7d56d7',
+    versionBorder: '1px solid rgba(0, 0, 2, 0.1)',
+    metricTypeIcon: 'rgba(0, 0, 2, 0.5)',
     secondaryButtonBackground: common.color.white,
     bannerBackground: common.color.white25,
     bannerBoxShadow:
@@ -86,6 +88,8 @@ export const darkTheme = createTheme(vars, {
     selectCardBoxShadow: 'none',
     toggleBackground: 'rgba(255 255 255 / 0.15)',
     toggleCheckedBackground: '#8267ef',
+    versionBorder: '1px solid rgba(255, 255, 255, 0.10)',
+    metricTypeIcon: 'rgba(255, 255, 255, 0.5)',
     secondaryButtonBackground: common.color.white4,
     bannerBackground: common.color.white4,
     bannerBoxShadow:

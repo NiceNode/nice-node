@@ -52,7 +52,7 @@ export const titleStyle = style({
 export const versionContainer = style({
   boxSizing: 'border-box',
   padding: '5px 8px',
-  border: '1px solid rgba(0, 0, 2, 0.1)',
+  border: vars.components.versionBorder,
   borderRadius: '50px',
   color: vars.color.font50,
 });

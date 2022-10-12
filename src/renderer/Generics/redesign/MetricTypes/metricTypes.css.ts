@@ -103,6 +103,7 @@ export const iconContainer = style({
   width: '20px',
   alignItems: 'center',
   justifyContent: 'center',
+  fill: vars.components.metricTypeIcon,
 });
 
 export const textContainer = style({

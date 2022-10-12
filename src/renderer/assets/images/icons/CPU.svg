@@ -1,18 +1,18 @@
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_748_57463)">
-<path opacity="0.6" d="M18 7H19C19.5523 7 20 7.44772 20 8C20 8.55228 19.5523 9 19 9H18V7Z" fill="#000002" fill-opacity="0.5"/>
-<path opacity="0.6" d="M0 8C0 7.44772 0.447715 7 1 7H2V9H1C0.447715 9 0 8.55228 0 8Z" fill="#000002" fill-opacity="0.5"/>
-<path opacity="0.6" d="M18 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H18V11Z" fill="#000002" fill-opacity="0.5"/>
-<path opacity="0.6" d="M0 12C0 11.4477 0.447715 11 1 11H2V13H1C0.447715 13 0 12.5523 0 12Z" fill="#000002" fill-opacity="0.5"/>
-<path opacity="0.6" d="M7 1C7 0.447715 7.44772 0 8 0C8.55228 0 9 0.447715 9 1V2H7V1Z" fill="#000002" fill-opacity="0.5"/>
-<path opacity="0.6" d="M7 18H9V19C9 19.5523 8.55228 20 8 20C7.44772 20 7 19.5523 7 19V18Z" fill="#000002" fill-opacity="0.5"/>
-<path opacity="0.6" d="M11 1C11 0.447715 11.4477 0 12 0C12.5523 0 13 0.447715 13 1V2H11V1Z" fill="#000002" fill-opacity="0.5"/>
-<path opacity="0.6" d="M11 18H13V19C13 19.5523 12.5523 20 12 20C11.4477 20 11 19.5523 11 19V18Z" fill="#000002" fill-opacity="0.5"/>
-<path opacity="0.8" fill-rule="evenodd" clip-rule="evenodd" d="M5 3C3.89543 3 3 3.89543 3 5V15C3 16.1046 3.89543 17 5 17H15C16.1046 17 17 16.1046 17 15V5C17 3.89543 16.1046 3 15 3H5ZM8 7C7.44772 7 7 7.44772 7 8V12C7 12.5523 7.44772 13 8 13H12C12.5523 13 13 12.5523 13 12V8C13 7.44772 12.5523 7 12 7H8Z" fill="#000002" fill-opacity="0.5"/>
+<path opacity="0.6" d="M18 7H19C19.5523 7 20 7.44772 20 8C20 8.55228 19.5523 9 19 9H18V7Z" fill="currentColor" fill-opacity="0.5"/>
+<path opacity="0.6" d="M0 8C0 7.44772 0.447715 7 1 7H2V9H1C0.447715 9 0 8.55228 0 8Z" fill="currentColor" fill-opacity="0.5"/>
+<path opacity="0.6" d="M18 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H18V11Z" fill="currentColor" fill-opacity="0.5"/>
+<path opacity="0.6" d="M0 12C0 11.4477 0.447715 11 1 11H2V13H1C0.447715 13 0 12.5523 0 12Z" fill="currentColor" fill-opacity="0.5"/>
+<path opacity="0.6" d="M7 1C7 0.447715 7.44772 0 8 0C8.55228 0 9 0.447715 9 1V2H7V1Z" fill="currentColor" fill-opacity="0.5"/>
+<path opacity="0.6" d="M7 18H9V19C9 19.5523 8.55228 20 8 20C7.44772 20 7 19.5523 7 19V18Z" fill="currentColor" fill-opacity="0.5"/>
+<path opacity="0.6" d="M11 1C11 0.447715 11.4477 0 12 0C12.5523 0 13 0.447715 13 1V2H11V1Z" fill="currentColor" fill-opacity="0.5"/>
+<path opacity="0.6" d="M11 18H13V19C13 19.5523 12.5523 20 12 20C11.4477 20 11 19.5523 11 19V18Z" fill="currentColor" fill-opacity="0.5"/>
+<path opacity="0.8" fill-rule="evenodd" clip-rule="evenodd" d="M5 3C3.89543 3 3 3.89543 3 5V15C3 16.1046 3.89543 17 5 17H15C16.1046 17 17 16.1046 17 15V5C17 3.89543 16.1046 3 15 3H5ZM8 7C7.44772 7 7 7.44772 7 8V12C7 12.5523 7.44772 13 8 13H12C12.5523 13 13 12.5523 13 12V8C13 7.44772 12.5523 7 12 7H8Z" fill="currentColor" fill-opacity="0.5"/>
 </g>
 <defs>
 <clipPath id="clip0_748_57463">
-<rect width="20" height="20" fill="white"/>
+<rect width="20" height="20" fill="none"/>
 </clipPath>
 </defs>
 </svg>
