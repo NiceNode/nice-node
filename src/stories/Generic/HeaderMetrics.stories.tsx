@@ -12,3 +12,8 @@ const Template: ComponentStory<typeof HeaderMetrics> = (args) => (
 );
 
 export const Primary = Template.bind({});
+
+Primary.args = {
+  status: 'sync',
+  type: 'altruistic',
+};
