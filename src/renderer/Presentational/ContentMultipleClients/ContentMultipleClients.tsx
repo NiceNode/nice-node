@@ -1,4 +1,5 @@
-import HorizontalLine from '../../Generics/redesign/HorizontalLine/HorizontalLine';
+import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
+import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
 import { container, horizontalLine } from './contentMultipleClients.css';
@@ -21,6 +22,7 @@ const ContentMultipleClients = () => {
       <HorizontalLine type="content" />
       <HeaderMetrics />
       <HorizontalLine type="content" />
+      <WalletPrompt />
     </div>
   );
 };

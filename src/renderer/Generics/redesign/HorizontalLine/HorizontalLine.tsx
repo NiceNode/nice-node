@@ -4,7 +4,6 @@ export interface HorizontalLineProps {
   type?: 'content';
 }
 
-const HorizontalLine = ({ type }: HorizontalLineProps) => {
+export const HorizontalLine = ({ type }: HorizontalLineProps) => {
   return <div className={[container, `${type}`].join(' ')} />;
 };
-export default HorizontalLine;

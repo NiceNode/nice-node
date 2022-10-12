@@ -1,7 +1,7 @@
 import React from 'react';
 import { container } from './checklist.css';
 import ChecklistItem, { ChecklistItemProps } from './ChecklistItem';
-import HorizontalLine from '../HorizontalLine/HorizontalLine';
+import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
 
 export interface ChecklistProps {
   /**
