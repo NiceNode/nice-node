@@ -1,3 +1,4 @@
+import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
@@ -6,6 +7,7 @@ import {
   container,
   sectionTitle,
   sectionDescription,
+  clientCardsContainer,
 } from './contentMultipleClients.css';
 
 const clientsData = {
@@ -28,6 +30,10 @@ const ContentMultipleClients = () => {
       <HorizontalLine type="content" />
       <WalletPrompt />
       <div className={sectionTitle}>Ethereum Clients</div>
+      <div className={clientCardsContainer}>
+        <ClientCard name="nimbus" />
+        <ClientCard name="besu" />
+      </div>
       <HorizontalLine type="content" />
       <div className={sectionTitle}>About</div>
       <div className={sectionDescription}>

@@ -24,6 +24,14 @@ export const sectionDescription = style({
   color: vars.color.font50,
 });
 
+export const clientCardsContainer = style({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'flex-start',
+  padding: 0,
+  gap: 24,
+});
+
 export const horizontalLine = style({
   padding: '0 20px',
 });
