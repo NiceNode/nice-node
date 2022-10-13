@@ -2,7 +2,11 @@ import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt'
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
-import { container } from './contentMultipleClients.css';
+import {
+  container,
+  sectionTitle,
+  sectionDescription,
+} from './contentMultipleClients.css';
 
 const clientsData = {
   iconId: 'ethereum',
@@ -23,6 +27,16 @@ const ContentMultipleClients = () => {
       <HeaderMetrics status="sync" type="altruistic" />
       <HorizontalLine type="content" />
       <WalletPrompt />
+      <div className={sectionTitle}>Ethereum Clients</div>
+      <HorizontalLine type="content" />
+      <div className={sectionTitle}>About</div>
+      <div className={sectionDescription}>
+        Running an Etherum node is a two part story. Lorem ipsum dolor sit amet,
+        consectetur adipiscing elit. Nunc eget mi vitae augue iaculis tempor
+        eget vitae. Running an Etherum node is a two part story. Lorem ipsum
+        dolor sit amet, consectetur adipiscing elit. Nunc eget mi vitae augue
+        iaculis tempor eget vitae.
+      </div>
     </div>
   );
 };

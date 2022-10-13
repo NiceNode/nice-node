@@ -3,9 +3,11 @@ import {
   title,
   description,
   buttonContainer,
+  backgroundIcon,
 } from './walletPrompt.css';
 
 import Button from '../Button/Button';
+import { Icon } from '../Icon/Icon';
 
 export interface WalletPromptProps {
   onClick: () => void;
@@ -25,6 +27,9 @@ export const WalletPrompt = ({ onClick }: WalletPromptProps) => {
       <div className={buttonContainer}>
         <Button primary label="Set up" />
         <Button label="Skip for now" />
+      </div>
+      <div className={backgroundIcon}>
+        <Icon iconId="lightning" />
       </div>
     </div>
   );

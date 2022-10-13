@@ -32,6 +32,7 @@ import { ReactComponent as InfoCircleFilled } from './Info-circle-filled.svg';
 import { ReactComponent as InfoCircle } from './Info-circle.svg';
 import { ReactComponent as LeftLarge } from './Left-large.svg';
 import { ReactComponent as Left } from './Left.svg';
+import { ReactComponent as Lightning } from './Lightning.svg';
 import { ReactComponent as Logs } from './Logs.svg';
 import { ReactComponent as Mail } from './Mail.svg';
 import { ReactComponent as DarkMode } from './Nicenode-darkmode.svg';
@@ -93,6 +94,7 @@ export interface Icons {
   infocircle?: React.ReactNode;
   leftlarge?: React.ReactNode;
   left?: React.ReactNode;
+  lightning?: React.ReactNode;
   logs?: React.ReactNode;
   mail?: React.ReactNode;
   darkmode?: React.ReactNode;
@@ -157,6 +159,7 @@ export const ICONS: Icons = {
   leftlarge: <LeftLarge />,
   left: <Left />,
   logs: <Logs />,
+  lightning: <Lightning />,
   mail: <Mail />,
   darkmode: <DarkMode />,
   lightmode: <LightMode />,
