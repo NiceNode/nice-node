@@ -15,7 +15,7 @@ export const container = style({
 export const cardTop = style({
   height: 166,
   position: 'relative',
-  backdropFilter: 'blur(20px)',
+  backgroundSize: 'cover',
 });
 
 export const clientDetails = style({
@@ -40,5 +40,23 @@ export const clientTitle = style({
 });
 
 export const cardContent = style({
-  height: 114,
+  padding: 20,
+});
+
+export const clientType = style({
+  textTransform: 'uppercase',
+  fontStyle: 'normal',
+  fontWeight: 590,
+  fontSize: '11px',
+  lineHeight: '12px',
+  letterSpacing: '0.24px',
+  color: vars.color.font40,
+  marginBottom: 12,
+});
+
+export const clientLabels = style({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'flex-start',
+  gap: 4,
 });

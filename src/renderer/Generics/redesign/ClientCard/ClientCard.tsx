@@ -3,7 +3,6 @@ import {
   NodeBackgroundId,
   NODE_BACKGROUNDS,
 } from '../../../assets/images/nodeBackgrounds';
-import { Icon } from '../Icon/Icon';
 import {
   container,
   cardTop,
@@ -11,8 +10,11 @@ import {
   clientDetails,
   clientIcon,
   clientTitle,
+  clientType,
+  clientLabels,
 } from './clientCard.css';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
+import { Label } from '../Label/Label';
 
 export interface ClientCardProps {
   /**
@@ -34,27 +36,40 @@ export const ClientCard = ({ name, sync }: ClientCardProps) => {
   };
   const renderContents = () => {
     if (sync) {
-      return <></>;
+      return (
+        <>
+          <div />
+        </>
+      );
     }
-    return <></>;
+    return (
+      <div className={clientLabels}>
+        <Label type="pink" label="Update" />
+        <Label type="pink" label="Low peer count" />
+        <Label type="pink" label="Synchronized" />
+      </div>
+    );
   };
   return (
     <div className={container}>
-      <div className={cardTop}>
+      <div
+        style={{
+          backgroundImage: `url(${NODE_BACKGROUNDS[name]})`,
+          height: sync ? 166 : 186,
+        }}
+        className={cardTop}
+      >
         <div className={clientDetails}>
           <div className={clientIcon}>
             <NodeIcon iconId={name} size="medium" />
           </div>
           <div className={clientTitle}>{capitalize(name)}</div>
         </div>
-        <img
-          src={NODE_BACKGROUNDS[name]}
-          alt="Node background"
-          width="348"
-          height="166"
-        />
       </div>
-      <div className={cardContent}>{renderContents()}</div>
+      <div className={cardContent}>
+        <div className={clientType}>Consensus Client</div>
+        {renderContents()}
+      </div>
     </div>
   );
 };
