@@ -19,14 +19,24 @@ export interface ClientCardProps {
    * Node name
    */
   name: NodeBackgroundId;
+  /**
+   * Is it syncing?
+   */
+  sync: boolean;
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const ClientCard = ({ name }: ClientCardProps) => {
+export const ClientCard = ({ name, sync }: ClientCardProps) => {
   const capitalize = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+  const renderContents = () => {
+    if (sync) {
+      return <></>;
+    }
+    return <></>;
   };
   return (
     <div className={container}>
@@ -44,7 +54,7 @@ export const ClientCard = ({ name }: ClientCardProps) => {
           height="166"
         />
       </div>
-      <div className={cardContent} />
+      <div className={cardContent}>{renderContents()}</div>
     </div>
   );
 };
