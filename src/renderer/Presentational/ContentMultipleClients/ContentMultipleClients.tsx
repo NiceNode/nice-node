@@ -24,6 +24,7 @@ const ContentMultipleClients = () => {
   // TODO: Continuously fetch stats from both nodes, pass down props
   // TODO: Handle wallet prompt decision registry (local storage or session?)
   // TODO: Come up with a better name for this component..
+  // TODO: Refactor to support single node view
 
   return (
     <div className={container}>
