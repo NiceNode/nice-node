@@ -37,6 +37,7 @@ export const clientTitle = style({
   lineHeight: '100%',
   color: common.color.white,
   textShadow: '0px 1px 2px rgba(0, 0, 0, 0.06)',
+  textTransform: 'capitalize',
 });
 
 export const cardContent = style({

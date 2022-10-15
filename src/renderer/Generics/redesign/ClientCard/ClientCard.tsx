@@ -31,9 +31,6 @@ export interface ClientCardProps {
  * Primary UI component for user interaction
  */
 export const ClientCard = ({ name, sync }: ClientCardProps) => {
-  const capitalize = (string: string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
   const renderContents = () => {
     if (sync) {
       return (
@@ -44,6 +41,7 @@ export const ClientCard = ({ name, sync }: ClientCardProps) => {
     }
     return (
       <div className={clientLabels}>
+        {/* TODO: tie labels and colors */}
         <Label type="purple" label="Update" />
         <Label type="orange" label="Low peer count" />
         <Label type="green" label="Synchronized" />
@@ -63,7 +61,7 @@ export const ClientCard = ({ name, sync }: ClientCardProps) => {
           <div className={clientIcon}>
             <NodeIcon iconId={name} size="medium" />
           </div>
-          <div className={clientTitle}>{capitalize(name)}</div>
+          <div className={clientTitle}>{name}</div>
         </div>
       </div>
       <div className={cardContent}>
