@@ -74,6 +74,7 @@ export const [lightTheme, vars] = createTheme({
     tagPinkFontColor: common.color.black85,
     tagPink2FontColor: 'rgba(236, 66, 159, 1)',
     tagGreenFontColor: 'rgba(55, 160, 85, 1)',
+    walletPromptBackground: '#F1F3FF',
   },
 });
 
@@ -136,5 +137,6 @@ export const darkTheme = createTheme(vars, {
     tagPinkFontColor: common.color.white70,
     tagPink2FontColor: 'rgba(236, 66, 159, 1)',
     tagGreenFontColor: 'rgba(55, 160, 85, 1)',
+    walletPromptBackground: '#3B2796',
   },
 });

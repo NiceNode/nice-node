@@ -4,7 +4,7 @@ import { vars } from '../theme.css';
 // required to export even if not using in a component
 export const container = style({
   boxSizing: 'border-box',
-  background: '#F1F3FF',
+  background: vars.components.walletPromptBackground,
   borderRadius: 10,
   height: 154,
   padding: 30,
