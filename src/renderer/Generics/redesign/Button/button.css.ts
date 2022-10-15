@@ -42,7 +42,7 @@ export const primaryButton = style([
         background: vars.color.primaryHover,
       },
       '&:active:enabled': {
-        background: common.color.primary700,
+        background: vars.color.primaryActive,
       },
     },
   },
@@ -55,7 +55,7 @@ export const secondaryButton = style([
     boxShadow: vars.components.buttonBoxShadow,
     selectors: {
       '&:hover:enabled': {
-        background: vars.color.background92,
+        background: vars.color.backgroundHoverGradient,
       },
       '&:active:enabled': {
         background: vars.color.backgroundActiveGradient,
