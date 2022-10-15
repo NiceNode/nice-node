@@ -15,6 +15,7 @@ import {
 } from './clientCard.css';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { Label } from '../Label/Label';
+import ProgressBar from '../ProgressBar/ProgressBar';
 
 export interface ClientCardProps {
   /**
@@ -35,7 +36,13 @@ export const ClientCard = ({ name, sync }: ClientCardProps) => {
     if (sync) {
       return (
         <>
-          <div />
+          {/* TODO: tie clients with progress bar colors */}
+          <ProgressBar
+            card
+            color="#F96767"
+            progress={23}
+            caption="Initial sync in progress."
+          />
         </>
       );
     }

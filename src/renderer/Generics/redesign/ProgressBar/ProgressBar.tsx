@@ -2,6 +2,7 @@ import {
   outerDiv,
   innerDiv,
   captionText,
+  cardDownloadingProgressContainer,
   downloadingProgressContainer,
   sectionFont,
 } from './progressBar.css';
@@ -14,9 +15,16 @@ export interface ProgressBarProps {
   title?: string;
   caption?: string;
   color?: string;
+  card?: boolean;
 }
 
-const ProgressBar = ({ progress, title, caption, color }: ProgressBarProps) => {
+const ProgressBar = ({
+  progress,
+  title,
+  caption,
+  color,
+  card,
+}: ProgressBarProps) => {
   let progressWidth = 0;
   if (progress) {
     if (progress > 100) {
@@ -27,8 +35,11 @@ const ProgressBar = ({ progress, title, caption, color }: ProgressBarProps) => {
       progressWidth = progress;
     }
   }
+  const downloadContainer = card
+    ? cardDownloadingProgressContainer
+    : downloadingProgressContainer;
   return (
-    <div className={downloadingProgressContainer}>
+    <div className={downloadContainer}>
       <div className={sectionFont}>
         <>{title}</>
       </div>

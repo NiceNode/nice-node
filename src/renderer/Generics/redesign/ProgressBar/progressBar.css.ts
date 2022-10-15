@@ -29,6 +29,8 @@ export const captionText = style({
   color: vars.color.font50,
 });
 
+export const cardDownloadingProgressContainer = style({});
+
 export const downloadingProgressContainer = style({
   borderColor: vars.color.border,
   borderWidth: 1,

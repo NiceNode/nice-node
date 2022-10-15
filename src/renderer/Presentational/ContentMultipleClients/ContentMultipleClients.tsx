@@ -31,7 +31,7 @@ const ContentMultipleClients = () => {
       <WalletPrompt />
       <div className={sectionTitle}>Ethereum Clients</div>
       <div className={clientCardsContainer}>
-        <ClientCard sync name="erigon" />
+        <ClientCard sync name="nimbus" />
         <ClientCard name="nethermind" />
       </div>
       <HorizontalLine type="content" />
