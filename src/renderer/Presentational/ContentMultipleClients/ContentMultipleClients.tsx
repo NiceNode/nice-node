@@ -20,19 +20,22 @@ const clientsData = {
   multiple: true,
 };
 
-// TODO: Come up with a better name for this component..
 const ContentMultipleClients = () => {
+  // TODO: Continuously fetch stats from both nodes, pass down props
+  // TODO: Handle wallet prompt decision registry (local storage or session?)
+  // TODO: Come up with a better name for this component..
+
   return (
     <div className={container}>
       <Header {...clientsData} />
       <HorizontalLine type="content" />
-      <HeaderMetrics status="sync" type="altruistic" />
+      <HeaderMetrics status="healthy" type="altruistic" />
       <HorizontalLine type="content" />
       <WalletPrompt />
       <div className={sectionTitle}>Ethereum Clients</div>
       <div className={clientCardsContainer}>
         <ClientCard sync name="nimbus" />
-        <ClientCard name="nethermind" />
+        <ClientCard name="besu" />
       </div>
       <HorizontalLine type="content" />
       <div className={sectionTitle}>About</div>

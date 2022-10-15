@@ -37,6 +37,7 @@ export const ClientCard = ({ name, sync }: ClientCardProps) => {
       return (
         <>
           {/* TODO: tie clients with progress bar colors */}
+          {/* TODO: modify height of the bar for card */}
           <ProgressBar
             card
             color="#F96767"

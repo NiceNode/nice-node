@@ -118,7 +118,7 @@ export const darkTheme = createTheme(vars, {
     bannerBoxShadow: `0px 1px 1px rgba(0, 0, 0, 0.15), inset 0px 1px 0px ${common.color.white8})`,
     sidebarBorder: '1px solid rgba(0, 0, 2, 0.9)',
     sidebarBackground: 'rgba(38, 38, 39, 0.8)',
-    clientCardBackground: '#1C1C1E',
+    clientCardBackground: common.color.white4,
     clientCardBorder: `1px solid ${common.color.white8}`,
     clientCardBoxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
     labelGreenBackground: 'rgba(97, 218, 136, 0.25)',
