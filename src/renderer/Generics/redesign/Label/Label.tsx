@@ -5,7 +5,7 @@ export interface LabelProps {
   /**
    * Label color
    */
-  type?: 'pink' | 'pink2' | 'green';
+  type?: 'green' | 'red' | 'gray' | 'pink' | 'purple' | 'orange' | 'pink2';
 }
 
 export const Label = ({ label, type }: LabelProps) => {

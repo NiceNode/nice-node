@@ -44,9 +44,9 @@ export const ClientCard = ({ name, sync }: ClientCardProps) => {
     }
     return (
       <div className={clientLabels}>
-        <Label type="pink" label="Update" />
-        <Label type="pink" label="Low peer count" />
-        <Label type="pink" label="Synchronized" />
+        <Label type="purple" label="Update" />
+        <Label type="orange" label="Low peer count" />
+        <Label type="green" label="Synchronized" />
       </div>
     );
   };

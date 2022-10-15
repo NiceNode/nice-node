@@ -21,7 +21,13 @@ export const container = style({
       background: vars.components.tagPinkBackground,
       color: vars.components.tagPinkFontColor,
     },
-    [`&.pink2`]: { background: '#fee3f9', color: '#ec429f' },
-    [`&.green`]: { background: '#dffbe8', color: '#3ebb64' },
+    [`&.pink2`]: {
+      background: vars.components.tagPink2Background,
+      color: vars.components.tagPink2FontColor,
+    },
+    [`&.green`]: {
+      background: vars.components.tagGreenBackground,
+      color: vars.components.tagGreenFontColor,
+    },
   },
 });

@@ -9,6 +9,7 @@ export const container = style({
   alignItems: 'center',
   padding: '4px 10px',
   gap: '4px',
+  fontWeight: 590,
   borderRadius: '14px',
   fontSize: '11px',
   lineHeight: '14px',
@@ -17,17 +18,33 @@ export const container = style({
   flexGrow: 0,
   width: 'fit-content',
   selectors: {
+    [`&.green`]: {
+      background: vars.components.labelGreenBackground,
+      color: vars.components.labelGreenFontColor,
+    },
+    [`&.red`]: {
+      background: vars.components.labelRedBackground,
+      color: vars.components.labelRedFontColor,
+    },
+    [`&.gray`]: {
+      background: vars.components.labelGrayBackground,
+      color: vars.components.labelGrayFontColor,
+    },
     [`&.pink`]: {
-      background: vars.components.tagPinkBackground,
-      color: vars.components.tagPinkFontColor,
+      background: vars.components.labelPinkBackground,
+      color: vars.components.labelPinkFontColor,
+    },
+    [`&.purple`]: {
+      background: vars.components.labelPurpleBackground,
+      color: vars.components.labelPurpleFontColor,
+    },
+    [`&.orange`]: {
+      background: vars.components.labelOrangeBackground,
+      color: vars.components.labelOrangeFontColor,
     },
     [`&.pink2`]: {
-      background: vars.components.tagPink2Background,
-      color: vars.components.tagPink2FontColor,
-    },
-    [`&.green`]: {
-      background: vars.components.tagGreenBackground,
-      color: vars.components.tagGreenFontColor,
+      background: vars.components.labelPink2Background,
+      color: vars.components.labelPink2FontColor,
     },
   },
 });
