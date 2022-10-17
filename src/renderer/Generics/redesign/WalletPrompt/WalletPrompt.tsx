@@ -3,7 +3,6 @@ import {
   title,
   description,
   buttonContainer,
-  backgroundIcon,
 } from './walletPrompt.css';
 
 import Button from '../Button/Button';
@@ -14,8 +13,15 @@ export interface WalletPromptProps {
 }
 
 export const WalletPrompt = ({ onClick }: WalletPromptProps) => {
+  const walletImage = require('../../../assets/images/artwork/wallet.png');
   return (
-    <div className={container}>
+    <div
+      className={container}
+      style={{
+        backgroundImage: `url(${walletImage})`,
+        backgroundRepeat: 'none',
+      }}
+    >
       <div className={title}>
         Point your browser wallet to your local Ethereum node
       </div>
@@ -27,9 +33,6 @@ export const WalletPrompt = ({ onClick }: WalletPromptProps) => {
       <div className={buttonContainer}>
         <Button primary label="Set up" />
         <Button label="Skip for now" />
-      </div>
-      <div className={backgroundIcon}>
-        <Icon iconId="lightning" />
       </div>
     </div>
   );
