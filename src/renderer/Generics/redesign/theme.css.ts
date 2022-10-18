@@ -77,6 +77,10 @@ export const [lightTheme, vars] = createTheme({
     tagPinkFontColor: common.color.black85,
     tagPink2FontColor: 'rgba(236, 66, 159, 1)',
     tagGreenFontColor: 'rgba(55, 160, 85, 1)',
+    messageInfoBackground: 'rgba(239, 246, 255, 1)',
+    messageWarningBackground: 'rgba(252, 243, 238, 1)',
+    messageErrorBackground: 'rgba(254, 242, 242, 1)',
+    messageSuccessBackground: 'rgba(232, 252, 238, 1)',
     walletPromptBackground: '#F1F3FF',
   },
 });
@@ -141,6 +145,10 @@ export const darkTheme = createTheme(vars, {
     tagPinkFontColor: common.color.white70,
     tagPink2FontColor: 'rgba(236, 66, 159, 1)',
     tagGreenFontColor: 'rgba(55, 160, 85, 1)',
+    messageInfoBackground: 'rgba(43, 54, 135, 1)',
+    messageWarningBackground: 'rgba(124, 46, 23, 1)',
+    messageErrorBackground: 'rgba(123, 35, 28, 1)',
+    messageSuccessBackground: 'rgba(32, 82, 49, 1)',
     walletPromptBackground: '#3B2796',
   },
 });
