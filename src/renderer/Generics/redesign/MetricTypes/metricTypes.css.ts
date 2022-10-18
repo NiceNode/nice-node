@@ -1,11 +1,11 @@
 import { style, keyframes } from '@vanilla-extract/css';
-import { vars } from '../theme.css';
+import { vars, common } from '../theme.css';
 
 export const activeContainer = style({});
 
-export const healthy = style({ background: vars.color.green });
-export const warning = style({ background: vars.color.yellow });
-export const error = style({ background: vars.color.red });
+export const healthy = style({ background: common.color.green });
+export const warning = style({ background: common.color.yellow });
+export const error = style({ background: common.color.red });
 export const sync = style({});
 
 const rotate = keyframes({

@@ -37,7 +37,7 @@ export const clientTitle = style({
   fontWeight: 590,
   fontSize: '28px',
   lineHeight: '100%',
-  color: common.color.white,
+  color: common.color.white100,
   textShadow: '0px 1px 2px rgba(0, 0, 0, 0.06)',
   textTransform: 'capitalize',
 });

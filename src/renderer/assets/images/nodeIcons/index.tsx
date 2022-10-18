@@ -1,3 +1,5 @@
+import { common } from '../../../Generics/redesign/theme.css';
+
 const ethereum = require('./Logo-Ethereum.png');
 
 // Execution
@@ -81,6 +83,7 @@ export const NODE_STATUS: NodeStatus = {
 };
 
 const white = '#FFFFFF';
+
 export const NODE_COLORS: NodeIcons = {
   geth: white,
   erigon: white,
@@ -91,12 +94,12 @@ export const NODE_COLORS: NodeIcons = {
   teku: white,
   lodestar: white,
   nimbus: white,
-  ethereum: '#6DA3F9',
-  arbitrum: '#28A0F0',
-  starknet: '#373795',
-  zkSync: '#8C8DFC',
-  radicle: '#B17CD9',
-  livepeer: '#28CD88',
+  ethereum: common.color.ethereum,
+  arbitrum: common.color.arbitrum,
+  starknet: common.color.starknet,
+  zkSync: common.color.zkSync,
+  radicle: common.color.radicle,
+  livepeer: common.color.livepeer,
 };
 
 export type NodeIconId = keyof NodeIcons;

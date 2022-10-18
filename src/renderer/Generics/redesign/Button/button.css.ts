@@ -35,7 +35,7 @@ export const smallButton = style({
 
 export const primaryButton = style([
   {
-    color: common.color.white,
+    color: common.color.white100,
     background: vars.color.primary,
     selectors: {
       '&:hover:enabled': {

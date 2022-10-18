@@ -15,6 +15,6 @@ export const container = style({
   textAlign: 'center',
   color: '#FFFFFF',
   maxWidth: 'fit-content',
-  background: '#EB493D',
+  background: common.color.red500,
   borderRadius: '9px',
 });

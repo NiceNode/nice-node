@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '../theme.css';
+import { vars, common } from '../theme.css';
 
 export const activeContainer = style({});
 
@@ -33,7 +33,7 @@ export const selectedContainer = style({
       left: '0',
       top: '0',
       height: '-webkit-fill-available',
-      border: '2px solid #7a64ee',
+      border: `2px solid ${common.color.purple600}`,
       borderRadius: '5px',
     },
   },
