@@ -12,6 +12,9 @@ export const container = style({
   overflow: 'hidden',
   backdropFilter: 'blur(0)',
   transform: 'translate3d(0, 0, 0)',
+  ':hover': {
+    boxShadow: 'none',
+  },
 });
 
 export const cardTop = style({
@@ -51,6 +54,12 @@ export const clientBackground = style({
   width: '100%',
   backdropFilter: 'blur(20px)',
   transform: 'translate3d(0, 0, 0)',
+  background: vars.components.clientCardTopBackground,
+  ':hover': {
+    backdropFilter: 'blur(28px)',
+    transform: 'translate3d(0, 0, 0)',
+    background: vars.components.clientCardTopBackgroundHover,
+  },
 });
 
 export const clientType = style({
