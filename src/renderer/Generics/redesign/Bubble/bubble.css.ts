@@ -13,7 +13,7 @@ export const container = style({
   fontSize: '11px',
   lineHeight: '14px',
   textAlign: 'center',
-  color: '#FFFFFF',
+  color: common.color.white100,
   maxWidth: 'fit-content',
   background: common.color.red500,
   borderRadius: '9px',

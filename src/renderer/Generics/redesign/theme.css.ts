@@ -145,7 +145,7 @@ export const [lightTheme, vars] = createTheme({
     selectCardBackground: 'rgba(115, 81, 235, 0.08)',
     selectCardBoxShadow: `inset 0px 0px 0px 4px ${common.color.white8}`,
     toggleBackground: 'rgba(0 0 2 / 0.15)',
-    toggleCheckedBackground: '#7d56d7',
+    toggleCheckedBackground: common.color.purple600,
     versionBorder: `1px solid ${common.color.black10}`,
     metricTypeIcon: 'rgba(0, 0, 2, 0.5)',
     secondaryButtonBackground: common.color.white100,

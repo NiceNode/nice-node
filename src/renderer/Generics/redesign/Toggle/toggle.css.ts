@@ -17,7 +17,6 @@ export const container = style({
   appearance: 'none',
   ':checked': {
     backgroundColor: vars.components.toggleCheckedBackground,
-    borderColor: '#7d56d7',
     backgroundPosition: '100%',
   },
   ':disabled': {
