@@ -12,6 +12,7 @@ import {
   clientTitle,
   clientType,
   clientLabels,
+  clientBackground,
 } from './clientCard.css';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { Label } from '../Label/Label';
@@ -65,11 +66,13 @@ export const ClientCard = ({ name, sync }: ClientCardProps) => {
         }}
         className={cardTop}
       >
-        <div className={clientDetails}>
-          <div className={clientIcon}>
-            <NodeIcon iconId={name} size="medium" />
+        <div className={clientBackground}>
+          <div className={clientDetails}>
+            <div className={clientIcon}>
+              <NodeIcon iconId={name} size="medium" />
+            </div>
+            <div className={clientTitle}>{name}</div>
           </div>
-          <div className={clientTitle}>{name}</div>
         </div>
       </div>
       <div className={cardContent}>

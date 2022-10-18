@@ -10,6 +10,8 @@ export const container = style({
   boxShadow: vars.components.clientCardBoxShadow,
   borderRadius: 12,
   overflow: 'hidden',
+  backdropFilter: 'blur(0)',
+  transform: 'translate3d(0, 0, 0)',
 });
 
 export const cardTop = style({
@@ -42,6 +44,13 @@ export const clientTitle = style({
 
 export const cardContent = style({
   padding: 20,
+});
+
+export const clientBackground = style({
+  height: '100%',
+  width: '100%',
+  backdropFilter: 'blur(20px)',
+  transform: 'translate3d(0, 0, 0)',
 });
 
 export const clientType = style({
