@@ -9,10 +9,14 @@ import Button from '../Button/Button';
 import { Icon } from '../Icon/Icon';
 
 export interface WalletPromptProps {
-  onClick: () => void;
+  onDismissClick: () => void;
+  onSetupClick: () => void;
 }
 
-export const WalletPrompt = ({ onClick }: WalletPromptProps) => {
+export const WalletPrompt = ({
+  onDismissClick,
+  onSetupClick,
+}: WalletPromptProps) => {
   const walletImage = require('../../../assets/images/artwork/wallet.png');
   return (
     <div
@@ -31,8 +35,8 @@ export const WalletPrompt = ({ onClick }: WalletPromptProps) => {
         tempor eget vitae.
       </div>
       <div className={buttonContainer}>
-        <Button primary label="Set up" />
-        <Button label="Skip for now" />
+        <Button primary label="Set up" onClick={onSetupClick} />
+        <Button label="Skip for now" onClick={onDismissClick} />
       </div>
     </div>
   );

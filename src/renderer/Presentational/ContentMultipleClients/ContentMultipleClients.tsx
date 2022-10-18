@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react';
 import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
@@ -22,9 +23,22 @@ const clientsData = {
 
 const ContentMultipleClients = () => {
   // TODO: Continuously fetch stats from both nodes, pass down props
-  // TODO: Handle wallet prompt decision registry (local storage or session?)
   // TODO: Come up with a better name for this component..
   // TODO: Refactor to support single node view
+
+  const initialDismissedState =
+    localStorage.getItem('walletDismissed') === 'true';
+  const [walletDismissed, setWalletDismissed] = useState(initialDismissedState);
+
+  const onDismissClick = useCallback(() => {
+    setWalletDismissed(true);
+    localStorage.setItem('walletDismissed', 'true');
+  }, []);
+
+  const onSetupClick = useCallback(() => {
+    // open wallet screen
+    onDismissClick();
+  }, []);
 
   return (
     <div className={container}>
@@ -32,7 +46,12 @@ const ContentMultipleClients = () => {
       <HorizontalLine type="content" />
       <HeaderMetrics status="healthy" type="altruistic" />
       <HorizontalLine type="content" />
-      <WalletPrompt />
+      {!walletDismissed && (
+        <WalletPrompt
+          onSetupClick={onSetupClick}
+          onDismissClick={onDismissClick}
+        />
+      )}
       <div className={sectionTitle}>Ethereum Clients</div>
       <div className={clientCardsContainer}>
         <ClientCard sync name="nimbus" />
