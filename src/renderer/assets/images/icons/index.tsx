@@ -48,6 +48,10 @@ import { ReactComponent as ScrollFill } from './Scroll-fill.svg';
 import { ReactComponent as Scroll } from './Scroll.svg';
 import { ReactComponent as Search } from './Search.svg';
 import { ReactComponent as Settings } from './Settings.svg';
+import { ReactComponent as Shape1 } from './Shape1.svg';
+import { ReactComponent as Shape2 } from './Shape2.svg';
+import { ReactComponent as Shape3 } from './Shape3.svg';
+import { ReactComponent as Shape4 } from './Shape4.svg';
 import { ReactComponent as Slots } from './Slots.svg';
 import { ReactComponent as Speedometer } from './Speedometer.svg';
 import { ReactComponent as SpinnerEndless } from './Spinner-endless.svg';
@@ -110,6 +114,10 @@ export interface Icons {
   scroll?: React.ReactNode;
   search?: React.ReactNode;
   settings?: React.ReactNode;
+  shape1?: React.ReactNode;
+  shape2?: React.ReactNode;
+  shape3?: React.ReactNode;
+  shape4?: React.ReactNode;
   slots?: React.ReactNode;
   speedometer?: React.ReactNode;
   spinnerendless?: React.ReactNode;
@@ -174,6 +182,10 @@ export const ICONS: Icons = {
   scroll: <Scroll />,
   search: <Search />,
   settings: <Settings />,
+  shape1: <Shape1 />,
+  shape2: <Shape2 />,
+  shape3: <Shape3 />,
+  shape4: <Shape4 />,
   slots: <Slots />,
   speedometer: <Speedometer />,
   spinnerendless: <SpinnerEndless />,

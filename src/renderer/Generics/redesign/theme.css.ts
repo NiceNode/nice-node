@@ -81,6 +81,10 @@ export const [lightTheme, vars] = createTheme({
     messageWarningBackground: 'rgba(252, 243, 238, 1)',
     messageErrorBackground: 'rgba(254, 242, 242, 1)',
     messageSuccessBackground: 'rgba(232, 252, 238, 1)',
+    messageInfoIcon: 'rgba(109, 163, 249, 1)',
+    messageWarningIcon: 'rgba(251, 146, 65, 1)',
+    messageErrorIcon: 'rgba(244, 118, 113, 1)',
+    messageSuccessIcon: 'rgba(99, 216, 137, 1)',
     walletPromptBackground: '#F1F3FF',
   },
 });
@@ -149,6 +153,10 @@ export const darkTheme = createTheme(vars, {
     messageWarningBackground: 'rgba(124, 46, 23, 1)',
     messageErrorBackground: 'rgba(123, 35, 28, 1)',
     messageSuccessBackground: 'rgba(32, 82, 49, 1)',
+    messageInfoIcon: 'rgba(239, 246, 255, 1)',
+    messageWarningIcon: 'rgba(252, 243, 238, 1)',
+    messageErrorIcon: 'rgba(254, 242, 242, 1)',
+    messageSuccessIcon: 'rgba(232, 252, 238, 1)',
     walletPromptBackground: '#3B2796',
   },
 });
