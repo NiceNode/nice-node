@@ -3,7 +3,7 @@ import { vars, common } from '../theme.css';
 
 export const container = style({
   boxSizing: 'border-box',
-  width: 348,
+  width: '50%',
   height: 280,
   background: vars.components.clientCardBackground,
   border: vars.components.clientCardBorder,

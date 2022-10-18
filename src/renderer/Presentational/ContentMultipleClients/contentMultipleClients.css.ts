@@ -3,7 +3,6 @@ import { vars } from '../../Generics/redesign/theme.css';
 
 export const container = style({
   margin: '64px 40px',
-  width: 720,
   boxSizing: 'border-box',
 });
 
