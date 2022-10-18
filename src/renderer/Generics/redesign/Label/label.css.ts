@@ -18,6 +18,10 @@ export const container = style({
   flexGrow: 0,
   width: 'fit-content',
   selectors: {
+    [`&.small`]: {
+      padding: '2px 6px',
+      gap: '10px',
+    },
     [`&.green`]: {
       background: vars.components.labelGreenBackground,
       color: vars.components.labelGreenFontColor,

@@ -6,11 +6,16 @@ export interface LabelProps {
    * Label color
    */
   type?: 'green' | 'red' | 'gray' | 'pink' | 'purple' | 'orange' | 'pink2';
+  /**
+   * Label size TODO: better way?
+   */
+  size?: null | 'small';
 }
 
-export const Label = ({ label, type }: LabelProps) => {
+export const Label = ({ label, type, size }: LabelProps) => {
+  const sizing = size || '';
   return (
-    <div className={[container, `${type}`].join(' ')}>
+    <div className={[container, `${sizing}`, `${type}`].join(' ')}>
       <div>{label}</div>
     </div>
   );
