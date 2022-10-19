@@ -187,6 +187,8 @@ export const [lightTheme, vars] = createTheme({
     messageErrorIcon: common.color.red400,
     messageSuccessIcon: common.color.green400,
     walletPromptBackground: common.color.purple50,
+    headerButtonHover: common.color.black4,
+    headerButtonActive: common.color.black8,
   },
 });
 
@@ -258,5 +260,7 @@ export const darkTheme = createTheme(vars, {
     messageErrorIcon: common.color.red600,
     messageSuccessIcon: common.color.green600,
     walletPromptBackground: common.color.purple900,
+    headerButtonHover: common.color.white4,
+    headerButtonActive: common.color.white8,
   },
 });

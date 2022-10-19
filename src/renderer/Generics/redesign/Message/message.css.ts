@@ -29,8 +29,7 @@ export const container = style({
 });
 
 export const messageIcon = style({
-  width: 56,
-  height: 56,
+  width: 28,
   selectors: {
     [`&.info`]: {
       color: vars.components.messageInfoIcon,
@@ -52,6 +51,7 @@ export const textContainer = style({
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: 4,
+  width: 584,
 });
 
 export const messageTitle = style({
@@ -70,4 +70,10 @@ export const messageDescription = style({
   lineHeight: '18px',
   letterSpacing: '-0.08px',
   color: vars.color.font70,
+});
+
+export const closeContainer = style({
+  position: 'absolute',
+  top: 16,
+  right: 16,
 });
