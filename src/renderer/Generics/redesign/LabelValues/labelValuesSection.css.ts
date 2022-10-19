@@ -24,7 +24,7 @@ export const sectionHeaderText = style({
   lineHeight: '12px',
   letterSpacing: '0.06em',
   textTransform: 'uppercase',
-  color: vars.color.font70,
+  color: vars.color.font40,
 });
 export const lineContainer = style({
   boxSizing: 'border-box',
@@ -42,7 +42,7 @@ export const lineContainer = style({
   borderColor: vars.color.font10,
 });
 export const lineKeyText = style({
-  color: vars.color.font50,
+  color: vars.color.font70,
   flex: 'none',
   order: 0,
   flexGrow: 0,
