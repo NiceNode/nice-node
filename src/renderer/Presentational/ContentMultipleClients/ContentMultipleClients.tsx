@@ -79,11 +79,14 @@ const resourcesData = {
 const ContentMultipleClients = () => {
   // TODO: Continuously fetch stats from both nodes, pass down props
   // TODO: Come up with a better name for this component..
-  // TODO: Refactor to support single node view
+  /* TODO: Refactor to support single node & eventual validator view,
+    maybe with a "provider" wrapper/manager to fetch data and handle states */
 
-  const initialDismissedState =
+  const initialWalletDismissedState =
     localStorage.getItem('walletDismissed') === 'true';
-  const [walletDismissed, setWalletDismissed] = useState(initialDismissedState);
+  const [walletDismissed, setWalletDismissed] = useState(
+    initialWalletDismissedState
+  );
 
   const onDismissClick = useCallback(() => {
     setWalletDismissed(true);
@@ -91,7 +94,7 @@ const ContentMultipleClients = () => {
   }, []);
 
   const onSetupClick = useCallback(() => {
-    // open wallet screen
+    // TODO: open wallet screen
     onDismissClick();
   }, []);
 
@@ -102,6 +105,8 @@ const ContentMultipleClients = () => {
       <HeaderMetrics status="healthy" type="altruistic" />
       <HorizontalLine type="content" />
       {!walletDismissed && (
+        // TODO: This only shows if *both* clients are fully synced
+        // TODO: Prompt handler for wallet & node status messages
         <WalletPrompt
           onSetupClick={onSetupClick}
           onDismissClick={onDismissClick}
@@ -115,11 +120,28 @@ const ContentMultipleClients = () => {
       <HorizontalLine type="content" />
       <div className={sectionTitle}>About</div>
       <div className={sectionDescription}>
-        Running an Etherum node is a two part story. Lorem ipsum dolor sit amet,
-        consectetur adipiscing elit. Nunc eget mi vitae augue iaculis tempor
-        eget vitae. Running an Etherum node is a two part story. Lorem ipsum
-        dolor sit amet, consectetur adipiscing elit. Nunc eget mi vitae augue
-        iaculis tempor eget vitae.
+        <p>
+          An Ethereum node holds a copy of the Ethereum blockchain and verifies
+          the validity of every block, keeps it up-to-date with new blocks and
+          helps others to download and update their own copies of the chain.
+        </p>
+        <p>
+          In the case of Ethereum a node consists of two parts: the execution
+          client and the consensus client. These two clients work together to
+          verify Ethereum's state. The execution client listens to new
+          transactions broadcasted in the network, executes them in EVM, and
+          holds the latest state and database of all current Ethereum data. The
+          consensus client runs the Proof-of-Stake consensus algorithm, which
+          enables the network to achieve agreement based on validated data from
+          the execution client.
+        </p>
+        <p>
+          A non-validating node does not get financial rewards but there are
+          many benefits of running a node for any Ethereum user to consider,
+          including privacy, security, reduced reliance on third-party servers,
+          censorship resistance and improved health and decentralization of the
+          network.
+        </p>
       </div>
       <div className={resourcesContainer}>
         <LabelValues {...resourcesData} column />

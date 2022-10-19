@@ -14,12 +14,8 @@ export interface SplashProps {
 }
 
 const Splash = ({ title, description }: SplashProps) => {
-  const welcomeImage = require('../../../assets/images/artwork/welcome.png');
   return (
-    <div
-      style={{ backgroundImage: `url(${welcomeImage})` }}
-      className={container}
-    >
+    <div className={container}>
       <div className={contentContainer}>
         <img className={iconClass} alt="NiceNode logo" src={icon} />
         <div className={titleFont}>{title}</div>

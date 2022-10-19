@@ -6,7 +6,6 @@ import {
 } from './walletPrompt.css';
 
 import Button from '../Button/Button';
-import { Icon } from '../Icon/Icon';
 
 export interface WalletPromptProps {
   onDismissClick: () => void;
@@ -17,15 +16,8 @@ export const WalletPrompt = ({
   onDismissClick,
   onSetupClick,
 }: WalletPromptProps) => {
-  const walletImage = require('../../../assets/images/artwork/wallet.png');
   return (
-    <div
-      className={container}
-      style={{
-        backgroundImage: `url(${walletImage})`,
-        backgroundRepeat: 'none',
-      }}
-    >
+    <div className={container}>
       <div className={title}>
         Point your browser wallet to your local Ethereum node
       </div>
