@@ -1,5 +1,9 @@
 import React from 'react';
-import { titleFont } from './labelValues.css';
+import {
+  titleFont,
+  columnContainerStyle,
+  columnItemStyle,
+} from './labelValues.css';
 import LineLabelValuesItem, {
   LabelValuesSectionProps,
 } from './LabelValuesSection';
@@ -13,22 +17,34 @@ export interface LineLabelValuesProps {
    * Title of the LineLabelValues
    */
   title?: string;
+  /**
+   * Column mode?
+   */
+  column?: boolean;
 }
 
 /**
  * Primary UI component for user interaction
  */
-const LineLabelValues = ({ title, items }: LineLabelValuesProps) => {
+const LineLabelValues = ({ title, items, column }: LineLabelValuesProps) => {
+  let columnDiv = '';
+  let columnContainer = '';
+  if (column) {
+    columnDiv = columnItemStyle;
+    columnContainer = columnContainerStyle;
+  }
   return (
-    <div>
+    <>
       <div className={titleFont}>{title}</div>
-      {items &&
-        items.map((item) => (
-          <React.Fragment key={item.sectionTitle}>
-            <LineLabelValuesItem {...item} />
-          </React.Fragment>
-        ))}
-    </div>
+      <div className={columnContainer}>
+        {items &&
+          items.map((item) => (
+            <div className={columnDiv} key={item.sectionTitle}>
+              <LineLabelValuesItem {...item} />
+            </div>
+          ))}
+      </div>
+    </>
   );
 };
 export default LineLabelValues;

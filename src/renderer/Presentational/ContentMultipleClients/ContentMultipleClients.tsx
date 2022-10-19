@@ -4,11 +4,13 @@ import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt'
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
+import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
 import {
   container,
   sectionTitle,
   sectionDescription,
   clientCardsContainer,
+  resourcesContainer,
 } from './contentMultipleClients.css';
 
 const clientsData = {
@@ -19,6 +21,59 @@ const clientsData = {
   running: true,
   update: true,
   multiple: true,
+};
+
+const resourcesData = {
+  title: 'More resources',
+  items: [
+    {
+      sectionTitle: 'Nimbus',
+      items: [
+        { label: 'Twitter', value: 'ethnimbus', link: 'https://ethereum.org' },
+        { label: 'Discord', value: 'Join', link: 'https://ethereum.org' },
+        {
+          label: 'Website',
+          value: 'nimbus.team',
+          link: 'https://ethereum.org',
+        },
+      ],
+    },
+    {
+      sectionTitle: 'Besu',
+      items: [
+        {
+          label: 'Twitter',
+          value: '@HyperledgerBesu',
+          link: 'https://ethereum.org',
+        },
+        {
+          label: 'Discord',
+          value: 'Join',
+          link: 'https://ethereum.org',
+        },
+        {
+          label: 'Website',
+          value: 'hyperledger.org',
+          link: 'https://ethereum.org',
+        },
+      ],
+    },
+    {
+      sectionTitle: 'Ethereum Node',
+      items: [
+        {
+          label: 'Run your own node',
+          value: 'ethereum.org',
+          link: 'https://ethereum.org',
+        },
+        {
+          label: 'Learn about client diversity',
+          value: 'ethereum.org',
+          link: 'https://ethereum.org',
+        },
+      ],
+    },
+  ],
 };
 
 const ContentMultipleClients = () => {
@@ -65,6 +120,9 @@ const ContentMultipleClients = () => {
         eget vitae. Running an Etherum node is a two part story. Lorem ipsum
         dolor sit amet, consectetur adipiscing elit. Nunc eget mi vitae augue
         iaculis tempor eget vitae.
+      </div>
+      <div className={resourcesContainer}>
+        <LabelValues {...resourcesData} column />
       </div>
     </div>
   );

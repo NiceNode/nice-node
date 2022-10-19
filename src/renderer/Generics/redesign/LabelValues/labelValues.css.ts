@@ -6,3 +6,16 @@ export const titleFont = style({
   lineHeight: '20px',
   letterSpacing: '-0.24px',
 });
+
+export const columnContainerStyle = style({
+  display: 'grid',
+  columnGap: 41,
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  gridTemplateRows: 'masonry',
+});
+
+export const columnItemStyle = style({
+  margin: 0,
+  display: 'grid',
+  gridTemplateRows: '1fr auto',
+});

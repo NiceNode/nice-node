@@ -14,6 +14,7 @@ const Template: ComponentStory<typeof LabelValues> = (args) => (
 
 export const About = Template.bind({});
 About.args = {
+  title: 'More resources',
   items: [
     {
       sectionTitle: 'Nimbus',
@@ -23,6 +24,26 @@ About.args = {
         {
           label: 'Website',
           value: 'nimbus.team',
+          link: 'https://ethereum.org',
+        },
+      ],
+    },
+    {
+      sectionTitle: 'Besu',
+      items: [
+        {
+          label: 'Twitter',
+          value: '@HyperledgerBesu',
+          link: 'https://ethereum.org',
+        },
+        {
+          label: 'Discord',
+          value: 'Join',
+          link: 'https://ethereum.org',
+        },
+        {
+          label: 'Website',
+          value: 'hyperledger.org',
           link: 'https://ethereum.org',
         },
       ],

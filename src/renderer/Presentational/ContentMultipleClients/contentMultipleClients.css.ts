@@ -31,6 +31,10 @@ export const clientCardsContainer = style({
   gap: 24,
 });
 
+export const resourcesContainer = style({
+  marginTop: 32,
+});
+
 export const horizontalLine = style({
   padding: '0 20px',
 });
