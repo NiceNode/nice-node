@@ -19,17 +19,13 @@ import {
 
 export interface MetricTypesProps {
   /**
-   * Primary metric types
-   */
-  primaryType: 'header' | 'breakdown1' | 'breakdown2';
-  /**
    * Secondary metric types
    */
-  secondaryType?: 'slots' | 'peers' | 'cpu' | 'disks';
+  statsType?: 'status' | 'slots' | 'peers' | 'cpuLoad' | 'diskUsage';
   /**
    * Status //TODO: match this with current status enum implementation
    */
-  status?: null | 'healthy' | 'warning' | 'error' | 'sync';
+  statsValue?: string | number;
   /**
    * Title of the metric
    */
@@ -48,9 +44,8 @@ export interface MetricTypesProps {
  * Primary UI component for user interaction
  */
 export const MetricTypes = ({
-  primaryType,
-  secondaryType,
-  status,
+  statsType,
+  statsValue,
   title,
   label,
   info,
@@ -63,23 +58,23 @@ export const MetricTypes = ({
 
   const processStatus = () => {
     let statusColorStyle;
-    switch (true) {
-      case status === 'healthy':
+    switch (statsValue) {
+      case 'healthy':
         statusColorStyle = healthy;
         titleText = 'Online';
         labelText = 'Synchronized';
         break;
-      case status === 'warning':
+      case 'warning':
         statusColorStyle = warning;
         titleText = 'Warning';
         labelText = 'Warning';
         break;
-      case status === 'error':
+      case 'error':
         statusColorStyle = error;
         titleText = 'Error';
         labelText = 'Error';
         break;
-      case status === 'sync':
+      case 'sync':
         statusColorStyle = sync;
         titleText = 'Syncing';
         labelText = 'In Progress...';
@@ -89,13 +84,13 @@ export const MetricTypes = ({
     }
     iconComponent = (
       <div className={[statusStyle, statusColorStyle].join(' ')}>
-        {status === 'sync' && <Icon iconId="syncing" />}
+        {statsValue === 'sync' && <Icon iconId="syncing" />}
       </div>
     );
   };
 
-  const processSecondaryType = () => {
-    switch (secondaryType) {
+  const processStatsType = () => {
+    switch (statsType) {
       case 'slots':
         titleText = '4,456,158';
         labelText = 'Current slot';
@@ -104,24 +99,30 @@ export const MetricTypes = ({
         titleText = '16';
         labelText = 'Peers connected';
         break;
-      case 'cpu':
-        titleText = '83%';
+      case 'cpuLoad':
+        titleText = `${statsValue}%`;
         labelText = 'CPU load';
         break;
-      case 'disks':
-        titleText = '1.52 GB';
+      case 'diskUsage':
+        if (statsValue >= 1000000) {
+          titleText = `${statsValue / 1000000} TB`;
+        } else if (statsValue < 999999 && statsValue > 1000) {
+          titleText = `${statsValue / 1000} GB`;
+        } else {
+          titleText = `${statsValue} MB`;
+        }
         labelText = 'Disk usage';
         break;
       default:
         break;
     }
-    iconComponent = <Icon iconId={secondaryType} />;
+    iconComponent = <Icon iconId={statsType} />;
   };
 
-  if (status) {
+  if (statsType === 'status') {
     processStatus();
-  } else if (secondaryType) {
-    processSecondaryType();
+  } else if (statsType) {
+    processStatsType();
   }
   return (
     <div className={container}>

@@ -4,59 +4,48 @@ import { container } from './headerMetrics.css';
 import VerticalLine from '../VerticalLine/VerticalLine';
 
 export interface HeaderMetricsProps {
-  /**
-   * Content type
-   */
-  type: 'altruistic' | 'client' | 'validator';
-  /**
-   * Node status
-   */
-  status: string;
-  /**
-   * Current slot
-   */
-  slot?: number;
-  /**
-   * Current CPU Load
-   */
-  cpuLoad?: number;
-  /**
-   * How much disk space is this node using?
-   */
-  diskUsage: number;
-  /**
-   * Is this header being shown on multiple clients screen? // TODO: Find a better way to do this
-   */
-  multiple: boolean;
+  node: {
+    name: string;
+    title: string;
+    info: string;
+    type: string;
+    version?: string;
+    update?: string;
+    status: string;
+    stats: {
+      block?: string;
+      cpuLoad?: number;
+      diskUsage?: number;
+    };
+  };
 }
 
 const metricTypeArray = {
-  altruistic: ['slots', 'cpu', 'disks'],
-  client: ['slots', 'peers', 'disks'],
-  validator: ['stake', 'rewards', 'balance'],
+  altruistic: ['status', 'slots', 'cpuLoad', 'diskUsage'],
+  client: ['status', 'slots', 'peers', 'diskUsage'],
+  validator: ['status', 'stake', 'rewards', 'balance'],
 };
 
 /**
  * Primary UI component for user interaction
  */
-export const HeaderMetrics = ({
-  type,
-  status,
-  slot,
-  cpuLoad,
-  diskUsage,
-  multiple,
-}: HeaderMetricsProps) => {
+export const HeaderMetrics = ({ node }: HeaderMetricsProps) => {
+  const { type, status, stats } = node;
   const assignedMetric = metricTypeArray[type];
   return (
     <div className={container}>
-      <MetricTypes status={status} />
-      <VerticalLine />
-      <MetricTypes secondaryType={assignedMetric[0]} />
-      <VerticalLine />
-      <MetricTypes secondaryType={assignedMetric[1]} />
-      <VerticalLine />
-      <MetricTypes secondaryType={assignedMetric[2]} />
+      {assignedMetric.map((metric, index) => {
+        const statsValue = index === 0 ? status : stats[metric];
+        return (
+          <>
+            <MetricTypes
+              statsValue={statsValue}
+              statsType={assignedMetric[index]}
+            />
+            {index !== 3 && <VerticalLine />}
+          </>
+        );
+      })}
     </div>
   );
 };

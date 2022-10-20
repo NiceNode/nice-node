@@ -67,7 +67,7 @@ const clients = [
     stats: {
       block: '15791798',
       cpuLoad: 82,
-      diskUsage: 500,
+      diskUsage: 5000,
     },
   },
 ];
@@ -151,8 +151,12 @@ const ContentMultipleClients = () => {
     let nodeStatus = {};
     if (clients.length > 1) {
       // Ethereum Altruistic Node
+      // TODO: potential optimization if array items are fixed
       const clClient = clients.find(
         (client) => client.nodeType === 'consensus'
+      );
+      const elClient = clients.find(
+        (client) => client.nodeType === 'execution'
       );
       nodeStatus = {
         name: 'ethereum',
@@ -162,8 +166,8 @@ const ContentMultipleClients = () => {
         status: 'healthy', // change this to enum to compare weights?
         stats: {
           block: clClient?.stats.slot,
-          cpuLoad: 82, // average out the 2 client numbers
-          diskUsage: 500, // add 2 client numbers
+          cpuLoad: (clClient?.stats.cpuLoad + elClient?.stats.cpuLoad) / 2,
+          diskUsage: clClient?.stats.diskUsage + elClient?.stats.diskUsage,
         },
       };
       return nodeStatus;
@@ -178,7 +182,7 @@ const ContentMultipleClients = () => {
     <div className={container}>
       <Header node={nodeOverview} />
       <HorizontalLine type="content" />
-      <HeaderMetrics status="healthy" type="altruistic" />
+      <HeaderMetrics node={nodeOverview} />
       <HorizontalLine type="content" />
       {!walletDismissed && (
         // TODO: This only shows if *both* clients are fully synced
