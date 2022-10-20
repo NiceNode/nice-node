@@ -13,55 +13,34 @@ import {
 } from './header.css';
 
 export interface HeaderProps {
-  /**
-   * Node title
-   */
-  title: string;
-  /**
-   * Node info
-   */
-  info: string;
-  /**
-   * Version info
-   */
-  version?: string;
-  /**
-   * Which icon?
-   */
-  iconId: NodeIconId;
-  /**
-   * Is this header being shown on multiple clients screen? // TODO: Find a better way to do this
-   */
-  multiple: boolean;
-  /**
-   * Is the node running right now? // TODO: Differentiate between main screen vs node screen with different variable?
-   */
-  running?: boolean;
-  /**
-   * Is update available?
-   */
-  update?: boolean;
+  node: {
+    name: string;
+    title: string;
+    info: string;
+    type: string;
+    version?: string;
+    update?: string;
+    status: string; // determine this by comparing 2 clients
+    stats: {
+      block: string;
+      cpuLoad: number;
+      diskUsage: number;
+    };
+  };
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const Header = ({
-  iconId,
-  version,
-  title,
-  info,
-  update,
-  running,
-  multiple,
-}: HeaderProps) => {
+export const Header = ({ node }: HeaderProps) => {
+  const { name, title, info, type, status, stats, version, update } = node;
   const buttonProps = {
     label: '',
     iconId: '',
     onClick: () => {},
   };
-  if (multiple) {
-    if (running) {
+  if (type === 'altruistic') {
+    if (true) {
       buttonProps.label = 'Stop';
       buttonProps.iconId = 'stop';
       buttonProps.onClick = () => {
@@ -85,7 +64,7 @@ export const Header = ({
   return (
     <div className={container}>
       <div className={iconContainer}>
-        <NodeIcon iconId={iconId} size="large" />
+        <NodeIcon iconId={name} size="large" />
       </div>
       <div className={textContainer}>
         <div className={titleContainer}>

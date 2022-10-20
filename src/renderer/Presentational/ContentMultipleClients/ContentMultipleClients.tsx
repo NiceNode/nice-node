@@ -22,28 +22,52 @@ const clientsData = {
   multiple: true,
 };
 
+const statusWeights = {
+  synchronized: 4,
+  blocksBehind: 3,
+  error: 0,
+};
+
 // TODO: process retrieved client data into this format?
 const clients = [
   {
     name: 'nimbus',
     version: 'v10',
-    type: 'consensus',
+    type: 'single',
+    nodeType: 'consensus',
     status: {
       synchronized: false,
       lowPeerCount: false,
       updateAvailable: false,
+      blocksBehind: false,
+      noConnection: false,
       stopped: false,
+      error: false,
+    },
+    stats: {
+      slot: '4,456,158',
+      cpuLoad: 20,
+      diskUsage: 600, // in MB?
     },
   },
   {
     name: 'besu',
     version: 'v10',
-    type: 'execution',
+    type: 'single',
+    nodeType: 'execution',
     status: {
       synchronized: true,
       lowPeerCount: true,
       updateAvailable: true,
+      blocksBehind: false,
+      noConnection: false,
       stopped: false,
+      error: false,
+    },
+    stats: {
+      block: '15791798',
+      cpuLoad: 82,
+      diskUsage: 500,
     },
   },
 ];
@@ -122,9 +146,37 @@ const ContentMultipleClients = () => {
     onDismissClick();
   }, []);
 
+  // useEffect, used only in Header and Metrics
+  const getNodeOverview = () => {
+    let nodeStatus = {};
+    if (clients.length > 1) {
+      // Ethereum Altruistic Node
+      const clClient = clients.find(
+        (client) => client.nodeType === 'consensus'
+      );
+      nodeStatus = {
+        name: 'ethereum',
+        title: 'Ethereum node',
+        info: 'Non-Validating Node — Ethereum mainnet',
+        type: 'altruistic',
+        status: 'healthy', // change this to enum to compare weights?
+        stats: {
+          block: clClient?.stats.slot,
+          cpuLoad: 82, // average out the 2 client numbers
+          diskUsage: 500, // add 2 client numbers
+        },
+      };
+      return nodeStatus;
+    }
+    // Single clients
+    // just return the client object
+  };
+
+  const nodeOverview = getNodeOverview();
+
   return (
     <div className={container}>
-      <Header {...clientsData} />
+      <Header node={nodeOverview} />
       <HorizontalLine type="content" />
       <HeaderMetrics status="healthy" type="altruistic" />
       <HorizontalLine type="content" />
@@ -138,8 +190,8 @@ const ContentMultipleClients = () => {
       )}
       <div className={sectionTitle}>Ethereum Clients</div>
       <div className={clientCardsContainer}>
-        {clients.map((item) => {
-          return <ClientCard item={item} />;
+        {clients.map((client) => {
+          return <ClientCard client={client} />;
         })}
       </div>
       <HorizontalLine type="content" />

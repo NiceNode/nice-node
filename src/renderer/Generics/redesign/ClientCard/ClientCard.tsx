@@ -19,35 +19,35 @@ import { Label } from '../Label/Label';
 import ProgressBar from '../ProgressBar/ProgressBar';
 
 const getLabelDetails = (label: string) => {
-  const labelObject = { color: '', string: '' };
+  const labelDetails = { color: '', string: '' };
   switch (label) {
     case 'synchronized':
-      labelObject.color = 'green';
-      labelObject.string = 'Synchronized';
+      labelDetails.color = 'green';
+      labelDetails.string = 'Synchronized';
       break;
     case 'lowPeerCount':
-      labelObject.color = 'orange';
-      labelObject.string = 'Low peer count';
+      labelDetails.color = 'orange';
+      labelDetails.string = 'Low peer count';
       break;
     case 'update':
-      labelObject.color = 'purple';
-      labelObject.string = 'Update';
+      labelDetails.color = 'purple';
+      labelDetails.string = 'Update';
       break;
     case 'stopped':
-      labelObject.color = 'purple';
-      labelObject.string = 'Update';
+      labelDetails.color = 'purple';
+      labelDetails.string = 'Update';
       break;
     default:
       break;
   }
-  return labelObject;
+  return labelDetails;
 };
 
 export interface ClientCardProps {
   /**
-   * Node item object
+   * Node client object
    */
-  item: {
+  client: {
     name: NodeBackgroundId;
     version: string;
     type: string;
@@ -59,14 +59,19 @@ export interface ClientCardProps {
       blocksBehind: boolean;
       noConnection: boolean;
     };
+    stats: {
+      slot: string;
+      cpuLoad: number;
+      diskUsage: number;
+    };
   };
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const ClientCard = ({ item }: ClientCardProps) => {
-  const { status, name, type } = item;
+export const ClientCard = ({ client }: ClientCardProps) => {
+  const { status, name, type } = client;
   const renderContents = () => {
     if (!status.synchronized) {
       return (
@@ -86,8 +91,10 @@ export const ClientCard = ({ item }: ClientCardProps) => {
     return (
       <div className={clientLabels}>
         {statusKeys.map((key) => {
-          const label = getLabelDetails(key);
-          return <Label type={label.color} label={label.string} />;
+          const labelDetails = getLabelDetails(key);
+          return (
+            <Label type={labelDetails.color} label={labelDetails.string} />
+          );
         })}
       </div>
     );
