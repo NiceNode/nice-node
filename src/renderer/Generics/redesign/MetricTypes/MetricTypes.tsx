@@ -19,9 +19,9 @@ import {
 
 export interface MetricTypesProps {
   /**
-   * Secondary metric types
+   * Stats types
    */
-  statsType?: 'status' | 'slots' | 'peers' | 'cpuLoad' | 'diskUsage';
+  statsType?: string;
   /**
    * Status //TODO: match this with current status enum implementation
    */
@@ -90,6 +90,7 @@ export const MetricTypes = ({
   };
 
   const processStatsType = () => {
+    let iconId = statsType;
     switch (statsType) {
       case 'slots':
         titleText = '4,456,158';
@@ -100,6 +101,7 @@ export const MetricTypes = ({
         labelText = 'Peers connected';
         break;
       case 'cpuLoad':
+        iconId = 'cpu';
         titleText = `${statsValue}%`;
         labelText = 'CPU load';
         break;
@@ -111,12 +113,13 @@ export const MetricTypes = ({
         } else {
           titleText = `${statsValue} MB`;
         }
+        iconId = 'disks';
         labelText = 'Disk usage';
         break;
       default:
         break;
     }
-    iconComponent = <Icon iconId={statsType} />;
+    iconComponent = <Icon iconId={iconId} />;
   };
 
   if (statsType === 'status') {

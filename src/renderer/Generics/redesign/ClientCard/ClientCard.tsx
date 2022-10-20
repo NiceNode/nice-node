@@ -50,7 +50,7 @@ export interface ClientCardProps {
   client: {
     name: NodeBackgroundId;
     version: string;
-    type: string;
+    nodeType: string;
     status: {
       synchronized: boolean;
       lowPeerCount: boolean;
@@ -71,7 +71,7 @@ export interface ClientCardProps {
  * Primary UI component for user interaction
  */
 export const ClientCard = ({ client }: ClientCardProps) => {
-  const { status, name, type } = client;
+  const { status, name, nodeType } = client;
   const renderContents = () => {
     if (!status.synchronized) {
       return (
@@ -102,7 +102,7 @@ export const ClientCard = ({ client }: ClientCardProps) => {
 
   // TODO: better const name
   const typeClientName =
-    type === 'execution' ? 'Execution Client' : 'Consensus Client';
+    nodeType === 'execution' ? 'Execution Client' : 'Consensus Client';
 
   return (
     <div className={container}>
