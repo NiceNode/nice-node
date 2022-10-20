@@ -18,23 +18,57 @@ import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { Label } from '../Label/Label';
 import ProgressBar from '../ProgressBar/ProgressBar';
 
+const getLabelDetails = (label: string) => {
+  const labelObject = { color: '', string: '' };
+  switch (label) {
+    case 'synchronized':
+      labelObject.color = 'green';
+      labelObject.string = 'Synchronized';
+      break;
+    case 'lowPeerCount':
+      labelObject.color = 'orange';
+      labelObject.string = 'Low peer count';
+      break;
+    case 'update':
+      labelObject.color = 'purple';
+      labelObject.string = 'Update';
+      break;
+    case 'stopped':
+      labelObject.color = 'purple';
+      labelObject.string = 'Update';
+      break;
+    default:
+      break;
+  }
+  return labelObject;
+};
+
 export interface ClientCardProps {
   /**
-   * Node name
+   * Node item object
    */
-  name: NodeBackgroundId;
-  /**
-   * Is it syncing?
-   */
-  sync: boolean;
+  item: {
+    name: NodeBackgroundId;
+    version: string;
+    type: string;
+    status: {
+      synchronized: boolean;
+      lowPeerCount: boolean;
+      updateAvailable: boolean;
+      stopped: boolean;
+      blocksBehind: boolean;
+      noConnection: boolean;
+    };
+  };
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const ClientCard = ({ name, sync }: ClientCardProps) => {
+export const ClientCard = ({ item }: ClientCardProps) => {
+  const { status, name, type } = item;
   const renderContents = () => {
-    if (sync) {
+    if (!status.synchronized) {
       return (
         <>
           {/* TODO: tie clients with progress bar colors */}
@@ -48,21 +82,27 @@ export const ClientCard = ({ name, sync }: ClientCardProps) => {
         </>
       );
     }
+    const statusKeys = Object.keys(status).filter((k) => status[k]);
     return (
       <div className={clientLabels}>
-        {/* TODO: tie labels and colors */}
-        <Label type="purple" label="Update" />
-        <Label type="orange" label="Low peer count" />
-        <Label type="green" label="Synchronized" />
+        {statusKeys.map((key) => {
+          const label = getLabelDetails(key);
+          return <Label type={label.color} label={label.string} />;
+        })}
       </div>
     );
   };
+
+  // TODO: better const name
+  const typeClientName =
+    type === 'execution' ? 'Execution Client' : 'Consensus Client';
+
   return (
     <div className={container}>
       <div
         style={{
           backgroundImage: `url(${NODE_BACKGROUNDS[name]})`,
-          height: sync ? 166 : 186,
+          height: !status.synchronized ? 166 : 186,
         }}
         className={cardTop}
       >
@@ -76,7 +116,7 @@ export const ClientCard = ({ name, sync }: ClientCardProps) => {
         </div>
       </div>
       <div className={cardContent}>
-        <div className={clientType}>Consensus Client</div>
+        <div className={clientType}>{typeClientName}</div>
         {renderContents()}
       </div>
     </div>

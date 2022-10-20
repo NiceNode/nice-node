@@ -17,7 +17,7 @@ Info.args = {
   title: 'Initial sync process started',
   description:
     'When adding a node it first needs to catch up on the history of the network. This process downloads all the necessary data and might take a couple of days. After synchronization is complete your node will be online and part of the network.',
-  onClick: () => {
-    console.log('cancel');
-  },
+  // onClick: () => {
+  //   console.log('cancel');
+  // },
 };

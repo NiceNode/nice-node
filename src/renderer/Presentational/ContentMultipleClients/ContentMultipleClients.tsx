@@ -15,13 +15,38 @@ import {
 
 const clientsData = {
   iconId: 'ethereum',
-  version: 'V0.41.0',
   title: 'Ethereum node',
   info: 'Non-Validating Node — Ethereum mainnet',
   running: true,
   update: true,
   multiple: true,
 };
+
+// TODO: process retrieved client data into this format?
+const clients = [
+  {
+    name: 'nimbus',
+    version: 'v10',
+    type: 'consensus',
+    status: {
+      synchronized: false,
+      lowPeerCount: false,
+      updateAvailable: false,
+      stopped: false,
+    },
+  },
+  {
+    name: 'besu',
+    version: 'v10',
+    type: 'execution',
+    status: {
+      synchronized: true,
+      lowPeerCount: true,
+      updateAvailable: true,
+      stopped: false,
+    },
+  },
+];
 
 const resourcesData = {
   title: 'More resources',
@@ -77,7 +102,6 @@ const resourcesData = {
 };
 
 const ContentMultipleClients = () => {
-  // TODO: Continuously fetch stats from both nodes, pass down props
   // TODO: Come up with a better name for this component..
   /* TODO: Refactor to support single node & eventual validator view,
     maybe with a "provider" wrapper/manager to fetch data and handle states */
@@ -114,8 +138,9 @@ const ContentMultipleClients = () => {
       )}
       <div className={sectionTitle}>Ethereum Clients</div>
       <div className={clientCardsContainer}>
-        <ClientCard sync name="nimbus" />
-        <ClientCard name="besu" />
+        {clients.map((item) => {
+          return <ClientCard item={item} />;
+        })}
       </div>
       <HorizontalLine type="content" />
       <div className={sectionTitle}>About</div>
