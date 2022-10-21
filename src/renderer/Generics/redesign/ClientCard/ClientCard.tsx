@@ -100,8 +100,7 @@ export const ClientCard = ({ client }: ClientCardProps) => {
     );
   };
 
-  // TODO: better const name
-  const typeClientName =
+  const clientTypeLabel =
     nodeType === 'execution' ? 'Execution Client' : 'Consensus Client';
 
   return (
@@ -123,7 +122,7 @@ export const ClientCard = ({ client }: ClientCardProps) => {
         </div>
       </div>
       <div className={cardContent}>
-        <div className={clientType}>{typeClientName}</div>
+        <div className={clientType}>{clientTypeLabel}</div>
         {renderContents()}
       </div>
     </div>

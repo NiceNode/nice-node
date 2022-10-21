@@ -72,59 +72,6 @@ const clients = [
   },
 ];
 
-const resourcesData = {
-  title: 'More resources',
-  items: [
-    {
-      sectionTitle: 'Nimbus',
-      items: [
-        { label: 'Twitter', value: 'ethnimbus', link: 'https://ethereum.org' },
-        { label: 'Discord', value: 'Join', link: 'https://ethereum.org' },
-        {
-          label: 'Website',
-          value: 'nimbus.team',
-          link: 'https://ethereum.org',
-        },
-      ],
-    },
-    {
-      sectionTitle: 'Besu',
-      items: [
-        {
-          label: 'Twitter',
-          value: '@HyperledgerBesu',
-          link: 'https://ethereum.org',
-        },
-        {
-          label: 'Discord',
-          value: 'Join',
-          link: 'https://ethereum.org',
-        },
-        {
-          label: 'Website',
-          value: 'hyperledger.org',
-          link: 'https://ethereum.org',
-        },
-      ],
-    },
-    {
-      sectionTitle: 'Ethereum Node',
-      items: [
-        {
-          label: 'Run your own node',
-          value: 'ethereum.org',
-          link: 'https://ethereum.org',
-        },
-        {
-          label: 'Learn about client diversity',
-          value: 'ethereum.org',
-          link: 'https://ethereum.org',
-        },
-      ],
-    },
-  ],
-};
-
 const ContentMultipleClients = () => {
   // TODO: Come up with a better name for this component..
   /* TODO: Refactor to support single node & eventual validator view,
@@ -146,19 +93,16 @@ const ContentMultipleClients = () => {
     onDismissClick();
   }, []);
 
-  // useEffect, used only in Header and Metrics
+  const clClient = clients.find((client) => client.nodeType === 'consensus');
+  const elClient = clients.find((client) => client.nodeType === 'execution');
+
   const getNodeOverview = () => {
-    let nodeStatus = {};
-    if (clients.length > 1) {
+    // useEffect, used only in Header and Metrics
+    let nodeOverview = {};
+
+    if (clClient && elClient) {
       // Ethereum Altruistic Node
-      // TODO: potential optimization if array items are fixed
-      const clClient = clients.find(
-        (client) => client.nodeType === 'consensus'
-      );
-      const elClient = clients.find(
-        (client) => client.nodeType === 'execution'
-      );
-      nodeStatus = {
+      nodeOverview = {
         name: 'ethereum',
         title: 'Ethereum node',
         info: 'Non-Validating Node — Ethereum mainnet',
@@ -166,23 +110,51 @@ const ContentMultipleClients = () => {
         status: 'healthy', // change this to enum to compare weights?
         stats: {
           block: clClient?.stats.slot,
-          cpuLoad: (clClient?.stats.cpuLoad + elClient?.stats.cpuLoad) / 2,
-          diskUsage: clClient?.stats.diskUsage + elClient?.stats.diskUsage,
+          cpuLoad:
+            (clClient?.stats.cpuLoad || 0) + (elClient?.stats.cpuLoad || 0),
+          diskUsage:
+            (clClient?.stats.diskUsage || 0) + (elClient?.stats.diskUsage || 0),
         },
       };
-      return nodeStatus;
+      return nodeOverview;
     }
-    // Single clients
-    // just return the client object
+    // non-Ethereum node conditions added here
+    return clients[0];
+  };
+
+  const getResourceData = () => {
+    const resourceData = {
+      title: 'More resources',
+      items: [],
+    };
+    const resourceJson = require('./resources.json');
+    const clientNames = clients.map((client) => {
+      return client.name;
+    });
+    // Look through json and find exact client resource data
+    clientNames.forEach((value, index, array) => {
+      const clientSearch = (clientString: string) =>
+        resourceJson.find((clientObject) => clientObject.key === clientString);
+      const found = clientSearch(value);
+      if (found) {
+        resourceData.items.push(found);
+      }
+    });
+    if (clClient || elClient) {
+      // Altruistic node, so add Ethereum information at end
+      resourceData.items.push(resourceJson[0]);
+    }
+    return resourceData;
   };
 
   const nodeOverview = getNodeOverview();
+  const resourceData = getResourceData();
 
   return (
     <div className={container}>
-      <Header node={nodeOverview} />
+      <Header nodeOverview={nodeOverview} />
       <HorizontalLine type="content" />
-      <HeaderMetrics node={nodeOverview} />
+      <HeaderMetrics nodeOverview={nodeOverview} />
       <HorizontalLine type="content" />
       {!walletDismissed && (
         // TODO: This only shows if *both* clients are fully synced
@@ -225,7 +197,7 @@ const ContentMultipleClients = () => {
         </p>
       </div>
       <div className={resourcesContainer}>
-        <LabelValues {...resourcesData} column />
+        <LabelValues {...resourceData} column />
       </div>
     </div>
   );

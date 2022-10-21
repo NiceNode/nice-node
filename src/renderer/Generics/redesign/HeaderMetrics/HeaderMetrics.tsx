@@ -4,7 +4,7 @@ import { container } from './headerMetrics.css';
 import VerticalLine from '../VerticalLine/VerticalLine';
 
 export interface HeaderMetricsProps {
-  node: {
+  nodeOverview: {
     name: string;
     title: string;
     info: string;
@@ -29,8 +29,8 @@ const metricTypeArray = {
 /**
  * Primary UI component for user interaction
  */
-export const HeaderMetrics = ({ node }: HeaderMetricsProps) => {
-  const { type, status, stats } = node;
+export const HeaderMetrics = ({ nodeOverview }: HeaderMetricsProps) => {
+  const { type, status, stats } = nodeOverview;
   const assignedMetric = metricTypeArray[type];
   return (
     <div className={container}>

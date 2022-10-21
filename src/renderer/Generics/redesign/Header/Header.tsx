@@ -13,7 +13,7 @@ import {
 } from './header.css';
 
 export interface HeaderProps {
-  node: {
+  nodeOverview: {
     name: string;
     title: string;
     info: string;
@@ -32,8 +32,9 @@ export interface HeaderProps {
 /**
  * Primary UI component for user interaction
  */
-export const Header = ({ node }: HeaderProps) => {
-  const { name, title, info, type, status, stats, version, update } = node;
+export const Header = ({ nodeOverview }: HeaderProps) => {
+  const { name, title, info, type, status, stats, version, update } =
+    nodeOverview;
   const buttonProps = {
     label: '',
     iconId: '',

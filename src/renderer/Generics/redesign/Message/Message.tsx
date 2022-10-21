@@ -7,8 +7,6 @@ import {
   closeContainer,
 } from './message.css';
 
-import Button from '../Button/Button';
-import ExternalLink from '../Link/ExternalLink';
 import { Icon } from '../Icon/Icon';
 import { HeaderButton } from '../HeaderButton/HeaderButton';
 
