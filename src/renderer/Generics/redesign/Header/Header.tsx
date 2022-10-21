@@ -22,6 +22,7 @@ export interface HeaderProps {
     update?: string;
     status: string; // determine this by comparing 2 clients
     stats: {
+      peers: number;
       block: string;
       cpuLoad: number;
       diskUsage: number;

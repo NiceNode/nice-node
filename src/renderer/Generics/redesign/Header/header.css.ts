@@ -46,6 +46,7 @@ export const titleStyle = style({
   fontWeight: '590',
   fontSize: '32px',
   lineHeight: '100%',
+  textTransform: 'capitalize',
   color: vars.color.font,
 });
 

@@ -60,6 +60,7 @@ export interface ClientCardProps {
       noConnection: boolean;
     };
     stats: {
+      peers: number;
       slot: string;
       cpuLoad: number;
       diskUsage: number;
@@ -100,6 +101,7 @@ export const ClientCard = ({ client }: ClientCardProps) => {
     );
   };
 
+  // TODO: refactor this out since it's used in Single client view
   const clientTypeLabel =
     nodeType === 'execution' ? 'Execution Client' : 'Consensus Client';
 

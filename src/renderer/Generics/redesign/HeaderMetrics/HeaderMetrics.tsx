@@ -13,6 +13,7 @@ export interface HeaderMetricsProps {
     update?: string;
     status: string;
     stats: {
+      peers?: number;
       block?: string;
       cpuLoad?: number;
       diskUsage?: number;

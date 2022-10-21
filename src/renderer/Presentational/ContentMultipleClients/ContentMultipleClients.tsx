@@ -45,6 +45,7 @@ const clients = [
       error: false,
     },
     stats: {
+      peers: 20,
       slot: '4,456,158',
       cpuLoad: 20,
       diskUsage: 600, // in MB?
@@ -65,6 +66,7 @@ const clients = [
       error: false,
     },
     stats: {
+      peers: 16,
       block: '15791798',
       cpuLoad: 82,
       diskUsage: 5000,
@@ -79,7 +81,7 @@ const ContentMultipleClients = () => {
 
   const initialWalletDismissedState =
     localStorage.getItem('walletDismissed') === 'true';
-  const [walletDismissed, setWalletDismissed] = useState(
+  const [walletDismissed, setWalletDismissed] = useState<boolean>(
     initialWalletDismissedState
   );
 
@@ -96,6 +98,7 @@ const ContentMultipleClients = () => {
   const clClient = clients.find((client) => client.nodeType === 'consensus');
   const elClient = clients.find((client) => client.nodeType === 'execution');
 
+  // TODO: refactor this out so that it can be shared with multiple and single
   const getNodeOverview = () => {
     // useEffect, used only in Header and Metrics
     let nodeOverview = {};
