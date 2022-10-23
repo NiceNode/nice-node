@@ -84,7 +84,7 @@ const SelectCard = ({
         </div>
         {minority && (
           <div className={tagStyle}>
-            <Label type="pink2" label="Minority Client" />{' '}
+            <Label bold={false} type="pink2" label="Minority Client" />{' '}
           </div>
         )}
       </div>

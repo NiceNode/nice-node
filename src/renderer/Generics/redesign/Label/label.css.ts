@@ -9,7 +9,7 @@ export const container = style({
   alignItems: 'center',
   padding: '4px 10px',
   gap: '4px',
-  fontWeight: 590,
+  fontWeight: 400,
   borderRadius: '14px',
   fontSize: '11px',
   lineHeight: '14px',
@@ -18,6 +18,9 @@ export const container = style({
   flexGrow: 0,
   width: 'fit-content',
   selectors: {
+    [`&.bold`]: {
+      fontWeight: 590,
+    },
     [`&.small`]: {
       padding: '2px 6px',
       gap: '10px',
