@@ -90,16 +90,15 @@ export const Header = ({ nodeOverview }: HeaderProps) => {
         </div>
         <div className={infoStyle}>{info}</div>
       </div>
-      <div
-        className={buttonContainer}
-        onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) {
-            setIsCalloutDisplayed(false);
-          }
-        }}
-      >
+      <div className={buttonContainer}>
         {updateAvailable && (
-          <>
+          <div
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) {
+                setIsCalloutDisplayed(false);
+              }
+            }}
+          >
             <Button
               label="Update Available"
               primary
@@ -121,7 +120,7 @@ export const Header = ({ nodeOverview }: HeaderProps) => {
                 />
               </div>
             )}
-          </>
+          </div>
         )}
         <Button {...buttonProps} variant="icon-left" size="small" />
         <Button iconId="settings" variant="icon" size="small" />
