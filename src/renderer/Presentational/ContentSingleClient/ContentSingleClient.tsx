@@ -37,32 +37,25 @@ const client = {
 };
 
 const ContentSingleClient = () => {
-  // TODO: Come up with a better name for this component..
-  /* TODO: Refactor to support single node & eventual validator view,
-    maybe with a "provider" wrapper/manager to fetch data and handle states */
-
-  const onDismissClick = useCallback(() => {
-    // setWalletDismissed(true);
-    // localStorage.setItem('walletDismissed', 'true');
-  }, []);
+  /* TODO: maybe a "provider" wrapper/manager to fetch data and handle states */
 
   // TODO: refactor this out so that it can be shared with multiple, single, and validator?
   const getNodeOverview = () => {
     // useEffect, used only in Header and Metrics
 
-    // TODO: refactor this out to higher level (client data provider)
     const clientTypeLabel =
       client.nodeType === 'consensus' ? 'Consensus Client' : 'Execution Client';
 
     return {
       ...client,
-      title: client.name,
-      info: `${clientTypeLabel} -- Ethereum mainnet`,
+      info: `${clientTypeLabel} -- Ethereum mainnet`, // should be more flexible for other networks
       status: 'healthy', // change this to enum to compare weights?
     };
   };
 
   const nodeOverview = getNodeOverview();
+
+  // TODO: retrieve initial data for all pages
 
   return (
     <div className={container}>

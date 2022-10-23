@@ -76,8 +76,7 @@ const clients = [
 
 const ContentMultipleClients = () => {
   // TODO: Come up with a better name for this component..
-  /* TODO: Refactor to support single node & eventual validator view,
-    maybe with a "provider" wrapper/manager to fetch data and handle states */
+  /* TODO: maybe a "provider" wrapper/manager to fetch data and handle states */
 
   const initialWalletDismissedState =
     localStorage.getItem('walletDismissed') === 'true';

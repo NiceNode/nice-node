@@ -15,7 +15,7 @@ import {
 export interface HeaderProps {
   nodeOverview: {
     name: string;
-    title: string;
+    title?: string;
     info: string;
     type: string;
     version?: string;
@@ -70,7 +70,7 @@ export const Header = ({ nodeOverview }: HeaderProps) => {
       </div>
       <div className={textContainer}>
         <div className={titleContainer}>
-          <div className={titleStyle}>{title}</div>
+          <div className={titleStyle}>{title || name}</div>
           {version && <div className={versionContainer}>{version}</div>}
         </div>
         <div className={infoStyle}>{info}</div>

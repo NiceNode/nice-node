@@ -14,6 +14,16 @@ const Template: ComponentStory<typeof HeaderMetrics> = (args) => (
 export const Primary = Template.bind({});
 
 Primary.args = {
-  status: 'sync',
-  type: 'altruistic',
+  nodeOverview: {
+    name: 'ethereum',
+    title: 'Ethereum node',
+    info: 'Non-Validating Node — Ethereum mainnet',
+    type: 'altruistic',
+    status: 'healthy', // change this to enum to compare weights?
+    stats: {
+      block: '32,000,200',
+      cpuLoad: 90,
+      diskUsage: 10000,
+    },
+  },
 };
