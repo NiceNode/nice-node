@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import Button from '../Button/Button';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
+import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
 import {
   container,
   iconContainer,
@@ -10,6 +12,7 @@ import {
   versionContainer,
   infoStyle,
   buttonContainer,
+  updateCallout,
 } from './header.css';
 
 export interface HeaderProps {
@@ -20,7 +23,10 @@ export interface HeaderProps {
     type: string;
     version?: string;
     update?: string;
-    status: string; // determine this by comparing 2 clients
+    status: {
+      syncStatus: string; // change this to enum to compare weights?
+      updateAvailable: boolean; // look through both clients
+    };
     stats: {
       peers: number;
       block: string;
@@ -34,8 +40,17 @@ export interface HeaderProps {
  * Primary UI component for user interaction
  */
 export const Header = ({ nodeOverview }: HeaderProps) => {
-  const { name, title, info, type, status, stats, version, update } =
-    nodeOverview;
+  const {
+    name,
+    title,
+    info,
+    type,
+    status: { updateAvailable },
+    version,
+  } = nodeOverview;
+
+  const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
+
   const buttonProps = {
     label: '',
     iconId: '',
@@ -75,15 +90,38 @@ export const Header = ({ nodeOverview }: HeaderProps) => {
         </div>
         <div className={infoStyle}>{info}</div>
       </div>
-      <div className={buttonContainer}>
-        {update && (
-          <Button
-            label="Update Available"
-            primary
-            iconId="down"
-            variant="icon-right"
-            size="small"
-          />
+      <div
+        className={buttonContainer}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            setIsCalloutDisplayed(false);
+          }
+        }}
+      >
+        {updateAvailable && (
+          <>
+            <Button
+              label="Update Available"
+              primary
+              iconId="down"
+              variant="icon-right"
+              size="small"
+              onClick={() => {
+                setIsCalloutDisplayed(true);
+              }}
+            />
+            {isCalloutDisplayed && (
+              // tabindex hack to keep focus, and allow blur behavior
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+              <div className={updateCallout} tabIndex={0}>
+                <UpdateCallout
+                  onClick={() => {
+                    console.log('clicked!');
+                  }}
+                />
+              </div>
+            )}
+          </>
         )}
         <Button {...buttonProps} variant="icon-left" size="small" />
         <Button iconId="settings" variant="icon" size="small" />

@@ -80,3 +80,9 @@ export const buttonContainer = style({
   top: '3px',
   gap: '5px',
 });
+
+export const updateCallout = style({
+  position: 'absolute',
+  right: 118,
+  top: 32,
+});

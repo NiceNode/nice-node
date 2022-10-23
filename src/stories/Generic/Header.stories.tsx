@@ -18,7 +18,10 @@ Primary.args = {
     title: 'Ethereum node',
     info: 'Non-Validating Node — Ethereum mainnet',
     type: 'altruistic',
-    status: 'healthy', // change this to enum to compare weights?
+    status: {
+      syncStatus: 'healthy', // change this to enum to compare weights?
+      updateAvailable: true, // look through both clients
+    },
     stats: {
       block: '32,000,200',
       cpuLoad: 90,

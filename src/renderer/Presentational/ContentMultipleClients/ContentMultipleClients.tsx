@@ -57,6 +57,7 @@ const clients = [
     type: 'single',
     nodeType: 'execution',
     status: {
+      syncStatus: 'healthy',
       synchronized: true,
       lowPeerCount: true,
       updateAvailable: true,
@@ -109,7 +110,10 @@ const ContentMultipleClients = () => {
         title: 'Ethereum node',
         info: 'Non-Validating Node — Ethereum mainnet',
         type: 'altruistic',
-        status: 'healthy', // change this to enum to compare weights?
+        status: {
+          syncStatus: 'healthy', // change this to enum to compare weights?
+          updateAvailable: true, // look through both clients
+        },
         stats: {
           block: clClient?.stats.slot,
           cpuLoad:

@@ -11,7 +11,10 @@ export interface HeaderMetricsProps {
     type: string;
     version?: string;
     update?: string;
-    status: string;
+    status: {
+      syncStatus: string; // change this to enum to compare weights?
+      updateAvailable: boolean; // look through both clients
+    };
     stats: {
       peers?: number;
       block?: string;
@@ -31,12 +34,16 @@ const metricTypeArray = {
  * Primary UI component for user interaction
  */
 export const HeaderMetrics = ({ nodeOverview }: HeaderMetricsProps) => {
-  const { type, status, stats } = nodeOverview;
+  const {
+    type,
+    status: { syncStatus },
+    stats,
+  } = nodeOverview;
   const assignedMetric = metricTypeArray[type];
   return (
     <div className={container}>
       {assignedMetric.map((metric, index) => {
-        const statsValue = index === 0 ? status : stats[metric];
+        const statsValue = index === 0 ? syncStatus : stats[metric];
         return (
           <>
             <MetricTypes
