@@ -189,6 +189,7 @@ export const [lightTheme, vars] = createTheme({
     walletPromptBackground: common.color.purple50,
     headerButtonHover: common.color.black4,
     headerButtonActive: common.color.black8,
+    updateCallout: common.color.white100,
   },
 });
 
@@ -262,5 +263,6 @@ export const darkTheme = createTheme(vars, {
     walletPromptBackground: common.color.purple900,
     headerButtonHover: common.color.white4,
     headerButtonActive: common.color.white8,
+    updateCallout: common.color.osMac,
   },
 });

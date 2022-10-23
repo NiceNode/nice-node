@@ -28,7 +28,13 @@ export const UpdateCallout = ({ onClick }: UpdateCalloutProps) => {
       </div>
       <div className={buttonContainer}>
         {/* TODO: 100% width */}
-        <Button primary label="Install Update" size="small" onClick={onClick} />
+        <Button
+          primary
+          wide
+          label="Install Update"
+          size="small"
+          onClick={onClick}
+        />
       </div>
     </div>
   );

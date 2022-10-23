@@ -33,6 +33,10 @@ export const smallButton = style({
   gap: '6px',
 });
 
+export const wideButton = style({
+  width: '100%',
+});
+
 export const primaryButton = style([
   {
     color: common.color.white100,

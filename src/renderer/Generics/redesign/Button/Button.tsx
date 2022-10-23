@@ -5,6 +5,7 @@ import {
   primaryButton,
   secondaryButton,
   smallButton,
+  wideButton,
   iconLeft,
 } from './button.css';
 
@@ -20,6 +21,10 @@ export interface ButtonProps {
    * Text only, with icon, or just icon?
    */
   variant?: 'text' | 'icon-left' | 'icon-right' | 'icon';
+  /**
+   * Is this button wide?
+   */
+  wide?: boolean;
   /**
    * Optional icon
    */
@@ -37,6 +42,7 @@ const Button = ({
   disabled = false,
   variant = 'text',
   iconId = 'settings',
+  wide = false,
   backgroundColor,
   label,
   ...props
@@ -45,6 +51,9 @@ const Button = ({
   const classNames = [baseButton, buttonStyle];
   if (size === 'small') {
     classNames.push(smallButton);
+  }
+  if (wide) {
+    classNames.push(wideButton);
   }
   return (
     <button

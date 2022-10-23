@@ -12,6 +12,8 @@ export const container = style({
   overflow: 'hidden',
   border: '1px solid rgba(0, 0, 2, 0.04)',
   boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.14)',
+  zIndex: 1,
+  backgroundColor: vars.components.updateCallout,
 });
 
 export const title = style({
