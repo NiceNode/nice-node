@@ -189,7 +189,9 @@ export const [lightTheme, vars] = createTheme({
     walletPromptBackground: common.color.purple50,
     headerButtonHover: common.color.black4,
     headerButtonActive: common.color.black8,
-    updateCallout: common.color.white100,
+    updateCalloutBackground: common.color.white100,
+    updateCalloutBorder: `1px solid ${common.color.black4}`,
+    updateCalloutBoxShadow: '0px 8px 16px rgba(0, 0, 0, 0.14)',
   },
 });
 
@@ -263,6 +265,8 @@ export const darkTheme = createTheme(vars, {
     walletPromptBackground: common.color.purple900,
     headerButtonHover: common.color.white4,
     headerButtonActive: common.color.white8,
-    updateCallout: common.color.osMac,
+    updateCalloutBackground: common.color.osMac,
+    updateCalloutBorder: `1px solid ${common.color.white10}`,
+    updateCalloutBoxShadow: `0px 8px 16px rgba(0, 0, 0, 0.28)`,
   },
 });
