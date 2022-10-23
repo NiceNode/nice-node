@@ -113,6 +113,7 @@ const ContentMultipleClients = () => {
         status: {
           syncStatus: 'healthy', // change this to enum to compare weights?
           updateAvailable: true, // look through both clients
+          stopped: true,
         },
         stats: {
           block: clClient?.stats.slot,

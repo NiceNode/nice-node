@@ -14,6 +14,7 @@ export interface HeaderMetricsProps {
     status: {
       syncStatus: string; // change this to enum to compare weights?
       updateAvailable: boolean; // look through both clients
+      stopped: boolean;
     };
     stats: {
       peers?: number;

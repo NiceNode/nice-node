@@ -29,9 +29,9 @@ const getLabelDetails = (label: string) => {
       labelDetails.color = 'orange';
       labelDetails.string = 'Low peer count';
       break;
-    case 'update':
+    case 'updateAvailable':
       labelDetails.color = 'purple';
-      labelDetails.string = 'Update';
+      labelDetails.string = 'Update Available';
       break;
     case 'stopped':
       labelDetails.color = 'purple';
@@ -88,7 +88,9 @@ export const ClientCard = ({ client }: ClientCardProps) => {
         </>
       );
     }
-    const statusKeys = Object.keys(status).filter((k) => status[k]);
+    const statusKeys = Object.keys(status).filter(
+      (k: string) => status[k] === true
+    );
     return (
       <div className={clientLabels}>
         {statusKeys.map((key) => {
