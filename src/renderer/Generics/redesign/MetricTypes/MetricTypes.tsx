@@ -21,19 +21,11 @@ export interface MetricTypesProps {
   /**
    * Stats types
    */
-  statsType?: string;
+  statsType?: 'status' | 'slots' | 'peers' | 'cpuLoad' | 'diskUsage';
   /**
    * Status //TODO: match this with current status enum implementation
    */
   statsValue?: string | number;
-  /**
-   * Title of the metric
-   */
-  title: string;
-  /**
-   * Label
-   */
-  label: string;
   /**
    * Info
    */
@@ -46,8 +38,6 @@ export interface MetricTypesProps {
 export const MetricTypes = ({
   statsType,
   statsValue,
-  title,
-  label,
   info,
 }: MetricTypesProps) => {
   let iconComponent = null;
@@ -108,7 +98,7 @@ export const MetricTypes = ({
       case 'diskUsage':
         if (statsValue >= 1000000) {
           titleText = `${statsValue / 1000000} TB`;
-        } else if (statsValue < 999999 && statsValue > 1000) {
+        } else if (statsValue <= 999999 && statsValue >= 1000) {
           titleText = `${statsValue / 1000} GB`;
         } else {
           titleText = `${statsValue} MB`;

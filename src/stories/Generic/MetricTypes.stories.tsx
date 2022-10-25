@@ -14,9 +14,14 @@ const Template: ComponentStory<typeof MetricTypes> = (args) => (
   <MetricTypes {...args} />
 );
 
-export const Primary = Template.bind({});
-Primary.args = {
-  title: 'Syncing',
-  label: 'In Progress..',
-  status: 'sync',
+export const Status = Template.bind({});
+Status.args = {
+  statsValue: 'healthy',
+  statsType: 'status',
+};
+
+export const Stats = Template.bind({});
+Stats.args = {
+  statsValue: 100,
+  statsType: 'diskUsage',
 };
