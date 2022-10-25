@@ -5,7 +5,7 @@ import {
   descriptionFont,
   iconClass,
 } from './splash.css';
-import icon from '../../../../../assets/icon.png';
+import icon from '../../../assets/images/logo/mono.svg';
 import Button from '../Button/Button';
 
 export interface SplashProps {

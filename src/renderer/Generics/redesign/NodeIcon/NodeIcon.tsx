@@ -16,6 +16,7 @@ import {
   error,
   healthy,
   warning,
+  stopped,
 } from './nodeIcon.css';
 import { Icon } from '../Icon/Icon';
 
@@ -27,7 +28,7 @@ export interface NodeIconProps {
   /**
    * What's the status?
    */
-  status?: 'healthy' | 'warning' | 'error' | 'sync';
+  status?: 'healthy' | 'warning' | 'error' | 'sync' | 'stopped';
   /**
    * What size should the icon be?
    */
@@ -58,6 +59,8 @@ export const NodeIcon = ({ iconId, status, size, animate }: NodeIconProps) => {
     statusColorStyle = error;
   } else if (status === 'sync') {
     statusColorStyle = sync;
+  } else if (status === 'stopped') {
+    statusColorStyle = stopped;
   }
   let isStatusStyle;
   let statusComponent = null;

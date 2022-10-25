@@ -27,7 +27,6 @@ export const UpdateCallout = ({ onClick }: UpdateCalloutProps) => {
         />
       </div>
       <div className={buttonContainer}>
-        {/* TODO: 100% width */}
         <Button
           primary
           wide

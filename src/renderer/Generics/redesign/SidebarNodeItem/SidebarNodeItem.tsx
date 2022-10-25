@@ -26,7 +26,7 @@ export interface SidebarNodeItemProps {
   /**
    * What's the status?
    */
-  status?: 'healthy' | 'warning' | 'error' | 'sync';
+  status?: 'healthy' | 'warning' | 'error' | 'sync' | 'stopped';
   /**
    * Optional click handler
    */

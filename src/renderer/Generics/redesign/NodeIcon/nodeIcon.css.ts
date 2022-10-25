@@ -8,56 +8,6 @@ export const imageStyle = style({
   objectFit: 'contain',
 });
 
-const rotate = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': { transform: 'rotate(359deg)' },
-});
-
-const healthyPulse = keyframes({
-  '0%': {
-    transform: 'scale(0.95)',
-    boxShadow: '0 0 0 0 rgba(62, 187, 100, 0.7)',
-  },
-  '70%': {
-    transform: 'scale(1)',
-    boxShadow: '0 0 0 5px rgba(62, 187, 100, 0)',
-  },
-  '100%': {
-    transform: 'scale(0.95)',
-    boxShadow: '0 0 0 0 rgba(62, 187, 100, 0)',
-  },
-});
-
-const warningPulse = keyframes({
-  '0%': {
-    transform: 'scale(0.95)',
-    boxShadow: '0 0 0 0 rgba(251, 146, 65, 0.7)',
-  },
-  '70%': {
-    transform: 'scale(1)',
-    boxShadow: '0 0 0 5px rgba(251, 146, 65, 0)',
-  },
-  '100%': {
-    transform: 'scale(0.95)',
-    boxShadow: '0 0 0 0 rgba(251, 146, 65, 0)',
-  },
-});
-
-const errorPulse = keyframes({
-  '0%': {
-    transform: 'scale(0.95)',
-    boxShadow: '0 0 0 0 rgba(235, 83, 76, 0.7)',
-  },
-  '70%': {
-    transform: 'scale(1)',
-    boxShadow: '0 0 0 5px rgba(235, 83, 76, 0)',
-  },
-  '100%': {
-    transform: 'scale(0.95)',
-    boxShadow: '0 0 0 0 rgba(235, 83, 76, 0)',
-  },
-});
-
 export const hasStatusStyle = style({});
 export const smallStyle = style({});
 export const mediumStyle = style({});
@@ -65,6 +15,7 @@ export const largeStyle = style({});
 export const healthy = style({ background: common.color.green });
 export const warning = style({ background: common.color.yellow });
 export const error = style({ background: common.color.red });
+export const stopped = style({ background: vars.components.nodeIconStopped });
 export const sync = style({});
 
 export const iconBackground = style({
@@ -146,15 +97,6 @@ export const statusStyle = style({
   top: '0',
   zIndex: 1,
   selectors: {
-    [`&.${healthy}`]: {
-      animationName: healthyPulse,
-    },
-    [`&.${warning}`]: {
-      animationName: warningPulse,
-    },
-    [`&.${error}`]: {
-      animationName: errorPulse,
-    },
     [`&.${smallStyle}`]: {
       width: 8,
       height: 8,
@@ -170,21 +112,6 @@ export const statusStyle = style({
       height: 14,
       borderRadius: 7,
     },
-    [`&.animate`]: {
-      animationDuration: '2s',
-      animationIterationCount: 'infinite',
-      animationTimingFunction: 'linear',
-      transform: 'scale(0.5)',
-    },
-    [`&.${sync}.animate`]: {
-      animationName: rotate,
-      animationDuration: '2s',
-      animationIterationCount: 'infinite',
-      animationTimingFunction: 'linear',
-      fill: vars.color.font,
-      right: '-1px',
-      top: '-1px',
-    },
     [`&.${smallStyle}.${sync}`]: {
       width: '9px',
       height: '14px',
@@ -194,10 +121,14 @@ export const statusStyle = style({
     [`&.${mediumStyle}.${sync}`]: {
       width: '12px',
       height: '12px',
+      right: -1,
+      top: -1,
     },
     [`&.${largeStyle}.${sync}`]: {
       width: '16px',
       height: '16px',
+      right: -1,
+      top: -1,
     },
   },
 });

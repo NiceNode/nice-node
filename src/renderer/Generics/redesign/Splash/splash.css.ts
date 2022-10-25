@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
-import welcome from '../../../../../assets/icon.png';
+import welcome from '../../../assets/images/artwork/welcome.png';
 
 export const container = style({
   backgroundImage: `url(${welcome})`,
