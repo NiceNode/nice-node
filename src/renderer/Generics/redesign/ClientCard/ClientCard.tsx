@@ -88,6 +88,9 @@ export const ClientCard = ({ client }: ClientCardProps) => {
         </>
       );
     }
+    if (status.stopped) {
+      return <Label type="gray" label="Stopped" />;
+    }
     const statusKeys = Object.keys(status).filter(
       (k: string) => status[k] === true
     );
@@ -107,6 +110,7 @@ export const ClientCard = ({ client }: ClientCardProps) => {
   const clientTypeLabel =
     nodeType === 'execution' ? 'Execution Client' : 'Consensus Client';
 
+  const stoppedStyle = status.stopped ? 'stopped' : '';
   return (
     <div className={container}>
       <div
@@ -114,9 +118,9 @@ export const ClientCard = ({ client }: ClientCardProps) => {
           backgroundImage: `url(${NODE_BACKGROUNDS[name]})`,
           height: !status.synchronized ? 166 : 186,
         }}
-        className={cardTop}
+        className={[cardTop, `${stoppedStyle}`].join(' ')}
       >
-        <div className={clientBackground}>
+        <div className={[clientBackground, `${stoppedStyle}`].join(' ')}>
           <div className={clientDetails}>
             <div className={clientIcon}>
               <NodeIcon iconId={name} size="medium" />

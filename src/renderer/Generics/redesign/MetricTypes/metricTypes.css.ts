@@ -7,6 +7,7 @@ export const green = style({ background: common.color.green });
 export const yellow = style({ background: common.color.yellow });
 export const red = style({ background: common.color.red });
 export const sync = style({});
+export const stopped = style({});
 
 const rotate = keyframes({
   '0%': { transform: 'rotate(0deg)' },
@@ -82,6 +83,12 @@ export const statusStyle = style({
       width: 20,
       height: 20,
       animationName: rotate,
+      color: vars.color.font50,
+    },
+    [`&.${stopped}`]: {
+      transform: 'none',
+      width: 20,
+      height: 20,
       color: vars.color.font50,
     },
   },

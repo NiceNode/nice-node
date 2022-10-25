@@ -21,6 +21,11 @@ export const cardTop = style({
   height: 166,
   position: 'relative',
   backgroundSize: 'cover',
+  selectors: {
+    [`&.stopped`]: {
+      opacity: 0.64,
+    },
+  },
 });
 
 export const clientDetails = style({
@@ -55,6 +60,11 @@ export const clientBackground = style({
   backdropFilter: 'blur(20px)',
   transform: 'translate3d(0, 0, 0)',
   background: vars.components.clientCardTopBackground,
+  selectors: {
+    [`&.stopped`]: {
+      background: common.color.white4,
+    },
+  },
   ':hover': {
     backdropFilter: 'blur(28px)',
     transform: 'translate3d(0, 0, 0)',

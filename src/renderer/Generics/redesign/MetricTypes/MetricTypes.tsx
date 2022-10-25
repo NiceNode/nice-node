@@ -15,13 +15,14 @@ import {
   yellow,
   red,
   sync,
+  stopped,
 } from './metricTypes.css';
 
 export interface MetricTypesProps {
   /**
    * Stats types
    */
-  statsType?: 'status' | 'slots' | 'peers' | 'cpuLoad' | 'diskUsage';
+  statsType?: 'status' | 'slots' | 'blocks' | 'peers' | 'cpuLoad' | 'diskUsage';
   /**
    * Status //TODO: match this with current status enum implementation
    */
@@ -69,12 +70,17 @@ export const MetricTypes = ({
         titleText = 'Syncing';
         labelText = 'In Progress...';
         break;
+      case 'stopped':
+        statusColorStyle = stopped;
+        titleText = 'Stopped';
+        break;
       default:
         break;
     }
     iconComponent = (
       <div className={[statusStyle, statusColorStyle].join(' ')}>
         {statsValue === 'sync' && <Icon iconId="syncing" />}
+        {statsValue === 'stopped' && <Icon iconId="stop" />}
       </div>
     );
   };
@@ -82,6 +88,11 @@ export const MetricTypes = ({
   const processStatsType = () => {
     let iconId = statsType;
     switch (statsType) {
+      case 'blocks':
+        iconId = 'slots';
+        titleText = '15828039';
+        labelText = 'Last synced block';
+        break;
       case 'slots':
         titleText = '4,456,158';
         labelText = 'Current slot';
