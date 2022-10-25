@@ -12,7 +12,7 @@ export const container = style({
   background: vars.components.bannerBackground,
   boxShadow: vars.components.bannerBoxShadow,
   borderRadius: '5px',
-  color: 'vars.color.font70',
+  color: vars.color.font70,
   padding: '12px',
 });
 
