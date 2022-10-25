@@ -11,9 +11,9 @@ import {
   titleStyle,
   labelStyle,
   infoStyle,
-  healthy,
-  warning,
-  error,
+  green,
+  yellow,
+  red,
   sync,
 } from './metricTypes.css';
 
@@ -50,17 +50,17 @@ export const MetricTypes = ({
     let statusColorStyle;
     switch (statsValue) {
       case 'healthy':
-        statusColorStyle = healthy;
+        statusColorStyle = green;
         titleText = 'Online';
         labelText = 'Synchronized';
         break;
       case 'warning':
-        statusColorStyle = warning;
+        statusColorStyle = yellow;
         titleText = 'Warning';
         labelText = 'Warning';
         break;
       case 'error':
-        statusColorStyle = error;
+        statusColorStyle = red;
         titleText = 'Error';
         labelText = 'Error';
         break;

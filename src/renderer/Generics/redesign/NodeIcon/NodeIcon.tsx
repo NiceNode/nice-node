@@ -13,9 +13,9 @@ import {
   statusStyle,
   containerStyle,
   sync,
-  error,
-  healthy,
-  warning,
+  red,
+  green,
+  yellow,
   stopped,
 } from './nodeIcon.css';
 import { Icon } from '../Icon/Icon';
@@ -52,11 +52,11 @@ export const NodeIcon = ({ iconId, status, size, animate }: NodeIconProps) => {
   }
   let statusColorStyle;
   if (status === 'healthy') {
-    statusColorStyle = healthy;
+    statusColorStyle = green;
   } else if (status === 'warning') {
-    statusColorStyle = warning;
+    statusColorStyle = yellow;
   } else if (status === 'error') {
-    statusColorStyle = error;
+    statusColorStyle = red;
   } else if (status === 'sync') {
     statusColorStyle = sync;
   } else if (status === 'stopped') {

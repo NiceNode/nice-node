@@ -12,9 +12,9 @@ export const hasStatusStyle = style({});
 export const smallStyle = style({});
 export const mediumStyle = style({});
 export const largeStyle = style({});
-export const healthy = style({ background: common.color.green });
-export const warning = style({ background: common.color.yellow });
-export const error = style({ background: common.color.red });
+export const green = style({ background: common.color.green });
+export const yellow = style({ background: common.color.yellow });
+export const red = style({ background: common.color.red });
 export const stopped = style({ background: vars.components.nodeIconStopped });
 export const sync = style({});
 

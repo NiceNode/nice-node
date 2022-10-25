@@ -24,12 +24,6 @@ const zkSync = require('./Logo-zkSync.png');
 const radicle = require('./Logo-Radicle.png');
 const livepeer = require('./Logo-Livepeer.png');
 
-// Status
-const healthy = require('./healthy.svg');
-const warning = require('./warning.svg');
-const error = require('./error.svg');
-const sync = require('./sync.svg');
-
 export interface NodeIcons {
   geth?: string;
   erigon?: string;
@@ -46,13 +40,6 @@ export interface NodeIcons {
   zkSync?: string;
   radicle?: string;
   livepeer?: string;
-}
-
-export interface NodeStatus {
-  healthy?: string;
-  warning?: string;
-  error?: string;
-  sync?: string;
 }
 
 // Define all icons here
@@ -72,14 +59,6 @@ export const NODE_ICONS: NodeIcons = {
   zkSync,
   radicle,
   livepeer,
-};
-
-// Replace soon with CSS
-export const NODE_STATUS: NodeStatus = {
-  healthy,
-  warning,
-  error,
-  sync,
 };
 
 const white = '#FFFFFF';

@@ -3,7 +3,7 @@ import { vars, common } from '../theme.css';
 
 export const activeContainer = style({});
 
-export const healthy = style({ background: common.color.green });
+export const green = style({ background: common.color.green });
 export const warning = style({ background: common.color.yellow });
 export const error = style({ background: common.color.red });
 export const sync = style({});
@@ -13,7 +13,7 @@ const rotate = keyframes({
   '100%': { transform: 'rotate(359deg)' },
 });
 
-const healthyPulse = keyframes({
+const greenPulse = keyframes({
   '0%': {
     transform: 'scale(0.95)',
     boxShadow: '0 0 0 0 rgba(62, 187, 100, 0.7)',
@@ -68,8 +68,8 @@ export const statusStyle = style({
   width: 10,
   height: 10,
   selectors: {
-    [`&.${healthy}`]: {
-      animationName: healthyPulse,
+    [`&.${green}`]: {
+      animationName: greenPulse,
     },
     [`&.${warning}`]: {
       animationName: warningPulse,
