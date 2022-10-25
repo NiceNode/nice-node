@@ -71,3 +71,8 @@ export const secondaryButton = style([
 export const iconLeft = style({
   order: 1,
 });
+
+export const iconStyle = style({
+  width: 16,
+  height: 16,
+});

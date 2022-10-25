@@ -7,6 +7,7 @@ import {
   smallButton,
   wideButton,
   iconLeft,
+  iconStyle,
 } from './button.css';
 
 export interface ButtonProps {
@@ -66,7 +67,11 @@ const Button = ({
       {variant !== 'icon' && (
         <span className={variant === 'icon-left' ? iconLeft : ''}>{label}</span>
       )}
-      {variant !== 'text' && <Icon iconId={iconId} />}
+      {variant !== 'text' && (
+        <div className={iconStyle}>
+          <Icon iconId={iconId} />
+        </div>
+      )}
     </button>
   );
 };
