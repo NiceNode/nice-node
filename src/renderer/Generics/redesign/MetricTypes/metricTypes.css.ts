@@ -4,8 +4,8 @@ import { vars, common } from '../theme.css';
 export const activeContainer = style({});
 
 export const green = style({ background: common.color.green });
-export const warning = style({ background: common.color.yellow });
-export const error = style({ background: common.color.red });
+export const yellow = style({ background: common.color.yellow });
+export const red = style({ background: common.color.red });
 export const sync = style({});
 
 const rotate = keyframes({
@@ -28,7 +28,7 @@ const greenPulse = keyframes({
   },
 });
 
-const warningPulse = keyframes({
+const yellowPulse = keyframes({
   '0%': {
     transform: 'scale(0.95)',
     boxShadow: '0 0 0 0 rgba(251, 146, 65, 0.7)',
@@ -43,7 +43,7 @@ const warningPulse = keyframes({
   },
 });
 
-const errorPulse = keyframes({
+const redPulse = keyframes({
   '0%': {
     transform: 'scale(0.95)',
     boxShadow: '0 0 0 0 rgba(235, 83, 76, 0.7)',
@@ -71,11 +71,11 @@ export const statusStyle = style({
     [`&.${green}`]: {
       animationName: greenPulse,
     },
-    [`&.${warning}`]: {
-      animationName: warningPulse,
+    [`&.${yellow}`]: {
+      animationName: yellowPulse,
     },
-    [`&.${error}`]: {
-      animationName: errorPulse,
+    [`&.${red}`]: {
+      animationName: redPulse,
     },
     [`&.${sync}`]: {
       borderRadius: 0,
