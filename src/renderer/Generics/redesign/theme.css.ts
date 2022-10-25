@@ -227,7 +227,7 @@ export const darkTheme = createTheme(vars, {
     metricTypeIcon: common.color.white50,
     secondaryButtonBackground: common.color.white4,
     bannerBackground: common.color.white4,
-    bannerBoxShadow: `0px 1px 1px ${common.color.black15}, inset 0px 1px 0px ${common.color.white8})`,
+    bannerBoxShadow: `0px 1px 1px ${common.color.black15}, inset 0px 1px 0px ${common.color.white8}`,
     sidebarBorder: `1px solid ${common.color.black90}`,
     sidebarBackground: 'rgba(38, 38, 39, 0.8)',
     clientCardBackground: common.color.white4,
