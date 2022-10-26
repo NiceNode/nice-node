@@ -152,9 +152,9 @@ const ContentMultipleClients = () => {
 
   return (
     <div className={container}>
-      <Header nodeOverview={nodeOverview} />
+      <Header {...nodeOverview} />
       <HorizontalLine type="content" />
-      <HeaderMetrics nodeOverview={nodeOverview} />
+      <HeaderMetrics {...nodeOverview} />
       <HorizontalLine type="content" />
       {clClient.status.synchronized &&
         elClient.status.synchronized &&
@@ -168,7 +168,7 @@ const ContentMultipleClients = () => {
       <div className={sectionTitle}>Ethereum Clients</div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
-          return <ClientCard client={client} />;
+          return <ClientCard {...client} />;
         })}
       </div>
       <HorizontalLine type="content" />

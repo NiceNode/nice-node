@@ -1,3 +1,35 @@
+import { NodeBackgroundId } from 'renderer/assets/images/nodeBackgrounds';
+
+export interface ClientProps {
+  name: NodeBackgroundId;
+  version: string;
+  nodeType: string;
+  status: ClientStatusProps;
+  stats: {
+    peers: number;
+    slot: string;
+    cpuLoad: number;
+    diskUsage: number;
+  };
+}
+
+export interface NodeOverviewProps {
+  name: NodeBackgroundId;
+  title: string;
+  info: string;
+  type: string;
+  version?: string;
+  status: ClientStatusProps;
+  stats: ClientStatsProps;
+}
+
+export interface ClientStatsProps {
+  peers?: number;
+  block?: string;
+  cpuLoad?: number;
+  diskUsage?: number;
+}
+
 export interface ClientStatusProps {
   synchronized: boolean;
   lowPeerCount: boolean;
