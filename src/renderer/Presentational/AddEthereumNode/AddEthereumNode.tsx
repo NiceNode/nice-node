@@ -16,6 +16,8 @@ import Input from '../../Generics/redesign/Input/Input';
 import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import Select from '../../Generics/redesign/Select/Select';
 import { NodeSpecification } from '../../../common/nodeSpec';
+import FolderInput from '../../Generics/redesign/Input/FolderInput';
+import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 
 const ecOptions = [
   {
@@ -116,6 +118,27 @@ const AddEthereumNode = ({
     useState<string>();
   const [sSelectedConsensusClient, setSelectedConsensusClient] =
     useState<string>();
+  const [sDefaultNodesStorageLocation, setDefaultNodesStorageLocation] =
+    useState<string>();
+  const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
+  const [
+    sNodeStorageLocationFreeStorageMBs,
+    setNodeStorageLocationFreeStorageMBs,
+  ] = useState<number>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const defaultNodesStorageDetails =
+        await electron.getNodesDefaultStorageLocation();
+      console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
+      setDefaultNodesStorageLocation(defaultNodesStorageDetails.folderPath);
+      setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
+      setNodeStorageLocationFreeStorageMBs(
+        defaultNodesStorageDetails.freeStorageMBs
+      );
+    };
+    fetchData();
+  }, []);
   // const [sExecutionOptions, setExecutionOptions] = useState<any[]>();
   // const [sBeaconOptions, setBeaconOptions] = useState<any[]>();
 
@@ -179,7 +202,6 @@ const AddEthereumNode = ({
       <SpecialSelect onChange={onChangeEc} options={ecOptions} />
       <p className={sectionFont}>Consensus client</p>
       <SpecialSelect onChange={onChangeCc} options={ccOptions} />
-      <p className={sectionFont}>Data location</p>
       <DropdownLink
         text={`${sIsOptionsOpen ? 'Hide' : 'Show'} advanced options`}
         onClick={() => setIsOptionsOpen(!sIsOptionsOpen)}
@@ -202,26 +224,24 @@ const AddEthereumNode = ({
           </div>
         </div>
       )}
-      <div
-        style={{
-          boxSizing: 'border-box',
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'flex-start',
-          padding: '0px',
-          gap: 20,
-          width: '100%',
+      <HorizontalLine />
+      <p className={sectionFont}>Data location</p>
+      <FolderInput
+        placeholder={sNodeStorageLocation ?? 'loading..'}
+        freeStorageSpaceMBs={sNodeStorageLocationFreeStorageMBs}
+        onClickChange={async () => {
+          const storageLocationDetails =
+            await electron.openDialogForStorageLocation();
+          if (storageLocationDetails) {
+            setNodeStorageLocation(storageLocationDetails.folderPath);
+            setNodeStorageLocationFreeStorageMBs(
+              storageLocationDetails.freeStorageMBs
+            );
+          } else {
+            // user didn't change the folder path
+          }
         }}
-      >
-        <div style={{ flexGrow: 1 }}>
-          <Input disabled placeholder="files/" />
-        </div>
-        <Button
-          size="small"
-          label="Change..."
-          onClick={() => electron.openDialogForNodeDataDir('')}
-        />
-      </div>
+      />
     </div>
   );
 };

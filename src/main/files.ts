@@ -68,11 +68,36 @@ export const gethDataDir = (): string => {
   return `${getNNDirPath()}/geth-mainnet`;
 };
 
-export const getSystemFreeDiskSpace = async (): Promise<number> => {
-  const diskSpace = await checkDiskSpace(app.getPath('userData'));
+/**
+ * @param diskSpacePath fold path to check free disk space at. Helpful for checking
+ * free space on different storage devices.
+ * @returns (MBs) free storage space
+ */
+export const getSystemFreeDiskSpace = async (
+  diskSpacePath?: string
+): Promise<number> => {
+  const pathToCheck: string = diskSpacePath || app.getPath('userData');
+  console.log('pathToCheck', pathToCheck);
+  const diskSpace = await checkDiskSpace(pathToCheck);
   const freeInGBs = diskSpace.free * 1e-9;
   return freeInGBs;
 };
+
+export type CheckStorageDetails = {
+  folderPath: string;
+  freeStorageMBs: number;
+};
+
+export const getNodesDirPathDetails =
+  async (): Promise<CheckStorageDetails> => {
+    const folderPath = getNodesDirPath();
+    const freeStorageMBs = await getSystemFreeDiskSpace(folderPath);
+    return {
+      folderPath,
+      freeStorageMBs,
+    };
+  };
+
 export const getSystemDiskSize = async (): Promise<number> => {
   const diskSpace = await checkDiskSpace(app.getPath('userData'));
   const sizeInGBs = diskSpace.size * 1e-9;

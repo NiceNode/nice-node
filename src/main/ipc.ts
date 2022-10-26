@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ipcMain } from 'electron';
 import getDebugInfo from './debug';
-import { getGethLogs, getGethErrorLogs, getSystemFreeDiskSpace } from './files';
+import {
+  getGethLogs,
+  getGethErrorLogs,
+  getSystemFreeDiskSpace,
+  getNodesDirPath,
+  getNodesDirPathDetails,
+} from './files';
 import store from './state/store';
 import logger from './logger';
 import {
@@ -24,7 +30,10 @@ import { NodeSpecification } from '../common/nodeSpec';
 import { isDockerInstalled, isDockerRunning } from './docker/docker';
 import installDocker from './docker/install';
 // eslint-disable-next-line import/no-cycle
-import { openDialogForNodeDataDir } from './dialog';
+import {
+  openDialogForNodeDataDir,
+  openDialogForStorageLocation,
+} from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
 import { getSettings, setLanguage } from './state/settings';
 import { getSystemInfo } from './systemInfo';
@@ -35,7 +44,9 @@ export const initialize = () => {
   ipcMain.handle('updateNodeUsedDiskSpace', (_event, nodeId: NodeId) => {
     return updateNodeUsedDiskSpace(nodeId);
   });
-  ipcMain.handle('getSystemFreeDiskSpace', getSystemFreeDiskSpace);
+  ipcMain.handle('getSystemFreeDiskSpace', (_event) => {
+    return getSystemFreeDiskSpace();
+  });
   ipcMain.handle('getDebugInfo', getDebugInfo);
   ipcMain.handle('getStoreValue', (_event, key: string) => {
     const value = store.get(key);
@@ -80,6 +91,9 @@ export const initialize = () => {
   ipcMain.handle('openDialogForNodeDataDir', (_event, nodeId: NodeId) => {
     return openDialogForNodeDataDir(nodeId);
   });
+  ipcMain.handle('openDialogForStorageLocation', () => {
+    return openDialogForStorageLocation();
+  });
   ipcMain.handle('deleteNodeStorage', (_event, nodeId: NodeId) => {
     return deleteNodeStorage(nodeId);
   });
@@ -89,6 +103,9 @@ export const initialize = () => {
   ipcMain.handle('stopSendingNodeLogs', (_event, nodeId?: NodeId) => {
     return stopSendingNodeLogs(nodeId);
   });
+
+  // Default Node storage location
+  ipcMain.handle('getNodesDefaultStorageLocation', getNodesDirPathDetails);
 
   // Node library
   ipcMain.handle('getNodeLibrary', getNodeLibrary);

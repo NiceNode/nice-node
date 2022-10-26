@@ -64,6 +64,8 @@ contextBridge.exposeInMainWorld('electron', {
   },
   openDialogForNodeDataDir: (nodeId: NodeId) =>
     ipcRenderer.invoke('openDialogForNodeDataDir', nodeId),
+  openDialogForStorageLocation: () =>
+    ipcRenderer.invoke('openDialogForStorageLocation'),
   deleteNodeStorage: (nodeId: NodeId) =>
     ipcRenderer.invoke('deleteNodeStorage', nodeId),
   sendNodeLogs: (nodeId: NodeId) => {
@@ -72,6 +74,10 @@ contextBridge.exposeInMainWorld('electron', {
   stopSendingNodeLogs: (nodeId?: NodeId) => {
     ipcRenderer.invoke('stopSendingNodeLogs', nodeId);
   },
+
+  // Default Node storage location
+  getNodesDefaultStorageLocation: () =>
+    ipcRenderer.invoke('getNodesDefaultStorageLocation'),
 
   // Node library
   getNodeLibrary: () => ipcRenderer.invoke('getNodeLibrary'),
