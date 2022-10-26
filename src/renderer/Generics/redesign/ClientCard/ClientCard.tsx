@@ -67,8 +67,9 @@ export interface ClientCardProps {
  */
 export const ClientCard = ({ client }: ClientCardProps) => {
   const { status, name, nodeType } = client;
+  const isNotSynchronizedAndStopped = !status.synchronized && !status.stopped;
   const renderContents = () => {
-    if (!status.synchronized) {
+    if (isNotSynchronizedAndStopped) {
       return (
         <>
           {/* TODO: tie clients with progress bar colors */}
@@ -110,7 +111,7 @@ export const ClientCard = ({ client }: ClientCardProps) => {
       <div
         style={{
           backgroundImage: `url(${NODE_BACKGROUNDS[name]})`,
-          height: !status.synchronized ? 166 : 186,
+          height: isNotSynchronizedAndStopped ? 166 : 186,
         }}
         className={[cardTop, `${stoppedStyle}`].join(' ')}
       >

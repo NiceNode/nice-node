@@ -5,6 +5,9 @@ export const getSyncStatus = (status: ClientStatusProps) => {
   switch (true) {
     // map this in an object?
     // find worst cases first
+    case status.stopped:
+      syncStatus = SYNC_STATUS.STOPPED;
+      break;
     case status.noConnection:
       syncStatus = SYNC_STATUS.NO_NETWORK;
       break;
@@ -13,9 +16,6 @@ export const getSyncStatus = (status: ClientStatusProps) => {
       break;
     case status.lowPeerCount:
       syncStatus = SYNC_STATUS.LOW_PEER_COUNT;
-      break;
-    case status.stopped:
-      syncStatus = SYNC_STATUS.STOPPED;
       break;
     case status.synchronized:
       syncStatus = SYNC_STATUS.SYNCHRONIZED;

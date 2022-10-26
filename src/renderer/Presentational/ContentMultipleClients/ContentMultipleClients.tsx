@@ -21,7 +21,7 @@ const clients = [
     type: 'single',
     nodeType: 'consensus',
     status: {
-      synchronized: false,
+      synchronized: true,
       lowPeerCount: false,
       updateAvailable: false,
       blocksBehind: false,
@@ -37,13 +37,13 @@ const clients = [
     },
   },
   {
-    name: 'besu',
+    name: 'erigon',
     version: 'v10',
     type: 'single',
     nodeType: 'execution',
     status: {
       synchronized: true,
-      lowPeerCount: true,
+      lowPeerCount: false,
       updateAvailable: true,
       blocksBehind: false,
       noConnection: false,
@@ -95,14 +95,18 @@ const ContentMultipleClients = () => {
         info: 'Non-Validating Node — Ethereum mainnet',
         type: 'altruistic',
         status: {
-          // TODO: get this from combining both client statuses
-          synchronized: true,
-          lowPeerCount: false,
-          updateAvailable: true,
-          blocksBehind: false,
-          noConnection: false,
-          stopped: false,
-          error: false,
+          synchronized:
+            clClient.status.synchronized || elClient.status.synchronized,
+          lowPeerCount:
+            clClient.status.lowPeerCount || elClient.status.lowPeerCount,
+          updateAvailable:
+            clClient.status.updateAvailable || elClient.status.updateAvailable,
+          blocksBehind:
+            clClient.status.blocksBehind || elClient.status.blocksBehind,
+          noConnection:
+            clClient.status.noConnection || elClient.status.noConnection,
+          stopped: clClient.status.stopped || elClient.status.stopped, // both should be stopped
+          error: clClient.status.error || elClient.status.error,
         },
         stats: {
           block: clClient?.stats.slot,
@@ -152,14 +156,15 @@ const ContentMultipleClients = () => {
       <HorizontalLine type="content" />
       <HeaderMetrics nodeOverview={nodeOverview} />
       <HorizontalLine type="content" />
-      {!walletDismissed && (
-        // TODO: This only shows if *both* clients are fully synced
-        // TODO: Prompt handler for wallet & node status messages
-        <WalletPrompt
-          onSetupClick={onSetupClick}
-          onDismissClick={onDismissClick}
-        />
-      )}
+      {clClient.status.synchronized &&
+        elClient.status.synchronized &&
+        !walletDismissed && (
+          // TODO: Prompt handler for wallet & node status messages
+          <WalletPrompt
+            onSetupClick={onSetupClick}
+            onDismissClick={onDismissClick}
+          />
+        )}
       <div className={sectionTitle}>Ethereum Clients</div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
