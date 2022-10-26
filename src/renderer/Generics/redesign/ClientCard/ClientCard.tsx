@@ -17,7 +17,7 @@ import {
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { Label } from '../Label/Label';
 import ProgressBar from '../ProgressBar/ProgressBar';
-import { ClientStatusProps } from '../consts';
+import { ClientStatusProps, ClientProps } from '../consts';
 
 const getLabelDetails = (label: string) => {
   const labelDetails = { color: '', string: '' };
@@ -44,29 +44,11 @@ const getLabelDetails = (label: string) => {
   return labelDetails;
 };
 
-export interface ClientCardProps {
-  /**
-   * Node client object
-   */
-  client: {
-    name: NodeBackgroundId;
-    version: string;
-    nodeType: string;
-    status: ClientStatusProps;
-    stats: {
-      peers: number;
-      slot: string;
-      cpuLoad: number;
-      diskUsage: number;
-    };
-  };
-}
-
 /**
  * Primary UI component for user interaction
  */
-export const ClientCard = ({ client }: ClientCardProps) => {
-  const { status, name, nodeType } = client;
+export const ClientCard = (props: ClientProps) => {
+  const { status, name, nodeType } = props;
   const isNotSynchronizedAndStopped = !status.synchronized && !status.stopped;
   const renderContents = () => {
     if (isNotSynchronizedAndStopped) {

@@ -1,8 +1,5 @@
-import { NodeIconId } from 'renderer/assets/images/nodeIcons';
-import Button from '../Button/Button';
 import { SYNC_STATUS } from '../consts';
 import { Icon } from '../Icon/Icon';
-import { NodeIcon } from '../NodeIcon/NodeIcon';
 import {
   statusStyle,
   container,

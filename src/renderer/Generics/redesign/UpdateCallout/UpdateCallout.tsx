@@ -14,6 +14,10 @@ export interface UpdateCalloutProps {
 }
 
 export const UpdateCallout = ({ onClick }: UpdateCalloutProps) => {
+  const onInstallClick = () => {
+    onClick();
+    console.log('install action!');
+  };
   return (
     <div className={container}>
       <div className={title}>Update your client</div>
@@ -32,8 +36,9 @@ export const UpdateCallout = ({ onClick }: UpdateCalloutProps) => {
           wide
           label="Install Update"
           size="small"
-          onClick={onClick}
+          onClick={onInstallClick}
         />
+        <Button wide label="Skip" size="small" onClick={onClick} />
       </div>
     </div>
   );

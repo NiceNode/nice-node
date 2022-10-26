@@ -1,27 +1,8 @@
-import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { MetricTypes } from '../MetricTypes/MetricTypes';
 import { container } from './headerMetrics.css';
 import VerticalLine from '../VerticalLine/VerticalLine';
 import { getSyncStatus } from '../utils';
-import { ClientStatusProps } from '../consts';
-
-export interface HeaderMetricsProps {
-  nodeOverview: {
-    name: string;
-    title: string;
-    info: string;
-    type: string;
-    version?: string;
-    update?: string;
-    status: ClientStatusProps;
-    stats: {
-      peers?: number;
-      block?: string;
-      cpuLoad?: number;
-      diskUsage?: number;
-    };
-  };
-}
+import { NodeOverviewProps } from '../consts';
 
 const metricTypeArray = {
   altruistic: ['status', 'slots', 'cpuLoad', 'diskUsage'],
@@ -32,8 +13,8 @@ const metricTypeArray = {
 /**
  * Primary UI component for user interaction
  */
-export const HeaderMetrics = ({ nodeOverview }: HeaderMetricsProps) => {
-  const { type, status, stats } = nodeOverview;
+export const HeaderMetrics = (props: NodeOverviewProps) => {
+  const { type, status, stats } = props;
   const assignedMetric = metricTypeArray[type];
   return (
     <div className={container}>

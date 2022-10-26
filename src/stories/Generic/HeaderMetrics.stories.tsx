@@ -14,24 +14,22 @@ const Template: ComponentStory<typeof HeaderMetrics> = (args) => (
 export const Primary = Template.bind({});
 
 Primary.args = {
-  nodeOverview: {
-    name: 'ethereum',
-    title: 'Ethereum node',
-    info: 'Non-Validating Node — Ethereum mainnet',
-    type: 'altruistic',
-    status: {
-      synchronized: true,
-      lowPeerCount: true,
-      updateAvailable: true,
-      blocksBehind: false,
-      noConnection: false,
-      stopped: false,
-      error: false,
-    },
-    stats: {
-      block: '32,000,200',
-      cpuLoad: 90,
-      diskUsage: 10000,
-    },
+  name: 'ethereum',
+  title: 'Ethereum node',
+  info: 'Non-Validating Node — Ethereum mainnet',
+  type: 'altruistic',
+  status: {
+    synchronized: true,
+    lowPeerCount: true,
+    updateAvailable: true,
+    blocksBehind: false,
+    noConnection: false,
+    stopped: false,
+    error: false,
+  },
+  stats: {
+    block: '32,000,200',
+    cpuLoad: 90,
+    diskUsage: 10000,
   },
 };
