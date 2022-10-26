@@ -1,4 +1,5 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { SYNC_STATUS } from '../../renderer/Generics/redesign/consts';
 
 import { MetricTypes } from '../../renderer/Generics/redesign/MetricTypes/MetricTypes';
 
@@ -16,7 +17,7 @@ const Template: ComponentStory<typeof MetricTypes> = (args) => (
 
 export const Status = Template.bind({});
 Status.args = {
-  statsValue: 'healthy',
+  statsValue: SYNC_STATUS.SYNCHRONIZED,
   statsType: 'status',
 };
 

@@ -1,5 +1,6 @@
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import Button from '../Button/Button';
+import { SYNC_STATUS } from '../consts';
 import { Icon } from '../Icon/Icon';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import {
@@ -45,43 +46,43 @@ export const MetricTypes = ({
   let titleText = '';
   let labelText = '';
 
-  // TODO: abstract this out if it gets complex
-
   const processStatus = () => {
     let statusColorStyle;
+    let icon = null;
     switch (statsValue) {
-      case 'healthy':
+      case SYNC_STATUS.SYNCHRONIZED:
         statusColorStyle = green;
         titleText = 'Online';
         labelText = 'Synchronized';
         break;
-      case 'warning':
+      case SYNC_STATUS.LOW_PEER_COUNT:
         statusColorStyle = yellow;
-        titleText = 'Warning';
-        labelText = 'Warning';
+        titleText = 'Online';
+        labelText = 'Low Peer Count';
         break;
-      case 'error':
+      case SYNC_STATUS.NO_NETWORK:
         statusColorStyle = red;
-        titleText = 'Error';
-        labelText = 'Error';
+        titleText = 'Offline';
+        labelText = 'No Network';
         break;
-      case 'sync':
+      case SYNC_STATUS.CATCHING_UP || SYNC_STATUS.INITIALIZING:
         statusColorStyle = sync;
         titleText = 'Syncing';
-        labelText = 'In Progress...';
+        labelText = SYNC_STATUS.CATCHING_UP
+          ? 'Catching up...'
+          : 'In progress...';
+        icon = <Icon iconId="syncing" />;
         break;
-      case 'stopped':
+      case SYNC_STATUS.STOPPED:
         statusColorStyle = stopped;
         titleText = 'Stopped';
+        icon = <Icon iconId="stop" />;
         break;
       default:
         break;
     }
     iconComponent = (
-      <div className={[statusStyle, statusColorStyle].join(' ')}>
-        {statsValue === 'sync' && <Icon iconId="syncing" />}
-        {statsValue === 'stopped' && <Icon iconId="stop" />}
-      </div>
+      <div className={[statusStyle, statusColorStyle].join(' ')}>{icon}</div>
     );
   };
 

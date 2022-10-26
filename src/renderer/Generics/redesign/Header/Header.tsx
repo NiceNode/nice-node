@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import Button from '../Button/Button';
+import { ClientStatusProps } from '../consts';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
 import {
@@ -23,10 +24,7 @@ export interface HeaderProps {
     type: string;
     version?: string;
     update?: string;
-    status: {
-      syncStatus: string; // change this to enum to compare weights?
-      updateAvailable: boolean; // look through both clients
-    };
+    status: ClientStatusProps;
     stats: {
       peers: number;
       block: string;

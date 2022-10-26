@@ -20,8 +20,13 @@ Primary.args = {
     info: 'Non-Validating Node — Ethereum mainnet',
     type: 'altruistic',
     status: {
-      syncStatus: 'healthy', // change this to enum to compare weights?
-      updateAvailable: true, // look through both clients
+      synchronized: true,
+      lowPeerCount: true,
+      updateAvailable: true,
+      blocksBehind: false,
+      noConnection: false,
+      stopped: false,
+      error: false,
     },
     stats: {
       block: '32,000,200',

@@ -17,6 +17,7 @@ import {
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { Label } from '../Label/Label';
 import ProgressBar from '../ProgressBar/ProgressBar';
+import { ClientStatusProps } from '../consts';
 
 const getLabelDetails = (label: string) => {
   const labelDetails = { color: '', string: '' };
@@ -51,14 +52,7 @@ export interface ClientCardProps {
     name: NodeBackgroundId;
     version: string;
     nodeType: string;
-    status: {
-      synchronized: boolean;
-      lowPeerCount: boolean;
-      updateAvailable: boolean;
-      stopped: boolean;
-      blocksBehind: boolean;
-      noConnection: boolean;
-    };
+    status: ClientStatusProps;
     stats: {
       peers: number;
       slot: string;

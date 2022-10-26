@@ -2,6 +2,8 @@ import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { MetricTypes } from '../MetricTypes/MetricTypes';
 import { container } from './headerMetrics.css';
 import VerticalLine from '../VerticalLine/VerticalLine';
+import { getSyncStatus } from '../utils';
+import { ClientStatusProps } from '../consts';
 
 export interface HeaderMetricsProps {
   nodeOverview: {
@@ -11,11 +13,7 @@ export interface HeaderMetricsProps {
     type: string;
     version?: string;
     update?: string;
-    status: {
-      syncStatus: string; // change this to enum to compare weights?
-      updateAvailable: boolean; // look through both clients
-      stopped: boolean;
-    };
+    status: ClientStatusProps;
     stats: {
       peers?: number;
       block?: string;
@@ -35,16 +33,12 @@ const metricTypeArray = {
  * Primary UI component for user interaction
  */
 export const HeaderMetrics = ({ nodeOverview }: HeaderMetricsProps) => {
-  const {
-    type,
-    status: { syncStatus },
-    stats,
-  } = nodeOverview;
+  const { type, status, stats } = nodeOverview;
   const assignedMetric = metricTypeArray[type];
   return (
     <div className={container}>
       {assignedMetric.map((metric, index) => {
-        const statsValue = index === 0 ? syncStatus : stats[metric];
+        const statsValue = index === 0 ? getSyncStatus(status) : stats[metric];
         return (
           <>
             <MetricTypes

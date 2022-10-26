@@ -13,21 +13,6 @@ import {
   resourcesContainer,
 } from './contentMultipleClients.css';
 
-const clientsData = {
-  iconId: 'ethereum',
-  title: 'Ethereum node',
-  info: 'Non-Validating Node — Ethereum mainnet',
-  running: true,
-  update: true,
-  multiple: true,
-};
-
-const statusWeights = {
-  synchronized: 4,
-  blocksBehind: 3,
-  error: 0,
-};
-
 // TODO: process retrieved client data into this format?
 const clients = [
   {
@@ -57,7 +42,6 @@ const clients = [
     type: 'single',
     nodeType: 'execution',
     status: {
-      syncStatus: 'healthy',
       synchronized: true,
       lowPeerCount: true,
       updateAvailable: true,
@@ -111,9 +95,14 @@ const ContentMultipleClients = () => {
         info: 'Non-Validating Node — Ethereum mainnet',
         type: 'altruistic',
         status: {
-          syncStatus: 'healthy', // change this to enum to compare weights?
-          updateAvailable: true, // look through both clients
-          stopped: true,
+          // TODO: get this from combining both client statuses
+          synchronized: true,
+          lowPeerCount: false,
+          updateAvailable: true,
+          blocksBehind: false,
+          noConnection: false,
+          stopped: false,
+          error: false,
         },
         stats: {
           block: clClient?.stats.slot,
