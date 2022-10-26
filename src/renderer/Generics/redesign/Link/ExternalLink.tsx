@@ -1,5 +1,5 @@
 import { blockContainer, inlineContainer, linkText } from './externalLink.css';
-import { ReactComponent as ExternalIcon } from '../../../assets/images/icons/External.svg';
+import { Icon } from '../Icon/Icon';
 
 // todo: variants for downloads or internal links
 export interface ExternalLinkProps {
@@ -24,7 +24,7 @@ const ExternalLink = ({ url, text, inline }: ExternalLinkProps) => {
       <a className={linkText} href={url} target="_blank" rel="noreferrer">
         {text}
       </a>
-      <ExternalIcon />
+      <Icon iconId="external" />
     </div>
   );
 };

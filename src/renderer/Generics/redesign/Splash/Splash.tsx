@@ -1,5 +1,11 @@
-import { container, titleFont, descriptionFont, iconClass } from './splash.css';
-import icon from '../../../../../assets/icon.png';
+import {
+  container,
+  contentContainer,
+  titleFont,
+  descriptionFont,
+  iconClass,
+} from './splash.css';
+import icon from '../../../assets/images/logo/mono.svg';
 import Button from '../Button/Button';
 
 export interface SplashProps {
@@ -10,14 +16,16 @@ export interface SplashProps {
 const Splash = ({ title, description }: SplashProps) => {
   return (
     <div className={container}>
-      <img className={iconClass} alt="NiceNode logo" src={icon} />
-      <div className={titleFont}>{title}</div>
-      <div className={descriptionFont}>{description}</div>
-      <Button
-        label="Get started"
-        primary
-        onClick={() => console.log('Get started')}
-      />
+      <div className={contentContainer}>
+        <img className={iconClass} alt="NiceNode logo" src={icon} />
+        <div className={titleFont}>{title}</div>
+        <div className={descriptionFont}>{description}</div>
+        <Button
+          label="Get started"
+          primary
+          onClick={() => console.log('Get started')}
+        />
+      </div>
     </div>
   );
 };

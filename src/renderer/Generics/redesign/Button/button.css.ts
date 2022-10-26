@@ -21,26 +21,32 @@ export const baseButton = style({
   ':hover': {
     transform: 'none',
   },
-  fontFamily: 'Inter',
   fontWeight: 500,
   fontSize: 13,
   lineHeight: '16px',
+  height: '32px',
 });
 
 export const smallButton = style({
   padding: '6px 10px',
+  height: '28px',
+  gap: '6px',
+});
+
+export const wideButton = style({
+  width: '100%',
 });
 
 export const primaryButton = style([
   {
-    color: common.color.white,
+    color: common.color.white100,
     background: vars.color.primary,
     selectors: {
       '&:hover:enabled': {
         background: vars.color.primaryHover,
       },
       '&:active:enabled': {
-        background: common.color.primary700,
+        background: vars.color.primaryActive,
       },
     },
   },
@@ -53,7 +59,7 @@ export const secondaryButton = style([
     boxShadow: vars.components.buttonBoxShadow,
     selectors: {
       '&:hover:enabled': {
-        background: vars.color.background92,
+        background: vars.color.backgroundHoverGradient,
       },
       '&:active:enabled': {
         background: vars.color.backgroundActiveGradient,
@@ -64,4 +70,9 @@ export const secondaryButton = style([
 
 export const iconLeft = style({
   order: 1,
+});
+
+export const iconStyle = style({
+  width: 16,
+  height: 16,
 });

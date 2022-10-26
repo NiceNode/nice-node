@@ -1,3 +1,5 @@
+import { common } from '../../../Generics/redesign/theme.css';
+
 const ethereum = require('./Logo-Ethereum.png');
 
 // Execution
@@ -16,17 +18,11 @@ const nimbus = require('./Logo-Nimbus.png');
 // L2
 const arbitrum = require('./Logo-Arbitrum.png');
 const starknet = require('./Logo-Starknet.png');
-const zkSync = require('./Logo-Starknet.png');
+const zkSync = require('./Logo-zkSync.png');
 
 // Other networks
 const radicle = require('./Logo-Radicle.png');
 const livepeer = require('./Logo-Livepeer.png');
-
-// Status
-const healthy = require('./healthy.svg');
-const warning = require('./warning.svg');
-const error = require('./error.svg');
-const sync = require('./sync.svg');
 
 export interface NodeIcons {
   geth?: string;
@@ -44,13 +40,6 @@ export interface NodeIcons {
   zkSync?: string;
   radicle?: string;
   livepeer?: string;
-}
-
-export interface NodeStatus {
-  healthy?: string;
-  warning?: string;
-  error?: string;
-  sync?: string;
 }
 
 // Define all icons here
@@ -72,15 +61,8 @@ export const NODE_ICONS: NodeIcons = {
   livepeer,
 };
 
-// Replace soon with CSS
-export const NODE_STATUS: NodeStatus = {
-  healthy,
-  warning,
-  error,
-  sync,
-};
-
 const white = '#FFFFFF';
+
 export const NODE_COLORS: NodeIcons = {
   geth: white,
   erigon: white,
@@ -91,12 +73,12 @@ export const NODE_COLORS: NodeIcons = {
   teku: white,
   lodestar: white,
   nimbus: white,
-  ethereum: '#6DA3F9',
-  arbitrum: '#28A0F0',
-  starknet: '#373795',
-  zkSync: '#8C8DFC',
-  radicle: '#B17CD9',
-  livepeer: '#28CD88',
+  ethereum: common.color.ethereum,
+  arbitrum: common.color.arbitrum,
+  starknet: common.color.starknet,
+  zkSync: common.color.zkSync,
+  radicle: common.color.radicle,
+  livepeer: common.color.livepeer,
 };
 
 export type NodeIconId = keyof NodeIcons;

@@ -1,11 +1,26 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
+import welcome from '../../../assets/images/artwork/welcome.png';
 
 export const container = style({
+  backgroundImage: `url(${welcome})`,
+  backgroundPosition: 'bottom',
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: '1281px 169px',
+  width: '100%',
+  height: '100%',
+});
+
+export const contentContainer = style({
+  alignItems: 'center',
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
   gap: 24,
+  position: 'absolute',
+  width: 420,
+  height: 378,
+  left: 'calc(50% - 420px/2)',
+  top: 'calc(50% - 378px/2 - 16px)',
 });
 
 export const titleFont = style({

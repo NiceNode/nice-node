@@ -1,5 +1,5 @@
-import { style } from '@vanilla-extract/css';
-import { vars } from '../theme.css';
+import { style, keyframes } from '@vanilla-extract/css';
+import { vars, common } from '../theme.css';
 
 export const container = style({
   // Auto layout
@@ -51,13 +51,25 @@ export const captionTextClass = style({
 });
 
 export const successIcon = style({
-  color: vars.color.green,
+  color: common.color.green,
 });
 
 export const warningIcon = style({
-  color: vars.color.yellow,
+  color: common.color.yellow,
+});
+
+const rotate = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': { transform: 'rotate(360deg)' },
+});
+
+export const loadingIcon = style({
+  fill: vars.color.font,
+  animationName: rotate,
+  animationDuration: '3s',
+  animationIterationCount: 'infinite',
 });
 
 export const errorIcon = style({
-  color: vars.color.red,
+  color: common.color.red,
 });

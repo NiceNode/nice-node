@@ -1,9 +1,13 @@
+import { IconId } from 'renderer/assets/images/icons';
+import { Icon } from '../Icon/Icon';
 import {
   baseButton,
   primaryButton,
   secondaryButton,
   smallButton,
+  wideButton,
   iconLeft,
+  iconStyle,
 } from './button.css';
 
 export interface ButtonProps {
@@ -19,13 +23,17 @@ export interface ButtonProps {
    */
   variant?: 'text' | 'icon-left' | 'icon-right' | 'icon';
   /**
+   * Is this button wide?
+   */
+  wide?: boolean;
+  /**
    * Optional icon
    */
-  icon?: React.ReactNode;
+  iconId?: IconId;
   /**
    * Button text content
    */
-  label: string;
+  label?: string;
   onClick?: () => void;
 }
 
@@ -34,7 +42,8 @@ const Button = ({
   size = 'medium',
   disabled = false,
   variant = 'text',
-  icon,
+  iconId = 'settings',
+  wide = false,
   backgroundColor,
   label,
   ...props
@@ -44,6 +53,9 @@ const Button = ({
   if (size === 'small') {
     classNames.push(smallButton);
   }
+  if (wide) {
+    classNames.push(wideButton);
+  }
   return (
     <button
       type="button"
@@ -52,8 +64,14 @@ const Button = ({
       style={{ backgroundColor }}
       {...props}
     >
-      <span className={variant === 'icon-left' ? iconLeft : ''}>{label}</span>
-      {icon}
+      {variant !== 'icon' && (
+        <span className={variant === 'icon-left' ? iconLeft : ''}>{label}</span>
+      )}
+      {variant !== 'text' && (
+        <div className={iconStyle}>
+          <Icon iconId={iconId} />
+        </div>
+      )}
     </button>
   );
 };

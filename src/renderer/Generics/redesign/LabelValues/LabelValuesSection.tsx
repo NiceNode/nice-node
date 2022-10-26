@@ -1,4 +1,5 @@
 import React from 'react';
+import ExternalLink from '../Link/ExternalLink';
 import {
   sectionContainer,
   lineContainer,
@@ -16,13 +17,25 @@ export interface LabelValuesSectionProps {
   /**
    * The sections label value items
    */
-  items: { label: string; value: string }[];
+  items: { label: string; value: string; link?: string }[];
 }
 
 const LabelValuesSection = ({
   sectionTitle,
   items,
 }: LabelValuesSectionProps) => {
+  const renderValue = (item: {
+    label: string;
+    value: string;
+    link?: string;
+  }) => {
+    const value = item.link ? (
+      <ExternalLink url={item.link} text={item.value} />
+    ) : (
+      item.value
+    );
+    return <div className={lineValueText}>{value}</div>;
+  };
   return (
     <div className={sectionContainer}>
       <div className={sectionHeaderContainer}>
@@ -33,7 +46,7 @@ const LabelValuesSection = ({
           <React.Fragment key={item.label + item.value}>
             <div className={lineContainer}>
               <div className={lineKeyText}>{item.label}</div>
-              <div className={lineValueText}>{item.value}</div>
+              {renderValue(item)}
             </div>
           </React.Fragment>
         ))}

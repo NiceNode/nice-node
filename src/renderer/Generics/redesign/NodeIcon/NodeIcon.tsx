@@ -13,30 +13,37 @@ import {
   statusStyle,
   containerStyle,
   sync,
-  error,
-  healthy,
-  warning,
+  red,
+  green,
+  yellow,
+  stopped,
 } from './nodeIcon.css';
+import { Icon } from '../Icon/Icon';
 
 export interface NodeIconProps {
   /**
-   * Which icon? // TODO: Change this to drop down eventually
+   * Which icon?
    */
   iconId: NodeIconId;
   /**
    * What's the status?
    */
-  status?: 'healthy' | 'warning' | 'error' | 'sync';
+  status?: 'healthy' | 'warning' | 'error' | 'sync' | 'stopped';
   /**
    * What size should the icon be?
    */
   size: 'small' | 'medium' | 'large';
+  /**
+   * Is it animated?
+   */
+  animate?: boolean;
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
+export const NodeIcon = ({ iconId, status, size, animate }: NodeIconProps) => {
+  const isAnimated = animate ? 'animate' : '';
   let sizeStyle = mediumStyle;
   if (size === 'small') {
     sizeStyle = smallStyle;
@@ -45,25 +52,50 @@ export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
   }
   let statusColorStyle;
   if (status === 'healthy') {
-    statusColorStyle = healthy;
+    statusColorStyle = green;
   } else if (status === 'warning') {
-    statusColorStyle = warning;
+    statusColorStyle = yellow;
   } else if (status === 'error') {
-    statusColorStyle = error;
+    statusColorStyle = red;
   } else if (status === 'sync') {
     statusColorStyle = sync;
+  } else if (status === 'stopped') {
+    statusColorStyle = stopped;
   }
   let isStatusStyle;
+  let statusComponent = null;
   if (status) {
     isStatusStyle = hasStatusStyle;
+    if (status === 'sync') {
+      statusComponent = (
+        <div
+          className={[
+            statusStyle,
+            sizeStyle,
+            statusColorStyle,
+            isAnimated,
+          ].join(' ')}
+        >
+          <Icon iconId="sync" />
+        </div>
+      );
+    } else {
+      statusComponent = (
+        <div
+          className={[
+            statusStyle,
+            sizeStyle,
+            statusColorStyle,
+            isAnimated,
+          ].join(' ')}
+        />
+      );
+    }
   }
 
   return (
     <div className={[containerStyle, sizeStyle].join(' ')}>
-      {/* TODO: Replace image with CSS, and add pulsating effect */}
-      {status && (
-        <div className={[statusStyle, sizeStyle, statusColorStyle].join(' ')} />
-      )}
+      {statusComponent}
       <div
         className={[iconBackground, sizeStyle, isStatusStyle].join(' ')}
         style={{ backgroundColor: NODE_COLORS[iconId] }}

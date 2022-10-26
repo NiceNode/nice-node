@@ -1,5 +1,5 @@
-import { style } from '@vanilla-extract/css';
-import { common, vars } from '../theme.css';
+import { style, keyframes } from '@vanilla-extract/css';
+import { vars, common } from '../theme.css';
 
 export const imageStyle = style({
   position: 'relative',
@@ -12,10 +12,11 @@ export const hasStatusStyle = style({});
 export const smallStyle = style({});
 export const mediumStyle = style({});
 export const largeStyle = style({});
-export const healthy = style({ background: 'green' });
-export const warning = style({ background: 'yellow' });
-export const error = style({ background: 'red' });
-export const sync = style({ background: 'black' });
+export const green = style({ background: common.color.green });
+export const yellow = style({ background: common.color.yellow });
+export const red = style({ background: common.color.red });
+export const stopped = style({ background: vars.components.nodeIconStopped });
+export const sync = style({});
 
 export const iconBackground = style({
   position: 'relative',
@@ -111,24 +112,23 @@ export const statusStyle = style({
       height: 14,
       borderRadius: 7,
     },
+    [`&.${smallStyle}.${sync}`]: {
+      width: '9px',
+      height: '14px',
+      top: '-3px',
+      right: '-0.5px',
+    },
+    [`&.${mediumStyle}.${sync}`]: {
+      width: '12px',
+      height: '12px',
+      right: -1,
+      top: -1,
+    },
+    [`&.${largeStyle}.${sync}`]: {
+      width: '16px',
+      height: '16px',
+      right: -1,
+      top: -1,
+    },
   },
-  // '&.darkMode': { '&.sync': { backgroundColor: 'rgba(255, 255, 255, 1)' } },
-  // selectors: {
-  //   '&.sync': {
-  //     animation: 'rotation 2s infinite linear',
-  //     right: '-1px',
-  //     WebkitMaskSize: 'cover',
-  //     maskSize: 'cover',
-  //     backgroundColor: 'rgba(0, 0, 2, 0.95)',
-  //   },
-  //   '&.small': {
-  //     // '&.sync': { width: '10px', height: '8px', backgroundSize: '10px 8px' },
-  //   },
-  //   '&.medium': {
-  //     // '&.sync': { width: '12px', height: '10px', backgroundSize: '12px 10px' },
-  //   },
-  //   '&.large': {
-  //     // '&.sync': { width: '16px', height: '13px', backgroundSize: '16px 13px' },
-  //   },
-  // },
 });

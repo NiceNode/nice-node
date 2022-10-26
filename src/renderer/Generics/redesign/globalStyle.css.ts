@@ -2,14 +2,16 @@ import { globalStyle } from '@vanilla-extract/css';
 import { vars } from './theme.css';
 
 globalStyle('#onBoarding', {
-  fontFamily: 'Inter',
+  fontFamily:
+    '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Ubuntu',
   fontSize: 13,
   background: vars.color.background,
   color: vars.color.font,
 });
 
 globalStyle('.redesignComponent', {
-  fontFamily: 'Inter',
+  fontFamily:
+    '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Ubuntu',
   fontSize: 13,
   background: vars.color.background,
   color: vars.color.font,

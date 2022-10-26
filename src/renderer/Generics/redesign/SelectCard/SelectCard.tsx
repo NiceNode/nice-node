@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+import { useState } from 'react';
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
-import Tag from '../Tag/Tag';
+import { Label } from '../Label/Label';
 import {
   container,
+  activeContainer,
   descriptionStyle,
   selectedContainer,
   tagStyle,
@@ -21,7 +23,7 @@ export interface SelectCardProps {
    */
   info?: string;
   /**
-   * Which icon? // TODO: Change this to drop down eventually
+   * Which icon?
    */
   iconId: NodeIconId;
   /**
@@ -47,35 +49,45 @@ const SelectCard = ({
   info,
   iconId,
   minority = false,
-  isSelected,
+  isSelected = false,
 }: SelectCardProps) => {
+  const [selected, setSelected] = useState(isSelected);
+
+  const onClickAction = () => {
+    setSelected(true);
+    if (onClick) {
+      onClick();
+    }
+  };
+
   const containerStyles = [container];
-  if (isSelected) {
+  if (selected) {
     containerStyles.push(selectedContainer);
   }
   return (
     <div
-      className={containerStyles.join(' ')}
-      onClick={() => {
-        if (onClick) {
-          onClick();
-        }
+      className={activeContainer}
+      onClick={onClickAction}
+      onBlur={() => {
+        setSelected(false);
       }}
-      onKeyDown={onClick}
+      onKeyDown={onClickAction}
       role="button"
       tabIndex={0}
     >
-      <NodeIcon iconId={iconId} size="medium" />
-      <div className={textContainer}>
-        {/* TODO: Fix height to 60px */}
-        <div className={titleStyle}>{title}</div>
-        <div className={descriptionStyle}>{info}</div>
-      </div>
-      {minority && (
-        <div className={tagStyle}>
-          <Tag type="pink" label="Minority Client" />{' '}
+      <div className={containerStyles.join(' ')}>
+        <NodeIcon iconId={iconId} size="medium" />
+        <div className={textContainer}>
+          {/* TODO: Fix height to 60px */}
+          <div className={titleStyle}>{title}</div>
+          <div className={descriptionStyle}>{info}</div>
         </div>
-      )}
+        {minority && (
+          <div className={tagStyle}>
+            <Label bold={false} type="pink2" label="Minority Client" />{' '}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
