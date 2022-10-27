@@ -87,7 +87,6 @@ export const MetricTypes = ({
 
   const processStatsType = () => {
     let iconId = statsType;
-    console.log(statsValue);
     switch (statsType) {
       case 'blocks':
         iconId = 'slots';

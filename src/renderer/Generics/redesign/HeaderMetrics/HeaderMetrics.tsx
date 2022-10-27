@@ -20,7 +20,6 @@ export const HeaderMetrics = (props: NodeOverviewProps) => {
     <div className={container}>
       {assignedMetric.map((metric, index) => {
         const statsValue = index === 0 ? getSyncStatus(status) : stats[metric];
-        console.log(stats);
         return (
           <>
             <MetricTypes
