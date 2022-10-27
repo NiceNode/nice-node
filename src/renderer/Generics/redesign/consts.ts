@@ -32,7 +32,6 @@ export interface ClientStatsProps {
 
 export interface ClientStatusProps {
   initialized: boolean; // initial initialization is done
-  synchronized: boolean; // fully synchronized (regardless of initial initialization or not)
   synchronizing: number; // currently synchronizing, update this constantly
   lowPeerCount: boolean;
   updateAvailable: boolean;

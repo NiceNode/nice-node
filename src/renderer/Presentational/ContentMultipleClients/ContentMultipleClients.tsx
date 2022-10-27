@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { ClientProps } from 'renderer/Generics/redesign/consts';
+import { Message } from '../../Generics/redesign/Message/Message';
 import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
@@ -23,9 +24,13 @@ const ContentMultipleClients = (props: {
 
   const initialWalletDismissedState =
     localStorage.getItem('walletDismissed') === 'true';
+  const initialSyncMessageDismissedState =
+    localStorage.getItem('initialSyncMessageDismissed') === 'true';
   const [walletDismissed, setWalletDismissed] = useState<boolean>(
     initialWalletDismissedState
   );
+  const [initialSyncMessageDismissed, setinitialSyncMessageDismissed] =
+    useState<boolean>(initialSyncMessageDismissedState);
 
   const onDismissClick = useCallback(() => {
     setWalletDismissed(true);
@@ -42,8 +47,8 @@ const ContentMultipleClients = (props: {
 
   const renderPrompt = () => {
     if (
-      clClient.status.synchronized &&
-      elClient.status.synchronized &&
+      clClient?.status.synchronizing >= 98 &&
+      elClient?.status.synchronizing >= 98 &&
       !walletDismissed
     ) {
       return (
@@ -53,6 +58,29 @@ const ContentMultipleClients = (props: {
         />
       );
     }
+    if (
+      !clClient?.status.initialized &&
+      !elClient?.status.initialized &&
+      clClient?.status.synchronizing < 98 &&
+      elClient?.status.synchronizing < 98 &&
+      !initialSyncMessageDismissed
+    ) {
+      const title = 'Initial sync process started';
+      const description =
+        'When adding a node it first needs to catch up on the history of the network. This process downloads all the necessary data and might take a couple of days. After synchronization is complete your node will be online and part of the network.';
+      return (
+        <Message
+          type="info"
+          title={title}
+          description={description}
+          onClick={() => {
+            localStorage.setItem('initialSyncMessageDismissed', 'true');
+            setinitialSyncMessageDismissed(true);
+          }}
+        />
+      );
+    }
+    return null;
   };
 
   // TODO: refactor this out so that it can be shared with multiple and single
@@ -69,21 +97,20 @@ const ContentMultipleClients = (props: {
         type: 'altruistic',
         status: {
           initialized:
-            clClient.status.initialized || elClient.status.initialized,
+            clClient?.status.initialized || elClient?.status.initialized,
           synchronizing:
-            clClient.status.synchronizing || elClient.status.synchronizing,
-          synchronized:
-            clClient.status.synchronized || elClient.status.synchronized,
+            clClient?.status.synchronizing || elClient?.status.synchronizing,
           lowPeerCount:
-            clClient.status.lowPeerCount || elClient.status.lowPeerCount,
+            clClient?.status.lowPeerCount || elClient?.status.lowPeerCount,
           updateAvailable:
-            clClient.status.updateAvailable || elClient.status.updateAvailable,
+            clClient?.status.updateAvailable ||
+            elClient?.status.updateAvailable,
           blocksBehind:
-            clClient.status.blocksBehind || elClient.status.blocksBehind,
+            clClient?.status.blocksBehind || elClient?.status.blocksBehind,
           noConnection:
-            clClient.status.noConnection || elClient.status.noConnection,
-          stopped: clClient.status.stopped || elClient.status.stopped, // both should be stopped
-          error: clClient.status.error || elClient.status.error,
+            clClient?.status.noConnection || elClient?.status.noConnection,
+          stopped: clClient?.status.stopped || elClient?.status.stopped, // both should be stopped
+          error: clClient?.status.error || elClient?.status.error,
         },
         stats: {
           block: clClient?.stats.slot,

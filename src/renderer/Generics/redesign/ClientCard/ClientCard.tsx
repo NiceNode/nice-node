@@ -17,7 +17,7 @@ import {
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { Label } from '../Label/Label';
 import ProgressBar from '../ProgressBar/ProgressBar';
-import { ClientStatusProps, ClientProps } from '../consts';
+import { ClientProps } from '../consts';
 import { common } from '../theme.css';
 
 const getLabelDetails = (label: string) => {
@@ -27,9 +27,17 @@ const getLabelDetails = (label: string) => {
       labelDetails.color = 'green';
       labelDetails.string = 'Synchronized';
       break;
+    case 'blocksBehind':
+      labelDetails.color = 'orange';
+      labelDetails.string = 'Blocks Behind';
+      break;
     case 'lowPeerCount':
       labelDetails.color = 'orange';
       labelDetails.string = 'Low peer count';
+      break;
+    case 'noConnection':
+      labelDetails.color = 'red';
+      labelDetails.string = 'No connection';
       break;
     case 'updateAvailable':
       labelDetails.color = 'purple';
@@ -47,7 +55,7 @@ const getLabelDetails = (label: string) => {
 export const ClientCard = (props: ClientProps) => {
   const { status, name, nodeType } = props;
   const isNotSynchronizedAndNotStopped =
-    !status.synchronized && !status.stopped;
+    status.synchronizing < 98 && !status.stopped;
   const renderContents = () => {
     if (isNotSynchronizedAndNotStopped) {
       const caption = !status.initialized
