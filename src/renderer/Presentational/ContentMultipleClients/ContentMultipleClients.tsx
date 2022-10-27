@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { ClientProps } from 'renderer/Generics/redesign/consts';
 import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
@@ -13,57 +14,10 @@ import {
   resourcesContainer,
 } from './contentMultipleClients.css';
 
-// TODO: process retrieved client data into this format?
-const clients = [
-  {
-    name: 'nimbus',
-    version: 'v10',
-    type: 'single',
-    nodeType: 'consensus',
-    status: {
-      initialized: true,
-      synchronized: true,
-      synchronizing: 99,
-      lowPeerCount: false,
-      updateAvailable: false,
-      blocksBehind: true,
-      noConnection: false,
-      stopped: false,
-      error: false,
-    },
-    stats: {
-      peers: 20,
-      slot: '4,456,158',
-      cpuLoad: 20,
-      diskUsage: 600, // in MB?
-    },
-  },
-  {
-    name: 'besu',
-    version: 'v10',
-    type: 'single',
-    nodeType: 'execution',
-    status: {
-      initialized: true,
-      synchronizing: 99,
-      synchronized: true,
-      lowPeerCount: false,
-      updateAvailable: true,
-      blocksBehind: true,
-      noConnection: false,
-      stopped: false,
-      error: false,
-    },
-    stats: {
-      peers: 16,
-      block: '15791798',
-      cpuLoad: 82,
-      diskUsage: 5000,
-    },
-  },
-];
-
-const ContentMultipleClients = () => {
+const ContentMultipleClients = (props: {
+  clients: [ClientProps, ClientProps];
+}) => {
+  const { clients } = props;
   // TODO: Come up with a better name for this component..
   /* TODO: maybe a "provider" wrapper/manager to fetch data and handle states */
 
