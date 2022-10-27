@@ -32,7 +32,7 @@ const client = {
   },
   stats: {
     peers: 15,
-    slot: '4,456,158',
+    slots: '4,456,158',
     cpuLoad: 20,
     diskUsage: 600, // in MB?
   },

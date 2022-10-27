@@ -113,7 +113,7 @@ const ContentMultipleClients = (props: {
           error: clClient?.status.error || elClient?.status.error,
         },
         stats: {
-          block: clClient?.stats.slot,
+          slots: clClient?.stats.slots,
           cpuLoad:
             (clClient?.stats.cpuLoad || 0) + (elClient?.stats.cpuLoad || 0),
           diskUsage:

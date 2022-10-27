@@ -87,14 +87,15 @@ export const MetricTypes = ({
 
   const processStatsType = () => {
     let iconId = statsType;
+    console.log(statsValue);
     switch (statsType) {
       case 'blocks':
         iconId = 'slots';
-        titleText = '15828039';
+        titleText = `${statsValue}`;
         labelText = 'Last synced block';
         break;
       case 'slots':
-        titleText = '4,456,158';
+        titleText = `${statsValue}`;
         labelText = 'Current slot';
         break;
       case 'peers':
