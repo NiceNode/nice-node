@@ -94,9 +94,10 @@ const ccOptions = [
   },
 ];
 
-type AddEthereumNodeValues = {
+export type AddEthereumNodeValues = {
   executionClient?: string;
   consensusClient?: string;
+  storageLocation?: string;
 };
 export interface AddEthereumNodeProps {
   executionOptions: NodeSpecification[];
@@ -109,6 +110,9 @@ export interface AddEthereumNodeProps {
 
 const AddEthereumNode = ({
   onChange,
+  /**
+   * Todo: Pass options from the node spec files
+   */
   executionOptions,
   beaconOptions,
 }: AddEthereumNodeProps) => {
@@ -117,8 +121,6 @@ const AddEthereumNode = ({
   const [sSelectedExecutionClient, setSelectedExecutionClient] =
     useState<string>();
   const [sSelectedConsensusClient, setSelectedConsensusClient] =
-    useState<string>();
-  const [sDefaultNodesStorageLocation, setDefaultNodesStorageLocation] =
     useState<string>();
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
   const [
@@ -131,7 +133,6 @@ const AddEthereumNode = ({
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
       console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
-      setDefaultNodesStorageLocation(defaultNodesStorageDetails.folderPath);
       setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
       setNodeStorageLocationFreeStorageMBs(
         defaultNodesStorageDetails.freeStorageMBs
@@ -139,36 +140,6 @@ const AddEthereumNode = ({
     };
     fetchData();
   }, []);
-  // const [sExecutionOptions, setExecutionOptions] = useState<any[]>();
-  // const [sBeaconOptions, setBeaconOptions] = useState<any[]>();
-
-  // useEffect(() => {
-  //   const formattedExecutionOptions: any[] = [];
-  //   executionOptions.forEach((opt) => {
-  //     const formattedOption = {
-  //       ...opt,
-  //       label: opt.displayName,
-  //       value: opt.specId,
-  //     };
-  //     formattedExecutionOptions.push(formattedOption);
-  //   });
-  //   setExecutionOptions(formattedExecutionOptions);
-  // }, [executionOptions]);
-
-  // useEffect(() => {
-  //   const formattedBeaconOptions: any[] = [];
-  //   beaconOptions.forEach((opt) => {
-  //     const formattedOption = {
-  //       ...opt,
-  //       label: opt.displayName,
-  //       value: opt.specId,
-  //     };
-  //     formattedBeaconOptions.push(formattedOption);
-  //   });
-  //   setBeaconOptions(formattedBeaconOptions);
-  // }, [beaconOptions]);
-  // on change client or setting, return NodeSpecIds, Node Settings, and storage location
-  // NodeSpecs are only req'd in parent component until Node Settings
 
   const onChangeEc = useCallback((newEc: any) => {
     console.log('new selected execution client: ', newEc);
@@ -184,9 +155,15 @@ const AddEthereumNode = ({
       onChange({
         executionClient: sSelectedExecutionClient,
         consensusClient: sSelectedConsensusClient,
+        storageLocation: sNodeStorageLocation,
       });
     }
-  }, [sSelectedExecutionClient, sSelectedConsensusClient, onChange]);
+  }, [
+    sSelectedExecutionClient,
+    sSelectedConsensusClient,
+    sNodeStorageLocation,
+    onChange,
+  ]);
 
   return (
     <div className={container}>

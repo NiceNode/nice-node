@@ -4,7 +4,9 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { componentContainer, container } from './addNodeStepper.css';
 import Stepper from '../../Generics/redesign/Stepper/Stepper';
-import AddEthereumNode from '../AddEthereumNode/AddEthereumNode';
+import AddEthereumNode, {
+  AddEthereumNodeValues,
+} from '../AddEthereumNode/AddEthereumNode';
 import DockerInstallation from '../DockerInstallation/DockerInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import electron from '../../electronGlobal';
@@ -15,6 +17,7 @@ import { SystemData } from '../../../main/systemInfo';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
 import { updateSelectedNodeId } from '../../state/node';
 import { useAppDispatch } from '../../state/hooks';
+import { CheckStorageDetails } from '../../../main/files';
 
 export interface AddNodeStepperProps {
   onChange: (newValue: 'done' | 'cancel') => void;
@@ -37,6 +40,8 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   const [sEthereumNodeConfig, setEthereumNodeConfig] = useState<any>();
   const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
     useState<SystemRequirements>();
+  const [sNodeStorageLocation, setNodeStorageLocation] =
+    useState<CheckStorageDetails>();
 
   const [sData, setData] = useState<SystemData>();
 
@@ -72,7 +77,7 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   }, []);
 
   const onChangeAddEthereumNode = useCallback(
-    (newValue: any) => {
+    (newValue: AddEthereumNodeValues) => {
       console.log('onChangeAddEthereumNode newValue ', newValue);
       setEthereumNodeConfig(newValue);
       let ecReqs;
@@ -96,6 +101,8 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       } catch (e) {
         console.error(e);
       }
+
+      // save storage location (and other settings)
     },
     [sNodeLibrary]
   );

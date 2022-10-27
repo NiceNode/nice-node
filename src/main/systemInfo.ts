@@ -67,6 +67,20 @@ export type SystemData = si.Systeminformation.StaticData;
 export const getSystemInfo = async (): Promise<SystemData> => {
   const data = await si.getStaticData();
   console.log('getStaticData data: ', JSON.stringify(data, null, 4));
+  const diskLayout = await si.diskLayout();
+  console.log(
+    'getStaticData diskLayout: ',
+    JSON.stringify(diskLayout, null, 4)
+  );
+  const blockDevices = await si.blockDevices();
+  console.log(
+    'getStaticData blockDevices: ',
+    JSON.stringify(blockDevices, null, 4)
+  );
+  const disksIO = await si.disksIO();
+  console.log('getStaticData disksIO: ', JSON.stringify(disksIO, null, 4));
+  const fsSize = await si.fsSize();
+  console.log('getStaticData fsSize: ', JSON.stringify(fsSize, null, 4));
   return data;
   // start monitoring sys_usage?
   // getCpuInfo();
