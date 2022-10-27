@@ -18,6 +18,7 @@ import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { Label } from '../Label/Label';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import { ClientStatusProps, ClientProps } from '../consts';
+import { common } from '../theme.css';
 
 const getLabelDetails = (label: string) => {
   const labelDetails = { color: '', string: '' };
@@ -34,10 +35,6 @@ const getLabelDetails = (label: string) => {
       labelDetails.color = 'purple';
       labelDetails.string = 'Update Available';
       break;
-    case 'stopped':
-      labelDetails.color = 'purple';
-      labelDetails.string = 'Update';
-      break;
     default:
       break;
   }
@@ -49,18 +46,21 @@ const getLabelDetails = (label: string) => {
  */
 export const ClientCard = (props: ClientProps) => {
   const { status, name, nodeType } = props;
-  const isNotSynchronizedAndStopped = !status.synchronized && !status.stopped;
+  const isNotSynchronizedAndNotStopped =
+    !status.synchronized && !status.stopped;
   const renderContents = () => {
-    if (isNotSynchronizedAndStopped) {
+    if (isNotSynchronizedAndNotStopped) {
+      const caption = !status.initialized
+        ? 'Initial sync in progress.'
+        : 'Catching up';
       return (
         <>
-          {/* TODO: tie clients with progress bar colors */}
           {/* TODO: modify height of the bar for card */}
           <ProgressBar
             card
-            color="#F96767"
-            progress={23}
-            caption="Initial sync in progress."
+            color={common.color[name]}
+            progress={status.synchronizing}
+            caption={caption}
           />
         </>
       );
@@ -68,7 +68,8 @@ export const ClientCard = (props: ClientProps) => {
     if (status.stopped) {
       return <Label type="gray" label="Stopped" />;
     }
-    const statusKeys = Object.keys(status).filter(
+    const { initialized, synchronizing, ...statusLabels } = status;
+    const statusKeys = Object.keys(statusLabels).filter(
       (k: string) => status[k] === true
     );
     return (
@@ -93,7 +94,7 @@ export const ClientCard = (props: ClientProps) => {
       <div
         style={{
           backgroundImage: `url(${NODE_BACKGROUNDS[name]})`,
-          height: isNotSynchronizedAndStopped ? 166 : 186,
+          height: isNotSynchronizedAndNotStopped ? 166 : 186,
         }}
         className={[cardTop, `${stoppedStyle}`].join(' ')}
       >

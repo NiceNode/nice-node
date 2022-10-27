@@ -21,10 +21,12 @@ const clients = [
     type: 'single',
     nodeType: 'consensus',
     status: {
+      initialized: true,
       synchronized: true,
+      synchronizing: 99,
       lowPeerCount: false,
       updateAvailable: false,
-      blocksBehind: false,
+      blocksBehind: true,
       noConnection: false,
       stopped: false,
       error: false,
@@ -37,15 +39,17 @@ const clients = [
     },
   },
   {
-    name: 'erigon',
+    name: 'besu',
     version: 'v10',
     type: 'single',
     nodeType: 'execution',
     status: {
+      initialized: true,
+      synchronizing: 99,
       synchronized: true,
       lowPeerCount: false,
       updateAvailable: true,
-      blocksBehind: false,
+      blocksBehind: true,
       noConnection: false,
       stopped: false,
       error: false,
@@ -82,6 +86,21 @@ const ContentMultipleClients = () => {
   const clClient = clients.find((client) => client.nodeType === 'consensus');
   const elClient = clients.find((client) => client.nodeType === 'execution');
 
+  const renderPrompt = () => {
+    if (
+      clClient.status.synchronized &&
+      elClient.status.synchronized &&
+      !walletDismissed
+    ) {
+      return (
+        <WalletPrompt
+          onSetupClick={onSetupClick}
+          onDismissClick={onDismissClick}
+        />
+      );
+    }
+  };
+
   // TODO: refactor this out so that it can be shared with multiple and single
   const getNodeOverview = () => {
     // useEffect, used only in Header and Metrics
@@ -95,6 +114,10 @@ const ContentMultipleClients = () => {
         info: 'Non-Validating Node — Ethereum mainnet',
         type: 'altruistic',
         status: {
+          initialized:
+            clClient.status.initialized || elClient.status.initialized,
+          synchronizing:
+            clClient.status.synchronizing || elClient.status.synchronizing,
           synchronized:
             clClient.status.synchronized || elClient.status.synchronized,
           lowPeerCount:
@@ -156,15 +179,7 @@ const ContentMultipleClients = () => {
       <HorizontalLine type="content" />
       <HeaderMetrics {...nodeOverview} />
       <HorizontalLine type="content" />
-      {clClient.status.synchronized &&
-        elClient.status.synchronized &&
-        !walletDismissed && (
-          // TODO: Prompt handler for wallet & node status messages
-          <WalletPrompt
-            onSetupClick={onSetupClick}
-            onDismissClick={onDismissClick}
-          />
-        )}
+      {renderPrompt()}
       <div className={sectionTitle}>Ethereum Clients</div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {

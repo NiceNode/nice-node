@@ -19,6 +19,8 @@ Primary.args = {
   info: 'Non-Validating Node — Ethereum mainnet',
   type: 'altruistic',
   status: {
+    initialized: true,
+    synchronizing: 100,
     synchronized: true,
     lowPeerCount: true,
     updateAvailable: true,

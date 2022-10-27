@@ -31,10 +31,12 @@ export interface ClientStatsProps {
 }
 
 export interface ClientStatusProps {
-  synchronized: boolean;
+  initialized: boolean; // initial initialization is done
+  synchronized: boolean; // fully synchronized (regardless of initial initialization or not)
+  synchronizing: number; // currently synchronizing, update this constantly
   lowPeerCount: boolean;
   updateAvailable: boolean;
-  blocksBehind: boolean;
+  blocksBehind: boolean; // is this redundant with synchronizing? consider deleting
   noConnection: boolean;
   stopped: boolean;
   error: boolean;

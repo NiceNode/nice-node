@@ -3,7 +3,7 @@ import { ClientStatusProps, SYNC_STATUS } from './consts';
 export const getSyncStatus = (status: ClientStatusProps) => {
   let syncStatus = null;
   switch (true) {
-    // map this in an object?
+    // TODO: revisit this.. feels off or unnecessary
     // find worst cases first
     case status.stopped:
       syncStatus = SYNC_STATUS.STOPPED;
@@ -11,8 +11,13 @@ export const getSyncStatus = (status: ClientStatusProps) => {
     case status.noConnection:
       syncStatus = SYNC_STATUS.NO_NETWORK;
       break;
-    case status.blocksBehind:
+    case status.blocksBehind && status.initialized && status.synchronizing < 99:
       syncStatus = SYNC_STATUS.CATCHING_UP;
+      break;
+    case status.blocksBehind &&
+      !status.initialized &&
+      status.synchronizing < 99:
+      syncStatus = SYNC_STATUS.INITIALIZING;
       break;
     case status.lowPeerCount:
       syncStatus = SYNC_STATUS.LOW_PEER_COUNT;
