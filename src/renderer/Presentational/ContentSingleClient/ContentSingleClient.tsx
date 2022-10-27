@@ -20,10 +20,12 @@ const client = {
   type: 'client',
   nodeType: 'consensus',
   status: {
+    initialized: false,
+    synchronizing: 96,
     synchronized: false,
     lowPeerCount: false,
     updateAvailable: false,
-    blocksBehind: false,
+    blocksBehind: true,
     noConnection: false,
     stopped: false,
     error: false,
@@ -49,7 +51,6 @@ const ContentSingleClient = () => {
     return {
       ...client,
       info: `${clientTypeLabel} -- Ethereum mainnet`, // should be more flexible for other networks
-      status: 'healthy', // change this to enum to compare weights?
     };
   };
 
@@ -59,9 +60,9 @@ const ContentSingleClient = () => {
 
   return (
     <div className={container}>
-      <Header nodeOverview={nodeOverview} />
+      <Header {...nodeOverview} />
       <HorizontalLine type="content" />
-      <HeaderMetrics nodeOverview={nodeOverview} />
+      <HeaderMetrics {...nodeOverview} />
       <HorizontalLine type="content" />
     </div>
   );

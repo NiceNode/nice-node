@@ -18,6 +18,8 @@ Nethermind.args = {
   type: 'single',
   nodeType: 'execution',
   status: {
+    initialized: true,
+    synchronizing: 100,
     synchronized: true,
     lowPeerCount: false,
     updateAvailable: true,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from '../Button/Button';
-import { ClientStatusProps, NodeOverviewProps } from '../consts';
+import { NodeOverviewProps } from '../consts';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
 import {
@@ -67,7 +67,7 @@ export const Header = (props: NodeOverviewProps) => {
           <div
             onBlur={(event) => {
               if (!event.currentTarget.contains(event.relatedTarget)) {
-                // setIsCalloutDisplayed(false);
+                setIsCalloutDisplayed(false);
               }
             }}
           >

@@ -62,12 +62,14 @@ export const MetricTypes = ({
         titleText = 'Offline';
         labelText = 'No Network';
         break;
-      case SYNC_STATUS.CATCHING_UP || SYNC_STATUS.INITIALIZING:
+      case SYNC_STATUS.CATCHING_UP:
+      case SYNC_STATUS.INITIALIZING:
         statusColorStyle = sync;
         titleText = 'Syncing';
-        labelText = SYNC_STATUS.CATCHING_UP
-          ? 'Catching up...'
-          : 'In progress...';
+        labelText =
+          statsValue === SYNC_STATUS.CATCHING_UP
+            ? 'Catching up...'
+            : 'In progress...';
         icon = <Icon iconId="syncing" />;
         break;
       case SYNC_STATUS.STOPPED:
