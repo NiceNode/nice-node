@@ -28,7 +28,7 @@ Primary.args = {
     error: false,
   },
   stats: {
-    block: '32,000,200',
+    slots: '32,000,200',
     cpuLoad: 90,
     diskUsage: 10000,
   },

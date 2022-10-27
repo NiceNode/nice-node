@@ -30,7 +30,7 @@ Nethermind.args = {
   },
   stats: {
     peers: 16,
-    slot: '15791798',
+    slots: '15791798',
     cpuLoad: 82,
     diskUsage: 5000,
   },

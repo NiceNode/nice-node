@@ -5,12 +5,7 @@ export interface ClientProps {
   version: string;
   nodeType: string;
   status: ClientStatusProps;
-  stats: {
-    peers: number;
-    slot: string;
-    cpuLoad: number;
-    diskUsage: number;
-  };
+  stats: ClientStatsProps;
 }
 
 export interface NodeOverviewProps {
@@ -25,7 +20,7 @@ export interface NodeOverviewProps {
 
 export interface ClientStatsProps {
   peers?: number;
-  block?: string;
+  slots?: string;
   cpuLoad?: number;
   diskUsage?: number;
 }
