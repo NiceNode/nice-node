@@ -13,9 +13,9 @@ const Template: ComponentStory<typeof ContentMultipleClients> = (args) => (
 );
 
 export const Primary = Template.bind({});
-const currentSlot = 190;
-const highestSlot = 190;
-const currentBlock = 2990;
+const currentSlot = 4671269;
+const highestSlot = 4671270;
+const currentBlock = 3000;
 const highestBlock = 3000;
 Primary.args = {
   clients: [

@@ -46,9 +46,12 @@ const ContentMultipleClients = (props: {
   const elClient = clients.find((client) => client.nodeType === 'execution');
 
   const renderPrompt = () => {
+    const synchronized =
+      clClient?.status.synchronized && elClient?.status.synchronized;
     if (
-      clClient?.status.synchronized &&
-      elClient?.status.synchronized &&
+      synchronized &&
+      !clClient?.status.updating &&
+      !elClient?.status.updating &&
       !walletDismissed
     ) {
       return (
@@ -61,8 +64,7 @@ const ContentMultipleClients = (props: {
     if (
       !clClient?.status.initialized &&
       !elClient?.status.initialized &&
-      !clClient?.status.synchronized &&
-      !elClient?.status.synchronized &&
+      !synchronized &&
       !initialSyncMessageDismissed
     ) {
       const title = 'Initial sync process started';
