@@ -48,7 +48,7 @@ declare global {
       // Multi-node
       getNodes(): Node[];
       getUserNodes(): UserNodes;
-      addNode(nodeSpec: NodeSpecification): Node;
+      addNode(nodeSpec: NodeSpecification, storageLocation?: string): Node;
       updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;
       removeNode(nodeId: NodeId, options: { isDeleteStorage: boolean }): Node;
       startNode(nodeId: NodeId): void;

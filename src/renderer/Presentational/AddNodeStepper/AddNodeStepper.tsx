@@ -128,9 +128,13 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
         ccNodeSpec = sNodeLibrary?.[`${ccValue}-beacon`];
       }
     }
-    const ecNode = await electron.addNode(ecNodeSpec);
+    console.log(
+      'adding nodes with storage location set to: ',
+      sNodeStorageLocation
+    );
+    const ecNode = await electron.addNode(ecNodeSpec, sNodeStorageLocation);
     console.log('addNode returned node: ', ecNode);
-    const ccNode = await electron.addNode(ccNodeSpec);
+    const ccNode = await electron.addNode(ccNodeSpec, sNodeStorageLocation);
     console.log('addNode returned node: ', ccNode);
     dispatch(updateSelectedNodeId(ecNode.id));
     const startEcResult = await electron.startNode(ecNode.id);

@@ -18,7 +18,7 @@ import Node, {
   NodeStatus,
 } from '../common/node';
 import * as nodeStore from './state/nodes';
-import { deleteDisk, makeNodeDir } from './files';
+import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
 import {
   startBinary,
   stopBinary,
@@ -32,8 +32,17 @@ import {
 } from './binary';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
 
-export const addNode = async (nodeSpec: NodeSpecification): Promise<Node> => {
-  const dataDir = await makeNodeDir(nodeSpec.specId);
+export const addNode = async (
+  nodeSpec: NodeSpecification,
+  storageLocation?: string
+): Promise<Node> => {
+  // use a timestamp postfix so the user can add multiple nodes of the same name
+  const utcTimestamp = Math.floor(Date.now() / 1000);
+  const dataDir = await makeNodeDir(
+    `${nodeSpec.specId}-${utcTimestamp}`,
+    storageLocation ?? getNodesDirPath()
+  );
+  console.log('adding node with dataDir: ', dataDir);
   const nodeRuntime: NodeRuntime = {
     dataDir,
     usage: {},

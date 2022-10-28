@@ -67,9 +67,12 @@ export const initialize = () => {
   // Multi-nodegetUserNodes
   ipcMain.handle('getNodes', getNodes);
   ipcMain.handle('getUserNodes', getUserNodes);
-  ipcMain.handle('addNode', (_event, nodeSpec: NodeSpecification) => {
-    return addNode(nodeSpec);
-  });
+  ipcMain.handle(
+    'addNode',
+    (_event, nodeSpec: NodeSpecification, storageLocation?: string) => {
+      return addNode(nodeSpec, storageLocation);
+    }
+  );
   ipcMain.handle(
     'updateNode',
     (_event, nodeId: NodeId, propertiesToUpdate: any) => {

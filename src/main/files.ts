@@ -55,11 +55,15 @@ export const doesFileOrDirExist = async (
 
 /**
  *
- * @returns checkOrMakeNodeDir at getNodesDirPath() + nodeDirName
+ * @returns checkOrMakeNodeDir at storageLocation + nodeDirName
+ *  or getNodesDirPath() + nodeDirName
  * @throws error if it cannot make the directory
  */
-export const makeNodeDir = async (nodeDirName: string): Promise<string> => {
-  const nodeDir = path.join(getNodesDirPath(), nodeDirName);
+export const makeNodeDir = async (
+  nodeDirName: string,
+  storageLocation?: string
+): Promise<string> => {
+  const nodeDir = path.join(storageLocation ?? getNodesDirPath(), nodeDirName);
   await checkAndOrCreateDir(nodeDir);
   return nodeDir;
 };
