@@ -4,17 +4,19 @@ import VerticalLine from '../VerticalLine/VerticalLine';
 import { getSyncStatus } from '../utils';
 import { NodeOverviewProps } from '../consts';
 
-const metricTypeArray = {
-  altruistic: ['status', 'slots', 'cpuLoad', 'diskUsage'],
-  client: ['status', 'slots', 'peers', 'diskUsage'],
-  validator: ['status', 'stake', 'rewards', 'balance'],
-};
-
 /**
  * Primary UI component for user interaction
  */
 export const HeaderMetrics = (props: NodeOverviewProps) => {
   const { type, status, stats } = props;
+  const getSlotOrBlockMetricType = stats.currentSlot
+    ? 'currentSlot'
+    : 'currentBlock';
+  const metricTypeArray = {
+    altruistic: ['status', 'currentSlot', 'cpuLoad', 'diskUsage'],
+    client: ['status', getSlotOrBlockMetricType, 'peers', 'diskUsage'],
+    validator: ['status', 'stake', 'rewards', 'balance'],
+  };
   const assignedMetric = metricTypeArray[type];
   return (
     <div className={container}>

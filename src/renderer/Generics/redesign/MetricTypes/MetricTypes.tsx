@@ -13,6 +13,7 @@ import {
   yellow,
   red,
   sync,
+  updating,
   stopped,
 } from './metricTypes.css';
 
@@ -20,7 +21,13 @@ export interface MetricTypesProps {
   /**
    * Stats types
    */
-  statsType?: 'status' | 'slots' | 'blocks' | 'peers' | 'cpuLoad' | 'diskUsage';
+  statsType?:
+    | 'status'
+    | 'currentSlot'
+    | 'currentBlock'
+    | 'peers'
+    | 'cpuLoad'
+    | 'diskUsage';
   /**
    * Status //TODO: match this with current status enum implementation
    */
@@ -47,15 +54,25 @@ export const MetricTypes = ({
     let statusColorStyle;
     let icon = null;
     switch (statsValue) {
+      case SYNC_STATUS.UPDATING:
+        statusColorStyle = updating;
+        titleText = 'Waiting';
+        labelText = 'Installing update...';
+        icon = <Icon iconId="updating" />;
+        break;
       case SYNC_STATUS.SYNCHRONIZED:
         statusColorStyle = green;
         titleText = 'Online';
         labelText = 'Synchronized';
         break;
+      case SYNC_STATUS.BLOCKS_BEHIND:
       case SYNC_STATUS.LOW_PEER_COUNT:
         statusColorStyle = yellow;
         titleText = 'Online';
-        labelText = 'Low Peer Count';
+        labelText =
+          statsValue === SYNC_STATUS.BLOCKS_BEHIND
+            ? 'Blocks behind'
+            : 'Low Peer Count';
         break;
       case SYNC_STATUS.NO_NETWORK:
         statusColorStyle = red;
@@ -88,13 +105,14 @@ export const MetricTypes = ({
   const processStatsType = () => {
     let iconId = statsType;
     switch (statsType) {
-      case 'blocks':
+      case 'currentBlock':
         iconId = 'slots';
         titleText = `${statsValue}`;
         labelText = 'Last synced block';
         break;
-      case 'slots':
-        titleText = `${statsValue}`;
+      case 'currentSlot':
+        iconId = 'slots';
+        titleText = Number(statsValue).toLocaleString();
         labelText = 'Current slot';
         break;
       case 'peers':

@@ -47,8 +47,8 @@ const ContentMultipleClients = (props: {
 
   const renderPrompt = () => {
     if (
-      clClient?.status.synchronizing >= 98 &&
-      elClient?.status.synchronizing >= 98 &&
+      clClient?.status.synchronized &&
+      elClient?.status.synchronized &&
       !walletDismissed
     ) {
       return (
@@ -61,8 +61,8 @@ const ContentMultipleClients = (props: {
     if (
       !clClient?.status.initialized &&
       !elClient?.status.initialized &&
-      clClient?.status.synchronizing < 98 &&
-      elClient?.status.synchronizing < 98 &&
+      !clClient?.status.synchronized &&
+      !elClient?.status.synchronized &&
       !initialSyncMessageDismissed
     ) {
       const title = 'Initial sync process started';
@@ -96,24 +96,28 @@ const ContentMultipleClients = (props: {
         info: 'Non-Validating Node — Ethereum mainnet',
         type: 'altruistic',
         status: {
+          updating: clClient?.status.updating || elClient?.status.updating,
+          synchronized:
+            clClient?.status.synchronized && elClient?.status.synchronized,
           initialized:
             clClient?.status.initialized || elClient?.status.initialized,
-          synchronizing:
-            clClient?.status.synchronizing || elClient?.status.synchronizing,
+          blocksBehind:
+            clClient?.status.blocksBehind || elClient?.status.blocksBehind,
           lowPeerCount:
             clClient?.status.lowPeerCount || elClient?.status.lowPeerCount,
           updateAvailable:
             clClient?.status.updateAvailable ||
             elClient?.status.updateAvailable,
-          blocksBehind:
-            clClient?.status.blocksBehind || elClient?.status.blocksBehind,
           noConnection:
             clClient?.status.noConnection || elClient?.status.noConnection,
           stopped: clClient?.status.stopped || elClient?.status.stopped, // both should be stopped
           error: clClient?.status.error || elClient?.status.error,
         },
         stats: {
-          slots: clClient?.stats.slots,
+          currentBlock: elClient?.stats.currentBlock,
+          highestBlock: elClient?.stats.highestBlock,
+          currentSlot: clClient?.stats.currentSlot,
+          highestSlot: clClient?.stats.highestSlot,
           cpuLoad:
             (clClient?.stats.cpuLoad || 0) + (elClient?.stats.cpuLoad || 0),
           diskUsage:

@@ -19,18 +19,22 @@ export interface NodeOverviewProps {
 }
 
 export interface ClientStatsProps {
+  currentBlock?: number;
+  highestBlock?: number;
+  currentSlot?: number;
+  highestSlot?: number;
   peers?: number;
-  slots?: string;
   cpuLoad?: number;
   diskUsage?: number;
 }
 
 export interface ClientStatusProps {
+  updating: boolean;
   initialized: boolean; // initial initialization is done
-  synchronizing: number; // currently synchronizing, update this constantly
+  synchronized: boolean; // constantly updated from checking current / height slot or block
   lowPeerCount: boolean;
   updateAvailable: boolean;
-  blocksBehind: boolean; // is this redundant with synchronizing? consider deleting
+  blocksBehind: boolean;
   noConnection: boolean;
   stopped: boolean;
   error: boolean;
@@ -41,15 +45,18 @@ export interface SyncStatusProps {
   CATCHING_UP: string;
   SYNCHRONIZED: string;
   LOW_PEER_COUNT: string;
+  BLOCKS_BEHIND: string;
   NO_NETWORK: string;
   STOPPED: string;
 }
 
 export const SYNC_STATUS = Object.freeze({
+  UPDATING: 'updating',
   INITIALIZING: 'initializing',
   CATCHING_UP: 'catchingUp',
   SYNCHRONIZED: 'synchronized',
   LOW_PEER_COUNT: 'lowPeerCount',
+  BLOCKS_BEHIND: 'blocksBehind',
   NO_NETWORK: 'noNetwork',
   STOPPED: 'stopped',
 });
