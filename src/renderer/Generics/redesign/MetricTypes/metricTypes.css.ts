@@ -7,6 +7,7 @@ export const green = style({ background: common.color.green });
 export const yellow = style({ background: common.color.yellow });
 export const red = style({ background: common.color.red });
 export const sync = style({});
+export const updating = style({});
 export const stopped = style({});
 
 const rotate = keyframes({
@@ -79,6 +80,13 @@ export const statusStyle = style({
       animationName: redPulse,
     },
     [`&.${sync}`]: {
+      borderRadius: 0,
+      width: 20,
+      height: 20,
+      animationName: rotate,
+      color: vars.color.font50,
+    },
+    [`&.${updating}`]: {
       borderRadius: 0,
       width: 20,
       height: 20,

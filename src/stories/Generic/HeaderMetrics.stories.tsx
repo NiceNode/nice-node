@@ -19,9 +19,9 @@ Primary.args = {
   info: 'Non-Validating Node — Ethereum mainnet',
   type: 'altruistic',
   status: {
+    updating: false,
     initialized: true,
     synchronizing: 100,
-    synchronized: true,
     lowPeerCount: true,
     updateAvailable: true,
     blocksBehind: false,
@@ -30,7 +30,8 @@ Primary.args = {
     error: false,
   },
   stats: {
-    slots: '32,000,200',
+    currentSlot: 90,
+    highestSlot: 190,
     cpuLoad: 90,
     diskUsage: 10000,
   },

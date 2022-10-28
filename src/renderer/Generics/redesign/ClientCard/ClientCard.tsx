@@ -53,21 +53,27 @@ const getLabelDetails = (label: string) => {
  * Primary UI component for user interaction
  */
 export const ClientCard = (props: ClientProps) => {
-  const { status, name, nodeType } = props;
+  const { status, name, nodeType, stats } = props;
+  const isNotCloseToSynchronized =
+    stats.highestSlot - stats.currentSlot > 10 ||
+    stats.highestBlock - stats.currentBlock > 10;
   const isNotSynchronizedAndNotStopped =
-    status.synchronizing < 98 && !status.stopped;
+    isNotCloseToSynchronized && !status.stopped;
   const renderContents = () => {
     if (isNotSynchronizedAndNotStopped) {
       const caption = !status.initialized
         ? 'Initial sync in progress.'
         : 'Catching up';
+      const progress =
+        (stats.currentBlock / stats.highestBlock) * 100 ||
+        (stats.currentSlot / stats.highestSlot) * 100;
       return (
         <>
           {/* TODO: modify height of the bar for card */}
           <ProgressBar
             card
             color={common.color[name]}
-            progress={status.synchronizing}
+            progress={progress}
             caption={caption}
           />
         </>
@@ -76,7 +82,7 @@ export const ClientCard = (props: ClientProps) => {
     if (status.stopped) {
       return <Label type="gray" label="Stopped" />;
     }
-    const { initialized, synchronizing, ...statusLabels } = status;
+    const { updating, initialized, ...statusLabels } = status;
     const statusKeys = Object.keys(statusLabels).filter(
       (k: string) => status[k] === true
     );

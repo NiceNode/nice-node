@@ -13,6 +13,10 @@ const Template: ComponentStory<typeof ContentMultipleClients> = (args) => (
 );
 
 export const Primary = Template.bind({});
+const currentSlot = 190;
+const highestSlot = 190;
+const currentBlock = 2990;
+const highestBlock = 3000;
 Primary.args = {
   clients: [
     {
@@ -21,19 +25,21 @@ Primary.args = {
       type: 'single',
       nodeType: 'consensus',
       status: {
+        updating: false,
         initialized: true,
-        synchronized: true,
-        synchronizing: 99,
+        synchronized: highestSlot - currentSlot <= 3,
+        blocksBehind:
+          highestSlot - currentSlot > 3 && highestSlot - currentSlot <= 10,
         lowPeerCount: false,
         updateAvailable: false,
-        blocksBehind: true,
         noConnection: false,
         stopped: false,
         error: false,
       },
       stats: {
+        currentSlot: currentSlot,
+        highestSlot: highestSlot,
         peers: 20,
-        slots: '4,456,158',
         cpuLoad: 20,
         diskUsage: 600, // in MB?
       },
@@ -44,19 +50,21 @@ Primary.args = {
       type: 'single',
       nodeType: 'execution',
       status: {
+        updating: false,
         initialized: true,
-        synchronizing: 99,
-        synchronized: true,
+        synchronized: highestBlock - currentBlock <= 3,
+        blocksBehind:
+          highestBlock - currentBlock > 3 && highestBlock - currentBlock <= 10,
         lowPeerCount: false,
         updateAvailable: true,
-        blocksBehind: true,
         noConnection: false,
         stopped: false,
         error: false,
       },
       stats: {
+        currentBlock: currentBlock,
+        highestBlock: highestBlock,
         peers: 16,
-        block: '15791798',
         cpuLoad: 82,
         diskUsage: 5000,
       },

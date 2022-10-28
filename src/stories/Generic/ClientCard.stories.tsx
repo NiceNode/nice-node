@@ -18,9 +18,8 @@ Nethermind.args = {
   type: 'single',
   nodeType: 'execution',
   status: {
+    updating: false,
     initialized: true,
-    synchronizing: 100,
-    synchronized: true,
     lowPeerCount: false,
     updateAvailable: true,
     blocksBehind: false,
@@ -30,7 +29,8 @@ Nethermind.args = {
   },
   stats: {
     peers: 16,
-    slots: '15791798',
+    currentSlot: 90,
+    highestSlot: 190,
     cpuLoad: 82,
     diskUsage: 5000,
   },

@@ -15,14 +15,14 @@ import {
 
 // TODO: process retrieved client data into this format?
 const client = {
-  name: 'nimbus',
+  name: 'geth',
   version: 'v10',
   type: 'client',
-  nodeType: 'consensus',
+  nodeType: 'execution',
   status: {
+    updating: false,
+    sychronized: true,
     initialized: false,
-    synchronizing: 96,
-    synchronized: false,
     lowPeerCount: false,
     updateAvailable: false,
     blocksBehind: true,
@@ -32,7 +32,8 @@ const client = {
   },
   stats: {
     peers: 15,
-    slots: '4,456,158',
+    currentBlock: 1000,
+    highestBlock: 2000,
     cpuLoad: 20,
     diskUsage: 600, // in MB?
   },
