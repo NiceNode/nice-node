@@ -6,6 +6,7 @@ import { Node, NodeId } from '../common/node';
 import { NodeLibrary } from '../main/state/nodeLibrary';
 import { Settings } from '../main/state/settings';
 import { CheckStorageDetails } from '../main/files';
+import { SystemData } from '../main/systemInfo';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
 //  we extend window.performance to include Chrome's memory stats
@@ -42,7 +43,7 @@ declare global {
       getRendererProcessUsage(): any;
       getMainProcessUsage(): any;
       checkSystemHardware(): string[];
-      getSystemInfo(): si.Systeminformation.StaticData;
+      getSystemInfo(): SystemData;
 
       // Multi-node
       getNodes(): Node[];

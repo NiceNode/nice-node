@@ -19,11 +19,16 @@ export interface NodeRequirementsProps {
    * Title of the checklist
    */
   systemData?: SystemData;
+  /**
+   * A folder path where the node data will be stored.
+   */
+  nodeStorageLocation?: string;
 }
 
 const NodeRequirements = ({
   nodeRequirements,
   systemData,
+  nodeStorageLocation,
 }: NodeRequirementsProps) => {
   const { t } = useTranslation('systemRequirements');
   const [sItems, setItems] = useState<ChecklistItemProps[]>([]);
@@ -42,11 +47,12 @@ const NodeRequirements = ({
       {
         nodeRequirements,
         systemData,
+        nodeStorageLocation,
       },
       t
     );
     setItems(newChecklistItems);
-  }, [nodeRequirements, systemData, t]);
+  }, [nodeRequirements, systemData, nodeStorageLocation, t]);
 
   return (
     <div className={container}>

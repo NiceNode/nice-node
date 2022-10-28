@@ -42,7 +42,7 @@
       "minSizeGBs": 16
     },
     "storage" : {
-      "minSizeGBs" : 2000,
+      "minSizeGBs" : 1600,
       "ssdRequired": true
     },
     "internet" : {

@@ -306,7 +306,7 @@
     "react-select": "^5.4.0",
     "react-tooltip": "^4.2.21",
     "styled-components": "^5.3.5",
-    "systeminformation": "^5.12.6",
+    "systeminformation": "^5.12.11",
     "throttle-debounce": "^5.0.0",
     "uuid": "^8.3.2",
     "winston": "^3.7.2",

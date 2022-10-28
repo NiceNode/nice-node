@@ -74,11 +74,11 @@ export const openDialogForStorageLocation = async (): Promise<
   if (result.filePaths) {
     if (result.filePaths.length > 0) {
       const folderPath = result.filePaths[0];
-      const freeStorageMBs = await getSystemFreeDiskSpace(folderPath);
+      const freeStorageGBs = await getSystemFreeDiskSpace(folderPath);
       // eslint-disable-next-line consistent-return
       return {
         folderPath,
-        freeStorageMBs,
+        freeStorageGBs,
       };
     }
   }

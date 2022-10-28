@@ -15,7 +15,7 @@ export interface FolderInputProps {
    *  Free storage space of the storage device where the folder
    *  is located (mounted).
    */
-  freeStorageSpaceMBs?: number;
+  freeStorageSpaceGBs?: number;
   /**
    *  Provide to allow the user to change the folder location
    */
@@ -24,7 +24,7 @@ export interface FolderInputProps {
 
 const FolderInput = ({
   placeholder,
-  freeStorageSpaceMBs,
+  freeStorageSpaceGBs,
   onClickChange,
 }: FolderInputProps) => {
   return (
@@ -40,9 +40,9 @@ const FolderInput = ({
           onClick={onClickChange}
         />
       </div>
-      {freeStorageSpaceMBs && (
+      {freeStorageSpaceGBs && (
         <span className={freeStorageSpaceFontStyle}>
-          {Math.round(freeStorageSpaceMBs)}MB available storage
+          {Math.round(freeStorageSpaceGBs)}GB available storage
         </span>
       )}
     </div>

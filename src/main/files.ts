@@ -71,7 +71,7 @@ export const gethDataDir = (): string => {
 /**
  * @param diskSpacePath fold path to check free disk space at. Helpful for checking
  * free space on different storage devices.
- * @returns (MBs) free storage space
+ * @returns (GBs) free storage space
  */
 export const getSystemFreeDiskSpace = async (
   diskSpacePath?: string
@@ -85,16 +85,16 @@ export const getSystemFreeDiskSpace = async (
 
 export type CheckStorageDetails = {
   folderPath: string;
-  freeStorageMBs: number;
+  freeStorageGBs: number;
 };
 
 export const getNodesDirPathDetails =
   async (): Promise<CheckStorageDetails> => {
     const folderPath = getNodesDirPath();
-    const freeStorageMBs = await getSystemFreeDiskSpace(folderPath);
+    const freeStorageGBs = await getSystemFreeDiskSpace(folderPath);
     return {
       folderPath,
-      freeStorageMBs,
+      freeStorageGBs,
     };
   };
 

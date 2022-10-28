@@ -40,13 +40,12 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   const [sEthereumNodeConfig, setEthereumNodeConfig] = useState<any>();
   const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
     useState<SystemRequirements>();
-  const [sNodeStorageLocation, setNodeStorageLocation] =
-    useState<CheckStorageDetails>();
+  const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
 
-  const [sData, setData] = useState<SystemData>();
+  const [sSystemData, setSystemData] = useState<SystemData>();
 
   const getData = async () => {
-    setData(await electron.getSystemInfo());
+    setSystemData(await electron.getSystemInfo());
   };
 
   useEffect(() => {
@@ -103,6 +102,7 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       }
 
       // save storage location (and other settings)
+      setNodeStorageLocation(newValue.storageLocation);
     },
     [sNodeLibrary]
   );
@@ -182,7 +182,8 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
         <div style={{ display: sStep === 1 ? '' : 'none' }}>
           <NodeRequirements
             nodeRequirements={sEthereumNodeRequirements}
-            systemData={sData}
+            systemData={sSystemData}
+            nodeStorageLocation={sNodeStorageLocation}
           />
         </div>
 

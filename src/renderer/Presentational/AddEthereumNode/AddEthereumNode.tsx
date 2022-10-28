@@ -124,8 +124,8 @@ const AddEthereumNode = ({
     useState<string>();
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
   const [
-    sNodeStorageLocationFreeStorageMBs,
-    setNodeStorageLocationFreeStorageMBs,
+    sNodeStorageLocationFreeStorageGBs,
+    setNodeStorageLocationFreeStorageGBs,
   ] = useState<number>();
 
   useEffect(() => {
@@ -134,8 +134,8 @@ const AddEthereumNode = ({
         await electron.getNodesDefaultStorageLocation();
       console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
       setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
-      setNodeStorageLocationFreeStorageMBs(
-        defaultNodesStorageDetails.freeStorageMBs
+      setNodeStorageLocationFreeStorageGBs(
+        defaultNodesStorageDetails.freeStorageGBs
       );
     };
     fetchData();
@@ -205,14 +205,15 @@ const AddEthereumNode = ({
       <p className={sectionFont}>Data location</p>
       <FolderInput
         placeholder={sNodeStorageLocation ?? 'loading..'}
-        freeStorageSpaceMBs={sNodeStorageLocationFreeStorageMBs}
+        freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
         onClickChange={async () => {
           const storageLocationDetails =
             await electron.openDialogForStorageLocation();
+          console.log('storageLocationDetails', storageLocationDetails);
           if (storageLocationDetails) {
             setNodeStorageLocation(storageLocationDetails.folderPath);
-            setNodeStorageLocationFreeStorageMBs(
-              storageLocationDetails.freeStorageMBs
+            setNodeStorageLocationFreeStorageGBs(
+              storageLocationDetails.freeStorageGBs
             );
           } else {
             // user didn't change the folder path
