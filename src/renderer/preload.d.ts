@@ -5,6 +5,8 @@ import { NodeSpecification } from '../common/nodeSpec';
 import { Node, NodeId } from '../common/node';
 import { NodeLibrary } from '../main/state/nodeLibrary';
 import { Settings } from '../main/state/settings';
+import { CheckStorageDetails } from '../main/files';
+import { SystemData } from '../main/systemInfo';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
 //  we extend window.performance to include Chrome's memory stats
@@ -41,21 +43,25 @@ declare global {
       getRendererProcessUsage(): any;
       getMainProcessUsage(): any;
       checkSystemHardware(): string[];
-      getSystemInfo(): si.Systeminformation.StaticData;
+      getSystemInfo(): SystemData;
 
       // Multi-node
       getNodes(): Node[];
       getUserNodes(): UserNodes;
-      addNode(nodeSpec: NodeSpecification): Node;
+      addNode(nodeSpec: NodeSpecification, storageLocation?: string): Node;
       updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;
       removeNode(nodeId: NodeId, options: { isDeleteStorage: boolean }): Node;
       startNode(nodeId: NodeId): void;
       stopNode(nodeId: NodeId): void;
       openDialogForNodeDataDir(nodeId: NodeId): void;
+      openDialogForStorageLocation(): CheckStorageDetails;
       updateNodeUsedDiskSpace(nodeId: NodeId): void;
       deleteNodeStorage(nodeId: NodeId): boolean;
       sendNodeLogs(nodeId: NodeId): void;
       stopSendingNodeLogs(nodeId?: NodeId): void;
+
+      // Default Node storage location
+      getNodesDefaultStorageLocation(): CheckStorageDetails;
 
       // Node library
       getNodeLibrary(): NodeLibrary;

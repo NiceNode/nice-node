@@ -13,15 +13,26 @@ import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import { bytesToGB } from '../../utils';
 // eslint-disable-next-line import/no-cycle
 import { NodeRequirementsProps } from './NodeRequirements';
+import { findSystemStorageDetailsAtALocation } from './nodeStorageUtil';
 
 export const makeCheckList = (
-  { nodeRequirements, systemData }: NodeRequirementsProps,
+  { nodeRequirements, systemData, nodeStorageLocation }: NodeRequirementsProps,
   t: TFunction<'systemRequirements', undefined>
 ) => {
   const newChecklistItems: ChecklistItemProps[] = [];
   if (!nodeRequirements) {
     return newChecklistItems;
   }
+
+  let nodeLocationStorageDetails;
+  if (systemData && nodeStorageLocation) {
+    nodeLocationStorageDetails = findSystemStorageDetailsAtALocation(
+      systemData,
+      nodeStorageLocation
+    );
+  }
+  console.log('nodeLocationStorageDetails', nodeLocationStorageDetails);
+
   // eslint-disable-next-line no-restricted-syntax
   for (const [nodeReqKey, nodeReqValue] of Object.entries(nodeRequirements)) {
     console.log(`${nodeReqKey}: ${nodeReqValue}`);
@@ -80,7 +91,7 @@ export const makeCheckList = (
     }
     if (nodeReqKey === 'storage') {
       const req = nodeReqValue as StorageRequirements;
-      const disk = systemData?.diskLayout[0];
+      const disk = nodeLocationStorageDetails;
       if (req.ssdRequired === true) {
         checkTitle = t('storageTypeTitle', {
           type: 'SSD',
@@ -121,8 +132,8 @@ export const makeCheckList = (
         checkTitle = t('storageSizeTitle', {
           minSize: req.minSizeGBs,
         });
-        if (disk?.size) {
-          const diskSizeGbs = bytesToGB(disk.size);
+        if (disk?.freeSpaceGBs) {
+          const diskSizeGbs = Math.round(disk.freeSpaceGBs);
           // todo: use free space for storage calculations?
           valueText = t('storageSizeDescription', {
             freeSize: diskSizeGbs,

@@ -16,6 +16,8 @@ import Input from '../../Generics/redesign/Input/Input';
 import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import Select from '../../Generics/redesign/Select/Select';
 import { NodeSpecification } from '../../../common/nodeSpec';
+import FolderInput from '../../Generics/redesign/Input/FolderInput';
+import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 
 const ecOptions = [
   {
@@ -92,9 +94,10 @@ const ccOptions = [
   },
 ];
 
-type AddEthereumNodeValues = {
+export type AddEthereumNodeValues = {
   executionClient?: string;
   consensusClient?: string;
+  storageLocation?: string;
 };
 export interface AddEthereumNodeProps {
   executionOptions: NodeSpecification[];
@@ -107,6 +110,9 @@ export interface AddEthereumNodeProps {
 
 const AddEthereumNode = ({
   onChange,
+  /**
+   * Todo: Pass options from the node spec files
+   */
   executionOptions,
   beaconOptions,
 }: AddEthereumNodeProps) => {
@@ -116,36 +122,24 @@ const AddEthereumNode = ({
     useState<string>();
   const [sSelectedConsensusClient, setSelectedConsensusClient] =
     useState<string>();
-  // const [sExecutionOptions, setExecutionOptions] = useState<any[]>();
-  // const [sBeaconOptions, setBeaconOptions] = useState<any[]>();
+  const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
+  const [
+    sNodeStorageLocationFreeStorageGBs,
+    setNodeStorageLocationFreeStorageGBs,
+  ] = useState<number>();
 
-  // useEffect(() => {
-  //   const formattedExecutionOptions: any[] = [];
-  //   executionOptions.forEach((opt) => {
-  //     const formattedOption = {
-  //       ...opt,
-  //       label: opt.displayName,
-  //       value: opt.specId,
-  //     };
-  //     formattedExecutionOptions.push(formattedOption);
-  //   });
-  //   setExecutionOptions(formattedExecutionOptions);
-  // }, [executionOptions]);
-
-  // useEffect(() => {
-  //   const formattedBeaconOptions: any[] = [];
-  //   beaconOptions.forEach((opt) => {
-  //     const formattedOption = {
-  //       ...opt,
-  //       label: opt.displayName,
-  //       value: opt.specId,
-  //     };
-  //     formattedBeaconOptions.push(formattedOption);
-  //   });
-  //   setBeaconOptions(formattedBeaconOptions);
-  // }, [beaconOptions]);
-  // on change client or setting, return NodeSpecIds, Node Settings, and storage location
-  // NodeSpecs are only req'd in parent component until Node Settings
+  useEffect(() => {
+    const fetchData = async () => {
+      const defaultNodesStorageDetails =
+        await electron.getNodesDefaultStorageLocation();
+      console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
+      setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
+      setNodeStorageLocationFreeStorageGBs(
+        defaultNodesStorageDetails.freeStorageGBs
+      );
+    };
+    fetchData();
+  }, []);
 
   const onChangeEc = useCallback((newEc: any) => {
     console.log('new selected execution client: ', newEc);
@@ -161,9 +155,15 @@ const AddEthereumNode = ({
       onChange({
         executionClient: sSelectedExecutionClient,
         consensusClient: sSelectedConsensusClient,
+        storageLocation: sNodeStorageLocation,
       });
     }
-  }, [sSelectedExecutionClient, sSelectedConsensusClient, onChange]);
+  }, [
+    sSelectedExecutionClient,
+    sSelectedConsensusClient,
+    sNodeStorageLocation,
+    onChange,
+  ]);
 
   return (
     <div className={container}>
@@ -179,7 +179,6 @@ const AddEthereumNode = ({
       <SpecialSelect onChange={onChangeEc} options={ecOptions} />
       <p className={sectionFont}>Consensus client</p>
       <SpecialSelect onChange={onChangeCc} options={ccOptions} />
-      <p className={sectionFont}>Data location</p>
       <DropdownLink
         text={`${sIsOptionsOpen ? 'Hide' : 'Show'} advanced options`}
         onClick={() => setIsOptionsOpen(!sIsOptionsOpen)}
@@ -202,26 +201,25 @@ const AddEthereumNode = ({
           </div>
         </div>
       )}
-      <div
-        style={{
-          boxSizing: 'border-box',
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'flex-start',
-          padding: '0px',
-          gap: 20,
-          width: '100%',
+      <HorizontalLine />
+      <p className={sectionFont}>Data location</p>
+      <FolderInput
+        placeholder={sNodeStorageLocation ?? 'loading..'}
+        freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
+        onClickChange={async () => {
+          const storageLocationDetails =
+            await electron.openDialogForStorageLocation();
+          console.log('storageLocationDetails', storageLocationDetails);
+          if (storageLocationDetails) {
+            setNodeStorageLocation(storageLocationDetails.folderPath);
+            setNodeStorageLocationFreeStorageGBs(
+              storageLocationDetails.freeStorageGBs
+            );
+          } else {
+            // user didn't change the folder path
+          }
         }}
-      >
-        <div style={{ flexGrow: 1 }}>
-          <Input disabled placeholder="files/" />
-        </div>
-        <Button
-          size="small"
-          label="Change..."
-          onClick={() => electron.openDialogForNodeDataDir('')}
-        />
-      </div>
+      />
     </div>
   );
 };

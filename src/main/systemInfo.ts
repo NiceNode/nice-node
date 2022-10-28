@@ -1,6 +1,10 @@
 import si from 'systeminformation';
 
-export type SystemData = si.Systeminformation.StaticData;
+export type SystemData = si.Systeminformation.StaticData & {
+  blockDevices: si.Systeminformation.BlockDevicesData[];
+  fsSize: si.Systeminformation.FsSizeData[];
+};
+
 // const getCpuInfo = async (): Promise<si.Systeminformation.CpuData> => {
 //   const data = await si.cpu();
 //   console.log('Cpu data: ', data);
@@ -54,20 +58,23 @@ export type SystemData = si.Systeminformation.StaticData;
 //   return data;
 // };
 
-// const getAllStaticInfo = async (): Promise<SystemData> => {
-//   const data = await si.getStaticData();
-//   console.log('getStaticData data: ', data);
-//   return data;
-// };
-
 /**
  * Returns detailed system information and sends async info
  * over a channel to the UI when it is determined.
  */
 export const getSystemInfo = async (): Promise<SystemData> => {
-  const data = await si.getStaticData();
-  console.log('getStaticData data: ', JSON.stringify(data, null, 4));
-  return data;
+  const staticData = await si.getStaticData();
+  // );
+  const blockDevices = await si.blockDevices();
+  const fsSize = await si.fsSize();
+  const systemData = {
+    ...staticData,
+    blockDevices,
+    fsSize,
+  };
+  console.log('systemData data: ', JSON.stringify(staticData, null, 4));
+
+  return systemData;
   // start monitoring sys_usage?
   // getCpuInfo();
   // getMemInfo();
@@ -81,6 +88,10 @@ export const getSystemInfo = async (): Promise<SystemData> => {
 };
 
 export const initialize = async () => {
-  // start monitoring sys_usage?
+  // Currently used for debugging.
+  // Also, it is good to "warm-up" Windows.
+  //  "Especially on Windows this can take really long (up to 20 seconds)
+  //   \ because the underlying get-WmiObject command is very slow when
+  //   \ using it the first time."
   getSystemInfo();
 };

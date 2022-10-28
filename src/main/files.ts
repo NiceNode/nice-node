@@ -55,11 +55,15 @@ export const doesFileOrDirExist = async (
 
 /**
  *
- * @returns checkOrMakeNodeDir at getNodesDirPath() + nodeDirName
+ * @returns checkOrMakeNodeDir at storageLocation + nodeDirName
+ *  or getNodesDirPath() + nodeDirName
  * @throws error if it cannot make the directory
  */
-export const makeNodeDir = async (nodeDirName: string): Promise<string> => {
-  const nodeDir = path.join(getNodesDirPath(), nodeDirName);
+export const makeNodeDir = async (
+  nodeDirName: string,
+  storageLocation?: string
+): Promise<string> => {
+  const nodeDir = path.join(storageLocation ?? getNodesDirPath(), nodeDirName);
   await checkAndOrCreateDir(nodeDir);
   return nodeDir;
 };
@@ -68,11 +72,36 @@ export const gethDataDir = (): string => {
   return `${getNNDirPath()}/geth-mainnet`;
 };
 
-export const getSystemFreeDiskSpace = async (): Promise<number> => {
-  const diskSpace = await checkDiskSpace(app.getPath('userData'));
+/**
+ * @param diskSpacePath fold path to check free disk space at. Helpful for checking
+ * free space on different storage devices.
+ * @returns (GBs) free storage space
+ */
+export const getSystemFreeDiskSpace = async (
+  diskSpacePath?: string
+): Promise<number> => {
+  const pathToCheck: string = diskSpacePath || app.getPath('userData');
+  console.log('pathToCheck', pathToCheck);
+  const diskSpace = await checkDiskSpace(pathToCheck);
   const freeInGBs = diskSpace.free * 1e-9;
   return freeInGBs;
 };
+
+export type CheckStorageDetails = {
+  folderPath: string;
+  freeStorageGBs: number;
+};
+
+export const getNodesDirPathDetails =
+  async (): Promise<CheckStorageDetails> => {
+    const folderPath = getNodesDirPath();
+    const freeStorageGBs = await getSystemFreeDiskSpace(folderPath);
+    return {
+      folderPath,
+      freeStorageGBs,
+    };
+  };
+
 export const getSystemDiskSize = async (): Promise<number> => {
   const diskSpace = await checkDiskSpace(app.getPath('userData'));
   const sizeInGBs = diskSpace.size * 1e-9;

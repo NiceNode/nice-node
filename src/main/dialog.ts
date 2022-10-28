@@ -1,7 +1,11 @@
 import { BrowserWindow, dialog } from 'electron';
 
 import { NodeId } from '../common/node';
-import { getNodesDirPath } from './files';
+import {
+  getNodesDirPath,
+  CheckStorageDetails,
+  getSystemFreeDiskSpace,
+} from './files';
 import logger from './logger';
 // eslint-disable-next-line import/no-cycle
 import { getMainWindow } from './main';
@@ -43,6 +47,39 @@ export const openDialogForNodeDataDir = async (nodeId: NodeId) => {
       node.runtime.dataDir = newDataDir;
       node.config.configValuesMap.dataDir = newDataDir;
       updateNode(node);
+    }
+  }
+};
+
+export const openDialogForStorageLocation = async (): Promise<
+  CheckStorageDetails | undefined
+> => {
+  const mainWindow: BrowserWindow | null = getMainWindow();
+  if (!mainWindow) {
+    logger.error(
+      'Unable to open dialog to select storage location. mainWindow is null.'
+    );
+    return;
+  }
+  const defaultPath = getNodesDirPath();
+  const result = await dialog.showOpenDialog(mainWindow, {
+    title: `Select a folder for storing node data`,
+    defaultPath,
+    properties: ['openDirectory'],
+  });
+  console.log('dir select result: ', result);
+  if (result.canceled) {
+    return;
+  }
+  if (result.filePaths) {
+    if (result.filePaths.length > 0) {
+      const folderPath = result.filePaths[0];
+      const freeStorageGBs = await getSystemFreeDiskSpace(folderPath);
+      // eslint-disable-next-line consistent-return
+      return {
+        folderPath,
+        freeStorageGBs,
+      };
     }
   }
 };

@@ -4,7 +4,9 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { componentContainer, container } from './addNodeStepper.css';
 import Stepper from '../../Generics/redesign/Stepper/Stepper';
-import AddEthereumNode from '../AddEthereumNode/AddEthereumNode';
+import AddEthereumNode, {
+  AddEthereumNodeValues,
+} from '../AddEthereumNode/AddEthereumNode';
 import DockerInstallation from '../DockerInstallation/DockerInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import electron from '../../electronGlobal';
@@ -15,6 +17,7 @@ import { SystemData } from '../../../main/systemInfo';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
 import { updateSelectedNodeId } from '../../state/node';
 import { useAppDispatch } from '../../state/hooks';
+import { CheckStorageDetails } from '../../../main/files';
 
 export interface AddNodeStepperProps {
   onChange: (newValue: 'done' | 'cancel') => void;
@@ -37,11 +40,12 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   const [sEthereumNodeConfig, setEthereumNodeConfig] = useState<any>();
   const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
     useState<SystemRequirements>();
+  const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
 
-  const [sData, setData] = useState<SystemData>();
+  const [sSystemData, setSystemData] = useState<SystemData>();
 
   const getData = async () => {
-    setData(await electron.getSystemInfo());
+    setSystemData(await electron.getSystemInfo());
   };
 
   useEffect(() => {
@@ -72,7 +76,7 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   }, []);
 
   const onChangeAddEthereumNode = useCallback(
-    (newValue: any) => {
+    (newValue: AddEthereumNodeValues) => {
       console.log('onChangeAddEthereumNode newValue ', newValue);
       setEthereumNodeConfig(newValue);
       let ecReqs;
@@ -96,6 +100,9 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       } catch (e) {
         console.error(e);
       }
+
+      // save storage location (and other settings)
+      setNodeStorageLocation(newValue.storageLocation);
     },
     [sNodeLibrary]
   );
@@ -121,9 +128,13 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
         ccNodeSpec = sNodeLibrary?.[`${ccValue}-beacon`];
       }
     }
-    const ecNode = await electron.addNode(ecNodeSpec);
+    console.log(
+      'adding nodes with storage location set to: ',
+      sNodeStorageLocation
+    );
+    const ecNode = await electron.addNode(ecNodeSpec, sNodeStorageLocation);
     console.log('addNode returned node: ', ecNode);
-    const ccNode = await electron.addNode(ccNodeSpec);
+    const ccNode = await electron.addNode(ccNodeSpec, sNodeStorageLocation);
     console.log('addNode returned node: ', ccNode);
     dispatch(updateSelectedNodeId(ecNode.id));
     const startEcResult = await electron.startNode(ecNode.id);
@@ -175,7 +186,8 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
         <div style={{ display: sStep === 1 ? '' : 'none' }}>
           <NodeRequirements
             nodeRequirements={sEthereumNodeRequirements}
-            systemData={sData}
+            systemData={sSystemData}
+            nodeStorageLocation={sNodeStorageLocation}
           />
         </div>
 

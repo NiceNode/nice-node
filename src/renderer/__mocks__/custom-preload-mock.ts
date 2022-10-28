@@ -63,6 +63,7 @@ export const removeNode = () => {};
 export const startNode = () => {};
 export const stopNode = () => {};
 export const openDialogForNodeDataDir = () => {};
+export const openDialogForStorageLocation = () => {};
 export const updateNodeUsedDiskSpace = () => {};
 export const deleteNodeStorage = () => true;
 export const sendNodeLogs = () => {};
