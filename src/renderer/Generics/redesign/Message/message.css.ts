@@ -9,9 +9,9 @@ export const container = style({
   gap: 16,
   boxSizing: 'border-box',
   borderRadius: '10px',
-  width: 730,
   padding: 24,
   position: 'relative',
+  marginBottom: 32,
   selectors: {
     [`&.info`]: {
       backgroundColor: vars.components.messageInfoBackground,

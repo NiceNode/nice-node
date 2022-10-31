@@ -15,22 +15,25 @@ import {
 
 // TODO: process retrieved client data into this format?
 const client = {
-  name: 'nimbus',
+  name: 'geth',
   version: 'v10',
   type: 'client',
-  nodeType: 'consensus',
+  nodeType: 'execution',
   status: {
-    synchronized: false,
+    updating: false,
+    sychronized: true,
+    initialized: false,
     lowPeerCount: false,
     updateAvailable: false,
-    blocksBehind: false,
+    blocksBehind: true,
     noConnection: false,
     stopped: false,
     error: false,
   },
   stats: {
     peers: 15,
-    slot: '4,456,158',
+    currentBlock: 1000,
+    highestBlock: 2000,
     cpuLoad: 20,
     diskUsage: 600, // in MB?
   },
@@ -49,7 +52,6 @@ const ContentSingleClient = () => {
     return {
       ...client,
       info: `${clientTypeLabel} -- Ethereum mainnet`, // should be more flexible for other networks
-      status: 'healthy', // change this to enum to compare weights?
     };
   };
 
@@ -59,9 +61,9 @@ const ContentSingleClient = () => {
 
   return (
     <div className={container}>
-      <Header nodeOverview={nodeOverview} />
+      <Header {...nodeOverview} />
       <HorizontalLine type="content" />
-      <HeaderMetrics nodeOverview={nodeOverview} />
+      <HeaderMetrics {...nodeOverview} />
       <HorizontalLine type="content" />
     </div>
   );

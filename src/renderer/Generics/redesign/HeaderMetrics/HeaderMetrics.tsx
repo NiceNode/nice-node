@@ -1,39 +1,22 @@
-import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { MetricTypes } from '../MetricTypes/MetricTypes';
 import { container } from './headerMetrics.css';
 import VerticalLine from '../VerticalLine/VerticalLine';
 import { getSyncStatus } from '../utils';
-import { ClientStatusProps } from '../consts';
-
-export interface HeaderMetricsProps {
-  nodeOverview: {
-    name: string;
-    title: string;
-    info: string;
-    type: string;
-    version?: string;
-    update?: string;
-    status: ClientStatusProps;
-    stats: {
-      peers?: number;
-      block?: string;
-      cpuLoad?: number;
-      diskUsage?: number;
-    };
-  };
-}
-
-const metricTypeArray = {
-  altruistic: ['status', 'slots', 'cpuLoad', 'diskUsage'],
-  client: ['status', 'slots', 'peers', 'diskUsage'],
-  validator: ['status', 'stake', 'rewards', 'balance'],
-};
+import { NodeOverviewProps } from '../consts';
 
 /**
  * Primary UI component for user interaction
  */
-export const HeaderMetrics = ({ nodeOverview }: HeaderMetricsProps) => {
-  const { type, status, stats } = nodeOverview;
+export const HeaderMetrics = (props: NodeOverviewProps) => {
+  const { type, status, stats } = props;
+  const getSlotOrBlockMetricType = stats.currentSlot
+    ? 'currentSlot'
+    : 'currentBlock';
+  const metricTypeArray = {
+    altruistic: ['status', 'currentSlot', 'cpuLoad', 'diskUsage'],
+    client: ['status', getSlotOrBlockMetricType, 'peers', 'diskUsage'],
+    validator: ['status', 'stake', 'rewards', 'balance'],
+  };
   const assignedMetric = metricTypeArray[type];
   return (
     <div className={container}>

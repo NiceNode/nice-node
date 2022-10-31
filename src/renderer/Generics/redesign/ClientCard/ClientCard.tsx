@@ -17,7 +17,8 @@ import {
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { Label } from '../Label/Label';
 import ProgressBar from '../ProgressBar/ProgressBar';
-import { ClientStatusProps } from '../consts';
+import { ClientProps } from '../consts';
+import { common } from '../theme.css';
 
 const getLabelDetails = (label: string) => {
   const labelDetails = { color: '', string: '' };
@@ -26,17 +27,21 @@ const getLabelDetails = (label: string) => {
       labelDetails.color = 'green';
       labelDetails.string = 'Synchronized';
       break;
+    case 'blocksBehind':
+      labelDetails.color = 'orange';
+      labelDetails.string = 'Blocks Behind';
+      break;
     case 'lowPeerCount':
       labelDetails.color = 'orange';
       labelDetails.string = 'Low peer count';
       break;
+    case 'noConnection':
+      labelDetails.color = 'red';
+      labelDetails.string = 'No connection';
+      break;
     case 'updateAvailable':
       labelDetails.color = 'purple';
       labelDetails.string = 'Update Available';
-      break;
-    case 'stopped':
-      labelDetails.color = 'purple';
-      labelDetails.string = 'Update';
       break;
     default:
       break;
@@ -44,41 +49,32 @@ const getLabelDetails = (label: string) => {
   return labelDetails;
 };
 
-export interface ClientCardProps {
-  /**
-   * Node client object
-   */
-  client: {
-    name: NodeBackgroundId;
-    version: string;
-    nodeType: string;
-    status: ClientStatusProps;
-    stats: {
-      peers: number;
-      slot: string;
-      cpuLoad: number;
-      diskUsage: number;
-    };
-  };
-}
-
 /**
  * Primary UI component for user interaction
  */
-export const ClientCard = ({ client }: ClientCardProps) => {
-  const { status, name, nodeType } = client;
-  const isNotSynchronizedAndStopped = !status.synchronized && !status.stopped;
+export const ClientCard = (props: ClientProps) => {
+  const { status, name, nodeType, stats } = props;
+  const isNotCloseToSynchronized =
+    stats.highestSlot - stats.currentSlot > 10 ||
+    stats.highestBlock - stats.currentBlock > 10;
+  const isNotSynchronizedAndNotStopped =
+    isNotCloseToSynchronized && !status.stopped;
   const renderContents = () => {
-    if (isNotSynchronizedAndStopped) {
+    if (isNotSynchronizedAndNotStopped) {
+      const caption = !status.initialized
+        ? 'Initial sync in progress.'
+        : 'Catching up';
+      const progress =
+        (stats.currentBlock / stats.highestBlock) * 100 ||
+        (stats.currentSlot / stats.highestSlot) * 100;
       return (
         <>
-          {/* TODO: tie clients with progress bar colors */}
           {/* TODO: modify height of the bar for card */}
           <ProgressBar
             card
-            color="#F96767"
-            progress={23}
-            caption="Initial sync in progress."
+            color={common.color[name]}
+            progress={progress}
+            caption={caption}
           />
         </>
       );
@@ -86,7 +82,8 @@ export const ClientCard = ({ client }: ClientCardProps) => {
     if (status.stopped) {
       return <Label type="gray" label="Stopped" />;
     }
-    const statusKeys = Object.keys(status).filter(
+    const { updating, initialized, ...statusLabels } = status;
+    const statusKeys = Object.keys(statusLabels).filter(
       (k: string) => status[k] === true
     );
     return (
@@ -111,7 +108,7 @@ export const ClientCard = ({ client }: ClientCardProps) => {
       <div
         style={{
           backgroundImage: `url(${NODE_BACKGROUNDS[name]})`,
-          height: isNotSynchronizedAndStopped ? 166 : 186,
+          height: isNotSynchronizedAndNotStopped ? 166 : 186,
         }}
         className={[cardTop, `${stoppedStyle}`].join(' ')}
       >

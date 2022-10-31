@@ -1,8 +1,5 @@
-import { NodeIconId } from 'renderer/assets/images/nodeIcons';
-import Button from '../Button/Button';
 import { SYNC_STATUS } from '../consts';
 import { Icon } from '../Icon/Icon';
-import { NodeIcon } from '../NodeIcon/NodeIcon';
 import {
   statusStyle,
   container,
@@ -16,6 +13,7 @@ import {
   yellow,
   red,
   sync,
+  updating,
   stopped,
 } from './metricTypes.css';
 
@@ -23,7 +21,13 @@ export interface MetricTypesProps {
   /**
    * Stats types
    */
-  statsType?: 'status' | 'slots' | 'blocks' | 'peers' | 'cpuLoad' | 'diskUsage';
+  statsType?:
+    | 'status'
+    | 'currentSlot'
+    | 'currentBlock'
+    | 'peers'
+    | 'cpuLoad'
+    | 'diskUsage';
   /**
    * Status //TODO: match this with current status enum implementation
    */
@@ -50,27 +54,39 @@ export const MetricTypes = ({
     let statusColorStyle;
     let icon = null;
     switch (statsValue) {
+      case SYNC_STATUS.UPDATING:
+        statusColorStyle = updating;
+        titleText = 'Waiting';
+        labelText = 'Installing update...';
+        icon = <Icon iconId="updating" />;
+        break;
       case SYNC_STATUS.SYNCHRONIZED:
         statusColorStyle = green;
         titleText = 'Online';
         labelText = 'Synchronized';
         break;
+      case SYNC_STATUS.BLOCKS_BEHIND:
       case SYNC_STATUS.LOW_PEER_COUNT:
         statusColorStyle = yellow;
         titleText = 'Online';
-        labelText = 'Low Peer Count';
+        labelText =
+          statsValue === SYNC_STATUS.BLOCKS_BEHIND
+            ? 'Blocks behind'
+            : 'Low Peer Count';
         break;
       case SYNC_STATUS.NO_NETWORK:
         statusColorStyle = red;
         titleText = 'Offline';
         labelText = 'No Network';
         break;
-      case SYNC_STATUS.CATCHING_UP || SYNC_STATUS.INITIALIZING:
+      case SYNC_STATUS.CATCHING_UP:
+      case SYNC_STATUS.INITIALIZING:
         statusColorStyle = sync;
         titleText = 'Syncing';
-        labelText = SYNC_STATUS.CATCHING_UP
-          ? 'Catching up...'
-          : 'In progress...';
+        labelText =
+          statsValue === SYNC_STATUS.CATCHING_UP
+            ? 'Catching up...'
+            : 'In progress...';
         icon = <Icon iconId="syncing" />;
         break;
       case SYNC_STATUS.STOPPED:
@@ -89,13 +105,14 @@ export const MetricTypes = ({
   const processStatsType = () => {
     let iconId = statsType;
     switch (statsType) {
-      case 'blocks':
+      case 'currentBlock':
         iconId = 'slots';
-        titleText = '15828039';
+        titleText = `${statsValue}`;
         labelText = 'Last synced block';
         break;
-      case 'slots':
-        titleText = '4,456,158';
+      case 'currentSlot':
+        iconId = 'slots';
+        titleText = Number(statsValue).toLocaleString();
         labelText = 'Current slot';
         break;
       case 'peers':

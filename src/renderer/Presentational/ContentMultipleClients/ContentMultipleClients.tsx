@@ -1,4 +1,6 @@
 import { useState, useCallback } from 'react';
+import { ClientProps } from 'renderer/Generics/redesign/consts';
+import { Message } from '../../Generics/redesign/Message/Message';
 import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
@@ -13,61 +15,22 @@ import {
   resourcesContainer,
 } from './contentMultipleClients.css';
 
-// TODO: process retrieved client data into this format?
-const clients = [
-  {
-    name: 'nimbus',
-    version: 'v10',
-    type: 'single',
-    nodeType: 'consensus',
-    status: {
-      synchronized: true,
-      lowPeerCount: false,
-      updateAvailable: false,
-      blocksBehind: false,
-      noConnection: false,
-      stopped: false,
-      error: false,
-    },
-    stats: {
-      peers: 20,
-      slot: '4,456,158',
-      cpuLoad: 20,
-      diskUsage: 600, // in MB?
-    },
-  },
-  {
-    name: 'erigon',
-    version: 'v10',
-    type: 'single',
-    nodeType: 'execution',
-    status: {
-      synchronized: true,
-      lowPeerCount: false,
-      updateAvailable: true,
-      blocksBehind: false,
-      noConnection: false,
-      stopped: false,
-      error: false,
-    },
-    stats: {
-      peers: 16,
-      block: '15791798',
-      cpuLoad: 82,
-      diskUsage: 5000,
-    },
-  },
-];
-
-const ContentMultipleClients = () => {
+const ContentMultipleClients = (props: {
+  clients: [ClientProps, ClientProps];
+}) => {
+  const { clients } = props;
   // TODO: Come up with a better name for this component..
   /* TODO: maybe a "provider" wrapper/manager to fetch data and handle states */
 
   const initialWalletDismissedState =
     localStorage.getItem('walletDismissed') === 'true';
+  const initialSyncMessageDismissedState =
+    localStorage.getItem('initialSyncMessageDismissed') === 'true';
   const [walletDismissed, setWalletDismissed] = useState<boolean>(
     initialWalletDismissedState
   );
+  const [initialSyncMessageDismissed, setinitialSyncMessageDismissed] =
+    useState<boolean>(initialSyncMessageDismissedState);
 
   const onDismissClick = useCallback(() => {
     setWalletDismissed(true);
@@ -82,6 +45,46 @@ const ContentMultipleClients = () => {
   const clClient = clients.find((client) => client.nodeType === 'consensus');
   const elClient = clients.find((client) => client.nodeType === 'execution');
 
+  const renderPrompt = () => {
+    const synchronized =
+      clClient?.status.synchronized && elClient?.status.synchronized;
+    if (
+      synchronized &&
+      !clClient?.status.updating &&
+      !elClient?.status.updating &&
+      !walletDismissed
+    ) {
+      return (
+        <WalletPrompt
+          onSetupClick={onSetupClick}
+          onDismissClick={onDismissClick}
+        />
+      );
+    }
+    if (
+      !clClient?.status.initialized &&
+      !elClient?.status.initialized &&
+      !synchronized &&
+      !initialSyncMessageDismissed
+    ) {
+      const title = 'Initial sync process started';
+      const description =
+        'When adding a node it first needs to catch up on the history of the network. This process downloads all the necessary data and might take a couple of days. After synchronization is complete your node will be online and part of the network.';
+      return (
+        <Message
+          type="info"
+          title={title}
+          description={description}
+          onClick={() => {
+            localStorage.setItem('initialSyncMessageDismissed', 'true');
+            setinitialSyncMessageDismissed(true);
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
   // TODO: refactor this out so that it can be shared with multiple and single
   const getNodeOverview = () => {
     // useEffect, used only in Header and Metrics
@@ -95,21 +98,28 @@ const ContentMultipleClients = () => {
         info: 'Non-Validating Node — Ethereum mainnet',
         type: 'altruistic',
         status: {
+          updating: clClient?.status.updating || elClient?.status.updating,
           synchronized:
-            clClient.status.synchronized || elClient.status.synchronized,
-          lowPeerCount:
-            clClient.status.lowPeerCount || elClient.status.lowPeerCount,
-          updateAvailable:
-            clClient.status.updateAvailable || elClient.status.updateAvailable,
+            clClient?.status.synchronized && elClient?.status.synchronized,
+          initialized:
+            clClient?.status.initialized || elClient?.status.initialized,
           blocksBehind:
-            clClient.status.blocksBehind || elClient.status.blocksBehind,
+            clClient?.status.blocksBehind || elClient?.status.blocksBehind,
+          lowPeerCount:
+            clClient?.status.lowPeerCount || elClient?.status.lowPeerCount,
+          updateAvailable:
+            clClient?.status.updateAvailable ||
+            elClient?.status.updateAvailable,
           noConnection:
-            clClient.status.noConnection || elClient.status.noConnection,
-          stopped: clClient.status.stopped || elClient.status.stopped, // both should be stopped
-          error: clClient.status.error || elClient.status.error,
+            clClient?.status.noConnection || elClient?.status.noConnection,
+          stopped: clClient?.status.stopped || elClient?.status.stopped, // both should be stopped
+          error: clClient?.status.error || elClient?.status.error,
         },
         stats: {
-          block: clClient?.stats.slot,
+          currentBlock: elClient?.stats.currentBlock,
+          highestBlock: elClient?.stats.highestBlock,
+          currentSlot: clClient?.stats.currentSlot,
+          highestSlot: clClient?.stats.highestSlot,
           cpuLoad:
             (clClient?.stats.cpuLoad || 0) + (elClient?.stats.cpuLoad || 0),
           diskUsage:
@@ -152,23 +162,15 @@ const ContentMultipleClients = () => {
 
   return (
     <div className={container}>
-      <Header nodeOverview={nodeOverview} />
+      <Header {...nodeOverview} />
       <HorizontalLine type="content" />
-      <HeaderMetrics nodeOverview={nodeOverview} />
+      <HeaderMetrics {...nodeOverview} />
       <HorizontalLine type="content" />
-      {clClient.status.synchronized &&
-        elClient.status.synchronized &&
-        !walletDismissed && (
-          // TODO: Prompt handler for wallet & node status messages
-          <WalletPrompt
-            onSetupClick={onSetupClick}
-            onDismissClick={onDismissClick}
-          />
-        )}
+      {renderPrompt()}
       <div className={sectionTitle}>Ethereum Clients</div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
-          return <ClientCard client={client} />;
+          return <ClientCard {...client} />;
         })}
       </div>
       <HorizontalLine type="content" />

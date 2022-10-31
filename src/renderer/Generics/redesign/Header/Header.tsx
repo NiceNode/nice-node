@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import Button from '../Button/Button';
-import { ClientStatusProps } from '../consts';
+import { NodeOverviewProps } from '../consts';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
 import {
@@ -16,36 +15,11 @@ import {
   updateCallout,
 } from './header.css';
 
-export interface HeaderProps {
-  nodeOverview: {
-    name: string;
-    title?: string;
-    info: string;
-    type: string;
-    version?: string;
-    update?: string;
-    status: ClientStatusProps;
-    stats: {
-      peers: number;
-      block: string;
-      cpuLoad: number;
-      diskUsage: number;
-    };
-  };
-}
-
 /**
  * Primary UI component for user interaction
  */
-export const Header = ({ nodeOverview }: HeaderProps) => {
-  const {
-    name,
-    title,
-    info,
-    type,
-    status: { updateAvailable },
-    version,
-  } = nodeOverview;
+export const Header = (props: NodeOverviewProps) => {
+  const { name, title, info, type, status, version } = props;
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
 
@@ -55,14 +29,15 @@ export const Header = ({ nodeOverview }: HeaderProps) => {
     onClick: () => {},
   };
   if (type === 'altruistic') {
-    if (true) {
+    if (!status.stopped) {
       buttonProps.label = 'Stop';
       buttonProps.iconId = 'stop';
       buttonProps.onClick = () => {
         console.log('stop node');
       };
     } else {
-      buttonProps.label = 'Start';
+      const text = status.initialized ? 'Resume' : 'Start';
+      buttonProps.label = 'Resume';
       buttonProps.iconId = 'play';
       buttonProps.onClick = () => {
         console.log('start node');
@@ -89,7 +64,7 @@ export const Header = ({ nodeOverview }: HeaderProps) => {
         <div className={infoStyle}>{info}</div>
       </div>
       <div className={buttonContainer}>
-        {updateAvailable && (
+        {status.updateAvailable && (
           <div
             onBlur={(event) => {
               if (!event.currentTarget.contains(event.relatedTarget)) {
@@ -113,6 +88,7 @@ export const Header = ({ nodeOverview }: HeaderProps) => {
               <div className={updateCallout} tabIndex={0}>
                 <UpdateCallout
                   onClick={() => {
+                    setIsCalloutDisplayed(false);
                     console.log('clicked!');
                   }}
                 />
