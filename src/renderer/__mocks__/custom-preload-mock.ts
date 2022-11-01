@@ -64,6 +64,7 @@ export const startNode = () => {};
 export const stopNode = () => {};
 export const openDialogForNodeDataDir = () => {};
 export const openDialogForStorageLocation = () => {};
+export const getNodesDefaultStorageLocation = () => '/user/storage/nodes/';
 export const updateNodeUsedDiskSpace = () => {};
 export const deleteNodeStorage = () => true;
 export const sendNodeLogs = () => {};
@@ -79,5 +80,7 @@ export const getNodeLibrary = (): NodeLibrary => {
 // Settings/Config
 export const getIsDockerInstalled = () => true;
 export const getIsDockerRunning = () => true;
+
+export const getSystemInfo = () => {};
 
 export const SENTRY_DSN = 'fake_sentry_dsn';

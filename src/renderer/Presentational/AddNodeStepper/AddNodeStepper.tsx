@@ -10,14 +10,15 @@ import AddEthereumNode, {
 import DockerInstallation from '../DockerInstallation/DockerInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import electron from '../../electronGlobal';
-import { NodeSpecification } from '../../../common/nodeSpec';
-import { categorizeNodeLibrary } from '../../utils';
+// import { NodeSpecification } from '../../../common/nodeSpec';
+// import { categorizeNodeLibrary } from '../../utils';
 import { SystemRequirements } from '../../../common/systemRequirements';
 import { SystemData } from '../../../main/systemInfo';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
 import { updateSelectedNodeId } from '../../state/node';
 import { useAppDispatch } from '../../state/hooks';
-import { CheckStorageDetails } from '../../../main/files';
+import { NodeLibrary } from '../../../main/state/nodeLibrary';
+// import { CheckStorageDetails } from '../../../main/files';
 
 export interface AddNodeStepperProps {
   onChange: (newValue: 'done' | 'cancel') => void;
@@ -28,16 +29,17 @@ const TOTAL_STEPS = 3;
 const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   const dispatch = useAppDispatch();
   const [sStep, setStep] = useState<number>(0);
-  const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
-    NodeSpecification[]
-  >([]);
-  const [sBeaconNodeLibrary, setBeaconNodeLibrary] = useState<
-    NodeSpecification[]
-  >([]);
-  const [sNodeLibrary, setNodeLibrary] = useState<any>();
+  // const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
+  //   NodeSpecification[]
+  // >([]);
+  // const [sBeaconNodeLibrary, setBeaconNodeLibrary] = useState<
+  //   NodeSpecification[]
+  // >([]);
+  const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
   // <string, NodeSpecification>{}
 
-  const [sEthereumNodeConfig, setEthereumNodeConfig] = useState<any>();
+  const [sEthereumNodeConfig, setEthereumNodeConfig] =
+    useState<AddEthereumNodeValues>();
   const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
     useState<SystemRequirements>();
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
@@ -57,13 +59,13 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   //  This can later be optimized to only retrieve NodeSpecs as needed
   useEffect(() => {
     const fetchNodeLibrary = async () => {
-      const nodeLibrary = await electron.getNodeLibrary();
+      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
       console.log('nodeLibrary', nodeLibrary);
-      const categorized = categorizeNodeLibrary(nodeLibrary);
+      // const categorized = categorizeNodeLibrary(nodeLibrary);
       // console.log('nodeLibrary categorized', categorized);
       setNodeLibrary(nodeLibrary);
-      setExecutionClientLibrary(categorized.ExecutionClient);
-      setBeaconNodeLibrary(categorized.BeaconNode);
+      // setExecutionClientLibrary(categorized.ExecutionClient);
+      // setBeaconNodeLibrary(categorized.BeaconNode);
       // // setLayer2ClientLibrary(categorized.L2);
       // setOtherNodeLibrary(categorized.Other);
       // set exec, beacons, and layer 2s
@@ -82,21 +84,25 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       let ecReqs;
       let ccReqs;
 
-      if (newValue?.executionClient?.value) {
-        const ecValue = newValue?.executionClient?.value;
+      if (newValue?.executionClient) {
+        const ecValue = newValue?.executionClient;
         if (sNodeLibrary) {
           ecReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
         }
       }
-      if (newValue?.consensusClient?.value) {
-        const ccValue = newValue?.consensusClient?.value;
+      if (newValue?.consensusClient) {
+        const ccValue = newValue?.consensusClient;
         if (sNodeLibrary) {
           ccReqs = sNodeLibrary?.[`${ccValue}-beacon`]?.systemRequirements;
         }
       }
       try {
-        const mergedReqs = mergeSystemRequirements([ecReqs, ccReqs]);
-        setEthereumNodeRequirements(mergedReqs);
+        if (ecReqs && ccReqs) {
+          const mergedReqs = mergeSystemRequirements([ecReqs, ccReqs]);
+          setEthereumNodeRequirements(mergedReqs);
+        } else {
+          throw new Error('ec or ec node requirements undefined');
+        }
       } catch (e) {
         console.error(e);
       }
@@ -116,14 +122,14 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
   const addNodes = async () => {
     let ecNodeSpec;
     let ccNodeSpec;
-    if (sEthereumNodeConfig?.executionClient?.value) {
-      const ecValue = sEthereumNodeConfig?.executionClient?.value;
+    if (sEthereumNodeConfig?.executionClient) {
+      const ecValue = sEthereumNodeConfig?.executionClient;
       if (sNodeLibrary) {
         ecNodeSpec = sNodeLibrary?.[ecValue];
       }
     }
-    if (sEthereumNodeConfig?.consensusClient?.value) {
-      const ccValue = sEthereumNodeConfig?.consensusClient?.value;
+    if (sEthereumNodeConfig?.consensusClient) {
+      const ccValue = sEthereumNodeConfig?.consensusClient;
       if (sNodeLibrary) {
         ccNodeSpec = sNodeLibrary?.[`${ccValue}-beacon`];
       }
@@ -132,6 +138,10 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       'adding nodes with storage location set to: ',
       sNodeStorageLocation
     );
+    if (!ecNodeSpec || !ccNodeSpec) {
+      throw new Error('ecNodeSpec or ccNodeSpec is undefined');
+      return;
+    }
     const ecNode = await electron.addNode(ecNodeSpec, sNodeStorageLocation);
     console.log('addNode returned node: ', ecNode);
     const ccNode = await electron.addNode(ccNodeSpec, sNodeStorageLocation);
@@ -177,8 +187,8 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
         <div style={{ display: sStep === 0 ? '' : 'none' }}>
           <AddEthereumNode
             onChange={onChangeAddEthereumNode}
-            executionOptions={sExecutionClientLibrary}
-            beaconOptions={sBeaconNodeLibrary}
+            // beaconOptions={sBeaconNodeLibrary}
+            // executionOptions={sExecutionClientLibrary}
           />
         </div>
 

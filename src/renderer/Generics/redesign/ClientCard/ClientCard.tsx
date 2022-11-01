@@ -1,8 +1,4 @@
-import { NodeIconId } from '../../../assets/images/nodeIcons';
-import {
-  NodeBackgroundId,
-  NODE_BACKGROUNDS,
-} from '../../../assets/images/nodeBackgrounds';
+import { NODE_BACKGROUNDS } from '../../../assets/images/nodeBackgrounds';
 import {
   container,
   cardTop,
@@ -15,13 +11,16 @@ import {
   clientBackground,
 } from './clientCard.css';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
-import { Label } from '../Label/Label';
+import { Label, LabelColor } from '../Label/Label';
 import ProgressBar from '../ProgressBar/ProgressBar';
-import { ClientProps } from '../consts';
+import { ClientProps, ClientStatusProps } from '../consts';
 import { common } from '../theme.css';
 
 const getLabelDetails = (label: string) => {
-  const labelDetails = { color: '', string: '' };
+  const labelDetails: { color: LabelColor; string: string } = {
+    color: 'gray',
+    string: '',
+  };
   switch (label) {
     case 'synchronized':
       labelDetails.color = 'green';
@@ -55,8 +54,12 @@ const getLabelDetails = (label: string) => {
 export const ClientCard = (props: ClientProps) => {
   const { status, name, nodeType, stats } = props;
   const isNotCloseToSynchronized =
-    stats.highestSlot - stats.currentSlot > 10 ||
-    stats.highestBlock - stats.currentBlock > 10;
+    (stats.highestSlot &&
+      stats.currentSlot &&
+      stats.highestSlot - stats.currentSlot > 10) ||
+    (stats.highestBlock &&
+      stats.currentBlock &&
+      stats.highestBlock - stats.currentBlock > 10);
   const isNotSynchronizedAndNotStopped =
     isNotCloseToSynchronized && !status.stopped;
   const renderContents = () => {
@@ -64,9 +67,12 @@ export const ClientCard = (props: ClientProps) => {
       const caption = !status.initialized
         ? 'Initial sync in progress.'
         : 'Catching up';
-      const progress =
-        (stats.currentBlock / stats.highestBlock) * 100 ||
-        (stats.currentSlot / stats.highestSlot) * 100;
+      let progress;
+      if (stats.highestSlot && stats.currentSlot) {
+        progress = (stats.currentSlot / stats.highestSlot) * 100;
+      } else if (stats.highestBlock && stats.currentBlock) {
+        progress = (stats.currentBlock / stats.highestBlock) * 100;
+      }
       return (
         <>
           {/* TODO: modify height of the bar for card */}
@@ -83,9 +89,10 @@ export const ClientCard = (props: ClientProps) => {
       return <Label type="gray" label="Stopped" />;
     }
     const { updating, initialized, ...statusLabels } = status;
-    const statusKeys = Object.keys(statusLabels).filter(
-      (k: string) => status[k] === true
-    );
+    const statusKeys = Object.keys(statusLabels).filter((k: string) => {
+      const statusKey = k as keyof ClientStatusProps;
+      return status[statusKey] === true;
+    });
     return (
       <div className={clientLabels}>
         {statusKeys.map((key) => {

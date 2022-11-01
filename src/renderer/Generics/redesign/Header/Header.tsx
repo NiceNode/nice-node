@@ -36,7 +36,7 @@ export const Header = (props: NodeOverviewProps) => {
         console.log('stop node');
       };
     } else {
-      const text = status.initialized ? 'Resume' : 'Start';
+      // const text = status.initialized ? 'Resume' : 'Start';
       buttonProps.label = 'Resume';
       buttonProps.iconId = 'play';
       buttonProps.onClick = () => {
