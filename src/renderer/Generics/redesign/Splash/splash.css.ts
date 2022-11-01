@@ -3,7 +3,7 @@ import { vars } from '../theme.css';
 import welcome from '../../../assets/images/artwork/welcome.png';
 
 export const container = style({
-  backgroundImage: `url(${welcome})`,
+  // backgroundImage: `url(${welcome})`,
   backgroundPosition: 'bottom',
   backgroundRepeat: 'no-repeat',
   backgroundSize: '1281px 169px',

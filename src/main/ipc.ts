@@ -35,7 +35,11 @@ import {
   openDialogForStorageLocation,
 } from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
-import { getSettings, setLanguage } from './state/settings';
+import {
+  getSetHasSeenSplashscreen,
+  getSettings,
+  setLanguage,
+} from './state/settings';
 import { getSystemInfo } from './systemInfo';
 import startDocker from './docker/start';
 
@@ -120,6 +124,9 @@ export const initialize = () => {
   ipcMain.handle('startDocker', startDocker);
 
   // Settings
+  ipcMain.handle('getSetHasSeenSplashscreen', (_event, hasSeen?: boolean) => {
+    return getSetHasSeenSplashscreen(hasSeen);
+  });
   ipcMain.handle('getSettings', getSettings);
   ipcMain.handle('setLanguage', (_event, languageCode: string) => {
     return setLanguage(languageCode);
