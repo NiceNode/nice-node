@@ -68,6 +68,7 @@ export interface Icons {
   add?: React.ReactNode;
   bell?: React.ReactNode;
   binoculars?: React.ReactNode;
+  blank?: React.ReactNode;
   block?: React.ReactNode;
   blocks?: React.ReactNode;
   boltstrike?: React.ReactNode;
@@ -137,6 +138,7 @@ export const ICONS: Icons = {
   add: <Add />,
   bell: <Bell />,
   binoculars: <Binoculars />,
+  blank: <></>,
   block: <Block />,
   blocks: <Blocks />,
   boltstrike: <BoltStrike />,

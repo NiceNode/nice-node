@@ -1,4 +1,4 @@
-import { MetricTypes } from '../MetricTypes/MetricTypes';
+import { MetricStats, MetricTypes } from '../MetricTypes/MetricTypes';
 import { container } from './headerMetrics.css';
 import VerticalLine from '../VerticalLine/VerticalLine';
 import { getSyncStatus } from '../utils';
@@ -12,7 +12,11 @@ export const HeaderMetrics = (props: NodeOverviewProps) => {
   const getSlotOrBlockMetricType = stats.currentSlot
     ? 'currentSlot'
     : 'currentBlock';
-  const metricTypeArray = {
+  const metricTypeArray: {
+    altruistic: MetricStats[];
+    client: MetricStats[];
+    validator: MetricStats[];
+  } = {
     altruistic: ['status', 'currentSlot', 'cpuLoad', 'diskUsage'],
     client: ['status', getSlotOrBlockMetricType, 'peers', 'diskUsage'],
     validator: ['status', 'stake', 'rewards', 'balance'],
@@ -21,7 +25,13 @@ export const HeaderMetrics = (props: NodeOverviewProps) => {
   return (
     <div className={container}>
       {assignedMetric.map((metric, index) => {
-        const statsValue = index === 0 ? getSyncStatus(status) : stats[metric];
+        let statsValue;
+        if (metric === 'status') {
+          statsValue = getSyncStatus(status);
+        } else {
+          statsValue = stats[metric];
+        }
+        // const statsValue = index === 0 ? getSyncStatus(status) : stats[metric];
         return (
           <>
             <MetricTypes

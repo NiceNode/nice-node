@@ -70,7 +70,7 @@ export const downloadFile = async (
         }
       });
       const streamProgress = new Transform({
-        transform(chunk, encoding, callback) {
+        transform(chunk, _encoding, callback) {
           downloadedBytes += chunk.length;
           throttleProgressListener(downloadedBytes);
           this.push(chunk);

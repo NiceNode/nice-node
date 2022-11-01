@@ -6,18 +6,21 @@ import {
   sectionFont,
   titleFont,
 } from './addNode.css';
-import SpecialSelect from '../../Generics/redesign/SpecialSelect/SpecialSelect';
+import SpecialSelect, {
+  SelectOption,
+} from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 
 export interface AddNodeProps {
   /**
    * Listen to node config changes
    */
-  onChange: (newValue: string) => void;
+  onChange: (newValue?: SelectOption) => void;
 }
 
 const networksOptions = [
   {
     value: 'ethereum',
+    label: 'Ethereum',
     iconId: 'ethereum',
     title: 'Ethereum',
     info: 'The world computer',
