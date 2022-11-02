@@ -13,6 +13,7 @@ import LeftSideBar from './LeftSideBar';
 import NodeScreen from './NodeScreen';
 import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
+import Sidebar from './Presentational/Sidebar/Sidebar';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -53,7 +54,8 @@ const MainScreen = () => {
           flex: 1,
         }}
       >
-        <LeftSideBar />
+        {/* <LeftSideBar /> */}
+        <Sidebar offline={false} />
 
         <div
           style={{

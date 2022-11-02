@@ -1,3 +1,11 @@
+import { NodeId } from 'common/node';
+import { useEffect } from 'react';
+import {
+  selectSelectedNodeId,
+  selectUserNodes,
+  updateSelectedNodeId,
+} from 'renderer/state/node';
+import { useAppDispatch, useAppSelector } from 'renderer/state/hooks';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
@@ -66,6 +74,36 @@ const itemListData = [
 ];
 
 const Sidebar = ({ offline }: SidebarProps) => {
+  const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
+  const sUserNodes = useAppSelector(selectUserNodes);
+  const dispatch = useAppDispatch();
+
+  // Default selected node to be the first node
+  useEffect(() => {
+    if (
+      !sSelectedNodeId &&
+      sUserNodes &&
+      Array.isArray(sUserNodes?.nodeIds) &&
+      sUserNodes.nodeIds.length > 0
+    ) {
+      dispatch(updateSelectedNodeId(sUserNodes.nodeIds[0]));
+    }
+  }, [sSelectedNodeId, sUserNodes, dispatch]);
+
+  const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
+  sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
+    const node = sUserNodes.nodes[nodeId];
+    // TODO: add validator logic here eventually
+    if (
+      node.spec.category === 'L1/ExecutionClient' ||
+      node.spec.category === 'L1/ConsensusClient/BeaconNode'
+    ) {
+      nodeListObject.nodeService.push(node);
+    } else {
+      nodeListObject.singleClients.push(node);
+    }
+  });
+
   return (
     <div className={container}>
       {offline && (
@@ -77,14 +115,28 @@ const Sidebar = ({ offline }: SidebarProps) => {
         <div className={titleItem}>
           <SidebarTitleItem title="Nodes" />
         </div>
-        {nodeListData.map((item) => {
+        {nodeListObject.nodeService.length === 2 && (
+          <SidebarNodeItem
+            iconId="ethereum"
+            title="Ethereum node"
+            info="Mainnet"
+            status={nodeListObject.nodeService[0].status} // TODO: get the worst status of both nodes
+            key="ethereum"
+            onClick={() => {
+              dispatch(updateSelectedNodeId(nodeListObject.nodeService[1].id));
+            }}
+          />
+        )}
+        {nodeListObject.singleClients.map((nodeId: NodeId) => {
+          const item = sUserNodes.nodes[nodeId];
+          const { spec, status } = item;
           return (
             <SidebarNodeItem
-              iconId={item.iconId}
-              title={item.title}
-              info={item.info}
-              status={item.status}
-              key={item.title}
+              iconId={spec.specId}
+              title={spec.displayName}
+              info={spec.displayName}
+              status={status}
+              key={spec.displayName}
             />
           );
         })}
