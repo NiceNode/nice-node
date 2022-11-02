@@ -1,5 +1,3 @@
-import si from 'systeminformation';
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NodeSpecification } from '../common/nodeSpec';
 import { Node, NodeId } from '../common/node';

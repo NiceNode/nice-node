@@ -5,7 +5,6 @@ import {
   getGethLogs,
   getGethErrorLogs,
   getSystemFreeDiskSpace,
-  getNodesDirPath,
   getNodesDirPathDetails,
 } from './files';
 import store from './state/store';
@@ -48,7 +47,7 @@ export const initialize = () => {
   ipcMain.handle('updateNodeUsedDiskSpace', (_event, nodeId: NodeId) => {
     return updateNodeUsedDiskSpace(nodeId);
   });
-  ipcMain.handle('getSystemFreeDiskSpace', (_event) => {
+  ipcMain.handle('getSystemFreeDiskSpace', () => {
     return getSystemFreeDiskSpace();
   });
   ipcMain.handle('getDebugInfo', getDebugInfo);

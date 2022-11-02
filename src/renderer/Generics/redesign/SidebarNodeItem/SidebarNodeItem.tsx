@@ -10,6 +10,12 @@ import {
   infoStyle,
 } from './sideBarNodeItem.css';
 
+export type SidebarNodeStatus =
+  | 'healthy'
+  | 'warning'
+  | 'error'
+  | 'sync'
+  | 'stopped';
 export interface SidebarNodeItemProps {
   /**
    * Node title
@@ -26,7 +32,7 @@ export interface SidebarNodeItemProps {
   /**
    * What's the status?
    */
-  status?: 'healthy' | 'warning' | 'error' | 'sync' | 'stopped';
+  status?: SidebarNodeStatus;
   /**
    * Optional click handler
    */

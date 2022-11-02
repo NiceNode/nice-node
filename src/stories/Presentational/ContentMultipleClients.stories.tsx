@@ -22,7 +22,6 @@ Primary.args = {
     {
       name: 'nimbus',
       version: 'v10',
-      type: 'single',
       nodeType: 'consensus',
       status: {
         updating: false,
@@ -47,7 +46,6 @@ Primary.args = {
     {
       name: 'besu',
       version: 'v10',
-      type: 'single',
       nodeType: 'execution',
       status: {
         updating: false,

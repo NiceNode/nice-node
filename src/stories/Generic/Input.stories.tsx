@@ -33,5 +33,5 @@ FolderInputPrimary.args = {
   onClickChange: () => {
     alert('Platform specific user prompt to select a folder location')
   },
-  freeStorageSpaceMBs: 250
+  freeStorageSpaceGBs: 250
 };

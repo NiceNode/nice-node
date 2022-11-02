@@ -3,36 +3,44 @@
 // https://react-select.com/components#Option
 import { useEffect, useState } from 'react';
 import Select, { OptionProps, ValueContainerProps } from 'react-select';
-import SelectCard from '../SelectCard/SelectCard';
+import SelectCard, { SelectCardProps } from '../SelectCard/SelectCard';
 import { vars } from '../theme.css';
 
 const Option = (props: OptionProps) => {
+  const selectCardProps = props.data as SelectCardProps;
   return (
     <div ref={props.innerRef} {...props.innerProps}>
-      <SelectCard {...props.data} />
+      <SelectCard {...selectCardProps} />
     </div>
   );
 };
 
 const SingleValue = ({ children, ...props }: ValueContainerProps) => {
-  const nething = props.getValue();
+  const selectedOptionValue = props.getValue();
+  const selectCardProps = selectedOptionValue[0] as SelectCardProps;
 
   return (
     <div {...props.innerProps}>
-      <SelectCard {...nething[0]} />
+      <SelectCard {...selectCardProps} />
     </div>
   );
 };
+
+export type SelectOption = {
+  value: string;
+  label: string;
+  [x: string]: unknown;
+};
 export interface SpecialSelectProps {
-  options?: any[];
-  onChange?: (newValue: any) => void;
+  options?: SelectOption[];
+  onChange?: (newValue: SelectOption | undefined) => void;
 }
 
 /**
  * Used for selecting Ethereum node client
  */
-const SpecialSelect = ({ options, onChange, ...props }: SpecialSelectProps) => {
-  const [sSelectedOption, setSelectedOption] = useState<any>();
+const SpecialSelect = ({ options, onChange }: SpecialSelectProps) => {
+  const [sSelectedOption, setSelectedOption] = useState<SelectOption>();
 
   useEffect(() => {
     // if (onChange && options && options[0]) {
@@ -56,9 +64,10 @@ const SpecialSelect = ({ options, onChange, ...props }: SpecialSelectProps) => {
     // }
   }, [sSelectedOption, onChange]);
 
-  const onSelectChange = (newValue: any) => {
-    console.log('onSelectChange: ', newValue);
-    setSelectedOption(newValue);
+  const onSelectChange = (newValue: unknown) => {
+    const newlySelectedOption = newValue as SelectOption;
+    console.log('onSelectChange: ', newlySelectedOption);
+    setSelectedOption(newlySelectedOption);
   };
 
   return (

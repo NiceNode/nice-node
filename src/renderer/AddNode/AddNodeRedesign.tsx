@@ -4,34 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 import IconButton from '../IconButton';
 import { Modal } from '../Generics/redesign/Modal/Modal';
-import ConfirmAddNode from './ConfirmAddNode';
-import { NodeSpecification } from '../../common/nodeSpec';
-// import { DopeButton } from '../DivButton';
-import electron from '../electronGlobal';
 import AddNodeStepper from '../Presentational/AddNodeStepper/AddNodeStepper';
 // todo: remove when new ui/ux redesign is further along
-import { darkTheme, lightTheme } from '../Generics/redesign/theme.css';
+import { darkTheme } from '../Generics/redesign/theme.css';
 
 const AddNode = () => {
   const { t } = useTranslation();
   const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
-  const [sIsModalOpenConfirmAddNode, setIsModalOpenConfirmAddNode] =
-    useState<boolean>(false);
-  const [sSelectedNodeSpecification, setSelectedNodeSpecification] =
-    useState<NodeSpecification>();
-
-  const onNodeSelected = (nodeSpec: NodeSpecification) => {
-    // set selected node
-    setSelectedNodeSpecification(nodeSpec);
-    // open confirm add modal
-    setIsModalOpenConfirmAddNode(true);
-  };
-
-  const onConfirmAddNode = () => {
-    // close both modals
-    setIsModalOpenConfirmAddNode(false);
-    setIsModalOpenAddNode(false);
-  };
 
   const onClickAddNodeButton = async () => {
     setIsModalOpenAddNode(true);
@@ -60,13 +39,6 @@ const AddNode = () => {
           />
         </Modal>
       </div>
-
-      <ConfirmAddNode
-        isOpen={sIsModalOpenConfirmAddNode}
-        onConfirm={onConfirmAddNode}
-        onCancel={() => setIsModalOpenConfirmAddNode(false)}
-        nodeSpec={sSelectedNodeSpecification}
-      />
     </div>
   );
 };

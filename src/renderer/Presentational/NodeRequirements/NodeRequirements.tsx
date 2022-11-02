@@ -52,7 +52,8 @@ const NodeRequirements = ({
       t
     );
     setItems(newChecklistItems);
-  }, [nodeRequirements, systemData, nodeStorageLocation, t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodeRequirements, systemData, nodeStorageLocation]);
 
   return (
     <div className={container}>

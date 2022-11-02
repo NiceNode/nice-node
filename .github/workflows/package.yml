@@ -1,6 +1,6 @@
-name: Test
+name: Package
 
-on: [push, pull_request]
+on: [pull_request]
 
 # asar is disabled for pm2 & electron build to work
 #   with asar disabled, hard links needs to be disabled
@@ -8,14 +8,14 @@ env:
   USE_HARD_LINKS: false
 
 jobs:
-  test:
+  package:
     timeout-minutes: 25
 
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-11, windows-latest, ubuntu-latest]
 
     steps:
       - name: Check out Git repository
@@ -31,18 +31,9 @@ jobs:
         run: |
           npm install
 
-      - name: npm build
+      - name: npm package
+        env:
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          npm run build
-
-      - name: npm lint
-        run: |
-          npm run lint
-
-      - name: npm exec tsc
-        run: |
-          npm exec tsc --verbose
-
-      - name: npm test
-        run: |
-          npm test
+          npm run package
