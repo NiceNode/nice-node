@@ -23,6 +23,8 @@ Sentry.init({
 const MainScreen = () => {
   const dispatch = useAppDispatch();
   const [sHasSeenSplashscreen, setHasSeenSplashscreen] = useState<boolean>();
+  const [sHasClickedGetStarted, setHasClickedGetStarted] = useState<boolean>();
+
   // const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
   // console.log('isStartOnLogin: ', isStartOnLogin);
   // setIsOpenOnLogin(isStartOnLogin);
@@ -43,6 +45,7 @@ const MainScreen = () => {
   const onClickSplashGetStarted = () => {
     setHasSeenSplashscreen(true);
     electron.getHasSeenSplashscreen(true);
+    setHasClickedGetStarted(true);
   };
 
   // const onChangeOpenOnLogin = (openOnLogin: boolean) => {
@@ -57,7 +60,6 @@ const MainScreen = () => {
   }
   if (sHasSeenSplashscreen === false) {
     console.log('User has not seen the splash screen yet');
-    // return <NNSplash onClickGetStarted={onClickSplashGetStarted} />;
   }
 
   return (
@@ -70,7 +72,11 @@ const MainScreen = () => {
       }}
     >
       {sHasSeenSplashscreen === false ? (
-        <NNSplash onClickGetStarted={onClickSplashGetStarted} />
+        <>
+          {!sHasClickedGetStarted && (
+            <NNSplash onClickGetStarted={onClickSplashGetStarted} />
+          )}
+        </>
       ) : (
         <div>
           <Header />

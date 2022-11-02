@@ -1,9 +1,7 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
-import welcome from '../../../assets/images/artwork/welcome.png';
 
 export const container = style({
-  // backgroundImage: `url(${welcome})`,
   backgroundPosition: 'bottom',
   backgroundRepeat: 'no-repeat',
   backgroundSize: '1281px 169px',
@@ -42,4 +40,5 @@ export const descriptionFont = style({
 export const iconClass = style({
   width: 64,
   height: 64,
+  filter: vars.components.iconFilterInvertForDarkOnly,
 });

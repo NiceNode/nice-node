@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   container,
   contentContainer,
@@ -17,6 +18,7 @@ export interface SplashProps {
   icon?: string;
   title: string;
   description: string;
+  getStartedLabel?: string;
   onClickGetStarted?: () => void;
 }
 
@@ -24,11 +26,15 @@ const Splash = ({
   title,
   description,
   icon,
+  getStartedLabel,
   onClickGetStarted,
 }: SplashProps) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className={container}
+      // webpack and vanilla css config was clashing for image imports so it is here
       style={{
         backgroundImage: `url(${welcome})`,
       }}
@@ -37,13 +43,12 @@ const Splash = ({
         <img className={iconClass} alt="App logo" src={icon ?? niceNodeIcon} />
         <div className={titleFont}>{title}</div>
         <div className={descriptionFont}>{description}</div>
-        <Button label="Get started" primary onClick={onClickGetStarted} />
+        <Button
+          label={getStartedLabel ?? t('GetStarted')}
+          primary
+          onClick={onClickGetStarted}
+        />
       </div>
-      {/* <img
-        className={backgroundImageContainer}
-        src={welcome}
-        alt="abstract art"
-      /> */}
     </div>
   );
 };
