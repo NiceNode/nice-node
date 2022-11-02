@@ -11,7 +11,7 @@ export const container = style({
   position: 'relative',
   overflow: 'hidden',
   border: vars.components.updateCalloutBorder,
-  boxShadow: vars.components.updateCalloutBoxShadow,
+  boxShadow: vars.color.elevation4boxShadow,
   zIndex: 1,
   backgroundColor: vars.components.updateCalloutBackground,
 });
