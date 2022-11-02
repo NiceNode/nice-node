@@ -1,6 +1,6 @@
-name: Test
+name: Package
 
-on: [push, pull_request]
+on: [pull_request]
 
 # asar is disabled for pm2 & electron build to work
 #   with asar disabled, hard links needs to be disabled
@@ -31,14 +31,9 @@ jobs:
         run: |
           npm install
 
-      - name: npm lint
+      - name: npm package
+        env:
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          npm run lint
-
-      - name: npm exec tsc
-        run: |
-          npm exec tsc --verbose
-
-      - name: npm test
-        run: |
-          npm test
+          npm run package
