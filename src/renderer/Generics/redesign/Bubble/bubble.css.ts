@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { common, vars } from '../theme.css';
+import { common } from '../theme.css';
 
 export const container = style({
   flex: 'none',

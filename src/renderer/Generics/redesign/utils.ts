@@ -1,7 +1,7 @@
 import { ClientStatusProps, SYNC_STATUS } from './consts';
 
 export const getSyncStatus = (status: ClientStatusProps) => {
-  let syncStatus = null;
+  let syncStatus;
   switch (true) {
     // find worst cases first
     case status.updating:

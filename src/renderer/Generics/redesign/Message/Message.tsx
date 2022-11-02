@@ -9,9 +9,10 @@ import {
 
 import { Icon } from '../Icon/Icon';
 import { HeaderButton } from '../HeaderButton/HeaderButton';
+import { IconId } from '../../../assets/images/icons';
 
 const getIconId = (type: string) => {
-  let iconId = '';
+  let iconId: IconId = 'blank';
   switch (type) {
     case 'info':
       iconId = 'shape1';

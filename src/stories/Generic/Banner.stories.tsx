@@ -10,6 +10,6 @@ export default {
   },
 } as ComponentMeta<typeof Banner>;
 
-const Template: ComponentStory<typeof Banner> = (args) => <Banner {...args} />;
+const Template: ComponentStory<typeof Banner> = () => <Banner />;
 
 export const Primary = Template.bind({});

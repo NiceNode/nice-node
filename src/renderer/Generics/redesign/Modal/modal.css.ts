@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { common, vars } from '../theme.css';
+import { vars } from '../theme.css';
 
 export const modalBackdropStyle = style({
   display: 'none',

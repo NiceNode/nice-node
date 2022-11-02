@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import StorybookLanguageSelect from '../../Presentational/StorybookLanguageSelect';
 import { darkTheme, lightTheme } from './theme.css';
 
 const RedesignContainerStoryBook: React.FC = ({ children }) => {
@@ -6,14 +7,21 @@ const RedesignContainerStoryBook: React.FC = ({ children }) => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '90vh' }}>
-      <p>Toggle dark mode</p>
-      <button
-        style={{ width: 150 }}
-        type="button"
-        onClick={() => setIsDarkTheme((currentValue: boolean) => !currentValue)}
-      >
-        Switch to {isDarkTheme ? 'light' : 'dark'} theme
-      </button>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div>
+          <p>Toggle dark mode</p>
+          <button
+            style={{ width: 150 }}
+            type="button"
+            onClick={() =>
+              setIsDarkTheme((currentValue: boolean) => !currentValue)
+            }
+          >
+            Switch to {isDarkTheme ? 'light' : 'dark'} theme
+          </button>
+        </div>
+        <StorybookLanguageSelect />
+      </div>
       <div
         id="onBoarding"
         className={isDarkTheme ? darkTheme : lightTheme}

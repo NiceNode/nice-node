@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '../theme.css';
+import { common, vars } from '../theme.css';
 
 export const container = style({
   height: '16px',
@@ -27,7 +27,7 @@ export const container = style({
   },
   ':invalid': {
     border: '1px solid',
-    borderColor: vars.color.red,
+    borderColor: common.color.red,
   },
   '::placeholder': {
     color: vars.color.font25,

@@ -8,7 +8,6 @@ import NodeCard from './NodeCard';
 import ConfirmAddNode from './ConfirmAddNode';
 import { NodeSpecification } from '../../common/nodeSpec';
 // import { DopeButton } from '../DivButton';
-import { NodeLibrary } from '../../main/state/nodeLibrary';
 import electron from '../electronGlobal';
 import { categorizeNodeLibrary } from '../utils';
 

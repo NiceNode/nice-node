@@ -7,7 +7,10 @@ import {
 } from 'renderer/state/node';
 import { useAppDispatch, useAppSelector } from 'renderer/state/hooks';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
-import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
+import {
+  SidebarNodeItem,
+  SidebarNodeStatus,
+} from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
 import {
@@ -17,6 +20,8 @@ import {
   itemList,
   titleItem,
 } from './sidebar.css';
+import { IconId } from '../../assets/images/icons';
+import { NodeIconId } from '../../assets/images/nodeIcons';
 
 export interface SidebarProps {
   /**
@@ -25,7 +30,12 @@ export interface SidebarProps {
   offline: boolean;
 }
 
-const nodeListData = [
+const nodeListData: {
+  iconId: NodeIconId;
+  title: string;
+  info: string;
+  status: SidebarNodeStatus;
+}[] = [
   {
     iconId: 'ethereum',
     title: 'Ethereum',
@@ -58,7 +68,7 @@ const nodeListData = [
   },
 ];
 
-const itemListData = [
+const itemListData: { iconId: IconId; label: string; count?: number }[] = [
   {
     iconId: 'health',
     label: 'System Monitor',

@@ -8,8 +8,8 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof ContentSingleClient>;
 
-const Template: ComponentStory<typeof ContentSingleClient> = (args) => (
-  <ContentSingleClient {...args} />
+const Template: ComponentStory<typeof ContentSingleClient> = () => (
+  <ContentSingleClient />
 );
 
 export const Primary = Template.bind({});
