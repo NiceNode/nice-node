@@ -17,6 +17,7 @@ export const yellow = style({ background: common.color.yellow });
 export const red = style({ background: common.color.red });
 export const stopped = style({ background: vars.components.nodeIconStopped });
 export const sync = style({});
+export const updating = style({});
 
 export const iconBackground = style({
   position: 'relative',
@@ -97,6 +98,9 @@ export const statusStyle = style({
   top: '0',
   zIndex: 1,
   selectors: {
+    [`&.${updating}`]: {
+      color: 'gray', // TODO: change this to radial gradient somehow
+    },
     [`&.${smallStyle}`]: {
       width: 8,
       height: 8,
@@ -129,6 +133,22 @@ export const statusStyle = style({
       height: '16px',
       right: -1,
       top: -1,
+    },
+    [`&.${smallStyle}.${updating}`]: {
+      width: '11px',
+      top: '-2px',
+      right: '-1.5px',
+    },
+    [`&.${mediumStyle}.${updating}`]: {
+      width: '12px',
+      height: '12px',
+      right: -1,
+      top: -1,
+    },
+    [`&.${largeStyle}.${updating}`]: {
+      width: '18px',
+      right: '-2px',
+      top: '-2px',
     },
   },
 });

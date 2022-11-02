@@ -17,7 +17,6 @@ export interface BannerProps {
  * Primary UI component for user interaction
  */
 export const Banner = ({ type }: BannerProps) => {
-  console.log(type);
   let iconId = 'empty';
   let title = 'empty';
   let description = 'empty';

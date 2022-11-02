@@ -59,7 +59,8 @@ import { ReactComponent as Stop } from './Stop.svg';
 import { ReactComponent as SyncSmall } from './Sync-small.svg';
 import { ReactComponent as Sync } from './Sync.svg';
 import { ReactComponent as Syncing } from './Syncing.svg';
-import { ReactComponent as Updating } from './Updating.svg';
+import { ReactComponent as Updating } from './Spinner.svg';
+import { ReactComponent as UpdatingSmall } from './Spinner-small.svg';
 import { ReactComponent as UpLarge } from './Up-large.svg';
 import { ReactComponent as Up } from './Up.svg';
 import { ReactComponent as WarningCircleFilled } from './Warning-circle-filled.svg';
@@ -128,6 +129,7 @@ export interface Icons {
   sync?: React.ReactNode;
   syncing?: React.ReactNode;
   updating?: React.ReactNode;
+  updatingsmall?: React.ReactNode;
   uplarge?: React.ReactNode;
   up?: React.ReactNode;
   warningcirclefilled?: React.ReactNode;
@@ -198,6 +200,7 @@ export const ICONS: Icons = {
   sync: <Sync />,
   syncing: <Syncing />,
   updating: <Updating />,
+  updatingsmall: <UpdatingSmall />,
   uplarge: <UpLarge />,
   up: <Up />,
   warningcirclefilled: <WarningCircleFilled />,
