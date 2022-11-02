@@ -18,19 +18,19 @@ Primary.args = {
     description: 'Your system is checked with the recommended requirements for the selected clients. You are able to launch a node with lower specifications but expect some hickups now and then.',
     cpu: {
       cores: 4,
-      minSpeed: 2.4
+      minSpeedGHz: 2.4
     },
     memory: {
-      minSize: 8000000000
+      minSizeGBs: 8000
     },
     storage: {
-      minSize: 1000,
-      minWriteSpeed: 400,
+      minSizeGBs: 1000,
+      minWriteSpeedMBps: 400,
       ssdRequired: true
     },
     internet: {
-      minDownloadSpeed: 25,
-      minUploadSpeed: 3,
+      minDownloadSpeedMbps: 25,
+      minUploadSpeedMbps: 3,
     },
     docker: {
       required: true,
@@ -38,6 +38,8 @@ Primary.args = {
     }
   },
   systemData: {
+    blockDevices: [],
+    fsSize: [],
     version: '5.11.15',
     system: {
       manufacturer: 'Apple Inc.',

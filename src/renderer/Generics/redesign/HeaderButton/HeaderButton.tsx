@@ -1,3 +1,4 @@
+import { IconId } from '../../../assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import { container } from './headerButton.css';
 
@@ -16,7 +17,7 @@ export interface HeaderButtonProps {
  * Primary UI component for user interaction
  */
 export const HeaderButton = ({ onClick, type }: HeaderButtonProps) => {
-  let iconId = '';
+  let iconId: IconId = 'blank';
   switch (type) {
     case 'close':
       iconId = type;
@@ -29,6 +30,7 @@ export const HeaderButton = ({ onClick, type }: HeaderButtonProps) => {
     default:
       break;
   }
+
   return (
     <div
       className={container}

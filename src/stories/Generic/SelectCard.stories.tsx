@@ -67,7 +67,7 @@ const clientsCards = [
   { iconId: 'nimbus', title: 'Nimbus', info: 'Consensus Client' },
 ];
 
-const NetworksTemplate: ComponentStory<typeof SelectCard> = (args) => (
+const NetworksTemplate: ComponentStory<typeof SelectCard> = () => (
   <>
     {networksCards.map((obj) => {
       const { iconId, ...rest } = obj
@@ -76,7 +76,7 @@ const NetworksTemplate: ComponentStory<typeof SelectCard> = (args) => (
   </>
 );
 
-const ClientsTemplate: ComponentStory<typeof SelectCard> = (args) => (
+const ClientsTemplate: ComponentStory<typeof SelectCard> = () => (
   <>
     {clientsCards.map((obj) => {
       const { iconId, ...rest } = obj

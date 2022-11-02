@@ -1,3 +1,4 @@
+import { IconId } from '../../../assets/images/icons';
 import { SYNC_STATUS } from '../consts';
 import { Icon } from '../Icon/Icon';
 import {
@@ -17,17 +18,21 @@ import {
   stopped,
 } from './metricTypes.css';
 
+export type MetricStats =
+  | 'status'
+  | 'currentSlot'
+  | 'currentBlock'
+  | 'peers'
+  | 'cpuLoad'
+  | 'diskUsage'
+  | 'balance'
+  | 'stake'
+  | 'rewards';
 export interface MetricTypesProps {
   /**
    * Stats types
    */
-  statsType?:
-    | 'status'
-    | 'currentSlot'
-    | 'currentBlock'
-    | 'peers'
-    | 'cpuLoad'
-    | 'diskUsage';
+  statsType?: MetricStats;
   /**
    * Status //TODO: match this with current status enum implementation
    */
@@ -103,7 +108,7 @@ export const MetricTypes = ({
   };
 
   const processStatsType = () => {
-    let iconId = statsType;
+    let iconId: IconId = 'blank';
     switch (statsType) {
       case 'currentBlock':
         iconId = 'slots';
@@ -125,9 +130,13 @@ export const MetricTypes = ({
         labelText = 'CPU load';
         break;
       case 'diskUsage':
-        if (statsValue >= 1000000) {
+        if (typeof statsValue === 'number' && statsValue >= 1000000) {
           titleText = `${statsValue / 1000000} TB`;
-        } else if (statsValue <= 999999 && statsValue >= 1000) {
+        } else if (
+          typeof statsValue === 'number' &&
+          statsValue <= 999999 &&
+          statsValue >= 1000
+        ) {
           titleText = `${statsValue / 1000} GB`;
         } else {
           titleText = `${statsValue} MB`;

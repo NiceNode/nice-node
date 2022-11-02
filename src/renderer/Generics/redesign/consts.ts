@@ -12,7 +12,7 @@ export interface NodeOverviewProps {
   name: NodeBackgroundId;
   title: string;
   info: string;
-  type: string;
+  type: 'altruistic' | 'client' | 'validator';
   version?: string;
   status: ClientStatusProps;
   stats: ClientStatsProps;
@@ -26,6 +26,9 @@ export interface ClientStatsProps {
   peers?: number;
   cpuLoad?: number;
   diskUsage?: number;
+  rewards?: number;
+  balance?: number;
+  stake?: number;
 }
 
 export interface ClientStatusProps {

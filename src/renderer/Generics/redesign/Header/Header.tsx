@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Button from '../Button/Button';
+import Button, { ButtonProps } from '../Button/Button';
 import { NodeOverviewProps } from '../consts';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
@@ -23,9 +23,9 @@ export const Header = (props: NodeOverviewProps) => {
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
 
-  const buttonProps = {
+  const buttonProps: ButtonProps = {
     label: '',
-    iconId: '',
+    iconId: undefined,
     onClick: () => {},
   };
   if (type === 'altruistic') {
@@ -36,7 +36,7 @@ export const Header = (props: NodeOverviewProps) => {
         console.log('stop node');
       };
     } else {
-      const text = status.initialized ? 'Resume' : 'Start';
+      // const text = status.initialized ? 'Resume' : 'Start';
       buttonProps.label = 'Resume';
       buttonProps.iconId = 'play';
       buttonProps.onClick = () => {

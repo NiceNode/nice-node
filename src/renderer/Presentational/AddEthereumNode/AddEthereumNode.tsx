@@ -9,13 +9,13 @@ import {
   titleFont,
 } from './addEthereumNode.css';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
-import SpecialSelect from '../../Generics/redesign/SpecialSelect/SpecialSelect';
+import SpecialSelect, {
+  SelectOption,
+} from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import electron from '../../electronGlobal';
-import Button from '../../Generics/redesign/Button/Button';
-import Input from '../../Generics/redesign/Input/Input';
 import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import Select from '../../Generics/redesign/Select/Select';
-import { NodeSpecification } from '../../../common/nodeSpec';
+// import { NodeSpecification } from '../../../common/nodeSpec';
 import FolderInput from '../../Generics/redesign/Input/FolderInput';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 
@@ -66,8 +66,8 @@ const ccOptions = [
     iconId: 'teku',
     title: 'Teku',
     info: 'Consensus Client',
-    value: 'prysm',
-    label: 'Prysm',
+    value: 'teku',
+    label: 'Teku',
     minority: true,
   },
   {
@@ -100,8 +100,8 @@ export type AddEthereumNodeValues = {
   storageLocation?: string;
 };
 export interface AddEthereumNodeProps {
-  executionOptions: NodeSpecification[];
-  beaconOptions: NodeSpecification[];
+  // executionOptions: NodeSpecification[];
+  // beaconOptions: NodeSpecification[];
   /**
    * Listen to node config changes
    */
@@ -110,12 +110,12 @@ export interface AddEthereumNodeProps {
 
 const AddEthereumNode = ({
   onChange,
-  /**
-   * Todo: Pass options from the node spec files
-   */
-  executionOptions,
-  beaconOptions,
-}: AddEthereumNodeProps) => {
+}: /**
+ * Todo: Pass options from the node spec files
+ */
+// executionOptions,
+// beaconOptions,
+AddEthereumNodeProps) => {
   const { t } = useTranslation();
   const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const [sSelectedExecutionClient, setSelectedExecutionClient] =
@@ -141,13 +141,13 @@ const AddEthereumNode = ({
     fetchData();
   }, []);
 
-  const onChangeEc = useCallback((newEc: any) => {
+  const onChangeEc = useCallback((newEc?: SelectOption) => {
     console.log('new selected execution client: ', newEc);
-    setSelectedExecutionClient(newEc);
+    if (newEc) setSelectedExecutionClient(newEc.value);
   }, []);
-  const onChangeCc = useCallback((newCc: any) => {
+  const onChangeCc = useCallback((newCc?: SelectOption) => {
     console.log('new selected consensus client: ', newCc);
-    setSelectedConsensusClient(newCc);
+    if (newCc) setSelectedConsensusClient(newCc.value);
   }, []);
 
   useEffect(() => {
