@@ -85,8 +85,9 @@ export const ClientCard = (props: ClientProps) => {
         </>
       );
     }
-    if (status.stopped) {
-      return <Label type="gray" label="Stopped" />;
+    if (status.stopped || status.updating) {
+      const label = status.stopped ? 'Stopped' : 'Updating...';
+      return <Label type="gray" label={label} />;
     }
     const { updating, initialized, ...statusLabels } = status;
     const statusKeys = Object.keys(statusLabels).filter((k: string) => {

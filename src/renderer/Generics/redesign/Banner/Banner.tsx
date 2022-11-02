@@ -1,3 +1,4 @@
+import { IconId } from 'renderer/assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import {
   container,
@@ -17,9 +18,9 @@ export interface BannerProps {
  * Primary UI component for user interaction
  */
 export const Banner = ({ type }: BannerProps) => {
-  let iconId = 'empty';
-  let title = 'empty';
-  let description = 'empty';
+  let iconId: IconId = 'blank';
+  let title = '';
+  let description = '';
   if (type === 'offline') {
     iconId = 'boltstrike';
     title = 'Currently offline';
