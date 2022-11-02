@@ -1,11 +1,19 @@
 import { container } from './label.css';
 
+export type LabelColor =
+  | 'green'
+  | 'red'
+  | 'gray'
+  | 'pink'
+  | 'purple'
+  | 'orange'
+  | 'pink2';
 export interface LabelProps {
   label: string;
   /**
    * Label color
    */
-  type?: 'green' | 'red' | 'gray' | 'pink' | 'purple' | 'orange' | 'pink2';
+  type?: LabelColor;
   /**
    * Label size TODO: better way?
    */

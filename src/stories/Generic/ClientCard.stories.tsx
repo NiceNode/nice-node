@@ -15,12 +15,12 @@ export const Nethermind = Template.bind({});
 Nethermind.args = {
   name: 'erigon',
   version: 'v10',
-  type: 'single',
   nodeType: 'execution',
   status: {
     updating: false,
     initialized: true,
     lowPeerCount: false,
+    synchronized: true,
     updateAvailable: true,
     blocksBehind: false,
     noConnection: false,

@@ -82,4 +82,6 @@ export const openDialogForStorageLocation = async (): Promise<
       };
     }
   }
+  // eslint-disable-next-line no-useless-return
+  return;
 };

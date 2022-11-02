@@ -1,17 +1,12 @@
-import { useState, useCallback } from 'react';
-import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
-import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
+// import { useState, useCallback } from 'react';
+// import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
+// import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
-import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
-import {
-  container,
-  sectionTitle,
-  sectionDescription,
-  clientCardsContainer,
-  resourcesContainer,
-} from './contentSingleClient.css';
+// import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
+import { container } from './contentSingleClient.css';
+import { NodeOverviewProps } from '../../Generics/redesign/consts';
 
 // TODO: process retrieved client data into this format?
 const client = {
@@ -61,9 +56,10 @@ const ContentSingleClient = () => {
 
   return (
     <div className={container}>
-      <Header {...nodeOverview} />
+      {/* todo: fix temp type casting */}
+      <Header {...(nodeOverview as unknown as NodeOverviewProps)} />
       <HorizontalLine type="content" />
-      <HeaderMetrics {...nodeOverview} />
+      <HeaderMetrics {...(nodeOverview as unknown as NodeOverviewProps)} />
       <HorizontalLine type="content" />
     </div>
   );

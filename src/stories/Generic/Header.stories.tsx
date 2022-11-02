@@ -12,14 +12,14 @@ const Template: ComponentStory<typeof Header> = (args) => <Header {...args} />;
 export const Primary = Template.bind({});
 
 Primary.args = {
-  name: 'ethereum',
+  name: 'besu',
   title: 'Ethereum node',
   info: 'Non-Validating Node — Ethereum mainnet',
   type: 'altruistic',
   status: {
     updating: false,
     initialized: true,
-    synchronizing: 100,
+    synchronized: true,
     lowPeerCount: true,
     updateAvailable: true,
     blocksBehind: false,

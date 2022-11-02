@@ -1,5 +1,8 @@
 import { useState, useCallback } from 'react';
-import { ClientProps } from 'renderer/Generics/redesign/consts';
+import {
+  ClientProps,
+  NodeOverviewProps,
+} from 'renderer/Generics/redesign/consts';
 import { Message } from '../../Generics/redesign/Message/Message';
 import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
@@ -14,6 +17,8 @@ import {
   clientCardsContainer,
   resourcesContainer,
 } from './contentMultipleClients.css';
+
+const resourceJson = require('./resources.json');
 
 const ContentMultipleClients = (props: {
   clients: [ClientProps, ClientProps];
@@ -40,7 +45,7 @@ const ContentMultipleClients = (props: {
   const onSetupClick = useCallback(() => {
     // TODO: open wallet screen
     onDismissClick();
-  }, []);
+  }, [onDismissClick]);
 
   const clClient = clients.find((client) => client.nodeType === 'consensus');
   const elClient = clients.find((client) => client.nodeType === 'execution');
@@ -133,18 +138,20 @@ const ContentMultipleClients = (props: {
   };
 
   const getResourceData = () => {
-    const resourceData = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const resourceData: { title: string; items: any[] } = {
       title: 'More resources',
       items: [],
     };
-    const resourceJson = require('./resources.json');
     const clientNames = clients.map((client) => {
       return client.name;
     });
     // Look through json and find exact client resource data
-    clientNames.forEach((value, index, array) => {
+    clientNames.forEach((value) => {
       const clientSearch = (clientString: string) =>
-        resourceJson.find((clientObject) => clientObject.key === clientString);
+        resourceJson.find(
+          (clientObject: { key: string }) => clientObject.key === clientString
+        );
       const found = clientSearch(value);
       if (found) {
         resourceData.items.push(found);
@@ -162,9 +169,9 @@ const ContentMultipleClients = (props: {
 
   return (
     <div className={container}>
-      <Header {...nodeOverview} />
+      <Header {...(nodeOverview as NodeOverviewProps)} />
       <HorizontalLine type="content" />
-      <HeaderMetrics {...nodeOverview} />
+      <HeaderMetrics {...(nodeOverview as NodeOverviewProps)} />
       <HorizontalLine type="content" />
       {renderPrompt()}
       <div className={sectionTitle}>Ethereum Clients</div>
@@ -184,7 +191,7 @@ const ContentMultipleClients = (props: {
         <p>
           In the case of Ethereum a node consists of two parts: the execution
           client and the consensus client. These two clients work together to
-          verify Ethereum's state. The execution client listens to new
+          verify Ethereum&apos;s state. The execution client listens to new
           transactions broadcasted in the network, executes them in EVM, and
           holds the latest state and database of all current Ethereum data. The
           consensus client runs the Proof-of-Stake consensus algorithm, which
