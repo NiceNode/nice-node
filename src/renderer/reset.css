@@ -2,7 +2,13 @@
  * @NOTE: Prepend a `~` to css file paths that are in your node_modules
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
+
 body {
+  margin: 0;
+}
+
+/* ---- LEGACY CSS (for reference during transition ---- */
+/* body {
   position: relative;
   color: white;
   height: 100vh;
@@ -16,8 +22,6 @@ body {
   overflow-y: hidden;
   display: flex;
   margin: 0;
-  /* justify-content: center;
-  align-items: center; */
 }
 
 button {
@@ -31,12 +35,10 @@ button {
     0px 18px 88px -4px rgba(24, 39, 75, 0.14);
   transition: all ease-in 0.1s;
   cursor: pointer;
-  /* opacity: 0.9; */
 }
 
 button:hover {
   transform: scale(1.05);
-  /* opacity: 1; */
 }
 
 li {
@@ -85,4 +87,4 @@ a:hover {
   width: 10px;
   border: 0px;
   background: 'grey';
-}
+} */

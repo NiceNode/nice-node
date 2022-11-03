@@ -3,9 +3,8 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
 
 import './Generics/redesign/globalStyle.css';
-// import './App.css';
+import './reset.css';
 import { useAppDispatch } from './state/hooks';
-import Header from './Header';
 import Footer from './Footer/Footer';
 import Warnings from './Warnings';
 import { initialize as initializeIpcListeners } from './ipc';
@@ -16,6 +15,7 @@ import electron from './electronGlobal';
 import Sidebar from './Presentational/Sidebar/Sidebar';
 import { darkTheme, lightTheme } from './Generics/redesign/theme.css';
 import NNSplash from './Presentational/NNSplashScreen/NNSplashScreen';
+import { dragWindowContainer } from './app.css';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -84,7 +84,7 @@ const MainScreen = () => {
         </>
       ) : (
         <>
-          <Header />
+          <div className={dragWindowContainer} />
           <div
             style={{
               display: 'flex',
