@@ -31,7 +31,7 @@ const MainScreen = () => {
 
   useEffect(() => {
     const callAsync = async () => {
-      const hasSeen = await electron.getHasSeenSplashscreen();
+      const hasSeen = await electron.getSetHasSeenSplashscreen();
       setHasSeenSplashscreen(hasSeen ?? false);
     };
     callAsync();
@@ -44,7 +44,7 @@ const MainScreen = () => {
 
   const onClickSplashGetStarted = () => {
     setHasSeenSplashscreen(true);
-    electron.getHasSeenSplashscreen(true);
+    electron.getSetHasSeenSplashscreen(true);
     setHasClickedGetStarted(true);
   };
 

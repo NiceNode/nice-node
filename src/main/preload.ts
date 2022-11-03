@@ -89,7 +89,7 @@ contextBridge.exposeInMainWorld('electron', {
   startDocker: () => ipcRenderer.invoke('startDocker'),
 
   // Settings
-  getHasSeenSplashscreen: (hasSeen?: boolean) =>
+  getSetHasSeenSplashscreen: (hasSeen?: boolean) =>
     ipcRenderer.invoke('getSetHasSeenSplashscreen', hasSeen),
   getSettings: () => ipcRenderer.invoke('getSettings'),
   setLanguage: (languageCode: string) => {
