@@ -9,5 +9,9 @@ export const container = style({
     [`&.content`]: {
       margin: '34px 0px',
     },
+    [`&.menu`]: {
+      margin: '4px 0px',
+      background: vars.color.font8,
+    },
   },
 });

@@ -122,6 +122,7 @@ export const common = {
 export const [lightTheme, vars] = createTheme({
   color: {
     font: common.color.black85,
+    font8: common.color.black8,
     font10: common.color.black10,
     font25: common.color.black25,
     font40: common.color.black40,
@@ -196,14 +197,15 @@ export const [lightTheme, vars] = createTheme({
     walletPromptBackground: common.color.purple50,
     headerButtonHover: common.color.black4,
     headerButtonActive: common.color.black8,
-    updateCalloutBackground: common.color.white100,
-    updateCalloutBorder: `1px solid ${common.color.black4}`,
+    menuBackground: common.color.white100,
+    menuBorder: `1px solid ${common.color.black4}`,
   },
 });
 
 export const darkTheme = createTheme(vars, {
   color: {
     font: common.color.white85,
+    font8: common.color.white8,
     font10: common.color.white10,
     font25: common.color.white25,
     font40: common.color.white40,
@@ -278,7 +280,7 @@ export const darkTheme = createTheme(vars, {
     walletPromptBackground: common.color.purple900,
     headerButtonHover: common.color.white4,
     headerButtonActive: common.color.white8,
-    updateCalloutBackground: common.color.osMac,
-    updateCalloutBorder: `1px solid ${common.color.white10}`,
+    menuBackground: common.color.osMac,
+    menuBorder: `1px solid ${common.color.white10}`,
   },
 });
