@@ -21,34 +21,7 @@ export interface MenuProps {
 export const Menu = ({ width, children }: MenuProps) => {
   return (
     <div style={{ width }} className={container}>
-      <MenuItem
-        text="Restart Client"
-        onClick={() => {
-          console.log('Restart Client');
-        }}
-      />
-      <MenuItem
-        text="Check for Updates..."
-        onClick={() => {
-          console.log('Check for Updates...');
-        }}
-      />
-      <HorizontalLine type="menu" />
-      <MenuItem
-        text="Client Versions"
-        onClick={() => {
-          console.log('Client Versions');
-        }}
-      />
-      <HorizontalLine type="menu" />
-      <MenuItem
-        text="Switch Client"
-        onClick={() => {
-          console.log('Switch Client');
-        }}
-        disabled
-      />
-      {/* {children} */}
+      {children}
     </div>
   );
 };

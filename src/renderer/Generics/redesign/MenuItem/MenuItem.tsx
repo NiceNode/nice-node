@@ -9,6 +9,14 @@ export interface MenuItemProps {
    */
   text: string;
   /**
+   * Which variant?
+   */
+  variant?: 'text' | 'checkbox';
+  /**
+   * Is this selected?
+   */
+  selected?: boolean;
+  /**
    * Is this disabled?
    */
   disabled?: boolean;
@@ -23,6 +31,8 @@ export interface MenuItemProps {
  */
 export const MenuItem = ({
   text,
+  variant = 'text',
+  selected,
   disabled = false,
   onClick,
 }: MenuItemProps) => {
