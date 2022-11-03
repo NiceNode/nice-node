@@ -3,11 +3,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import IconButton from '../IconButton';
-import { LEFT_SIDEBAR_WIDTH } from '../LeftSideBar';
+
 import { HEADER_HEIGHT } from '../Header';
 // eslint-disable-next-line import/no-cycle
 // import { FOOTER_HEIGHT } from './Footer';
 
+const LEFT_SIDEBAR_WIDTH = 100;
 const FOOTER_HEIGHT = 64;
 
 const MenuDrawerStyled = styled.div`

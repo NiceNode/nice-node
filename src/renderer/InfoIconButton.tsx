@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MdInfoOutline } from 'react-icons/md';
 import styled from 'styled-components';
 
-import { Modal } from './Modal';
+import { Modal } from './Generics/redesign/Modal/Modal';
 
 const InfoButton = styled.button`
   background: transparent;

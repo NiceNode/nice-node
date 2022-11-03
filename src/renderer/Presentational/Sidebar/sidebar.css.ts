@@ -30,7 +30,7 @@ export const titleItem = style({
 });
 
 export const nodeList = style({
-  overflowY: 'scroll',
+  overflowY: 'auto',
   order: '2',
   alignSelf: 'stretch',
   flexGrow: '1',

@@ -3,16 +3,18 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
 
 import './Generics/redesign/globalStyle.css';
-import './App.css';
+// import './App.css';
 import { useAppDispatch } from './state/hooks';
 import Header from './Header';
 import Footer from './Footer/Footer';
 import Warnings from './Warnings';
 import { initialize as initializeIpcListeners } from './ipc';
-import LeftSideBar from './LeftSideBar';
+// import LeftSideBar from './LeftSideBar';
 import NodeScreen from './NodeScreen';
 import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
+import Sidebar from './Presentational/Sidebar/Sidebar';
+import { darkTheme, lightTheme } from './Generics/redesign/theme.css';
 import NNSplash from './Presentational/NNSplashScreen/NNSplashScreen';
 
 Sentry.init({
@@ -22,6 +24,7 @@ Sentry.init({
 
 const MainScreen = () => {
   const dispatch = useAppDispatch();
+  const [isDarkTheme] = useState(false);
   const [sHasSeenSplashscreen, setHasSeenSplashscreen] = useState<boolean>();
   const [sHasClickedGetStarted, setHasClickedGetStarted] = useState<boolean>();
 
@@ -64,6 +67,8 @@ const MainScreen = () => {
 
   return (
     <div
+      id="onBoarding"
+      className={isDarkTheme ? darkTheme : lightTheme}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -78,7 +83,7 @@ const MainScreen = () => {
           )}
         </>
       ) : (
-        <div>
+        <>
           <Header />
           <div
             style={{
@@ -87,7 +92,7 @@ const MainScreen = () => {
               flex: 1,
             }}
           >
-            <LeftSideBar />
+            <Sidebar offline={false} />
 
             <div
               style={{
@@ -105,7 +110,7 @@ const MainScreen = () => {
 
           <Footer />
           <DataRefresher />
-        </div>
+        </>
       )}
     </div>
   );
