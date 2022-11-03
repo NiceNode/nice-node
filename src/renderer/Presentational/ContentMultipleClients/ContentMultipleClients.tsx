@@ -127,8 +127,9 @@ const ContentMultipleClients = (props: {
           highestSlot: clClient?.stats.highestSlot,
           cpuLoad:
             (clClient?.stats.cpuLoad || 0) + (elClient?.stats.cpuLoad || 0),
-          diskUsage:
-            (clClient?.stats.diskUsage || 0) + (elClient?.stats.diskUsage || 0),
+          diskUsageGBs:
+            (clClient?.stats.diskUsageGBs || 0) +
+            (elClient?.stats.diskUsageGBs || 0),
         },
       };
       return nodeOverview;

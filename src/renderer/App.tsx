@@ -6,7 +6,6 @@ import './Generics/redesign/globalStyle.css';
 import './reset.css';
 import { useAppDispatch } from './state/hooks';
 import Footer from './Footer/Footer';
-import Warnings from './Warnings';
 import { initialize as initializeIpcListeners } from './ipc';
 // import LeftSideBar from './LeftSideBar';
 import NodeScreen from './NodeScreen';
@@ -104,7 +103,6 @@ const MainScreen = () => {
               }}
             >
               <NodeScreen />
-              <Warnings />
             </div>
           </div>
 

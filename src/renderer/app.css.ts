@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { style, ComplexStyleRule } from '@vanilla-extract/css';
 import { vars } from './Generics/redesign/theme.css';
 
 export const dragWindowContainer = style({
@@ -10,8 +10,8 @@ export const dragWindowContainer = style({
   top: 0,
   zIndex: 100,
   cursor: 'grab',
-  '&:hover': {
+  ':hover': {
     background: vars.color.background92,
     opacity: 0.3,
   },
-});
+} as ComplexStyleRule); // fix for lacking '-webkit-app-region' type
