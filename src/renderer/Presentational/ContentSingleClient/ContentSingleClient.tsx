@@ -30,11 +30,40 @@ const client = {
     currentBlock: 1000,
     highestBlock: 2000,
     cpuLoad: 20,
-    diskUsage: 600, // in MB?
+    diskUsageGBs: 600, // in MB?
   },
 };
 
-const ContentSingleClient = () => {
+export type SingleNodeContent = {
+  nodeId: string;
+  name: string; // lowercase for supported node icons
+  version?: string;
+  type?: string;
+  nodeType?: 'execution' | 'consensus' | string;
+  info?: string;
+  network?: string;
+  iconUrl?: string;
+  status?: {
+    updating?: boolean;
+    sychronized?: boolean;
+    initialized?: boolean;
+    lowPeerCount?: boolean;
+    updateAvailable?: boolean;
+    blocksBehind?: boolean;
+    noConnection?: boolean;
+    stopped?: boolean;
+    error?: boolean;
+  };
+  stats?: {
+    peers?: number;
+    currentBlock?: number;
+    highestBlock?: number;
+    cpuLoad?: number;
+    diskUsageGBs?: number; // in MB?
+  };
+};
+
+const ContentSingleClient = (props: SingleNodeContent) => {
   /* TODO: maybe a "provider" wrapper/manager to fetch data and handle states */
 
   // TODO: refactor this out so that it can be shared with multiple, single, and validator?
@@ -50,7 +79,7 @@ const ContentSingleClient = () => {
     };
   };
 
-  const nodeOverview = getNodeOverview();
+  const nodeOverview = props;
 
   // TODO: retrieve initial data for all pages
 

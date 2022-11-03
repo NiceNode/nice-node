@@ -24,7 +24,7 @@ export type MetricStats =
   | 'currentBlock'
   | 'peers'
   | 'cpuLoad'
-  | 'diskUsage'
+  | 'diskUsageGBs'
   | 'balance'
   | 'stake'
   | 'rewards';
@@ -121,6 +121,7 @@ export const MetricTypes = ({
         labelText = 'Current slot';
         break;
       case 'peers':
+        iconId = 'peers';
         titleText = '16';
         labelText = 'Peers connected';
         break;
@@ -129,17 +130,22 @@ export const MetricTypes = ({
         titleText = `${statsValue}%`;
         labelText = 'CPU load';
         break;
-      case 'diskUsage':
-        if (typeof statsValue === 'number' && statsValue >= 1000000) {
-          titleText = `${statsValue / 1000000} TB`;
-        } else if (
-          typeof statsValue === 'number' &&
-          statsValue <= 999999 &&
-          statsValue >= 1000
-        ) {
-          titleText = `${statsValue / 1000} GB`;
+      case 'diskUsageGBs':
+        // if (typeof statsValue === 'number' && statsValue >= 1000000) {
+        //   titleText = `${statsValue / 1000000} TB`;
+        // } else if (
+        //   typeof statsValue === 'number' &&
+        //   statsValue <= 999999 &&
+        //   statsValue >= 1000
+        // ) {
+        //   titleText = `${statsValue / 1000} GB`;
+        // } else {
+        //   titleText = `${statsValue} MB`;
+        // }
+        if (typeof statsValue === 'number') {
+          titleText = `${statsValue.toFixed(2)} GB`;
         } else {
-          titleText = `${statsValue} MB`;
+          titleText = `${statsValue} GB`;
         }
         iconId = 'disks';
         labelText = 'Disk usage';

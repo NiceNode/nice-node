@@ -33,6 +33,6 @@ Primary.args = {
     currentSlot: 90,
     highestSlot: 190,
     cpuLoad: 90,
-    diskUsage: 10000
+    diskUsageGBs: 10000
   },
 };
