@@ -6,6 +6,7 @@ import {
   MenuItemConstructorOptions,
   clipboard,
 } from 'electron';
+import { getSetHasSeenSplashscreen } from './state/settings';
 
 import { getDebugInfoString, getGithubIssueProblemURL } from './debug';
 import { checkForUpdates } from './updater';
@@ -147,6 +148,12 @@ export default class MenuBuilder {
             shell.openExternal(
               'https://ethereum.org/en/run-a-node/#build-your-own'
             );
+          },
+        },
+        {
+          label: 'Show Splash Screen On Launch',
+          click() {
+            getSetHasSeenSplashscreen(false);
           },
         },
         {

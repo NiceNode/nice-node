@@ -13,6 +13,7 @@ const OS_LANGUAGE_KEY = 'osLanguage';
 const OS_COUNTRY_KEY = 'osCountry';
 const OS_IS_DARK_MODE_KEY = 'osIsDarkMode';
 const APP_LANGUAGE_KEY = 'appLanguage';
+const APP_HAS_SEEN_SPLASHSCREEN_KEY = 'appHasSeenSplashscreen';
 
 export type Settings = {
   [OS_PLATFORM_KEY]?: string;
@@ -36,6 +37,16 @@ const initialize = () => {
   }
 };
 initialize();
+
+export const getSetHasSeenSplashscreen = (hasSeen?: boolean): boolean => {
+  if (hasSeen !== undefined) {
+    store.set(`${SETTINGS_KEY}.${APP_HAS_SEEN_SPLASHSCREEN_KEY}`, hasSeen);
+  }
+  const savedHasSeenValue: boolean = store.get(
+    `${SETTINGS_KEY}.${APP_HAS_SEEN_SPLASHSCREEN_KEY}`
+  );
+  return savedHasSeenValue;
+};
 
 export const getSettings = (): Settings => {
   const settings: Settings = store.get(SETTINGS_KEY);
