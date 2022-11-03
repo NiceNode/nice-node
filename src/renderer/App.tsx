@@ -15,6 +15,7 @@ import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
 import Sidebar from './Presentational/Sidebar/Sidebar';
 import { darkTheme, lightTheme } from './Generics/redesign/theme.css';
+import NNSplash from './Presentational/NNSplashScreen/NNSplashScreen';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -24,20 +25,45 @@ Sentry.init({
 const MainScreen = () => {
   const dispatch = useAppDispatch();
   const [isDarkTheme] = useState(false);
+  const [sHasSeenSplashscreen, setHasSeenSplashscreen] = useState<boolean>();
+  const [sHasClickedGetStarted, setHasClickedGetStarted] = useState<boolean>();
 
   // const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
   // console.log('isStartOnLogin: ', isStartOnLogin);
   // setIsOpenOnLogin(isStartOnLogin);
 
   useEffect(() => {
+    const callAsync = async () => {
+      const hasSeen = await electron.getSetHasSeenSplashscreen();
+      setHasSeenSplashscreen(hasSeen ?? false);
+    };
+    callAsync();
+  }, []);
+
+  useEffect(() => {
     console.log('App loaded. Initializing...');
     initializeIpcListeners(dispatch);
   }, [dispatch]);
+
+  const onClickSplashGetStarted = () => {
+    setHasSeenSplashscreen(true);
+    electron.getSetHasSeenSplashscreen(true);
+    setHasClickedGetStarted(true);
+  };
 
   // const onChangeOpenOnLogin = (openOnLogin: boolean) => {
   //   electron.setStoreValue('isStartOnLogin', openOnLogin);
   //   setIsOpenOnLogin(openOnLogin);
   // };
+  if (sHasSeenSplashscreen === undefined) {
+    console.log(
+      'waiting for splash screen value to return... showing loading screen'
+    );
+    return <></>;
+  }
+  if (sHasSeenSplashscreen === false) {
+    console.log('User has not seen the splash screen yet');
+  }
 
   return (
     <div
@@ -50,33 +76,42 @@ const MainScreen = () => {
         height: '100vh',
       }}
     >
-      <Header />
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flex: 1,
-        }}
-      >
-        {/* <LeftSideBar /> */}
-        <Sidebar offline={false} />
+      {sHasSeenSplashscreen === false ? (
+        <>
+          {!sHasClickedGetStarted && (
+            <NNSplash onClickGetStarted={onClickSplashGetStarted} />
+          )}
+        </>
+      ) : (
+        <>
+          <Header />
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              flex: 1,
+            }}
+          >
+            <Sidebar offline={false} />
 
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            flex: 1,
-            justifyContent: 'center',
-          }}
-        >
-          <NodeScreen />
-          <Warnings />
-        </div>
-      </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                flex: 1,
+                justifyContent: 'center',
+              }}
+            >
+              <NodeScreen />
+              <Warnings />
+            </div>
+          </div>
 
-      <Footer />
-      <DataRefresher />
+          <Footer />
+          <DataRefresher />
+        </>
+      )}
     </div>
   );
 };

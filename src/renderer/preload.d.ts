@@ -71,6 +71,7 @@ declare global {
       startDocker(): any;
 
       // Settings
+      getSetHasSeenSplashscreen(hasSeen?: boolean): boolean;
       getSettings(): Settings;
       setLanguage(languageCode: string): void;
     };
