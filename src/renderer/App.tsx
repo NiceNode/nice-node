@@ -5,7 +5,6 @@ import * as Sentry from '@sentry/electron/renderer';
 import './Generics/redesign/globalStyle.css';
 import './reset.css';
 import { useAppDispatch } from './state/hooks';
-import Header from './Header';
 import Footer from './Footer/Footer';
 import Warnings from './Warnings';
 import { initialize as initializeIpcListeners } from './ipc';
