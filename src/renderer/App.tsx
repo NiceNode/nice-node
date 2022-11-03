@@ -23,7 +23,7 @@ Sentry.init({
 
 const MainScreen = () => {
   const dispatch = useAppDispatch();
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isDarkTheme] = useState(false);
 
   // const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
   // console.log('isStartOnLogin: ', isStartOnLogin);

@@ -1,11 +1,11 @@
-import { NodeId, NodeStatus } from 'common/node';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import {
   selectSelectedNodeId,
   selectUserNodes,
   updateSelectedNodeId,
-} from 'renderer/state/node';
-import { useAppDispatch, useAppSelector } from 'renderer/state/hooks';
+} from '../../state/node';
+import { NodeId, NodeStatus } from '../../../common/node';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
 import {
   SidebarNodeItem,
@@ -21,7 +21,9 @@ import {
   titleItem,
 } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
-import { NodeIconId } from '../../assets/images/nodeIcons';
+// import { NodeIconId } from '../../assets/images/nodeIcons';
+import { Modal } from '../../Generics/redesign/Modal/Modal';
+import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
 
 export interface SidebarProps {
   /**
@@ -30,43 +32,43 @@ export interface SidebarProps {
   offline: boolean;
 }
 
-const nodeListData: {
-  iconId: NodeIconId;
-  title: string;
-  info: string;
-  status: SidebarNodeStatus;
-}[] = [
-  {
-    iconId: 'ethereum',
-    title: 'Ethereum',
-    info: 'Mainnet',
-    status: 'healthy',
-  },
-  {
-    iconId: 'zkSync',
-    title: 'zkSync',
-    info: 'Rinkeby',
-    status: 'sync',
-  },
-  {
-    iconId: 'arbitrum',
-    title: 'Arbitrum Nitro',
-    info: 'Testnet',
-    status: 'healthy',
-  },
-  {
-    iconId: 'starknet',
-    title: 'Starknet',
-    info: 'Testnet',
-    status: 'error',
-  },
-  {
-    iconId: 'livepeer',
-    title: 'Livepeer Orchestrator',
-    info: 'Testnet',
-    status: 'warning',
-  },
-];
+// const nodeListData: {
+//   iconId: NodeIconId;
+//   title: string;
+//   info: string;
+//   status: SidebarNodeStatus;
+// }[] = [
+//   {
+//     iconId: 'ethereum',
+//     title: 'Ethereum',
+//     info: 'Mainnet',
+//     status: 'healthy',
+//   },
+//   {
+//     iconId: 'zkSync',
+//     title: 'zkSync',
+//     info: 'Rinkeby',
+//     status: 'sync',
+//   },
+//   {
+//     iconId: 'arbitrum',
+//     title: 'Arbitrum Nitro',
+//     info: 'Testnet',
+//     status: 'healthy',
+//   },
+//   {
+//     iconId: 'starknet',
+//     title: 'Starknet',
+//     info: 'Testnet',
+//     status: 'error',
+//   },
+//   {
+//     iconId: 'livepeer',
+//     title: 'Livepeer Orchestrator',
+//     info: 'Testnet',
+//     status: 'warning',
+//   },
+// ];
 
 const itemListData: { iconId: IconId; label: string; count?: number }[] = [
   {
@@ -106,6 +108,7 @@ const Sidebar = ({ offline }: SidebarProps) => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const sUserNodes = useAppSelector(selectUserNodes);
   const dispatch = useAppDispatch();
+  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
 
   // Default selected node to be the first node
   useEffect(() => {
@@ -137,6 +140,7 @@ const Sidebar = ({ offline }: SidebarProps) => {
     console.log('sidebar link item clicked: ', linkItemId);
     if (linkItemId === 'add') {
       // open add node dialog
+      setIsModalOpenAddNode(true);
     }
   }, []);
 
@@ -193,6 +197,21 @@ const Sidebar = ({ offline }: SidebarProps) => {
           );
         })}
       </div>
+      <Modal
+        title=""
+        isOpen={sIsModalOpenAddNode}
+        onClickCloseButton={() => setIsModalOpenAddNode(false)}
+        isFullScreen
+      >
+        <AddNodeStepper
+          onChange={(newValue: 'done' | 'cancel') => {
+            console.log(newValue);
+            if (newValue === 'done' || newValue === 'cancel') {
+              setIsModalOpenAddNode(false);
+            }
+          }}
+        />
+      </Modal>
     </div>
   );
 };
