@@ -86,6 +86,8 @@ const createWindow = async () => {
   };
 
   mainWindow = new BrowserWindow({
+    titleBarOverlay: true,
+    titleBarStyle: 'hiddenInset',
     show: false,
     width: 1200,
     height: 820,
