@@ -22,7 +22,7 @@ const AddNode = () => {
       <IconButton type="button" onClick={onClickAddNodeButton}>
         <BsPlusSquareDotted />
       </IconButton>
-      <div id="onBoarding" className={darkTheme}>
+      <div className={darkTheme}>
         <Modal
           title=""
           isOpen={sIsModalOpenAddNode}

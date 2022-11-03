@@ -1,19 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
 
 import './Generics/redesign/globalStyle.css';
-import './App.css';
+// import './App.css';
 import { useAppDispatch } from './state/hooks';
 import Header from './Header';
 import Footer from './Footer/Footer';
 import Warnings from './Warnings';
 import { initialize as initializeIpcListeners } from './ipc';
-import LeftSideBar from './LeftSideBar';
+// import LeftSideBar from './LeftSideBar';
 import NodeScreen from './NodeScreen';
 import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
 import Sidebar from './Presentational/Sidebar/Sidebar';
+import { darkTheme, lightTheme } from './Generics/redesign/theme.css';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -22,6 +23,7 @@ Sentry.init({
 
 const MainScreen = () => {
   const dispatch = useAppDispatch();
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   // const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
   // console.log('isStartOnLogin: ', isStartOnLogin);
@@ -39,6 +41,8 @@ const MainScreen = () => {
 
   return (
     <div
+      id="onBoarding"
+      className={isDarkTheme ? darkTheme : lightTheme}
       style={{
         display: 'flex',
         flexDirection: 'column',

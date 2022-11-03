@@ -1,5 +1,5 @@
-import { NodeId } from 'common/node';
-import { useEffect } from 'react';
+import { NodeId, NodeStatus } from 'common/node';
+import { useCallback, useEffect } from 'react';
 import {
   selectSelectedNodeId,
   selectUserNodes,
@@ -83,6 +83,25 @@ const itemListData: { iconId: IconId; label: string; count?: number }[] = [
   },
 ];
 
+const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
+  created: 'stopped',
+  initializing: 'sync',
+  [NodeStatus.checkingForUpdates]: 'sync',
+  downloading: 'sync',
+  downloaded: 'sync',
+  [NodeStatus.errorDownloading]: 'error',
+  extracting: 'sync',
+  [NodeStatus.readyToStart]: 'stopped',
+  starting: 'sync',
+  running: 'healthy',
+  stopping: 'healthy',
+  stopped: 'stopped',
+  [NodeStatus.errorRunning]: 'error',
+  [NodeStatus.errorStarting]: 'error',
+  [NodeStatus.errorStopping]: 'error',
+  unknown: 'error',
+};
+
 const Sidebar = ({ offline }: SidebarProps) => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const sUserNodes = useAppSelector(selectUserNodes);
@@ -100,19 +119,26 @@ const Sidebar = ({ offline }: SidebarProps) => {
     }
   }, [sSelectedNodeId, sUserNodes, dispatch]);
 
-  const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
-  sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
-    const node = sUserNodes.nodes[nodeId];
-    // TODO: add validator logic here eventually
-    if (
-      node.spec.category === 'L1/ExecutionClient' ||
-      node.spec.category === 'L1/ConsensusClient/BeaconNode'
-    ) {
-      nodeListObject.nodeService.push(node);
-    } else {
-      nodeListObject.singleClients.push(node);
+  // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
+  // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
+  //   const node = sUserNodes.nodes[nodeId];
+  //   // TODO: add validator logic here eventually
+  //   if (
+  //     node.spec.category === 'L1/ExecutionClient' ||
+  //     node.spec.category === 'L1/ConsensusClient/BeaconNode'
+  //   ) {
+  //     nodeListObject.nodeService.push(node);
+  //   } else {
+  //     nodeListObject.singleClients.push(node);
+  //   }
+  // });
+
+  const onClickLinkItem = useCallback((linkItemId) => {
+    console.log('sidebar link item clicked: ', linkItemId);
+    if (linkItemId === 'add') {
+      // open add node dialog
     }
-  });
+  }, []);
 
   return (
     <div className={container}>
@@ -125,7 +151,7 @@ const Sidebar = ({ offline }: SidebarProps) => {
         <div className={titleItem}>
           <SidebarTitleItem title="Nodes" />
         </div>
-        {nodeListObject.nodeService.length === 2 && (
+        {/* {nodeListObject.nodeService.length === 2 && (
           <SidebarNodeItem
             iconId="ethereum"
             title="Ethereum node"
@@ -136,17 +162,20 @@ const Sidebar = ({ offline }: SidebarProps) => {
               dispatch(updateSelectedNodeId(nodeListObject.nodeService[1].id));
             }}
           />
-        )}
-        {nodeListObject.singleClients.map((nodeId: NodeId) => {
-          const item = sUserNodes.nodes[nodeId];
-          const { spec, status } = item;
+        )} */}
+        {sUserNodes?.nodeIds.map((nodeId: NodeId) => {
+          const node = sUserNodes.nodes[nodeId];
+          const { spec, status } = node;
+          const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[status];
           return (
             <SidebarNodeItem
-              iconId={spec.specId}
+              // temp fix
+              key={node.id}
+              iconId={spec.specId.replace('-beacon', '')}
               title={spec.displayName}
               info={spec.displayName}
-              status={status}
-              key={spec.displayName}
+              status={sidebarStatus}
+              onClick={() => dispatch(updateSelectedNodeId(node.id))}
             />
           );
         })}
@@ -155,9 +184,11 @@ const Sidebar = ({ offline }: SidebarProps) => {
         {itemListData.map((item) => {
           return (
             <SidebarLinkItem
+              key={item.label}
               iconId={item.iconId}
               label={item.label}
               count={item.count}
+              onClick={() => onClickLinkItem(item.iconId)}
             />
           );
         })}

@@ -29,7 +29,7 @@ export const textContainer = style({
   alignItems: 'flex-start',
   padding: '0px',
   gap: '2px',
-  width: '172px',
+  // width: '172px',
   height: '32px',
   flex: 'none',
   order: '1',

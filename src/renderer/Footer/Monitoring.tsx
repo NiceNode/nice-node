@@ -153,7 +153,7 @@ const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
         />
       </div>
       <hr />
-      <div id="onBoarding" className={darkTheme}>
+      <div>
         <SystemMonitor />
         {/* <Checklist
           items={[
