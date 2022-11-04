@@ -5,7 +5,8 @@ export const container = style({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  gap: 10,
+  // TODO: fix this gap depending on type
+  gap: 8,
   cursor: 'pointer',
   boxSizing: 'border-box',
   height: 28,
@@ -51,7 +52,7 @@ export const statusDot = style({
 });
 
 export const selectIcon = style({
-  color: common.color.purple600,
+  color: vars.components.menuItemSelectIcon,
   flex: 'none',
   order: 1,
   flexGrow: 0,

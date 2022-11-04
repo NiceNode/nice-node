@@ -201,6 +201,7 @@ export const [lightTheme, vars] = createTheme({
     menuBorder: `1px solid ${common.color.black4}`,
     checkboxBackground: common.color.white100,
     checkboxBorder: common.color.black25,
+    menuItemSelectIcon: common.color.purple600,
   },
 });
 
@@ -286,5 +287,6 @@ export const darkTheme = createTheme(vars, {
     menuBorder: `1px solid ${common.color.white10}`,
     checkboxBackground: common.color.osMac,
     checkboxBorder: common.color.white25,
+    menuItemSelectIcon: common.color.purple500,
   },
 });
