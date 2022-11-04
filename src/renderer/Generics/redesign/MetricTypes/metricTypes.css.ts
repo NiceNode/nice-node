@@ -61,7 +61,7 @@ const redPulse = keyframes({
 });
 
 export const statusStyle = style({
-  zIndex: 1,
+  // zIndex: 1,
   animationDuration: '2s',
   animationIterationCount: 'infinite',
   animationTimingFunction: 'linear',

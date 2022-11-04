@@ -17,14 +17,14 @@ export const HeaderMetrics = (props: NodeOverviewProps) => {
     client: MetricStats[];
     validator: MetricStats[];
   } = {
-    altruistic: ['status', 'currentSlot', 'cpuLoad', 'diskUsage'],
-    client: ['status', getSlotOrBlockMetricType, 'peers', 'diskUsage'],
+    altruistic: ['status', 'currentSlot', 'cpuLoad', 'diskUsageGBs'],
+    client: ['status', getSlotOrBlockMetricType, 'peers', 'diskUsageGBs'],
     validator: ['status', 'stake', 'rewards', 'balance'],
   };
   const assignedMetric = metricTypeArray[type];
   return (
     <div className={container}>
-      {assignedMetric.map((metric, index) => {
+      {assignedMetric?.map((metric, index) => {
         let statsValue;
         if (metric === 'status') {
           statsValue = getSyncStatus(status);
