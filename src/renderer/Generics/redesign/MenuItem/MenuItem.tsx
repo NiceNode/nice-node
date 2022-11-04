@@ -2,13 +2,7 @@ import { IconId } from 'renderer/assets/images/icons';
 import { useState } from 'react';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { Icon } from '../Icon/Icon';
-import {
-  container,
-  iconStyle,
-  menuItemText,
-  statusDot,
-  selectIcon,
-} from './menuItem.css';
+import { container, menuItemText, statusDot, selectIcon } from './menuItem.css';
 
 export interface MenuItemProps {
   /**
@@ -85,7 +79,7 @@ export const MenuItem = ({
     >
       {variant === 'checkbox' && <Checkbox checked={isChecked} />}
       {iconId && (
-        <div className={iconStyle}>
+        <div>
           <Icon iconId={iconId} />
         </div>
       )}
