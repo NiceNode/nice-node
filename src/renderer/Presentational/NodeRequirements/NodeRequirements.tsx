@@ -62,23 +62,16 @@ const NodeRequirements = ({
         {nodeRequirements?.description ? (
           nodeRequirements.description
         ) : (
-          <>
-            Your computer is checked with the recommended requirements for the
-            selected node.
-          </>
+          <>{t('nodeRequirementsDefaultDescription')}</>
         )}
       </div>
       {nodeRequirements?.documentationUrl && (
         <ExternalLink
-          text="Learn more about the requirements"
+          text={t('nodeRequirementsLearnMore')}
           url={nodeRequirements.documentationUrl}
         />
       )}
-      {!nodeRequirements && (
-        <>
-          The requirements are unavailable. Please check with the node provider.
-        </>
-      )}
+      {!nodeRequirements && <>{t('nodeRequirementsUnavailable')}</>}
       <Checklist items={sItems} />
     </div>
   );

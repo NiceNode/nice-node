@@ -117,6 +117,7 @@ const AddEthereumNode = ({
 // beaconOptions,
 AddEthereumNodeProps) => {
   const { t } = useTranslation();
+  const { t: tGeneric } = useTranslation('genericComponents');
   const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const [sSelectedExecutionClient, setSelectedExecutionClient] =
     useState<string>();
@@ -180,7 +181,9 @@ AddEthereumNodeProps) => {
       <p className={sectionFont}>Consensus client</p>
       <SpecialSelect onChange={onChangeCc} options={ccOptions} />
       <DropdownLink
-        text={`${sIsOptionsOpen ? 'Hide' : 'Show'} advanced options`}
+        text={`${
+          sIsOptionsOpen ? tGeneric('Hide') : tGeneric('Show')
+        } ${tGeneric('advancedOptions')}`}
         onClick={() => setIsOptionsOpen(!sIsOptionsOpen)}
         isDown={!sIsOptionsOpen}
       />
@@ -193,7 +196,7 @@ AddEthereumNodeProps) => {
             width: '100%',
           }}
         >
-          <span style={{ fontWeight: 600 }}>Network</span>{' '}
+          <span style={{ fontWeight: 600 }}>{tGeneric('Network')}</span>{' '}
           <div
             style={{ width: 300, display: 'inline-block', marginLeft: 'auto' }}
           >
@@ -202,9 +205,9 @@ AddEthereumNodeProps) => {
         </div>
       )}
       <HorizontalLine />
-      <p className={sectionFont}>Data location</p>
+      <p className={sectionFont}>{tGeneric('DataLocation')}</p>
       <FolderInput
-        placeholder={sNodeStorageLocation ?? 'loading..'}
+        placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
         freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
         onClickChange={async () => {
           const storageLocationDetails =
