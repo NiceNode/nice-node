@@ -14,7 +14,7 @@ export interface SidebarWrapperProps {
 export const SidebarWrapper = ({
   children,
 }: {
-  children: (sUserNodes: UserNodes) => React.ReactNode;
+  children: (sUserNodes: any) => React.ReactNode;
 }) => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const sUserNodes = useAppSelector(selectUserNodes);
@@ -31,10 +31,6 @@ export const SidebarWrapper = ({
       dispatch(updateSelectedNodeId(sUserNodes.nodeIds[0]));
     }
   }, [sSelectedNodeId, sUserNodes, dispatch]);
-
-  if (!sUserNodes) {
-    return null;
-  }
 
   return <>{children(sUserNodes)}</>;
 };
