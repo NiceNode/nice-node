@@ -1,4 +1,5 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { NodeStatus } from 'common/node';
 
 import Sidebar from '../../renderer/Presentational/Sidebar/Sidebar';
 
@@ -305,7 +306,7 @@ Primary.args = {
             '63fe38e8f9ef52474e92a3e469e93a056100c9a45e382d1581bd0f2945549eeb',
           ],
         },
-        status: 'stopped',
+        status: NodeStatus.stopped,
         lastStopped: '2022-11-01T01:05:37.061103099Z',
       },
       'd5f390cb-d48c-46b5-8ae4-b41701bed176': {
@@ -468,7 +469,7 @@ Primary.args = {
             '62b5b9295aa2ae67d74660f16e58c77f4255b3cd807d2871ec04ca7fe89cb614',
           ],
         },
-        status: 'stopped',
+        status: NodeStatus.stopped,
         lastStopped: '2022-11-01T01:05:35.62993638Z',
       },
     },
