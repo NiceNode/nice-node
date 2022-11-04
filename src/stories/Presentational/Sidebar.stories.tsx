@@ -13,4 +13,7 @@ const Template: ComponentStory<typeof Sidebar> = (args) => (
 );
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = {
+  offline: false,
+  updateAvailable: false,
+};

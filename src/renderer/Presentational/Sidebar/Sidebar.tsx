@@ -1,3 +1,4 @@
+import { components } from 'react-select';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
 import {
   SidebarNodeItem,
@@ -7,7 +8,7 @@ import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/Sidebar
 import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
 import {
   container,
-  networkBanner,
+  banner,
   nodeList,
   itemList,
   titleItem,
@@ -20,6 +21,10 @@ export interface SidebarProps {
    * Offline mode?
    */
   offline: boolean;
+  /**
+   * Nice Node update available?
+   */
+  updateAvailable: boolean;
 }
 
 const nodeListData: {
@@ -75,14 +80,28 @@ const itemListData: { iconId: IconId; label: string; count?: number }[] = [
   },
 ];
 
-const Sidebar = ({ offline }: SidebarProps) => {
+const Sidebar = (props: SidebarProps) => {
+  const renderBanners = () => {
+    return Object.keys(props).map((key) => {
+      // eslint-disable-next-line react/destructuring-assignment
+      if (props[key as keyof SidebarProps]) {
+        return (
+          <div className={banner}>
+            <Banner
+              offline={false}
+              updateAvailable={false}
+              {...{ [key]: true }}
+            />
+          </div>
+        );
+      }
+      return null;
+    });
+  };
+
   return (
     <div className={container}>
-      {offline && (
-        <div className={networkBanner}>
-          <Banner />
-        </div>
-      )}
+      {renderBanners()}
       <div className={nodeList}>
         <div className={titleItem}>
           <SidebarTitleItem title="Nodes" />

@@ -15,7 +15,7 @@ export const container = style({
   // backdropFilter: 'blur(40px)',
 });
 
-export const networkBanner = style({
+export const banner = style({
   padding: '8px 0px',
 });
 

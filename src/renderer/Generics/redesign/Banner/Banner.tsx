@@ -9,23 +9,27 @@ import {
 
 export interface BannerProps {
   /**
-   * Which type?
+   * Is it offline?
    */
-  type?: 'offline' | 'update';
+  offline: boolean;
+  /**
+   * Is update available?
+   */
+  updateAvailable: boolean;
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const Banner = ({ type }: BannerProps) => {
+export const Banner = ({ offline, updateAvailable }: BannerProps) => {
   let iconId: IconId = 'blank';
   let title = '';
   let description = '';
-  if (type === 'offline') {
+  if (offline) {
     iconId = 'boltstrike';
     title = 'Currently offline';
     description = 'Please reconnect to the internet';
-  } else if (type === 'update') {
+  } else if (updateAvailable) {
     iconId = 'download1';
     title = 'Update available';
     description = 'New version ready to install';
