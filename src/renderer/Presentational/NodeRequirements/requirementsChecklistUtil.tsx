@@ -156,19 +156,18 @@ export const makeCheckList = (
           minDownloadSpeed: req.minDownloadSpeedMbps,
           minUploadSpeed: req.minUploadSpeedMbps,
         });
-        valueText =
-          'Please do your own internet speed test to ensure it meets these requirements!';
+        valueText = t('internetSpeedPleaseTest');
         valueComponent = (
           <>
-            You can check the speed at one of the following websites{' '}
+            {`${t('internetSpeedTestWebsites')} `}
             <ExternalLink
-              text="Google Speed Test"
+              text={t('internetSpeedGoogleSpeedTest')}
               url="https://www.google.com/search?q=speed+test"
               inline
             />{' '}
             or{' '}
             <ExternalLink
-              text="Speedtest by Ookla"
+              text={t('internetSpeedOoklaSpeedTest')}
               url="https://speedtest.net"
               inline
             />

@@ -1,0 +1,14 @@
+{
+  "AboutSecondsRemaining" : "About {{seconds}} seconds remaining",
+  "advanced options": "advanced options",
+  "DataLocation" : "Data location",
+  "FinishingUp" : "Finishing up...",
+  "Hide" : "Hide",
+  "loadingDotDotDot": "loading...",
+  "MinorityClient" : "Minority Client",
+  "Network": "Network",
+  "NextStep" : "Next step",
+  "NodeIcon" : "Node icon",
+  "Previous" : "Previous",
+  "Show" : "Show"
+}

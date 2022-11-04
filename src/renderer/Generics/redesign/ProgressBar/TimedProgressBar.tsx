@@ -1,21 +1,29 @@
 import { useEffect, useState } from 'react';
+import { TFunction, useTranslation } from 'react-i18next';
 import ProgressBar, { ProgressBarProps } from './ProgressBar';
 
 export interface TimedProgressBarProps extends ProgressBarProps {
   totalTimeSeconds: number;
 }
 
-const timeRemainingCaption = (totalTime: number, timeElapsed: number) => {
+const timeRemainingCaption = (
+  t: TFunction<'genericComponents', undefined>,
+  totalTime: number,
+  timeElapsed: number
+) => {
   if (timeElapsed >= totalTime) {
-    return 'Finishing up...';
+    return t('FinishingUp');
   }
-  return `About ${Math.round(totalTime - timeElapsed)} seconds remaining`;
+  return t('AboutSecondsRemaining', {
+    seconds: Math.round(totalTime - timeElapsed),
+  });
 };
 
 const TimedProgressBar = ({
   totalTimeSeconds,
   ...restProps
 }: TimedProgressBarProps) => {
+  const { t } = useTranslation('genericComponents');
   const [sElapsedSeconds, setElapsedSeconds] = useState<number>(0);
 
   useEffect(() => {
@@ -28,7 +36,7 @@ const TimedProgressBar = ({
   return (
     <ProgressBar
       progress={(sElapsedSeconds / totalTimeSeconds) * 100}
-      caption={timeRemainingCaption(totalTimeSeconds, sElapsedSeconds)}
+      caption={timeRemainingCaption(t, totalTimeSeconds, sElapsedSeconds)}
       {...restProps}
     />
   );

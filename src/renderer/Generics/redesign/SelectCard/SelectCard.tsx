@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useState } from 'react';
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
+import { useTranslation } from 'react-i18next';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { Label } from '../Label/Label';
 import {
@@ -51,6 +52,7 @@ const SelectCard = ({
   minority = false,
   isSelected = false,
 }: SelectCardProps) => {
+  const { t } = useTranslation('genericComponents');
   const [selected, setSelected] = useState(isSelected);
 
   const onClickAction = () => {
@@ -84,7 +86,7 @@ const SelectCard = ({
         </div>
         {minority && (
           <div className={tagStyle}>
-            <Label bold={false} type="pink2" label="Minority Client" />{' '}
+            <Label bold={false} type="pink2" label={t('MinorityClient')} />{' '}
           </div>
         )}
       </div>

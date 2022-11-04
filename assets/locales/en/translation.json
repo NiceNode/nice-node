@@ -52,6 +52,8 @@
   "DockerInstallation": "Docker installation",
   "LearnMoreDocker": "Learn more about Docker",
   "DownloadAndInstall": "Download and install",
+  "DockerIsRunningProceed": "Docker is running. Please proceed to start your node.",
+  "DockerUncheckOpenAtStartup": "Settings -> Unchceck \"Open Docker at startup\"",
   "GetStarted": "Get started",
   "WelcomeToNiceNode": "Welcome to NiceNode",
   "WelcomeToNiceNodeDescription": "Run a node how you want it — without commands and a terminal. NiceNode shows what the node is doing at a glance. Stats like how many peer nodes are connected and synching progress are built into the app."
