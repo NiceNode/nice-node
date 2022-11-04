@@ -12,10 +12,6 @@ export interface CheckboxProps {
    */
   checked?: boolean;
   /**
-   * Is this indeterminate?
-   */
-  indeterminate?: boolean;
-  /**
    * Is this disabled?
    */
   disabled?: boolean;
@@ -31,7 +27,6 @@ export interface CheckboxProps {
 export const Checkbox = ({
   label,
   checked = false,
-  indeterminate = false,
   disabled = false,
   onClick,
 }: CheckboxProps) => {
@@ -58,7 +53,7 @@ export const Checkbox = ({
           onChange: () => {
             setChecked(!isChecked);
             if (onClick) {
-              onClick();
+              onChangeAction();
             }
           },
         }}

@@ -1,8 +1,7 @@
-import { IconId } from 'renderer/assets/images/icons';
+// import { IconId } from 'renderer/assets/images/icons';
 import { useState } from 'react';
 import { Checkbox } from '../Checkbox/Checkbox';
-import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
-import { Icon } from '../Icon/Icon';
+// import { Icon } from '../Icon/Icon';
 import { container, menuItemText, statusDot } from './menuItem.css';
 
 export interface MenuItemProps {
@@ -43,7 +42,7 @@ export const MenuItem = ({
   disabled = false,
   onClick,
 }: MenuItemProps) => {
-  const [isChecked, setChecked] = useState(false);
+  const [isChecked, setChecked] = useState(selected);
   const disabledStyle = disabled ? 'disabled' : '';
 
   const onClickAction = () => {

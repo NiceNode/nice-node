@@ -1,7 +1,3 @@
-import { IconId } from 'renderer/assets/images/icons';
-import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
-import { Icon } from '../Icon/Icon';
-import { MenuItem } from '../MenuItem/MenuItem';
 import { container } from './menu.css';
 
 export interface MenuProps {
