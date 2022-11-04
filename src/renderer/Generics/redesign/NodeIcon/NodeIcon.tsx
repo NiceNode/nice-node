@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   NODE_ICONS,
   NodeIconId,
@@ -43,6 +44,8 @@ export interface NodeIconProps {
  * Primary UI component for user interaction
  */
 export const NodeIcon = ({ iconId, status, size, animate }: NodeIconProps) => {
+  const { t } = useTranslation('genericComponents');
+
   const isAnimated = animate ? 'animate' : '';
   let sizeStyle = mediumStyle;
   if (size === 'small') {
@@ -102,7 +105,7 @@ export const NodeIcon = ({ iconId, status, size, animate }: NodeIconProps) => {
       >
         <img
           src={NODE_ICONS[iconId as NodeIconId] || undefined}
-          alt="Node icon"
+          alt={t('NodeIcon')}
           className={imageStyle}
         />
       </div>

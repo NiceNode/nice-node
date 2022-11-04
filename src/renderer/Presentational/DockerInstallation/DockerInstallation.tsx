@@ -155,14 +155,10 @@ const DockerInstallation = ({ onChange }: DockerInstallationProps) => {
             label={t('start docker')}
             onClick={onClickStartDocker}
           />
-          <div
-            className={captionText}
-          >{`Settings -> Unchceck "Open Docker at startup"`}</div>
+          <div className={captionText}>{t('DockerUncheckOpenAtStartup')}</div>
         </>
       )}
-      {isDockerRunning && (
-        <>Docker is running. Please proceed to start your node.</>
-      )}
+      {isDockerRunning && <>{t('DockerIsRunningProceed')}</>}
     </div>
   );
 };

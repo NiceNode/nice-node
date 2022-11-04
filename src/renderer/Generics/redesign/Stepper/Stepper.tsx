@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Button from '../Button/Button';
 import { bottomBar, previousButton, nextButton } from './stepper.css';
 
@@ -9,13 +10,19 @@ export interface StepperProps {
 }
 
 const Stepper = ({ onChange }: StepperProps) => {
+  const { t } = useTranslation('genericComponents');
+
   return (
     <div className={bottomBar}>
       <div className={previousButton}>
-        <Button label="Previous" onClick={() => onChange('previous')} />
+        <Button label={t('Previous')} onClick={() => onChange('previous')} />
       </div>
       <div className={nextButton}>
-        <Button label="Next step" primary onClick={() => onChange('next')} />
+        <Button
+          label={t('NextStep')}
+          primary
+          onClick={() => onChange('next')}
+        />
       </div>
     </div>
   );
