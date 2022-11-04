@@ -1,8 +1,8 @@
-// import { IconId } from 'renderer/assets/images/icons';
+import { IconId } from 'renderer/assets/images/icons';
 import { useState } from 'react';
 import { Checkbox } from '../Checkbox/Checkbox';
-// import { Icon } from '../Icon/Icon';
-import { container, menuItemText, statusDot } from './menuItem.css';
+import { Icon } from '../Icon/Icon';
+import { container, menuItemText, statusDot, selectIcon } from './menuItem.css';
 
 export interface MenuItemProps {
   /**
@@ -17,6 +17,10 @@ export interface MenuItemProps {
    * Which variant?
    */
   variant?: 'text' | 'checkbox';
+  /**
+   * Is this selectable?
+   */
+  selectable?: boolean;
   /**
    * Is this selected?
    */
@@ -38,6 +42,7 @@ export const MenuItem = ({
   text,
   variant = 'text',
   status,
+  selectable,
   selected,
   disabled = false,
   onClick,
@@ -48,7 +53,7 @@ export const MenuItem = ({
   const onClickAction = () => {
     if (!disabled && onClick) {
       onClick();
-      if (variant === 'checkbox') {
+      if (selectable) {
         setChecked(!isChecked);
       }
     }
@@ -61,10 +66,20 @@ export const MenuItem = ({
       onKeyDown={onClickAction}
       className={[container, `${disabledStyle}`].join(' ')}
       onClick={onClickAction}
+      onBlur={() => {
+        if (selectable) {
+          setChecked(false);
+        }
+      }}
     >
       {variant === 'checkbox' && <Checkbox checked={isChecked} />}
       {status && <div className={[statusDot, `${status}`].join(' ')} />}
       <div className={menuItemText}>{text}</div>
+      {variant === 'text' && selectable && isChecked && (
+        <div className={selectIcon}>
+          <Icon iconId="check" />
+        </div>
+      )}
     </div>
   );
 };

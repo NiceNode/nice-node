@@ -75,31 +75,60 @@ export const LogMessageType: ComponentStory<typeof Menu> = () => (
 export const LogMessageTime: ComponentStory<typeof Menu> = () => (
   <Menu width={156}>
     <MenuItem
-      text="Restart Client"
+      text="Last 30 minutes"
+      selectable
       onClick={() => {
-        console.log('Restart Client');
+        console.log('Last 30 minutes');
       }}
     />
     <MenuItem
-      text="Check for Updates..."
+      text="Last hour"
+      selectable
       onClick={() => {
-        console.log('Check for Updates...');
+        console.log('Last hour');
       }}
     />
-    <HorizontalLine type="menu" />
     <MenuItem
-      text="Client Versions"
+      text="Last 6 hours"
+      selectable
       onClick={() => {
-        console.log('Client Versions');
+        console.log('Last 6 hours');
       }}
     />
-    <HorizontalLine type="menu" />
     <MenuItem
-      text="Switch Client"
+      text="Last 12 hours"
+      selectable
       onClick={() => {
-        console.log('Switch Client');
+        console.log('Last 12 hours');
       }}
-      disabled
+    />
+    <MenuItem
+      text="Last day"
+      selectable
+      onClick={() => {
+        console.log('Last day');
+      }}
+    />
+    <MenuItem
+      text="Last 3 days"
+      selectable
+      onClick={() => {
+        console.log('Last 3 days');
+      }}
+    />
+    <MenuItem
+      text="Last week"
+      selectable
+      onClick={() => {
+        console.log('Last week');
+      }}
+    />
+    <MenuItem
+      text="Last month"
+      selectable
+      onClick={() => {
+        console.log('Last month');
+      }}
     />
   </Menu>
 );

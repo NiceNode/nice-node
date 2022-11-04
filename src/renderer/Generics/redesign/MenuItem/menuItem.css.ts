@@ -28,7 +28,11 @@ export const menuItemText = style({
   fontSize: '13px',
   lineHeight: '16px',
   letterSpacing: '-0.08px',
+  flex: 'none',
+  order: 0,
+  flexGrow: 1,
 });
+
 export const statusDot = style({
   width: 8,
   height: 8,
@@ -44,4 +48,11 @@ export const statusDot = style({
       backgroundColor: common.color.red500,
     },
   },
+});
+
+export const selectIcon = style({
+  color: common.color.purple600,
+  flex: 'none',
+  order: 1,
+  flexGrow: 0,
 });
