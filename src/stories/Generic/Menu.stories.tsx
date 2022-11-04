@@ -55,7 +55,7 @@ export const LogMessageType: ComponentStory<typeof Menu> = () => (
     />
     <MenuItem
       variant="checkbox"
-      status="yellow"
+      status="orange"
       text="Warnings"
       onClick={() => {
         console.log('Warnings');

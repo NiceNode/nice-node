@@ -1,13 +1,19 @@
 import { IconId } from 'renderer/assets/images/icons';
+import { useState } from 'react';
+import { Checkbox } from '../Checkbox/Checkbox';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
 import { Icon } from '../Icon/Icon';
-import { container, menuItemText } from './menuItem.css';
+import { container, menuItemText, statusDot } from './menuItem.css';
 
 export interface MenuItemProps {
   /**
    * What's the width?
    */
   text: string;
+  /**
+   * Is theres status?
+   */
+  status?: string;
   /**
    * Which variant?
    */
@@ -32,16 +38,23 @@ export interface MenuItemProps {
 export const MenuItem = ({
   text,
   variant = 'text',
+  status,
   selected,
   disabled = false,
   onClick,
 }: MenuItemProps) => {
+  const [isChecked, setChecked] = useState(false);
+  const disabledStyle = disabled ? 'disabled' : '';
+
   const onClickAction = () => {
     if (!disabled && onClick) {
       onClick();
+      if (variant === 'checkbox') {
+        setChecked(!isChecked);
+      }
     }
   };
-  const disabledStyle = disabled ? 'disabled' : '';
+
   return (
     <div
       tabIndex={0}
@@ -50,6 +63,8 @@ export const MenuItem = ({
       className={[container, `${disabledStyle}`].join(' ')}
       onClick={onClickAction}
     >
+      {variant === 'checkbox' && <Checkbox checked={isChecked} />}
+      {status && <div className={[statusDot, `${status}`].join(' ')} />}
       <div className={menuItemText}>{text}</div>
     </div>
   );

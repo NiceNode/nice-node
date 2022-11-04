@@ -2,19 +2,23 @@ import { style } from '@vanilla-extract/css';
 import { common, vars } from '../theme.css';
 
 export const container = style({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 10,
   cursor: 'pointer',
   boxSizing: 'border-box',
   height: 28,
   width: '100%',
   padding: '6px 12px',
-  color: common.color.black85,
+  color: vars.color.font,
   userSelect: 'none',
   ':hover': {
     background: vars.components.headerButtonHover,
   },
   selectors: {
     [`&.disabled`]: {
-      color: common.color.black40,
+      color: vars.color.fontDisabled,
     },
   },
 });
@@ -24,4 +28,20 @@ export const menuItemText = style({
   fontSize: '13px',
   lineHeight: '16px',
   letterSpacing: '-0.08px',
+});
+export const statusDot = style({
+  width: 8,
+  height: 8,
+  borderRadius: '50%',
+  selectors: {
+    [`&.blue`]: {
+      backgroundColor: common.color.blue500,
+    },
+    [`&.orange`]: {
+      backgroundColor: common.color.orange400,
+    },
+    [`&.red`]: {
+      backgroundColor: common.color.red500,
+    },
+  },
 });
