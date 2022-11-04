@@ -62,6 +62,7 @@ export const ClientCard = (props: ClientProps) => {
       stats.highestBlock - stats.currentBlock > 10);
   const isNotSynchronizedAndNotStopped =
     isNotCloseToSynchronized && !status.stopped;
+
   const renderContents = () => {
     if (isNotSynchronizedAndNotStopped) {
       const caption = !status.initialized

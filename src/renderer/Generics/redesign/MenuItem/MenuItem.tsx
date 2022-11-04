@@ -18,7 +18,7 @@ export interface MenuItemProps {
   /**
    * IconId?
    */
-  iconId: IconId;
+  iconId?: IconId;
   /**
    * Is theres status?
    */

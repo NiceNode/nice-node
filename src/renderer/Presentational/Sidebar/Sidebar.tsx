@@ -1,4 +1,3 @@
-import { components } from 'react-select';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
 import {
   SidebarNodeItem,
@@ -6,13 +5,7 @@ import {
 } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
-import {
-  container,
-  banner,
-  nodeList,
-  itemList,
-  titleItem,
-} from './sidebar.css';
+import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 import { NodeIconId } from '../../assets/images/nodeIcons';
 
