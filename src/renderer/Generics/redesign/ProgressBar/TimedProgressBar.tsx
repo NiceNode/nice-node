@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { TFunction, useTranslation } from 'react-i18next';
 import ProgressBar, { ProgressBarProps } from './ProgressBar';
 
 export interface TimedProgressBarProps extends ProgressBarProps {
   totalTimeSeconds: number;
 }
 
-const timeRemainingCaption = (t, totalTime: number, timeElapsed: number) => {
+const timeRemainingCaption = (
+  t: TFunction<'genericComponents', undefined>,
+  totalTime: number,
+  timeElapsed: number
+) => {
   if (timeElapsed >= totalTime) {
     return t('FinishingUp');
   }
