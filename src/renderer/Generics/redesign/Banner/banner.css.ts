@@ -2,6 +2,10 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
 
 export const container = style({
+  padding: '8px 0px',
+});
+
+export const innerContainer = style({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'flex-start',

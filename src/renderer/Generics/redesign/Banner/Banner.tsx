@@ -2,6 +2,7 @@ import { IconId } from 'renderer/assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import {
   container,
+  innerContainer,
   textContainer,
   titleStyle,
   descriptionStyle,
@@ -25,6 +26,7 @@ export const Banner = ({ offline, updateAvailable }: BannerProps) => {
   let iconId: IconId = 'blank';
   let title = '';
   let description = '';
+  let onClick = () => {};
   if (offline) {
     iconId = 'boltstrike';
     title = 'Currently offline';
@@ -33,13 +35,25 @@ export const Banner = ({ offline, updateAvailable }: BannerProps) => {
     iconId = 'download1';
     title = 'Update available';
     description = 'New version ready to install';
+    onClick = () => {
+      console.log('update nice node!');
+    };
   }
   return (
-    <div className={container}>
-      <Icon iconId={iconId} />
-      <div className={textContainer}>
-        <div className={titleStyle}>{title}</div>
-        <div className={descriptionStyle}>{description}</div>
+    <div
+      style={updateAvailable ? { cursor: 'pointer' } : {}}
+      className={container}
+      onClick={onClick}
+      onKeyDown={onClick}
+      role="button"
+      tabIndex={0}
+    >
+      <div className={innerContainer}>
+        <Icon iconId={iconId} />
+        <div className={textContainer}>
+          <div className={titleStyle}>{title}</div>
+          <div className={descriptionStyle}>{description}</div>
+        </div>
       </div>
     </div>
   );

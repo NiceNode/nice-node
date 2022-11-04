@@ -15,5 +15,5 @@ const Template: ComponentStory<typeof Banner> = (args) => <Banner {...args} />;
 export const Primary = Template.bind({});
 
 Primary.args = {
-  type: 'update',
+  updateAvailable: true,
 };

@@ -86,13 +86,11 @@ const Sidebar = (props: SidebarProps) => {
       // eslint-disable-next-line react/destructuring-assignment
       if (props[key as keyof SidebarProps]) {
         return (
-          <div className={banner}>
-            <Banner
-              offline={false}
-              updateAvailable={false}
-              {...{ [key]: true }}
-            />
-          </div>
+          <Banner
+            offline={false}
+            updateAvailable={false}
+            {...{ [key]: true }}
+          />
         );
       }
       return null;
