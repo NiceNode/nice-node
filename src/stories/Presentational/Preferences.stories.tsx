@@ -1,0 +1,23 @@
+import { ComponentStory, ComponentMeta } from '@storybook/react';
+
+import Preferences from '../../renderer/Presentational/PreferencesModal/Preferences';
+
+export default {
+  title: 'Presentational/Preferences',
+  component: Preferences,
+  argTypes: {},
+} as ComponentMeta<typeof Preferences>;
+
+const Template: ComponentStory<typeof Preferences> = (args) => (
+  <Preferences {...args} />
+);
+
+export const Primary = Template.bind({});
+Primary.args = {
+  isOpen: true,
+  onClose: () => alert('close'),
+  themeSetting: 'auto',
+  isOpenOnStartup: true,
+  language: 'en',
+  version: 'v69.69',
+};

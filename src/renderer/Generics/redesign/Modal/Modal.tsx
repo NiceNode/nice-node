@@ -1,5 +1,5 @@
 import Button from '../Button/Button';
-import { modalBackdropStyle, modalContentStyle } from './modal.css';
+import { modalBackdropStyle, modalContentStyle, titleFont } from './modal.css';
 
 type Props = {
   children: React.ReactNode;
@@ -30,11 +30,20 @@ export const Modal = ({
           flexDirection: 'column',
           height: isFullScreen ? '95vh' : '',
           width: isFullScreen ? '95vw' : '',
+          minHeight: 100,
         }}
       >
-        <div style={{ display: 'flex' }}>
-          <h1 style={{ flexGrow: 1 }}>{title}</h1>
-          <Button variant="icon" iconId="close" onClick={onClickCloseButton} />
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ height: 40, alignSelf: 'flex-end' }}>
+            <Button
+              variant="icon"
+              iconId="close"
+              onClick={onClickCloseButton}
+            />
+          </div>
+          <span className={titleFont} style={{ flexGrow: 1 }}>
+            {title}
+          </span>
         </div>
         <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
       </div>
