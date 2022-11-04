@@ -7,6 +7,7 @@ export const container = style({
   alignItems: 'flex-start',
   boxSizing: 'border-box',
   padding: '0px 16px 16px 16px',
+  paddingTop: '52px',
   isolation: 'isolate',
   width: '268px',
   height: '100%',
@@ -26,7 +27,7 @@ export const titleItem = style({
 });
 
 export const nodeList = style({
-  overflowY: 'scroll',
+  overflowY: 'auto',
   order: '2',
   alignSelf: 'stretch',
   flexGrow: '1',

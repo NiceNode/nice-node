@@ -32,6 +32,6 @@ Nethermind.args = {
     currentSlot: 90,
     highestSlot: 190,
     cpuLoad: 82,
-    diskUsage: 5000,
+    diskUsageGBs: 5000,
   },
 };

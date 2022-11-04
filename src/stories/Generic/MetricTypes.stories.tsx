@@ -24,5 +24,5 @@ Status.args = {
 export const Stats = Template.bind({});
 Stats.args = {
   statsValue: 100,
-  statsType: 'diskUsage',
+  statsType: 'diskUsageGBs',
 };

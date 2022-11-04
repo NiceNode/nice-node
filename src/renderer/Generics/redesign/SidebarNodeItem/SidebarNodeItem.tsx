@@ -28,7 +28,7 @@ export interface SidebarNodeItemProps {
   /**
    * Which icon?
    */
-  iconId: NodeIconId;
+  iconId: NodeIconId | string;
   /**
    * What's the status?
    */

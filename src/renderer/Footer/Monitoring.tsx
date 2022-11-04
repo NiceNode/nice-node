@@ -7,8 +7,6 @@ import { useAppSelector } from '../state/hooks';
 import { selectNumFreeDiskGB, selectSelectedNode } from '../state/node';
 // import { Checklist } from '../Generics/redesign/Checklist/Checklist';
 
-// todo: remove when new ui/ux redesign is further along
-import { darkTheme, lightTheme } from '../Generics/redesign/theme.css';
 import { SystemMonitor } from '../Generics/redesign/SystemMonitor/SystemMonitor';
 
 type Props = {
@@ -110,8 +108,6 @@ const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
     }
   }, [isOpen]);
 
-  console.log('monitoring lightTheme: ', lightTheme);
-
   return (
     <MenuDrawer
       title="Monitoring"
@@ -153,7 +149,7 @@ const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
         />
       </div>
       <hr />
-      <div id="onBoarding" className={darkTheme}>
+      <div>
         <SystemMonitor />
         {/* <Checklist
           items={[

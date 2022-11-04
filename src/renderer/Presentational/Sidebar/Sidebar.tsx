@@ -1,3 +1,7 @@
+import { useCallback, useState } from 'react';
+import { useAppDispatch } from '../../state/hooks';
+import { updateSelectedNodeId } from '../../state/node';
+import { NodeId, NodeStatus, UserNodes } from '../../../common/node';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
 import {
   SidebarNodeItem,
@@ -7,7 +11,9 @@ import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/Sidebar
 import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
 import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
-import { NodeIconId } from '../../assets/images/nodeIcons';
+// import { NodeIconId } from '../../assets/images/nodeIcons';
+import { Modal } from '../../Generics/redesign/Modal/Modal';
+import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
 
 export interface SidebarProps {
   /**
@@ -18,45 +24,8 @@ export interface SidebarProps {
    * Nice Node update available?
    */
   updateAvailable: boolean;
+  sUserNodes: UserNodes;
 }
-
-const nodeListData: {
-  iconId: NodeIconId;
-  title: string;
-  info: string;
-  status: SidebarNodeStatus;
-}[] = [
-  {
-    iconId: 'ethereum',
-    title: 'Ethereum',
-    info: 'Mainnet',
-    status: 'healthy',
-  },
-  {
-    iconId: 'zkSync',
-    title: 'zkSync',
-    info: 'Rinkeby',
-    status: 'sync',
-  },
-  {
-    iconId: 'arbitrum',
-    title: 'Arbitrum Nitro',
-    info: 'Testnet',
-    status: 'healthy',
-  },
-  {
-    iconId: 'starknet',
-    title: 'Starknet',
-    info: 'Testnet',
-    status: 'error',
-  },
-  {
-    iconId: 'livepeer',
-    title: 'Livepeer Orchestrator',
-    info: 'Testnet',
-    status: 'warning',
-  },
-];
 
 const itemListData: { iconId: IconId; label: string; count?: number }[] = [
   {
@@ -73,11 +42,52 @@ const itemListData: { iconId: IconId; label: string; count?: number }[] = [
   },
 ];
 
-const Sidebar = (props: SidebarProps) => {
+const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
+  created: 'stopped',
+  initializing: 'sync',
+  [NodeStatus.checkingForUpdates]: 'sync',
+  downloading: 'sync',
+  downloaded: 'sync',
+  [NodeStatus.errorDownloading]: 'error',
+  extracting: 'sync',
+  [NodeStatus.readyToStart]: 'stopped',
+  starting: 'sync',
+  running: 'healthy',
+  stopping: 'healthy',
+  stopped: 'stopped',
+  [NodeStatus.errorRunning]: 'error',
+  [NodeStatus.errorStarting]: 'error',
+  [NodeStatus.errorStopping]: 'error',
+  unknown: 'error',
+};
+
+const Sidebar = ({ sUserNodes, updateAvailable, offline }: SidebarProps) => {
+  const dispatch = useAppDispatch();
+  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
+
+  // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
+  // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
+  //   const node = sUserNodes.nodes[nodeId];
+  //   // TODO: add validator logic here eventually
+  //   if (
+  //     node.spec.category === 'L1/ExecutionClient' ||
+  //     node.spec.category === 'L1/ConsensusClient/BeaconNode'
+  //   ) {
+  //     nodeListObject.nodeService.push(node);
+  //   } else {
+  //     nodeListObject.singleClients.push(node);
+  //   }
+  // });
+
   const renderBanners = () => {
-    return Object.keys(props).map((key) => {
+    const bannerProps = {
+      updateAvailable,
+      offline,
+    };
+    return Object.keys(bannerProps).map((key) => {
       // eslint-disable-next-line react/destructuring-assignment
-      if (props[key as keyof SidebarProps]) {
+      if (bannerProps[key as keyof typeof bannerProps]) {
+        // ^ not sure if this is correct
         return (
           <Banner
             offline={false}
@@ -90,6 +100,14 @@ const Sidebar = (props: SidebarProps) => {
     });
   };
 
+  const onClickLinkItem = useCallback((linkItemId) => {
+    console.log('sidebar link item clicked: ', linkItemId);
+    if (linkItemId === 'add') {
+      // open add node dialog
+      setIsModalOpenAddNode(true);
+    }
+  }, []);
+
   return (
     <div className={container}>
       {renderBanners()}
@@ -97,14 +115,31 @@ const Sidebar = (props: SidebarProps) => {
         <div className={titleItem}>
           <SidebarTitleItem title="Nodes" />
         </div>
-        {nodeListData.map((item) => {
+        {/* {nodeListObject.nodeService.length === 2 && (
+          <SidebarNodeItem
+            iconId="ethereum"
+            title="Ethereum node"
+            info="Mainnet"
+            status={nodeListObject.nodeService[0].status} // TODO: get the worst status of both nodes
+            key="ethereum"
+            onClick={() => {
+              dispatch(updateSelectedNodeId(nodeListObject.nodeService[1].id));
+            }}
+          />
+        )} */}
+        {sUserNodes?.nodeIds.map((nodeId: NodeId) => {
+          const node = sUserNodes.nodes[nodeId];
+          const { spec, status } = node;
+          const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[status];
           return (
             <SidebarNodeItem
-              iconId={item.iconId}
-              title={item.title}
-              info={item.info}
-              status={item.status}
-              key={item.title}
+              // temp fix
+              key={node.id}
+              iconId={spec.specId.replace('-beacon', '')}
+              title={spec.displayName}
+              info={spec.displayName}
+              status={sidebarStatus}
+              onClick={() => dispatch(updateSelectedNodeId(node.id))}
             />
           );
         })}
@@ -113,13 +148,30 @@ const Sidebar = (props: SidebarProps) => {
         {itemListData.map((item) => {
           return (
             <SidebarLinkItem
+              key={item.label}
               iconId={item.iconId}
               label={item.label}
               count={item.count}
+              onClick={() => onClickLinkItem(item.iconId)}
             />
           );
         })}
       </div>
+      <Modal
+        title=""
+        isOpen={sIsModalOpenAddNode}
+        onClickCloseButton={() => setIsModalOpenAddNode(false)}
+        isFullScreen
+      >
+        <AddNodeStepper
+          onChange={(newValue: 'done' | 'cancel') => {
+            console.log(newValue);
+            if (newValue === 'done' || newValue === 'cancel') {
+              setIsModalOpenAddNode(false);
+            }
+          }}
+        />
+      </Modal>
     </div>
   );
 };

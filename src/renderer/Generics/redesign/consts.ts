@@ -8,6 +8,7 @@ export interface ClientProps {
   stats: ClientStatsProps;
 }
 
+export type NodeAction = 'start' | 'stop' | 'logs' | 'settings';
 export interface NodeOverviewProps {
   name: NodeBackgroundId;
   title: string;
@@ -16,6 +17,7 @@ export interface NodeOverviewProps {
   version?: string;
   status: ClientStatusProps;
   stats: ClientStatsProps;
+  onAction?: (action: NodeAction) => void;
 }
 
 export interface ClientStatsProps {
@@ -25,22 +27,22 @@ export interface ClientStatsProps {
   highestSlot?: number;
   peers?: number;
   cpuLoad?: number;
-  diskUsage?: number;
+  diskUsageGBs?: number;
   rewards?: number;
   balance?: number;
   stake?: number;
 }
 
 export interface ClientStatusProps {
-  updating: boolean;
-  initialized: boolean; // initial initialization is done
-  synchronized: boolean; // constantly updated from checking current / height slot or block
-  lowPeerCount: boolean;
-  updateAvailable: boolean;
-  blocksBehind: boolean;
-  noConnection: boolean;
-  stopped: boolean;
-  error: boolean;
+  updating?: boolean;
+  initialized?: boolean; // initial initialization is done
+  synchronized?: boolean; // constantly updated from checking current / height slot or block
+  lowPeerCount?: boolean;
+  updateAvailable?: boolean;
+  blocksBehind?: boolean;
+  noConnection?: boolean;
+  stopped?: boolean;
+  error?: boolean;
 }
 
 export interface SyncStatusProps {

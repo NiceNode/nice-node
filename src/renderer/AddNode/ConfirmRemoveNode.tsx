@@ -3,7 +3,7 @@ import { MdDelete } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
 
 import electron from '../electronGlobal';
-import { Modal } from '../Modal';
+import { Modal } from '../Generics/redesign/Modal/Modal';
 import Node from '../../common/node';
 
 type Props = {

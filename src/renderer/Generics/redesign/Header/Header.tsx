@@ -23,40 +23,41 @@ import {
  * Primary UI component for user interaction
  */
 export const Header = (props: NodeOverviewProps) => {
-  const { name, title, info, type, status, version } = props;
+  const { name, title, info, type, status, version, onAction } = props;
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
   const [isSettingsDisplayed, setIsSettingsDisplayed] =
     useState<boolean>(false);
 
-  const buttonProps: ButtonProps = {
+  const startStopButtonProps: ButtonProps = {
     label: '',
     iconId: undefined,
     onClick: () => {},
   };
-  if (type === 'altruistic') {
-    if (!status.stopped) {
-      buttonProps.label = 'Stop';
-      buttonProps.iconId = 'stop';
-      buttonProps.onClick = () => {
-        console.log('stop node');
-      };
-    } else {
-      // const text = status.initialized ? 'Resume' : 'Start';
-      buttonProps.label = 'Resume';
-      buttonProps.iconId = 'play';
-      buttonProps.onClick = () => {
-        console.log('start node');
-      };
-    }
+  if (!status.stopped) {
+    startStopButtonProps.label = 'Stop';
+    startStopButtonProps.iconId = 'stop';
+    startStopButtonProps.onClick = () => {
+      if (onAction) onAction('stop');
+    };
   } else {
-    buttonProps.label = 'Logs';
-    buttonProps.iconId = 'logs';
-    buttonProps.onClick = () => {
-      console.log('open logs');
+    // const text = status.initialized ? 'Resume' : 'Start';
+    startStopButtonProps.label = 'Resume';
+    startStopButtonProps.iconId = 'play';
+    startStopButtonProps.onClick = () => {
+      if (onAction) onAction('start');
     };
   }
-
+  let logsButtonProps: ButtonProps | undefined;
+  if (type !== 'altruistic') {
+    logsButtonProps = {
+      label: 'Logs',
+      iconId: 'logs',
+      onClick: () => {
+        if (onAction) onAction('logs');
+      },
+    };
+  }
   return (
     <div className={container}>
       <div className={iconContainer}>
@@ -103,7 +104,15 @@ export const Header = (props: NodeOverviewProps) => {
             )}
           </div>
         )}
-        <Button {...buttonProps} variant="icon-left" size="small" />
+        <Button
+          {...startStopButtonProps}
+          variant="icon-left"
+          size="small"
+          primary={startStopButtonProps.iconId === 'play'}
+        />
+        {logsButtonProps !== undefined && (
+          <Button {...logsButtonProps} variant="icon-left" size="small" />
+        )}
         <div
           className={menuButtonContainer}
           onBlur={(event) => {
@@ -118,7 +127,8 @@ export const Header = (props: NodeOverviewProps) => {
             size="small"
             onClick={() => {
               if (type === 'client') {
-                setIsSettingsDisplayed(!isSettingsDisplayed);
+                if (onAction) onAction('settings');
+                // setIsSettingsDisplayed(!isSettingsDisplayed);
               } else {
                 console.log('open preferences!');
               }

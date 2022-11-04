@@ -1,6 +1,4 @@
-import { CgCloseO } from 'react-icons/cg';
-
-import IconButton from '../../../IconButton';
+import Button from '../Button/Button';
 import { modalBackdropStyle, modalContentStyle } from './modal.css';
 
 type Props = {
@@ -36,13 +34,7 @@ export const Modal = ({
       >
         <div style={{ display: 'flex' }}>
           <h1 style={{ flexGrow: 1 }}>{title}</h1>
-          <IconButton
-            type="button"
-            onClick={onClickCloseButton}
-            style={{ paddingRight: 0 }}
-          >
-            <CgCloseO />
-          </IconButton>
+          <Button variant="icon" iconId="close" onClick={onClickCloseButton} />
         </div>
         <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
       </div>

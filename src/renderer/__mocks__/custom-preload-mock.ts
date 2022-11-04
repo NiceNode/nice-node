@@ -78,6 +78,7 @@ export const getNodeLibrary = (): NodeLibrary => {
 };
 
 // Settings/Config
+export const getSetHasSeenSplashscreen = () => true;
 export const getIsDockerInstalled = () => true;
 export const getIsDockerRunning = () => true;
 

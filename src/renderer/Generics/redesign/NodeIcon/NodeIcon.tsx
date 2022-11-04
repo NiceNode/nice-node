@@ -25,7 +25,7 @@ export interface NodeIconProps {
   /**
    * Which icon?
    */
-  iconId: NodeIconId;
+  iconId: NodeIconId | string;
   /**
    * What's the status?
    */
@@ -83,9 +83,13 @@ export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
       {statusComponent}
       <div
         className={[iconBackground, sizeStyle, isStatusStyle].join(' ')}
-        style={{ backgroundColor: NODE_COLORS[iconId] }}
+        style={{ backgroundColor: NODE_COLORS[iconId as NodeIconId] }}
       >
-        <img src={NODE_ICONS[iconId]} alt="Node icon" className={imageStyle} />
+        <img
+          src={NODE_ICONS[iconId as NodeIconId] || undefined}
+          alt="Node icon"
+          className={imageStyle}
+        />
       </div>
     </div>
   );
