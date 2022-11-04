@@ -6,7 +6,7 @@ import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetri
 import { Header } from '../../Generics/redesign/Header/Header';
 // import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
 import { container } from './contentSingleClient.css';
-import { NodeOverviewProps } from '../../Generics/redesign/consts';
+import { NodeAction, NodeOverviewProps } from '../../Generics/redesign/consts';
 
 // TODO: process retrieved client data into this format
 export type SingleNodeContent = {
@@ -36,6 +36,7 @@ export type SingleNodeContent = {
     cpuLoad?: number;
     diskUsageGBs?: number; // in MB?
   };
+  onAction?: (action: NodeAction) => void;
 };
 
 const ContentSingleClient = (props: SingleNodeContent) => {

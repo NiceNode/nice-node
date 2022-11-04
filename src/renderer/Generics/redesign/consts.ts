@@ -8,6 +8,7 @@ export interface ClientProps {
   stats: ClientStatsProps;
 }
 
+export type NodeAction = 'start' | 'stop' | 'logs' | 'settings';
 export interface NodeOverviewProps {
   name: NodeBackgroundId;
   title: string;
@@ -16,6 +17,7 @@ export interface NodeOverviewProps {
   version?: string;
   status: ClientStatusProps;
   stats: ClientStatsProps;
+  onAction?: (action: NodeAction) => void;
 }
 
 export interface ClientStatsProps {

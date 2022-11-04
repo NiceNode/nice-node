@@ -1,8 +1,8 @@
 // import { useTranslation } from 'react-i18next';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
-// import electron from './electronGlobal';
+import electron from './electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector } from './state/hooks';
 import { selectIsAvailableForPolling, selectSelectedNode } from './state/node';
@@ -17,6 +17,7 @@ import ContentSingleClient, {
   SingleNodeContent,
 } from './Presentational/ContentSingleClient/ContentSingleClient';
 import { hexToDecimal } from './utils';
+import { NodeAction } from './Generics/redesign/consts';
 
 const NodeScreen = () => {
   // const { t } = useTranslation();
@@ -129,6 +130,24 @@ const NodeScreen = () => {
       setLatestBlockNumber(undefined);
     }
   }, [qLatestBlock]);
+
+  const onNodeAction = useCallback(
+    (action: NodeAction) => {
+      console.log('NodeAction for node: ', action, selectedNode);
+      if (selectedNode) {
+        if (action === 'start') {
+          electron.startNode(selectedNode.id);
+        } else if (action === 'stop') {
+          electron.stopNode(selectedNode.id);
+        } else if (action === 'logs') {
+          // show logs
+        } else if (action === 'settings') {
+          // show settings
+        }
+      }
+    },
+    [selectedNode]
+  );
   // useEffect(() => {
   //   qNodeInfo.refetch();
   // }, [selectedNode]);
@@ -168,6 +187,7 @@ const NodeScreen = () => {
       currentBlock: sLatestBlockNumber,
       diskUsageGBs: diskUsed ? parseFloat(diskUsed) : undefined,
     },
+    onAction: onNodeAction,
   };
   console.log('passing content to NodeScreen: ', nodeContent);
   return <ContentSingleClient {...nodeContent} />;
