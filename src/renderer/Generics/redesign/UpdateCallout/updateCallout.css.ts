@@ -12,7 +12,6 @@ export const container = style({
   overflow: 'hidden',
   border: vars.components.menuBorder,
   boxShadow: vars.color.elevation4boxShadow,
-  zIndex: 1,
   backgroundColor: vars.components.menuBackground,
 });
 

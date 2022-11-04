@@ -79,10 +79,15 @@ export const buttonContainer = style({
   right: '0px',
   top: '3px',
   gap: '5px',
+  zIndex: 1,
 });
 
-export const updateCallout = style({
+export const menuButtonContainer = style({
+  position: 'relative',
+});
+
+export const popupContainer = style({
   position: 'absolute',
-  right: 118,
+  right: 0,
   top: 32,
 });
