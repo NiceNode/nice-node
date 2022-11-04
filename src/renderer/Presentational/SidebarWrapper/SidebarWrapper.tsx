@@ -1,3 +1,4 @@
+import { UserNodes } from 'common/node';
 import React, { ReactElement, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import {
@@ -13,7 +14,7 @@ export interface SidebarWrapperProps {
 export const SidebarWrapper = ({
   children,
 }: {
-  children: (sUserNodes: []) => React.ReactNode;
+  children: (sUserNodes: UserNodes) => React.ReactNode;
 }) => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const sUserNodes = useAppSelector(selectUserNodes);
@@ -30,6 +31,10 @@ export const SidebarWrapper = ({
       dispatch(updateSelectedNodeId(sUserNodes.nodeIds[0]));
     }
   }, [sSelectedNodeId, sUserNodes, dispatch]);
+
+  if (!sUserNodes) {
+    return null;
+  }
 
   return <>{children(sUserNodes)}</>;
 };
