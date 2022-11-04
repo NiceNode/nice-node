@@ -93,17 +93,7 @@ const MainScreen = () => {
           >
             <Sidebar offline={false} />
 
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                flex: 1,
-                justifyContent: 'center',
-              }}
-            >
-              <NodeScreen />
-            </div>
+            <NodeScreen />
           </div>
 
           <Footer />
