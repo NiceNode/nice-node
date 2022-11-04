@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { NodeStatus } from 'common/node';
+import { NodeStatus } from '../../common/node';
 
 import Sidebar from '../../renderer/Presentational/Sidebar/Sidebar';
 
