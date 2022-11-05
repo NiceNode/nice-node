@@ -1,4 +1,3 @@
-import { UserNodes } from 'common/node';
 import React, { ReactElement, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import {
