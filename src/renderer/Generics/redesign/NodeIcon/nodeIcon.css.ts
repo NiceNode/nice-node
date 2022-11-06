@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { vars, common } from '../theme.css';
 
 export const imageStyle = style({
-  position: 'relative',
+  // position: 'relative',
   width: '100%',
   height: '100%',
   objectFit: 'contain',
@@ -20,7 +20,7 @@ export const sync = style({});
 export const updating = style({});
 
 export const iconBackground = style({
-  position: 'relative',
+  // position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -63,7 +63,7 @@ export const iconBackground = style({
 });
 
 export const containerStyle = style({
-  position: 'relative',
+  // position: 'relative',
   selectors: {
     [`&.${smallStyle}`]: {
       width: 32,
@@ -81,7 +81,7 @@ export const containerStyle = style({
 });
 
 export const iconStyle = style({
-  position: 'relative',
+  // position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -93,9 +93,9 @@ export const iconStyle = style({
 
 export const statusStyle = style({
   boxSizing: 'border-box',
-  position: 'absolute',
-  right: '0',
-  top: '0',
+  position: 'relative',
+  right: '-24px',
+  top: '8px',
   zIndex: 1,
   selectors: {
     [`&.${updating}`]: {

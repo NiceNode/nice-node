@@ -8,14 +8,13 @@ export const container = style({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'flex-start',
-  position: 'relative',
 });
 
 export const iconContainer = style({
-  flex: 'none',
-  order: '0',
-  flexGrow: '0',
-  filter: 'drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.04))',
+  // Todo: setting filter as a value causes the element to appear at the "top" of the visual
+  //  stack. More here https://stackoverflow.com/questions/52937708/why-does-applying-a-css-filter-on-the-parent-break-the-child-positioning
+  // filter: 'drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.04))',
+  filter: 'none',
 });
 
 export const textContainer = style({
@@ -25,7 +24,6 @@ export const textContainer = style({
   paddingLeft: '24px',
   gap: '6px',
   flex: 'none',
-  order: '1',
   flexGrow: '1',
 });
 
@@ -74,16 +72,12 @@ export const buttonContainer = style({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'flex-start',
-  position: 'absolute',
   height: '28px',
-  right: '0px',
-  top: '3px',
   gap: '5px',
-  zIndex: 1,
 });
 
 export const menuButtonContainer = style({
-  position: 'relative',
+  // position: 'relative',
 });
 
 export const popupContainer = style({
