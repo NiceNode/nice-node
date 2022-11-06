@@ -5,14 +5,9 @@ import ReactSelect, { ActionMeta, SingleValue } from 'react-select';
 import { Icon } from '../Icon/Icon';
 import { vars } from '../theme.css';
 
-const options = [
-  { value: 'mainnet', label: 'Ethereum Mainnet' },
-  { value: 'goerli', label: 'Goerli Testnet' },
-  { value: 'sepolia', label: 'Sepolia Testnet' },
-];
-
 export interface SelectProps {
-  onChange: (
+  options: { value: string; label: string }[];
+  onChange?: (
     newValue: SingleValue<{
       value: string;
       label: string;
@@ -27,13 +22,13 @@ export interface SelectProps {
 /**
  * Use for selecting Ethereum node client
  */
-const Select = ({ onChange }: SelectProps) => {
+const Select = ({ onChange, options }: SelectProps) => {
   return (
     <>
       <ReactSelect
         onChange={onChange}
         hideSelectedOptions
-        defaultValue={options[0]}
+        defaultValue={options[0] ?? undefined}
         options={options}
         isSearchable={false}
         components={{

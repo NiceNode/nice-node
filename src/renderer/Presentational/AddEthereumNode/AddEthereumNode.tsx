@@ -200,7 +200,14 @@ AddEthereumNodeProps) => {
           <div
             style={{ width: 300, display: 'inline-block', marginLeft: 'auto' }}
           >
-            <Select onChange={console.log} />
+            <Select
+              onChange={console.log}
+              options={[
+                { value: 'mainnet', label: 'Ethereum Mainnet' },
+                { value: 'goerli', label: 'Goerli Testnet' },
+                { value: 'sepolia', label: 'Sepolia Testnet' },
+              ]}
+            />
           </div>
         </div>
       )}
