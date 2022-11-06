@@ -1,34 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useCallback, useEffect, useState } from 'react';
+import electron from '../../electronGlobal';
 
-import { Modal } from '../../Generics/redesign/Modal/Modal';
-import Preferences from './Preferences';
+import Preferences, { Preference, ThemeSetting } from './Preferences';
 
 export interface PreferencesWrapperProps {
   isOpen: boolean;
   onClose: () => void;
-  themeSetting: 'light' | 'dark' | 'auto';
-  isOpenOnStartup: boolean;
-  language: string;
-  version: string;
 }
 
-const PreferencesWrapper = ({
-  isOpen,
-  onClose,
-  themeSetting,
-  isOpenOnStartup,
-  language,
-  version,
-}: PreferencesWrapperProps) => {
-  const { t } = useTranslation();
+const PreferencesWrapper = ({ isOpen, onClose }: PreferencesWrapperProps) => {
+  const [sThemeSetting, setThemeSetting] = useState<ThemeSetting>();
+  const [sIsOpenOnStartup, setIsOpenOnStartup] = useState<boolean>();
+  const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
 
-  // make electron calls for os and user settings
+  useEffect(() => {
+    const asyncData = async () => {
+      const userSettings = await electron.getSettings();
+      console.log('pref userSettings', userSettings);
+      // use the os setting unless the user changes
+      let themeSetting: ThemeSetting = 'auto';
+      if (userSettings.appThemeSetting) {
+        themeSetting = userSettings.appThemeSetting;
+      }
+      setThemeSetting(themeSetting);
+    };
+    asyncData();
+
+    const getNiceNodeVersion = async () => {
+      const debugInfo = await electron.getDebugInfo();
+      if (
+        debugInfo?.niceNodeVersion &&
+        typeof debugInfo.niceNodeVersion === 'string'
+      ) {
+        setNiceNodeVersion(debugInfo.niceNodeVersion);
+      }
+    };
+    getNiceNodeVersion();
+  }, []);
+
+  const onChangePreference = useCallback(
+    async (preference: Preference, value: unknown) => {
+      if (preference === 'theme') {
+        const theme = value as ThemeSetting;
+        setThemeSetting(theme);
+        await electron.setThemeSetting(theme);
+      } else if (preference === 'isOpenOnStartup') {
+        const isOpenOnStartup = value as boolean;
+        setIsOpenOnStartup(isOpenOnStartup);
+        await electron.setIsOpenOnStartup(isOpenOnStartup);
+      }
+    },
+    []
+  );
+
   return (
     <Preferences
       isOpen={isOpen}
-      title={t('PreferencesWrapper')}
-      onClickCloseButton={onClose}
+      onClose={onClose}
+      themeSetting={sThemeSetting}
+      isOpenOnStartup={sIsOpenOnStartup}
+      version={sNiceNodeVersion}
+      onChange={onChangePreference}
     />
   );
 };

@@ -1,9 +1,15 @@
 {
   "AboutSecondsRemaining" : "About {{seconds}} seconds remaining",
+  "Appearance": "Appearance",
+  "AutoFollowsComputerSetting": "Auto (Follows computer setting)",
   "advanced options": "advanced options",
   "DataLocation" : "Data location",
+  "DarkMode": "Dark mode",
   "FinishingUp" : "Finishing up...",
   "Hide" : "Hide",
+  "Language": "Language",
+  "LaunchOnStartup": "Launch on startup",
+  "LightMode": "Light mode",
   "loadingDotDotDot": "loading...",
   "MinorityClient" : "Minority Client",
   "Network": "Network",
@@ -11,5 +17,6 @@
   "NodeIcon" : "Node icon",
   "Preferences": "Preferences",
   "Previous" : "Previous",
-  "Show" : "Show"
+  "Show" : "Show",
+  "ThemeColor" : "Theme color"
 }

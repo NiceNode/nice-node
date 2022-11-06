@@ -5,7 +5,7 @@ import {
 } from './labelSettings.css';
 import LineLabelSettingsItem, {
   LabelSettingsSectionProps,
-} from './LabelSettingsSection';
+} from './LabelValuesSection';
 
 export interface LineLabelSettingsProps {
   /**

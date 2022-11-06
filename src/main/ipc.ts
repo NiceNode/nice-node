@@ -37,10 +37,13 @@ import { getNodeLibrary } from './state/nodeLibrary';
 import {
   getSetHasSeenSplashscreen,
   getSettings,
+  setIsOpenOnStartup,
   setLanguage,
+  setThemeSetting,
 } from './state/settings';
 import { getSystemInfo } from './systemInfo';
 import startDocker from './docker/start';
+import { ThemeSetting } from '../renderer/Presentational/PreferencesModal/Preferences';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -129,5 +132,11 @@ export const initialize = () => {
   ipcMain.handle('getSettings', getSettings);
   ipcMain.handle('setLanguage', (_event, languageCode: string) => {
     return setLanguage(languageCode);
+  });
+  ipcMain.handle('setThemeSetting', (_event, theme: ThemeSetting) => {
+    return setThemeSetting(theme);
+  });
+  ipcMain.handle('setLanguage', (_event, isOpenOnStartup: boolean) => {
+    return setIsOpenOnStartup(isOpenOnStartup);
   });
 };

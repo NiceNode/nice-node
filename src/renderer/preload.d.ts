@@ -74,6 +74,8 @@ declare global {
       getSetHasSeenSplashscreen(hasSeen?: boolean): boolean;
       getSettings(): Settings;
       setLanguage(languageCode: string): void;
+      setThemeSetting(theme: ThemeSetting): void;
+      setIsOpenOnStartup(isOpenOnStartup: boolean): void;
     };
 
     performance: Performance;

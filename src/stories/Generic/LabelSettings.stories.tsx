@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import LabelSettings from '../../renderer/Generics/redesign/LabelSettings/LabelSettings';
+import LabelSettings from '../../renderer/Generics/redesign/LabelSetting/LabelSettings';
 import Select from '../../renderer/Generics/redesign/Select/Select';
 import { Toggle } from '../../renderer/Generics/redesign/Toggle/Toggle';
 

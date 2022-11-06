@@ -24,6 +24,7 @@ import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
+import PreferencesWrapper from '../PreferencesModal/PreferencesWrapper';
 
 export interface SidebarProps {
   /**
@@ -109,6 +110,8 @@ const Sidebar = ({ offline }: SidebarProps) => {
   const sUserNodes = useAppSelector(selectUserNodes);
   const dispatch = useAppDispatch();
   const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
+  const [sIsModalOpenSettings, setIsModalOpenSettings] =
+    useState<boolean>(false);
 
   // Default selected node to be the first node
   useEffect(() => {
@@ -141,6 +144,8 @@ const Sidebar = ({ offline }: SidebarProps) => {
     if (linkItemId === 'add') {
       // open add node dialog
       setIsModalOpenAddNode(true);
+    } else if (linkItemId === 'preferences') {
+      setIsModalOpenSettings(true);
     }
   }, []);
 
@@ -212,6 +217,10 @@ const Sidebar = ({ offline }: SidebarProps) => {
           }}
         />
       </Modal>
+      <PreferencesWrapper
+        isOpen={sIsModalOpenSettings}
+        onClose={() => setIsModalOpenSettings(false)}
+      />
     </div>
   );
 };

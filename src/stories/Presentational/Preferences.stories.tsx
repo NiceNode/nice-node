@@ -16,8 +16,7 @@ export const Primary = Template.bind({});
 Primary.args = {
   isOpen: true,
   onClose: () => alert('close'),
-  themeSetting: 'auto',
+  themeSetting: 'dark',
   isOpenOnStartup: true,
-  language: 'en',
   version: 'v69.69',
 };

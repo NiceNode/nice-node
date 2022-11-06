@@ -1,5 +1,7 @@
+/* eslint-disable import/no-cycle */
 import { useTranslation } from 'react-i18next';
-import Select from './DynamicControls/Select';
+import { SingleValue } from 'react-select';
+import Select from './Generics/redesign/Select/Select';
 import { useGetSettingsQuery } from './state/settingsService';
 import electron from './electronGlobal';
 import { Settings } from '../main/state/settings';
@@ -10,10 +12,16 @@ const LanguageSelect = () => {
 
   // always is string, but type can be string | string[] | undefined
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onChangeLanguage = async (newLang: any) => {
+  const onChangeLanguage = async (
+    newLang: SingleValue<{ value: string; label: string }> | undefined
+  ) => {
     console.log('language selected: ', newLang);
-    i18n.changeLanguage(newLang);
-    await electron.setLanguage(newLang);
+    if (newLang) {
+      const lang = newLang.value;
+      i18n.changeLanguage(lang);
+      await electron.setLanguage(lang);
+    }
+
     qSettings.refetch();
     // todo: electron.setLang
   };
@@ -36,9 +44,7 @@ const LanguageSelect = () => {
 
   return (
     <Select
-      isDisabled={false}
       value={appLanguage}
-      isMulti={false}
       options={[
         { label: 'English', value: 'en' },
         { label: 'Chinese', value: 'cn' },
