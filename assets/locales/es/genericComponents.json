@@ -1,7 +1,15 @@
 {
   "AboutSecondsRemaining" : "Sobre {{seconds}} segundo remaining",
+  "Appearance": "Appearancio",
+  "AutoFollowsComputerSetting": "Auto (Sigue computadora setting)",
+  "DarkMode": "Sombre modo",
   "FinishingUp" : "Finishing arriba...",
+  "Language" : "Idioma",
+  "LaunchOnStartup" : "Empieze en Startup",
+  "LightMode": "Luz modo",
   "MinorityClient" : "Mejor Client",
   "NextStep" : "Proxima step",
-  "Previous" : "Previouso"
+  "Preferences" : "Preferencios",
+  "Previous" : "Previouso",
+  "ThemeColor" : "Themee colore"
 }

@@ -6,3 +6,7 @@ export const sendMessageOnDownloadProgress = (
 ) => {
   send(CHANNELS.docker, downloadProgress);
 };
+
+export const sendMessageOnThemeChange = () => {
+  send(CHANNELS.theme, 'themeChange');
+};

@@ -1,39 +1,73 @@
 /* eslint-disable react/destructuring-assignment */
 // React select docs at:
 // https://react-select.com/components#Option
-import ReactSelect, { ActionMeta, SingleValue } from 'react-select';
+import { useState, useCallback, useEffect } from 'react';
+import ReactSelect, { MenuPlacement, SingleValue } from 'react-select';
 import { Icon } from '../Icon/Icon';
 import { vars } from '../theme.css';
 
-const options = [
-  { value: 'mainnet', label: 'Ethereum Mainnet' },
-  { value: 'goerli', label: 'Goerli Testnet' },
-  { value: 'sepolia', label: 'Sepolia Testnet' },
-];
+export type SelectOption = {
+  value: string;
+  label: string;
+};
 
 export interface SelectProps {
-  onChange: (
-    newValue: SingleValue<{
-      value: string;
-      label: string;
-    }>,
-    actionMeta: ActionMeta<{
-      value: string;
-      label: string;
-    }>
-  ) => void | undefined;
+  options: { value: string; label: string }[];
+  value?: string;
+  isDisabled?: boolean;
+  // onChange?: (
+  //   newValue: SingleValue<{
+  //     value: string;
+  //     label: string;
+  //   }>,
+  //   actionMeta: ActionMeta<{
+  //     value: string;
+  //     label: string;
+  //   }>
+  // ) => void | undefined;
+  onChange?: (
+    newValue:
+      | SingleValue<{
+          value: string;
+          label: string;
+        }>
+      | undefined
+  ) => unknown;
+  menuPlacement?: MenuPlacement;
 }
 
-/**
- * Use for selecting Ethereum node client
- */
-const Select = ({ onChange }: SelectProps) => {
+const Select = ({
+  onChange,
+  options,
+  value,
+  isDisabled,
+  menuPlacement,
+}: SelectProps) => {
+  const [sSelectedOption, setSelectedOption] = useState<SelectOption>();
+
+  useEffect(() => {
+    const selectedOption = options.find((option) => option.value === value);
+    setSelectedOption(selectedOption);
+  }, [options, value]);
+  // const selectedOption = options.find((option) => option.value === value);
+
+  const onChangeReactSelect = useCallback(
+    (newOption: SingleValue<SelectOption>) => {
+      setSelectedOption(newOption as SelectOption);
+      if (onChange) onChange(newOption);
+    },
+    [onChange]
+  );
+
   return (
     <>
       <ReactSelect
-        onChange={onChange}
+        menuPlacement={menuPlacement ?? 'bottom'}
+        isDisabled={isDisabled}
+        onChange={onChangeReactSelect}
         hideSelectedOptions
-        defaultValue={options[0]}
+        value={sSelectedOption}
+        defaultValue={options[0] ?? undefined}
         options={options}
         isSearchable={false}
         components={{
@@ -62,6 +96,7 @@ const Select = ({ onChange }: SelectProps) => {
             marginTop: 0,
             borderTop: 0,
             boxShadow: '0px 14px 16px rgba(0, 0, 0, 0.14)',
+            zIndex: 100,
           }),
           option: (base) => ({
             ...base,
@@ -86,6 +121,7 @@ const Select = ({ onChange }: SelectProps) => {
             ...base,
             color: 'inherit',
             marginLeft: 8,
+            lineHeight: '16px',
           }),
         }}
       />

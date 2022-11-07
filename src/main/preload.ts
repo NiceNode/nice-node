@@ -3,6 +3,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { NodeSpecification } from '../common/nodeSpec';
 import { CHANNELS_ARRAY } from './messenger';
 import { NodeId } from '../common/node';
+import { ThemeSetting } from './state/settings';
 
 contextBridge.exposeInMainWorld('electron', {
   SENTRY_DSN: process.env.SENTRY_DSN,
@@ -94,5 +95,11 @@ contextBridge.exposeInMainWorld('electron', {
   getSettings: () => ipcRenderer.invoke('getSettings'),
   setLanguage: (languageCode: string) => {
     ipcRenderer.invoke('setLanguage', languageCode);
+  },
+  setThemeSetting: (theme: ThemeSetting) => {
+    ipcRenderer.invoke('setThemeSetting', theme);
+  },
+  setIsOpenOnStartup: (isOpenOnStartup: boolean) => {
+    ipcRenderer.invoke('setIsOpenOnStartup', isOpenOnStartup);
   },
 });

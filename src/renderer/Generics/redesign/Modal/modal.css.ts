@@ -20,7 +20,7 @@ export const modalContentStyle = style({
     'drop-shadow(0px 32px 64px rgba(0, 0, 0, 0.1876)) drop-shadow(0px 2px 21px rgba(0, 0, 0, 0.1474))',
   maxHeight: '95vh',
   backgroundColor: vars.color.background,
-  padding: '20px',
+  padding: '32px',
   paddingTop: '0px',
   borderRadius: 14,
   width: '80%',
@@ -28,4 +28,11 @@ export const modalContentStyle = style({
   left: '50%',
   color: 'inherit',
   // a: { color: 'inherit' },
+});
+
+export const titleFont = style({
+  fontSize: '28px',
+  lineHeight: '28px',
+  fontWeight: 590,
+  paddingBottom: 16,
 });

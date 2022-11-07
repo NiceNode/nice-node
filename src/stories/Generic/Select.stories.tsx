@@ -11,4 +11,13 @@ const Template: ComponentStory<typeof Select> = (args) => <Select {...args} />;
 
 export const Single = Template.bind({});
 Single.args = {
+  value: 'dark',
+  options: [
+    {
+      value: 'auto',
+      label: 'Auto (Follows computer settings)',
+    },
+    { value: 'light', label: 'Light mode' },
+    { value: 'dark', label: 'Dark mode' }
+  ]
 };

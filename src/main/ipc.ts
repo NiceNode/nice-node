@@ -37,7 +37,10 @@ import { getNodeLibrary } from './state/nodeLibrary';
 import {
   getSetHasSeenSplashscreen,
   getSettings,
+  setIsOpenOnStartup,
   setLanguage,
+  setThemeSetting,
+  ThemeSetting,
 } from './state/settings';
 import { getSystemInfo } from './systemInfo';
 import startDocker from './docker/start';
@@ -129,5 +132,11 @@ export const initialize = () => {
   ipcMain.handle('getSettings', getSettings);
   ipcMain.handle('setLanguage', (_event, languageCode: string) => {
     return setLanguage(languageCode);
+  });
+  ipcMain.handle('setThemeSetting', (_event, theme: ThemeSetting) => {
+    return setThemeSetting(theme);
+  });
+  ipcMain.handle('setIsOpenOnStartup', (_event, isOpenOnStartup: boolean) => {
+    return setIsOpenOnStartup(isOpenOnStartup);
   });
 };

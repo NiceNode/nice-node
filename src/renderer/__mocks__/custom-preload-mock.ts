@@ -78,6 +78,11 @@ export const getNodeLibrary = (): NodeLibrary => {
 };
 
 // Settings/Config
+export const getSettings = () => {
+  return {
+    appThemeSetting: 'auto',
+  };
+};
 export const getSetHasSeenSplashscreen = () => true;
 export const getIsDockerInstalled = () => true;
 export const getIsDockerRunning = () => true;

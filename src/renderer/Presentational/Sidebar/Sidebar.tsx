@@ -14,6 +14,7 @@ import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
+import PreferencesWrapper from '../PreferencesModal/PreferencesWrapper';
 
 export interface SidebarProps {
   /**
@@ -64,6 +65,8 @@ const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
 const Sidebar = ({ sUserNodes, updateAvailable, offline }: SidebarProps) => {
   const dispatch = useAppDispatch();
   const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
+  const [sIsModalOpenSettings, setIsModalOpenSettings] =
+    useState<boolean>(false);
 
   // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
   // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
@@ -105,6 +108,8 @@ const Sidebar = ({ sUserNodes, updateAvailable, offline }: SidebarProps) => {
     if (linkItemId === 'add') {
       // open add node dialog
       setIsModalOpenAddNode(true);
+    } else if (linkItemId === 'preferences') {
+      setIsModalOpenSettings(true);
     }
   }, []);
 
@@ -172,6 +177,10 @@ const Sidebar = ({ sUserNodes, updateAvailable, offline }: SidebarProps) => {
           }}
         />
       </Modal>
+      <PreferencesWrapper
+        isOpen={sIsModalOpenSettings}
+        onClose={() => setIsModalOpenSettings(false)}
+      />
     </div>
   );
 };
