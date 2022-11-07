@@ -59,11 +59,17 @@ export default class MenuBuilder {
 
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
-      label: 'Electron',
+      label: 'NiceNode',
       submenu: [
         {
           label: 'About NiceNode',
           selector: 'orderFrontStandardAboutPanel:',
+        },
+        {
+          label: 'Check for updates',
+          click() {
+            checkForUpdates(true);
+          },
         },
         { type: 'separator' },
         {
@@ -168,12 +174,6 @@ export default class MenuBuilder {
             clipboard.writeText(getDebugInfoString());
           },
         },
-        {
-          label: 'Check for updates',
-          click() {
-            checkForUpdates(true);
-          },
-        },
       ],
     };
 
@@ -191,6 +191,12 @@ export default class MenuBuilder {
       {
         label: '&File',
         submenu: [
+          {
+            label: 'Check for updates',
+            click() {
+              checkForUpdates(true);
+            },
+          },
           {
             label: '&Open',
             accelerator: 'Ctrl+O',
@@ -273,12 +279,6 @@ export default class MenuBuilder {
             label: 'Copy Configuration Details to Clipboard',
             click() {
               clipboard.writeText(getDebugInfoString());
-            },
-          },
-          {
-            label: 'Check for updates',
-            click() {
-              checkForUpdates(true);
             },
           },
         ],
