@@ -11,6 +11,7 @@ import NodeScreen from './NodeScreen';
 import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
 import Sidebar from './Presentational/Sidebar/Sidebar';
+import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
 import NNSplash from './Presentational/NNSplashScreen/NNSplashScreen';
 import { dragWindowContainer } from './app.css';
 import ThemeManager from './ThemeManager';
@@ -80,7 +81,15 @@ const MainScreen = () => {
               flex: 1,
             }}
           >
-            <Sidebar offline={false} />
+            <SidebarWrapper>
+              {(sUserNodes) => (
+                <Sidebar
+                  offline={false}
+                  updateAvailable={false}
+                  sUserNodes={sUserNodes}
+                />
+              )}
+            </SidebarWrapper>
 
             <NodeScreen />
           </div>

@@ -2,6 +2,10 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
 
 export const container = style({
+  padding: '8px 0px',
+});
+
+export const innerContainer = style({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'flex-start',
@@ -18,7 +22,7 @@ export const container = style({
 
 export const textContainer = style({});
 
-export const offline = style({
+export const titleStyle = style({
   fontStyle: 'normal',
   fontWeight: '590',
   fontSize: '13px',
@@ -27,7 +31,7 @@ export const offline = style({
   marginBottom: '2px',
 });
 
-export const reconnect = style({
+export const descriptionStyle = style({
   fontWeight: '400',
   fontSize: '11px',
   lineHeight: '14px',
