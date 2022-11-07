@@ -40,10 +40,10 @@ import {
   setIsOpenOnStartup,
   setLanguage,
   setThemeSetting,
+  ThemeSetting,
 } from './state/settings';
 import { getSystemInfo } from './systemInfo';
 import startDocker from './docker/start';
-import { ThemeSetting } from '../renderer/Presentational/PreferencesModal/Preferences';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -136,7 +136,7 @@ export const initialize = () => {
   ipcMain.handle('setThemeSetting', (_event, theme: ThemeSetting) => {
     return setThemeSetting(theme);
   });
-  ipcMain.handle('setLanguage', (_event, isOpenOnStartup: boolean) => {
+  ipcMain.handle('setIsOpenOnStartup', (_event, isOpenOnStartup: boolean) => {
     return setIsOpenOnStartup(isOpenOnStartup);
   });
 };

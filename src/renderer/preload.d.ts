@@ -2,7 +2,7 @@
 import { NodeSpecification } from '../common/nodeSpec';
 import { Node, NodeId } from '../common/node';
 import { NodeLibrary } from '../main/state/nodeLibrary';
-import { Settings } from '../main/state/settings';
+import { Settings, ThemeSetting } from '../main/state/settings';
 import { CheckStorageDetails } from '../main/files';
 import { SystemData } from '../main/systemInfo';
 

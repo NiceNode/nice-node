@@ -1,7 +1,6 @@
 import { app, nativeTheme } from 'electron';
-// eslint-disable-next-line import/no-cycle
-import { ThemeSetting } from '../../renderer/Presentational/PreferencesModal/Preferences';
 import { getArch } from '../arch';
+import { sendMessageOnThemeChange } from '../docker/messageFrontEnd';
 import logger from '../logger';
 import { getPlatform } from '../platform';
 
@@ -19,6 +18,7 @@ const APP_HAS_SEEN_SPLASHSCREEN_KEY = 'appHasSeenSplashscreen';
 const APP_THEME_SETTING = 'appThemeSetting';
 const APP_IS_OPEN_ON_STARTUP = 'appIsOpenOnStartup';
 
+export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Settings = {
   [OS_PLATFORM_KEY]?: string;
   [OS_ARCHITECTURE]?: string;
@@ -74,6 +74,7 @@ export const setThemeSetting = (theme: ThemeSetting) => {
   logger.info(`Setting theme to ${theme}`);
   store.set(`${SETTINGS_KEY}.${APP_THEME_SETTING}`, theme);
   logger.info(`App theme is ${store.get(SETTINGS_KEY, APP_THEME_SETTING)}`);
+  sendMessageOnThemeChange();
 };
 
 export const setIsOpenOnStartup = (isOpenOnStartup: boolean) => {
@@ -83,3 +84,19 @@ export const setIsOpenOnStartup = (isOpenOnStartup: boolean) => {
     `App isOpenOnStartup is ${store.get(SETTINGS_KEY, APP_IS_OPEN_ON_STARTUP)}`
   );
 };
+
+// listen to OS theme updates
+nativeTheme.on('updated', () => {
+  console.log("nativeTheme.on('updated')");
+  const settings = getSettings();
+
+  console.log(
+    'nativeTheme shouldUseDarkColors vs settings.osIsDarkMode',
+    nativeTheme.shouldUseDarkColors,
+    settings.osIsDarkMode
+  );
+  // if the user theme setting is 'auto', notify the front end of the change
+  if (settings.appThemeSetting === 'auto') {
+    sendMessageOnThemeChange();
+  }
+});

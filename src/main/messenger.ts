@@ -21,5 +21,6 @@ export const CHANNELS = {
   userNodes: 'userNodes',
   nodeLogs: 'nodeLogs',
   docker: 'docker',
+  theme: 'theme',
 };
-export const CHANNELS_ARRAY = ['userNodes', 'nodeLogs', 'docker'];
+export const CHANNELS_ARRAY = ['userNodes', 'nodeLogs', 'docker', 'theme'];

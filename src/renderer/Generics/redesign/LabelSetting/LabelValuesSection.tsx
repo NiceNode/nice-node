@@ -17,7 +17,11 @@ export interface LabelSettingsSectionProps {
   /**
    * The sections label value items
    */
-  items: { label: string; value: ReactElement | string; link?: string }[];
+  items: {
+    label: string;
+    value: ReactElement | string;
+    link?: string;
+  }[];
 }
 
 const LabelSettingsSection = ({
@@ -38,9 +42,11 @@ const LabelSettingsSection = ({
   };
   return (
     <div className={sectionContainer}>
-      <div className={sectionHeaderContainer}>
-        <div className={sectionHeaderText}>{sectionTitle}</div>
-      </div>
+      {sectionTitle && (
+        <div className={sectionHeaderContainer}>
+          <div className={sectionHeaderText}>{sectionTitle}</div>
+        </div>
+      )}
       {items &&
         items.map((item) => (
           <React.Fragment key={item.label + item.value}>

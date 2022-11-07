@@ -38,7 +38,7 @@ const LineLabelSettings = ({
   }
   return (
     <>
-      <div className={titleFont}>{title}</div>
+      {title && <div className={titleFont}>{title}</div>}
       <div className={columnContainer}>
         {items &&
           items.map((item) => (

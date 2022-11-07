@@ -34,4 +34,5 @@ export const titleFont = style({
   fontSize: '28px',
   lineHeight: '28px',
   fontWeight: 590,
+  paddingBottom: 16,
 });

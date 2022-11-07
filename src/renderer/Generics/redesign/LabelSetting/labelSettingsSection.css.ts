@@ -31,7 +31,7 @@ export const lineContainer = style({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
-  alignItems: 'flex-start',
+  alignItems: 'center',
   padding: '8px 0px',
   gap: '28px',
   flex: 'none',
@@ -42,7 +42,9 @@ export const lineContainer = style({
   borderColor: vars.color.font10,
 });
 export const lineKeyText = style({
+  fontWeight: 590,
   color: vars.color.font70,
+  letterSpacing: '-0.12px',
   flex: 'none',
   order: 0,
   flexGrow: 0,

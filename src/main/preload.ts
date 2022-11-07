@@ -3,7 +3,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { NodeSpecification } from '../common/nodeSpec';
 import { CHANNELS_ARRAY } from './messenger';
 import { NodeId } from '../common/node';
-import { ThemeSetting } from '../renderer/Presentational/PreferencesModal/Preferences';
+import { ThemeSetting } from './state/settings';
 
 contextBridge.exposeInMainWorld('electron', {
   SENTRY_DSN: process.env.SENTRY_DSN,
