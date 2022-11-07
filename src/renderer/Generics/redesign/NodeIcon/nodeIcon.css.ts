@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { vars, common } from '../theme.css';
 
 export const imageStyle = style({
-  position: 'relative',
+  // position: 'relative',
   width: '100%',
   height: '100%',
   objectFit: 'contain',
@@ -17,9 +17,10 @@ export const yellow = style({ background: common.color.yellow });
 export const red = style({ background: common.color.red });
 export const stopped = style({ background: vars.components.nodeIconStopped });
 export const sync = style({});
+export const updating = style({});
 
 export const iconBackground = style({
-  position: 'relative',
+  // position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -62,7 +63,7 @@ export const iconBackground = style({
 });
 
 export const containerStyle = style({
-  position: 'relative',
+  // position: 'relative',
   selectors: {
     [`&.${smallStyle}`]: {
       width: 32,
@@ -80,7 +81,7 @@ export const containerStyle = style({
 });
 
 export const iconStyle = style({
-  position: 'relative',
+  // position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -92,11 +93,14 @@ export const iconStyle = style({
 
 export const statusStyle = style({
   boxSizing: 'border-box',
-  position: 'absolute',
-  right: '0',
-  top: '0',
+  position: 'relative',
+  right: '-24px',
+  top: '8px',
   zIndex: 1,
   selectors: {
+    [`&.${updating}`]: {
+      color: 'gray', // TODO: change this to radial gradient somehow
+    },
     [`&.${smallStyle}`]: {
       width: 8,
       height: 8,
@@ -129,6 +133,22 @@ export const statusStyle = style({
       height: '16px',
       right: -1,
       top: -1,
+    },
+    [`&.${smallStyle}.${updating}`]: {
+      width: '11px',
+      top: '-2px',
+      right: '-1.5px',
+    },
+    [`&.${mediumStyle}.${updating}`]: {
+      width: '12px',
+      height: '12px',
+      right: -1,
+      top: -1,
+    },
+    [`&.${largeStyle}.${updating}`]: {
+      width: '18px',
+      right: '-2px',
+      top: '-2px',
     },
   },
 });

@@ -108,7 +108,6 @@ export const container = style({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'flex-start',
-  position: 'relative',
   flexGrow: 1,
 });
 

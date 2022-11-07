@@ -16,10 +16,6 @@ export const container = style({
   // backdropFilter: 'blur(40px)',
 });
 
-export const networkBanner = style({
-  padding: '8px 0px',
-});
-
 export const titleItem = style({
   display: 'flex',
   flexDirection: 'row',

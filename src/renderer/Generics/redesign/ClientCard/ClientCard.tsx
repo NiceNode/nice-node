@@ -62,6 +62,7 @@ export const ClientCard = (props: ClientProps) => {
       stats.highestBlock - stats.currentBlock > 10);
   const isNotSynchronizedAndNotStopped =
     isNotCloseToSynchronized && !status.stopped;
+
   const renderContents = () => {
     if (isNotSynchronizedAndNotStopped) {
       const caption = !status.initialized
@@ -85,8 +86,9 @@ export const ClientCard = (props: ClientProps) => {
         </>
       );
     }
-    if (status.stopped) {
-      return <Label type="gray" label="Stopped" />;
+    if (status.stopped || status.updating) {
+      const label = status.stopped ? 'Stopped' : 'Updating...';
+      return <Label type="gray" label={label} />;
     }
     const { updating, initialized, ...statusLabels } = status;
     const statusKeys = Object.keys(statusLabels).filter((k: string) => {

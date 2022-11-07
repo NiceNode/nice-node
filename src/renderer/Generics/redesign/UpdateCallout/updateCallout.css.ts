@@ -10,10 +10,9 @@ export const container = style({
   padding: 16,
   position: 'relative',
   overflow: 'hidden',
-  border: vars.components.updateCalloutBorder,
-  boxShadow: vars.components.updateCalloutBoxShadow,
-  zIndex: 1,
-  backgroundColor: vars.components.updateCalloutBackground,
+  border: vars.components.menuBorder,
+  boxShadow: vars.color.elevation4boxShadow,
+  backgroundColor: vars.components.menuBackground,
 });
 
 export const title = style({

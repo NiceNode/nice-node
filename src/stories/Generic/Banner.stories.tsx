@@ -10,6 +10,10 @@ export default {
   },
 } as ComponentMeta<typeof Banner>;
 
-const Template: ComponentStory<typeof Banner> = () => <Banner />;
+const Template: ComponentStory<typeof Banner> = (args) => <Banner {...args} />;
 
 export const Primary = Template.bind({});
+
+Primary.args = {
+  updateAvailable: true,
+};

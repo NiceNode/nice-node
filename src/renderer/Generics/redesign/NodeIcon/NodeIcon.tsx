@@ -18,6 +18,7 @@ import {
   green,
   yellow,
   stopped,
+  updating,
 } from './nodeIcon.css';
 import { Icon } from '../Icon/Icon';
 
@@ -29,24 +30,19 @@ export interface NodeIconProps {
   /**
    * What's the status?
    */
-  status?: 'healthy' | 'warning' | 'error' | 'sync' | 'stopped';
+  status?: 'healthy' | 'warning' | 'error' | 'sync' | 'stopped' | 'updating';
   /**
    * What size should the icon be?
    */
   size: 'small' | 'medium' | 'large';
-  /**
-   * Is it animated?
-   */
-  animate?: boolean;
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const NodeIcon = ({ iconId, status, size, animate }: NodeIconProps) => {
+export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
   const { t } = useTranslation('genericComponents');
 
-  const isAnimated = animate ? 'animate' : '';
   let sizeStyle = mediumStyle;
   if (size === 'small') {
     sizeStyle = smallStyle;
@@ -64,34 +60,23 @@ export const NodeIcon = ({ iconId, status, size, animate }: NodeIconProps) => {
     statusColorStyle = sync;
   } else if (status === 'stopped') {
     statusColorStyle = stopped;
+  } else if (status === 'updating') {
+    statusColorStyle = updating;
   }
   let isStatusStyle;
   let statusComponent = null;
   if (status) {
     isStatusStyle = hasStatusStyle;
-    if (status === 'sync') {
+    if (status === 'sync' || status === 'updating') {
+      const icon = status === 'updating' ? 'updatingsmall' : 'sync';
       statusComponent = (
-        <div
-          className={[
-            statusStyle,
-            sizeStyle,
-            statusColorStyle,
-            isAnimated,
-          ].join(' ')}
-        >
-          <Icon iconId="sync" />
+        <div className={[statusStyle, sizeStyle, statusColorStyle].join(' ')}>
+          <Icon iconId={icon} />
         </div>
       );
     } else {
       statusComponent = (
-        <div
-          className={[
-            statusStyle,
-            sizeStyle,
-            statusColorStyle,
-            isAnimated,
-          ].join(' ')}
-        />
+        <div className={[statusStyle, sizeStyle, statusColorStyle].join(' ')} />
       );
     }
   }

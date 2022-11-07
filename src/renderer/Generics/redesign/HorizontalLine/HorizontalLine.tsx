@@ -1,7 +1,7 @@
 import { container } from './horizontalLine.css';
 
 export interface HorizontalLineProps {
-  type?: 'content';
+  type?: 'content' | 'menu';
 }
 
 export const HorizontalLine = ({ type }: HorizontalLineProps) => {

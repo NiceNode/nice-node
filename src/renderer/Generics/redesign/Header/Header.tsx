@@ -3,6 +3,9 @@ import Button, { ButtonProps } from '../Button/Button';
 import { NodeOverviewProps } from '../consts';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
+import { Menu } from '../Menu/Menu';
+import { MenuItem } from '../MenuItem/MenuItem';
+import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
 import {
   container,
   iconContainer,
@@ -12,7 +15,8 @@ import {
   versionContainer,
   infoStyle,
   buttonContainer,
-  updateCallout,
+  popupContainer,
+  menuButtonContainer,
 } from './header.css';
 
 /**
@@ -22,6 +26,8 @@ export const Header = (props: NodeOverviewProps) => {
   const { name, title, info, type, status, version, onAction } = props;
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
+  const [isSettingsDisplayed, setIsSettingsDisplayed] =
+    useState<boolean>(false);
 
   const startStopButtonProps: ButtonProps = {
     label: '',
@@ -67,6 +73,7 @@ export const Header = (props: NodeOverviewProps) => {
       <div className={buttonContainer}>
         {status.updateAvailable && (
           <div
+            className={menuButtonContainer}
             onBlur={(event) => {
               if (!event.currentTarget.contains(event.relatedTarget)) {
                 setIsCalloutDisplayed(false);
@@ -86,7 +93,7 @@ export const Header = (props: NodeOverviewProps) => {
             {isCalloutDisplayed && (
               // tabindex hack to keep focus, and allow blur behavior
               // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-              <div className={updateCallout} tabIndex={0}>
+              <div className={popupContainer} tabIndex={0}>
                 <UpdateCallout
                   onClick={() => {
                     setIsCalloutDisplayed(false);
@@ -106,14 +113,63 @@ export const Header = (props: NodeOverviewProps) => {
         {logsButtonProps !== undefined && (
           <Button {...logsButtonProps} variant="icon-left" size="small" />
         )}
-        <Button
-          iconId="settings"
-          variant="icon"
-          size="small"
-          onClick={() => {
-            if (onAction) onAction('settings');
+        <div
+          className={menuButtonContainer}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) {
+              setIsSettingsDisplayed(false);
+            }
           }}
-        />
+        >
+          <Button
+            iconId="settings"
+            variant="icon"
+            size="small"
+            onClick={() => {
+              if (type === 'client') {
+                if (onAction) onAction('settings');
+                // setIsSettingsDisplayed(!isSettingsDisplayed);
+              } else {
+                console.log('open preferences!');
+              }
+            }}
+          />
+          {isSettingsDisplayed && (
+            // tabindex hack to keep focus, and allow blur behavior
+            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+            <div className={popupContainer} tabIndex={0}>
+              <Menu width={156}>
+                <MenuItem
+                  text="Restart Client"
+                  onClick={() => {
+                    console.log('Restart Client');
+                  }}
+                />
+                <MenuItem
+                  text="Check for Updates..."
+                  onClick={() => {
+                    console.log('Check for Updates...');
+                  }}
+                />
+                <HorizontalLine type="menu" />
+                <MenuItem
+                  text="Client Versions"
+                  onClick={() => {
+                    console.log('Client Versions');
+                  }}
+                />
+                <HorizontalLine type="menu" />
+                <MenuItem
+                  text="Switch Client"
+                  onClick={() => {
+                    console.log('Switch Client');
+                  }}
+                  disabled
+                />
+              </Menu>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

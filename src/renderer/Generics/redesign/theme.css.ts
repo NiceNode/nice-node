@@ -122,6 +122,7 @@ export const common = {
 export const [lightTheme, vars] = createTheme({
   color: {
     font: common.color.black85,
+    font8: common.color.black8,
     font10: common.color.black10,
     font25: common.color.black25,
     font40: common.color.black40,
@@ -139,6 +140,12 @@ export const [lightTheme, vars] = createTheme({
     primary: common.color.purple600,
     primaryHover: common.color.purple600,
     primaryActive: common.color.purple700,
+    elevation1boxShadow: `0px 1px 2px rgba(0, 0, 0, 0.06)`,
+    elevation2boxShadow: `0px 2px 4px rgba(0, 0, 0, 0.04)`,
+    elevation3boxShadow: `0px 4px 8px rgba(0, 0, 0, 0.14)`,
+    elevation4boxShadow: `0px 8px 16px rgba(0, 0, 0, 0.14)`,
+    elevation5boxShadow: `0px 32px 64px rgba(0, 0, 0, 0.1876), 0px 2px 21px rgba(0, 0, 0, 0.1474)`,
+    elevation6boxShadow: `0px 32px 64px rgba(0, 0, 0, 0.28), 0px 2px 20px rgba(0, 0, 0, 0.22)`,
   },
   components: {
     buttonBoxShadow: `0px 1px 2px ${common.color.black8}`,
@@ -191,15 +198,18 @@ export const [lightTheme, vars] = createTheme({
     walletPromptBackground: common.color.purple50,
     headerButtonHover: common.color.black4,
     headerButtonActive: common.color.black8,
-    updateCalloutBackground: common.color.white100,
-    updateCalloutBorder: `1px solid ${common.color.black4}`,
-    updateCalloutBoxShadow: '0px 8px 16px rgba(0, 0, 0, 0.14)',
+    menuBackground: common.color.white100,
+    menuBorder: `1px solid ${common.color.black4}`,
+    checkboxBackground: common.color.white100,
+    checkboxBorder: common.color.black25,
+    menuItemSelectIcon: common.color.purple600,
   },
 });
 
 export const darkTheme = createTheme(vars, {
   color: {
     font: common.color.white85,
+    font8: common.color.white8,
     font10: common.color.white10,
     font25: common.color.white25,
     font40: common.color.white40,
@@ -217,6 +227,12 @@ export const darkTheme = createTheme(vars, {
     primary: common.color.purple600,
     primaryHover: common.color.purple500,
     primaryActive: common.color.purple500,
+    elevation1boxShadow: `0px 1px 2px rgba(0, 0, 0, 0.24)`,
+    elevation2boxShadow: `0px 2px 4px rgba(0, 0, 0, 0.1)`,
+    elevation3boxShadow: `0px 4px 8px rgba(0, 0, 0, 0.26)`,
+    elevation4boxShadow: `0px 8px 16px rgba(0, 0, 0, 0.28)`,
+    elevation5boxShadow: `0px 32px 64px rgba(0, 0, 0, 0.37), 0px 2px 21px rgba(0, 0, 0, 0.37)`,
+    elevation6boxShadow: `0px 32px 64px rgba(0, 0, 0, 0.56), 0px 2px 21px rgba(0, 0, 0, 0.55)`,
   },
   components: {
     buttonBoxShadow: '0px 1px 2px rgba(0, 0, 0, 0.24)',
@@ -269,8 +285,10 @@ export const darkTheme = createTheme(vars, {
     walletPromptBackground: common.color.purple900,
     headerButtonHover: common.color.white4,
     headerButtonActive: common.color.white8,
-    updateCalloutBackground: common.color.osMac,
-    updateCalloutBorder: `1px solid ${common.color.white10}`,
-    updateCalloutBoxShadow: `0px 8px 16px rgba(0, 0, 0, 0.28)`,
+    menuBackground: common.color.osMac,
+    menuBorder: `1px solid ${common.color.white10}`,
+    checkboxBackground: common.color.osMac,
+    checkboxBorder: common.color.white25,
+    menuItemSelectIcon: common.color.purple500,
   },
 });
