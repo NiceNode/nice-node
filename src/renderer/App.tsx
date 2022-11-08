@@ -10,7 +10,6 @@ import { initialize as initializeIpcListeners } from './ipc';
 import NodeScreen from './NodeScreen';
 import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
-import Sidebar from './Presentational/Sidebar/Sidebar';
 import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
 import NNSplash from './Presentational/NNSplashScreen/NNSplashScreen';
 import { dragWindowContainer } from './app.css';
@@ -81,15 +80,7 @@ const MainScreen = () => {
               flex: 1,
             }}
           >
-            <SidebarWrapper>
-              {(sUserNodes) => (
-                <Sidebar
-                  offline={false}
-                  updateAvailable={false}
-                  sUserNodes={sUserNodes}
-                />
-              )}
-            </SidebarWrapper>
+            <SidebarWrapper />
 
             <NodeScreen />
           </div>

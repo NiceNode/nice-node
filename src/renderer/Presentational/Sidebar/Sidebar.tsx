@@ -15,6 +15,7 @@ import { IconId } from '../../assets/images/icons';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
 import PreferencesWrapper from '../PreferencesModal/PreferencesWrapper';
+import { DockerStoppedBanner } from '../DockerInstallation/StartDockerBanner';
 
 export interface SidebarProps {
   /**
@@ -25,7 +26,11 @@ export interface SidebarProps {
    * Nice Node update available?
    */
   updateAvailable: boolean;
-  sUserNodes: UserNodes;
+  /**
+   * Is docker not running?
+   */
+  dockerStopped: boolean;
+  sUserNodes?: UserNodes;
 }
 
 const itemListData: { iconId: IconId; label: string; count?: number }[] = [
@@ -62,7 +67,12 @@ const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
   unknown: 'error',
 };
 
-const Sidebar = ({ sUserNodes, updateAvailable, offline }: SidebarProps) => {
+const Sidebar = ({
+  sUserNodes,
+  updateAvailable,
+  offline,
+  dockerStopped,
+}: SidebarProps) => {
   const dispatch = useAppDispatch();
   const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
   const [sIsModalOpenSettings, setIsModalOpenSettings] =
@@ -115,6 +125,7 @@ const Sidebar = ({ sUserNodes, updateAvailable, offline }: SidebarProps) => {
 
   return (
     <div className={container}>
+      {dockerStopped && <DockerStoppedBanner />}
       {renderBanners()}
       <div className={nodeList}>
         <div className={titleItem}>

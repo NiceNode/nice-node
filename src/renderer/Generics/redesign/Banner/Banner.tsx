@@ -12,21 +12,31 @@ export interface BannerProps {
   /**
    * Is it offline?
    */
-  offline: boolean;
+  offline?: boolean;
   /**
    * Is update available?
    */
-  updateAvailable: boolean;
+  updateAvailable?: boolean;
+  /**
+   * Is docker not running?
+   */
+  dockerStopped?: boolean;
+  onClick?: () => void;
 }
 
 /**
  * Primary UI component for user interaction
  */
-export const Banner = ({ offline, updateAvailable }: BannerProps) => {
+export const Banner = ({
+  offline,
+  updateAvailable,
+  dockerStopped,
+  onClick,
+}: BannerProps) => {
   let iconId: IconId = 'blank';
   let title = '';
   let description = '';
-  let onClick = () => {};
+  let internalOnClick = () => {};
   if (offline) {
     iconId = 'boltstrike';
     title = 'Currently offline';
@@ -35,16 +45,30 @@ export const Banner = ({ offline, updateAvailable }: BannerProps) => {
     iconId = 'download1';
     title = 'Update available';
     description = 'New version ready to install';
-    onClick = () => {
+    internalOnClick = () => {
       console.log('update nice node!');
     };
+  } else if (dockerStopped) {
+    iconId = 'play';
+    title = 'Docker is not running';
+    description = 'Click to start Docker';
+    internalOnClick = () => {
+      console.log('Start Docker!');
+    };
   }
+  const onClickBanner = () => {
+    internalOnClick();
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <div
-      style={updateAvailable ? { cursor: 'pointer' } : {}}
+      style={onClick ? { cursor: 'pointer' } : {}}
       className={container}
-      onClick={onClick}
-      onKeyDown={onClick}
+      onClick={onClickBanner}
+      onKeyDown={onClickBanner}
       role="button"
       tabIndex={0}
     >
