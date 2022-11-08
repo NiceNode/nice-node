@@ -45,6 +45,7 @@ export const SidebarWrapper = () => {
       updateAvailable={false}
       dockerStopped={!isDockerRunning}
       sUserNodes={sUserNodes}
+      selectedNodeId={sSelectedNodeId}
     />
   );
 };
