@@ -169,7 +169,7 @@ export default class MenuBuilder {
           },
         },
         {
-          label: 'Check for updates',
+          label: 'Check for updates...',
           click() {
             checkForUpdates(true);
           },
@@ -276,7 +276,7 @@ export default class MenuBuilder {
             },
           },
           {
-            label: 'Check for updates',
+            label: 'Check for updates...',
             click() {
               checkForUpdates(true);
             },
