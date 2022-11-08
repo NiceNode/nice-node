@@ -93,14 +93,14 @@
       "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#rest-api-host-allowlist"
     },
     "eth1ProviderUrl": {
-      "displayName": "Url to Eth1 node with enabled rpc",
-      "cliConfigPrefix": "--eth1-endpoint=",
+      "displayName": "URL of the execution client’s Engine JSON-RPC APIs.",
+      "cliConfigPrefix": "--ee-endpoint=",
       "defaultValue": "http://localhost:8545",
       "uiControl": {
         "type": "text"
       },
       "infoDescription": "Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)",
-      "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#data-base-path-data-path"
+      "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#ee-endpoint"
     },
     "executionEngineEndpoint": {
       "displayName": "URL of the execution client's Engine JSON-RPC APIs",

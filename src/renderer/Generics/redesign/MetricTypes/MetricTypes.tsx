@@ -122,7 +122,10 @@ export const MetricTypes = ({
         break;
       case 'peers':
         iconId = 'peers';
-        titleText = '16';
+        titleText = `${statsValue}`;
+        if (statsValue === undefined) {
+          titleText = `${0}`;
+        }
         labelText = 'Peers connected';
         break;
       case 'cpuLoad':

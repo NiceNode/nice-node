@@ -37,29 +37,31 @@ export interface SidebarNodeItemProps {
    * Optional click handler
    */
   onClick?: () => void;
+  /**
+   * Is the node selected?
+   */
+  selected?: boolean;
 }
 
-/**
- * Primary UI component for user interaction
- */
 export const SidebarNodeItem = ({
   onClick,
   title,
   info,
   iconId,
   status,
+  selected,
 }: SidebarNodeItemProps) => {
-  const [selected, setSelected] = useState(false);
+  const [sInternalSelected, setInternalSelected] = useState(false);
 
   const onClickAction = () => {
-    setSelected(true);
+    setInternalSelected(true);
     if (onClick) {
       onClick();
     }
   };
 
   const containerStyles = [container];
-  if (selected) {
+  if (selected || sInternalSelected) {
     containerStyles.push(selectedContainer);
   }
 
@@ -68,7 +70,7 @@ export const SidebarNodeItem = ({
       className={containerStyles.join(' ')}
       onClick={onClickAction}
       onBlur={() => {
-        setSelected(false);
+        setInternalSelected(false);
       }}
       onKeyDown={onClickAction}
       role="button"

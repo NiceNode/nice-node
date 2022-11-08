@@ -31,6 +31,7 @@ export interface SidebarProps {
    */
   dockerStopped: boolean;
   sUserNodes?: UserNodes;
+  selectedNodeId?: NodeId;
 }
 
 const itemListData: { iconId: IconId; label: string; count?: number }[] = [
@@ -72,6 +73,7 @@ const Sidebar = ({
   updateAvailable,
   offline,
   dockerStopped,
+  selectedNodeId,
 }: SidebarProps) => {
   const dispatch = useAppDispatch();
   const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
@@ -147,6 +149,7 @@ const Sidebar = ({
           const node = sUserNodes.nodes[nodeId];
           const { spec, status } = node;
           const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[status];
+          console.log(node, 'sidebarStatus', sidebarStatus);
           return (
             <SidebarNodeItem
               // temp fix
@@ -155,6 +158,7 @@ const Sidebar = ({
               title={spec.displayName}
               info={spec.displayName}
               status={sidebarStatus}
+              selected={selectedNodeId === node.id}
               onClick={() => dispatch(updateSelectedNodeId(node.id))}
             />
           );
