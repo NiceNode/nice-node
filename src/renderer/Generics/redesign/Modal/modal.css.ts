@@ -12,7 +12,7 @@ export const modalBackdropStyle = style({
   width: '100%',
   height: '100%',
   overflow: 'auto',
-  backgroundColor: 'rgba(0, 0, 2, 0.25)',
+  backgroundColor: vars.components.modalBackdropBackground,
 });
 
 export const modalContentStyle = style({

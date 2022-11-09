@@ -52,3 +52,11 @@ SecondaryMediumIcon.args = {
   iconId: 'settings',
   variant: 'icon-right',
 };
+
+export const GhostSmallIcon = Template.bind({});
+SecondaryMediumIcon.args = {
+  size: 'small',
+  iconId: 'close',
+  variant: 'icon',
+  ghost: true
+};
