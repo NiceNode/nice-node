@@ -23,6 +23,8 @@ const ThemeManager = ({ children }: Props) => {
         setIsDarkTheme(true);
       } else if (settingsData.appThemeSetting === 'auto') {
         setIsDarkTheme(settingsData.osIsDarkMode);
+      } else {
+        setIsDarkTheme(settingsData.osIsDarkMode);
       }
     }
   }, [qSettings.data]);

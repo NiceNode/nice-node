@@ -36,10 +36,13 @@ export type Settings = {
  */
 const initialize = () => {
   logger.info('Intializing store settings key');
-  let nodes = store.get(SETTINGS_KEY);
-  if (!nodes || typeof nodes !== 'object') {
-    nodes = {};
-    store.set(SETTINGS_KEY, {});
+  let settings = store.get(SETTINGS_KEY);
+  if (!settings || typeof settings !== 'object') {
+    // set the default settings if no settings are saved yet
+    settings = {
+      appThemeSetting: 'auto',
+    };
+    store.set(SETTINGS_KEY, settings);
   }
 };
 initialize();
