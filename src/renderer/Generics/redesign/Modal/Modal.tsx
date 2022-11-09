@@ -20,6 +20,8 @@ export const Modal = ({
     <div
       style={{
         display: isOpen ? 'flex' : 'none',
+        // paddingTop: 35 leaves room for the drag bar on mac
+        paddingTop: isFullScreen ? 35 : '',
       }}
       className={modalBackdropStyle}
     >
@@ -35,11 +37,14 @@ export const Modal = ({
       >
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ height: 40, alignSelf: 'flex-end' }}>
-            <Button
-              variant="icon"
-              iconId="close"
-              onClick={onClickCloseButton}
-            />
+            <div style={{ position: 'absolute', top: 12, right: 14 }}>
+              <Button
+                variant="icon"
+                iconId="close"
+                ghost
+                onClick={onClickCloseButton}
+              />
+            </div>
           </div>
           <span className={titleFont} style={{ flexGrow: 1 }}>
             {title}
