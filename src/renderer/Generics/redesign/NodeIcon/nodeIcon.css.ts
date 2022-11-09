@@ -93,62 +93,69 @@ export const iconStyle = style({
 
 export const statusStyle = style({
   boxSizing: 'border-box',
-  position: 'relative',
-  right: '-24px',
-  top: '8px',
+  position: 'absolute',
   zIndex: 1,
+  color: vars.color.font70,
   selectors: {
     [`&.${updating}`]: {
       color: 'gray', // TODO: change this to radial gradient somehow
     },
     [`&.${smallStyle}`]: {
+      // 32px icon width - 8px status width
+      left: '24px',
       width: 8,
       height: 8,
       borderRadius: 4,
     },
     [`&.${mediumStyle}`]: {
+      // 40px icon width - 10px status width
+      left: '30px',
       width: 10,
       height: 10,
       borderRadius: 5,
     },
     [`&.${largeStyle}`]: {
+      // 56px icon width - 14px status width
+      left: '42px',
       width: 14,
       height: 14,
       borderRadius: 7,
     },
     [`&.${smallStyle}.${sync}`]: {
-      width: '9px',
-      height: '14px',
-      top: '-3px',
-      right: '-0.5px',
+      left: '23px',
+      top: '-2px',
+      width: '10px',
+      height: '8px',
     },
     [`&.${mediumStyle}.${sync}`]: {
-      width: '12px',
-      height: '12px',
-      right: -1,
-      top: -1,
+      left: '30px',
+      top: '-1px',
+      width: '10px',
+      height: '8px',
     },
     [`&.${largeStyle}.${sync}`]: {
-      width: '16px',
-      height: '16px',
-      right: -1,
-      top: -1,
+      left: '40.67px',
+      top: '-1.33px',
+      width: '16.67px',
+      height: '12.67px',
     },
     [`&.${smallStyle}.${updating}`]: {
-      width: '11px',
+      left: '22px',
       top: '-2px',
-      right: '-1.5px',
-    },
-    [`&.${mediumStyle}.${updating}`]: {
       width: '12px',
       height: '12px',
-      right: -1,
-      top: -1,
+    },
+    [`&.${mediumStyle}.${updating}`]: {
+      left: '29px',
+      top: '-1px',
+      width: '12px',
+      height: '12px',
     },
     [`&.${largeStyle}.${updating}`]: {
-      width: '18px',
-      right: '-2px',
-      top: '-2px',
+      left: '39px',
+      top: '-3px',
+      width: '20px',
+      height: '20px',
     },
   },
 });
