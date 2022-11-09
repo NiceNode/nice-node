@@ -17,6 +17,7 @@ export const Primary = Template.bind({});
 Primary.args = {
   offline: false,
   updateAvailable: false,
+  selectedNodeId: '86825805-9c48-4667-9473-4df440714b4e',
   sUserNodes: {
     nodes: {
       '86825805-9c48-4667-9473-4df440714b4e': {

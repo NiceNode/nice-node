@@ -83,7 +83,10 @@ export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
 
   return (
     <div className={[containerStyle, sizeStyle].join(' ')}>
-      {statusComponent}
+      {/* https://stackoverflow.com/questions/6040005/relatively-position-an-element-without-it-taking-up-space-in-document-flow */}
+      <div style={{ position: 'relative', width: 0, height: 0 }}>
+        {statusComponent}
+      </div>
       <div
         className={[iconBackground, sizeStyle, isStatusStyle].join(' ')}
         style={{ backgroundColor: NODE_COLORS[iconId as NodeIconId] }}
