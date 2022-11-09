@@ -15,7 +15,8 @@ export type SidebarNodeStatus =
   | 'warning'
   | 'error'
   | 'sync'
-  | 'stopped';
+  | 'stopped'
+  | 'updating';
 export interface SidebarNodeItemProps {
   /**
    * Node title

@@ -123,7 +123,7 @@ export const statusStyle = style({
     },
     [`&.${smallStyle}.${sync}`]: {
       left: '23px',
-      top: '-2px',
+      top: '-2.5px',
       width: '10px',
       height: '8px',
     },

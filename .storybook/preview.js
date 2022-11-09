@@ -1,4 +1,4 @@
-import '../src/renderer/assets/reset.scss';
+import '../src/renderer/reset.css';
 import '../src/renderer/Generics/redesign/globalStyle.css';
 import '../src/renderer/i18n';
 

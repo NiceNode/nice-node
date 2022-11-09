@@ -51,12 +51,12 @@ const itemListData: { iconId: IconId; label: string; count?: number }[] = [
 
 const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
   created: 'stopped',
-  initializing: 'sync',
-  [NodeStatus.checkingForUpdates]: 'sync',
-  downloading: 'sync',
-  downloaded: 'sync',
+  initializing: 'updating',
+  [NodeStatus.checkingForUpdates]: 'updating',
+  downloading: 'updating',
+  downloaded: 'stopped',
   [NodeStatus.errorDownloading]: 'error',
-  extracting: 'sync',
+  extracting: 'updating',
   [NodeStatus.readyToStart]: 'stopped',
   starting: 'sync',
   running: 'healthy',
