@@ -184,7 +184,7 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
     <div className={container}>
       <div className={componentContainer}>
         {/* Step 0 */}
-        <div style={{ display: sStep === 0 ? '' : 'none' }}>
+        <div style={{ display: sStep === 0 ? '' : 'none', height: '100%' }}>
           <AddEthereumNode
             onChange={onChangeAddEthereumNode}
             // beaconOptions={sBeaconNodeLibrary}
@@ -193,7 +193,7 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
         </div>
 
         {/* Step 1 */}
-        <div style={{ display: sStep === 1 ? '' : 'none' }}>
+        <div style={{ display: sStep === 1 ? '' : 'none', height: '100%' }}>
           <NodeRequirements
             nodeRequirements={sEthereumNodeRequirements}
             systemData={sSystemData}
@@ -202,7 +202,7 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
         </div>
 
         {/* Step 2 - If Docker is not installed */}
-        <div style={{ display: sStep === 2 ? '' : 'none' }}>
+        <div style={{ display: sStep === 2 ? '' : 'none', height: '100%' }}>
           <DockerInstallation onChange={onChangeDockerInstall} />
         </div>
       </div>

@@ -46,6 +46,7 @@
   "dockerInstallStatus": "Docker install status:",
   "dockerInstallingMessage": "Installing... (this may take 5 or more minutes). There will be a password prompt on Mac and a pop-up on Windows to give permissions to install Docker.",
   "EthereumNode": "Ethereum Node",
+  "LaunchAnEthereumNode": "Launch an Ethereum Node",
   "LearnMoreClientDiversity": "Learn more about client diversity",
   "AddEthereumNodeDescription" : "Running a full etherum node is a two part story. Choosing minority clients are important for the health of the network.",
   "ChooseYourNetwork" : "Choose your network",
