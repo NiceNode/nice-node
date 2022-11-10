@@ -1,6 +1,22 @@
 // import { container } from './logsMessage.css';
 import { LogMessage } from './LogMessage';
 
+const getFormattedDate = (string: string) => {
+  const date = new Date(string);
+  const dateArray = date.toString().split(' ');
+  const ms = string.substring(20, 23);
+  return `${dateArray[1]} ${dateArray[2]} ${dateArray[4]}:${ms}`;
+};
+
+const getLogObject = (log: string) => {
+  const logArray = log.split(' | ');
+  return {
+    timestamp: getFormattedDate(logArray[0]),
+    type: logArray[2].trim().toLowerCase(),
+    message: `${logArray[3]} ${logArray[4]}`,
+  };
+};
+
 export const Logs = () => {
   const sLogs = [
     '2022-11-04 21:41:44.170+00:00 | main | INFO  | Besu | Using LibEthPairings native alt bn128',
@@ -66,32 +82,30 @@ export const Logs = () => {
     '2022-11-04 21:42:11.041+00:00 | main | WARN  | Besu | Using jemalloc',
   ];
 
-  const type = null;
-
-  const getFormattedDate = (string: string) => {
-    const date = new Date(string);
-    const dateArray = date.toString().split(' ');
-    const ms = string.substring(20, 23);
-    return `${dateArray[1]} ${dateArray[2]} ${dateArray[4]}:${ms}`;
+  const filterQuery = {
+    type: 'warn',
+    text: 'use',
+    date: '',
   };
 
-  const filteredLogMessages = sLogs.map((log) => {
-    const logArray = log.split(' | ');
+  const filteredLogMessages = sLogs
+    .filter((log: string) => {
+      const logObject = getLogObject(log);
 
-    const logObject = {
-      timestamp: getFormattedDate(logArray[0]),
-      type: logArray[2].trim().toLowerCase(),
-      message: `${logArray[3]} ${logArray[4]}`,
-    };
-
-    if (type === null || type === logObject.type) {
+      if (
+        (!filterQuery.type || logObject.type === filterQuery.type) &&
+        (!filterQuery.text ||
+          (filterQuery.text !== '' &&
+            logObject.message.includes(filterQuery.text))) &&
+        !filterQuery.date
+      ) {
+        return true;
+      }
+      return false;
+    })
+    .map((log) => {
+      const logObject = getLogObject(log);
       return <LogMessage {...logObject} />;
-    }
-    return null;
-  });
-  return (
-    <div className="test">
-      <div>{filteredLogMessages}</div>
-    </div>
-  );
+    });
+  return <div className="test">{filteredLogMessages}</div>;
 };

@@ -1,3 +1,4 @@
+import { Icon } from '../Icon/Icon';
 import {
   container,
   infoStyle,
@@ -22,9 +23,16 @@ export interface LogMessageProps {
 }
 
 export const LogMessage = ({ timestamp, type, message }: LogMessageProps) => {
+  const getTooltip = () => {
+    if (true) {
+      return <Icon iconId="infocirclefilled" />;
+    }
+    return null;
+  };
+  const tooltip = getTooltip();
   return (
     <div className={container}>
-      <div className={infoStyle}>i</div>
+      <div className={infoStyle}>{tooltip}</div>
       <div className={timestampStyle}>{timestamp}</div>
       <div className={[typeStyle, `${type}`].join(' ')}>{type}</div>
       <div className={messageStyle}>{message}</div>
