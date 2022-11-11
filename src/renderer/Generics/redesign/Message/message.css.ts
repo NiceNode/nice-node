@@ -11,7 +11,6 @@ export const container = style({
   borderRadius: '10px',
   padding: 24,
   position: 'relative',
-  marginBottom: 32,
   selectors: {
     [`&.info`]: {
       backgroundColor: vars.components.messageInfoBackground,

@@ -17,6 +17,10 @@ export interface FolderInputProps {
    */
   freeStorageSpaceGBs?: number;
   /**
+   *  Is this input field disabled?
+   */
+  disabled?: boolean;
+  /**
    *  Provide to allow the user to change the folder location
    */
   onClickChange?: () => void;
@@ -25,6 +29,7 @@ export interface FolderInputProps {
 const FolderInput = ({
   placeholder,
   freeStorageSpaceGBs,
+  disabled,
   onClickChange,
 }: FolderInputProps) => {
   return (
@@ -36,7 +41,7 @@ const FolderInput = ({
         <Button
           size="small"
           label="Change..."
-          disabled={!onClickChange}
+          disabled={!onClickChange || disabled}
           onClick={onClickChange}
         />
       </div>
