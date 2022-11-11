@@ -29,7 +29,7 @@ export const infoStyle = style({
   color: common.color.black25,
 });
 
-export const timestampStyle = style({
+export const dateStyle = style({
   width: 133,
   flex: 'none',
   order: 1,

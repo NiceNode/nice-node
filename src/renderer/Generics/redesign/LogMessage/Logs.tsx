@@ -1,20 +1,34 @@
 // import { container } from './logsMessage.css';
+import moment from 'moment';
 import { LogMessage } from './LogMessage';
-
-const getFormattedDate = (string: string) => {
-  const date = new Date(string);
-  const dateArray = date.toString().split(' ');
-  const ms = string.substring(20, 23);
-  return `${dateArray[1]} ${dateArray[2]} ${dateArray[4]}:${ms}`;
-};
 
 const getLogObject = (log: string) => {
   const logArray = log.split(' | ');
   return {
-    timestamp: getFormattedDate(logArray[0]),
+    timestamp: logArray[0],
+    date: moment(logArray[0]).format('MMM MM HH:MM:ss:SSS'),
     type: logArray[2].trim().toLowerCase(),
     message: `${logArray[3]} ${logArray[4]}`,
   };
+};
+
+const isWithinTimeframe = (timestamp: string, timeframe) => {
+  const format = 'YYYY-MM-DD hh:mm:ss';
+
+  const logTime = moment(new Date(timestamp), format);
+  const nowTime = moment();
+  const beforeTime = moment().subtract(30, 'minutes');
+  console.log(logTime);
+  console.log(nowTime);
+  console.log(beforeTime);
+
+  console.log(logTime.isBetween(moment(), moment().subtract(30, 'hours')));
+
+  // console.log(
+  //   moment(timestamp)
+  //     .format(format)
+  //     .isBetween(moment(), moment().subtract(30, 'minutes').toDate().getTime())
+  // );
 };
 
 export const Logs = () => {
@@ -77,15 +91,15 @@ export const Logs = () => {
     '2022-11-04 21:42:10.957+00:00 | BesuCommand-Shutdown-Hook | INFO  | NetworkRunner | Network stopped.',
     '2022-11-04 21:42:10.958+00:00 | BesuCommand-Shutdown-Hook | INFO  | AutoTransactionLogBloomCachingService | Shutting down Auto transaction logs caching service.',
     '2022-11-04 21:42:10.960+00:00 | BesuCommand-Shutdown-Hook | INFO  | NatService | No NAT environment detected so no service could be stopped',
-    '2022-11-04 21:42:11.041+00:00 | main | INFO  | Besu | Using jemalloc',
-    '2022-11-04 21:42:11.041+00:00 | main | ERROR  | Besu | Using jemalloc',
-    '2022-11-04 21:42:11.041+00:00 | main | WARN  | Besu | Using jemalloc',
+    '2022-11-10 21:42:11.041+00:00 | main | INFO  | Besu | Using jemalloc',
+    '2022-11-11 21:42:11.041+00:00 | main | ERROR  | Besu | Using jemalloc',
+    '2022-11-11 21:35:11.041+00:00 | main | WARN  | Besu | Using jemalloc',
   ];
 
   const filterQuery = {
     type: 'warn',
-    text: 'use',
-    date: '',
+    text: '',
+    timeframe: '',
   };
 
   const filteredLogMessages = sLogs
@@ -97,7 +111,8 @@ export const Logs = () => {
         (!filterQuery.text ||
           (filterQuery.text !== '' &&
             logObject.message.includes(filterQuery.text))) &&
-        !filterQuery.date
+        !filterQuery.timeframe
+        // isWithinTimeframe(logObject.timestamp, filterQuery.timeframe)
       ) {
         return true;
       }
