@@ -1,8 +1,6 @@
 import { ConfigTranslation } from '../../../../common/nodeConfig';
-import LineLabelSettings, {
-  LineLabelSettingsProps,
-} from '../LabelSetting/LabelSettings';
-import LabelSettingsSection, {
+import LineLabelSettings from '../LabelSetting/LabelSettings';
+import {
   LabelSettingsItem,
   LabelSettingsSectionProps,
 } from '../LabelSetting/LabelValuesSection';
@@ -10,10 +8,15 @@ import LabelSettingsSection, {
 import { CategoryConfig } from './DynamicSettings';
 import Setting from './Setting';
 
-const convertConfigToLabelSettings = (
-  categoryConfigs: CategoryConfig[],
-  configValuesMap: any
-): React.ReactNode => {
+const convertConfigToLabelSettings = ({
+  categoryConfigs,
+  configValuesMap,
+  isDisabled,
+}: {
+  categoryConfigs: CategoryConfig[];
+  configValuesMap: any;
+  isDisabled?: boolean;
+}): React.ReactNode => {
   // let lineLabelSettingsProps: LineLabelSettingsProps = {
   //   items: [],
   // };
@@ -54,6 +57,7 @@ const convertConfigToLabelSettings = (
                 configKey={configKey}
                 configTranslation={configTranslation}
                 currentValue={currentValue}
+                isDisabled={isDisabled}
               />
             ),
           };

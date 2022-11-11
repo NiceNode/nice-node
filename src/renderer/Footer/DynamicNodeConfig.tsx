@@ -76,6 +76,7 @@ const DynamicNodeConfig = () => {
       return 0;
     });
 
+    console.log('setting sCategoryConfigs ', arr);
     setCategoryConfigs(arr);
   }, [sConfigTranslationMap]);
 

@@ -80,7 +80,10 @@ const Select = ({
         styles={{
           control: (base) => ({
             ...base,
-            backgroundColor: 'inherit',
+            backgroundColor: isDisabled
+              ? vars.color.backgroundDisabled
+              : 'inherit',
+            color: isDisabled ? vars.color.fontDisabled : 'inherit',
             borderColor: vars.color.border,
             boxShadow: 'none',
             ':hover': {

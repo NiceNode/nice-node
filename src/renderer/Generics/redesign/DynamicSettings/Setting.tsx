@@ -20,12 +20,14 @@ export type SettingProps = {
   configTranslation: ConfigTranslation;
   configKey: ConfigKey;
   currentValue: string | string[];
+  isDisabled?: boolean;
   onChange?: (configKey: string, newValue: ConfigValue) => void;
 };
 const Setting = ({
   configTranslation,
   configKey,
   currentValue,
+  isDisabled,
   onChange,
 }: SettingProps) => {
   const onNodeConfigChange = async (newValue: ConfigValue) => {
@@ -47,6 +49,7 @@ const Setting = ({
       {configTranslationControl?.type === 'filePath' && (
         <FolderInput
           placeholder={currentValue as string}
+          disabled={isDisabled}
           onClickChange={() => {
             console.log('onclick dir');
             // todo: fix
@@ -73,8 +76,7 @@ const Setting = ({
         <Input
           value={currentValue as string}
           onChange={(newValue: string) => onNodeConfigChange(newValue)}
-          // isDisabled={sIsConfigDisabled}
-          disabled={false}
+          disabled={isDisabled}
         />
       )}
       {configTranslationControl?.type === 'select/single' && (
@@ -87,8 +89,7 @@ const Setting = ({
               return { value, label: value };
             }
           )}
-          // isDisabled={sIsConfigDisabled}
-          isDisabled={false}
+          isDisabled={isDisabled}
         />
       )}
       {configTranslationControl?.type === 'select/multiple' && (
@@ -101,8 +102,7 @@ const Setting = ({
               return { value, label: value };
             }
           )}
-          // isDisabled={sIsConfigDisabled}
-          isDisabled={false}
+          isDisabled={isDisabled ?? false}
           isMulti={configTranslationControl?.type === 'select/multiple'}
         />
       )}
