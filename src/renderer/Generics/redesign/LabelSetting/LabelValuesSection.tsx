@@ -9,19 +9,20 @@ import {
   sectionHeaderText,
 } from './labelSettingsSection.css';
 
+export type LabelSettingsItem = {
+  label: string;
+  value: ReactElement | string;
+  link?: string;
+};
 export interface LabelSettingsSectionProps {
   /**
    * Title gets uppercased
    */
-  sectionTitle: string;
+  sectionTitle?: string;
   /**
    * The sections label value items
    */
-  items: {
-    label: string;
-    value: ReactElement | string;
-    link?: string;
-  }[];
+  items: LabelSettingsItem[];
 }
 
 const LabelSettingsSection = ({
