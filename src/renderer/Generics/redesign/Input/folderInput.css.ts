@@ -6,6 +6,7 @@ export const container = style({
   flexDirection: 'column',
   gap: 8,
   width: '100%',
+  minWidth: 400,
 });
 
 export const pathAndChangeContainer = style({

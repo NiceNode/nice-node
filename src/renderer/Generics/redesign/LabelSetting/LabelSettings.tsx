@@ -23,7 +23,7 @@ export interface LineLabelSettingsProps {
 }
 
 /**
- * Primary UI component for user interaction
+ * Rows of labels and inputs used for settings screens
  */
 const LineLabelSettings = ({
   title,

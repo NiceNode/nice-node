@@ -36,6 +36,11 @@ const DynamicNodeConfig = () => {
     }
     console.log('NodeConfig isDisabled? ', isDisabled);
     setIsConfigDisabled(isDisabled);
+    console.log(
+      'DynamicSettings configValuesMap',
+      selectedNode?.config.configValuesMap
+    );
+    console.log('DynamicSettings configTranslationMap', configTranslationMap);
     setConfigTranslationMap(configTranslationMap);
   }, [selectedNode]);
 
