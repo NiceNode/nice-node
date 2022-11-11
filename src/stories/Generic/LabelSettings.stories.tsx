@@ -1,6 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import LabelSettings from '../../renderer/Generics/redesign/LabelSetting/LabelSettings';
+import ExternalLink from '../../renderer/Generics/redesign/Link/ExternalLink';
 import Select from '../../renderer/Generics/redesign/Select/Select';
 import { Toggle } from '../../renderer/Generics/redesign/Toggle/Toggle';
 
@@ -21,12 +22,16 @@ About.args = {
     {
       sectionTitle: 'Preferences',
       items: [
-        { label: 'Launch on startup', value: <Toggle checked={true}/> },
-        { label: 'Language', value: <Select options={[{value: 'en', label: "English"}]}/> },
+        { label: 'Launch on startup', value: <Toggle checked={true}/>, description: "NiceNode will automatically open when your computer starts up.", learnMoreLink: 'https://ethereum.org' },
+        { label: 'Language', value: <Select options={[{value: 'en', label: "English"}]}/>, learnMoreLink: 'https://nicenode.xyz' },
         {
           label: 'Website',
-          value: 'nimbus.team',
-          link: 'https://ethereum.org',
+          value: <ExternalLink url="https://ethereum.org" text='nimbus website'/>,
+          description: "this is kind of obvious, just here to test"
+        },
+        {
+          label: 'Website',
+          value: <ExternalLink url="https://ethereum.org" text='Ethereum.org'/>,
         },
       ],
     }

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
   ConfigValue,
   ConfigTranslationMap,
@@ -9,11 +8,8 @@ import {
 import FolderInput from '../Input/FolderInput';
 import Input from '../Input/Input';
 import Select from '../Select/Select';
-import MultiSelect from './DynamicControls/Select';
-import TextArea from './DynamicControls/TextArea';
+import MultiSelect from '../Select/MultiSelect';
 // import Warning from '../Warning';
-// import { InfoModal } from '../InfoIconButton';
-// import ExternalLink from '../Generics/ExternalLink';
 
 type CategoryConfig = {
   category: string;
@@ -26,7 +22,6 @@ export type SettingProps = {
   currentValue: string | string[];
   onChange?: (configKey: string, newValue: ConfigValue) => void;
 };
-// configTranslationMap = selectedNode.spec.configTranslation;
 const Setting = ({
   configTranslation,
   configKey,
@@ -34,7 +29,7 @@ const Setting = ({
   onChange,
 }: SettingProps) => {
   const onNodeConfigChange = async (newValue: ConfigValue) => {
-    // updateNode
+    // todo: updateNode
     console.log('updating node with newValue: ', newValue);
     if (onChange) {
       onChange(configKey, newValue);
@@ -49,27 +44,6 @@ const Setting = ({
   // currentValue (Str)
   return (
     <div key={configKey}>
-      <div>
-        {/* <span>{configTranslation.displayName}</span> */}
-        {/* {(configTranslation.infoDescription ||
-                              configTranslation.documentation) && (
-                              <InfoModal title={configTranslation.displayName}>
-                                {configTranslation.infoDescription}
-                                {configTranslation.defaultValue && (
-                                  <p>
-                                    Default value:{' '}
-                                    {configTranslation.defaultValue}
-                                  </p>
-                                )}
-                                {configTranslation.documentation && (
-                                  <ExternalLink
-                                    title="Documentation Link"
-                                    url={configTranslation.documentation}
-                                  />
-                                )}
-                              </InfoModal>
-                            )} */}
-      </div>
       {configTranslationControl?.type === 'filePath' && (
         <FolderInput
           placeholder={currentValue as string}

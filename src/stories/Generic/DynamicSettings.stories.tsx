@@ -31,8 +31,6 @@ const configTranslationMap: ConfigTranslationMap = {
     uiControl: {
       type: 'filePath',
     },
-    documentation:
-      'https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#data-path',
   },
   syncMode: {
     displayName: 'Sync mode',
@@ -52,8 +50,6 @@ const configTranslationMap: ConfigTranslationMap = {
       ],
     },
     defaultValue: 'FAST',
-    documentation:
-      'https://besu.hyperledger.org/en/stable/Concepts/Node-Types/',
   },
   http: {
     displayName: 'RPC http connections',
@@ -71,8 +67,6 @@ const configTranslationMap: ConfigTranslationMap = {
       ],
     },
     defaultValue: 'Disabled',
-    documentation:
-      'https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-http-enabled',
   },
   webSockets: {
     displayName: 'RPC websocket connections',
@@ -89,10 +83,6 @@ const configTranslationMap: ConfigTranslationMap = {
       ],
     },
     defaultValue: 'Disabled',
-    infoDescription:
-      'Enables or disables the WebSocket JSON-RPC service. The default is false.',
-    documentation:
-      'https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-ws-enabled',
   },
   webSocketsPort: {
     displayName: 'WebSockets RPC listening port',
@@ -101,10 +91,6 @@ const configTranslationMap: ConfigTranslationMap = {
     uiControl: {
       type: 'text',
     },
-    documentation:
-      'https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-ws-port',
-    infoDescription:
-      'The port (TCP) on which WebSocket JSON-RPC listens. The default is 8546. You must expose ports appropriately (https://besu.hyperledger.org/en/stable/HowTo/Find-and-Connect/Configuring-Ports/).',
   },
   httpApis: {
     displayName: "Enabled HTTP API's",
@@ -173,8 +159,6 @@ const configTranslationMap: ConfigTranslationMap = {
       ],
     },
     defaultValue: ['ETH', 'NET', 'WEB3'],
-    documentation:
-      'https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-http-api',
   },
   hostAllowList: {
     displayName: 'RPC connections accepted by node',
@@ -227,8 +211,6 @@ const configTranslationMap: ConfigTranslationMap = {
     uiControl: {
       type: 'text',
     },
-    documentation:
-      'https://besu.hyperledger.org/en/stable/HowTo/Find-and-Connect/Managing-Peers/#limit-peers',
   },
 };
 
