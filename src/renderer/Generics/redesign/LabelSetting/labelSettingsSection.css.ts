@@ -33,6 +33,7 @@ export const lineContainer = style({
   flexWrap: 'wrap',
   justifyContent: 'space-between',
   alignItems: 'center',
+  minHeight: '48px',
   padding: '8px 0px',
   columnGap: '14px',
   rowGap: '8px',
@@ -43,13 +44,21 @@ export const lineContainer = style({
   borderBottom: '1px solid',
   borderColor: vars.color.font10,
 });
+
+export const labelAndDescriptionContainer = style({
+  display: 'flex',
+  gap: 4,
+  flexDirection: 'column',
+  flex: 'none',
+  order: 0,
+  flexGrow: 0,
+  maxWidth: '100%',
+});
+
 export const lineKeyText = style({
   fontWeight: 590,
   color: vars.color.font70,
   letterSpacing: '-0.12px',
-  flex: 'none',
-  order: 0,
-  flexGrow: 0,
 });
 
 export const lineValueText = style({

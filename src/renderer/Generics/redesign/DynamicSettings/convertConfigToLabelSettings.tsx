@@ -57,6 +57,12 @@ const convertConfigToLabelSettings = (
               />
             ),
           };
+          if (configTranslation.infoDescription) {
+            settingItem.description = configTranslation.infoDescription;
+          }
+          if (configTranslation.documentation) {
+            settingItem.learnMoreLink = configTranslation.documentation;
+          }
           console.log('settings settingItem: ', settingItem);
           return settingItem;
         }
