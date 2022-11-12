@@ -29,6 +29,6 @@
     "release/app/dist",
     ".erb/dll",
     "storybook-static",
-    "src/main/util/timestamp.js"
+    // "src/main/util/timestamp.js"
   ]
 }

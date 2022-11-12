@@ -7,14 +7,14 @@
  * level: the log severity level
  * timestamp: UTC timestamp in ms
  */
+import { timestampFromString } from './timestamp';
+
 export type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
 export type LogWithMetadata = {
   message: string;
   level?: LogLevel;
   timestamp?: number;
 };
-
-const Timestamp = require('./timestamp');
 
 /**
  * Tries to parse as much log metadata from a raw log string output
@@ -28,7 +28,7 @@ export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
   const message = log.slice(31); // 30+1 to remove a space
   const nanoTimestampStr = log.substring(0, 30);
   // returns timestamp in seconds
-  const timestamp = Timestamp.fromString(nanoTimestampStr).time;
+  const timestamp = timestampFromString(nanoTimestampStr);
   console.log(
     'test parse nanoTimestamp',
     nanoTimestampStr,
