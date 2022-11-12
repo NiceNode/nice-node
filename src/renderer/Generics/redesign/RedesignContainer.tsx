@@ -5,31 +5,40 @@ import { store } from '../../state/store';
 
 import StorybookLanguageSelect from '../../Presentational/StorybookLanguageSelect';
 import { darkTheme, lightTheme } from './theme.css';
+import Button from './Button/Button';
 
 const RedesignContainerStoryBook: React.FC = ({ children }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   return (
     <Provider store={store}>
-      <div style={{ display: 'flex', flexDirection: 'column', height: '90vh' }}>
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div
+        id="onBoarding"
+        className={isDarkTheme ? darkTheme : lightTheme}
+        style={{ display: 'flex', flexDirection: 'column', height: '90vh' }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+            gap: 20,
+          }}
+        >
           <div>
             <p>Toggle dark mode</p>
-            <button
-              style={{ width: 150 }}
-              type="button"
+            <Button
+              label={`Switch to ${isDarkTheme ? 'light' : 'dark'} theme`}
               onClick={() =>
                 setIsDarkTheme((currentValue: boolean) => !currentValue)
               }
-            >
-              Switch to {isDarkTheme ? 'light' : 'dark'} theme
-            </button>
+            />
           </div>
-          <StorybookLanguageSelect />
+          <div style={{ minWidth: 150 }}>
+            <StorybookLanguageSelect />
+          </div>
         </div>
         <div
-          id="onBoarding"
-          className={isDarkTheme ? darkTheme : lightTheme}
           style={{
             marginTop: '1em',
             border: '1px dashed #E3E3E3',
