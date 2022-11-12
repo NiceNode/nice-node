@@ -18,6 +18,7 @@ import {
   popupContainer,
   menuButtonContainer,
 } from './header.css';
+import NodeSettingsWrapper from '../../../Presentational/NodeSettingsModal/NodeSettingsWrapper';
 
 /**
  * Primary UI component for user interaction
@@ -27,6 +28,8 @@ export const Header = (props: NodeOverviewProps) => {
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
   const [isSettingsDisplayed, setIsSettingsDisplayed] =
+    useState<boolean>(false);
+  const [sIsSettingsModalOpen, setIsSettingsModalOpen] =
     useState<boolean>(false);
 
   const startStopButtonProps: ButtonProps = {
@@ -126,6 +129,7 @@ export const Header = (props: NodeOverviewProps) => {
             variant="icon"
             size="small"
             onClick={() => {
+              setIsSettingsModalOpen(true);
               if (type === 'client') {
                 if (onAction) onAction('settings');
                 // setIsSettingsDisplayed(!isSettingsDisplayed);
@@ -171,6 +175,11 @@ export const Header = (props: NodeOverviewProps) => {
           )}
         </div>
       </div>
+
+      <NodeSettingsWrapper
+        isOpen={sIsSettingsModalOpen}
+        onClickClose={() => setIsSettingsModalOpen(false)}
+      />
     </div>
   );
 };

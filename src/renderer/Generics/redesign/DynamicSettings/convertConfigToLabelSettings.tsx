@@ -1,54 +1,67 @@
-import { ConfigTranslation } from '../../../../common/nodeConfig';
-import LineLabelSettings from '../LabelSetting/LabelSettings';
+import {
+  ConfigTranslation,
+  ConfigValuesMap,
+} from '../../../../common/nodeConfig';
+import { SettingChangeHandler } from '../../../Presentational/NodeSettingsModal/NodeSettingsWrapper';
 import {
   LabelSettingsItem,
   LabelSettingsSectionProps,
 } from '../LabelSetting/LabelValuesSection';
-// eslint-disable-next-line import/no-cycle
 import { CategoryConfig } from './DynamicSettings';
 import Setting from './Setting';
+
+const getConfigValue = (
+  configTranslation: ConfigTranslation,
+  configKey: string,
+  configValuesMap: ConfigValuesMap
+) => {
+  let currentValue: string | string[] = configValuesMap?.[configKey];
+  if (currentValue === undefined) {
+    if (configTranslation.niceNodeDefaultValue !== undefined) {
+      currentValue = configTranslation.niceNodeDefaultValue;
+    } else if (configTranslation.defaultValue !== undefined) {
+      currentValue = configTranslation.defaultValue;
+    }
+  }
+  return currentValue;
+};
 
 const convertConfigToLabelSettings = ({
   categoryConfigs,
   configValuesMap,
   isDisabled,
+  onChange,
 }: {
   categoryConfigs: CategoryConfig[];
-  configValuesMap: any;
+  configValuesMap: ConfigValuesMap;
   isDisabled?: boolean;
-}): React.ReactNode => {
-  // let lineLabelSettingsProps: LineLabelSettingsProps = {
-  //   items: [],
-  // };
-  console.log(
-    'settings categoryConfigs, configValuesMap: ',
-    categoryConfigs,
-    configValuesMap
-  );
-
+  onChange?: SettingChangeHandler;
+}): LabelSettingsSectionProps => {
   // no separate settings sections (Only one for now)
   const section: LabelSettingsSectionProps = {
-    // sectionTitle: category
     items: [],
   };
-  const configItems = categoryConfigs.map((categoryConfig) => {
-    const { configTranslationMap, category } = categoryConfig;
 
-    if (configTranslationMap) {
-      const categoryItems = Object.keys(configTranslationMap).map(
-        (configKey) => {
+  // We're parsing the settings obj to form a categories array
+  // which contains the settings for each category
+  const configSettingsItems: LabelSettingsItem[][] = categoryConfigs.map(
+    (categoryConfig) => {
+      const { configTranslationMap } = categoryConfig;
+
+      if (configTranslationMap) {
+        // categorySettingsArr: An array of all the Settings in this category
+        const categorySettingsArr: LabelSettingsItem[] = Object.keys(
+          configTranslationMap
+        ).map((configKey) => {
           const configTranslation: ConfigTranslation =
             configTranslationMap[configKey];
 
-          let currentValue: string | string[] = configValuesMap?.[configKey];
-          if (currentValue === undefined) {
-            if (configTranslation.niceNodeDefaultValue !== undefined) {
-              currentValue = configTranslation.niceNodeDefaultValue;
-            } else if (configTranslation.defaultValue !== undefined) {
-              currentValue = configTranslation.defaultValue;
-            }
-            // todo for mutli select?
-          }
+          const currentValue: string | string[] = getConfigValue(
+            configTranslation,
+            configKey,
+            configValuesMap
+          );
+
           const settingItem: LabelSettingsItem = {
             label: configTranslation.displayName,
             value: (
@@ -58,6 +71,7 @@ const convertConfigToLabelSettings = ({
                 configTranslation={configTranslation}
                 currentValue={currentValue}
                 isDisabled={isDisabled}
+                onChange={onChange}
               />
             ),
           };
@@ -67,16 +81,25 @@ const convertConfigToLabelSettings = ({
           if (configTranslation.documentation) {
             settingItem.learnMoreLink = configTranslation.documentation;
           }
-          console.log('settings settingItem: ', settingItem);
           return settingItem;
-        }
+        });
+        return categorySettingsArr;
+      }
+      // config with translation? todo: error
+      console.error(
+        'category config does not have a configTranslation',
+        categoryConfig
       );
-      section.items = section.items.concat(categoryItems);
+      return [];
     }
-
-    console.log('settings section: ', section);
-    return section;
-  });
-  return <LineLabelSettings items={[section]} />;
+  );
+  // End of parsing category settings
+  // Now flatten them into one category or "section"
+  if (configSettingsItems) {
+    configSettingsItems.forEach((categorySettingsArr) => {
+      section.items = section.items.concat(categorySettingsArr);
+    });
+  }
+  return section;
 };
 export default convertConfigToLabelSettings;

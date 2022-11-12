@@ -34,7 +34,11 @@ const Input = ({
         className: [container].join(' '),
         placeholder,
         value,
-        onchange: onChange,
+        onChange: (event) => {
+          if (onChange) {
+            onChange(event.target.value);
+          }
+        },
         ...(disabled && { disabled }),
         ...(required && { required }),
       }}

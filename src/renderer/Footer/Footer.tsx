@@ -1,6 +1,5 @@
 import { VscDebugConsole } from 'react-icons/vsc';
 import { AiOutlineAreaChart } from 'react-icons/ai';
-import { MdSettings } from 'react-icons/md';
 import { FaDocker } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 
@@ -8,9 +7,7 @@ import IconButton from '../IconButton';
 import Monitoring from './Monitoring';
 import Debugging from './Debugging';
 import electron from '../electronGlobal';
-import DynamicSettings from './DynamicSettings';
 import Docker from './Docker';
-import LanguageSelect from '../LanguageSelect';
 import { useGetIsDockerInstalledQuery } from '../state/settingsService';
 
 export const FOOTER_HEIGHT = 64;
@@ -51,21 +48,6 @@ const Footer = () => {
         paddingRight: 10,
       }}
     >
-      <IconButton
-        type="button"
-        onClick={() => {
-          setSelectedMenuDrawer(
-            sSelectedMenuDrawer === 'settings' ? undefined : 'settings'
-          );
-        }}
-        style={{
-          borderBottom:
-            sSelectedMenuDrawer === 'settings' ? '2px solid' : 'none',
-          borderTop: sSelectedMenuDrawer === 'settings' ? '2px solid' : 'none',
-        }}
-      >
-        <MdSettings />
-      </IconButton>
       <IconButton
         type="button"
         onClick={() => {
@@ -121,10 +103,6 @@ const Footer = () => {
         isOpen={sSelectedMenuDrawer === 'debugging'}
         onClickCloseButton={onCloseDrawer}
       />
-      <DynamicSettings
-        isOpen={sSelectedMenuDrawer === 'settings'}
-        onClickCloseButton={onCloseDrawer}
-      />
       <Monitoring
         isOpen={sSelectedMenuDrawer === 'monitoring'}
         onClickCloseButton={onCloseDrawer}
@@ -135,8 +113,6 @@ const Footer = () => {
           onClickCloseButton={onCloseDrawer}
         />
       )}
-      &nbsp; &nbsp;
-      <LanguageSelect />
     </div>
   );
 };

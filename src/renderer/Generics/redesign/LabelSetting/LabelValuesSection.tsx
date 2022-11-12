@@ -44,7 +44,7 @@ const LabelSettingsSection = ({
       )}
       {items &&
         items.map((item) => (
-          <React.Fragment key={item.label + item.value}>
+          <React.Fragment key={item.label}>
             <div className={lineContainer}>
               <div className={labelAndDescriptionContainer}>
                 <div className={lineKeyText}>{item.label}</div>
