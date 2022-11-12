@@ -1,7 +1,20 @@
 import { style } from '@vanilla-extract/css';
 import { vars, common } from '../theme.css';
 
+export const container = style({
+  position: 'relative',
+});
+
 export const contentHeader = style({
+  position: 'absolute',
+  width: '100%',
+  background: 'white',
+  height: 52,
+  zIndex: 1,
+});
+
+export const logsContainer = style({
+  paddingTop: 52,
   position: 'relative',
 });
 
@@ -34,4 +47,5 @@ export const typeFilterContainer = style({
 });
 export const timeframeFilterContainer = style({
   width: 148,
+  position: 'relative',
 });
