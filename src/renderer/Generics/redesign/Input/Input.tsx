@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { container } from './input.css';
 
 export interface InputProps {
@@ -16,7 +17,7 @@ export interface InputProps {
   /**
    *  Is there an onChange event when a user types something?
    */
-  onChange?: () => void;
+  onChange?: (text: string) => void;
 }
 
 const Input = ({
@@ -25,9 +26,9 @@ const Input = ({
   disabled,
   onChange = () => {},
 }: InputProps) => {
-  const onChangeAction = (evt) => {
+  const onChangeAction = (evt: ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
-      onChange(evt);
+      onChange(evt.target.value);
     }
   };
   return (

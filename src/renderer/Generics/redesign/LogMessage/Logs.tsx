@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import moment from 'moment';
 import { container } from './logs.css';
 import { Menu } from '../Menu/Menu';
@@ -101,6 +101,20 @@ export const Logs = () => {
   const [timeframeFilter, setTimeframeFilter] = useState<number>(0);
   const [textFilter, setTextFilter] = useState<string>('');
   const [typeFilter, setTypeFilter] = useState<string>('');
+  const onClickSetTypeFilter = (type: string) => {
+    if (typeFilter !== '') {
+      setTypeFilter('');
+    } else {
+      setTypeFilter(type);
+    }
+  };
+  const onClickSetTimeframeFilter = (timeframe: SetStateAction<number>) => {
+    if (timeframeFilter !== 0 && timeframeFilter === timeframe) {
+      setTimeframeFilter(0);
+    } else {
+      setTimeframeFilter(timeframe);
+    }
+  };
 
   const filteredLogMessages = sLogs
     .filter((log: string) => {
@@ -125,42 +139,42 @@ export const Logs = () => {
           <MenuItem
             text="Last 30 minutes"
             selectable
-            onClick={() => setTimeframeFilter(timeframes['30MINUTES'])}
+            onClick={() => onClickSetTimeframeFilter(timeframes['30MINUTES'])}
           />
           <MenuItem
             text="Last hour"
             selectable
-            onClick={() => setTimeframeFilter(timeframes['1HOUR'])}
+            onClick={() => onClickSetTimeframeFilter(timeframes['1HOUR'])}
           />
           <MenuItem
             text="Last 6 hours"
             selectable
-            onClick={() => setTimeframeFilter(timeframes['6HOURS'])}
+            onClick={() => onClickSetTimeframeFilter(timeframes['6HOURS'])}
           />
           <MenuItem
             text="Last 12 hours"
             selectable
-            onClick={() => setTimeframeFilter(timeframes['12HOURS'])}
+            onClick={() => onClickSetTimeframeFilter(timeframes['12HOURS'])}
           />
           <MenuItem
             text="Last day"
             selectable
-            onClick={() => setTimeframeFilter(timeframes['1DAY'])}
+            onClick={() => onClickSetTimeframeFilter(timeframes['1DAY'])}
           />
           <MenuItem
             text="Last 3 days"
             selectable
-            onClick={() => setTimeframeFilter(timeframes['3DAYS'])}
+            onClick={() => onClickSetTimeframeFilter(timeframes['3DAYS'])}
           />
           <MenuItem
             text="Last week"
             selectable
-            onClick={() => setTimeframeFilter(timeframes['1WEEK'])}
+            onClick={() => onClickSetTimeframeFilter(timeframes['1WEEK'])}
           />
           <MenuItem
             text="Last month"
             selectable
-            onClick={() => setTimeframeFilter(timeframes['1MONTH'])}
+            onClick={() => onClickSetTimeframeFilter(timeframes['1MONTH'])}
           />
         </Menu>
         <Menu width={156}>
@@ -168,24 +182,24 @@ export const Logs = () => {
             variant="checkbox"
             status="blue"
             text="Info"
-            onClick={() => setTypeFilter('info')}
+            onClick={() => onClickSetTypeFilter('info')}
           />
           <MenuItem
             variant="checkbox"
             status="orange"
             text="Warnings"
-            onClick={() => setTypeFilter('warn')}
+            onClick={() => onClickSetTypeFilter('warn')}
           />
           <MenuItem
             variant="checkbox"
             status="red"
             text="Errors"
-            onClick={() => setTypeFilter('error')}
+            onClick={() => onClickSetTypeFilter('error')}
           />
         </Menu>
         <Input
-          onChange={(evt) => {
-            setTextFilter(evt.target.value);
+          onChange={(text: string) => {
+            setTextFilter(text);
           }}
         />
       </div>
