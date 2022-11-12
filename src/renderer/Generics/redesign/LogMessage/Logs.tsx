@@ -1,10 +1,20 @@
 import { SetStateAction, useState } from 'react';
 import moment from 'moment';
-import { container } from './logs.css';
+import {
+  contentHeader,
+  filterContainer,
+  textFilterContainer,
+  typeFilterContainer,
+  timeframeFilterContainer,
+  typeFilterMenu,
+  filterMenu,
+} from './logs.css';
 import { Menu } from '../Menu/Menu';
 import { MenuItem } from '../MenuItem/MenuItem';
 import { LogMessage } from './LogMessage';
 import Input from '../Input/Input';
+import Button from '../Button/Button';
+import { HeaderButton } from '../HeaderButton/HeaderButton';
 
 const timeframes = {
   '30MINUTES': 30,
@@ -98,6 +108,12 @@ export const Logs = () => {
     '2022-11-11 22:35:11.041+00:00 | main | WARN  | Besu | Using jemalloc',
   ];
 
+  const [isFilterBarDisplayed, setIsFilterBarDisplayed] =
+    useState<boolean>(false);
+  const [isTypeFilterDisplayed, setIsTypeFilterDisplayed] =
+    useState<boolean>(false);
+  const [isTimeframeFilterDisplayed, setIsTimeframeFilterDisplayed] =
+    useState<boolean>(false);
   const [timeframeFilter, setTimeframeFilter] = useState<number>(0);
   const [textFilter, setTextFilter] = useState<string>('');
   const [typeFilter, setTypeFilter] = useState<string>('');
@@ -134,75 +150,169 @@ export const Logs = () => {
 
   return (
     <>
-      <div className={container}>
-        <Menu width={200}>
-          <MenuItem
-            text="Last 30 minutes"
-            selectable
-            onClick={() => onClickSetTimeframeFilter(timeframes['30MINUTES'])}
-          />
-          <MenuItem
-            text="Last hour"
-            selectable
-            onClick={() => onClickSetTimeframeFilter(timeframes['1HOUR'])}
-          />
-          <MenuItem
-            text="Last 6 hours"
-            selectable
-            onClick={() => onClickSetTimeframeFilter(timeframes['6HOURS'])}
-          />
-          <MenuItem
-            text="Last 12 hours"
-            selectable
-            onClick={() => onClickSetTimeframeFilter(timeframes['12HOURS'])}
-          />
-          <MenuItem
-            text="Last day"
-            selectable
-            onClick={() => onClickSetTimeframeFilter(timeframes['1DAY'])}
-          />
-          <MenuItem
-            text="Last 3 days"
-            selectable
-            onClick={() => onClickSetTimeframeFilter(timeframes['3DAYS'])}
-          />
-          <MenuItem
-            text="Last week"
-            selectable
-            onClick={() => onClickSetTimeframeFilter(timeframes['1WEEK'])}
-          />
-          <MenuItem
-            text="Last month"
-            selectable
-            onClick={() => onClickSetTimeframeFilter(timeframes['1MONTH'])}
-          />
-        </Menu>
-        <Menu width={156}>
-          <MenuItem
-            variant="checkbox"
-            status="blue"
-            text="Info"
-            onClick={() => onClickSetTypeFilter('info')}
-          />
-          <MenuItem
-            variant="checkbox"
-            status="orange"
-            text="Warnings"
-            onClick={() => onClickSetTypeFilter('warn')}
-          />
-          <MenuItem
-            variant="checkbox"
-            status="red"
-            text="Errors"
-            onClick={() => onClickSetTypeFilter('error')}
-          />
-        </Menu>
-        <Input
-          onChange={(text: string) => {
-            setTextFilter(text);
+      <div className={contentHeader}>
+        <HeaderButton
+          type="filter"
+          onClick={() => {
+            if (isFilterBarDisplayed) {
+              setIsFilterBarDisplayed(false);
+            } else {
+              setIsFilterBarDisplayed(true);
+            }
           }}
         />
       </div>
+      {isFilterBarDisplayed && (
+        <div className={filterContainer}>
+          <div className={textFilterContainer}>
+            <Input
+              placeholder="Search..."
+              onChange={(text: string) => {
+                setTextFilter(text);
+              }}
+            />
+          </div>
+          <div
+            className={typeFilterContainer}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) {
+                setIsTypeFilterDisplayed(false);
+              }
+            }}
+          >
+            <Button
+              wide
+              iconId="down"
+              size="small"
+              variant="icon-right"
+              label="All message types"
+              onClick={() => {
+                if (isTypeFilterDisplayed) {
+                  setIsTypeFilterDisplayed(false);
+                } else {
+                  setIsTypeFilterDisplayed(true);
+                }
+              }}
+            />
+            {isTypeFilterDisplayed && (
+              <div className={filterMenu}>
+                <Menu width={158}>
+                  <MenuItem
+                    variant="checkbox"
+                    status="blue"
+                    text="Info"
+                    onClick={() => onClickSetTypeFilter('info')}
+                  />
+                  <MenuItem
+                    variant="checkbox"
+                    status="orange"
+                    text="Warnings"
+                    onClick={() => onClickSetTypeFilter('warn')}
+                  />
+                  <MenuItem
+                    variant="checkbox"
+                    status="red"
+                    text="Errors"
+                    onClick={() => onClickSetTypeFilter('error')}
+                  />
+                </Menu>
+              </div>
+            )}
+          </div>
+          <div
+            className={timeframeFilterContainer}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) {
+                setIsTimeframeFilterDisplayed(false);
+              }
+            }}
+          >
+            <Button
+              iconId="down"
+              size="small"
+              variant="icon-right"
+              label="Last week"
+              onClick={() => {
+                if (isTimeframeFilterDisplayed) {
+                  setIsTimeframeFilterDisplayed(false);
+                } else {
+                  setIsTimeframeFilterDisplayed(true);
+                }
+              }}
+            />
+            {isTimeframeFilterDisplayed && (
+              <div className={filterMenu}>
+                <Menu width={148}>
+                  <MenuItem
+                    text="Last 30 minutes"
+                    selectable
+                    selected={timeframeFilter === timeframes['30MINUTES']}
+                    onClick={() =>
+                      onClickSetTimeframeFilter(timeframes['30MINUTES'])
+                    }
+                  />
+                  <MenuItem
+                    text="Last hour"
+                    selectable
+                    selected={timeframeFilter === timeframes['1HOUR']}
+                    onClick={() =>
+                      onClickSetTimeframeFilter(timeframes['1HOUR'])
+                    }
+                  />
+                  <MenuItem
+                    text="Last 6 hours"
+                    selectable
+                    selected={timeframeFilter === timeframes['6HOURS']}
+                    onClick={() =>
+                      onClickSetTimeframeFilter(timeframes['6HOURS'])
+                    }
+                  />
+                  <MenuItem
+                    text="Last 12 hours"
+                    selectable
+                    selected={timeframeFilter === timeframes['12HOURS']}
+                    onClick={() =>
+                      onClickSetTimeframeFilter(timeframes['12HOURS'])
+                    }
+                  />
+                  <MenuItem
+                    text="Last day"
+                    selectable
+                    selected={timeframeFilter === timeframes['1DAY']}
+                    onClick={() =>
+                      onClickSetTimeframeFilter(timeframes['1DAY'])
+                    }
+                  />
+                  <MenuItem
+                    text="Last 3 days"
+                    selectable
+                    selected={timeframeFilter === timeframes['3DAYS']}
+                    onClick={() =>
+                      onClickSetTimeframeFilter(timeframes['3DAYS'])
+                    }
+                  />
+                  <MenuItem
+                    text="Last week"
+                    selectable
+                    selected={timeframeFilter === timeframes['1WEEK']}
+                    onClick={() =>
+                      onClickSetTimeframeFilter(timeframes['1WEEK'])
+                    }
+                  />
+                  <MenuItem
+                    text="Last month"
+                    selectable
+                    selected={timeframeFilter === timeframes['1MONTH']}
+                    onClick={() =>
+                      onClickSetTimeframeFilter(timeframes['1MONTH'])
+                    }
+                  />
+                </Menu>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       <div>{filteredLogMessages}</div>
     </>
   );
