@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react';
 import {
-  ConfigValue,
   ConfigTranslationMap,
+  ConfigValuesMap,
 } from '../../../../common/nodeConfig';
-// eslint-disable-next-line import/no-cycle
+import { SettingChangeHandler } from '../../../Presentational/NodeSettingsModal/NodeSettingsWrapper';
+import LineLabelSettings from '../LabelSetting/LabelSettings';
+import { LabelSettingsSectionProps } from '../LabelSetting/LabelValuesSection';
 import convertConfigToLabelSettings from './convertConfigToLabelSettings';
 
 export type CategoryConfig = {
@@ -11,9 +14,9 @@ export type CategoryConfig = {
 };
 export type DynamicSettingsProps = {
   categoryConfigs?: CategoryConfig[];
-  configValuesMap?: unknown;
+  configValuesMap?: ConfigValuesMap;
   isDisabled?: boolean;
-  onChange?: (configKey: string, newValue: ConfigValue) => void;
+  onChange?: SettingChangeHandler;
 };
 const DynamicSettings = ({
   categoryConfigs,
@@ -21,28 +24,28 @@ const DynamicSettings = ({
   isDisabled,
   onChange,
 }: DynamicSettingsProps) => {
-  if (!categoryConfigs) {
-    return <>No config</>;
-  }
+  const [sSections, setSections] = useState<LabelSettingsSectionProps>({
+    items: [],
+  });
 
-  const onNodeConfigChange = async (
-    configKey: string,
-    newValue: ConfigValue
-  ) => {
-    // updateNode
-    console.log('updating node with newValue: ', newValue);
-    if (onChange) {
-      onChange(configKey, newValue);
-    }
-  };
+  useEffect(() => {
+    setSections(
+      convertConfigToLabelSettings({
+        categoryConfigs: categoryConfigs ?? [],
+        configValuesMap: configValuesMap ?? {},
+        isDisabled,
+        onChange,
+      })
+    );
+  }, [categoryConfigs, configValuesMap, isDisabled, onChange]);
+
+  if (!categoryConfigs) {
+    return <>No node settings found.</>;
+  }
 
   return (
     <>
-      {convertConfigToLabelSettings({
-        categoryConfigs: categoryConfigs ?? [],
-        configValuesMap,
-        isDisabled,
-      })}
+      <LineLabelSettings items={[sSections]} />
     </>
   );
 };

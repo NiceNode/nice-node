@@ -41,8 +41,10 @@ const LineLabelSettings = ({
       {title && <div className={titleFont}>{title}</div>}
       <div className={columnContainer}>
         {items &&
-          items.map((item) => (
-            <div className={columnDiv} key={item.sectionTitle}>
+          items.map((item, index) => (
+            // Settings section ordering does not change during view of modal
+            // eslint-disable-next-line react/no-array-index-key
+            <div className={columnDiv} key={index}>
               <LineLabelSettingsItem {...item} />
             </div>
           ))}

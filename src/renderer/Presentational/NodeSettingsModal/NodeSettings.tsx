@@ -6,21 +6,22 @@ import DynamicSettings, {
 } from '../../Generics/redesign/DynamicSettings/DynamicSettings';
 import { ConfigValuesMap } from '../../../common/nodeConfig';
 import { Message } from '../../Generics/redesign/Message/Message';
+import { SettingChangeHandler } from './NodeSettingsWrapper';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Preference = 'theme' | 'isOpenOnStartup';
 export interface NodeSettingsProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClickClose: () => void;
   categoryConfigs?: CategoryConfig[];
   configValuesMap?: ConfigValuesMap;
   isDisabled?: boolean;
-  onChange?: () => void;
+  onChange?: SettingChangeHandler;
 }
 
 const NodeSettings = ({
   isOpen,
-  onClose,
+  onClickClose,
   categoryConfigs,
   configValuesMap,
   isDisabled,
@@ -28,17 +29,11 @@ const NodeSettings = ({
 }: NodeSettingsProps) => {
   const { t } = useTranslation('genericComponents');
 
-  const onChangeSetting = () => {
-    if (onChange) {
-      onChange();
-    }
-  };
-
   return (
     <Modal
       isOpen={isOpen}
       title={t('Node settings')}
-      onClickCloseButton={onClose}
+      onClickCloseButton={onClickClose}
     >
       {isDisabled && (
         <Message
@@ -51,6 +46,7 @@ const NodeSettings = ({
         categoryConfigs={categoryConfigs}
         configValuesMap={configValuesMap}
         isDisabled={isDisabled}
+        onChange={onChange}
       />
     </Modal>
   );
