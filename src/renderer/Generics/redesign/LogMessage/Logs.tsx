@@ -1,6 +1,21 @@
-// import { container } from './logsMessage.css';
+import { useState } from 'react';
 import moment from 'moment';
+import { container } from './logs.css';
+import { Menu } from '../Menu/Menu';
+import { MenuItem } from '../MenuItem/MenuItem';
 import { LogMessage } from './LogMessage';
+import Input from '../Input/Input';
+
+const timeframes = {
+  '30MINUTES': 30,
+  '1HOUR': 60,
+  '6HOURS': 360,
+  '12HOURS': 720,
+  '1DAY': 1440,
+  '3DAYS': 4320,
+  '1WEEK': 10080,
+  '1MONTH': 43800,
+};
 
 const getLogObject = (log: string) => {
   const logArray = log.split(' | ');
@@ -12,23 +27,10 @@ const getLogObject = (log: string) => {
   };
 };
 
-const isWithinTimeframe = (timestamp: string, timeframe) => {
-  const format = 'YYYY-MM-DD hh:mm:ss';
-
-  const logTime = moment(new Date(timestamp), format);
-  const nowTime = moment();
-  const beforeTime = moment().subtract(30, 'minutes');
-  console.log(logTime);
-  console.log(nowTime);
-  console.log(beforeTime);
-
-  console.log(logTime.isBetween(moment(), moment().subtract(30, 'hours')));
-
-  // console.log(
-  //   moment(timestamp)
-  //     .format(format)
-  //     .isBetween(moment(), moment().subtract(30, 'minutes').toDate().getTime())
-  // );
+const isWithinTimeframe = (timestamp: string, timeframe: number) => {
+  const nowTime = moment().format();
+  const beforeTime = moment().subtract(timeframe, 'minutes').format();
+  return moment(timestamp).isBetween(beforeTime, nowTime);
 };
 
 export const Logs = () => {
@@ -90,37 +92,104 @@ export const Logs = () => {
     '2022-11-04 21:42:10.957+00:00 | BesuCommand-Shutdown-Hook | INFO  | EthProtocolManager | eth Subprotocol stopped.',
     '2022-11-04 21:42:10.957+00:00 | BesuCommand-Shutdown-Hook | INFO  | NetworkRunner | Network stopped.',
     '2022-11-04 21:42:10.958+00:00 | BesuCommand-Shutdown-Hook | INFO  | AutoTransactionLogBloomCachingService | Shutting down Auto transaction logs caching service.',
-    '2022-11-04 21:42:10.960+00:00 | BesuCommand-Shutdown-Hook | INFO  | NatService | No NAT environment detected so no service could be stopped',
-    '2022-11-10 21:42:11.041+00:00 | main | INFO  | Besu | Using jemalloc',
+    '2022-11-11 21:42:10.960+00:00 | BesuCommand-Shutdown-Hook | INFO  | NatService | No NAT environment detected so no service could be stopped',
+    '2022-11-11 21:42:11.041+00:00 | main | INFO  | Besu | Using jemalloc',
     '2022-11-11 21:42:11.041+00:00 | main | ERROR  | Besu | Using jemalloc',
-    '2022-11-11 21:35:11.041+00:00 | main | WARN  | Besu | Using jemalloc',
+    '2022-11-11 22:35:11.041+00:00 | main | WARN  | Besu | Using jemalloc',
   ];
 
-  const filterQuery = {
-    type: 'warn',
-    text: '',
-    timeframe: '',
-  };
+  const [timeframeFilter, setTimeframeFilter] = useState<number>(0);
+  const [textFilter, setTextFilter] = useState<string>('');
+  const [typeFilter, setTypeFilter] = useState<string>('');
 
   const filteredLogMessages = sLogs
     .filter((log: string) => {
       const logObject = getLogObject(log);
 
       if (
-        (!filterQuery.type || logObject.type === filterQuery.type) &&
-        (!filterQuery.text ||
-          (filterQuery.text !== '' &&
-            logObject.message.includes(filterQuery.text))) &&
-        !filterQuery.timeframe
-        // isWithinTimeframe(logObject.timestamp, filterQuery.timeframe)
+        (typeFilter === '' || logObject.type === typeFilter) &&
+        (textFilter === '' || logObject.message.includes(textFilter)) &&
+        (timeframeFilter === 0 ||
+          isWithinTimeframe(logObject.timestamp, timeframeFilter))
       ) {
         return true;
       }
       return false;
     })
-    .map((log) => {
-      const logObject = getLogObject(log);
-      return <LogMessage {...logObject} />;
-    });
-  return <div className="test">{filteredLogMessages}</div>;
+    .map((log) => <LogMessage {...getLogObject(log)} />);
+
+  return (
+    <>
+      <div className={container}>
+        <Menu width={200}>
+          <MenuItem
+            text="Last 30 minutes"
+            selectable
+            onClick={() => setTimeframeFilter(timeframes['30MINUTES'])}
+          />
+          <MenuItem
+            text="Last hour"
+            selectable
+            onClick={() => setTimeframeFilter(timeframes['1HOUR'])}
+          />
+          <MenuItem
+            text="Last 6 hours"
+            selectable
+            onClick={() => setTimeframeFilter(timeframes['6HOURS'])}
+          />
+          <MenuItem
+            text="Last 12 hours"
+            selectable
+            onClick={() => setTimeframeFilter(timeframes['12HOURS'])}
+          />
+          <MenuItem
+            text="Last day"
+            selectable
+            onClick={() => setTimeframeFilter(timeframes['1DAY'])}
+          />
+          <MenuItem
+            text="Last 3 days"
+            selectable
+            onClick={() => setTimeframeFilter(timeframes['3DAYS'])}
+          />
+          <MenuItem
+            text="Last week"
+            selectable
+            onClick={() => setTimeframeFilter(timeframes['1WEEK'])}
+          />
+          <MenuItem
+            text="Last month"
+            selectable
+            onClick={() => setTimeframeFilter(timeframes['1MONTH'])}
+          />
+        </Menu>
+        <Menu width={156}>
+          <MenuItem
+            variant="checkbox"
+            status="blue"
+            text="Info"
+            onClick={() => setTypeFilter('info')}
+          />
+          <MenuItem
+            variant="checkbox"
+            status="orange"
+            text="Warnings"
+            onClick={() => setTypeFilter('warn')}
+          />
+          <MenuItem
+            variant="checkbox"
+            status="red"
+            text="Errors"
+            onClick={() => setTypeFilter('error')}
+          />
+        </Menu>
+        <Input
+          onChange={(evt) => {
+            setTextFilter(evt.target.value);
+          }}
+        />
+      </div>
+      <div>{filteredLogMessages}</div>
+    </>
+  );
 };

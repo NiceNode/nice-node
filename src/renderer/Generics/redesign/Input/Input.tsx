@@ -13,9 +13,23 @@ export interface InputProps {
    *  Is this input field disabled?
    */
   disabled?: boolean;
+  /**
+   *  Is there an onChange event when a user types something?
+   */
+  onChange?: () => void;
 }
 
-const Input = ({ placeholder, required, disabled }: InputProps) => {
+const Input = ({
+  placeholder,
+  required,
+  disabled,
+  onChange = () => {},
+}: InputProps) => {
+  const onChangeAction = (evt) => {
+    if (onChange) {
+      onChange(evt);
+    }
+  };
   return (
     <input
       {...{
@@ -24,6 +38,9 @@ const Input = ({ placeholder, required, disabled }: InputProps) => {
         placeholder,
         ...(disabled && { disabled }),
         ...(required && { required }),
+        onChange: (evt) => {
+          onChangeAction(evt);
+        },
       }}
     />
   );
