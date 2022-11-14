@@ -5,4 +5,4 @@ npx lint-staged
 npm run lint
 npm exec tsc
 npm run postinstall
-npm run test
+npm run test-precommit

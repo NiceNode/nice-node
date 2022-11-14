@@ -1,5 +1,11 @@
+import { useCallback, useEffect } from 'react';
 import Button from '../Button/Button';
-import { modalBackdropStyle, modalContentStyle, titleFont } from './modal.css';
+import {
+  modalBackdropStyle,
+  modalChildrenContainer,
+  modalContentStyle,
+  titleFont,
+} from './modal.css';
 
 type Props = {
   children: React.ReactNode;
@@ -16,36 +22,56 @@ export const Modal = ({
   title,
   isFullScreen,
 }: Props) => {
+  const escFunction = useCallback(
+    (event) => {
+      if (event.key === 'Escape') {
+        // Do whatever when esc is pressed
+        onClickCloseButton();
+      }
+    },
+    [onClickCloseButton]
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', escFunction, false);
+
+    return () => {
+      document.removeEventListener('keydown', escFunction, false);
+    };
+  }, [escFunction]);
+
   return (
     <div
       style={{
         display: isOpen ? 'flex' : 'none',
+        // paddingTop: 30 leaves room for the drag bar on mac
+        paddingTop: 30,
       }}
       className={modalBackdropStyle}
     >
       <div
         className={modalContentStyle}
         style={{
-          display: 'flex',
-          flexDirection: 'column',
           height: isFullScreen ? '95vh' : '',
           width: isFullScreen ? '95vw' : '',
-          minHeight: 100,
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ height: 40, alignSelf: 'flex-end' }}>
-            <Button
-              variant="icon"
-              iconId="close"
-              onClick={onClickCloseButton}
-            />
+            <div style={{ position: 'absolute', top: 12, right: 14 }}>
+              <Button
+                variant="icon"
+                iconId="close"
+                ghost
+                onClick={onClickCloseButton}
+              />
+            </div>
           </div>
           <span className={titleFont} style={{ flexGrow: 1 }}>
             {title}
           </span>
         </div>
-        <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
+        <div className={modalChildrenContainer}>{children}</div>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import Select from '../DynamicControls/Select';
+import Select from '../Generics/redesign/Select/Select';
 
 const StorybookLanguageSelect = () => {
   const { i18n } = useTranslation();
@@ -8,16 +8,15 @@ const StorybookLanguageSelect = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onChangeLanguage = async (newLang: any) => {
-    console.log('language selected: ', newLang);
-    setLang(newLang);
-    i18n.changeLanguage(newLang);
+    console.log('language selected: ', newLang.value);
+    setLang(newLang.value);
+    i18n.changeLanguage(newLang.value);
   };
 
   return (
     <Select
       isDisabled={false}
       value={sLang}
-      isMulti={false}
       options={[
         { label: 'English', value: 'en' },
         { label: 'Chinese', value: 'cn' },

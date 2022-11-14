@@ -12,6 +12,7 @@ import { send } from '../messenger';
 import * as monitoring from './monitoring';
 import * as dockerCompose from './docker-compose';
 import { killChildProcess } from '../processExit';
+import { parseDockerLogMetadata } from '../util/nodeLogUtils';
 // const options = {
 //   machineName: undefined, // uses local docker
 //   currentWorkingDirectory: undefined, // uses current working directory
@@ -192,7 +193,7 @@ export const sendLogsToUI = (node: Node) => {
   }
   const containerId = node.runtime.processIds[0];
   const childProcess = spawn(
-    `docker logs -f -n 100 ${containerId}`,
+    `docker logs --follow --timestamps -n 100 ${containerId}`,
     watchInput,
     spawnOptions
   );
@@ -225,7 +226,12 @@ export const sendLogsToUI = (node: Node) => {
     rlStdOut.on('line', (log: string) => {
       // logger.info(`docker log read for ${node.spec.specId}`);
 
+      // can use these logs to generate tests
+      // console.log('log metadata without:', log);
+      console.log('log metadata:', parseDockerLogMetadata(log));
       try {
+        // parse log metadata before sending to the UI
+        // send('nodeLogs', parseDockerLogMetadata(log));
         send('nodeLogs', log);
       } catch (err) {
         logger.error(`Error parsing docker event log ${log}`, err);

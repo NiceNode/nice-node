@@ -15,16 +15,20 @@ export interface ExternalLinkProps {
    * Inline the link
    */
   inline?: boolean;
+  /**
+   * Hide the external link icon
+   */
+  hideIcon?: boolean;
 }
 
-const ExternalLink = ({ url, text, inline }: ExternalLinkProps) => {
+const ExternalLink = ({ url, text, inline, hideIcon }: ExternalLinkProps) => {
   const classContainer = inline ? inlineContainer : blockContainer;
   return (
     <div className={classContainer}>
       <a className={linkText} href={url} target="_blank" rel="noreferrer">
         {text}
       </a>
-      <Icon iconId="external" />
+      {!hideIcon && <Icon iconId="external" />}
     </div>
   );
 };

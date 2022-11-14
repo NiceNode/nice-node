@@ -3,6 +3,10 @@ import { container } from './input.css';
 
 export interface InputProps {
   /**
+   *  Control the input by passing a value
+   */
+  value?: string;
+  /**
    *  What's the placeholder text?
    */
   placeholder?: string;
@@ -14,10 +18,7 @@ export interface InputProps {
    *  Is this input field disabled?
    */
   disabled?: boolean;
-  /**
-   *  Is there an onChange event when a user types something?
-   */
-  onChange?: (text: string) => void;
+  onChange?: (newValue: string) => void;
 }
 
 const Input = ({
@@ -38,12 +39,12 @@ const Input = ({
         type: 'text',
         className: [container].join(' '),
         placeholder,
+        value,
         ...(disabled && { disabled }),
         ...(required && { required }),
         onChange: (evt) => {
           onChangeAction(evt);
         },
-        value,
       }}
     />
   );

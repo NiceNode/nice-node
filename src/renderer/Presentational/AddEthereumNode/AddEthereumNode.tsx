@@ -18,6 +18,8 @@ import Select from '../../Generics/redesign/Select/Select';
 // import { NodeSpecification } from '../../../common/nodeSpec';
 import FolderInput from '../../Generics/redesign/Input/FolderInput';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
+import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
+import graphicsPng from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 
 const ecOptions = [
   {
@@ -167,70 +169,76 @@ AddEthereumNodeProps) => {
   ]);
 
   return (
-    <div className={container}>
-      <div className={titleFont}>{t('EthereumNode')}</div>
-      <div className={descriptionFont}>
-        <>{t('AddEthereumNodeDescription')}</>
-      </div>
-      <ExternalLink
-        text={t('LearnMoreClientDiversity')}
-        url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
-      />
-      <p className={sectionFont}>Execution client</p>
-      <SpecialSelect onChange={onChangeEc} options={ecOptions} />
-      <p className={sectionFont}>Consensus client</p>
-      <SpecialSelect onChange={onChangeCc} options={ccOptions} />
-      <DropdownLink
-        text={`${
-          sIsOptionsOpen ? tGeneric('Hide') : tGeneric('Show')
-        } ${tGeneric('advancedOptions')}`}
-        onClick={() => setIsOptionsOpen(!sIsOptionsOpen)}
-        isDown={!sIsOptionsOpen}
-      />
-      {sIsOptionsOpen && (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-            width: '100%',
-          }}
-        >
-          <span style={{ fontWeight: 600 }}>{tGeneric('Network')}</span>{' '}
-          <div
-            style={{ width: 300, display: 'inline-block', marginLeft: 'auto' }}
-          >
-            <Select
-              onChange={console.log}
-              options={[
-                { value: 'mainnet', label: 'Ethereum Mainnet' },
-                { value: 'goerli', label: 'Goerli Testnet' },
-                { value: 'sepolia', label: 'Sepolia Testnet' },
-              ]}
-            />
-          </div>
+    <ContentWithSideArt graphic={graphicsPng}>
+      <div className={container}>
+        <div className={titleFont}>{t('LaunchAnEthereumNode')}</div>
+        <div className={descriptionFont}>
+          <>{t('AddEthereumNodeDescription')}</>
         </div>
-      )}
-      <HorizontalLine />
-      <p className={sectionFont}>{tGeneric('DataLocation')}</p>
-      <FolderInput
-        placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
-        freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
-        onClickChange={async () => {
-          const storageLocationDetails =
-            await electron.openDialogForStorageLocation();
-          console.log('storageLocationDetails', storageLocationDetails);
-          if (storageLocationDetails) {
-            setNodeStorageLocation(storageLocationDetails.folderPath);
-            setNodeStorageLocationFreeStorageGBs(
-              storageLocationDetails.freeStorageGBs
-            );
-          } else {
-            // user didn't change the folder path
-          }
-        }}
-      />
-    </div>
+        <ExternalLink
+          text={t('LearnMoreClientDiversity')}
+          url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
+        />
+        <p className={sectionFont}>Execution client</p>
+        <SpecialSelect onChange={onChangeEc} options={ecOptions} />
+        <p className={sectionFont}>Consensus client</p>
+        <SpecialSelect onChange={onChangeCc} options={ccOptions} />
+        <DropdownLink
+          text={`${
+            sIsOptionsOpen ? tGeneric('Hide') : tGeneric('Show')
+          } ${tGeneric('advancedOptions')}`}
+          onClick={() => setIsOptionsOpen(!sIsOptionsOpen)}
+          isDown={!sIsOptionsOpen}
+        />
+        {sIsOptionsOpen && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              width: '100%',
+            }}
+          >
+            <span style={{ fontWeight: 600 }}>{tGeneric('Network')}</span>{' '}
+            <div
+              style={{
+                width: 300,
+                display: 'inline-block',
+                marginLeft: 'auto',
+              }}
+            >
+              <Select
+                onChange={console.log}
+                options={[
+                  { value: 'mainnet', label: 'Ethereum Mainnet' },
+                  { value: 'goerli', label: 'Goerli Testnet' },
+                  { value: 'sepolia', label: 'Sepolia Testnet' },
+                ]}
+              />
+            </div>
+          </div>
+        )}
+        <HorizontalLine />
+        <p className={sectionFont}>{tGeneric('DataLocation')}</p>
+        <FolderInput
+          placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
+          freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
+          onClickChange={async () => {
+            const storageLocationDetails =
+              await electron.openDialogForStorageLocation();
+            console.log('storageLocationDetails', storageLocationDetails);
+            if (storageLocationDetails) {
+              setNodeStorageLocation(storageLocationDetails.folderPath);
+              setNodeStorageLocationFreeStorageGBs(
+                storageLocationDetails.freeStorageGBs
+              );
+            } else {
+              // user didn't change the folder path
+            }
+          }}
+        />
+      </div>
+    </ContentWithSideArt>
   );
 };
 

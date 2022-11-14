@@ -17,14 +17,25 @@ export const baseButton = style({
     color: vars.color.fontDisabled,
     background: vars.color.backgroundDisabled,
   },
-  // offsets legacy value in app.css
-  ':hover': {
-    transform: 'none',
-  },
   fontWeight: 500,
   fontSize: 13,
   lineHeight: '16px',
   height: '32px',
+});
+
+export const ghostButton = style({
+  background: 'none',
+  border: 'none',
+  boxShadow: 'none',
+  color: vars.color.font,
+  selectors: {
+    '&:hover:enabled': {
+      background: vars.color.backgroundHoverGradient,
+    },
+    '&:active:enabled': {
+      background: vars.color.backgroundActiveGradient,
+    },
+  },
 });
 
 export const smallButton = style({

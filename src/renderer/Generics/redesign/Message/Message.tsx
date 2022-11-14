@@ -43,7 +43,7 @@ export interface MessageProps {
   /**
    * Message description
    */
-  description: string;
+  description?: string;
   /**
    * onClick event
    */
@@ -63,7 +63,7 @@ export const Message = ({
       </div>
       <div className={textContainer}>
         <div className={messageTitle}>{title}</div>
-        <div className={messageDescription}>{description}</div>
+        {description && <div className={messageDescription}>{description}</div>}
       </div>
       {onClick && (
         <div className={closeContainer}>

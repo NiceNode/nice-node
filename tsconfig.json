@@ -23,5 +23,12 @@
     // skip because github's macos-latest was checking lib types
     "skipLibCheck": true
   },
-  "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
+  "exclude": [
+    "test",
+    "release/build",
+    "release/app/dist",
+    ".erb/dll",
+    "storybook-static",
+    // "src/main/util/timestamp.js"
+  ]
 }

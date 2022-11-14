@@ -13,7 +13,6 @@ export const componentContainer = style({
   flexGrow: 1,
   overflow: 'auto',
   boxSizing: 'border-box',
-  paddingBottom: 20,
 });
 
 export const titleFont = style({
