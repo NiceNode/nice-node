@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import moment from 'moment';
 import { useAppSelector } from '../state/hooks';
 import { selectSelectedNode, selectSelectedNodeId } from '../state/node';
 
@@ -16,7 +17,6 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
   const [sLogs, setLogs] = useState<string[]>([]);
 
   const nodeLogsListener = (message: string[]) => {
-    // console.log('sLogs: ', message);
     setLogs((prevState) => {
       if (prevState.length < 1000) {
         return [...prevState, message[0]];
@@ -79,11 +79,13 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
           flexDirection: 'column-reverse',
         }}
       >
-        {sLogs.map((log, index) => {
+        {sLogs.map((log: any, index) => {
           return (
             // eslint-disable-next-line react/no-array-index-key
-            <p key={`${index} ${log}`} style={{ marginBlockEnd: 0 }}>
-              {log}
+            <p key={`${index}`} style={{ marginBlockEnd: 0 }}>
+              {`${moment.unix(log.timestamp).format('MMM DD HH:MM:ss:SSS')} ${
+                log.level
+              } ${log.message}`}
             </p>
           );
         })}

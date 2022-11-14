@@ -29,27 +29,27 @@ export const infoStyle = style({
   color: common.color.black25,
 });
 
-export const dateStyle = style({
+export const timestampStyle = style({
   width: 133,
   flex: 'none',
   order: 1,
   flexGrow: 0,
 });
 
-export const typeStyle = style({
+export const levelStyle = style({
   textTransform: 'uppercase',
   width: 35,
   flex: 'none',
   order: 2,
   flexGrow: 0,
   selectors: {
-    [`&.info`]: {
+    [`&.INFO`]: {
       color: common.color.blue600,
     },
-    [`&.warn`]: {
+    [`&.WARN`]: {
       color: common.color.orange500,
     },
-    [`&.error`]: {
+    [`&.ERROR`]: {
       color: common.color.red500,
     },
   },
