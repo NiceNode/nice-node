@@ -21,6 +21,7 @@ export interface InputProps {
 }
 
 const Input = ({
+  value,
   placeholder,
   required,
   disabled,
@@ -42,6 +43,7 @@ const Input = ({
         onChange: (evt) => {
           onChangeAction(evt);
         },
+        value,
       }}
     />
   );
