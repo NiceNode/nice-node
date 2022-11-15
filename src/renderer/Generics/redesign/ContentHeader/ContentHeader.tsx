@@ -10,6 +10,10 @@ import {
 
 export interface ContentHeaderProps {
   /**
+   * What's the text alignment?
+   */
+  textAlign?: string;
+  /**
    * What's the title?
    */
   title: string;
@@ -46,26 +50,27 @@ export const ContentHeader = ({
   title,
   subtitle,
   leftButtonIconId,
-  leftButtonOnClick,
+  leftButtonOnClick = () => {},
   rightButtonIconId,
-  rightButtonOnClick,
+  rightButtonOnClick = () => {},
   transparent,
+  textAlign,
 }: ContentHeaderProps) => {
   const transparentStyle = transparent ? 'transparent' : '';
   return (
     <div className={[container, transparentStyle].join(' ')}>
       {leftButtonIconId && (
         <div className={leftButtonContainer}>
-          <HeaderButton type={leftButtonIconId} />
+          <HeaderButton type={leftButtonIconId} onClick={leftButtonOnClick} />
         </div>
       )}
-      <div className={textContainer}>
+      <div className={[textContainer, textAlign].join(' ')}>
         <div className={titleStyle}>{title}</div>
         <div className={subtitleStyle}>{subtitle}</div>
       </div>
       {rightButtonIconId && (
         <div className={rightButtonContainer}>
-          <HeaderButton type={rightButtonIconId} />
+          <HeaderButton type={rightButtonIconId} onClick={rightButtonOnClick} />
         </div>
       )}
     </div>

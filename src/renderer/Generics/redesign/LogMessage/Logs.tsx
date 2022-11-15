@@ -16,6 +16,7 @@ import { LogMessage } from './LogMessage';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 import { HeaderButton } from '../HeaderButton/HeaderButton';
+import { ContentHeader } from '../ContentHeader/ContentHeader';
 
 const timeframes = {
   '30MINUTES': 30,
@@ -443,9 +444,12 @@ export const Logs = () => {
             }
           }}
         >
-          <HeaderButton
-            type="filter"
-            onClick={() => {
+          <ContentHeader
+            textAlign="left"
+            title="Logs"
+            leftButtonIconId="down"
+            rightButtonIconId="filter"
+            rightButtonOnClick={() => {
               if (isFilterBarDisplayed) {
                 setIsFilterBarDisplayed(false);
               } else {

@@ -33,13 +33,18 @@ export const textContainer = style({
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
+  textAlign: 'center',
+  selectors: {
+    [`&.left`]: {
+      textAlign: 'left',
+    },
+  },
 });
 
 export const titleStyle = style({
   fontWeight: 510,
   fontSize: '13px',
   lineHeight: '16px',
-  textAlign: 'center',
   letterSpacing: '-0.12px',
   color: vars.components.contentHeaderTitle,
   flex: 'none',
@@ -52,7 +57,6 @@ export const subtitleStyle = style({
   fontWeight: 400,
   fontSize: '11px',
   lineHeight: '14px',
-  textAlign: 'center',
   color: vars.components.contentHeaderSubtitle,
   flex: 'none',
   order: 1,

@@ -8,8 +8,6 @@ export const container = style({
 export const contentHeader = style({
   position: 'absolute',
   width: '100%',
-  background: 'white',
-  height: 52,
   zIndex: 1,
 });
 
