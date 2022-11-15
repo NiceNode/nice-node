@@ -5,6 +5,7 @@ export const common = {
     white100: '#FFFFFF',
     white90: 'rgba(255, 255, 255, 0.90)',
     white85: 'rgba(255, 255, 255, 0.85)',
+    white80: 'rgba(255, 255, 255, 0.80)',
     white70: 'rgba(255, 255, 255, 0.70)',
     white50: 'rgba(255, 255, 255, 0.50)',
     white40: 'rgba(255, 255, 255, 0.40)',
@@ -17,6 +18,7 @@ export const common = {
     black100: '#000002',
     black90: 'rgba(0, 0, 2, 0.90)',
     black85: 'rgba(0, 0, 2, 0.85)',
+    black80: 'rgba(0, 0, 2, 0.80)',
     black70: 'rgba(0, 0, 2, 0.70)',
     black50: 'rgba(0, 0, 2, 0.50)',
     black40: 'rgba(0, 0, 2, 0.40)',
@@ -204,6 +206,10 @@ export const [lightTheme, vars] = createTheme({
     checkboxBackground: common.color.white100,
     checkboxBorder: common.color.black25,
     menuItemSelectIcon: common.color.purple600,
+    contentHeaderBorderBottom: `1px solid ${common.color.black8}`,
+    contentHeaderBackground: common.color.white80,
+    contentHeaderTitle: common.color.black70,
+    contentHeaderSubtitle: common.color.black50,
   },
 });
 
@@ -292,5 +298,9 @@ export const darkTheme = createTheme(vars, {
     checkboxBackground: common.color.osMac,
     checkboxBorder: common.color.white25,
     menuItemSelectIcon: common.color.purple500,
+    contentHeaderBorderBottom: `1px solid ${common.color.black40}`,
+    contentHeaderBackground: `rgba(28, 28, 30, 0.8)`,
+    contentHeaderTitle: common.color.white85,
+    contentHeaderSubtitle: common.color.white50,
   },
 });

@@ -2,6 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
 
 export const container = style({
+  boxSizing: 'border-box',
   flex: 'none',
   display: 'flex',
   flexDirection: 'row',

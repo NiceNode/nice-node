@@ -25,10 +25,6 @@ export const container = style({
   letterSpacing: '0.24px',
 });
 
-export const infoStyle = style({
-  color: common.color.black25,
-});
-
 export const timestampStyle = style({
   width: 133,
   flex: 'none',
