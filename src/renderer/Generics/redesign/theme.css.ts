@@ -130,6 +130,7 @@ export const [lightTheme, vars] = createTheme({
     font40: common.color.black40,
     font50: common.color.black50,
     font70: common.color.black70,
+    font90: common.color.black90,
     fontDisabled: common.color.black25,
     background: common.color.white100,
     background96: common.color.black4,
@@ -210,6 +211,7 @@ export const [lightTheme, vars] = createTheme({
     contentHeaderBackground: common.color.white80,
     contentHeaderTitle: common.color.black70,
     contentHeaderSubtitle: common.color.black50,
+    filterBackground: common.color.white100,
   },
 });
 
@@ -222,6 +224,7 @@ export const darkTheme = createTheme(vars, {
     font40: common.color.white40,
     font50: common.color.white50,
     font70: common.color.white70,
+    font90: common.color.white90,
     fontDisabled: common.color.white25,
     background: 'rgba(28, 28, 30, 1)',
     background96: common.color.white4,
@@ -302,5 +305,6 @@ export const darkTheme = createTheme(vars, {
     contentHeaderBackground: `rgba(28, 28, 30, 0.8)`,
     contentHeaderTitle: common.color.white85,
     contentHeaderSubtitle: common.color.white50,
+    filterBackground: common.color.osMac,
   },
 });

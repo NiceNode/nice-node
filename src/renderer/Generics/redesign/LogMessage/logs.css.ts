@@ -25,8 +25,8 @@ export const filterContainer = style({
   alignItems: 'flex-start',
   padding: '8px 16px',
   gap: 4,
-  background: common.color.white100,
-  borderBottom: `1px solid rgba(0, 0, 0, 0.08)`,
+  background: vars.components.filterBackground,
+  borderBottom: vars.components.contentHeaderBorderBottom,
   boxShadow: vars.color.elevation2boxShadow,
 });
 

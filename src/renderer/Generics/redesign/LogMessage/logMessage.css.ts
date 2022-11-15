@@ -14,14 +14,13 @@ export const container = style({
   alignSelf: 'stretch',
   flexGrow: 0,
 
-  color: common.color.black90,
+  color: vars.color.font90,
   fontFamily: `'SF Mono', SFMono-Regular, ui-monospace,
   'DejaVu Sans Mono', Menlo, Consolas, monospace`,
   fontStyle: 'normal',
   fontWeight: 400,
   fontSize: '11px',
   lineHeight: '14px',
-
   letterSpacing: '0.24px',
 });
 
