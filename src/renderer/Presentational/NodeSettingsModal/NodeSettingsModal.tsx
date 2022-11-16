@@ -7,6 +7,7 @@ import DynamicSettings, {
 import { ConfigValuesMap } from '../../../common/nodeConfig';
 import { Message } from '../../Generics/redesign/Message/Message';
 import { SettingChangeHandler } from './NodeSettingsWrapper';
+import InternalLink from '../../Generics/redesign/Link/InternalLink';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Preference = 'theme' | 'isOpenOnStartup';
@@ -17,6 +18,7 @@ export interface NodeSettingsProps {
   configValuesMap?: ConfigValuesMap;
   isDisabled?: boolean;
   onChange?: SettingChangeHandler;
+  onClickRemoveNode: () => void;
 }
 
 const NodeSettings = ({
@@ -26,19 +28,20 @@ const NodeSettings = ({
   configValuesMap,
   isDisabled,
   onChange,
+  onClickRemoveNode,
 }: NodeSettingsProps) => {
-  const { t } = useTranslation('genericComponents');
+  const { t: tNiceNode } = useTranslation();
 
   return (
     <Modal
       isOpen={isOpen}
-      title={t('Node settings')}
+      title={tNiceNode('NodeSettings')}
       onClickCloseButton={onClickClose}
     >
       {isDisabled && (
         <Message
           type="warning"
-          title="The node must be stopped to make changes"
+          title={tNiceNode('StopeNodeToChangeSettings')}
         />
       )}
       {/* todo: tab1 */}
@@ -47,6 +50,12 @@ const NodeSettings = ({
         configValuesMap={configValuesMap}
         isDisabled={isDisabled}
         onChange={onChange}
+      />
+      {/* Remove Node link */}
+      <InternalLink
+        text={tNiceNode('RemoveThisNode')}
+        onClick={onClickRemoveNode}
+        danger
       />
     </Modal>
   );

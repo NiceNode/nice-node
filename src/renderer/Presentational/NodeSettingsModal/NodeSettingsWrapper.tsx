@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   ConfigTranslation,
   ConfigTranslationMap,
@@ -9,7 +9,10 @@ import electron from '../../electronGlobal';
 import { CategoryConfig } from '../../Generics/redesign/DynamicSettings/DynamicSettings';
 import { useAppSelector } from '../../state/hooks';
 import { selectSelectedNode } from '../../state/node';
-import NodeSettings from './NodeSettings';
+import RemoveNodeWrapper, {
+  RemoveNodeAction,
+} from '../RemoveNodeModal/RemoveNodeWrapper';
+import NodeSettings from './NodeSettingsModal';
 
 export type SettingChangeHandler = (
   configKey: string,
@@ -28,6 +31,8 @@ const NodeSettingsWrapper = ({
   const [sConfigTranslationMap, setConfigTranslationMap] =
     useState<ConfigTranslationMap>();
   const [sCategoryConfigs, setCategoryConfigs] = useState<CategoryConfig[]>();
+  const [sIsRemoveNodeModalOpen, setIsRemoveNodeModalOpen] =
+    useState<boolean>(false);
 
   const selectedNode = useAppSelector(selectSelectedNode);
 
@@ -125,15 +130,40 @@ const NodeSettingsWrapper = ({
     }
   };
 
+  const onClickRemoveNode = useCallback(() => {
+    setIsRemoveNodeModalOpen(true);
+  }, []);
+
+  const onCloseRemoveNode = useCallback(
+    (action: RemoveNodeAction) => {
+      // if node was removed, close the node settings
+      //  select another node?
+      // if remove node was "cancel"'d, keep settings open
+      console.log('NodeSettingsWrapper: onCloseRemoveNode');
+      setIsRemoveNodeModalOpen(false);
+      if (action === 'remove') {
+        onClickClose();
+      }
+    },
+    [onClickClose]
+  );
+
   return (
-    <NodeSettings
-      isOpen={isOpen}
-      onClickClose={onClickClose}
-      categoryConfigs={sCategoryConfigs}
-      configValuesMap={selectedNode?.config.configValuesMap}
-      isDisabled={sIsConfigDisabled}
-      onChange={onNodeConfigChange}
-    />
+    <>
+      <NodeSettings
+        isOpen={isOpen}
+        onClickClose={onClickClose}
+        categoryConfigs={sCategoryConfigs}
+        configValuesMap={selectedNode?.config.configValuesMap}
+        isDisabled={sIsConfigDisabled}
+        onChange={onNodeConfigChange}
+        onClickRemoveNode={onClickRemoveNode}
+      />
+      <RemoveNodeWrapper
+        isOpen={sIsRemoveNodeModalOpen}
+        onClose={onCloseRemoveNode}
+      />
+    </>
   );
 };
 
