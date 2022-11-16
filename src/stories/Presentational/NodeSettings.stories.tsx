@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { ConfigValuesMap } from '../../common/nodeConfig';
 
-import NodeSettings from '../../renderer/Presentational/NodeSettingsModal/NodeSettings';
+import NodeSettings from '../../renderer/Presentational/NodeSettingsModal/NodeSettingsModal';
 
 export default {
   title: 'Presentational/NodeSettings',

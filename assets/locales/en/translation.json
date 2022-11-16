@@ -4,6 +4,7 @@
   "Add Node": "Add Node",
   "NodeSettings": "Node settings",
   "StopeNodeToChangeSettings": "The node must be stopped to make changes",
+  "RemoveNode": "Remove node",
   "RemoveThisNode": "Remove this node",
   "Install Docker": "Install Docker",
   "Confirm": "Confirm",
@@ -59,5 +60,6 @@
   "DockerUncheckOpenAtStartup": "Settings -> Unchceck \"Open Docker at startup\"",
   "GetStarted": "Get started",
   "WelcomeToNiceNode": "Welcome to NiceNode",
-  "WelcomeToNiceNodeDescription": "Run a node how you want it — without commands and a terminal. NiceNode shows what the node is doing at a glance. Stats like how many peer nodes are connected and synching progress are built into the app."
+  "WelcomeToNiceNodeDescription": "Run a node how you want it — without commands and a terminal. NiceNode shows what the node is doing at a glance. Stats like how many peer nodes are connected and synching progress are built into the app.",
+  "DeleteNodeDataQuestion": "Delete all of the node chain data?"
 }

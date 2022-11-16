@@ -116,6 +116,9 @@ export const removeNode = async (
 ): Promise<Node> => {
   // todo: check if node can be removed. Is it stopped?
   // todo: stop & remove container
+  logger.info(
+    `Remove node ${nodeId} and delete storage? ${options.isDeleteStorage}`
+  );
   try {
     await stopNode(nodeId);
   } catch (err) {
