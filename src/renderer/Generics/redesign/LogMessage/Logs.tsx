@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from 'react';
+import { SetStateAction, useState, useEffect } from 'react';
 import moment from 'moment';
 import {
   container,
@@ -9,6 +9,8 @@ import {
   timeframeFilterContainer,
   filterMenu,
   logsContainer,
+  spacer,
+  clearFilters,
 } from './logs.css';
 import { Menu } from '../Menu/Menu';
 import { MenuItem } from '../MenuItem/MenuItem';
@@ -43,6 +45,7 @@ const isWithinTimeframe = (timestamp: number, timeframe: number) => {
 };
 
 export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
+  const [logs, setLogs] = useState<string[]>([]);
   const [isFilterBarDisplayed, setIsFilterBarDisplayed] =
     useState<boolean>(false);
   const [isTypeFilterDisplayed, setIsTypeFilterDisplayed] =
@@ -59,6 +62,7 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
       setTypeFilter(type);
     }
   };
+
   const onClickSetTimeframeFilter = (timeframe: SetStateAction<number>) => {
     if (timeframeFilter !== 0 && timeframeFilter === timeframe) {
       setTimeframeFilter(0);
@@ -67,7 +71,7 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
     }
   };
 
-  const filteredLogMessages = sLogs
+  const filteredLogMessages = logs
     .filter((log: any) => {
       if (
         (typeFilter === '' || log.level === typeFilter) &&
@@ -80,6 +84,19 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
       return false;
     })
     .map((log: any) => <LogMessage {...log} />);
+
+  const filterExists =
+    timeframeFilter !== 0 || typeFilter !== '' || textFilter !== '';
+
+  const resetFilters = () => {
+    setTextFilter('');
+    setTypeFilter('');
+    setTimeframeFilter(0);
+  };
+
+  useEffect(() => {
+    setLogs(sLogs);
+  }, [sLogs]);
 
   return (
     <>
@@ -258,6 +275,20 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
                   </div>
                 )}
               </div>
+              {filterExists && (
+                <>
+                  <div className={spacer} />
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className={clearFilters}
+                    onClick={resetFilters}
+                    onKeyDown={resetFilters}
+                  >
+                    Clear all filters
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAppSelector } from '../state/hooks';
-import { selectSelectedNode, selectSelectedNodeId } from '../state/node';
+import { selectSelectedNodeId } from '../state/node';
 
 import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';

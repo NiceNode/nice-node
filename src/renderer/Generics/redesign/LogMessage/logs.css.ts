@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '../theme.css';
+import { vars, common } from '../theme.css';
 
 export const container = style({
   position: 'relative',
@@ -22,7 +22,7 @@ export const filterContainer = style({
   boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'row',
-  alignItems: 'flex-start',
+  alignItems: 'baseline',
   padding: '8px 16px',
   gap: 4,
   background: vars.components.filterBackground,
@@ -43,7 +43,18 @@ export const typeFilterContainer = style({
   width: 158,
   position: 'relative',
 });
+
 export const timeframeFilterContainer = style({
   width: 148,
   position: 'relative',
+});
+
+export const spacer = style({
+  alignSelf: 'stretch',
+  flexGrow: 1,
+});
+
+export const clearFilters = style({
+  cursor: 'pointer',
+  color: common.color.purple600,
 });
