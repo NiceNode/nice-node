@@ -9,6 +9,7 @@ import {
   iconLeft,
   iconStyle,
   ghostButton,
+  dangerButton,
 } from './button.css';
 
 export interface ButtonProps {
@@ -24,6 +25,10 @@ export interface ButtonProps {
    * Text only, with icon, or just icon?
    */
   variant?: 'text' | 'icon-left' | 'icon-right' | 'icon';
+  /**
+   * Type of button, determines styling and color
+   */
+  type?: 'primary' | 'secondary' | 'ghost' | 'danger';
   /**
    * Is this button wide?
    */
@@ -44,6 +49,7 @@ const Button = ({
   size = 'medium',
   disabled = false,
   variant = 'text',
+  type = 'secondary',
   iconId = 'settings',
   wide = false,
   ghost = false,
@@ -51,7 +57,17 @@ const Button = ({
   label,
   ...props
 }: ButtonProps) => {
+  // initialization makes type backwards compatible with primary
   let buttonStyle = primary ? primaryButton : secondaryButton;
+  if (type === 'secondary') {
+    buttonStyle = secondaryButton;
+  } else if (type === 'primary') {
+    buttonStyle = primaryButton;
+  } else if (type === 'ghost') {
+    buttonStyle = ghostButton;
+  } else if (type === 'danger') {
+    buttonStyle = dangerButton;
+  }
   if (ghost) {
     buttonStyle = ghostButton;
   }
