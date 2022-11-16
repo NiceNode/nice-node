@@ -51,7 +51,7 @@ export const levelStyle = style({
 });
 
 export const messageStyle = style({
-  flex: 'none',
   order: 3,
   flexGrow: 1,
+  overflowWrap: 'anywhere',
 });
