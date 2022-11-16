@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import moment from 'moment';
 import { useAppSelector } from '../state/hooks';
 import { selectSelectedNode, selectSelectedNodeId } from '../state/node';
 
@@ -14,7 +13,6 @@ type Props = {
 
 const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
-  const sSelectedNode = useAppSelector(selectSelectedNode);
   const [sLogs, setLogs] = useState<string[]>([]);
 
   const nodeLogsListener = (message: string[]) => {

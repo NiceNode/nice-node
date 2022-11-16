@@ -21,7 +21,7 @@ export interface LogsProps {
   /**
    * sLogs props
    */
-  sLogs: any;
+  sLogs: string[];
   onClickCloseButton: () => void;
 }
 

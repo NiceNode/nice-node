@@ -30,14 +30,12 @@ const MenuDrawerStyled = styled.div`
 `;
 
 type Props = {
-  title: string;
   isSelected: boolean;
-  onClickCloseButton: () => void;
   children: React.ReactNode;
 };
 
 const MenuDrawer: React.FC<Props> = (props) => {
-  const { title, isSelected, onClickCloseButton, children } = props;
+  const { isSelected, children } = props;
   return (
     <MenuDrawerStyled className={isSelected ? 'show' : 'hidde'}>
       {children}
