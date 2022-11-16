@@ -48,20 +48,18 @@ export const wideButton = style({
   width: '100%',
 });
 
-export const primaryButton = style([
-  {
-    color: common.color.white100,
-    background: vars.color.primary,
-    selectors: {
-      '&:hover:enabled': {
-        background: vars.color.primaryHover,
-      },
-      '&:active:enabled': {
-        background: vars.color.primaryActive,
-      },
+export const primaryButton = style({
+  color: common.color.white100,
+  background: vars.color.primary,
+  selectors: {
+    '&:hover:enabled': {
+      background: vars.color.primaryHover,
+    },
+    '&:active:enabled': {
+      background: vars.color.primaryActive,
     },
   },
-]);
+});
 
 export const secondaryButton = style([
   {
@@ -78,6 +76,19 @@ export const secondaryButton = style([
     },
   },
 ]);
+
+export const dangerButton = style({
+  color: common.color.white100,
+  background: common.color.red500,
+  selectors: {
+    '&:hover:enabled': {
+      background: common.color.red600,
+    },
+    '&:active:enabled': {
+      background: common.color.red600,
+    },
+  },
+});
 
 export const iconLeft = style({
   order: 1,
