@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars, common } from '../theme.css';
+import { vars } from '../theme.css';
 
 export const container = style({
   position: 'relative',

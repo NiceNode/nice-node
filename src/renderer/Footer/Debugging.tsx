@@ -5,6 +5,7 @@ import { selectSelectedNode, selectSelectedNodeId } from '../state/node';
 
 import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
+import { Logs } from '../Generics/redesign/LogMessage/Logs';
 
 type Props = {
   isOpen: boolean | undefined;
@@ -66,30 +67,8 @@ const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
   }, [isOpen, sSelectedNodeId]);
 
   return (
-    <MenuDrawer
-      title={`${sSelectedNode?.spec.displayName} Logs`}
-      isSelected={!!isOpen}
-      onClickCloseButton={onClickCloseButton}
-    >
-      <em>Newest logs at the top</em>
-      <div
-        style={{
-          overflow: 'auto',
-          display: 'flex',
-          flexDirection: 'column-reverse',
-        }}
-      >
-        {sLogs.map((log: any, index) => {
-          return (
-            // eslint-disable-next-line react/no-array-index-key
-            <p key={`${index}`} style={{ marginBlockEnd: 0 }}>
-              {`${moment.unix(log.timestamp).format('MMM DD HH:MM:ss:SSS')} ${
-                log.level
-              } ${log.message}`}
-            </p>
-          );
-        })}
-      </div>
+    <MenuDrawer isSelected={!!isOpen}>
+      <Logs sLogs={sLogs} onClickCloseButton={onClickCloseButton} />
     </MenuDrawer>
   );
 };

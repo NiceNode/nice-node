@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { Icon } from '../Icon/Icon';
 import {
   container,
   timestampStyle,
