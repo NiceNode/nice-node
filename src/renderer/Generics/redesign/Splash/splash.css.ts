@@ -7,6 +7,9 @@ export const container = style({
   backgroundSize: '1281px 169px',
   width: '100%',
   height: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 });
 
 export const contentContainer = style({
@@ -14,11 +17,8 @@ export const contentContainer = style({
   display: 'flex',
   flexDirection: 'column',
   gap: 24,
-  position: 'absolute',
   width: 420,
   height: 378,
-  left: 'calc(50% - 420px/2)',
-  top: 'calc(50% - 378px/2 - 16px)',
 });
 
 export const titleFont = style({
