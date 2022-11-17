@@ -129,6 +129,7 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
             <div className={filterContainer}>
               <div className={textFilterContainer}>
                 <Input
+                  leftIconId="search"
                   value={textFilter}
                   placeholder="Search..."
                   onChange={(text: string) => {

@@ -2,10 +2,31 @@ import { style } from '@vanilla-extract/css';
 import { common, vars } from '../theme.css';
 
 export const container = style({
+  position: 'relative',
+});
+
+export const leftIconContainer = style({
+  position: 'absolute',
+  left: 8,
+  top: 6,
+  color: vars.color.font70,
+});
+
+export const rightIconContainer = style({
+  position: 'absolute',
+  right: 8,
+  top: 6,
+  color: vars.color.font70,
+});
+
+export const inputContainer = style({
   height: '16px',
   display: 'block',
   width: '-webkit-fill-available',
-  padding: '6px 8px',
+  paddingTop: 6,
+  paddingBottom: 6,
+  paddingLeft: 8,
+  paddingRight: 8,
   backgroundColor: vars.color.background,
   backgroundClip: 'padding-box',
   color: 'inherit',
@@ -13,6 +34,14 @@ export const container = style({
   borderColor: vars.color.border,
   borderRadius: '4px',
   transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+  selectors: {
+    [`&.leftIcon`]: {
+      paddingLeft: 32,
+    },
+    [`&.rightIcon`]: {
+      paddingRight: 32,
+    },
+  },
   ':focus': {
     border: '1px solid',
     borderColor: vars.color.primary,
