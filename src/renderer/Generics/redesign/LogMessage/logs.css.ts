@@ -45,6 +45,7 @@ export const filterMenu = style({
 export const typeFilterContainer = style({
   width: 158,
   position: 'relative',
+  textAlign: 'left',
 });
 
 export const timeframeFilterContainer = style({

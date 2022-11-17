@@ -38,6 +38,33 @@ const timeframes = {
   '1MONTH': 43800,
 };
 
+type TimeframeLabelProps = {
+  [key: number]: string;
+};
+
+type TypeLabelProps = {
+  [key: string]: string;
+};
+
+const typeLabels: TypeLabelProps = {
+  '': 'All message types',
+  INFO: 'Info',
+  WARN: 'Warnings',
+  ERROR: 'Errors',
+};
+
+const timeframeLabels: TimeframeLabelProps = {
+  0: 'All timeframes',
+  30: 'Last 30 minutes',
+  60: 'Last hour',
+  360: 'Last 6 hours',
+  720: 'Last 12 hours',
+  1440: 'Last day',
+  4320: 'Last 3 days',
+  10080: 'Last week',
+  43800: 'Last month',
+};
+
 const isWithinTimeframe = (timestamp: number, timeframe: number) => {
   const nowTime = moment().format();
   const beforeTime = moment().subtract(timeframe, 'minutes').format();
@@ -98,6 +125,9 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
     setLogs(sLogs);
   }, [sLogs]);
 
+  const typeLabel = typeLabels[typeFilter];
+  const timeframeLabel = timeframeLabels[timeframeFilter];
+
   return (
     <>
       <div className={container}>
@@ -146,11 +176,12 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
                 }}
               >
                 <Button
+                  spaceBetween
                   wide
                   iconId="down"
                   size="small"
                   variant="icon-right"
-                  label="All message types"
+                  label={typeLabel}
                   onClick={() => {
                     if (isTypeFilterDisplayed) {
                       setIsTypeFilterDisplayed(false);
@@ -196,7 +227,7 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
                   iconId="down"
                   size="small"
                   variant="icon-right"
-                  label="Last week"
+                  label={timeframeLabel}
                   onClick={() => {
                     if (isTimeframeFilterDisplayed) {
                       setIsTimeframeFilterDisplayed(false);

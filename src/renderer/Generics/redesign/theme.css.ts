@@ -304,7 +304,7 @@ export const darkTheme = createTheme(vars, {
     checkboxBorder: common.color.white25,
     menuItemSelectIcon: common.color.purple500,
     contentHeaderBorderBottom: `1px solid ${common.color.black40}`,
-    contentHeaderBackground: `rgba(28, 28, 30, 0.8)`,
+    contentHeaderBackground: common.color.osMac,
     contentHeaderTitle: common.color.white85,
     contentHeaderSubtitle: common.color.white50,
     filterBackground: common.color.osMac,

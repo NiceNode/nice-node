@@ -48,6 +48,10 @@ export const wideButton = style({
   width: '100%',
 });
 
+export const spaceBetweenButton = style({
+  justifyContent: 'space-between',
+});
+
 export const primaryButton = style({
   color: common.color.white100,
   background: vars.color.primary,
