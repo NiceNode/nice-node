@@ -18,7 +18,7 @@ export interface CheckboxProps {
   /**
    * Optional change handler
    */
-  onClick?: () => void;
+  onClick?: (isChecked: boolean) => void;
 }
 
 /**
@@ -30,13 +30,8 @@ export const Checkbox = ({
   disabled = false,
   onClick,
 }: CheckboxProps) => {
-  const onChangeAction = () => {
-    if (!disabled && onClick) {
-      onClick();
-    }
-  };
+  const [sIsChecked, setIsChecked] = useState(checked);
 
-  const [isChecked, setChecked] = useState(checked);
   const disabledStyle = disabled ? 'disabled' : '';
   // TODO: implement indeterminate
   return (
@@ -47,13 +42,15 @@ export const Checkbox = ({
           className: checkbox,
           type: 'checkbox',
           // TODO: fix checked when text is pressed in MenuItem
-          checked: isChecked,
-          defaultChecked: isChecked,
+          checked: sIsChecked,
           ...(disabled && { disabled }),
           onChange: () => {
-            setChecked(!isChecked);
-            if (onClick) {
-              onChangeAction();
+            // protect against unpredictable state update occurring
+            //   before or after onClick callback
+            const isCheckedBeforeAction = sIsChecked;
+            setIsChecked(!isCheckedBeforeAction);
+            if (onClick && !disabled) {
+              onClick(!isCheckedBeforeAction);
             }
           },
         }}

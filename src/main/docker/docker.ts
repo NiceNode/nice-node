@@ -33,11 +33,11 @@ let docker: Docker;
 let dockerWatchProcess: ChildProcess;
 
 const runCommand = async (command: string) => {
-  if (!command.includes('stats')) {
+  if (!command.includes('stats') && !command.includes('info')) {
     logger.info(`Running docker ${command}`);
   }
   const data = await docker.command(command);
-  if (!command.includes('stats')) {
+  if (!command.includes('stats') && !command.includes('info')) {
     logger.info(`DOCKER ${command} data: ${JSON.stringify(data)}`);
   }
   return data;
@@ -429,17 +429,18 @@ export const isDockerRunning = async () => {
   let bIsDockerRunning;
   logger.info('Checking isDockerRunning...');
   try {
-    const infoResult = await runCommand('info');
-    console.log('docker isDockerRunning infoResult: ', infoResult);
+    // Docker is running if the info command did not throw error.
+    await runCommand('info');
     bIsDockerRunning = true;
-    logger.info('Docker is running. Docker info command did not throw error.');
   } catch (err) {
     // [mac verified] "error cannot connect to the docker dameon"
     logger.error(err);
     bIsDockerRunning = false;
     logger.info('Docker engine not found.');
   }
-  logger.info(`isDockerRunning: ${bIsDockerRunning}`);
+  if (!bIsDockerRunning) {
+    logger.info(`isDockerRunning: ${bIsDockerRunning}`);
+  }
   return bIsDockerRunning;
 };
 
