@@ -3,11 +3,14 @@ import { vars, common } from '../theme.css';
 
 export const container = style({
   position: 'relative',
+  maxWidth: '100%',
+  width: 'inherit',
 });
 
 export const contentHeader = style({
-  position: 'absolute',
-  width: '100%',
+  position: 'fixed',
+  maxWidth: 'inherit',
+  width: 'inherit',
   zIndex: 1,
 });
 
