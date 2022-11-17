@@ -15,7 +15,7 @@ export const contentHeader = style({
 });
 
 export const logsContainer = style({
-  paddingTop: 52,
+  padding: '52px 17px 0px 17px',
   position: 'relative',
 });
 
