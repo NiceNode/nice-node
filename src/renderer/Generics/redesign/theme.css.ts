@@ -209,7 +209,7 @@ export const [lightTheme, vars] = createTheme({
     checkboxBorder: common.color.black25,
     menuItemSelectIcon: common.color.purple600,
     contentHeaderBorderBottom: `1px solid ${common.color.black8}`,
-    contentHeaderBackground: common.color.white80,
+    contentHeaderBackground: common.color.white100,
     contentHeaderTitle: common.color.black70,
     contentHeaderSubtitle: common.color.black50,
     filterBackground: common.color.white100,
