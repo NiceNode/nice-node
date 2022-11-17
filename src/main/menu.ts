@@ -59,11 +59,17 @@ export default class MenuBuilder {
 
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
-      label: 'Electron',
+      label: 'NiceNode',
       submenu: [
         {
           label: 'About NiceNode',
           selector: 'orderFrontStandardAboutPanel:',
+        },
+        {
+          label: 'Check for updates...',
+          click() {
+            checkForUpdates(true);
+          },
         },
         { type: 'separator' },
         {
@@ -71,7 +77,6 @@ export default class MenuBuilder {
           accelerator: 'Command+H',
           selector: 'hide:',
         },
-        { label: 'Show All', selector: 'unhideAllApplications:' },
         { type: 'separator' },
         {
           label: 'Quit',
@@ -137,25 +142,12 @@ export default class MenuBuilder {
       label: 'Help',
       submenu: [
         {
-          label: 'Documentation',
+          label: 'NiceNode Website',
           click() {
             shell.openExternal('https://nicenode.xyz');
           },
         },
-        {
-          label: 'Computer Hardware Requirements',
-          click() {
-            shell.openExternal(
-              'https://ethereum.org/en/run-a-node/#build-your-own'
-            );
-          },
-        },
-        {
-          label: 'Show Splash Screen On Launch',
-          click() {
-            getSetHasSeenSplashscreen(false);
-          },
-        },
+        { type: 'separator' },
         {
           label: 'Report Problems',
           click() {
@@ -168,10 +160,11 @@ export default class MenuBuilder {
             clipboard.writeText(getDebugInfoString());
           },
         },
+        { type: 'separator' },
         {
-          label: 'Check for updates...',
+          label: 'Show Splash Screen On Launch',
           click() {
-            checkForUpdates(true);
+            getSetHasSeenSplashscreen(false);
           },
         },
       ],
@@ -189,17 +182,12 @@ export default class MenuBuilder {
   buildDefaultTemplate() {
     const templateDefault = [
       {
-        label: '&File',
+        label: '&NiceNode',
         submenu: [
           {
-            label: '&Open',
-            accelerator: 'Ctrl+O',
-          },
-          {
-            label: '&Close',
-            accelerator: 'Ctrl+W',
-            click: () => {
-              this.mainWindow.close();
+            label: 'Check for updates...',
+            click() {
+              checkForUpdates(true);
             },
           },
         ],
@@ -244,23 +232,22 @@ export default class MenuBuilder {
                     );
                   },
                 },
+                {
+                  label: '&Close',
+                  accelerator: 'Ctrl+W',
+                  click: () => {
+                    this.mainWindow.close();
+                  },
+                },
               ],
       },
       {
         label: 'Help',
         submenu: [
           {
-            label: 'NiceNode Documentation',
+            label: 'NiceNode Website',
             click() {
               shell.openExternal('https://nicenode.xyz');
-            },
-          },
-          {
-            label: 'Computer Hardware Requirements',
-            click() {
-              shell.openExternal(
-                'https://ethereum.org/en/run-a-node/#build-your-own'
-              );
             },
           },
           {
@@ -273,12 +260,6 @@ export default class MenuBuilder {
             label: 'Copy Configuration Details to Clipboard',
             click() {
               clipboard.writeText(getDebugInfoString());
-            },
-          },
-          {
-            label: 'Check for updates...',
-            click() {
-              checkForUpdates(true);
             },
           },
         ],
