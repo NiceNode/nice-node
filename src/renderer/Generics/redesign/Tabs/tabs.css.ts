@@ -15,4 +15,12 @@ export const tabsList = style({
 
 export const tabContent = style({
   marginTop: 36,
+  selectors: {
+    '&.modal': {
+      height: '40vh',
+      overflow: 'auto',
+      // extra padding from scrollbar
+      paddingRight: 10,
+    },
+  },
 });

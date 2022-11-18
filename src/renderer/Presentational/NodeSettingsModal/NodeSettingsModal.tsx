@@ -37,26 +37,30 @@ const NodeSettings = ({
       isOpen={isOpen}
       title={tNiceNode('NodeSettings')}
       onClickCloseButton={onClickClose}
+      tabs
     >
-      {isDisabled && (
-        <Message
-          type="warning"
-          title={tNiceNode('StopeNodeToChangeSettings')}
+      <div id="General">
+        {isDisabled && (
+          <Message
+            type="warning"
+            title={tNiceNode('StopeNodeToChangeSettings')}
+          />
+        )}
+        {/* todo: tab1 */}
+        <DynamicSettings
+          categoryConfigs={categoryConfigs}
+          configValuesMap={configValuesMap}
+          isDisabled={isDisabled}
+          onChange={onChange}
         />
-      )}
-      {/* todo: tab1 */}
-      <DynamicSettings
-        categoryConfigs={categoryConfigs}
-        configValuesMap={configValuesMap}
-        isDisabled={isDisabled}
-        onChange={onChange}
-      />
-      {/* Remove Node link */}
-      <InternalLink
-        text={tNiceNode('RemoveThisNode')}
-        onClick={onClickRemoveNode}
-        danger
-      />
+        {/* Remove Node link */}
+        <InternalLink
+          text={tNiceNode('RemoveThisNode')}
+          onClick={onClickRemoveNode}
+          danger
+        />
+      </div>
+      <div id="Wallet Connections">Wallet Connections content</div>
     </Modal>
   );
 };

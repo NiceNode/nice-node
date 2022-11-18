@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import Button from '../Button/Button';
+import { Tabs } from '../Tabs/Tabs';
 import {
   modalBackdropStyle,
   modalChildrenContainer,
@@ -13,6 +14,7 @@ type Props = {
   onClickCloseButton: () => void;
   title: string;
   isFullScreen?: boolean;
+  tabs?: boolean;
 };
 
 export const Modal = ({
@@ -21,6 +23,7 @@ export const Modal = ({
   onClickCloseButton,
   title,
   isFullScreen,
+  tabs,
 }: Props) => {
   const escFunction = useCallback(
     (event) => {
@@ -39,6 +42,13 @@ export const Modal = ({
       document.removeEventListener('keydown', escFunction, false);
     };
   }, [escFunction]);
+
+  const renderContent = () => {
+    if (tabs) {
+      return <Tabs modal>{children}</Tabs>;
+    }
+    return <div className={modalChildrenContainer}>{children}</div>;
+  };
 
   return (
     <div
@@ -71,7 +81,7 @@ export const Modal = ({
             {title}
           </span>
         </div>
-        <div className={modalChildrenContainer}>{children}</div>
+        {renderContent()}
       </div>
     </div>
   );
