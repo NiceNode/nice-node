@@ -2,6 +2,7 @@
 // import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 // import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
 import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
+import { TabContent } from '../../Generics/redesign/TabContent/TabContent';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
@@ -68,7 +69,9 @@ const ContentSingleClient = (props: SingleNodeContent) => {
       <HeaderMetrics {...(nodeOverview as unknown as NodeOverviewProps)} />
       <HorizontalLine type="above-tab" />
       <Tabs>
-        <div id="Sync">Sync content goes here!</div>
+        <div id="Sync">
+          <TabContent tabId="Sync" />
+        </div>
         <div id="CPU">CPU content goes here!</div>
         <div id="Memory">Memory content goes here!</div>
         <div id="Network">Network content goes here!</div>
