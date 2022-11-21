@@ -6,10 +6,9 @@ import InstallDocker from '../Docker/InstallDocker';
 
 type Props = {
   isOpen: boolean | undefined;
-  onClickCloseButton: () => void;
 };
 
-const Docker = ({ isOpen, onClickCloseButton }: Props) => {
+const Docker = ({ isOpen }: Props) => {
   const qIsDockerInstalled = useGetIsDockerInstalledQuery();
   useEffect(() => {
     if (isOpen) {

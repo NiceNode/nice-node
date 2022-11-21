@@ -108,10 +108,7 @@ const Footer = () => {
         onClickCloseButton={onCloseDrawer}
       />
       {!isDockerInstalled && (
-        <Docker
-          isOpen={sSelectedMenuDrawer === 'docker'}
-          onClickCloseButton={onCloseDrawer}
-        />
+        <Docker isOpen={sSelectedMenuDrawer === 'docker'} />
       )}
     </div>
   );
