@@ -109,11 +109,7 @@ const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
   }, [isOpen]);
 
   return (
-    <MenuDrawer
-      title="Monitoring"
-      isSelected={!!isOpen}
-      onClickCloseButton={onClickCloseButton}
-    >
+    <MenuDrawer isSelected={!!isOpen} onClickCloseButton={onClickCloseButton}>
       <div style={{ flex: 1, overflow: 'auto' }}>
         <h2>Storage</h2>
         <div>

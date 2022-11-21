@@ -19,11 +19,7 @@ const Docker = ({ isOpen, onClickCloseButton }: Props) => {
   }, [isOpen]);
 
   return (
-    <MenuDrawer
-      title="Docker"
-      isSelected={!!isOpen}
-      onClickCloseButton={onClickCloseButton}
-    >
+    <MenuDrawer isSelected={!!isOpen} onClickCloseButton={onClickCloseButton}>
       <div style={{ flex: 1, overflow: 'auto' }}>
         <InstallDocker />
       </div>
