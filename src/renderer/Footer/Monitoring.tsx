@@ -11,11 +11,9 @@ import { SystemMonitor } from '../Generics/redesign/SystemMonitor/SystemMonitor'
 
 type Props = {
   isOpen: boolean | undefined;
-  onClickCloseButton?: () => void;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Monitoring = ({ isOpen, onClickCloseButton }: Props) => {
+const Monitoring = ({ isOpen }: Props) => {
   const selectedNode = useAppSelector(selectSelectedNode);
   const sFreeDisk = useAppSelector(selectNumFreeDiskGB);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

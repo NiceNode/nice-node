@@ -103,10 +103,7 @@ const Footer = () => {
         isOpen={sSelectedMenuDrawer === 'debugging'}
         onClickCloseButton={onCloseDrawer}
       />
-      <Monitoring
-        isOpen={sSelectedMenuDrawer === 'monitoring'}
-        onClickCloseButton={onCloseDrawer}
-      />
+      <Monitoring isOpen={sSelectedMenuDrawer === 'monitoring'} />
       {!isDockerInstalled && (
         <Docker isOpen={sSelectedMenuDrawer === 'docker'} />
       )}
