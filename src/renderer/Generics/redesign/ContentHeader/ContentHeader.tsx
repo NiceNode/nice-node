@@ -1,4 +1,4 @@
-import { HeaderButtonProps, HeaderButton } from '../HeaderButton/HeaderButton';
+import { HeaderButton } from '../HeaderButton/HeaderButton';
 import {
   container,
   textContainer,
@@ -24,7 +24,7 @@ export interface ContentHeaderProps {
   /**
    * Is there left button?
    */
-  leftButtonIconId?: HeaderButtonProps;
+  leftButtonIconId?: string;
   /**
    * Is there onClick event on the left button?
    */
@@ -32,7 +32,7 @@ export interface ContentHeaderProps {
   /**
    * Is there right button?
    */
-  rightButtonIconId?: HeaderButtonProps;
+  rightButtonIconId?: string;
   /**
    * Is there onClick event on the right button?
    */
