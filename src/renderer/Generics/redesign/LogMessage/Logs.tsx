@@ -18,12 +18,13 @@ import { LogMessage } from './LogMessage';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
 import { ContentHeader } from '../ContentHeader/ContentHeader';
+import { LogWithMetadata } from '../../../../main/util/nodeLogUtils';
 
 export interface LogsProps {
   /**
    * sLogs props
    */
-  sLogs: string[];
+  sLogs: LogWithMetadata[];
   onClickCloseButton: () => void;
 }
 
@@ -72,7 +73,7 @@ const isWithinTimeframe = (timestamp: number, timeframe: number) => {
 };
 
 export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
-  const [logs, setLogs] = useState<string[]>([]);
+  const [logs, setLogs] = useState<LogWithMetadata[]>([]);
   const [isFilterBarDisplayed, setIsFilterBarDisplayed] =
     useState<boolean>(false);
   const [isTypeFilterDisplayed, setIsTypeFilterDisplayed] =

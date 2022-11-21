@@ -5,6 +5,7 @@ import { selectSelectedNodeId } from '../state/node';
 import electron from '../electronGlobal';
 import MenuDrawer from './MenuDrawer';
 import { Logs } from '../Generics/redesign/LogMessage/Logs';
+import { LogWithMetadata } from '../../main/util/nodeLogUtils';
 
 type Props = {
   isOpen: boolean | undefined;
@@ -13,9 +14,9 @@ type Props = {
 
 const Debugging = ({ isOpen, onClickCloseButton }: Props) => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
-  const [sLogs, setLogs] = useState<string[]>([]);
+  const [sLogs, setLogs] = useState<LogWithMetadata[]>([]);
 
-  const nodeLogsListener = (message: string[]) => {
+  const nodeLogsListener = (message: LogWithMetadata[]) => {
     setLogs((prevState) => {
       if (prevState.length < 1000) {
         return [...prevState, message[0]];
