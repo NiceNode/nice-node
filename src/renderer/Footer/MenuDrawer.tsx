@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { vars } from 'renderer/Generics/redesign/theme.css';
+import { vars } from '../Generics/redesign/theme.css';
 import { HEADER_HEIGHT } from '../Header';
 // eslint-disable-next-line import/no-cycle
 // import { FOOTER_HEIGHT } from './Footer';
