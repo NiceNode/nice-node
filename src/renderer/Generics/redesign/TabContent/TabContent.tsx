@@ -1,9 +1,53 @@
 import React, { useState } from 'react';
 import { container } from './tabContent.css';
 import LabelValues from '../LabelValues/LabelValues';
+import { getBreakdown } from './getBreakdown';
 
 export interface TabContentProps {
   tabId: string;
+}
+
+export interface GranularNodeDataProps {
+  sync: {
+    maximumBlocksBehind: string;
+    minimumBlockTime: string;
+    maximumBlockTime: string;
+    averageBlockTime: string;
+    totalDownTime: string;
+  };
+  cpu: {
+    minimumUsage: string;
+    maxUsage: string;
+    averageUsage: string;
+  };
+  memory: {
+    minimumUsage: string;
+    maxUsage: string;
+    averageUsage: string;
+  };
+  network: {
+    dataReceived: string;
+    dataSent: string;
+    highestPeerCount: string;
+    lowestPeerCount: string;
+    averagePeerCount: string;
+    highestDownloadSpeed: string;
+    lowestDownloadSpeed: string;
+    averageDownloadSpeed: string;
+    highestUploadSpeed: string;
+    lowestUploadSpeed: string;
+    averageUploadSpeed: string;
+  };
+  disk: {
+    dataWritten: string;
+    dataRead: string;
+    highestWriteSpeed: string;
+    lowestWriteSpeed: string;
+    averageWriteSpeed: string;
+    highestReadSpeed: string;
+    lowestReadSpeed: string;
+    averageReadSpeed: string;
+  };
 }
 
 export const TabContent = ({ tabId }: TabContentProps) => {
@@ -42,56 +86,21 @@ export const TabContent = ({ tabId }: TabContentProps) => {
       lowestUploadSpeed: '0 KB/s',
       averageUploadSpeed: '126 KB/s',
     },
+    disk: {
+      dataWritten: '6.62 GB',
+      dataRead: '358.1 MB',
+      highestWriteSpeed: '23',
+      lowestWriteSpeed: '13',
+      averageWriteSpeed: '18',
+      highestReadSpeed: '23.9 MB/s',
+      lowestReadSpeed: '25 KB/s',
+      averageReadSpeed: '4.2 MB/s',
+    },
   };
 
   const breakdownData: { title: string; items: any[] } = {
     title: 'Period breakdown',
-    items: [
-      {
-        key: 'synchronization',
-        sectionTitle: 'Synchronization',
-        items: [
-          {
-            label: 'Maximum blocks behind',
-            value: granularNodeData.sync.maximumBlocksBehind,
-          },
-          {
-            label: 'Minimum block time',
-            value: granularNodeData.sync.minimumBlockTime,
-          },
-          {
-            label: 'Maximum block time',
-            value: granularNodeData.sync.maximumBlockTime,
-          },
-          {
-            label: 'Average block time',
-            value: granularNodeData.sync.averageBlockTime,
-          },
-          {
-            label: 'Total downtime',
-            value: granularNodeData.sync.maximumBlocksBehind,
-          },
-        ],
-      },
-      {
-        key: 'peers',
-        sectionTitle: 'Peers',
-        items: [
-          {
-            label: 'Highest peer count',
-            value: granularNodeData.network.highestPeerCount,
-          },
-          {
-            label: 'Lowest peer count',
-            value: granularNodeData.network.lowestPeerCount,
-          },
-          {
-            label: 'Average peer count',
-            value: granularNodeData.network.averagePeerCount,
-          },
-        ],
-      },
-    ],
+    items: getBreakdown(tabId.toLowerCase(), granularNodeData),
   };
 
   return (

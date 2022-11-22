@@ -72,10 +72,18 @@ const ContentSingleClient = (props: SingleNodeContent) => {
         <div id="Sync">
           <TabContent tabId="Sync" />
         </div>
-        <div id="CPU">CPU content goes here!</div>
-        <div id="Memory">Memory content goes here!</div>
-        <div id="Network">Network content goes here!</div>
-        <div id="Disk">Disk content goes here!</div>
+        <div id="CPU">
+          <TabContent tabId="CPU" />
+        </div>
+        <div id="Memory">
+          <TabContent tabId="Memory" />
+        </div>
+        <div id="Network">
+          <TabContent tabId="Network" />
+        </div>
+        <div id="Disk">
+          <TabContent tabId="Disk" />
+        </div>
       </Tabs>
     </div>
   );
