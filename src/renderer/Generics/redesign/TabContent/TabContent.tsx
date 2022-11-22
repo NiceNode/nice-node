@@ -13,7 +13,7 @@ export interface TabContentProps {
   tabId: string;
 }
 
-export interface PeriodBreakdownProps {
+export interface PeriodBreakdownDataProps {
   sync: {
     maximumBlocksBehind: string;
     minimumBlockTime: string;
@@ -69,11 +69,11 @@ const contentLabels: SectionLabelProps = {
 };
 
 export const TabContent = ({ tabId }: TabContentProps) => {
-  const renderContent = () => {};
   // switch statement here to determine which charts and sections to show?
+  const renderContent = () => {};
 
   // format data passed into TabContent as this?
-  const periodBreakdown = {
+  const periodBreakdownData = {
     sync: {
       maximumBlocksBehind: '2',
       minimumBlockTime: '98ms',
@@ -133,7 +133,7 @@ export const TabContent = ({ tabId }: TabContentProps) => {
 
   const breakdownData: { title: string; items: any[] } = {
     title: 'Period breakdown',
-    items: getBreakdown(tabId.toLowerCase(), periodBreakdown),
+    items: getBreakdown(tabId.toLowerCase(), periodBreakdownData),
   };
 
   return (
