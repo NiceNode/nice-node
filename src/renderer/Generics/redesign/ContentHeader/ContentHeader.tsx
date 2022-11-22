@@ -65,9 +65,7 @@ export const ContentHeader = ({
         <div className={titleStyle}>{title}</div>
         <div className={subtitleStyle}>{subtitle}</div>
       </div>
-      {textAlign === 'left' && (
-        <div className={spacer}/>
-      )}
+      {textAlign === 'left' && <div className={spacer} />}
       {rightButtonIconId && (
         <HeaderButton type={rightButtonIconId} onClick={rightButtonOnClick} />
       )}
