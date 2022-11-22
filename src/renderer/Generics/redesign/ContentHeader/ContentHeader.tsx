@@ -4,8 +4,6 @@ import {
   textContainer,
   titleStyle,
   subtitleStyle,
-  leftButtonContainer,
-  rightButtonContainer,
 } from './contentHeader.css';
 
 export interface ContentHeaderProps {
@@ -60,18 +58,14 @@ export const ContentHeader = ({
   return (
     <div className={[container, transparentStyle].join(' ')}>
       {leftButtonIconId && (
-        <div className={leftButtonContainer}>
-          <HeaderButton type={leftButtonIconId} onClick={leftButtonOnClick} />
-        </div>
+        <HeaderButton type={leftButtonIconId} onClick={leftButtonOnClick} />
       )}
       <div className={[textContainer, textAlign].join(' ')}>
         <div className={titleStyle}>{title}</div>
         <div className={subtitleStyle}>{subtitle}</div>
       </div>
       {rightButtonIconId && (
-        <div className={rightButtonContainer}>
-          <HeaderButton type={rightButtonIconId} onClick={rightButtonOnClick} />
-        </div>
+        <HeaderButton type={rightButtonIconId} onClick={rightButtonOnClick} />
       )}
     </div>
   );

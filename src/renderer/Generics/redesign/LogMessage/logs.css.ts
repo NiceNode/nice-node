@@ -5,23 +5,21 @@ export const container = style({
   position: 'relative',
   maxWidth: '100%',
   width: 'inherit',
-});
-
-export const contentHeader = style({
-  position: 'fixed',
-  maxWidth: 'inherit',
-  width: 'inherit',
-  zIndex: 1,
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
 });
 
 export const logsContainer = style({
-  padding: '52px 17px 0px 17px',
+  padding: '7px 17px 0px 17px',
   position: 'relative',
+  flexGrow: 1,
+  overflow: 'auto',
 });
 
 export const filterContainer = style({
   width: '100%',
-  position: 'absolute',
+  // position: 'absolute',
   boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'row',
@@ -40,6 +38,7 @@ export const textFilterContainer = style({
 export const filterMenu = style({
   position: 'absolute',
   top: 34,
+  zIndex: 1,
 });
 
 export const typeFilterContainer = style({

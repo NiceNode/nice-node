@@ -10,11 +10,12 @@ export const container = style({
   backgroundColor: vars.components.contentHeaderBackground,
   display: 'flex',
   flexDirection: 'row',
-  alignItems: 'flex-start',
+  alignItems: 'center',
   justifyContent: 'space-between',
   padding: '12px 14px',
   position: 'relative',
   height: 52,
+  width: '100%',
   selectors: {
     [`&.transparent`]: {
       backgroundColor: 'transparent',
@@ -24,11 +25,6 @@ export const container = style({
 });
 
 export const textContainer = style({
-  position: 'absolute',
-  height: 30,
-  left: 54,
-  right: 54,
-  top: 'calc(50% - 30px/2)',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -62,19 +58,4 @@ export const subtitleStyle = style({
   order: 1,
   alignSelf: 'stretch',
   flexGrow: 0,
-});
-
-export const leftButtonContainer = style({
-  position: 'absolute',
-  left: 14,
-  top: 12,
-  width: 28,
-  height: 28,
-});
-export const rightButtonContainer = style({
-  position: 'absolute',
-  right: 14,
-  top: 12,
-  width: 28,
-  height: 28,
 });

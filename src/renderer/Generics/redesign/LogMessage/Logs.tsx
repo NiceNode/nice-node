@@ -1,8 +1,7 @@
-import { SetStateAction, useState, useEffect } from 'react';
+import React, { SetStateAction, useState, useEffect } from 'react';
 import moment from 'moment';
 import {
   container,
-  contentHeader,
   filterContainer,
   textFilterContainer,
   typeFilterContainer,
@@ -100,18 +99,22 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
   };
 
   const filteredLogMessages = logs
-    .filter((log: any) => {
+    .filter((log: LogWithMetadata) => {
       if (
         (typeFilter === '' || log.level === typeFilter) &&
         (textFilter === '' || log.message.includes(textFilter)) &&
         (timeframeFilter === 0 ||
-          isWithinTimeframe(log.timestamp, timeframeFilter))
+          (log.timestamp && isWithinTimeframe(log.timestamp, timeframeFilter)))
       ) {
         return true;
       }
       return false;
     })
-    .map((log: any) => <LogMessage {...log} />);
+    .map((log: LogWithMetadata) => (
+      <React.Fragment key={`${log.timestamp}${log.message}`}>
+        <LogMessage {...log} />
+      </React.Fragment>
+    ));
 
   const filterExists =
     timeframeFilter !== 0 || typeFilter !== '' || textFilter !== '';
@@ -132,16 +135,7 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
   return (
     <>
       <div className={container}>
-        <div
-          className={contentHeader}
-          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-          tabIndex={0}
-          onBlur={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget)) {
-              setIsFilterBarDisplayed(false);
-            }
-          }}
-        >
+        <div>
           <ContentHeader
             textAlign="left"
             title="Logs"

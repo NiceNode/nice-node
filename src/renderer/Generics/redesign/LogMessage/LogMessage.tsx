@@ -10,11 +10,11 @@ export interface LogMessageProps {
   /**
    * Date
    */
-  timestamp: number;
+  timestamp?: number;
   /**
    * Level
    */
-  level: string;
+  level?: string;
   /**
    * Message>
    */
