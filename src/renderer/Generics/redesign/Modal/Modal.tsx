@@ -11,7 +11,7 @@ type Props = {
   children: React.ReactNode;
   isOpen: boolean | undefined;
   onClickCloseButton: () => void;
-  title: string;
+  title?: string;
   isFullScreen?: boolean;
 };
 
