@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { container } from './tabContent.css';
+import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
+import {
+  container,
+  contentHeader,
+  contentTitle,
+  contentPeriod,
+} from './tabContent.css';
 import LabelValues from '../LabelValues/LabelValues';
 import { getBreakdown } from './getBreakdown';
 
@@ -7,7 +13,7 @@ export interface TabContentProps {
   tabId: string;
 }
 
-export interface GranularNodeDataProps {
+export interface PeriodBreakdownProps {
   sync: {
     maximumBlocksBehind: string;
     minimumBlockTime: string;
@@ -50,12 +56,24 @@ export interface GranularNodeDataProps {
   };
 }
 
+type SectionLabelProps = {
+  [key: string]: string;
+};
+
+const contentLabels: SectionLabelProps = {
+  Sync: 'Synchronization',
+  CPU: 'CPU usage',
+  Memory: 'Memory usage',
+  Network: 'Network',
+  Disk: 'Disk',
+};
+
 export const TabContent = ({ tabId }: TabContentProps) => {
   const renderContent = () => {};
   // switch statement here to determine which charts and sections to show?
 
   // format data passed into TabContent as this?
-  const granularNodeData = {
+  const periodBreakdown = {
     sync: {
       maximumBlocksBehind: '2',
       minimumBlockTime: '98ms',
@@ -98,13 +116,35 @@ export const TabContent = ({ tabId }: TabContentProps) => {
     },
   };
 
+  const renderDiskCapacity = () => {
+    if (tabId === 'Disk') {
+      return (
+        <>
+          <div className={contentHeader}>
+            <div className={contentTitle}>Capacity</div>
+          </div>
+          <div className="contentCharts">Disk Capacity chart goes here</div>
+          <HorizontalLine type="content" />
+        </>
+      );
+    }
+    return null;
+  };
+
   const breakdownData: { title: string; items: any[] } = {
     title: 'Period breakdown',
-    items: getBreakdown(tabId.toLowerCase(), granularNodeData),
+    items: getBreakdown(tabId.toLowerCase(), periodBreakdown),
   };
 
   return (
     <div className={container}>
+      {renderDiskCapacity()}
+      <div className={contentHeader}>
+        <div className={contentTitle}>{contentLabels[tabId]}</div>
+        <div className={contentPeriod}>Dropdown</div>
+      </div>
+      <div className="charts">Charts go here</div>
+      <HorizontalLine type="content" />
       <div className="breakdown">
         <LabelValues {...breakdownData} />
       </div>

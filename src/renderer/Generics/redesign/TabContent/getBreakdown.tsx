@@ -1,8 +1,8 @@
-import { GranularNodeDataProps } from './TabContent';
+import { PeriodBreakdownProps } from './TabContent';
 
 export const getBreakdown = (
   tabId: string,
-  granularNodeData: GranularNodeDataProps
+  granularNodeData: PeriodBreakdownProps
 ) => {
   const breakDownObjects = {
     sync: [
