@@ -4,6 +4,7 @@ import {
   textContainer,
   titleStyle,
   subtitleStyle,
+  spacer,
 } from './contentHeader.css';
 
 export interface ContentHeaderProps {
@@ -64,6 +65,9 @@ export const ContentHeader = ({
         <div className={titleStyle}>{title}</div>
         <div className={subtitleStyle}>{subtitle}</div>
       </div>
+      {textAlign === 'left' && (
+        <div className={spacer}/>
+      )}
       {rightButtonIconId && (
         <HeaderButton type={rightButtonIconId} onClick={rightButtonOnClick} />
       )}

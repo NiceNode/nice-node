@@ -3,6 +3,7 @@ import { common, vars } from '../theme.css';
 
 export const baseButton = style({
   cursor: 'pointer',
+  userSelect: 'none',
   boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'row',

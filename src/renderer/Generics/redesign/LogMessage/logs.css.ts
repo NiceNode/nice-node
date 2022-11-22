@@ -19,7 +19,7 @@ export const logsContainer = style({
 
 export const filterContainer = style({
   width: '100%',
-  // position: 'absolute',
+  position: 'absolute',
   boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'row',
@@ -29,6 +29,7 @@ export const filterContainer = style({
   background: vars.components.filterBackground,
   borderBottom: vars.components.contentHeaderBorderBottom,
   boxShadow: vars.color.elevation2boxShadow,
+  zIndex: 1,
 });
 
 export const textFilterContainer = style({

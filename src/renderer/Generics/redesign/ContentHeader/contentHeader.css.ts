@@ -32,7 +32,7 @@ export const textContainer = style({
   textAlign: 'center',
   selectors: {
     [`&.left`]: {
-      textAlign: 'left',
+      marginLeft: 12,
     },
   },
 });
@@ -47,6 +47,10 @@ export const titleStyle = style({
   order: 0,
   alignSelf: 'stretch',
   flexGrow: 0,
+});
+
+export const spacer = style({
+  flex: 1,
 });
 
 export const subtitleStyle = style({
