@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { container, tabsList, tabContent } from './tabs.css';
-import { Tab } from './Tab';
+import TabItem from '../TabItem/TabItem';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
 
 export interface TabsProps {
@@ -31,8 +31,8 @@ export const Tabs = ({ children, id, modal }: TabsProps) => {
           const { id } = child.props;
 
           return (
-            <Tab
-              activeTab={activeTab}
+            <TabItem
+              activeTabId={activeTab}
               key={id}
               label={id}
               onClickTabItem={onClickTabItem}
