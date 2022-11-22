@@ -36,16 +36,16 @@ export interface SidebarProps {
 
 const itemListData: { iconId: IconId; label: string; count?: number }[] = [
   {
-    iconId: 'health',
-    label: 'System Monitor',
-  },
-  {
     iconId: 'add',
     label: 'Add Node',
   },
   {
     iconId: 'preferences',
     label: 'Preferences',
+  },
+  {
+    iconId: 'health',
+    label: 'System Monitor',
   },
 ];
 

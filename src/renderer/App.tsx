@@ -14,6 +14,8 @@ import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
 import NNSplash from './Presentational/NNSplashScreen/NNSplashScreen';
 import { dragWindowContainer } from './app.css';
 import ThemeManager from './ThemeManager';
+import { Modal } from './Generics/redesign/Modal/Modal';
+import AddNodeStepper from './Presentational/AddNodeStepper/AddNodeStepper';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -24,6 +26,7 @@ const MainScreen = () => {
   const dispatch = useAppDispatch();
   const [sHasSeenSplashscreen, setHasSeenSplashscreen] = useState<boolean>();
   const [sHasClickedGetStarted, setHasClickedGetStarted] = useState<boolean>();
+  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
 
   // const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
   // console.log('isStartOnLogin: ', isStartOnLogin);
@@ -46,6 +49,7 @@ const MainScreen = () => {
     setHasSeenSplashscreen(true);
     electron.getSetHasSeenSplashscreen(true);
     setHasClickedGetStarted(true);
+    setIsModalOpenAddNode(true);
   };
 
   // const onChangeOpenOnLogin = (openOnLogin: boolean) => {
@@ -87,6 +91,22 @@ const MainScreen = () => {
 
           <Footer />
           <DataRefresher />
+          {/* Todo: remove this when Modal Manager is created */}
+          <Modal
+            title=""
+            isOpen={sIsModalOpenAddNode}
+            onClickCloseButton={() => setIsModalOpenAddNode(false)}
+            isFullScreen
+          >
+            <AddNodeStepper
+              onChange={(newValue: 'done' | 'cancel') => {
+                console.log(newValue);
+                if (newValue === 'done' || newValue === 'cancel') {
+                  setIsModalOpenAddNode(false);
+                }
+              }}
+            />
+          </Modal>
         </>
       )}
     </ThemeManager>

@@ -18,6 +18,9 @@ import ContentSingleClient, {
 } from './Presentational/ContentSingleClient/ContentSingleClient';
 import { hexToDecimal } from './utils';
 import { NodeAction } from './Generics/redesign/consts';
+import NNSplash from './Presentational/NNSplashScreen/NNSplashScreen';
+import AddNodeStepper from './Presentational/AddNodeStepper/AddNodeStepper';
+import { Modal } from './Generics/redesign/Modal/Modal';
 
 const NodeScreen = () => {
   // const { t } = useTranslation();
@@ -51,6 +54,7 @@ const NodeScreen = () => {
       pollingInterval,
     }
   );
+  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
 
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
@@ -162,9 +166,30 @@ const NodeScreen = () => {
   //   },
   // });
   if (!selectedNode) {
-    // if docker is not installed, show prompt
-    // eslint-disable-next-line react/jsx-curly-brace-presence
-    return <p>{'Get started! "Add a node"!'}</p>;
+    // if there is no node selected, prompt user to create a new node
+    return (
+      <>
+        {!sIsModalOpenAddNode && (
+          <NNSplash onClickGetStarted={() => setIsModalOpenAddNode(true)} />
+        )}
+        {/* Todo: remove this when Modal Manager is created */}
+        <Modal
+          title=""
+          isOpen={sIsModalOpenAddNode}
+          onClickCloseButton={() => setIsModalOpenAddNode(false)}
+          isFullScreen
+        >
+          <AddNodeStepper
+            onChange={(newValue: 'done' | 'cancel') => {
+              console.log(newValue);
+              if (newValue === 'done' || newValue === 'cancel') {
+                setIsModalOpenAddNode(false);
+              }
+            }}
+          />
+        </Modal>
+      </>
+    );
   }
 
   const { status, spec } = selectedNode;
