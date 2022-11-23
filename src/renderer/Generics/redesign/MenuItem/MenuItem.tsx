@@ -1,5 +1,5 @@
 import { IconId } from 'renderer/assets/images/icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { Icon } from '../Icon/Icon';
 import { container, menuItemText, statusDot, selectIcon } from './menuItem.css';
