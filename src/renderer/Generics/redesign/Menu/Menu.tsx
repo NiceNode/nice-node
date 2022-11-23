@@ -4,7 +4,7 @@ export interface MenuProps {
   /**
    * What's the width?
    */
-  width: number;
+  width?: number;
   /**
    * Menu Items?
    */

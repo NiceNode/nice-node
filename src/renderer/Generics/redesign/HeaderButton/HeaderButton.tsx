@@ -6,7 +6,7 @@ export interface HeaderButtonProps {
   /**
    * Type?
    */
-  type: 'left' | 'close' | 'filter' | 'down';
+  type: string;
   /**
    * onClick
    */

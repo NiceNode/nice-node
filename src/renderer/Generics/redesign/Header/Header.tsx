@@ -19,6 +19,7 @@ import {
   menuButtonContainer,
 } from './header.css';
 import NodeSettingsWrapper from '../../../Presentational/NodeSettingsModal/NodeSettingsWrapper';
+import LogsModal from '../../../Presentational/NodeLogsModal/LogsModal';
 
 /**
  * Primary UI component for user interaction
@@ -31,6 +32,7 @@ export const Header = (props: NodeOverviewProps) => {
     useState<boolean>(false);
   const [sIsSettingsModalOpen, setIsSettingsModalOpen] =
     useState<boolean>(false);
+  const [sIsLogsModalOpen, setIsLogsModalOpen] = useState<boolean>(false);
 
   const startStopButtonProps: ButtonProps = {
     label: '',
@@ -114,7 +116,12 @@ export const Header = (props: NodeOverviewProps) => {
           primary={startStopButtonProps.iconId === 'play'}
         />
         {logsButtonProps !== undefined && (
-          <Button {...logsButtonProps} variant="icon-left" size="small" />
+          <Button
+            {...logsButtonProps}
+            variant="icon-left"
+            size="small"
+            onClick={() => setIsLogsModalOpen(true)}
+          />
         )}
         <div
           className={menuButtonContainer}
@@ -179,6 +186,10 @@ export const Header = (props: NodeOverviewProps) => {
       <NodeSettingsWrapper
         isOpen={sIsSettingsModalOpen}
         onClickClose={() => setIsSettingsModalOpen(false)}
+      />
+      <LogsModal
+        isOpen={sIsLogsModalOpen}
+        onClickClose={() => setIsLogsModalOpen(false)}
       />
     </div>
   );

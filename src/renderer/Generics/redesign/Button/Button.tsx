@@ -10,6 +10,7 @@ import {
   iconStyle,
   ghostButton,
   dangerButton,
+  spaceBetweenButton,
 } from './button.css';
 
 export interface ButtonProps {
@@ -20,6 +21,7 @@ export interface ButtonProps {
   disabled?: boolean;
   backgroundColor?: string;
   ghost?: boolean;
+  spaceBetween?: boolean;
   size?: 'small' | 'medium' | 'large';
   /**
    * Text only, with icon, or just icon?
@@ -51,6 +53,7 @@ const Button = ({
   variant = 'text',
   type = 'secondary',
   iconId = 'settings',
+  spaceBetween = false,
   wide = false,
   ghost = false,
   backgroundColor,
@@ -77,6 +80,9 @@ const Button = ({
   }
   if (wide) {
     classNames.push(wideButton);
+  }
+  if (spaceBetween) {
+    classNames.push(spaceBetweenButton);
   }
 
   return (

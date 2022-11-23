@@ -231,8 +231,8 @@ export const sendLogsToUI = (node: Node) => {
       console.log('log metadata:', parseDockerLogMetadata(log));
       try {
         // parse log metadata before sending to the UI
-        // send('nodeLogs', parseDockerLogMetadata(log));
-        send('nodeLogs', log);
+        send('nodeLogs', parseDockerLogMetadata(log));
+        // send('nodeLogs', log);
       } catch (err) {
         logger.error(`Error parsing docker event log ${log}`, err);
       }

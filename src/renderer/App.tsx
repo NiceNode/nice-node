@@ -5,7 +5,6 @@ import * as Sentry from '@sentry/electron/renderer';
 import './Generics/redesign/globalStyle.css';
 import './reset.css';
 import { useAppDispatch } from './state/hooks';
-import Footer from './Footer/Footer';
 import { initialize as initializeIpcListeners } from './ipc';
 import NodeScreen from './NodeScreen';
 import DataRefresher from './DataRefresher';
@@ -89,7 +88,6 @@ const MainScreen = () => {
             <NodeScreen />
           </div>
 
-          <Footer />
           <DataRefresher />
           {/* Todo: remove this when Modal Manager is created */}
           <Modal
