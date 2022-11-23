@@ -3,6 +3,7 @@ import { common, vars } from '../theme.css';
 
 export const baseButton = style({
   cursor: 'pointer',
+  userSelect: 'none',
   boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'row',
@@ -46,6 +47,10 @@ export const smallButton = style({
 
 export const wideButton = style({
   width: '100%',
+});
+
+export const spaceBetweenButton = style({
+  justifyContent: 'space-between',
 });
 
 export const primaryButton = style({

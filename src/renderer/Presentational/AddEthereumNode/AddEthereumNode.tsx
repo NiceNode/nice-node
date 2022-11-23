@@ -185,8 +185,10 @@ AddEthereumNodeProps) => {
         <SpecialSelect onChange={onChangeCc} options={ccOptions} />
         <DropdownLink
           text={`${
-            sIsOptionsOpen ? tGeneric('Hide') : tGeneric('Show')
-          } ${tGeneric('advancedOptions')}`}
+            sIsOptionsOpen
+              ? tGeneric('HideAdvancedOptions')
+              : tGeneric('ShowAdvancedOptions')
+          }`}
           onClick={() => setIsOptionsOpen(!sIsOptionsOpen)}
           isDown={!sIsOptionsOpen}
         />

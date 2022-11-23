@@ -2,12 +2,12 @@
   "AboutSecondsRemaining" : "About {{seconds}} seconds remaining",
   "Appearance": "Appearance",
   "AutoFollowsComputerSetting": "Auto (Follows computer setting)",
-  "advanced options": "advanced options",
   "Confirm" : "Confirm",
   "DataLocation" : "Data location",
   "DarkMode": "Dark mode",
   "FinishingUp" : "Finishing up...",
   "Hide" : "Hide",
+  "HideAdvancedOptions": "Hide advanced options",
   "Language": "Language",
   "LaunchOnStartup": "Launch on startup",
   "LearnMore": "Learn more",
@@ -20,5 +20,6 @@
   "Preferences": "Preferences",
   "Previous" : "Previous",
   "Show" : "Show",
+  "ShowAdvancedOptions": "Show advanced options",
   "ThemeColor" : "Theme color"
 }

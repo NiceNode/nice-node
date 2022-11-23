@@ -65,8 +65,10 @@ export const MenuItem = ({
   };
 
   return (
-    <div
+    // eslint-disable-next-line jsx-a11y/label-has-associated-control
+    <label
       tabIndex={0}
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
       role="button"
       onKeyDown={onClickAction}
       className={[container, `${disabledStyle}`].join(' ')}
@@ -90,6 +92,6 @@ export const MenuItem = ({
           <Icon iconId="check" />
         </div>
       )}
-    </div>
+    </label>
   );
 };
