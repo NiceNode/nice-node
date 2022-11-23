@@ -190,18 +190,21 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
                     <Menu width={158}>
                       <MenuItem
                         variant="checkbox"
+                        selected={typeFilter === 'INFO'}
                         status="blue"
                         text="Info"
                         onClick={() => onClickSetTypeFilter('INFO')}
                       />
                       <MenuItem
                         variant="checkbox"
+                        selected={typeFilter === 'WARN'}
                         status="orange"
                         text="Warnings"
                         onClick={() => onClickSetTypeFilter('WARN')}
                       />
                       <MenuItem
                         variant="checkbox"
+                        selected={typeFilter === 'ERROR'}
                         status="red"
                         text="Errors"
                         onClick={() => onClickSetTypeFilter('ERROR')}
