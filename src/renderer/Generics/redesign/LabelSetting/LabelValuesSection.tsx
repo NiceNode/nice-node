@@ -13,7 +13,7 @@ import {
 } from './labelSettingsSection.css';
 
 export type LabelSettingsItem = {
-  label: string;
+  label: ReactElement | string;
   value: ReactElement | string;
   description?: string;
   learnMoreLink?: string;

@@ -14,7 +14,7 @@ export const Tabs = ({ children, id, modal }: TabsProps) => {
     id || children[0].props.id
   );
 
-  const onClickTabItem = (tab) => {
+  const onClickTabItem = (tab: string) => {
     setActiveTab(tab);
   };
 
