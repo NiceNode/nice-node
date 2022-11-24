@@ -8,6 +8,7 @@ export const container = style({
   lineHeight: '16px',
   letterSpacing: '-0.12px',
   color: vars.color.font50,
+  userSelect: 'none',
   cursor: 'pointer',
   selectors: {
     [`&.active`]: {

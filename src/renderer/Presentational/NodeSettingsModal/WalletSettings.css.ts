@@ -18,3 +18,21 @@ export const walletsTitle = style({
   letterSpacing: '-0.12px',
   marginBottom: 8,
 });
+
+export const walletContainer = style({
+  flexDirection: 'row',
+  display: 'flex',
+  alignContent: 'center',
+  alignItems: 'center',
+});
+
+export const walletTitle = style({
+  marginLeft: 12,
+});
+
+export const walletImage = style({
+  width: 24,
+  height: 24,
+  backgroundSize: 'contain',
+  backgroundRepeat: 'no-repeat',
+});
