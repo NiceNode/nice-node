@@ -13,7 +13,7 @@ export const tabsList = style({
 });
 
 export const tabContent = style({
-  marginTop: 36,
+  paddingTop: 36,
   selectors: {
     '&.modal': {
       height: '40vh',

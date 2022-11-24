@@ -11,7 +11,7 @@ export const walletDescription = style({
   marginBottom: 24,
 });
 
-export const walletsTitle = style({
+export const title = style({
   fontWeight: 590,
   fontSize: '13px',
   lineHeight: '16px',
@@ -35,4 +35,24 @@ export const walletImage = style({
   height: 24,
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
+});
+
+export const advancedOptionsLink = style({
+  marginTop: 16,
+});
+
+export const advancedOptions = style({
+  marginTop: 24,
+  marginBottom: 40,
+});
+
+export const advancedOptionsDescription = style({
+  fontWeight: 400,
+  fontSize: '11px',
+  lineHeight: '14px',
+  color: vars.color.font50,
+});
+
+export const walletDetails = style({
+  marginTop: 32,
 });

@@ -1,15 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import {
   WalletBackgroundId,
   WALLET_BACKGROUNDS,
 } from '../../assets/images/wallets';
 import {
   walletDescription,
-  walletsTitle,
+  title,
   walletContainer,
   walletTitle,
   walletImage,
+  walletDetails,
+  advancedOptionsLink,
+  advancedOptions,
+  advancedOptionsDescription,
 } from './WalletSettings.css';
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
@@ -78,44 +83,74 @@ export const WalletSettings = () => {
         wallets below to allow access to your node. Don’t forget to add a new
         network in your wallet with the configuration below.
       </div>
-      <div className={walletsTitle}>Wallets</div>
+      <div className={title}>Wallets</div>
       <LineLabelSettings
         items={[
           {
             sectionTitle: '',
-            items: wallets.map((wallet: WalletProps) => {
+            items: wallets.map((wallet) => {
               return getWalletItem(wallet);
             }),
           },
         ]}
       />
-      <DropdownLink
-        text={`${
-          isOptionsOpen ? tGeneric('Hide') : tGeneric('Show')
-        } ${tGeneric('advancedOptions')}`}
-        onClick={() => setIsOptionsOpen(!isOptionsOpen)}
-        isDown={!isOptionsOpen}
-      />
+      <div className={advancedOptionsLink}>
+        <DropdownLink
+          text={`${
+            isOptionsOpen ? tGeneric('Hide') : tGeneric('Show')
+          } ${tGeneric('advancedOptions')}`}
+          onClick={() => setIsOptionsOpen(!isOptionsOpen)}
+          isDown={!isOptionsOpen}
+        />
+      </div>
       {isOptionsOpen && (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-            width: '100%',
-          }}
-        >
-          <span style={{ fontWeight: 600 }}>{tGeneric('Network')}</span>
-
-          <div
-            style={{
-              width: 300,
-              display: 'inline-block',
-              marginLeft: 'auto',
-            }}
-          />
+        <div className={advancedOptions}>
+          <div className={title}>Using a lesser known browser wallet?</div>
+          <div className={advancedOptionsDescription}>
+            If your wallet of choice is not displayed in the list above you can
+            select the browser used for the extension and provide the extension
+            ID to allow access.{' '}
+            <ExternalLink
+              url="http://google.com"
+              text={tGeneric('LearnMore')}
+              inline
+              hideIcon
+            />
+          </div>
         </div>
       )}
+      <div className={walletDetails}>
+        <div className={title}>Details for your new wallet network</div>
+        <LineLabelSettings
+          items={[
+            {
+              sectionTitle: '',
+              items: [
+                {
+                  label: 'Network Name',
+                  value: 'Ethereum Mainnet (NiceNode)',
+                },
+                {
+                  label: 'New RPC URL',
+                  value: 'http://localhost:8080',
+                },
+                {
+                  label: 'Chain ID',
+                  value: '1',
+                },
+                {
+                  label: 'Currency Symbol',
+                  value: 'ETH',
+                },
+                {
+                  label: 'Block explorer',
+                  value: 'https://etherscan.io',
+                },
+              ],
+            },
+          ]}
+        />
+      </div>
     </>
   );
 };
