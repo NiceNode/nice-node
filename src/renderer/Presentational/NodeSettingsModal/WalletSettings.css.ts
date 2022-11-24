@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '../../Generics/redesign/theme.css';
+import { common, vars } from '../../Generics/redesign/theme.css';
 
 export const walletDescription = style({
   fontStyle: 'normal',
@@ -55,4 +55,20 @@ export const advancedOptionsDescription = style({
 
 export const walletDetails = style({
   marginTop: 32,
+  marginBottom: 20,
+});
+
+export const networkValue = style({
+  flexDirection: 'row',
+  display: 'flex',
+  alignContent: 'center',
+  alignItems: 'center',
+  gap: 12,
+});
+
+export const copyIcon = style({
+  width: 14,
+  height: 14,
+  color: common.color.purple500,
+  cursor: 'pointer',
 });

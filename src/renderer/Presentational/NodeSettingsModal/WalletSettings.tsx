@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { clipboard } from 'electron';
+import { Icon } from '../../Generics/redesign/Icon/Icon';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import {
   WalletBackgroundId,
@@ -15,6 +17,8 @@ import {
   advancedOptionsLink,
   advancedOptions,
   advancedOptionsDescription,
+  networkValue,
+  copyIcon,
 } from './WalletSettings.css';
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
@@ -97,8 +101,10 @@ export const WalletSettings = () => {
       <div className={advancedOptionsLink}>
         <DropdownLink
           text={`${
-            isOptionsOpen ? tGeneric('Hide') : tGeneric('Show')
-          } ${tGeneric('advancedOptions')}`}
+            isOptionsOpen
+              ? tGeneric('HideAdvancedOptions')
+              : tGeneric('ShowAdvancedOptions')
+          }`}
           onClick={() => setIsOptionsOpen(!isOptionsOpen)}
           isDown={!isOptionsOpen}
         />
@@ -128,29 +134,93 @@ export const WalletSettings = () => {
               items: [
                 {
                   label: 'Network Name',
-                  value: 'Ethereum Mainnet (NiceNode)',
+                  value: (
+                    <div className={networkValue}>
+                      <div>Ethereum Mainnet (NiceNode)</div>
+                      <div
+                        className={copyIcon}
+                        onClick={() => {
+                          console.log('copy text!');
+                        }}
+                      >
+                        <Icon iconId="copy" />
+                      </div>
+                    </div>
+                  ),
                 },
                 {
                   label: 'New RPC URL',
-                  value: 'http://localhost:8080',
+                  value: (
+                    <div className={networkValue}>
+                      <div>http://localhost:8080</div>
+                      <div
+                        className={copyIcon}
+                        onClick={() => {
+                          console.log('copy text!');
+                        }}
+                      >
+                        <Icon iconId="copy" />
+                      </div>
+                    </div>
+                  ),
                 },
                 {
                   label: 'Chain ID',
-                  value: '1',
+                  value: (
+                    <div className={networkValue}>
+                      <div>1</div>
+                      <div
+                        className={copyIcon}
+                        onClick={() => {
+                          console.log('copy text!');
+                        }}
+                      >
+                        <Icon iconId="copy" />
+                      </div>
+                    </div>
+                  ),
                 },
                 {
                   label: 'Currency Symbol',
-                  value: 'ETH',
+                  value: (
+                    <div className={networkValue}>
+                      <div>ETH</div>
+                      <div
+                        className={copyIcon}
+                        onClick={() => {
+                          console.log('copy text!');
+                        }}
+                      >
+                        <Icon iconId="copy" />
+                      </div>
+                    </div>
+                  ),
                 },
                 {
                   label: 'Block explorer',
-                  value: 'https://etherscan.io',
+                  value: (
+                    <div className={networkValue}>
+                      <div>https://etherscan.io</div>
+                      <div
+                        className={copyIcon}
+                        onClick={() => {
+                          console.log('copy text!');
+                        }}
+                      >
+                        <Icon iconId="copy" />
+                      </div>
+                    </div>
+                  ),
                 },
               ],
             },
           ]}
         />
       </div>
+      <ExternalLink
+        text="Learn about adding a network to your wallet"
+        url="https://google.com"
+      />
     </>
   );
 };
