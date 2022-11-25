@@ -6,6 +6,13 @@ const url =
 
 // required to export even if not using in a component
 export const container = style({
+  display: 'flex',
+  flexDirection: 'row',
+  gap: 16,
+  alignItems: 'center',
+});
+
+export const inputContainer = style({
   height: '16px',
   width: '30px',
   backgroundRepeat: 'no-repeat',
@@ -24,4 +31,12 @@ export const container = style({
     filter: 'none',
     opacity: '0.5',
   },
+});
+
+export const toggleText = style({
+  fontWeight: 400,
+  fontSize: '13px',
+  lineHeight: '16px',
+  letterSpacing: '-0.08px',
+  color: vars.color.font50,
 });

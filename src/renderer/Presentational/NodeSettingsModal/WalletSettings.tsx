@@ -28,6 +28,11 @@ export const WalletSettings = () => {
   const { t: tGeneric } = useTranslation('genericComponents');
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
 
+  type WalletProps = {
+    walletId: WalletBackgroundId;
+    walletName: string;
+  };
+
   const wallets = [
     {
       walletId: 'metamask',
@@ -51,9 +56,40 @@ export const WalletSettings = () => {
     },
   ];
 
-  type WalletProps = {
-    walletId: WalletBackgroundId;
-    walletName: string;
+  const networkLabels = {
+    networkName: 'Network Name',
+    rpcUrl: 'http://localhost:8080',
+    chainId: 'Chain ID',
+    currencySymbol: 'Currency Symbol',
+    blockExplorer: 'Block explorer',
+  };
+
+  // fetch this from data layer
+  const networkDetails = {
+    networkName: 'Ethereum Mainnet (NiceNode)',
+    rpcUrl: 'New RPC URL',
+    chainId: '1',
+    currencySymbol: 'ETH',
+    blockExplorer: 'https://etherscan.io',
+  };
+
+  const getNetworkItem = (key: string) => {
+    return {
+      label: networkLabels[key],
+      value: (
+        <div className={networkValue}>
+          <div>{networkDetails[key]}</div>
+          <div
+            className={copyIcon}
+            onClick={() => {
+              console.log('copy text!');
+            }}
+          >
+            <Icon iconId="copy" />
+          </div>
+        </div>
+      ),
+    };
   };
 
   const getWalletItem = ({ walletId, walletName }: WalletProps) => {
@@ -72,6 +108,7 @@ export const WalletSettings = () => {
       value: (
         <Toggle
           // checked={isOpenOnStartup}
+          text={{ on: 'Allowed', off: 'Disabled' }}
           onChange={(newValue) => {
             console.log(newValue);
           }}
@@ -131,88 +168,9 @@ export const WalletSettings = () => {
           items={[
             {
               sectionTitle: '',
-              items: [
-                {
-                  label: 'Network Name',
-                  value: (
-                    <div className={networkValue}>
-                      <div>Ethereum Mainnet (NiceNode)</div>
-                      <div
-                        className={copyIcon}
-                        onClick={() => {
-                          console.log('copy text!');
-                        }}
-                      >
-                        <Icon iconId="copy" />
-                      </div>
-                    </div>
-                  ),
-                },
-                {
-                  label: 'New RPC URL',
-                  value: (
-                    <div className={networkValue}>
-                      <div>http://localhost:8080</div>
-                      <div
-                        className={copyIcon}
-                        onClick={() => {
-                          console.log('copy text!');
-                        }}
-                      >
-                        <Icon iconId="copy" />
-                      </div>
-                    </div>
-                  ),
-                },
-                {
-                  label: 'Chain ID',
-                  value: (
-                    <div className={networkValue}>
-                      <div>1</div>
-                      <div
-                        className={copyIcon}
-                        onClick={() => {
-                          console.log('copy text!');
-                        }}
-                      >
-                        <Icon iconId="copy" />
-                      </div>
-                    </div>
-                  ),
-                },
-                {
-                  label: 'Currency Symbol',
-                  value: (
-                    <div className={networkValue}>
-                      <div>ETH</div>
-                      <div
-                        className={copyIcon}
-                        onClick={() => {
-                          console.log('copy text!');
-                        }}
-                      >
-                        <Icon iconId="copy" />
-                      </div>
-                    </div>
-                  ),
-                },
-                {
-                  label: 'Block explorer',
-                  value: (
-                    <div className={networkValue}>
-                      <div>https://etherscan.io</div>
-                      <div
-                        className={copyIcon}
-                        onClick={() => {
-                          console.log('copy text!');
-                        }}
-                      >
-                        <Icon iconId="copy" />
-                      </div>
-                    </div>
-                  ),
-                },
-              ],
+              items: Object.keys(networkLabels).map((key) => {
+                return getNetworkItem(key);
+              }),
             },
           ]}
         />

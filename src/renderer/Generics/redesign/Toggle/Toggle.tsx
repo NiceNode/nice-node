@@ -1,7 +1,11 @@
 import { useState } from 'react';
-import { container } from './toggle.css';
+import { container, inputContainer, toggleText } from './toggle.css';
 
 export interface ToggleProps {
+  /**
+   * Is there text to toggle?
+   */
+  text?: { on: string; off: string };
   /**
    * Is it disabled?
    */
@@ -19,24 +23,31 @@ export interface ToggleProps {
 /**
  * Primary UI component for user interaction
  */
-export const Toggle = ({ checked, disabled, onChange }: ToggleProps) => {
+export const Toggle = ({ checked, disabled, onChange, text }: ToggleProps) => {
   const [isChecked, setChecked] = useState(checked);
+  let displayedText = '';
+  if (text) {
+    displayedText = isChecked ? text.on : text.off;
+  }
   return (
-    <input
-      {...{
-        className: container,
-        type: 'checkbox',
-        role: 'switch',
-        id: 'flexSwitchCheckDefault',
-        defaultChecked: isChecked,
-        ...(disabled && { disabled }),
-        onChange: () => {
-          setChecked(!isChecked);
-          if (onChange) {
-            onChange(!isChecked);
-          }
-        },
-      }}
-    />
+    <div className={container}>
+      {text && <div className={toggleText}>{displayedText}</div>}
+      <input
+        {...{
+          className: inputContainer,
+          type: 'checkbox',
+          role: 'switch',
+          id: 'flexSwitchCheckDefault',
+          defaultChecked: isChecked,
+          ...(disabled && { disabled }),
+          onChange: () => {
+            setChecked(!isChecked);
+            if (onChange) {
+              onChange(!isChecked);
+            }
+          },
+        }}
+      />
+    </div>
   );
 };
