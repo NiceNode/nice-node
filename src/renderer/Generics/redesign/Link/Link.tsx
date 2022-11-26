@@ -6,6 +6,7 @@ import {
   inlineContainer,
   linkText,
   iconStyle,
+  dangerLinkText,
 } from './link.css';
 import { Icon } from '../Icon/Icon';
 
@@ -67,6 +68,7 @@ const Link = ({
   hideIcon = false,
 }: LinkProps) => {
   const classContainer = inline ? inlineContainer : blockContainer;
+  const containerStyle = danger ? dangerLinkText : linkText;
 
   const linkProps = { href: '', target: '', rel: '', onClick: (e: any) => {} };
   if (url) {
@@ -85,8 +87,7 @@ const Link = ({
   }
 
   const smallStyle = small ? 'small' : '';
-  const dangerStyle = danger ? 'danger' : '';
-  const underlineStyle = underline ? 'underline' : '';
+  const underlineStyle = underline || url ? 'underline' : '';
 
   const getIcon = (type: string) => {
     let iconId: IconId;
@@ -105,39 +106,34 @@ const Link = ({
         iconId = 'external';
     }
     return (
-      <div className={[iconStyle, small].join(' ')}>
+      <div className={[iconStyle, smallStyle].join(' ')}>
+        {/* make sure icon svg doesnt have width and height set */}
         <Icon iconId={iconId} />
       </div>
     );
   };
 
-  const renderDropdownIcon = () => {
-    if (dropdown) {
-      if (isDown === true) {
-        return getIcon('down');
-      }
-      return getIcon('up');
+  const getDropdownIcon = () => {
+    if (isDown === true) {
+      return getIcon('down');
     }
-    return null;
+    return getIcon('up');
   };
 
   return (
     <div
-      className={[classContainer, smallStyle].join(' ')}
+      className={[classContainer, containerStyle, smallStyle].join(' ')}
       onClick={onClick}
       onKeyDown={onClick}
       role="button"
       tabIndex={0}
     >
-      {leftIconId && getIcon(leftIconId)}
-      <a
-        className={[linkText, dangerStyle, underlineStyle].join(' ')}
-        {...linkProps}
-      >
+      {leftIconId && getIcon('leftIconId')}
+      <a className={[containerStyle, underlineStyle].join(' ')} {...linkProps}>
         {text}
       </a>
-      {rightIconId && getIcon(rightIconId)}
-      {renderDropdownIcon()}
+      {rightIconId && getIcon('rightIconId')}
+      {dropdown && getDropdownIcon()}
       {url && !hideIcon && getIcon('external')}
     </div>
   );

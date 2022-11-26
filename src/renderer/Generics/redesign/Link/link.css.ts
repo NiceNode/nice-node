@@ -23,7 +23,7 @@ export const inlineContainer = style([container, { display: 'inline-flex' }]);
 export const blockContainer = style([container, { display: 'flex' }]);
 
 export const linkText = style({
-  color: vars.color.primary,
+  color: vars.color.primaryLink,
   letterSpacing: '-0.08px',
   textDecoration: 'none',
   selectors: {
@@ -32,7 +32,7 @@ export const linkText = style({
     },
   },
   ':hover': {
-    color: vars.color.primaryHover,
+    color: vars.color.primaryLinkHover,
     textDecoration: 'none',
   },
   ':link': {
@@ -44,12 +44,23 @@ export const linkText = style({
 });
 
 export const dangerLinkText = style({
-  color: common.color.red500,
+  color: vars.color.dangerLink,
+  letterSpacing: '-0.08px',
+  textDecoration: 'none',
+  selectors: {
+    '&.underline': {
+      textDecoration: 'underline',
+    },
+  },
   ':hover': {
-    color: vars.components.linkHoverDanger,
+    color: vars.color.dangerLinkHover,
+    textDecoration: 'none',
+  },
+  ':link': {
+    textDecoration: 'none',
   },
   ':visited': {
-    color: common.color.red500,
+    textDecoration: 'none',
   },
 });
 
