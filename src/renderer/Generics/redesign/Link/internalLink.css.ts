@@ -20,7 +20,7 @@ export const linkText = style({
 export const dangerLinkText = style({
   color: common.color.red500,
   ':hover': {
-    color: vars.components.linkHoverDanger,
+    color: vars.color.dangerLinkHover,
   },
   ':visited': {
     color: common.color.red500,
