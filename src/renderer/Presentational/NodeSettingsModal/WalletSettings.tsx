@@ -33,7 +33,7 @@ import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSetting
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
 import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import Select from '../../Generics/redesign/Select/Select';
-import Link from '../../Generics/redesign/Link/Link';
+import Linking from '../../Generics/redesign/Link/Linking';
 
 export const WalletSettings = () => {
   const { t: tGeneric } = useTranslation('genericComponents');
@@ -255,7 +255,7 @@ export const WalletSettings = () => {
                 setBrowserItems(temp);
               }}
             >
-              <Link text="Add Row" leftIconId="add" />
+              <Linking text="Add Row" leftIconId="add" />
             </div>
           </div>
         </div>

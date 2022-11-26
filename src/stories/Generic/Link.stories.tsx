@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import Link from '../../renderer/Generics/redesign/Link/Link';
+import Link from '../../renderer/Generics/redesign/Link/Linking';
 
 export default {
   title: 'Generic/Link',

@@ -7,11 +7,11 @@ import {
   linkText,
   iconStyle,
   dangerLinkText,
-} from './link.css';
+} from './linking.css';
 import { Icon } from '../Icon/Icon';
 
 // todo: variants for downloads or internal links
-export interface LinkProps {
+export interface LinkingProps {
   /**
    * Url (external)
    */
@@ -19,7 +19,7 @@ export interface LinkProps {
   /**
    * The link text
    */
-  text?: string;
+  text: string;
   /**
    * Inline the link
    */
@@ -53,7 +53,7 @@ export interface LinkProps {
   underline?: boolean;
 }
 
-const Link = ({
+const Linking = ({
   url,
   text,
   inline,
@@ -66,17 +66,21 @@ const Link = ({
   danger = false,
   underline = false,
   hideIcon = false,
-}: LinkProps) => {
+}: LinkingProps) => {
   const classContainer = inline ? inlineContainer : blockContainer;
   const containerStyle = danger ? dangerLinkText : linkText;
 
-  const linkProps = { href: '', target: '', rel: '', onClick: (e: any) => {} };
+  const linkProps = {
+    href: 'javascript:void(0);',
+    target: '',
+    rel: '',
+    onClick: (e: any) => {},
+  };
   if (url) {
     linkProps.href = url;
     linkProps.target = '_blank';
     linkProps.rel = 'noreferrer';
   } else {
-    linkProps.href = 'javascript:void(0);';
     linkProps.onClick = (e) => {
       console.log('Internal link a onclik');
       e.preventDefault();
@@ -138,4 +142,4 @@ const Link = ({
     </div>
   );
 };
-export default Link;
+export default Linking;
