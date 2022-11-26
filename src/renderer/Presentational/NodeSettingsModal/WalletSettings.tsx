@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
-import { clipboard } from 'electron';
+import { useState, useEffect } from 'react';
+import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
+import Input from '../../Generics/redesign/Input/Input';
+import Button from '../../Generics/redesign/Button/Button';
+import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
 import { Icon } from '../../Generics/redesign/Icon/Icon';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import {
@@ -17,16 +20,42 @@ import {
   advancedOptionsLink,
   advancedOptions,
   advancedOptionsDescription,
+  advancedOptionsListContainer,
+  advancedOptionsItemContainer,
   networkValue,
   copyIcon,
+  inputContainer,
+  selectContainer,
+  buttonContainer,
 } from './WalletSettings.css';
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
 import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
+import Select from '../../Generics/redesign/Select/Select';
 
 export const WalletSettings = () => {
   const { t: tGeneric } = useTranslation('genericComponents');
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
+  const browserSettings = [
+    {
+      browser: 'chrome',
+      extensionId: '',
+    },
+    {
+      browser: 'firefox',
+      extensionId: '',
+    },
+    {
+      browser: 'brave',
+      extensionId: '',
+    },
+  ];
+  const [browserItems, setBrowserItems] = useState<
+    {
+      browser: string;
+      extensionId: string;
+    }[]
+  >(browserSettings);
 
   type WalletProps = {
     walletId: WalletBackgroundId;
@@ -116,6 +145,51 @@ export const WalletSettings = () => {
       ),
     };
   };
+
+  const getBrowserItem = (
+    item: { browser: string; extensionId: string },
+    index: number
+  ) => {
+    return (
+      <>
+        <div className={advancedOptionsItemContainer}>
+          <Checkbox onClick={() => {}} />
+          <div className={selectContainer}>
+            <Select
+              value={item.browser}
+              onChange={console.log}
+              options={[
+                { value: 'chrome', label: 'Chrome' },
+                { value: 'firefox', label: 'Firefox' },
+                { value: 'brave', label: 'Brave' },
+              ]}
+            />
+          </div>
+          <div className={inputContainer}>
+            <Input
+              placeholder="Browser extension ID"
+              value={item.extensionId}
+            />
+          </div>
+          <div className={buttonContainer}>
+            <Button
+              ghost
+              variant="icon"
+              iconId="close"
+              size="small"
+              onClick={() => {
+                const temp = [...browserItems];
+                temp.splice(index, 1);
+                setBrowserItems(temp);
+              }}
+            />
+          </div>
+        </div>
+        <HorizontalLine />
+      </>
+    );
+  };
+
   return (
     <>
       <div className={walletDescription}>
@@ -159,6 +233,11 @@ export const WalletSettings = () => {
               inline
               hideIcon
             />
+          </div>
+          <div className={advancedOptionsListContainer}>
+            {browserItems.map((item, index) => {
+              return getBrowserItem(item, index);
+            })}
           </div>
         </div>
       )}

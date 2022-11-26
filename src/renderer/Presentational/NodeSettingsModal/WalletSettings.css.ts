@@ -53,6 +53,25 @@ export const advancedOptionsDescription = style({
   color: vars.color.font50,
 });
 
+export const advancedOptionsListContainer = style({
+  marginTop: 12,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+});
+
+export const advancedOptionsItemContainer = style({
+  marginTop: 10,
+  marginBottom: 9,
+  flex: 'none',
+  alignSelf: 'stretch',
+  flexGrow: 0,
+  flexDirection: 'row',
+  display: 'flex',
+  alignContent: 'center',
+  alignItems: 'center',
+});
+
 export const walletDetails = style({
   marginTop: 32,
   marginBottom: 20,
@@ -64,6 +83,20 @@ export const networkValue = style({
   alignContent: 'center',
   alignItems: 'center',
   gap: 12,
+});
+
+export const selectContainer = style({
+  marginLeft: 12,
+  width: 116,
+});
+
+export const inputContainer = style({
+  marginLeft: 8,
+  width: '100%',
+});
+
+export const buttonContainer = style({
+  marginLeft: 8,
 });
 
 export const copyIcon = style({
