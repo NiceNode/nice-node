@@ -54,11 +54,13 @@ const NodeSettings = ({
           onChange={onChange}
         />
         {/* Remove Node link */}
-        <InternalLink
-          text={tNiceNode('RemoveThisNode')}
-          onClick={onClickRemoveNode}
-          danger
-        />
+        <div style={{ padding: '16px 0px 16px 0px' }}>
+          <InternalLink
+            text={tNiceNode('RemoveThisNode')}
+            onClick={onClickRemoveNode}
+            danger
+          />
+        </div>
       </div>
       <div id="Wallet Connections">
         <WalletSettings />

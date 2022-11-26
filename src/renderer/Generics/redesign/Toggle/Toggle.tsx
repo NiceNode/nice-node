@@ -3,9 +3,13 @@ import { container, inputContainer, toggleText } from './toggle.css';
 
 export interface ToggleProps {
   /**
-   * Is there text to toggle?
+   * Is there (on) text to toggle?
    */
-  text?: { on: string; off: string };
+  onText?: string;
+  /**
+   * Is there (off) text to toggle?
+   */
+  offText?: string;
   /**
    * Is it disabled?
    */
@@ -23,15 +27,19 @@ export interface ToggleProps {
 /**
  * Primary UI component for user interaction
  */
-export const Toggle = ({ checked, disabled, onChange, text }: ToggleProps) => {
+export const Toggle = ({
+  checked,
+  disabled,
+  onChange,
+  onText,
+  offText,
+}: ToggleProps) => {
   const [isChecked, setChecked] = useState(checked);
-  let displayedText = '';
-  if (text) {
-    displayedText = isChecked ? text.on : text.off;
-  }
   return (
     <div className={container}>
-      {text && <div className={toggleText}>{displayedText}</div>}
+      {onText && offText && (
+        <div className={toggleText}>{isChecked ? onText : offText}</div>
+      )}
       <input
         {...{
           className: inputContainer,

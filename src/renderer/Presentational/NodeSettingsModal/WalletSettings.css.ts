@@ -99,6 +99,10 @@ export const buttonContainer = style({
   marginLeft: 8,
 });
 
+export const addRow = style({
+  marginTop: 16,
+});
+
 export const copyIcon = style({
   width: 14,
   height: 14,

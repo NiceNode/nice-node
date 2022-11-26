@@ -27,6 +27,7 @@ import {
   inputContainer,
   selectContainer,
   buttonContainer,
+  addRow,
 } from './WalletSettings.css';
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
@@ -36,6 +37,8 @@ import Select from '../../Generics/redesign/Select/Select';
 export const WalletSettings = () => {
   const { t: tGeneric } = useTranslation('genericComponents');
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
+
+  // fetch this from data layer
   const browserSettings = [
     {
       browser: 'chrome',
@@ -50,6 +53,7 @@ export const WalletSettings = () => {
       extensionId: '',
     },
   ];
+
   const [browserItems, setBrowserItems] = useState<
     {
       browser: string;
@@ -137,7 +141,8 @@ export const WalletSettings = () => {
       value: (
         <Toggle
           // checked={isOpenOnStartup}
-          text={{ on: 'Allowed', off: 'Disabled' }}
+          onText="Allowed"
+          offText="Disabled"
           onChange={(newValue) => {
             console.log(newValue);
           }}
@@ -153,7 +158,7 @@ export const WalletSettings = () => {
     return (
       <>
         <div className={advancedOptionsItemContainer}>
-          <Checkbox onClick={() => {}} />
+          <Checkbox checked={item.extensionId !== ''} onClick={() => {}} />
           <div className={selectContainer}>
             <Select
               value={item.browser}
@@ -238,6 +243,19 @@ export const WalletSettings = () => {
             {browserItems.map((item, index) => {
               return getBrowserItem(item, index);
             })}
+          </div>
+          <div className={addRow}>
+            <div
+              onClick={() => {
+                const temp = [
+                  ...browserItems,
+                  { browser: '', extensionId: '' },
+                ];
+                setBrowserItems(temp);
+              }}
+            >
+              Add Row
+            </div>
           </div>
         </div>
       )}
