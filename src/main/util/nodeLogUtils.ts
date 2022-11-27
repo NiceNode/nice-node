@@ -39,11 +39,11 @@ export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
   // handle errors: todo
 
   let level: LogLevel = 'INFO';
-  if (log.includes('ERROR')) {
+  if (log.includes('ERROR') || log.includes('ERR')) {
     level = 'ERROR';
-  } else if (log.includes('WARN')) {
+  } else if (log.includes('WARN') || log.includes('WRN')) {
     level = 'WARN';
-  } else if (log.includes('DEBUG')) {
+  } else if (log.includes('DEBUG') || log.includes('DBG')) {
     level = 'DEBUG';
   }
 
