@@ -13,7 +13,7 @@ import { Icon } from '../Icon/Icon';
 // todo: variants for downloads or internal links
 export interface LinkingProps {
   /**
-   * Url (external)
+   * Url (having this makes link become external)
    */
   url?: string;
   /**
@@ -111,17 +111,10 @@ const Linking = ({
     }
     return (
       <div className={[iconStyle, smallStyle].join(' ')}>
-        {/* make sure icon svg doesnt have width and height set */}
+        {/* make sure icon svg doesn't have width and height set */}
         <Icon iconId={iconId} />
       </div>
     );
-  };
-
-  const getDropdownIcon = () => {
-    if (isDown === true) {
-      return getIcon('down');
-    }
-    return getIcon('up');
   };
 
   return (
@@ -137,7 +130,7 @@ const Linking = ({
         {text}
       </a>
       {rightIconId && getIcon('rightIconId')}
-      {dropdown && getDropdownIcon()}
+      {dropdown && isDown === true ? getIcon('down') : getIcon('up')}
       {url && !hideIcon && getIcon('external')}
     </div>
   );
