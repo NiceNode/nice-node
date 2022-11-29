@@ -9,7 +9,7 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpCorsDomains": "nice-node://,http://localhost",
+        "httpCorsDomains": "nice-node://",
         "webSockets": "Enabled",
         "httpVirtualHosts": "localhost,host.docker.internal"
       },
@@ -41,21 +41,21 @@
   "rpcTranslation": "eth-l1",
   "systemRequirements": {
     "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
-    "cpu" : {
+    "cpu": {
       "cores": 4
     },
     "memory": {
       "minSizeGBs": 16
     },
-    "storage" : {
-      "minSizeGBs" : 1600,
+    "storage": {
+      "minSizeGBs": 1600,
       "ssdRequired": true
     },
-    "internet" : {
+    "internet": {
       "minDownloadSpeedMbps": 25,
       "minUploadSpeedMbps": 10
     },
-    "docker" : {
+    "docker": {
       "required": true
     }
   },

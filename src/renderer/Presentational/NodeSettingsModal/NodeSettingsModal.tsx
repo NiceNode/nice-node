@@ -63,7 +63,7 @@ const NodeSettings = ({
         </div>
       </div>
       <div id="Wallet Connections">
-        <WalletSettings />
+        <WalletSettings onChange={onChange} />
       </div>
     </Modal>
   );

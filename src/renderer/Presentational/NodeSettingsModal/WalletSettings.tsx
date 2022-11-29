@@ -35,9 +35,11 @@ import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import Select from '../../Generics/redesign/Select/Select';
 import Linking from '../../Generics/redesign/Link/Linking';
 
-export const WalletSettings = () => {
+export const WalletSettings = (props) => {
   const { t: tGeneric } = useTranslation('genericComponents');
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
+
+  const { onChange } = props;
 
   // fetch this from data layer
   const browserSettings = [
@@ -65,28 +67,36 @@ export const WalletSettings = () => {
   type WalletProps = {
     walletId: WalletBackgroundId;
     walletName: string;
+    walletAddress: string;
   };
+
+  let allowedWallets: string[] = [];
 
   const wallets = [
     {
       walletId: 'metamask',
       walletName: 'Metamask',
+      walletAddress: 'chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn',
     },
     {
       walletId: 'coinbase',
       walletName: 'Coinbase',
+      walletAddress: 'chrome-extension://hnfanknocfeofbddgcijnmhnfnkdnaad',
     },
     {
       walletId: 'brave',
       walletName: 'Brave',
+      walletAddress: 'chrome-extension://',
     },
     {
       walletId: 'tally',
       walletName: 'TallyHo!',
+      walletAddress: 'chrome-extension://eajafomhmkipbjmfmhebemolkcicgfmd',
     },
     {
       walletId: 'argent',
       walletName: 'Argent',
+      walletAddress: 'chrome-extension://dlcobpjiigpikoobohmabehhmhfoodbb/',
     },
   ];
 
@@ -126,7 +136,11 @@ export const WalletSettings = () => {
     };
   };
 
-  const getWalletItem = ({ walletId, walletName }: WalletProps) => {
+  const getWalletItem = ({
+    walletId,
+    walletName,
+    walletAddress,
+  }: WalletProps) => {
     return {
       label: (
         <div className={walletContainer}>
@@ -145,7 +159,15 @@ export const WalletSettings = () => {
           onText="Allowed"
           offText="Disabled"
           onChange={(newValue) => {
-            console.log(newValue);
+            if (newValue) {
+              allowedWallets.push(walletAddress);
+            } else {
+              allowedWallets = allowedWallets.filter(
+                (e) => e !== walletAddress
+              );
+            }
+            // onChange('httpCorsDomains', allowedWallets.toString());
+            console.log(allowedWallets.toString());
           }}
         />
       ),
