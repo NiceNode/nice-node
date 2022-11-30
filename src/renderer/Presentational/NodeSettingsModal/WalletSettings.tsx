@@ -36,10 +36,17 @@ import Select from '../../Generics/redesign/Select/Select';
 import Linking from '../../Generics/redesign/Link/Linking';
 
 export const WalletSettings = (props) => {
+  const { onChange, configValuesMap } = props;
+  console.log(`config ${JSON.stringify(configValuesMap)}`);
   const { t: tGeneric } = useTranslation('genericComponents');
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
+  const officialWallets = configValuesMap.httpCorsDomains.split(',') || [];
 
-  const { onChange } = props;
+  // const customWalletIds = Object
+  // const customWallets = officialWallets.filter(
+  //   (string) =>
+  //     !['David', 'Mike', 'Sam', 'Carol'].includes(allNameObject)
+  // );
 
   // fetch this from data layer
   const browserSettings = [
@@ -69,8 +76,6 @@ export const WalletSettings = (props) => {
     walletName: string;
     walletAddress: string;
   };
-
-  let allowedWallets: string[] = [];
 
   const wallets = [
     {
@@ -155,19 +160,20 @@ export const WalletSettings = (props) => {
       ),
       value: (
         <Toggle
-          // checked={isOpenOnStartup}
+          checked={officialWallets.includes(walletAddress)}
           onText="Allowed"
           offText="Disabled"
           onChange={(newValue) => {
+            console.log(`allowed ${JSON.stringify(officialWallets)}`);
+            let officialWalletsArray = officialWallets;
             if (newValue) {
-              allowedWallets.push(walletAddress);
+              officialWalletsArray.push(walletAddress);
             } else {
-              allowedWallets = allowedWallets.filter(
+              officialWalletsArray = officialWalletsArray.filter(
                 (e) => e !== walletAddress
               );
             }
-            // onChange('httpCorsDomains', allowedWallets.toString());
-            console.log(allowedWallets.toString());
+            onChange('httpCorsDomains', officialWalletsArray.toString());
           }}
         />
       ),
