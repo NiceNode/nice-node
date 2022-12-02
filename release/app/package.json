@@ -16,6 +16,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "pm2": "^5.2.0"
+    "pm2": "^5.2.0",
+    "systeminformation": "^5.16.0"
   }
 }
