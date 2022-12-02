@@ -53,9 +53,37 @@ export const findSystemStorageDetailsAtALocation = (
     throw new Error(`No filesystem found for location ${nodeStorageLocation}`);
   }
 
+  // Use matched file system or blockDevice to retrieve disk name
+  console.log(
+    'Matched Filesystem and BlockDevice',
+    matchedFileSystemSizes,
+    longestMatchBlockDevice,
+    systemData.diskLayout
+  );
+  let matchedDisk: Systeminformation.DiskLayoutData | undefined;
+  systemData.diskLayout?.forEach((disk) => {
+    if (longestMatchBlockDevice?.device === disk.device) {
+      // windows and linux
+      matchedDisk = disk;
+    } else if (longestMatchBlockDevice?.device === `/dev/${disk.device}`) {
+      // mac
+      matchedDisk = disk;
+    }
+  });
+
+  const storageName = matchedDisk
+    ? matchedDisk.name
+    : longestMatchBlockDevice.label;
+
+  // Example types: 'NVMe SSD' (win), 'PCIe NVMe' (mac)
+  const storageType = matchedDisk
+    ? `${matchedDisk.interfaceType} ${matchedDisk.type}`
+    : longestMatchBlockDevice.physical;
+
+  // todo: add total disk space? disk.size
   return {
-    type: longestMatchBlockDevice.physical,
-    name: longestMatchBlockDevice.label,
+    type: storageType,
+    name: storageName,
     freeSpaceGBs: matchedFileSystemSizes.available * 1e-9,
   };
 };

@@ -97,22 +97,19 @@ export const makeCheckList = (
           type: 'SSD',
         });
         if (disk?.type || disk?.name) {
-          if (disk?.type.includes('SSD') || disk?.name.includes('SSD')) {
+          if (disk?.type.includes('NVMe') || disk?.name.includes('NVMe')) {
             valueText = t('storageTypeDescription', {
-              type: 'SSD',
+              type: disk?.type ? disk?.type : 'NVMe SSD',
             });
             status = 'complete';
-          } else if (
-            disk?.type.includes('NVMe') ||
-            disk?.name.includes('NVMe')
-          ) {
+          } else if (disk?.type.includes('SSD') || disk?.name.includes('SSD')) {
             valueText = t('storageTypeDescription', {
-              type: 'NVMe SSD',
+              type: disk?.type ? disk?.type : 'SSD',
             });
             status = 'complete';
           } else if (disk?.type.includes('HDD') || disk?.name.includes('HDD')) {
             valueText = t('storageTypeDescription', {
-              type: 'HDD',
+              type: disk?.type ? disk?.type : 'HDD',
             });
             status = 'error';
           } else {
