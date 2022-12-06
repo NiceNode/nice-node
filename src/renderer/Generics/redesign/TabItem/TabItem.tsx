@@ -4,12 +4,12 @@ export interface TabItemProps {
   /**
    * What's the current active tab id?
    */
-  activeTabId: string;
+  activeTabId: string | undefined;
 
   /**
    * Required tab label
    */
-  label: string;
+  label: string | undefined;
 
   /**
    * Tab action

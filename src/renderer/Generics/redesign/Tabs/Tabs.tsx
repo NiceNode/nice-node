@@ -6,13 +6,11 @@ import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
 export interface TabsProps {
   modal?: boolean;
   id?: string;
-  children: React.ReactNode[];
+  children: React.ReactElement<TabsProps>[];
 }
 
 export const Tabs = ({ children, id, modal }: TabsProps) => {
-  const [activeTab, setActiveTab] = useState<string>(
-    id || children[0].props.id
-  );
+  const [activeTab, setActiveTab] = useState(id || children[0].props.id);
 
   const onClickTabItem = (tab: string) => {
     setActiveTab(tab);
@@ -28,13 +26,13 @@ export const Tabs = ({ children, id, modal }: TabsProps) => {
     <div className={container}>
       <ol className={tabsList}>
         {children.map((child) => {
-          const { id } = child.props;
+          const childId = child.props.id;
 
           return (
             <TabItem
               activeTabId={activeTab}
-              key={id}
-              label={id}
+              key={childId}
+              label={childId}
               onClickTabItem={onClickTabItem}
             />
           );
