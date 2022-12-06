@@ -23,7 +23,7 @@ export const Modal = ({
   isFullScreen,
 }: Props) => {
   const escFunction = useCallback(
-    (event) => {
+    (event: { key: string }) => {
       if (event.key === 'Escape') {
         // Do whatever when esc is pressed
         onClickCloseButton();

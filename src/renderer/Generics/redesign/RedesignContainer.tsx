@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Provider } from 'react-redux';
 
 import { store } from '../../state/store';
@@ -7,7 +7,7 @@ import StorybookLanguageSelect from '../../Presentational/StorybookLanguageSelec
 import { darkTheme, lightTheme } from './theme.css';
 import Button from './Button/Button';
 
-const RedesignContainerStoryBook: React.FC = ({ children }) => {
+const RedesignContainerStoryBook = ({ children }: { children: ReactNode }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   return (
