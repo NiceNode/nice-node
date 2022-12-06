@@ -1,5 +1,6 @@
+import { TFunction } from 'i18next';
 import { useEffect, useState } from 'react';
-import { TFunction, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import ProgressBar, { ProgressBarProps } from './ProgressBar';
 
 export interface TimedProgressBarProps extends ProgressBarProps {
@@ -7,7 +8,7 @@ export interface TimedProgressBarProps extends ProgressBarProps {
 }
 
 const timeRemainingCaption = (
-  t: TFunction<'genericComponents', undefined>,
+  t: TFunction,
   totalTime: number,
   timeElapsed: number
 ) => {

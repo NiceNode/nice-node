@@ -1,5 +1,5 @@
+import { TFunction } from 'i18next';
 import { ReactElement } from 'react';
-import { TFunction } from 'react-i18next';
 import {
   CpuRequirements,
   DockerRequirements,
@@ -17,7 +17,7 @@ import { findSystemStorageDetailsAtALocation } from './nodeStorageUtil';
 
 export const makeCheckList = (
   { nodeRequirements, systemData, nodeStorageLocation }: NodeRequirementsProps,
-  t: TFunction<'systemRequirements', undefined>
+  t: TFunction
 ) => {
   const newChecklistItems: ChecklistItemProps[] = [];
   if (!nodeRequirements) {
