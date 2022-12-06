@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
 import {
   container,
@@ -70,7 +69,6 @@ const contentLabels: SectionLabelProps = {
 
 export const TabContent = ({ tabId }: TabContentProps) => {
   // switch statement here to determine which charts and sections to show?
-  const renderContent = () => {};
 
   // format data passed into TabContent as this?
   const periodBreakdownData = {
@@ -131,6 +129,7 @@ export const TabContent = ({ tabId }: TabContentProps) => {
     return null;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const breakdownData: { title: string; items: any[] } = {
     title: 'Period breakdown',
     items: getBreakdown(tabId.toLowerCase(), periodBreakdownData),

@@ -4,14 +4,10 @@ import {
   baseButton,
   primaryButton,
   secondaryButton,
-  smallButton,
-  wideButton,
   iconLeft,
   iconStyle,
   ghostButton,
   dangerButton,
-  spaceBetweenButton,
-  iconButton,
 } from './button.css';
 
 export interface ButtonProps {

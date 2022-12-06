@@ -74,7 +74,8 @@ const Linking = ({
     href: 'javascript:void(0);',
     target: '',
     rel: '',
-    onClick: (e: any) => {},
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+    onClick: (_e: any) => {},
   };
   if (url) {
     linkProps.href = url;
@@ -101,10 +102,20 @@ const Linking = ({
         iconId = type;
         break;
       case 'rightIconId':
-        iconId = rightIconId;
+        if (rightIconId) {
+          // check for undefined here
+          iconId = rightIconId;
+        } else {
+          return null;
+        }
         break;
       case 'leftIconId':
-        iconId = leftIconId;
+        if (leftIconId) {
+          // check for undefined here
+          iconId = leftIconId;
+        } else {
+          return null;
+        }
         break;
       default:
         iconId = 'external';
@@ -118,13 +129,7 @@ const Linking = ({
   };
 
   return (
-    <div
-      className={[classContainer, containerStyle, smallStyle].join(' ')}
-      onClick={onClick}
-      onKeyDown={onClick}
-      role="button"
-      tabIndex={0}
-    >
+    <div className={[classContainer, containerStyle, smallStyle].join(' ')}>
       {leftIconId && getIcon('leftIconId')}
       <a className={[containerStyle, underlineStyle].join(' ')} {...linkProps}>
         {text}
