@@ -21,7 +21,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-11]
 
     steps:
       - name: Checkout git repo
@@ -36,6 +36,16 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
+
+      # This dependency wasn't needed until suddenly on Dec. 2, 2022
+      - name: install dmg-license
+        run: |
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            npm i -D dmg-license
+          else
+            exit 0
+          fi
+        shell: bash
 
       - name: Publish releases
         env:
