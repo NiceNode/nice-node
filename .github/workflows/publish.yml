@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - ui-redesign
+      - chore/update-deps
 
 # asar is disabled for pm2 & electron build to work
 #   with asar disabled, hard links needs to be disabled
