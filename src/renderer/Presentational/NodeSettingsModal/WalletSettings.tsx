@@ -243,7 +243,7 @@ export const WalletSettings = (props) => {
           },
         ]}
       />
-      <div className={advancedOptionsLink}>
+      {/* <div className={advancedOptionsLink}>
         <DropdownLink
           text={`${
             isOptionsOpen
@@ -287,7 +287,7 @@ export const WalletSettings = (props) => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
       <div className={walletDetails}>
         <div className={title}>Details for your new wallet network</div>
         <LineLabelSettings
