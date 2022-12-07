@@ -38,14 +38,17 @@ import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
 import { SettingChangeHandler } from './NodeSettingsWrapper';
 
 export interface WalletSettingsProps {
-  configValuesMap: ConfigValuesMap;
-  onChange: SettingChangeHandler;
+  configValuesMap?: ConfigValuesMap;
+  onChange?: SettingChangeHandler;
 }
 
 export const WalletSettings = ({
   onChange,
   configValuesMap,
 }: WalletSettingsProps) => {
+  if (!configValuesMap) {
+    return <>Config values not found</>;
+  }
   // const { t: tGeneric } = useTranslation('genericComponents');
   // const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const officialWallets = configValuesMap.httpCorsDomains.split(',') || [];
@@ -185,7 +188,9 @@ export const WalletSettings = ({
                 (e: string) => e !== walletAddress
               );
             }
-            onChange('httpCorsDomains', officialWalletsArray.toString());
+            if (onChange) {
+              onChange('httpCorsDomains', officialWalletsArray.toString());
+            }
           }}
         />
       ),

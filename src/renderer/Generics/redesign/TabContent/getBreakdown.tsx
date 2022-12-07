@@ -1,10 +1,32 @@
 import { PeriodBreakdownDataProps } from './TabContent';
 
+interface BreakDownObjects {
+  sync: {
+    key: string;
+    sectionTitle: string;
+    items: { label: string; value: string }[];
+  }[];
+  cpu: { key: string; items: { label: string; value: string }[] }[];
+  memory: { key: string; items: { label: string; value: string }[] }[];
+  network: {
+    key: string;
+    sectionTitle: string;
+    items: { label: string; value: string }[];
+  }[];
+  disk: {
+    key: string;
+    sectionTitle: string;
+    items: { label: string; value: string }[];
+  }[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any; // index signature
+}
+
 export const getBreakdown = (
   tabId: string,
   periodBreakdownData: PeriodBreakdownDataProps
 ) => {
-  const breakDownObjects = {
+  const breakDownObjects: BreakDownObjects = {
     sync: [
       {
         key: 'synchronization',

@@ -9,7 +9,7 @@ export default {
   },
 } as ComponentMeta<typeof Tabs>;
 
-const NodeSettingTabs: ComponentStory<typeof Tabs> = (args) => {
+const NodeSettingTabs: ComponentStory<typeof Tabs> = () => {
   return (
     <Tabs id="Wallet Connections">
       <div id="General">General content goes here!</div>
@@ -20,7 +20,7 @@ const NodeSettingTabs: ComponentStory<typeof Tabs> = (args) => {
 
 export const NoteSettings = NodeSettingTabs.bind({});
 
-const SingleClientTabs: ComponentStory<typeof Tabs> = (args) => {
+const SingleClientTabs: ComponentStory<typeof Tabs> = () => {
   return (
     <Tabs>
       <div id="Sync">Sync content goes here!</div>

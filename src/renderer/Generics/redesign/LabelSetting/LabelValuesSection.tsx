@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import ExternalLink from '../Link/ExternalLink';
 import Caption from '../Typography/Caption';
@@ -44,7 +44,7 @@ const LabelSettingsSection = ({
       )}
       {items &&
         items.map((item) => (
-          <React.Fragment key={item.label}>
+          <>
             <div className={lineContainer}>
               <div className={labelAndDescriptionContainer}>
                 <div className={lineKeyText}>{item.label}</div>
@@ -63,7 +63,7 @@ const LabelSettingsSection = ({
 
               <div className={lineValueText}>{item.value}</div>
             </div>
-          </React.Fragment>
+          </>
         ))}
     </div>
   );

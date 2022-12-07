@@ -14,7 +14,7 @@ export interface TabItemProps {
   /**
    * Tab action
    */
-  onClickTabItem: (tab: string) => void;
+  onClickTabItem: (tab: string | undefined) => void;
 }
 
 const TabItem = ({ activeTabId, label, onClickTabItem }: TabItemProps) => {

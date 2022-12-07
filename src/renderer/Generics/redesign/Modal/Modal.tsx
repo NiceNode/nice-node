@@ -9,7 +9,7 @@ import {
 } from './modal.css';
 
 type Props = {
-  children: React.ReactNode;
+  children: React.ReactElement[] | React.ReactElement;
   isOpen: boolean | undefined;
   onClickCloseButton: () => void;
   title?: string;
@@ -44,7 +44,7 @@ export const Modal = ({
   }, [escFunction]);
 
   const renderContent = () => {
-    if (tabs) {
+    if (Array.isArray(children) && tabs) {
       return <Tabs modal>{children}</Tabs>;
     }
     return <div className={modalChildrenContainer}>{children}</div>;
