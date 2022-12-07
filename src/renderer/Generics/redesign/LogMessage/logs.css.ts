@@ -19,7 +19,6 @@ export const logsContainer = style({
 
 export const filterContainer = style({
   width: '100%',
-  position: 'absolute',
   boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'row',
