@@ -36,6 +36,8 @@ import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
 // import Select from '../../Generics/redesign/Select/Select';
 // import Linking from '../../Generics/redesign/Link/Linking';
 import { SettingChangeHandler } from './NodeSettingsWrapper';
+import Button from '../../Generics/redesign/Button/Button';
+import { vars } from '../../Generics/redesign/theme.css';
 
 export interface WalletSettingsProps {
   configValuesMap: ConfigValuesMap;
@@ -117,7 +119,7 @@ export const WalletSettings = ({
 
   const networkLabels = {
     networkName: 'Network Name',
-    rpcUrl: 'http://localhost:8080',
+    rpcUrl: 'New RPC URL',
     chainId: 'Chain ID',
     currencySymbol: 'Currency Symbol',
     blockExplorer: 'Block explorer',
@@ -126,7 +128,7 @@ export const WalletSettings = ({
   // fetch this from data layer
   const networkDetails = {
     networkName: 'Ethereum Mainnet (NiceNode)',
-    rpcUrl: 'New RPC URL',
+    rpcUrl: 'http://localhost:8545',
     chainId: '1',
     currencySymbol: 'ETH',
     blockExplorer: 'https://etherscan.io',
@@ -138,19 +140,16 @@ export const WalletSettings = ({
       value: (
         <div className={networkValue}>
           <div>{networkDetails[key as keyof NetworkLabelsProps]}</div>
-          <div
-            className={copyIcon}
-            onKeyDown={() => {
-              console.log('copy text!');
-            }}
-            role="button"
-            tabIndex={0}
+          <Button
+            ghost
+            iconId="copy"
+            variant="icon"
             onClick={() => {
-              console.log('copy text!');
+              navigator.clipboard.writeText(
+                networkDetails[key as keyof NetworkLabelsProps]
+              );
             }}
-          >
-            <Icon iconId="copy" />
-          </div>
+          />
         </div>
       ),
     };
