@@ -115,7 +115,7 @@ const Sidebar = ({
     });
   };
 
-  const onClickLinkItem = useCallback((linkItemId) => {
+  const onClickLinkItem = useCallback((linkItemId: string) => {
     console.log('sidebar link item clicked: ', linkItemId);
     if (linkItemId === 'add') {
       // open add node dialog
