@@ -5,7 +5,6 @@ import { ConfigValuesMap } from 'common/nodeConfig';
 // import Input from '../../Generics/redesign/Input/Input';
 // import Button from '../../Generics/redesign/Button/Button';
 // import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
-import { Icon } from '../../Generics/redesign/Icon/Icon';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import {
   WalletBackgroundId,
@@ -24,7 +23,6 @@ import {
   // advancedOptionsListContainer,
   // advancedOptionsItemContainer,
   networkValue,
-  copyIcon,
   // inputContainer,
   // selectContainer,
   // buttonContainer,
@@ -37,7 +35,6 @@ import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
 // import Linking from '../../Generics/redesign/Link/Linking';
 import { SettingChangeHandler } from './NodeSettingsWrapper';
 import Button from '../../Generics/redesign/Button/Button';
-import { vars } from '../../Generics/redesign/theme.css';
 
 export interface WalletSettingsProps {
   configValuesMap: ConfigValuesMap;
