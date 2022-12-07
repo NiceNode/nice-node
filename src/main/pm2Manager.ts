@@ -82,11 +82,11 @@ export const sendLogsToUI = (node: Node) => {
   });
 
   rl.on('line', (log: string) => {
-    logger.info(`docker log read for ${node.spec.specId}`);
+    logger.info(`pm2 log read for ${node.spec.specId}`);
     try {
       send('nodeLogs', log);
     } catch (err) {
-      logger.error(`Error parsing docker event log ${log}`, err);
+      logger.error(`Error parsing pm2 log ${log}`, err);
     }
   });
 

@@ -209,10 +209,11 @@ export const sendLogsToUI = (node: Node) => {
     rlStdErr = readline.createInterface({
       input: sendLogsToUIProc.stderr,
     });
+    // some nodes, such as geth, send all logs over stderr
     rlStdErr.on('line', (log: string) => {
       // logger.info(`docker log read for ${node.spec.specId}`);
       try {
-        send('nodeLogs', log);
+        send('nodeLogs', parseDockerLogMetadata(log));
       } catch (err) {
         logger.error(`Error parsing docker event log ${log}`, err);
       }
@@ -228,7 +229,7 @@ export const sendLogsToUI = (node: Node) => {
 
       // can use these logs to generate tests
       // console.log('log metadata without:', log);
-      console.log('log metadata:', parseDockerLogMetadata(log));
+      // logger.info('log metadata:', parseDockerLogMetadata(log));
       try {
         // parse log metadata before sending to the UI
         send('nodeLogs', parseDockerLogMetadata(log));

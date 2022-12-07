@@ -110,8 +110,9 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
       }
       return false;
     })
-    .map((log: LogWithMetadata) => (
-      <React.Fragment key={`${log.timestamp}${log.message}`}>
+    .map((log: LogWithMetadata, index) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <React.Fragment key={`${log.timestamp}${log.message}${index}`}>
         <LogMessage {...log} />
       </React.Fragment>
     ));
