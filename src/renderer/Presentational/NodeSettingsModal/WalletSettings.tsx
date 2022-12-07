@@ -1,10 +1,10 @@
-// import { useTranslation } from 'react-i18next';
-// import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { ConfigValuesMap } from 'common/nodeConfig';
-// import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
-// import Input from '../../Generics/redesign/Input/Input';
-// import Button from '../../Generics/redesign/Button/Button';
-// import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
+import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
+import Input from '../../Generics/redesign/Input/Input';
+import Button from '../../Generics/redesign/Button/Button';
+import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import {
   WalletBackgroundId,
@@ -17,24 +17,23 @@ import {
   walletTitle,
   walletImage,
   walletDetails,
-  // advancedOptionsLink,
-  // advancedOptions,
-  // advancedOptionsDescription,
-  // advancedOptionsListContainer,
-  // advancedOptionsItemContainer,
+  advancedOptionsLink,
+  advancedOptions,
+  advancedOptionsDescription,
+  advancedOptionsListContainer,
+  advancedOptionsItemContainer,
   networkValue,
-  // inputContainer,
-  // selectContainer,
-  // buttonContainer,
-  // addRow,
+  inputContainer,
+  selectContainer,
+  buttonContainer,
+  addRow,
 } from './WalletSettings.css';
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
-// import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
-// import Select from '../../Generics/redesign/Select/Select';
-// import Linking from '../../Generics/redesign/Link/Linking';
+import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
+import Select from '../../Generics/redesign/Select/Select';
+import Linking from '../../Generics/redesign/Link/Linking';
 import { SettingChangeHandler } from './NodeSettingsWrapper';
-import Button from '../../Generics/redesign/Button/Button';
 
 export interface WalletSettingsProps {
   configValuesMap?: ConfigValuesMap;
@@ -45,49 +44,9 @@ export const WalletSettings = ({
   onChange,
   configValuesMap,
 }: WalletSettingsProps) => {
-  if (!configValuesMap) {
-    return <>Config values not found</>;
-  }
-  // const { t: tGeneric } = useTranslation('genericComponents');
-  // const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
-  const officialWallets = configValuesMap.httpCorsDomains.split(',') || [];
-
-  // // fetch this from data layer
-  // const browserSettings = [
-  //   {
-  //     browser: 'chrome',
-  //     extensionId: '',
-  //   },
-  //   {
-  //     browser: 'firefox',
-  //     extensionId: '',
-  //   },
-  //   {
-  //     browser: 'brave',
-  //     extensionId: '',
-  //   },
-  // ];
-
-  // const [browserItems, setBrowserItems] = useState<
-  //   {
-  //     browser: string;
-  //     extensionId: string;
-  //   }[]
-  // >(browserSettings);
-
-  interface WalletProps {
-    walletId: WalletBackgroundId;
-    walletName: string;
-    walletAddress: string;
-  }
-
-  type NetworkLabelsProps = {
-    networkName: string;
-    rpcUrl: string;
-    chainId: string;
-    currencySymbol: string;
-    blockExplorer: string;
-  };
+  // if (!configValuesMap) {
+  //   return <>Config values not found</>;
+  // }
 
   const wallets = [
     {
@@ -116,6 +75,69 @@ export const WalletSettings = ({
       walletAddress: 'chrome-extension://dlcobpjiigpikoobohmabehhmhfoodbb/',
     },
   ];
+
+  const { t: tGeneric } = useTranslation('genericComponents');
+  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
+  const allWallets = configValuesMap.httpCorsDomains.split(',') || [];
+  const defaultAddresses = ['nice-node://', 'http://localhost'];
+  // const defaultAddresses = [];
+  const officialWallets = wallets.map((item) => {
+    return item.walletAddress;
+  });
+
+  const getOfficialWalletAddressArray = () => {
+    return allWallets.filter(
+      (e) => officialWallets.includes(e) && !defaultAddresses.includes(e)
+    );
+  };
+  // filters allWallets so it only includes official wallets
+  const officialWalletAddressArray = getOfficialWalletAddressArray();
+
+  // filters allWallets so it only includes custom wallets
+  const getCustomWalletAddressArray = () => {
+    return allWallets.filter(
+      (e) =>
+        !officialWalletAddressArray.includes(e) && !defaultAddresses.includes(e)
+    );
+  };
+  const customWalletAddressArray = getCustomWalletAddressArray();
+
+  // fetch this from data layer
+  const browserSettings = [
+    {
+      browser: 'chrome',
+      extensionId: '',
+    },
+    {
+      browser: 'firefox',
+      extensionId: '',
+    },
+    {
+      browser: 'brave',
+      extensionId: '',
+    },
+  ];
+
+  const [browserItems, setBrowserItems] = useState<
+    {
+      browser: string;
+      extensionId: string;
+    }[]
+  >(browserSettings);
+
+  interface WalletProps {
+    walletId: WalletBackgroundId;
+    walletName: string;
+    walletAddress: string;
+  }
+
+  type NetworkLabelsProps = {
+    networkName: string;
+    rpcUrl: string;
+    chainId: string;
+    currencySymbol: string;
+    blockExplorer: string;
+  };
 
   const networkLabels = {
     networkName: 'Network Name',
@@ -171,12 +193,11 @@ export const WalletSettings = ({
       ),
       value: (
         <Toggle
-          checked={officialWallets.includes(walletAddress)}
+          checked={officialWalletAddressArray.includes(walletAddress)}
           onText="Allowed"
           offText="Disabled"
           onChange={(newValue) => {
-            console.log(`allowed ${JSON.stringify(officialWallets)}`);
-            let officialWalletsArray = officialWallets;
+            let officialWalletsArray = officialWalletAddressArray;
             if (newValue) {
               officialWalletsArray.push(walletAddress);
             } else {
@@ -184,8 +205,15 @@ export const WalletSettings = ({
                 (e: string) => e !== walletAddress
               );
             }
+
+            // take the new official wallet array, and combine with existing custom wallet address array
+            const allWalletsAddressArray = [
+              ...officialWalletsArray,
+              ...getCustomWalletAddressArray(),
+            ];
+
             if (onChange) {
-              onChange('httpCorsDomains', officialWalletsArray.toString());
+              onChange('httpCorsDomains', allWalletsAddressArray.toString());
             }
           }}
         />
@@ -193,49 +221,72 @@ export const WalletSettings = ({
     };
   };
 
-  // const getBrowserItem = (
-  //   item: { browser: string; extensionId: string },
-  //   index: number
-  // ) => {
-  //   return (
-  //     <>
-  //       <div className={advancedOptionsItemContainer}>
-  //         <Checkbox checked={item.extensionId !== ''} onClick={() => {}} />
-  //         <div className={selectContainer}>
-  //           <Select
-  //             value={item.browser}
-  //             onChange={console.log}
-  //             options={[
-  //               { value: 'chrome', label: 'Chrome' },
-  //               { value: 'firefox', label: 'Firefox' },
-  //               { value: 'brave', label: 'Brave' },
-  //             ]}
-  //           />
-  //         </div>
-  //         <div className={inputContainer}>
-  //           <Input
-  //             placeholder="Browser extension ID"
-  //             value={item.extensionId}
-  //           />
-  //         </div>
-  //         <div className={buttonContainer}>
-  //           <Button
-  //             ghost
-  //             variant="icon"
-  //             iconId="close"
-  //             size="small"
-  //             onClick={() => {
-  //               const temp = [...browserItems];
-  //               temp.splice(index, 1);
-  //               setBrowserItems(temp);
-  //             }}
-  //           />
-  //         </div>
-  //       </div>
-  //       <HorizontalLine />
-  //     </>
-  //   );
-  // };
+  const getBrowserItem = (
+    item: { browser: string; extensionId: string },
+    index: number
+  ) => {
+    return (
+      <>
+        <div className={advancedOptionsItemContainer}>
+          <div className={selectContainer}>
+            <Select
+              value={item.browser}
+              onChange={(newValue) => {
+                const { value } = newValue;
+                if (customWalletAddressArray[index] === '') {
+                  // string doesn't exist yet
+                  customWalletAddressArray[index] = `${value}://`;
+                } else {
+                  // string exists already, so update the browser
+                  const parts = customWalletAddressArray[index].split('://');
+                  customWalletAddressArray[index] = `${value}://${parts[1]}`;
+                }
+                console.log(customWalletAddressArray[index]);
+              }}
+              options={[
+                { value: 'chrome', label: 'Chrome' },
+                { value: 'firefox', label: 'Firefox' },
+                { value: 'brave', label: 'Brave' },
+              ]}
+            />
+          </div>
+          <div className={inputContainer}>
+            <Input
+              placeholder="Browser extension ID"
+              // value={item.extensionId}
+              onChange={(value) => {
+                if (customWalletAddressArray[index] === '') {
+                  // string doesn't exist yet
+                  customWalletAddressArray[
+                    index
+                  ] = `${item.browser}://${value}`;
+                } else {
+                  // string exists already, so update the extensionId
+                  const parts = customWalletAddressArray[index].split('://');
+                  customWalletAddressArray[index] = `${parts[0]}://${value}`;
+                }
+                console.log(customWalletAddressArray[index]);
+              }}
+            />
+          </div>
+          <div className={buttonContainer}>
+            <Button
+              ghost
+              variant="icon"
+              iconId="close"
+              size="small"
+              onClick={() => {
+                const temp = [...browserItems];
+                temp.splice(index, 1);
+                setBrowserItems(temp);
+              }}
+            />
+          </div>
+        </div>
+        <HorizontalLine />
+      </>
+    );
+  };
 
   return (
     <>
@@ -256,7 +307,7 @@ export const WalletSettings = ({
           },
         ]}
       />
-      {/* <div className={advancedOptionsLink}>
+      <div className={advancedOptionsLink}>
         <DropdownLink
           text={`${
             isOptionsOpen
@@ -300,7 +351,7 @@ export const WalletSettings = ({
             </div>
           </div>
         </div>
-      )} */}
+      )}
       <div className={walletDetails}>
         <div className={title}>Details for your new wallet network</div>
         <LineLabelSettings
