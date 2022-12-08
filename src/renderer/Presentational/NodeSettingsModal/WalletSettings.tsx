@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { ConfigValuesMap } from 'common/nodeConfig';
+import { SingleValue } from 'react-select';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import Input from '../../Generics/redesign/Input/Input';
 import Button from '../../Generics/redesign/Button/Button';
-import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import {
   WalletBackgroundId,
@@ -44,10 +44,6 @@ export const WalletSettings = ({
   onChange,
   configValuesMap,
 }: WalletSettingsProps) => {
-  // if (!configValuesMap) {
-  //   return <>Config values not found</>;
-  // }
-
   const wallets = [
     {
       walletId: 'metamask',
@@ -78,9 +74,8 @@ export const WalletSettings = ({
 
   const { t: tGeneric } = useTranslation('genericComponents');
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
-  const allWallets = configValuesMap.httpCorsDomains.split(',') || [];
+  const allWallets = configValuesMap?.httpCorsDomains.split(',') || [];
   const defaultAddresses = ['nice-node://', 'http://localhost'];
-  // const defaultAddresses = [];
   const officialWallets = wallets.map((item) => {
     return item.walletAddress;
   });
@@ -95,14 +90,29 @@ export const WalletSettings = ({
 
   // filters allWallets so it only includes custom wallets
   const getCustomWalletAddressArray = () => {
-    return allWallets.filter(
+    const filtered = allWallets.filter(
       (e) =>
         !officialWalletAddressArray.includes(e) && !defaultAddresses.includes(e)
     );
+    if (filtered[0] === '') {
+      return null;
+    }
+    return filtered.map((item) => {
+      const parts = item.split('://');
+      return {
+        browser: parts[0],
+        extensionId: parts[1],
+      };
+    });
   };
-  const customWalletAddressArray = getCustomWalletAddressArray();
 
-  // fetch this from data layer
+  const getWalletStringFromObject = (object: {
+    browser: string;
+    extensionId: string;
+  }) => {
+    return `${object.browser}://${object.extensionId}`;
+  };
+
   const browserSettings = [
     {
       browser: 'chrome',
@@ -118,12 +128,26 @@ export const WalletSettings = ({
     },
   ];
 
-  const [browserItems, setBrowserItems] = useState<
-    {
-      browser: string;
-      extensionId: string;
-    }[]
-  >(browserSettings);
+  const [customWalletAddressArray, setCustomWalletAddressArray] = useState(
+    getCustomWalletAddressArray() || browserSettings
+  );
+
+  const updateConfig = (
+    updatedArray: { browser: string; extensionId: string }[]
+  ) => {
+    if (onChange) {
+      const customWalletAddressStringsArray = updatedArray.map(
+        (arrayItem: { browser: string; extensionId: string }) => {
+          return getWalletStringFromObject(arrayItem);
+        }
+      );
+      const allWalletsAddressArray = [
+        ...officialWalletAddressArray,
+        ...customWalletAddressStringsArray,
+      ];
+      onChange('httpCorsDomains', allWalletsAddressArray.toString());
+    }
+  };
 
   interface WalletProps {
     walletId: WalletBackgroundId;
@@ -206,10 +230,15 @@ export const WalletSettings = ({
               );
             }
 
+            const customWalletAddressStringsArray =
+              customWalletAddressArray.map((item) => {
+                return getWalletStringFromObject(item);
+              });
+
             // take the new official wallet array, and combine with existing custom wallet address array
             const allWalletsAddressArray = [
               ...officialWalletsArray,
-              ...getCustomWalletAddressArray(),
+              ...customWalletAddressStringsArray,
             ];
 
             if (onChange) {
@@ -231,17 +260,23 @@ export const WalletSettings = ({
           <div className={selectContainer}>
             <Select
               value={item.browser}
-              onChange={(newValue) => {
-                const { value } = newValue;
-                if (customWalletAddressArray[index] === '') {
-                  // string doesn't exist yet
-                  customWalletAddressArray[index] = `${value}://`;
-                } else {
+              onChange={(
+                newValue:
+                  | SingleValue<{ value: string; label: string }>
+                  | undefined
+              ) => {
+                if (newValue) {
+                  const { value } = newValue;
+                  const updatedArray = customWalletAddressArray;
                   // string exists already, so update the browser
-                  const parts = customWalletAddressArray[index].split('://');
-                  customWalletAddressArray[index] = `${value}://${parts[1]}`;
+                  const { extensionId } = updatedArray[index];
+                  updatedArray[index] = {
+                    browser: value,
+                    extensionId,
+                  };
+                  setCustomWalletAddressArray(updatedArray);
+                  updateConfig(updatedArray);
                 }
-                console.log(customWalletAddressArray[index]);
               }}
               options={[
                 { value: 'chrome', label: 'Chrome' },
@@ -253,19 +288,17 @@ export const WalletSettings = ({
           <div className={inputContainer}>
             <Input
               placeholder="Browser extension ID"
-              // value={item.extensionId}
+              value={item.extensionId}
               onChange={(value) => {
-                if (customWalletAddressArray[index] === '') {
-                  // string doesn't exist yet
-                  customWalletAddressArray[
-                    index
-                  ] = `${item.browser}://${value}`;
-                } else {
-                  // string exists already, so update the extensionId
-                  const parts = customWalletAddressArray[index].split('://');
-                  customWalletAddressArray[index] = `${parts[0]}://${value}`;
-                }
-                console.log(customWalletAddressArray[index]);
+                const updatedArray = customWalletAddressArray;
+                // string exists already, so update the extensionId
+                const { browser } = updatedArray[index];
+                updatedArray[index] = {
+                  browser,
+                  extensionId: value,
+                };
+                setCustomWalletAddressArray(updatedArray);
+                updateConfig(updatedArray);
               }}
             />
           </div>
@@ -276,9 +309,10 @@ export const WalletSettings = ({
               iconId="close"
               size="small"
               onClick={() => {
-                const temp = [...browserItems];
-                temp.splice(index, 1);
-                setBrowserItems(temp);
+                const updatedArray = [...customWalletAddressArray];
+                updatedArray.splice(index, 1);
+                setCustomWalletAddressArray(updatedArray);
+                updateConfig(updatedArray);
               }}
             />
           </div>
@@ -333,22 +367,22 @@ export const WalletSettings = ({
             />
           </div>
           <div className={advancedOptionsListContainer}>
-            {browserItems.map((item, index) => {
+            {customWalletAddressArray.map((item, index) => {
               return getBrowserItem(item, index);
             })}
           </div>
           <div className={addRow}>
-            <div
+            <Linking
+              text="Add Row"
+              leftIconId="add"
               onClick={() => {
-                const temp = [
-                  ...browserItems,
-                  { browser: '', extensionId: '' },
+                const updatedArray = [
+                  ...customWalletAddressArray,
+                  { browser: 'chrome', extensionId: '' },
                 ];
-                setBrowserItems(temp);
+                setCustomWalletAddressArray(updatedArray);
               }}
-            >
-              <Linking text="Add Row" leftIconId="add" />
-            </div>
+            />
           </div>
         </div>
       )}
