@@ -128,6 +128,13 @@ const Linking = ({
     );
   };
 
+  const getDropdown = () => {
+    if (dropdown) {
+      return isDown === true ? getIcon('down') : getIcon('up');
+    }
+    return null;
+  };
+
   return (
     <div className={[classContainer, containerStyle, smallStyle].join(' ')}>
       {leftIconId && getIcon('leftIconId')}
@@ -135,7 +142,7 @@ const Linking = ({
         {text}
       </a>
       {rightIconId && getIcon('rightIconId')}
-      {dropdown && isDown === true ? getIcon('down') : getIcon('up')}
+      {getDropdown()}
       {url && !hideIcon && getIcon('external')}
     </div>
   );
