@@ -12,12 +12,12 @@
         "httpPort": "5052",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
-        "eth1ProviderUrl": "http://host.docker.internal:8545"
+        "executionEndpoint": "http://host.docker.internal:8551"
       },
       "docker": {
         "containerVolumePath": "/var/lib/teku",
         "raw": "--add-host=host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
-        "forcedRawNodeInput": "--data-path=\"/var/lib/teku\""
+        "forcedRawNodeInput": "--data-path=\"/var/lib/teku\" --ee-jwt-secret-file=\"/var/lib/teku/jwtsecret\""
       }
     }
   },
@@ -92,24 +92,14 @@
       "warning": "Only trusted parties should access the REST API. Do not directly expose these APIs publicly on production nodes. We don’t recommend allowing all hostnames (\"*\") for production environments.",
       "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#rest-api-host-allowlist"
     },
-    "eth1ProviderUrl": {
-      "displayName": "URL of the execution client’s Engine JSON-RPC APIs.",
-      "cliConfigPrefix": "--ee-endpoint=",
-      "defaultValue": "http://localhost:8545",
-      "uiControl": {
-        "type": "text"
-      },
-      "infoDescription": "Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)",
-      "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#ee-endpoint"
-    },
-    "executionEngineEndpoint": {
+    "executionEndpoint": {
       "displayName": "URL of the execution client's Engine JSON-RPC APIs",
       "cliConfigPrefix": "--ee-endpoint=",
-      "defaultValue": "http://localhost:8550",
+      "defaultValue": "http://host.docker.internal:8551",
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "URL of the execution client's Engine JSON-RPC APIs. This replaces eth1-endpoint after The Merge.",
+      "infoDescription": "URL of the execution client's Engine JSON-RPC APIs.",
       "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#ee-endpoint"
     },
     "maxPeerCount": {

@@ -46,6 +46,11 @@ declare global {
       // Multi-node
       getNodes(): Node[];
       getUserNodes(): UserNodes;
+      addEthereumNode(
+        ecNodeSpec: NodeSpecification,
+        ccNodeSpec: NodeSpecification,
+        settings: { storageLocation?: string }
+      ): { ecNode: Node; ccNode: Node };
       addNode(nodeSpec: NodeSpecification, storageLocation?: string): Node;
       updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;
       removeNode(nodeId: NodeId, options: { isDeleteStorage: boolean }): Node;
