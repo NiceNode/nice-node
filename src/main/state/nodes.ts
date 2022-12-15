@@ -7,6 +7,7 @@ import Node, {
   UserNodes,
 } from '../../common/node';
 import store from './store';
+import { ConfigValuesMap } from '../../common/nodeConfig';
 
 export const USER_NODES_KEY = 'userNodes';
 const NODES_KEY = 'nodes';
@@ -95,6 +96,22 @@ export const updateNodeProperties = (
   );
   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${node.id}`, newNode);
   return getNode(node.id);
+};
+
+/**
+ * Update node config values passed (doesn't change values if not passed)
+ * @param nodeId
+ * @param newConfig
+ * @returns updated Node
+ */
+export const updateNodeConfig = (
+  nodeId: NodeId,
+  newConfig: ConfigValuesMap
+) => {
+  console.log('updateNodeProperties: propertiesToUpdate', newConfig);
+  // todo: could add some validation on the config key and values with the
+  //  those detailed in the node spec
+  return updateNodeProperties(nodeId, { config: newConfig });
 };
 
 // todo: put a lock on anything that changes nodes array

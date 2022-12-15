@@ -49,9 +49,20 @@ contextBridge.exposeInMainWorld('electron', {
   // Multi-node
   getNodes: () => ipcRenderer.invoke('getNodes'),
   getUserNodes: () => ipcRenderer.invoke('getUserNodes'),
+  addEthereumNode: async (
+    ecNodeSpec: NodeSpecification,
+    ccNodeSpec: NodeSpecification,
+    settings: { storageLocation?: string }
+  ) => {
+    return ipcRenderer.invoke(
+      'addEthereumNode',
+      ecNodeSpec,
+      ccNodeSpec,
+      settings
+    );
+  },
   addNode: (nodeSpec: NodeSpecification, storageLocation?: string) =>
     ipcRenderer.invoke('addNode', nodeSpec, storageLocation),
-
   updateNode: (nodeId: NodeId, propertiesToUpdate: any) =>
     ipcRenderer.invoke('updateNode', nodeId, propertiesToUpdate),
 

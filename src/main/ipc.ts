@@ -24,7 +24,7 @@ import {
   stopSendingNodeLogs,
 } from './nodeManager';
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
-import { NodeId } from '../common/node';
+import Node, { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
 import { isDockerInstalled, isDockerRunning } from './docker/docker';
 import installDocker from './docker/install';
@@ -44,6 +44,7 @@ import {
 } from './state/settings';
 import { getSystemInfo } from './systemInfo';
 import startDocker from './docker/start';
+import { addEthereumNode } from './specialNodes/ethereumNode';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -73,6 +74,17 @@ export const initialize = () => {
   // Multi-nodegetUserNodes
   ipcMain.handle('getNodes', getNodes);
   ipcMain.handle('getUserNodes', getUserNodes);
+  ipcMain.handle(
+    'addEthereumNode',
+    (
+      _event,
+      ecNodeSpec: NodeSpecification,
+      ccNodeSpec: NodeSpecification,
+      settings: { storageLocation?: string }
+    ): Promise<{ ecNode: Node; ccNode: Node }> => {
+      return addEthereumNode(ecNodeSpec, ccNodeSpec, settings);
+    }
+  );
   ipcMain.handle(
     'addNode',
     (_event, nodeSpec: NodeSpecification, storageLocation?: string) => {

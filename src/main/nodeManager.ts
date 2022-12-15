@@ -31,10 +31,12 @@ import {
   getProcess,
 } from './binary';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
+import { ConfigValuesMap } from '../common/nodeConfig';
 
 export const addNode = async (
   nodeSpec: NodeSpecification,
-  storageLocation?: string
+  storageLocation?: string,
+  initialConfigFromUser?: ConfigValuesMap
 ): Promise<Node> => {
   // use a timestamp postfix so the user can add multiple nodes of the same name
   const utcTimestamp = Math.floor(Date.now() / 1000);
@@ -47,7 +49,11 @@ export const addNode = async (
     dataDir,
     usage: {},
   };
-  const node: Node = createNode({ spec: nodeSpec, runtime: nodeRuntime });
+  const node: Node = createNode({
+    spec: nodeSpec,
+    runtime: nodeRuntime,
+    initialConfigFromUser,
+  });
   nodeStore.addNode(node);
   return node;
 };
