@@ -39,11 +39,12 @@ export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
   // handle errors: todo
 
   let level: LogLevel = 'INFO';
-  if (log.includes('ERROR') || log.includes('ERR')) {
+  const uppercaseLog = log.toUpperCase();
+  if (uppercaseLog.includes('ERROR') || uppercaseLog.includes('ERR')) {
     level = 'ERROR';
-  } else if (log.includes('WARN') || log.includes('WRN')) {
+  } else if (uppercaseLog.includes('WARN') || uppercaseLog.includes('WRN')) {
     level = 'WARN';
-  } else if (log.includes('DEBUG') || log.includes('DBG')) {
+  } else if (uppercaseLog.includes('DEBUG') || uppercaseLog.includes('DBG')) {
     level = 'DEBUG';
   }
 
