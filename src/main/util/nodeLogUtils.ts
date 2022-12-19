@@ -29,12 +29,6 @@ export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
   const nanoTimestampStr = log.substring(0, 30);
   // returns timestamp in seconds
   const timestamp = timestampFromString(nanoTimestampStr);
-  console.log(
-    'test parse nanoTimestamp',
-    nanoTimestampStr,
-    'result',
-    timestamp
-  );
   // Timestamp library silently fails and returns invalid timestamps
   // handle errors: todo
 
