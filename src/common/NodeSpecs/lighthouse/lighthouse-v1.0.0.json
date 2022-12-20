@@ -11,12 +11,12 @@
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "http://localhost",
         "websockets": "Enabled",
-        "eth1ProviderUrl": "http://localhost:8545"
+        "executionEndpoint": "http://host.docker.internal:8551"
       },
       "docker": {
         "containerVolumePath": "/root/.lighthouse",
         "raw": "--add-host=host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052",
-        "forcedRawNodeInput": "lighthouse --network mainnet beacon --eth1"
+        "forcedRawNodeInput": "lighthouse --network mainnet beacon --execution-jwt /root/.lighthouse/jwtsecret"
       }
     },
     "architectures": {
@@ -106,14 +106,13 @@
       "infoDescription": "Set the value of the Access-Control-Allow-Origin response HTTP header. Use * to allow any origin (not recommended in production). If no value is supplied, the CORS allowed origin is set to the listen address of this server (e.g., http://localhost:5052)",
       "documentation": "https://lighthouse-book.sigmaprime.io/api-bn.html#starting-the-server"
     },
-    "eth1ProviderUrl": {
-      "displayName": "Url to Eth1 node with enabled rpc",
-      "cliConfigPrefix": "--eth1-endpoints ",
-      "defaultValue": "http://localhost:8545",
+    "executionEndpoint": {
+      "displayName": "The URL of the local execution engine API",
+      "cliConfigPrefix": "--execution-endpoint ",
+      "defaultValue": "http://host.docker.internal:8551",
       "uiControl": {
         "type": "text"
-      },
-      "infoDescription": "One or more comma-delimited server endpoints for web3 connection. If multiple endpoints are given the endpoints are used as fallback in the given order. Also enables the --eth1 flag. Defaults to http://127.0.0.1:8545."
+      }
     },
     "executionEngineEndpoint": {
       "displayName": "URL of the execution client's Engine JSON-RPC APIs",

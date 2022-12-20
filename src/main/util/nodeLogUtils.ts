@@ -29,21 +29,16 @@ export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
   const nanoTimestampStr = log.substring(0, 30);
   // returns timestamp in seconds
   const timestamp = timestampFromString(nanoTimestampStr);
-  console.log(
-    'test parse nanoTimestamp',
-    nanoTimestampStr,
-    'result',
-    timestamp
-  );
   // Timestamp library silently fails and returns invalid timestamps
   // handle errors: todo
 
   let level: LogLevel = 'INFO';
-  if (log.includes('ERROR') || log.includes('ERR')) {
+  const uppercaseLog = log.toUpperCase();
+  if (uppercaseLog.includes('ERROR') || uppercaseLog.includes('ERR')) {
     level = 'ERROR';
-  } else if (log.includes('WARN') || log.includes('WRN')) {
+  } else if (uppercaseLog.includes('WARN') || uppercaseLog.includes('WRN')) {
     level = 'WARN';
-  } else if (log.includes('DEBUG') || log.includes('DBG')) {
+  } else if (uppercaseLog.includes('DEBUG') || uppercaseLog.includes('DBG')) {
     level = 'DEBUG';
   }
 

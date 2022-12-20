@@ -17,6 +17,8 @@ describe('Parsing log string testing', () => {
       '2022-11-12T20:36:55.301070423Z 20:36:55.300 WRN  - Eth1 chain monitoring failure, restarting topics="eth1"';
     const logNimbusError1 =
       '2022-11-12T20:36:55.301070423Z 20:36:55.300 ERR  - Eth1 chain monitoring failure, restarting topics="eth1"';
+    const logPrysmError1 =
+      '2022-11-12T20:36:55.301070423Z time="2022-12-15 20:48:46" level=error msg="Could not connect to execution endpoint" error="403 Forbidden: invalid host specified';
 
     const metadataBesu1 = parseDockerLogMetadata(logBesu1);
     const metadataTekuInfo1 = parseDockerLogMetadata(logTekuInfo1);
@@ -26,6 +28,7 @@ describe('Parsing log string testing', () => {
     const metadataNimbusInfo1 = parseDockerLogMetadata(logNimbusInfo1);
     const metadataNimbusWarn1 = parseDockerLogMetadata(logNimbusWarn1);
     const metadataNimbusError1 = parseDockerLogMetadata(logNimbusError1);
+    const metadataPrysmError1 = parseDockerLogMetadata(logPrysmError1);
 
     expect(metadataBesu1).toEqual({
       message:
@@ -66,6 +69,12 @@ describe('Parsing log string testing', () => {
     expect(metadataNimbusError1).toEqual({
       message:
         '20:36:55.300 ERR  - Eth1 chain monitoring failure, restarting topics="eth1"',
+      level: 'ERROR',
+      timestamp: 1668285415301,
+    });
+    expect(metadataPrysmError1).toEqual({
+      message:
+        'time="2022-12-15 20:48:46" level=error msg="Could not connect to execution endpoint" error="403 Forbidden: invalid host specified',
       level: 'ERROR',
       timestamp: 1668285415301,
     });

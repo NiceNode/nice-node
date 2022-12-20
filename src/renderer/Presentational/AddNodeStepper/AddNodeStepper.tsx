@@ -142,9 +142,15 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       throw new Error('ecNodeSpec or ccNodeSpec is undefined');
       return;
     }
-    const ecNode = await electron.addNode(ecNodeSpec, sNodeStorageLocation);
+
+    const { ecNode, ccNode } = await electron.addEthereumNode(
+      ecNodeSpec,
+      ccNodeSpec,
+      { storageLocation: sNodeStorageLocation }
+    );
+    // const ecNode = await electron.addNode(ecNodeSpec, sNodeStorageLocation);
     console.log('addNode returned node: ', ecNode);
-    const ccNode = await electron.addNode(ccNodeSpec, sNodeStorageLocation);
+    // const ccNode = await electron.addNode(ccNodeSpec, sNodeStorageLocation);
     console.log('addNode returned node: ', ccNode);
     dispatch(updateSelectedNodeId(ecNode.id));
     const startEcResult = await electron.startNode(ecNode.id);
