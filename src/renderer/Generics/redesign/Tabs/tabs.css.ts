@@ -1,7 +1,19 @@
 import { style } from '@vanilla-extract/css';
+import { vars } from '../theme.css';
 
 // required to export even if not using in a component
 export const container = style({});
+
+export const tabsContainer = style({
+  selectors: {
+    '&.modal': {
+      position: 'sticky',
+      top: 0,
+      backgroundColor: vars.color.background,
+      zIndex: 1,
+    },
+  },
+});
 
 export const tabsList = style({
   display: 'flex',
@@ -16,7 +28,6 @@ export const tabContent = style({
   paddingTop: 36,
   selectors: {
     '&.modal': {
-      height: '40vh',
       overflow: 'auto',
       // extra padding from scrollbar
       paddingRight: 10,
