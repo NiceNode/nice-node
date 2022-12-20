@@ -9,7 +9,7 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpCorsDomains": "nice-node://,http://localhost",
+        "httpCorsDomains": "nice-node://",
         "webSockets": "Disabled",
         "httpVirtualHosts": "localhost,host.docker.internal",
         "authVirtualHosts": "localhost,host.docker.internal"
