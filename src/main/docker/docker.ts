@@ -356,22 +356,10 @@ export const removeDockerNode = async (node: Node) => {
   return isRemoved;
 };
 
-export const startDockerNode = async (node: Node): Promise<string[]> => {
-  // pull image
+export const createRunCommand = (node: Node): string => {
   const { specId, execution } = node.spec;
   const { imageName, input } = execution as DockerExecution;
   // try catch? .. docker dameon might need to be restarted if a bad gateway error occurs
-  await runCommand(`pull ${imageName}`);
-
-  // todo: custom setup: ex. use network specific data directory?
-  // todo: check if there is a stopped container?
-
-  // (stop &) remove possible previous docker container for this node
-  try {
-    await removeDockerNode(node);
-  } catch (err) {
-    logger.info('Continuing start node.');
-  }
 
   let dockerRawInput = '';
   let dockerVolumePath = '';
@@ -398,7 +386,28 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
   nodeInput += ` ${cliConfigInput}`;
 
   const dockerCommand = `run -d --name ${specId} ${finalDockerInput} ${imageName} ${nodeInput}`;
-  logger.info(`docker startNode command ${dockerCommand}`);
+  logger.info(`docker run command ${dockerCommand}`);
+  return dockerCommand;
+};
+
+export const startDockerNode = async (node: Node): Promise<string[]> => {
+  // pull image
+  const { execution } = node.spec;
+  const { imageName } = execution as DockerExecution;
+  // try catch? .. docker dameon might need to be restarted if a bad gateway error occurs
+  await runCommand(`pull ${imageName}`);
+
+  // todo: custom setup: ex. use network specific data directory?
+  // todo: check if there is a stopped container?
+
+  // (stop &) remove possible previous docker container for this node
+  try {
+    await removeDockerNode(node);
+  } catch (err) {
+    logger.info('Continuing start node.');
+  }
+
+  const dockerCommand = createRunCommand(node);
   // todo: test if input is empty string
   const runData = await runCommand(dockerCommand);
 

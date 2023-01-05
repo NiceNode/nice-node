@@ -9,6 +9,7 @@ import { SettingChangeHandler } from './NodeSettingsWrapper';
 import InternalLink from '../../Generics/redesign/Link/InternalLink';
 import { WalletSettings } from './WalletSettings';
 import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
+import Button from '../../Generics/redesign/Button/Button';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Preference = 'theme' | 'isOpenOnStartup';
@@ -20,6 +21,7 @@ export interface NodeSettingsProps {
   isDisabled?: boolean;
   onChange?: SettingChangeHandler;
   onClickRemoveNode: () => void;
+  nodeStartCommand?: string;
 }
 
 const NodeSettings = ({
@@ -30,6 +32,7 @@ const NodeSettings = ({
   isDisabled,
   onChange,
   onClickRemoveNode,
+  nodeStartCommand,
 }: NodeSettingsProps) => {
   const { t: tNiceNode } = useTranslation();
 
@@ -54,6 +57,22 @@ const NodeSettings = ({
             isDisabled={isDisabled}
             onChange={onChange}
           />
+          <p>Node start command</p>
+          {nodeStartCommand && (
+            <div style={{ display: 'flex', paddingTop: 8 }}>
+              <p style={{ fontFamily: 'monospace' }}>{nodeStartCommand}</p>
+              <Button
+                ghost
+                iconId="copy"
+                variant="icon"
+                onClick={() => {
+                  if (nodeStartCommand) {
+                    navigator.clipboard.writeText(nodeStartCommand);
+                  }
+                }}
+              />
+            </div>
+          )}
           {/* Remove Node link */}
           <div style={{ padding: '16px 0px 16px 0px' }}>
             <InternalLink

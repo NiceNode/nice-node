@@ -8,6 +8,7 @@ import {
   initialize as initDocker,
   onExit as onExitDocker,
   stopSendingLogsToUI as dockerStopSendingLogsToUI,
+  createRunCommand,
 } from './docker/docker';
 import logger from './logger';
 import Node, {
@@ -56,6 +57,31 @@ export const addNode = async (
   });
   nodeStore.addNode(node);
   return node;
+};
+
+// Useful for users "ejecting" from using the UI
+export const getNodeStartCommand = (nodeId: NodeId): string => {
+  const node = nodeStore.getNode(nodeId);
+  if (!node) {
+    throw new Error(
+      `Unable to get node start command ${nodeId}. Node not found.`
+    );
+  }
+
+  try {
+    if (isDockerNode(node)) {
+      const dockerNode = node;
+      console.log('creating node start command');
+      // startDockerNode(dockerNode);
+      const startCommand = `docker ${createRunCommand(dockerNode)}`;
+      console.log('created node start command', startCommand);
+
+      return startCommand;
+    }
+  } catch (err) {
+    logger.error(err);
+  }
+  return '';
 };
 
 export const startNode = async (nodeId: NodeId) => {

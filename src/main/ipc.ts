@@ -22,6 +22,7 @@ import {
   deleteNodeStorage,
   sendNodeLogs,
   stopSendingNodeLogs,
+  getNodeStartCommand,
 } from './nodeManager';
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import Node, { NodeId } from '../common/node';
@@ -105,6 +106,9 @@ export const initialize = () => {
   );
   ipcMain.handle('startNode', (_event, nodeId: NodeId) => {
     return startNode(nodeId);
+  });
+  ipcMain.handle('getNodeStartCommand', (_event, nodeId: NodeId) => {
+    return getNodeStartCommand(nodeId);
   });
   ipcMain.handle('stopNode', (_event, nodeId: NodeId) => {
     return stopNode(nodeId);

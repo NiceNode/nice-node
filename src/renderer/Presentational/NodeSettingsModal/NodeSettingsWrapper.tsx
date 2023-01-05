@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { NodeId } from '../../../common/node';
 import {
   ConfigTranslation,
   ConfigTranslationMap,
@@ -33,6 +34,7 @@ const NodeSettingsWrapper = ({
   const [sCategoryConfigs, setCategoryConfigs] = useState<CategoryConfig[]>();
   const [sIsRemoveNodeModalOpen, setIsRemoveNodeModalOpen] =
     useState<boolean>(false);
+  const [sNodeStartCommand, setNodeStartCommand] = useState<string>();
 
   const selectedNode = useAppSelector(selectSelectedNode);
 
@@ -48,6 +50,17 @@ const NodeSettingsWrapper = ({
     setConfigTranslationMap(configTranslationMap);
   }, [selectedNode]);
   // configTranslationMap = selectedNode.spec.configTranslation;
+
+  useEffect(() => {
+    const fetchData = async (nodeId: NodeId) => {
+      const nodeStartCommand = await electron.getNodeStartCommand(nodeId);
+      console.log('node start command: ', nodeStartCommand);
+      setNodeStartCommand(nodeStartCommand);
+    };
+    if (selectedNode) {
+      fetchData(selectedNode.id);
+    }
+  }, [selectedNode]);
 
   useEffect(() => {
     // category to configs
@@ -158,6 +171,7 @@ const NodeSettingsWrapper = ({
         isDisabled={sIsConfigDisabled}
         onChange={onNodeConfigChange}
         onClickRemoveNode={onClickRemoveNode}
+        nodeStartCommand={sNodeStartCommand}
       />
       <RemoveNodeWrapper
         isOpen={sIsRemoveNodeModalOpen}
