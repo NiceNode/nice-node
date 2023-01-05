@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { contextBridge, ipcRenderer } from 'electron';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NodeSpecification } from '../common/nodeSpec';
 import { CHANNELS_ARRAY } from './messenger';
 import { NodeId } from '../common/node';
@@ -70,6 +70,9 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('removeNode', nodeId, options),
   startNode: (nodeId: NodeId) => {
     ipcRenderer.invoke('startNode', nodeId);
+  },
+  getNodeStartCommand: (nodeId: NodeId) => {
+    return ipcRenderer.invoke('getNodeStartCommand', nodeId);
   },
   stopNode: (nodeId: NodeId) => {
     ipcRenderer.invoke('stopNode', nodeId);

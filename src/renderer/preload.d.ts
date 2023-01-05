@@ -55,6 +55,7 @@ declare global {
       updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;
       removeNode(nodeId: NodeId, options: { isDeleteStorage: boolean }): Node;
       startNode(nodeId: NodeId): void;
+      getNodeStartCommand(nodeId: NodeId): string;
       stopNode(nodeId: NodeId): void;
       openDialogForNodeDataDir(nodeId: NodeId): void;
       openDialogForStorageLocation(): CheckStorageDetails;
