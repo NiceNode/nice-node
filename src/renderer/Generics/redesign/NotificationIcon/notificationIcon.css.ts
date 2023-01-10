@@ -8,7 +8,10 @@ export const imageStyle = style({
   objectFit: 'contain',
 });
 
-export const hasStatusStyle = style({});
+export const hasStatusStyle = style({
+  WebkitMaskImage:
+    'radial-gradient(circle 8px at calc(100% - 23px) calc(100% - 23px),transparent 6px,#000 0)',
+});
 export const smallStyle = style({});
 
 export const iconBackground = style({
@@ -24,12 +27,6 @@ export const iconBackground = style({
   height: 24,
   borderRadius: 5,
   boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.16)',
-  selectors: {
-    [`&.${hasStatusStyle}`]: {
-      WebkitMaskImage:
-        'radial-gradient(circle 8px at calc(100% - 23px) calc(100% - 23px),transparent 6px,#000 0)',
-    },
-  },
 });
 
 export const containerStyle = style({

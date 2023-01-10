@@ -28,7 +28,7 @@ export const NotificationIcon = ({ status, unread }: NotificationIconProps) => {
   const { t } = useTranslation('genericComponents');
 
   let statusComponent = null;
-  let unreadStyle = null;
+  let unreadStyle = '';
   if (unread) {
     statusComponent = <div className={statusStyle} />;
     unreadStyle = hasStatusStyle;
@@ -69,14 +69,16 @@ export const NotificationIcon = ({ status, unread }: NotificationIconProps) => {
       <div style={{ position: 'relative', width: 0, height: 0 }}>
         {statusComponent}
       </div>
-      <div
-        className={[iconBackground, smallStyle, unreadStyle].join(' ')}
-        style={{
-          backgroundColor: iconObject.backgroundColor,
-          color: iconObject.color,
-        }}
-      >
-        <Icon iconId={iconObject.iconId as IconId} />
+      <div className={unreadStyle}>
+        <div
+          className={[iconBackground, smallStyle].join(' ')}
+          style={{
+            backgroundColor: iconObject.backgroundColor,
+            color: iconObject.color,
+          }}
+        >
+          <Icon iconId={iconObject.iconId as IconId} />
+        </div>
       </div>
     </div>
   );

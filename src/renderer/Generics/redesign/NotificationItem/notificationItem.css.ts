@@ -5,11 +5,12 @@ export const container = style({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'flex-start',
-  padding: '8px 10px',
+  padding: '16px 0px 16px 10px',
   gap: '12px',
   width: 'auto',
   cursor: 'pointer',
   userSelect: 'none',
+  borderBottom: vars.components.clientCardBorder,
 });
 
 export const selectedContainer = style({
