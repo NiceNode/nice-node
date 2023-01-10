@@ -23,7 +23,7 @@ export const iconBackground = style({
   width: 24,
   height: 24,
   borderRadius: 5,
-  // filter: 'drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.16))',
+  boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.16)',
   selectors: {
     [`&.${hasStatusStyle}`]: {
       WebkitMaskImage:

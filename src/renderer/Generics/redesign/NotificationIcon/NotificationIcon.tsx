@@ -41,10 +41,14 @@ export const NotificationIcon = ({ status, unread }: NotificationIconProps) => {
   };
   switch (status) {
     case 'info':
-    case 'completed':
       iconObject.color = common.color.green500;
       iconObject.backgroundColor = 'rgba(18, 186, 108, 0.08)';
       iconObject.iconId = 'infocirclefilled';
+      break;
+    case 'completed':
+      iconObject.color = common.color.green500;
+      iconObject.backgroundColor = 'rgba(18, 186, 108, 0.08)';
+      iconObject.iconId = 'checkcirclefilled';
       break;
     case 'download':
       iconObject.color = common.color.blue500;
