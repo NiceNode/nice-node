@@ -1,6 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import Notifications from '../../renderer/Presentational/Notifications/Notifications';
+// import NotificationsWrapper from '../../renderer/Presentational/Notifications/NotificationsWrapper';
 
 export default {
   title: 'Presentational/Notifications',
@@ -14,7 +15,13 @@ const Template: ComponentStory<typeof Notifications> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  array: [
+  onSettingsClick: () => {
+    console.log('on settings click');
+  },
+  updateNotifications: () => {
+    console.log('update notifications!');
+  },
+  data: [
     {
       unread: true,
       status: 'info',

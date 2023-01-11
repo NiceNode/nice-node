@@ -11,6 +11,7 @@ export const headerContainer = style({
   flexDirection: 'row',
   marginBottom: 32,
   gap: 5,
+  alignItems: 'center',
 });
 
 export const spacer = style({

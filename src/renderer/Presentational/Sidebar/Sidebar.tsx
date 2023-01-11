@@ -177,6 +177,7 @@ const Sidebar = ({
           );
         })}
       </div>
+      {/* <NotificationsWrapper /> */}
       <Modal
         title=""
         isOpen={sIsModalOpenAddNode}

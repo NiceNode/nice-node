@@ -1,5 +1,8 @@
 // import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
-import { NotificationItem } from '../../Generics/redesign/NotificationItem/NotificationItem';
+import {
+  NotificationItem,
+  NotificationItemProps,
+} from '../../Generics/redesign/NotificationItem/NotificationItem';
 import Button from '../../Generics/redesign/Button/Button';
 import {
   container,
@@ -8,16 +11,14 @@ import {
   titleStyle,
 } from './notifications.css';
 
-// TODO: process retrieved client data into this format
-export type NotificationsType = {};
+export type NotificationsType = {
+  data: NotificationItemProps[];
+  updateNotifications: () => void;
+  onSettingsClick: () => void;
+};
 
-const Notifications = (props) => {
-  // TODO: retrieve initial data for all pages
-
-  const { array } = props;
-
-  console.log(props);
-
+const Notifications = (props: NotificationsType) => {
+  const { data, updateNotifications } = props;
   return (
     <div className={container}>
       <div className={headerContainer}>
@@ -28,17 +29,16 @@ const Notifications = (props) => {
           iconId="check"
           variant="icon-left"
           size="small"
-          onClick={() => {}}
+          onClick={updateNotifications}
         />
         <Button
           iconId="settings"
           variant="icon"
           size="small"
-          onClick={() => {}}
+          onClick={onSettingsClick}
         />
       </div>
-      {array.map((item) => {
-        console.log(item);
+      {data.map((item) => {
         return <NotificationItem {...item} />;
       })}
     </div>
