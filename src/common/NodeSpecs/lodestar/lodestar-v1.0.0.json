@@ -10,18 +10,37 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpPort": "5052",
-        "eth1ProviderUrl": "http://host.docker.internal:8545"
+        "executionEndpoint": "http://host.docker.internal:8551"
       },
       "docker": {
         "containerVolumePath": "/usr/app/data",
         "raw": "--add-host host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
-        "forcedRawNodeInput": "beacon --rootDir /usr/app/data"
+        "forcedRawNodeInput": "beacon --network mainnet --rest.address 0.0.0.0 --dataDir /usr/app/data --jwt-secret /usr/app/data/jwtsecret"
       }
     }
   },
   "category": "L1/ConsensusClient/BeaconNode",
   "rpcTranslation": "eth-l1-beacon",
-  "nodeReleasePhase": "beta",
+  "systemRequirements": {
+    "documentationUrl": "https://chainsafe.github.io/lodestar/#specifications",
+    "cpu" : {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 4
+    },
+    "storage" : {
+      "minSizeGBs" : 20,
+      "ssdRequired": true
+    },
+    "internet" : {
+      "minDownloadSpeedMbps": 10,
+      "minUploadSpeedMbps": 10
+    },
+    "docker" : {
+      "required": true
+    }
+  },
   "configTranslation": {
     "dataDir": {
       "displayName": "Node data is stored in this folder",
@@ -33,7 +52,7 @@
     },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",
-      "cliConfigPrefix": "--api.rest.enabled ",
+      "cliConfigPrefix": "--rest ",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -50,8 +69,8 @@
       "defaultValue": "Disabled"
     },
     "httpApis": {
-      "displayName": "Enabled HTTP APIs",
-      "cliConfigPrefix": "--http.api ",
+      "displayName": "Pick namespaces to expose for HTTP API",
+      "cliConfigPrefix": "--rest.namespace ",
       "defaultValue": ["beacon", "config", "events", "node", "validator"],
       "valuesJoinStr": ",",
       "uiControl": {
@@ -81,10 +100,19 @@
         ]
       }
     },
+    "httpHostAddress": {
+      "displayName": "Listening address of the REST server.",
+      "cliConfigPrefix": "--rest.address ",
+      "defaultValue": "0.0.0.0",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Limit the access to the REST API to a particular hostname (for CORS-enabled clients such as browsers)."
+    },
     "httpPort": {
       "displayName": "Set port for HTTP API",
-      "cliConfigPrefix": "--api.rest.port ",
-      "defaultValue": "9596",
+      "cliConfigPrefix": "--rest.port ",
+      "defaultValue": "5052",
       "uiControl": {
         "type": "text"
       }
@@ -97,14 +125,13 @@
         "type": "text"
       }
     },
-    "eth1ProviderUrl": {
-      "displayName": "Url to Eth1 node with enabled rpc",
-      "cliConfigPrefix": "--eth1.providerUrls ",
-      "defaultValue": "http://localhost:8545",
+    "executionEndpoint": {
+      "displayName": "The URL of the local execution engine API",
+      "cliConfigPrefix": "--execution.urls ",
+      "defaultValue": "http://localhost:8551",
       "uiControl": {
         "type": "text"
-      },
-      "infoDescription": "Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)"
+      }
     },
     "maxPeerCount": {
       "displayName": "Max Peer Count (set to low number to use less bandwidth)",

@@ -32,5 +32,8 @@
   "logs": "registros",
   "dockerPurpose": "Docker ayuda a NiceNode a proporcionar muchos nodos entre los que los usuarios pueden elegir. Docker es compatible con la mayoría de los nodos y es gratis para que los usuarios lo instalen. La instalación de Docker le dará acceso a todos los nodos de Ethereum! Docker se ejecutará silenciosamente en segundo plano después de la instalación.",
   "restartDockerOnInstall": "Reinicie NiceNode cuando Docker esté instalado y ejecutándose.",
-  "ensureDockerIsRunning": "Si tiene instalado Docker Desktop, asegúrese de que está ejecutándose."
+  "ensureDockerIsRunning": "Si tiene instalado Docker Desktop, asegúrese de que está ejecutándose.",
+  "GetStarted": "Get empieza",
+  "WelcomeToNiceNode": "Welcome to NiceNode",
+  "WelcomeToNiceNodeDescription": "Run a node how you want it — without commands and a terminal. NiceNode shows what the node is doing at a glance. Stats like how many peer nodes are connected and synching progress are built into the app."
 }

@@ -8,6 +8,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import { VanillaExtractPlugin } from '@vanilla-extract/webpack-plugin';
 import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
@@ -45,6 +46,28 @@ const configuration: webpack.Configuration = {
 
   module: {
     rules: [
+      // Required for vanilla-extract to set classes on components
+      {
+        test: /\.(js|ts|tsx)$/,
+        exclude: [/node_modules/],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: false,
+              presets: [
+                '@babel/preset-typescript',
+                ['@babel/preset-react', { runtime: 'automatic' }],
+                [
+                  '@babel/preset-env',
+                  { targets: { node: 14 }, modules: false },
+                ],
+              ],
+              plugins: ['@vanilla-extract/babel-plugin'],
+            },
+          },
+        ],
+      },
       {
         test: /\.s?(a|c)ss$/,
         use: [
@@ -73,8 +96,28 @@ const configuration: webpack.Configuration = {
       },
       // Images
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
+      },
+      // SVGs - converts svg files to React Components
+      {
+        test: /\.svg$/,
+        issuer: /\.[jt]sx?$/,
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              prettier: false,
+              svgo: false,
+              svgoConfig: {
+                plugins: [{ removeViewBox: false }],
+              },
+              titleProp: true,
+              ref: true,
+            },
+          },
+          'file-loader',
+        ],
       },
     ],
   },
@@ -111,6 +154,8 @@ const configuration: webpack.Configuration = {
     new BundleAnalyzerPlugin({
       analyzerMode: process.env.ANALYZE === 'true' ? 'server' : 'disabled',
     }),
+
+    new VanillaExtractPlugin(),
 
     new HtmlWebpackPlugin({
       filename: 'index.html',

@@ -82,11 +82,21 @@ export const isBinaryNode = (node: Node) => {
 export const createNode = (input: {
   spec: NodeSpecification;
   runtime: NodeRuntime;
+  initialConfigFromUser?: ConfigValuesMap;
 }): Node => {
   let initialConfigValues: ConfigValuesMap = {};
   if (input.spec.execution?.input?.defaultConfig) {
     initialConfigValues = input.spec.execution?.input?.defaultConfig;
   }
+
+  // initial config from user overrides default config
+  if (input.initialConfigFromUser) {
+    initialConfigValues = {
+      ...initialConfigValues,
+      ...input.initialConfigFromUser,
+    };
+  }
+
   // The data directory is default set to the NiceNode nodes directory
   //  Config in the node spec can override this.
   if (!initialConfigValues.dataDir) {

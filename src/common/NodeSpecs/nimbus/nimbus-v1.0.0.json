@@ -12,12 +12,12 @@
         "http": "Enabled",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
-        "eth1ProviderUrl": "\"ws://host.docker.internal:8546\""
+        "executionEndpoint": "\"http://host.docker.internal:8551\""
       },
       "docker": {
         "containerVolumePath": "/home/user/nimbus-eth2/build/data",
         "raw": "--add-host=host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
-        "forcedRawNodeInput": "--data-dir=build/data/shared_mainnet_0 --network=mainnet"
+        "forcedRawNodeInput": "--data-dir=build/data/shared_mainnet_0 --network=mainnet --web3-url=http://host.docker.internal:8551 --jwt-secret=/home/user/nimbus-eth2/build/data/jwtsecret"
       }
     },
     "binaryDownload": {
@@ -28,6 +28,22 @@
   },
   "category": "L1/ConsensusClient/BeaconNode",
   "rpcTranslation": "eth-l1-beacon",
+  "systemRequirements": {
+    "memory": {
+      "minSizeGBs": 4
+    },
+    "storage" : {
+      "minSizeGBs" : 200,
+      "ssdRequired": true
+    },
+    "internet" : {
+      "minDownloadSpeedMbps": 8,
+      "minUploadSpeedMbps": 8
+    },
+    "docker" : {
+      "required": true
+    }
+  },
   "configTranslation": {
     "dataDir": {
       "displayName": "The directory where nimbus will store all blockchain data.",
@@ -79,15 +95,15 @@
       },
       "infoDescription": "Limit the access to the REST API to a particular hostname (for CORS-enabled clients such as browsers)."
     },
-    "eth1ProviderUrl": {
-      "displayName": "One or more Web3 provider URLs used for obtaining deposit contract data.",
+    "executionEndpoint": {
+      "displayName": "One or more execution layer Web3 provider URLs",
       "cliConfigPrefix": "--web3-url=",
-      "defaultValue": "\"ws://127.0.0.1:8546\"",
+      "defaultValue": "\"http://host.docker.internal:8551\"",
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "Urls to Eth1 node with enabled rpc. If not explicity provided and execution endpoint provided via execution.urls, it will use execution.urls. Otherwise will try connecting on the specified default(s)",
-      "documentation": "https://nimbus.guide/web3-backup.html?highlight=--web3-url#add-a-backup-web3-provider"
+      "infoDescription": "informs the beacon node how to connect to the execution client - both http:// and ws:// URLs are supported.",
+      "documentation": "https://nimbus.guide/eth1.html#3-pass-the-url-and-jwt-secret-to-nimbus"
     },
     "maxPeerCount": {
       "displayName": "Max Peer Count (set to low number to use less bandwidth)",

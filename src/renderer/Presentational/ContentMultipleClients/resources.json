@@ -1,0 +1,73 @@
+[
+  {
+    "key": "ethereum",
+    "sectionTitle": "Ethereum Node",
+    "items": [
+      {
+        "label": "Run your own node",
+        "value": "ethereum.org",
+        "link": "https://ethereum.org"
+      },
+      {
+        "label": "Learn about client diversity",
+        "value": "ethereum.org",
+        "link": "https://ethereum.org"
+      }
+    ]
+  },
+  {
+    "key": "nethermind",
+    "sectionTitle": "Nethermind",
+    "items": [
+      {
+        "label": "Twitter",
+        "value": "nethermind",
+        "link": "https://ethereum.org"
+      },
+      { "label": "Discord", "value": "Join", "link": "https://ethereum.org" },
+      {
+        "label": "Website",
+        "value": "nethermind",
+        "link": "https://ethereum.org"
+      }
+    ]
+  },
+  {
+    "key": "nimbus",
+    "sectionTitle": "Nimbus",
+    "items": [
+      {
+        "label": "Twitter",
+        "value": "ethnimbus",
+        "link": "https://ethereum.org"
+      },
+      { "label": "Discord", "value": "Join", "link": "https://ethereum.org" },
+      {
+        "label": "Website",
+        "value": "nimbus.team",
+        "link": "https://ethereum.org"
+      }
+    ]
+  },
+  {
+    "key": "besu",
+    "sectionTitle": "Besu",
+    "items": [
+      {
+        "label": "Twitter",
+        "value": "@HyperledgerBesu",
+        "link": "https://ethereum.org"
+      },
+      {
+        "label": "Discord",
+        "value": "Join",
+        "link": "https://ethereum.org"
+      },
+      {
+        "label": "Website",
+        "value": "hyperledger.org",
+        "link": "https://ethereum.org"
+      }
+    ]
+  }
+]

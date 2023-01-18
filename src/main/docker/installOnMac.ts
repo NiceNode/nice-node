@@ -3,6 +3,8 @@ import * as arch from '../arch';
 import logger from '../logger';
 import { execAwait } from '../execHelper';
 import { downloadFile } from '../downloadFile';
+import { sendMessageOnDownloadProgress } from './messageFrontEnd';
+import { startOnMac } from './start';
 
 /**
  * Download docker.dmg, install docker, start docker
@@ -22,9 +24,14 @@ const installOnMac = async (): Promise<any> => {
       };
     }
     logger.info(`Downloading Docker from url ${downloadUrl}`);
-    const dockerDmgFilePath = await downloadFile(downloadUrl, getNNDirPath());
+    const dockerDmgFilePath = await downloadFile(
+      downloadUrl,
+      getNNDirPath(),
+      sendMessageOnDownloadProgress
+    );
     let stdout;
     let stderr;
+    // eslint-disable-next-line prefer-const
     ({ stdout, stderr } = await execAwait(
       `hdiutil attach "${dockerDmgFilePath}" && /Volumes/Docker/Docker.app/Contents/MacOS/install --accept-license && hdiutil detach /Volumes/Docker`,
       { log: true, sudo: true }
@@ -35,9 +42,8 @@ const installOnMac = async (): Promise<any> => {
       stderr
     );
     // start docker app
-    ({ stdout, stderr } = await execAwait(`open /Applications/Docker.app`, {
-      log: true,
-    }));
+    await startOnMac();
+
     // todo: reboot needed?
     console.log('open docker app stdout, stderr', stdout, stderr);
     return true;

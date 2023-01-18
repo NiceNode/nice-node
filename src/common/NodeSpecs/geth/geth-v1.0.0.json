@@ -10,13 +10,14 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpCorsDomains": "nice-node://,http://localhost",
-        "webSockets": "Enabled",
-        "httpVirtualHosts": "localhost,host.docker.internal"
+        "webSockets": "Disabled",
+        "httpVirtualHosts": "localhost,host.docker.internal",
+        "authVirtualHosts": "localhost,host.docker.internal"
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
-        "raw": "-p 30303:30303 -p 8545:8545 -p 8546:8546",
-        "forcedRawNodeInput": "--http.addr 0.0.0.0"
+        "raw": "-p 30303:30303 -p 8545:8545 -p 8546:8546 -p 8551:8551",
+        "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret"
       }
     },
     "imageName": "ethereum/client-go:stable",
@@ -39,6 +40,26 @@
   },
   "category": "L1/ExecutionClient",
   "rpcTranslation": "eth-l1",
+  "systemRequirements": {
+    "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
+    "cpu" : {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 16
+    },
+    "storage" : {
+      "minSizeGBs" : 1600,
+      "ssdRequired": true
+    },
+    "internet" : {
+      "minDownloadSpeedMbps": 25,
+      "minUploadSpeedMbps": 10
+    },
+    "docker" : {
+      "required": true
+    }
+  },
   "configTranslation": {
     "dataDir": {
       "displayName": "Node data is stored in this folder",
@@ -202,6 +223,14 @@
         "type": "text"
       },
       "documentation": "https://geth.ethereum.org/docs/interface/peer-to-peer#peer-limit"
+    },
+    "authVirtualHosts": {
+      "displayName": "Comma separated list of virtual hostnames from which to accept authentication requests for engine api's (server enforced). Accepts '*' wildcard. Default value (localhost)",
+      "cliConfigPrefix": "--authrpc.vhosts ",
+      "uiControl": {
+        "type": "text"
+      },
+      "defaultValue": "localhost,host.docker.internal"
     }
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"

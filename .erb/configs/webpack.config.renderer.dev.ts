@@ -7,6 +7,7 @@ import chalk from 'chalk';
 import { merge } from 'webpack-merge';
 import { execSync, spawn } from 'child_process';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import { VanillaExtractPlugin } from '@vanilla-extract/webpack-plugin';
 import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 import checkNodeEnv from '../scripts/check-node-env';
@@ -63,6 +64,28 @@ const configuration: webpack.Configuration = {
 
   module: {
     rules: [
+      // Required for vanilla-extract to set classes on components
+      {
+        test: /\.(js|ts|tsx)$/,
+        exclude: [/node_modules/],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: false,
+              presets: [
+                '@babel/preset-typescript',
+                ['@babel/preset-react', { runtime: 'automatic' }],
+                [
+                  '@babel/preset-env',
+                  { targets: { node: 14 }, modules: false },
+                ],
+              ],
+              plugins: ['@vanilla-extract/babel-plugin'],
+            },
+          },
+        ],
+      },
       {
         test: /\.s?css$/,
         use: [
@@ -91,8 +114,28 @@ const configuration: webpack.Configuration = {
       },
       // Images
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
+      },
+      // SVGs - converts svg files to React Components
+      {
+        test: /\.svg$/,
+        issuer: /\.[jt]sx?$/,
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              prettier: false,
+              svgo: false,
+              svgoConfig: {
+                plugins: [{ removeViewBox: false }],
+              },
+              titleProp: true,
+              ref: true,
+            },
+          },
+          'file-loader',
+        ],
       },
     ],
   },
@@ -130,6 +173,8 @@ const configuration: webpack.Configuration = {
     }),
 
     new ReactRefreshWebpackPlugin(),
+
+    new VanillaExtractPlugin({ identifiers: 'debug' }),
 
     new HtmlWebpackPlugin({
       filename: path.join('index.html'),

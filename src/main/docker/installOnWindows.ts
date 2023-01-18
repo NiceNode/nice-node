@@ -1,9 +1,10 @@
-import { spawn } from 'node:child_process';
 import logger from '../logger';
 import { execAwait } from '../execHelper';
 import * as arch from '../arch';
 import { downloadFile } from '../downloadFile';
 import { getNNDirPath } from '../files';
+import { sendMessageOnDownloadProgress } from './messageFrontEnd';
+import { startOnWindows } from './start';
 
 const iconv = require('iconv-lite');
 
@@ -86,20 +87,19 @@ const installOnWindows = async (): Promise<any> => {
       };
     }
     logger.info(`Downloading Docker from url ${downloadUrl}`);
-    const dockerExeFilePath = await downloadFile(downloadUrl, getNNDirPath());
+    const dockerExeFilePath = await downloadFile(
+      downloadUrl,
+      getNNDirPath(),
+      sendMessageOnDownloadProgress
+    );
     ({ stdout, stderr } = await execAwait(
       `start /w "" "${dockerExeFilePath}" install --quiet --accept-license --backend=wsl-2`,
       { log: true }
     ));
     console.log('docker install stdout, stderr', stdout, stderr);
-    // To start an exe does not return after it starts.
-    //  It returns when the exe stops, in this case, we don't want to wait.
-    //  Use spawn here so that if NiceNode is closed, Docker continues running
-    spawn('C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe', [], {
-      detached: true,
-      stdio: 'ignore',
-    });
-    console.log('docker exe start stdout, stderr', stdout, stderr);
+
+    await startOnWindows();
+
     return true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {

@@ -1,24 +1,157 @@
-import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 
-import { NodeStatus } from '../common/node';
+import { useCallback, useEffect, useState } from 'react';
+// import { NodeStatus } from '../common/node';
 import electron from './electronGlobal';
-import InstallDocker from './Docker/InstallDocker';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector } from './state/hooks';
-import { selectSelectedNode } from './state/node';
-import { useGetNodeVersionQuery } from './state/services';
-import { useGetIsDockerInstalledQuery } from './state/settingsService';
+import { selectIsAvailableForPolling, selectSelectedNode } from './state/node';
+import {
+  useGetExecutionIsSyncingQuery,
+  useGetExecutionLatestBlockQuery,
+  useGetExecutionPeersQuery,
+  useGetNodeVersionQuery,
+} from './state/services';
+// import { useGetNetworkConnectedQuery } from './state/network';
+import ContentSingleClient, {
+  SingleNodeContent,
+} from './Presentational/ContentSingleClient/ContentSingleClient';
+import { hexToDecimal } from './utils';
+import { NodeAction } from './Generics/redesign/consts';
+import NNSplash from './Presentational/NNSplashScreen/NNSplashScreen';
+import AddNodeStepper from './Presentational/AddNodeStepper/AddNodeStepper';
+import { Modal } from './Generics/redesign/Modal/Modal';
 
 const NodeScreen = () => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const selectedNode = useAppSelector(selectSelectedNode);
   const qNodeVersion = useGetNodeVersionQuery(
     selectedNode?.spec.rpcTranslation
   );
-  const qIsDockerInstalled = useGetIsDockerInstalledQuery();
-  // const isDisabled = true;
-  const isDockerInstalled = qIsDockerInstalled?.data;
+  const [sIsSyncing, setIsSyncing] = useState<boolean>();
+  const [sSyncPercent, setSyncPercent] = useState<string>('');
+  const [sPeers, setPeers] = useState<number>();
+  const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>();
+  const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
+  const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
+  const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(
+    selectedNode?.spec.rpcTranslation,
+    {
+      pollingInterval,
+    }
+  );
+  // const isSelectedNode = selectedNode !== undefined;
+  // const peersPolling = isSelectedNode ? pollingInterval : 0;
+  const qExecutionPeers = useGetExecutionPeersQuery(
+    selectedNode?.spec.rpcTranslation,
+    {
+      pollingInterval,
+    }
+  );
+  const qLatestBlock = useGetExecutionLatestBlockQuery(
+    selectedNode?.spec.rpcTranslation,
+    {
+      pollingInterval,
+    }
+  );
+  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
+
+  // use to show if internet is disconnected
+  // const qNetwork = useGetNetworkConnectedQuery(null, {
+  //   // Only polls network connection if there are exactly 0 peers
+  //   pollingInterval: typeof sPeers === 'number' && sPeers === 0 ? 30000 : 0,
+  // });
+
+  const diskUsed =
+    selectedNode?.runtime?.usage?.diskGBs?.toPrecision(2) ?? undefined;
+  // eslint-disable-next-line eqeqeq
+  // const isHttpEnabled =
+  //   selectedNode?.config?.configValuesMap?.http &&
+  //   ['Enabled', 'enabled', 'true', true, 1].includes(
+  //     selectedNode?.config?.configValuesMap?.http
+  //   );
+  // todo: http apis
+
+  useEffect(() => {
+    if (!sIsAvailableForPolling) {
+      // clear all node data when it becomes unavailable to get
+      setSyncPercent('');
+      setIsSyncing(undefined);
+      setPeers(undefined);
+      setLatestBlockNumber(undefined);
+    }
+  }, [sIsAvailableForPolling]);
+
+  useEffect(() => {
+    console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
+    if (qExeuctionIsSyncing.isError) {
+      setSyncPercent('');
+      setIsSyncing(undefined);
+      return;
+    }
+    const syncingData = qExeuctionIsSyncing.data;
+    if (typeof syncingData === 'object') {
+      setSyncPercent(syncingData.syncPercent);
+      setIsSyncing(syncingData.isSyncing);
+    }
+    // else if (syncingData === false) {
+    //   // light client geth, it is done syncing if data is false
+    //   setSyncPercent('');
+    //   setIsSyncing(false);
+    // }
+    else {
+      setSyncPercent('');
+      setIsSyncing(undefined);
+    }
+  }, [qExeuctionIsSyncing]);
+
+  useEffect(() => {
+    if (qExecutionPeers.isError) {
+      setPeers(undefined);
+      return;
+    }
+    if (typeof qExecutionPeers.data === 'string') {
+      setPeers(qExecutionPeers.data);
+    } else if (typeof qExecutionPeers.data === 'number') {
+      setPeers(qExecutionPeers.data.toString());
+    } else {
+      setPeers(undefined);
+    }
+  }, [qExecutionPeers]);
+
+  useEffect(() => {
+    if (qLatestBlock.isError) {
+      setLatestBlockNumber(undefined);
+      return;
+    }
+    if (
+      qLatestBlock?.data?.number &&
+      typeof qLatestBlock.data.number === 'string'
+    ) {
+      const latestBlockNum = hexToDecimal(qLatestBlock.data.number);
+      setLatestBlockNumber(latestBlockNum);
+    } else {
+      setLatestBlockNumber(undefined);
+    }
+  }, [qLatestBlock]);
+
+  const onNodeAction = useCallback(
+    (action: NodeAction) => {
+      console.log('NodeAction for node: ', action, selectedNode);
+      if (selectedNode) {
+        if (action === 'start') {
+          electron.startNode(selectedNode.id);
+        } else if (action === 'stop') {
+          electron.stopNode(selectedNode.id);
+        } else if (action === 'logs') {
+          // show logs
+        } else if (action === 'settings') {
+          // show settings
+        }
+      }
+    },
+    [selectedNode]
+  );
   // useEffect(() => {
   //   qNodeInfo.refetch();
   // }, [selectedNode]);
@@ -33,82 +166,68 @@ const NodeScreen = () => {
   //   },
   // });
   if (!selectedNode) {
-    // if docker is not installed, show prompt
-    if (!isDockerInstalled) {
-      if (qIsDockerInstalled.isLoading) {
-        return <>Loading...</>;
-      }
-      return <InstallDocker />;
-    }
-    return <div>No node selected</div>;
+    // if there is no node selected, prompt user to create a new node
+    return (
+      <>
+        {!sIsModalOpenAddNode && (
+          <NNSplash onClickGetStarted={() => setIsModalOpenAddNode(true)} />
+        )}
+        {/* Todo: remove this when Modal Manager is created */}
+        <Modal
+          title=""
+          isOpen={sIsModalOpenAddNode}
+          onClickCloseButton={() => setIsModalOpenAddNode(false)}
+          isFullScreen
+        >
+          <AddNodeStepper
+            onChange={(newValue: 'done' | 'cancel') => {
+              console.log(newValue);
+              if (newValue === 'done' || newValue === 'cancel') {
+                setIsModalOpenAddNode(false);
+              }
+            }}
+          />
+        </Modal>
+      </>
+    );
   }
 
   const { status, spec } = selectedNode;
-  const { category, displayName } = spec;
+  // todo: get node type, single or multi-service
+  // parse node details from selectedNode => SingleNodeContent
+  // todo: add stop/start ability?
+  const nodeContent: SingleNodeContent = {
+    nodeId: selectedNode.id,
+    name: spec.specId.replace('-beacon', ''),
+    type: 'client',
+    version: qNodeVersion?.currentData,
+    info: spec.category,
+    status: {
+      stopped: status === 'stopped',
+      error: status.includes('error'),
+      sychronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+    },
+    stats: {
+      peers: sPeers,
+      currentBlock: sLatestBlockNumber,
+      diskUsageGBs: diskUsed ? parseFloat(diskUsed) : undefined,
+    },
+    onAction: onNodeAction,
+  };
+  console.log('passing content to NodeScreen: ', nodeContent);
+  return <ContentSingleClient {...nodeContent} />;
 
-  return (
-    <div>
-      <div>
-        <h1>{displayName}</h1>
-        {status === 'running' && qNodeVersion && (
-          <h4>
-            Version:{' '}
-            <>
-              {qNodeVersion.isLoading ? (
-                <>Loading...</>
-              ) : (
-                <>
-                  {qNodeVersion.isError ? (
-                    <>Loading..</>
-                  ) : (
-                    qNodeVersion.currentData
-                  )}
-                </>
-              )}
-            </>
-          </h4>
-        )}
-        <h4>
-          {t('Type')}: {category} Node
-        </h4>
-        <h3>
-          {t('Status')}: {t(status)}
-        </h3>
-      </div>
-      <div className="Hello">
-        <button
-          type="button"
-          onClick={() => electron.startNode(selectedNode.id)}
-          disabled={
-            !(
-              status === NodeStatus.created ||
-              status === NodeStatus.readyToStart ||
-              status === NodeStatus.errorStarting ||
-              status === NodeStatus.errorRunning ||
-              status === NodeStatus.stopped ||
-              status === NodeStatus.errorStopping ||
-              status === NodeStatus.unknown
-            )
-          }
-        >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <FaPlayCircle style={{ marginRight: 5 }} />
-            {t('Start')}
-          </div>
-        </button>
-        &nbsp;
-        <button
-          type="button"
-          onClick={() => electron.stopNode(selectedNode.id)}
-          disabled={status !== NodeStatus.running}
-        >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <FaPauseCircle style={{ marginRight: 5 }} />
-            {t('Stop')}
-          </div>
-        </button>
-      </div>
-    </div>
-  );
+  // start button disabled logic
+  // disabled={
+  //   !(
+  //     status === NodeStatus.created ||
+  //     status === NodeStatus.readyToStart ||
+  //     status === NodeStatus.errorStarting ||
+  //     status === NodeStatus.errorRunning ||
+  //     status === NodeStatus.stopped ||
+  //     status === NodeStatus.errorStopping ||
+  //     status === NodeStatus.unknown
+  // stop button disabled logic
+  //   disabled={status !== NodeStatus.running}
 };
 export default NodeScreen;

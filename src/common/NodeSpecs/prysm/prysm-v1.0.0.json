@@ -7,15 +7,41 @@
     "defaultExecutionType": "docker",
     "imageName": "gcr.io/prysmaticlabs/prysm/beacon-chain:stable",
     "input": {
+      "defaultConfig": {
+        "http": "Enabled",
+        "httpHostAddress": "0.0.0.0",
+        "httpCorsDomains": "\"http://localhost\"",
+        "executionEndpoint": "http://host.docker.internal:8551"
+      },
       "docker": {
         "containerVolumePath": "/data",
         "raw": "-p 4000:4000 -p 13000:13000 -p 12000:12000/udp",
-        "forcedRawNodeInput": "--accept-terms-of-use=true"
+        "forcedRawNodeInput": "--accept-terms-of-use=true --rpc-host=0.0.0.0 --jwt-secret=/data/jwtsecret"
       }
     }
   },
   "category": "L1/ConsensusClient/BeaconNode",
   "rpcTranslation": "eth-l1-beacon",
+  "systemRequirements": {
+    "documentationUrl": "https://docs.prylabs.network/docs/install/install-with-script#step-1-review-prerequisites-and-best-practices",
+    "cpu" : {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage" : {
+      "minSizeGBs" : 200,
+      "ssdRequired": true
+    },
+    "internet" : {
+      "minDownloadSpeedMbps": 8,
+      "minUploadSpeedMbps": 8
+    },
+    "docker" : {
+      "required": true
+    }
+  },
   "configTranslation": {
     "dataDir": {
       "displayName": "The directory where nimbus will store all blockchain data.",
@@ -49,38 +75,14 @@
         "type": "text"
       }
     },
-    "httpApis": {
-      "displayName": "Enabled HTTP APIs",
-      "category": "RPC APIs",
-      "cliConfigPrefix": "--http-modules=",
-      "valuesJoinStr": ", ",
-      "uiControl": {
-        "type": "select/multiple",
-        "controlTranslations": [
-          {
-            "value": "Prysm",
-            "config": "prysm"
-          },
-          {
-            "value": "Eth",
-            "config": "eth"
-          }
-        ]
-      },
-      "defaultValue": [
-        "Prysm",
-        "Eth"
-      ],
-      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/json-rpc"
-    },
-    "eth1ProviderUrl": {
-      "displayName": "One or more Web3 provider URLs used for obtaining deposit contract data.",
-      "cliConfigPrefix": "--http-web3provider=",
-      "defaultValue": "http://localhost:8545",
+    "executionEndpoint": {
+      "displayName": "The URL of the local execution engine API",
+      "cliConfigPrefix": "--execution-endpoint=",
+      "defaultValue": "http://host.docker.internal:8551",
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "A mainchain web3 provider string http endpoint. Can contain auth header as well in the format"
+      "iconUrl": "https://docs.prylabs.network/docs/execution-node/authentication#configure-beacon-node"
     },
     "maxPeerCount": {
       "displayName": "Max Peer Count (set to low number to use less bandwidth)",

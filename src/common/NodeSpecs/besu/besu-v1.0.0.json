@@ -11,17 +11,40 @@
         "http": "Enabled",
         "webSockets": "Enabled",
         "httpCorsDomains": "\"http://localhost\"",
-        "hostAllowList": "localhost,host.docker.internal"
+        "hostAllowList": "localhost,host.docker.internal",
+        "engineRpc" : "Enabled",
+        "engineHostAllowList": "localhost,host.docker.internal"
+
       },
       "docker": {
         "containerVolumePath": "/var/lib/besu",
-        "raw": "-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546",
-        "forcedRawNodeInput": "--data-path=\"/var/lib/besu\""
+        "raw": "-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546 -p 8551:8551",
+        "forcedRawNodeInput": "--data-path=\"/var/lib/besu\" --engine-jwt-secret=\"/var/lib/besu/jwtsecret\""
       }
     }
   },
   "category": "L1/ExecutionClient",
   "rpcTranslation": "eth-l1",
+  "systemRequirements": {
+    "documentationUrl": "https://besu.hyperledger.org/en/stable/public-networks/get-started/system-requirements/",
+    "cpu" : {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage" : {
+      "minSizeGBs" : 750,
+      "ssdRequired": true
+    },
+    "internet" : {
+      "minDownloadSpeedMbps": 10,
+      "minUploadSpeedMbps": 10
+    },
+    "docker" : {
+      "required": true
+    }
+  },
   "configTranslation": {
     "dataDir": {
       "displayName": "Node data is stored in this folder",
@@ -69,6 +92,24 @@
       },
       "defaultValue": "Disabled",
       "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-http-enabled"
+    },
+    "engineRpc": {
+      "displayName": "Engine RPC connections (*Syncing requires this enabled)",
+      "category": "RPC API",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--engine-rpc-enabled"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://besu.hyperledger.org/en/stable/public-networks/reference/cli/options/#engine-rpc-enabled"
     },
     "webSockets": {
       "displayName": "Enables or disables the WebSocket JSON-RPC service. The default is false.",
@@ -183,6 +224,16 @@
       },
       "infoDescription": "Example value: medomain.com,meotherdomain.com",
       "defaultValue": "localhost,127.0.0.1"
+    },
+    "engineHostAllowList": {
+      "displayName": "A comma-separated list of hostnames to access the JSON-RPC API and pull Besu metrics. By default, Besu accepts requests from localhost and 127.0.0.1.",
+      "category": "RPC APIs",
+      "cliConfigPrefix": "--engine-host-allowlist=",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: medomain.com,meotherdomain.com",
+      "defaultValue": "localhost,host.docker.internal,127.0.0.1"
     },
     "dataStorageFormat": {
       "displayName": "The data storage format to use",

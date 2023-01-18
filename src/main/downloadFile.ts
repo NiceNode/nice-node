@@ -1,8 +1,9 @@
 import path from 'node:path';
-import { pipeline } from 'node:stream';
+import { pipeline, Transform } from 'node:stream';
 import { promisify } from 'node:util';
 import { createWriteStream } from 'fs';
 import { chmod } from 'fs/promises';
+import { throttle } from 'throttle-debounce';
 
 import { doesFileOrDirExist } from './files';
 import logger from './logger';
@@ -11,6 +12,10 @@ import { httpGet } from './httpReq';
 
 const streamPipeline = promisify(pipeline);
 
+export type FileDownloadProgress = {
+  totalBytes: number;
+  downloadedBytes: number;
+};
 /**
  * Downloads the file to directory.
  * @param downloadUrl
@@ -19,7 +24,8 @@ const streamPipeline = promisify(pipeline);
  */
 export const downloadFile = async (
   downloadUrl: string,
-  directory: string
+  directory: string,
+  progressListener?: (progress: FileDownloadProgress) => void
 ): Promise<string> => {
   logger.info(`downloading file ${downloadUrl}`);
   // todo: return error if no file in url
@@ -35,10 +41,46 @@ export const downloadFile = async (
       });
       // if (!res.ok) throw new Error(`unexpected response ${res.statusText}`);
       logger.info('http response received');
+      logger.info('http response', response);
+      console.log(
+        'http response content-length',
+        response.headers['content-length']
+      );
+      console.log(
+        'http response Content-Length',
+        response.headers['Content-Length']
+      );
+      let totalBytes = 0;
+      if (response.headers['content-length']) {
+        totalBytes = parseInt(response.headers['content-length'], 10);
+      }
       const fileWriteStream = createWriteStream(fileOutPath);
 
       logger.info('piping response to fileWriteStream');
-      await streamPipeline(response, fileWriteStream);
+
+      let downloadedBytes = 0;
+      const throttleProgressListener = throttle(1000, (currBytes: number) => {
+        const update: FileDownloadProgress = {
+          totalBytes,
+          downloadedBytes: currBytes,
+        };
+        console.log('update: ', update);
+        if (progressListener) {
+          progressListener(update);
+        }
+      });
+      const streamProgress = new Transform({
+        transform(chunk, _encoding, callback) {
+          downloadedBytes += chunk.length;
+          throttleProgressListener(downloadedBytes);
+          this.push(chunk);
+          callback();
+        },
+      });
+      await streamPipeline(response, streamProgress, fileWriteStream);
+      // } else {
+      //   await streamPipeline(response, fileWriteStream);
+      // }
       logger.info(
         'done piping response to fileWriteStream. closing fileWriteStream.'
       );

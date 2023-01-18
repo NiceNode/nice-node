@@ -12,6 +12,7 @@ import { send } from '../messenger';
 import * as monitoring from './monitoring';
 import * as dockerCompose from './docker-compose';
 import { killChildProcess } from '../processExit';
+import { parseDockerLogMetadata } from '../util/nodeLogUtils';
 // const options = {
 //   machineName: undefined, // uses local docker
 //   currentWorkingDirectory: undefined, // uses current working directory
@@ -32,11 +33,11 @@ let docker: Docker;
 let dockerWatchProcess: ChildProcess;
 
 const runCommand = async (command: string) => {
-  if (!command.includes('stats')) {
+  if (!command.includes('stats') && !command.includes('info')) {
     logger.info(`Running docker ${command}`);
   }
   const data = await docker.command(command);
-  if (!command.includes('stats')) {
+  if (!command.includes('stats') && !command.includes('info')) {
     logger.info(`DOCKER ${command} data: ${JSON.stringify(data)}`);
   }
   return data;
@@ -192,7 +193,7 @@ export const sendLogsToUI = (node: Node) => {
   }
   const containerId = node.runtime.processIds[0];
   const childProcess = spawn(
-    `docker logs -f -n 100 ${containerId}`,
+    `docker logs --follow --timestamps -n 100 ${containerId}`,
     watchInput,
     spawnOptions
   );
@@ -208,10 +209,11 @@ export const sendLogsToUI = (node: Node) => {
     rlStdErr = readline.createInterface({
       input: sendLogsToUIProc.stderr,
     });
+    // some nodes, such as geth, send all logs over stderr
     rlStdErr.on('line', (log: string) => {
       // logger.info(`docker log read for ${node.spec.specId}`);
       try {
-        send('nodeLogs', log);
+        send('nodeLogs', parseDockerLogMetadata(log));
       } catch (err) {
         logger.error(`Error parsing docker event log ${log}`, err);
       }
@@ -225,8 +227,13 @@ export const sendLogsToUI = (node: Node) => {
     rlStdOut.on('line', (log: string) => {
       // logger.info(`docker log read for ${node.spec.specId}`);
 
+      // can use these logs to generate tests
+      // console.log('log metadata without:', log);
+      // logger.info('log metadata:', parseDockerLogMetadata(log));
       try {
-        send('nodeLogs', log);
+        // parse log metadata before sending to the UI
+        send('nodeLogs', parseDockerLogMetadata(log));
+        // send('nodeLogs', log);
       } catch (err) {
         logger.error(`Error parsing docker event log ${log}`, err);
       }
@@ -399,7 +406,6 @@ export const startDockerNode = async (node: Node): Promise<string[]> => {
   return [containerId];
 };
 
-// todo: check docker version. check docker desktop is installed but not running
 export const isDockerInstalled = async () => {
   let bIsDockerInstalled;
   logger.info('Checking isDockerInstalled...');
@@ -419,6 +425,29 @@ export const isDockerInstalled = async () => {
   logger.info(`isDockerInstalled: ${bIsDockerInstalled}`);
   return bIsDockerInstalled;
 };
+
+export const isDockerRunning = async () => {
+  let bIsDockerRunning;
+  logger.info('Checking isDockerRunning...');
+  try {
+    // Docker is running if the info command did not throw error.
+    await runCommand('info');
+    bIsDockerRunning = true;
+  } catch (err) {
+    // [mac verified] "error cannot connect to the docker dameon"
+    logger.error(err);
+    bIsDockerRunning = false;
+    logger.info('Docker engine not found.');
+  }
+  if (!bIsDockerRunning) {
+    logger.info(`isDockerRunning: ${bIsDockerRunning}`);
+  }
+  return bIsDockerRunning;
+};
+
+setTimeout(() => {
+  isDockerRunning();
+}, 5000);
 
 export const onExit = () => {
   monitoring.onExit();

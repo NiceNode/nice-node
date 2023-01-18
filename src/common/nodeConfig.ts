@@ -1,15 +1,16 @@
-type FilePathControl = {
+export const FilePathControlType = 'filePath';
+export type FilePathControl = {
   type: 'filePath';
 };
-type TextControl = {
+export type TextControl = {
   type: 'text';
 };
-type SelectTranslation = { value: string; config?: string };
-type SelectControl = {
+export type SelectTranslation = { value: string; config?: string };
+export type SelectControl = {
   type: 'select/single';
   controlTranslations: SelectTranslation[];
 };
-type MultiSelectControl = {
+export type MultiSelectControl = {
   type: 'select/multiple';
   controlTranslations: SelectTranslation[];
 };

@@ -18,7 +18,7 @@ import Node, {
   NodeStatus,
 } from '../common/node';
 import * as nodeStore from './state/nodes';
-import { deleteDisk, makeNodeDir } from './files';
+import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
 import {
   startBinary,
   stopBinary,
@@ -31,14 +31,29 @@ import {
   getProcess,
 } from './binary';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
+import { ConfigValuesMap } from '../common/nodeConfig';
 
-export const addNode = async (nodeSpec: NodeSpecification): Promise<Node> => {
-  const dataDir = await makeNodeDir(nodeSpec.specId);
+export const addNode = async (
+  nodeSpec: NodeSpecification,
+  storageLocation?: string,
+  initialConfigFromUser?: ConfigValuesMap
+): Promise<Node> => {
+  // use a timestamp postfix so the user can add multiple nodes of the same name
+  const utcTimestamp = Math.floor(Date.now() / 1000);
+  const dataDir = await makeNodeDir(
+    `${nodeSpec.specId}-${utcTimestamp}`,
+    storageLocation ?? getNodesDirPath()
+  );
+  console.log('adding node with dataDir: ', dataDir);
   const nodeRuntime: NodeRuntime = {
     dataDir,
     usage: {},
   };
-  const node: Node = createNode({ spec: nodeSpec, runtime: nodeRuntime });
+  const node: Node = createNode({
+    spec: nodeSpec,
+    runtime: nodeRuntime,
+    initialConfigFromUser,
+  });
   nodeStore.addNode(node);
   return node;
 };
@@ -107,6 +122,9 @@ export const removeNode = async (
 ): Promise<Node> => {
   // todo: check if node can be removed. Is it stopped?
   // todo: stop & remove container
+  logger.info(
+    `Remove node ${nodeId} and delete storage? ${options.isDeleteStorage}`
+  );
   try {
     await stopNode(nodeId);
   } catch (err) {

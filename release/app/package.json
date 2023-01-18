@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "1.5.1-alpha",
+  "version": "2.2.3-alpha",
   "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./dist/main/main.js",
@@ -16,6 +16,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "pm2": "^5.2.0"
+    "pm2": "^5.2.0",
+    "systeminformation": "^5.16.0"
   }
 }

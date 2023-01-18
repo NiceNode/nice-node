@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ipcMain } from 'electron';
 import getDebugInfo from './debug';
-import { getGethLogs, getGethErrorLogs, getSystemFreeDiskSpace } from './files';
+import {
+  getGethLogs,
+  getGethErrorLogs,
+  getSystemFreeDiskSpace,
+  getNodesDirPathDetails,
+} from './files';
 import store from './state/store';
 import logger from './logger';
 import {
@@ -19,21 +24,36 @@ import {
   stopSendingNodeLogs,
 } from './nodeManager';
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
-import { NodeId } from '../common/node';
+import Node, { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
-import { isDockerInstalled } from './docker/docker';
+import { isDockerInstalled, isDockerRunning } from './docker/docker';
 import installDocker from './docker/install';
 // eslint-disable-next-line import/no-cycle
-import { openDialogForNodeDataDir } from './dialog';
+import {
+  openDialogForNodeDataDir,
+  openDialogForStorageLocation,
+} from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
-import { getSettings, setLanguage } from './state/settings';
+import {
+  getSetHasSeenSplashscreen,
+  getSettings,
+  setIsOpenOnStartup,
+  setLanguage,
+  setThemeSetting,
+  ThemeSetting,
+} from './state/settings';
+import { getSystemInfo } from './systemInfo';
+import startDocker from './docker/start';
+import { addEthereumNode } from './specialNodes/ethereumNode';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
   ipcMain.handle('updateNodeUsedDiskSpace', (_event, nodeId: NodeId) => {
     return updateNodeUsedDiskSpace(nodeId);
   });
-  ipcMain.handle('getSystemFreeDiskSpace', getSystemFreeDiskSpace);
+  ipcMain.handle('getSystemFreeDiskSpace', () => {
+    return getSystemFreeDiskSpace();
+  });
   ipcMain.handle('getDebugInfo', getDebugInfo);
   ipcMain.handle('getStoreValue', (_event, key: string) => {
     const value = store.get(key);
@@ -49,13 +69,28 @@ export const initialize = () => {
   ipcMain.handle('getGethErrorLogs', getGethErrorLogs);
   ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
+  ipcMain.handle('getSystemInfo', getSystemInfo);
 
   // Multi-nodegetUserNodes
   ipcMain.handle('getNodes', getNodes);
   ipcMain.handle('getUserNodes', getUserNodes);
-  ipcMain.handle('addNode', (_event, nodeSpec: NodeSpecification) => {
-    return addNode(nodeSpec);
-  });
+  ipcMain.handle(
+    'addEthereumNode',
+    (
+      _event,
+      ecNodeSpec: NodeSpecification,
+      ccNodeSpec: NodeSpecification,
+      settings: { storageLocation?: string }
+    ): Promise<{ ecNode: Node; ccNode: Node }> => {
+      return addEthereumNode(ecNodeSpec, ccNodeSpec, settings);
+    }
+  );
+  ipcMain.handle(
+    'addNode',
+    (_event, nodeSpec: NodeSpecification, storageLocation?: string) => {
+      return addNode(nodeSpec, storageLocation);
+    }
+  );
   ipcMain.handle(
     'updateNode',
     (_event, nodeId: NodeId, propertiesToUpdate: any) => {
@@ -77,6 +112,9 @@ export const initialize = () => {
   ipcMain.handle('openDialogForNodeDataDir', (_event, nodeId: NodeId) => {
     return openDialogForNodeDataDir(nodeId);
   });
+  ipcMain.handle('openDialogForStorageLocation', () => {
+    return openDialogForStorageLocation();
+  });
   ipcMain.handle('deleteNodeStorage', (_event, nodeId: NodeId) => {
     return deleteNodeStorage(nodeId);
   });
@@ -87,16 +125,30 @@ export const initialize = () => {
     return stopSendingNodeLogs(nodeId);
   });
 
+  // Default Node storage location
+  ipcMain.handle('getNodesDefaultStorageLocation', getNodesDirPathDetails);
+
   // Node library
   ipcMain.handle('getNodeLibrary', getNodeLibrary);
 
   // Docker
   ipcMain.handle('getIsDockerInstalled', isDockerInstalled);
   ipcMain.handle('installDocker', installDocker);
+  ipcMain.handle('getIsDockerRunning', isDockerRunning);
+  ipcMain.handle('startDocker', startDocker);
 
   // Settings
+  ipcMain.handle('getSetHasSeenSplashscreen', (_event, hasSeen?: boolean) => {
+    return getSetHasSeenSplashscreen(hasSeen);
+  });
   ipcMain.handle('getSettings', getSettings);
   ipcMain.handle('setLanguage', (_event, languageCode: string) => {
     return setLanguage(languageCode);
+  });
+  ipcMain.handle('setThemeSetting', (_event, theme: ThemeSetting) => {
+    return setThemeSetting(theme);
+  });
+  ipcMain.handle('setIsOpenOnStartup', (_event, isOpenOnStartup: boolean) => {
+    return setIsOpenOnStartup(isOpenOnStartup);
   });
 };

@@ -3,6 +3,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { NodeSpecification } from '../common/nodeSpec';
 import { CHANNELS_ARRAY } from './messenger';
 import { NodeId } from '../common/node';
+import { ThemeSetting } from './state/settings';
 
 contextBridge.exposeInMainWorld('electron', {
   SENTRY_DSN: process.env.SENTRY_DSN,
@@ -43,13 +44,25 @@ contextBridge.exposeInMainWorld('electron', {
     return { memory, cpu };
   },
   checkSystemHardware: () => ipcRenderer.invoke('checkSystemHardware'),
+  getSystemInfo: () => ipcRenderer.invoke('getSystemInfo'),
 
   // Multi-node
   getNodes: () => ipcRenderer.invoke('getNodes'),
   getUserNodes: () => ipcRenderer.invoke('getUserNodes'),
-  addNode: (nodeSpec: NodeSpecification) =>
-    ipcRenderer.invoke('addNode', nodeSpec),
-
+  addEthereumNode: async (
+    ecNodeSpec: NodeSpecification,
+    ccNodeSpec: NodeSpecification,
+    settings: { storageLocation?: string }
+  ) => {
+    return ipcRenderer.invoke(
+      'addEthereumNode',
+      ecNodeSpec,
+      ccNodeSpec,
+      settings
+    );
+  },
+  addNode: (nodeSpec: NodeSpecification, storageLocation?: string) =>
+    ipcRenderer.invoke('addNode', nodeSpec, storageLocation),
   updateNode: (nodeId: NodeId, propertiesToUpdate: any) =>
     ipcRenderer.invoke('updateNode', nodeId, propertiesToUpdate),
 
@@ -63,6 +76,8 @@ contextBridge.exposeInMainWorld('electron', {
   },
   openDialogForNodeDataDir: (nodeId: NodeId) =>
     ipcRenderer.invoke('openDialogForNodeDataDir', nodeId),
+  openDialogForStorageLocation: () =>
+    ipcRenderer.invoke('openDialogForStorageLocation'),
   deleteNodeStorage: (nodeId: NodeId) =>
     ipcRenderer.invoke('deleteNodeStorage', nodeId),
   sendNodeLogs: (nodeId: NodeId) => {
@@ -72,16 +87,30 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('stopSendingNodeLogs', nodeId);
   },
 
+  // Default Node storage location
+  getNodesDefaultStorageLocation: () =>
+    ipcRenderer.invoke('getNodesDefaultStorageLocation'),
+
   // Node library
   getNodeLibrary: () => ipcRenderer.invoke('getNodeLibrary'),
 
   // Docker
   getIsDockerInstalled: () => ipcRenderer.invoke('getIsDockerInstalled'),
   installDocker: () => ipcRenderer.invoke('installDocker'),
+  getIsDockerRunning: () => ipcRenderer.invoke('getIsDockerRunning'),
+  startDocker: () => ipcRenderer.invoke('startDocker'),
 
   // Settings
+  getSetHasSeenSplashscreen: (hasSeen?: boolean) =>
+    ipcRenderer.invoke('getSetHasSeenSplashscreen', hasSeen),
   getSettings: () => ipcRenderer.invoke('getSettings'),
   setLanguage: (languageCode: string) => {
     ipcRenderer.invoke('setLanguage', languageCode);
+  },
+  setThemeSetting: (theme: ThemeSetting) => {
+    ipcRenderer.invoke('setThemeSetting', theme);
+  },
+  setIsOpenOnStartup: (isOpenOnStartup: boolean) => {
+    ipcRenderer.invoke('setIsOpenOnStartup', isOpenOnStartup);
   },
 });
