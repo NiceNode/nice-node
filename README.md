@@ -9,11 +9,13 @@ For the latest information, visit https://nicenode.xyz
 [![Downloads](https://badgen.net/badge/icon/alpha?label=downloads)](https://www.nicenode.xyz/downloads) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/k3dpYU4Pn9)
 [![gitpoap badge](https://public-api.gitpoap.io/v1/repo/jgresham/nice-node/badge)](https://www.gitpoap.io/gh/jgresham/nice-node)
 
-<img width="949" alt="Nice Node Screenshot captioned coming soon" src="https://user-images.githubusercontent.com/3721291/213474580-8a5a7ec5-9c42-4b70-bd5d-0b0915ef5ee7.png">
+<img width="1164" alt="Nice Node Screenshot captioned work in progress" src="https://user-images.githubusercontent.com/3721291/213537206-fa5380f4-af5b-4d81-a07b-ea9072f07b24.png">
 
 # Development
 
 [![Test](https://github.com/jgresham/nice-node/actions/workflows/test.yml/badge.svg)](https://github.com/jgresham/nice-node/actions/workflows/test.yml)
+
+
 
 ## Install
 
