@@ -36,6 +36,10 @@ export interface SidebarProps {
 
 const itemListData: { iconId: IconId; label: string; count?: number }[] = [
   {
+    iconId: 'bell',
+    label: 'Notifications',
+  },
+  {
     iconId: 'add',
     label: 'Add Node',
   },

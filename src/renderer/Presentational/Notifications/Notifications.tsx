@@ -15,10 +15,21 @@ export type NotificationsType = {
   data: NotificationItemProps[];
   updateNotifications: () => void;
   onSettingsClick: () => void;
+  onNotificationItemClick: () => void;
 };
 
 const Notifications = (props: NotificationsType) => {
-  const { data, updateNotifications } = props;
+  const {
+    data,
+    updateNotifications,
+    onSettingsClick,
+    onNotificationItemClick,
+  } = props;
+
+  const areAllNotificationsRead = () => {
+    return data.every((item) => item.unread === false);
+  };
+
   return (
     <div className={container}>
       <div className={headerContainer}>
@@ -29,6 +40,7 @@ const Notifications = (props: NotificationsType) => {
           iconId="check"
           variant="icon-left"
           size="small"
+          disabled={areAllNotificationsRead()}
           onClick={updateNotifications}
         />
         <Button
@@ -39,7 +51,7 @@ const Notifications = (props: NotificationsType) => {
         />
       </div>
       {data.map((item) => {
-        return <NotificationItem {...item} />;
+        return <NotificationItem {...item} onClick={onNotificationItemClick} />;
       })}
     </div>
   );

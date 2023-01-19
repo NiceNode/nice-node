@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
+import NotificationsWrapper from './Presentational/Notifications/NotificationsWrapper';
 
 import './Generics/redesign/globalStyle.css';
 import './reset.css';
@@ -86,7 +87,8 @@ const MainScreen = () => {
           >
             <SidebarWrapper />
             <div style={{ flex: 1, overflow: 'auto' }}>
-              <NodeScreen />
+              {/* <NodeScreen /> */}
+              <NotificationsWrapper />
             </div>
           </div>
 
