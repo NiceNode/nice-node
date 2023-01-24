@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { container, tabsList, tabsContainer, tabContent } from './tabs.css';
 import TabItem from '../TabItem/TabItem';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
@@ -13,6 +13,19 @@ export const Tabs = ({ children, id, modal }: TabsProps) => {
   const [activeTab, setActiveTab] = useState(
     id || (Array.isArray(children) ? children[0].props.id : null)
   );
+
+  // if the children change and the current active tab isn't available,
+  //  then select the first tab if available
+  useEffect(() => {
+    if (activeTab) {
+      if (
+        children.length > 0 &&
+        !children.find((child) => child.props?.id === activeTab)
+      ) {
+        setActiveTab(children[0].props.id);
+      }
+    }
+  }, [activeTab, children]);
 
   const onClickTabItem = (tab: string | undefined) => {
     setActiveTab(tab);
