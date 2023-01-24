@@ -1,7 +1,7 @@
 import { container } from './horizontalLine.css';
 
 export interface HorizontalLineProps {
-  type?: 'content' | 'menu';
+  type?: 'content' | 'menu' | 'above-tab';
 }
 
 export const HorizontalLine = ({ type }: HorizontalLineProps) => {

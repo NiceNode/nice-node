@@ -59,6 +59,8 @@ export const lineKeyText = style({
   fontWeight: 590,
   color: vars.color.font70,
   letterSpacing: '-0.12px',
+  fontSize: '13px',
+  lineHeight: '16px',
 });
 
 export const lineValueText = style({

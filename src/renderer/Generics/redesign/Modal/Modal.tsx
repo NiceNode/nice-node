@@ -8,7 +8,7 @@ import {
 } from './modal.css';
 
 type Props = {
-  children: React.ReactNode;
+  children: React.ReactElement[] | React.ReactElement;
   isOpen: boolean | undefined;
   onClickCloseButton: () => void;
   title?: string;

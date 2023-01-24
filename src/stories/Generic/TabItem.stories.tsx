@@ -17,13 +17,13 @@ const Template: ComponentStory<typeof TabItem> = (args) => (
 export const TabItemActive = Template.bind({});
 
 TabItemActive.args = {
-  active: true,
-  label: 'Active Tab',
+  activeTabId: 'Sync',
+  label: 'Sync',
 };
 
 export const TabItemIdle = Template.bind({});
 
 TabItemIdle.args = {
-  active: false,
-  label: 'Idle Tab',
+  activeTabId: 'Sync',
+  label: 'CPU',
 };

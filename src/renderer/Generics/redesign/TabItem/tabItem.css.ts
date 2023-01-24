@@ -1,30 +1,18 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '../theme.css';
+import { vars, common } from '../theme.css';
 
-export const baseTab = style({
-  cursor: 'pointer',
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-
-  fontWeight: 500,
-  fontSize: 13,
+export const container = style({
+  listStyleType: 'none',
+  fontWeight: 590,
+  fontSize: '13px',
   lineHeight: '16px',
-  height: '32px',
-  ':hover': {
-    color: vars.color.font70,
+  letterSpacing: '-0.12px',
+  color: vars.color.font50,
+  userSelect: 'none',
+  cursor: 'pointer',
+  selectors: {
+    [`&.active`]: {
+      color: common.color.purple600,
+    },
   },
 });
-
-export const activeTab = style([
-  {
-    color: vars.color.primaryActive,
-  },
-]);
-
-export const idleTab = style([
-  {
-    color: vars.color.font50,
-  },
-]);

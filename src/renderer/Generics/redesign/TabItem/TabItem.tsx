@@ -1,35 +1,37 @@
-import { useState } from 'react';
-
-import { baseTab, idleTab, activeTab } from './tabItem.css';
+import { container } from './tabItem.css';
 
 export interface TabItemProps {
   /**
-   * Is this the active tab?
+   * What's the current active tab id?
    */
-  active?: boolean;
+  activeTabId: string | undefined;
 
   /**
    * Required tab label
    */
-  label: string;
+  label: string | undefined;
+
+  /**
+   * Tab action
+   */
+  onClickTabItem: (tab: string | undefined) => void;
 }
 
-const TabItem = ({ active = false, label }: TabItemProps) => {
-  const [tabState, setTabState] = useState(active ? activeTab : idleTab);
-  const classNames = [baseTab, tabState];
+const TabItem = ({ activeTabId, label, onClickTabItem }: TabItemProps) => {
   const onClickAction = () => {
-    setTabState(activeTab);
+    onClickTabItem(label);
   };
+  const tabActiveStyle = activeTabId === label ? 'active' : '';
   return (
-    <span
-      className={classNames.join(' ')}
+    <li
+      className={[container, tabActiveStyle].join(' ')}
       onClick={onClickAction}
       onKeyDown={onClickAction}
       role="tab"
       tabIndex={0}
     >
       {label}
-    </span>
+    </li>
   );
 };
 
