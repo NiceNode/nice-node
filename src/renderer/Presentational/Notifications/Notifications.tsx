@@ -13,7 +13,7 @@ import {
 
 export type NotificationsType = {
   data: NotificationItemProps[];
-  updateNotifications: () => void;
+  markAllNotificationsAsRead: () => void;
   onSettingsClick: () => void;
   onNotificationItemClick: () => void;
 };
@@ -21,7 +21,7 @@ export type NotificationsType = {
 const Notifications = (props: NotificationsType) => {
   const {
     data,
-    updateNotifications,
+    markAllNotificationsAsRead,
     onSettingsClick,
     onNotificationItemClick,
   } = props;
@@ -41,7 +41,7 @@ const Notifications = (props: NotificationsType) => {
           variant="icon-left"
           size="small"
           disabled={areAllNotificationsRead()}
-          onClick={updateNotifications}
+          onClick={markAllNotificationsAsRead}
         />
         <Button
           iconId="settings"

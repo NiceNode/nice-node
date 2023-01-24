@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { getNotifications } from 'main/notifications';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
 import { NodeId, NodeStatus, UserNodes } from '../../../common/node';
@@ -38,6 +39,7 @@ const itemListData: { iconId: IconId; label: string; count?: number }[] = [
   {
     iconId: 'bell',
     label: 'Notifications',
+    count: getNotifications().length, // this needs to be updated based on changes in global state
   },
   {
     iconId: 'add',
