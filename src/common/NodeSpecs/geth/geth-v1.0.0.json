@@ -9,14 +9,14 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpCorsDomains": "nice-node://",
+        "httpCorsDomains": "http://localhost",
         "webSockets": "Disabled",
         "httpVirtualHosts": "localhost,host.docker.internal",
         "authVirtualHosts": "localhost,host.docker.internal"
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
-        "raw": "-p 30303:30303 -p 8545:8545 -p 8546:8546 -p 8551:8551",
+        "raw": "-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546 -p 8551:8551",
         "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret"
       }
     },
