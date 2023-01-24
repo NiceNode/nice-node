@@ -87,7 +87,7 @@ export const networkValue = style({
 
 export const selectContainer = style({
   marginLeft: 12,
-  width: 116,
+  width: 160,
 });
 
 export const inputContainer = style({

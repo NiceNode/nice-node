@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { ConfigValuesMap } from 'common/nodeConfig';
 import { SingleValue } from 'react-select';
+import { ConfigTranslation, ConfigValuesMap } from '../../../common/nodeConfig';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import Input from '../../Generics/redesign/Input/Input';
 import Button from '../../Generics/redesign/Button/Button';
@@ -37,18 +37,68 @@ import { SettingChangeHandler } from './NodeSettingsWrapper';
 
 export interface WalletSettingsProps {
   configValuesMap?: ConfigValuesMap;
+  httpCorsConfigTranslation?: ConfigTranslation;
   onChange?: SettingChangeHandler;
 }
 
+/**
+ * if joinChar and wrapChar are not given,
+ * The default assumption is comma separated values without a wrapChar
+ * @param param
+ * @returns an array of domains
+ */
+const splitDomainsFromValue = ({
+  rawCorsValue,
+  joinChar,
+  wrapChar,
+}: {
+  rawCorsValue?: string;
+  joinChar?: string;
+  wrapChar?: string;
+}) => {
+  let splitDomains: string[] = [];
+  let parsedCorsValue = rawCorsValue;
+  if (parsedCorsValue) {
+    if (wrapChar) {
+      if (parsedCorsValue.startsWith(wrapChar)) {
+        parsedCorsValue = parsedCorsValue.substring(
+          wrapChar.length,
+          parsedCorsValue.length
+        );
+      }
+      if (parsedCorsValue.endsWith(wrapChar)) {
+        parsedCorsValue = parsedCorsValue.substring(
+          0,
+          parsedCorsValue.length - wrapChar.length
+        );
+      }
+    }
+    if (joinChar) {
+      splitDomains = parsedCorsValue.split(joinChar);
+    } else {
+      // defaults to comma
+      splitDomains = parsedCorsValue.split(',');
+    }
+  }
+
+  return splitDomains;
+};
+
 export const WalletSettings = ({
-  onChange,
   configValuesMap,
+  httpCorsConfigTranslation,
+  onChange,
 }: WalletSettingsProps) => {
   const wallets = [
     {
       walletId: 'metamask',
-      walletName: 'Metamask',
+      walletName: 'Metamask (Chrome or Brave)',
       walletAddress: 'chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn',
+    },
+    {
+      walletId: 'metamask',
+      walletName: 'Metamask (Firefox)',
+      walletAddress: 'moz-extension://9ed7a5c5-8a81-4785-b45b-dc2ed1250aec',
     },
     {
       walletId: 'coinbase',
@@ -58,7 +108,7 @@ export const WalletSettings = ({
     {
       walletId: 'brave',
       walletName: 'Brave',
-      walletAddress: 'chrome-extension://',
+      walletAddress: 'brave://wallet',
     },
     {
       walletId: 'tally',
@@ -74,23 +124,27 @@ export const WalletSettings = ({
 
   const { t: tGeneric } = useTranslation('genericComponents');
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
-  const allWallets = configValuesMap?.httpCorsDomains.split(',') || [];
+  const splitCorsDomains = splitDomainsFromValue({
+    rawCorsValue: configValuesMap?.httpCorsDomains,
+    joinChar: httpCorsConfigTranslation?.valuesJoinStr,
+    wrapChar: httpCorsConfigTranslation?.valuesWrapChar,
+  });
   const defaultAddresses = ['nice-node://', 'http://localhost'];
   const officialWallets = wallets.map((item) => {
     return item.walletAddress;
   });
 
   const getOfficialWalletAddressArray = () => {
-    return allWallets.filter(
+    return splitCorsDomains.filter(
       (e) => officialWallets.includes(e) && !defaultAddresses.includes(e)
     );
   };
-  // filters allWallets so it only includes official wallets
+  // filters splitCorsDomains so it only includes official wallets
   const officialWalletAddressArray = getOfficialWalletAddressArray();
 
-  // filters allWallets so it only includes custom wallets
+  // filters splitCorsDomains so it only includes custom wallets
   const getCustomWalletAddressArray = () => {
-    const filtered = allWallets.filter(
+    const filtered = splitCorsDomains.filter(
       (e) =>
         !officialWalletAddressArray.includes(e) && !defaultAddresses.includes(e)
     );
@@ -99,8 +153,9 @@ export const WalletSettings = ({
     }
     return filtered.map((item) => {
       const parts = item.split('://');
+      const browser = parts[0].split('-extension')[0];
       return {
-        browser: parts[0],
+        browser,
         extensionId: parts[1],
       };
     });
@@ -110,7 +165,7 @@ export const WalletSettings = ({
     browser: string;
     extensionId: string;
   }) => {
-    return `${object.browser}://${object.extensionId}`;
+    return `${object.browser}-extension://${object.extensionId}`;
   };
 
   const browserSettings = [
@@ -122,16 +177,45 @@ export const WalletSettings = ({
       browser: 'firefox',
       extensionId: '',
     },
-    {
-      browser: 'brave',
-      extensionId: '',
-    },
   ];
 
   const [customWalletAddressArray, setCustomWalletAddressArray] = useState(
     getCustomWalletAddressArray() || browserSettings
   );
 
+  const mergeAndSetNewCorsDomains = (walletsAddressArray: string[]) => {
+    if (onChange) {
+      // if a saved domain is not of a wallet type, keep it
+      const nonWalletSavedCorsDomains = splitCorsDomains.filter((domain) => {
+        return (
+          !domain.includes('chrome-extension') &&
+          !domain.includes('moz-extension') &&
+          !domain.includes('brave')
+        );
+      });
+      // node's configTranslationMap defines how a node likes input such as join and wrap
+      //  characters for values
+      let joinChar = ',';
+      if (httpCorsConfigTranslation?.valuesJoinStr) {
+        joinChar = httpCorsConfigTranslation.valuesJoinStr;
+      }
+      let wrapChar;
+      if (httpCorsConfigTranslation?.valuesWrapChar) {
+        wrapChar = httpCorsConfigTranslation.valuesWrapChar;
+      }
+      let newCorsDomains = nonWalletSavedCorsDomains
+        .concat(walletsAddressArray)
+        .join(joinChar);
+      if (wrapChar) {
+        newCorsDomains = wrapChar + newCorsDomains + wrapChar;
+      }
+      onChange('httpCorsDomains', `${newCorsDomains}`);
+    }
+  };
+
+  /**
+   * @param updatedArray the updated custom wallet array
+   */
   const updateConfig = (
     updatedArray: { browser: string; extensionId: string }[]
   ) => {
@@ -145,7 +229,7 @@ export const WalletSettings = ({
         ...officialWalletAddressArray,
         ...customWalletAddressStringsArray,
       ];
-      onChange('httpCorsDomains', allWalletsAddressArray.toString());
+      mergeAndSetNewCorsDomains(allWalletsAddressArray);
     }
   };
 
@@ -241,16 +325,14 @@ export const WalletSettings = ({
               ...customWalletAddressStringsArray,
             ];
 
-            if (onChange) {
-              onChange('httpCorsDomains', allWalletsAddressArray.toString());
-            }
+            mergeAndSetNewCorsDomains(allWalletsAddressArray);
           }}
         />
       ),
     };
   };
 
-  const getBrowserItem = (
+  const renderCustomWalletInput = (
     item: { browser: string; extensionId: string },
     index: number
   ) => {
@@ -279,9 +361,8 @@ export const WalletSettings = ({
                 }
               }}
               options={[
-                { value: 'chrome', label: 'Chrome' },
-                { value: 'firefox', label: 'Firefox' },
-                { value: 'brave', label: 'Brave' },
+                { value: 'chrome', label: 'Chrome/Brave' },
+                { value: 'moz', label: 'Firefox' },
               ]}
             />
           </div>
@@ -321,6 +402,15 @@ export const WalletSettings = ({
       </>
     );
   };
+
+  if (!httpCorsConfigTranslation) {
+    return (
+      <>
+        Unable to set wallet connections for this node. This node is missing
+        configuration values for this feature.
+      </>
+    );
+  }
 
   return (
     <>
@@ -368,7 +458,7 @@ export const WalletSettings = ({
           </div>
           <div className={advancedOptionsListContainer}>
             {customWalletAddressArray.map((item, index) => {
-              return getBrowserItem(item, index);
+              return renderCustomWalletInput(item, index);
             })}
           </div>
           <div className={addRow}>
