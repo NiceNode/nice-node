@@ -1,6 +1,8 @@
 // import { useState, useCallback } from 'react';
 // import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 // import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
+import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
+import { TabContent } from '../../Generics/redesign/TabContent/TabContent';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
@@ -65,7 +67,24 @@ const ContentSingleClient = (props: SingleNodeContent) => {
       <Header {...(nodeOverview as unknown as NodeOverviewProps)} />
       <HorizontalLine type="content" />
       <HeaderMetrics {...(nodeOverview as unknown as NodeOverviewProps)} />
-      <HorizontalLine type="content" />
+      <HorizontalLine type="above-tab" />
+      <Tabs>
+        <div id="Sync">
+          <TabContent tabId="Sync" />
+        </div>
+        <div id="CPU">
+          <TabContent tabId="CPU" />
+        </div>
+        <div id="Memory">
+          <TabContent tabId="Memory" />
+        </div>
+        <div id="Network">
+          <TabContent tabId="Network" />
+        </div>
+        <div id="Disk">
+          <TabContent tabId="Disk" />
+        </div>
+      </Tabs>
     </div>
   );
 };

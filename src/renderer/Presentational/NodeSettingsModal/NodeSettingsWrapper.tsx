@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { NodeId } from '../../../common/node';
 import {
   ConfigTranslation,
   ConfigTranslationMap,
@@ -23,6 +24,8 @@ export interface NodeSettingsWrapperProps {
   onClickClose: () => void;
 }
 
+const HTTP_CORS_DOMAINS_KEY = 'httpCorsDomains';
+
 const NodeSettingsWrapper = ({
   isOpen,
   onClickClose,
@@ -33,29 +36,56 @@ const NodeSettingsWrapper = ({
   const [sCategoryConfigs, setCategoryConfigs] = useState<CategoryConfig[]>();
   const [sIsRemoveNodeModalOpen, setIsRemoveNodeModalOpen] =
     useState<boolean>(false);
+  const [sIsWalletSettingsEnabled, setIsWalletSettingsEnabled] =
+    useState<boolean>(false);
+  // find httpCors config translation for the wallet settings tab
+  const [sHttpCorsConfigTranslation, setHttpCorsConfigTranslation] =
+    useState<ConfigTranslation>();
+  const [sNodeStartCommand, setNodeStartCommand] = useState<string>();
 
   const selectedNode = useAppSelector(selectSelectedNode);
 
   useEffect(() => {
     let isDisabled = true;
     let configTranslationMap;
+    let isWalletSettingsEnabled = false;
     console.log(selectedNode);
     if (selectedNode) {
       isDisabled = ['running', 'starting'].includes(selectedNode.status);
       configTranslationMap = selectedNode.spec.configTranslation;
+      isWalletSettingsEnabled =
+        selectedNode.spec.category === 'L1/ExecutionClient';
     }
     setIsConfigDisabled(isDisabled);
     setConfigTranslationMap(configTranslationMap);
+    setIsWalletSettingsEnabled(isWalletSettingsEnabled);
   }, [selectedNode]);
   // configTranslationMap = selectedNode.spec.configTranslation;
 
   useEffect(() => {
+    const fetchData = async (nodeId: NodeId) => {
+      const nodeStartCommand = await electron.getNodeStartCommand(nodeId);
+      console.log('node start command: ', nodeStartCommand);
+      setNodeStartCommand(nodeStartCommand);
+    };
+    if (selectedNode) {
+      fetchData(selectedNode.id);
+    }
+  }, [selectedNode]);
+
+  useEffect(() => {
     // category to configs
     const categoryMap: Record<string, ConfigTranslationMap> = {};
+    // also, find httpCors config translation for the wallet settings tab
+    let httpCorsConfigTranslation;
     if (sConfigTranslationMap) {
       Object.keys(sConfigTranslationMap).forEach((configKey) => {
         const configTranslation: ConfigTranslation =
           sConfigTranslationMap[configKey];
+
+        if (configKey === HTTP_CORS_DOMAINS_KEY) {
+          httpCorsConfigTranslation = configTranslation;
+        }
         const category = configTranslation.category ?? 'Other';
         if (!categoryMap[category]) {
           categoryMap[category] = {};
@@ -63,6 +93,7 @@ const NodeSettingsWrapper = ({
         categoryMap[category][configKey] = configTranslation;
       });
     }
+    setHttpCorsConfigTranslation(httpCorsConfigTranslation);
     const arr = Object.keys(categoryMap).map((category) => {
       return {
         category,
@@ -155,9 +186,12 @@ const NodeSettingsWrapper = ({
         onClickClose={onClickClose}
         categoryConfigs={sCategoryConfigs}
         configValuesMap={selectedNode?.config.configValuesMap}
+        httpCorsConfigTranslation={sHttpCorsConfigTranslation}
+        isWalletSettingsEnabled={sIsWalletSettingsEnabled}
         isDisabled={sIsConfigDisabled}
         onChange={onNodeConfigChange}
         onClickRemoveNode={onClickRemoveNode}
+        nodeStartCommand={sNodeStartCommand}
       />
       <RemoveNodeWrapper
         isOpen={sIsRemoveNodeModalOpen}

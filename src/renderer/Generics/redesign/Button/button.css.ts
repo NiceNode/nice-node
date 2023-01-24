@@ -22,6 +22,25 @@ export const baseButton = style({
   fontSize: 13,
   lineHeight: '16px',
   height: '32px',
+  selectors: {
+    '&.small': {
+      padding: '6px 10px',
+      height: '28px',
+      gap: '6px',
+    },
+    '&.small.icon': {
+      padding: 6,
+    },
+    '&.medium.icon': {
+      padding: 8,
+    },
+    '&.wide': {
+      width: '100%',
+    },
+    '&.spaceBetween': {
+      justifyContent: 'space-between',
+    },
+  },
 });
 
 export const ghostButton = style({
@@ -37,20 +56,6 @@ export const ghostButton = style({
       background: vars.color.backgroundActiveGradient,
     },
   },
-});
-
-export const smallButton = style({
-  padding: '6px 10px',
-  height: '28px',
-  gap: '6px',
-});
-
-export const wideButton = style({
-  width: '100%',
-});
-
-export const spaceBetweenButton = style({
-  justifyContent: 'space-between',
 });
 
 export const primaryButton = style({

@@ -13,5 +13,8 @@ export const container = style({
       margin: '4px 0px',
       background: vars.color.font8,
     },
+    [`&.above-tab`]: {
+      marginTop: 34,
+    },
   },
 });

@@ -104,6 +104,8 @@ const Preferences = ({
                 label: t('LaunchOnStartup'),
                 value: (
                   <Toggle
+                    onText="Enabled"
+                    offText="Disabled"
                     checked={isOpenOnStartup}
                     onChange={(newValue) => {
                       if (onChange) {

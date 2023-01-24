@@ -4,13 +4,10 @@ import {
   baseButton,
   primaryButton,
   secondaryButton,
-  smallButton,
-  wideButton,
   iconLeft,
   iconStyle,
   ghostButton,
   dangerButton,
-  spaceBetweenButton,
 } from './button.css';
 
 export interface ButtonProps {
@@ -75,20 +72,19 @@ const Button = ({
     buttonStyle = ghostButton;
   }
   const classNames = [baseButton, buttonStyle];
-  if (size === 'small') {
-    classNames.push(smallButton);
-  }
-  if (wide) {
-    classNames.push(wideButton);
-  }
-  if (spaceBetween) {
-    classNames.push(spaceBetweenButton);
-  }
+  const wideStyle = wide ? 'wide' : '';
+  const spaceBetweenStyle = spaceBetween ? 'spaceBetween' : '';
 
   return (
     <button
       type="button"
-      className={classNames.join(' ')}
+      className={[
+        classNames.join(' '),
+        size,
+        wideStyle,
+        spaceBetweenStyle,
+        variant,
+      ].join(' ')}
       disabled={disabled}
       style={{ backgroundColor }}
       {...props}
