@@ -87,8 +87,8 @@ const MainScreen = () => {
           >
             <SidebarWrapper />
             <div style={{ flex: 1, overflow: 'auto' }}>
-              {/* <NodeScreen /> */}
-              <NotificationsWrapper />
+              <NodeScreen />
+              {/* <NotificationsWrapper /> */}
             </div>
           </div>
 

@@ -33,6 +33,7 @@ import {
 } from './binary';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
 import { ConfigValuesMap } from '../common/nodeConfig';
+import { displayNotification } from './notifications';
 
 export const addNode = async (
   nodeSpec: NodeSpecification,
@@ -120,6 +121,8 @@ export const stopNode = async (nodeId: NodeId) => {
   logger.info(`Stopping node ${JSON.stringify(node)}`);
   node.status = NodeStatus.stopping;
   nodeStore.updateNode(node);
+
+  displayNotification('Stop Node', 'The node was stopped');
 
   if (isDockerNode(node)) {
     const containerIds = await stopDockerNode(node);

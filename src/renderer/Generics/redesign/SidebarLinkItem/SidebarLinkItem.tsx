@@ -58,7 +58,7 @@ export const SidebarLinkItem = ({
     >
       <Icon iconId={iconId} />
       <div className={labelText}>{label}</div>
-      {count && <Bubble count={count} />}
+      {count !== undefined && count > 0 && <Bubble count={count} />}
     </div>
   );
 };

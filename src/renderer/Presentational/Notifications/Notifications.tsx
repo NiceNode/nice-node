@@ -9,6 +9,7 @@ import {
   headerContainer,
   spacer,
   titleStyle,
+  emptyNotifications,
 } from './notifications.css';
 
 export type NotificationsType = {
@@ -28,6 +29,21 @@ const Notifications = (props: NotificationsType) => {
 
   const areAllNotificationsRead = () => {
     return data.every((item) => item.unread === false);
+  };
+
+  const renderContent = () => {
+    if (data.length > 0) {
+      return (
+        <div>
+          {data.map((item) => {
+            return (
+              <NotificationItem {...item} onClick={onNotificationItemClick} />
+            );
+          })}
+        </div>
+      );
+    }
+    return <div className={emptyNotifications}>There are no notifications</div>;
   };
 
   return (
@@ -50,9 +66,7 @@ const Notifications = (props: NotificationsType) => {
           onClick={onSettingsClick}
         />
       </div>
-      {data.map((item) => {
-        return <NotificationItem {...item} onClick={onNotificationItemClick} />;
-      })}
+      {renderContent()}
     </div>
   );
 };

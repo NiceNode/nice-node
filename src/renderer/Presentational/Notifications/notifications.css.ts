@@ -27,3 +27,5 @@ export const titleStyle = style({
   textTransform: 'capitalize',
   color: vars.color.font,
 });
+
+export const emptyNotifications = style({});

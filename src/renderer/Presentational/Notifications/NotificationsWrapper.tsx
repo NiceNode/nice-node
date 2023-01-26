@@ -3,9 +3,9 @@ import {
   markAllAsRead,
   addNotification,
   removeNotifications,
+  addNotifications,
 } from 'main/notifications';
 import { useState } from 'react';
-import moment from 'moment';
 import Notifications from './Notifications';
 
 const NotificationsWrapper = () => {
@@ -18,6 +18,61 @@ const NotificationsWrapper = () => {
 
   const onSettingsClick = () => {
     console.log('setting was clicked!');
+    // removeNotifications();
+    // setNotifications(getNotifications);
+    // addNotifications([
+    //   {
+    //     unread: true,
+    //     status: 'info',
+    //     title: 'Scheduled for Sync Commitee Duty',
+    //     description: 'Validator 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+    //     timestamp: 1673384953,
+    //   },
+    //   {
+    //     unread: true,
+    //     status: 'info',
+    //     title: 'Reward for slashing another validator',
+    //     description: 'Validator 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+    //     timestamp: 1673384953,
+    //   },
+    //   {
+    //     unread: true,
+    //     status: 'completed',
+    //     title: 'Client successfuly updated',
+    //     description: 'Lodestar consensus client',
+    //     timestamp: 1673384953,
+    //   },
+    //   {
+    //     unread: true,
+    //     status: 'download',
+    //     title: 'Client update available',
+    //     description: 'Lodestar consensus client',
+    //     timestamp: 1673384953,
+    //   },
+    //   {
+    //     unread: false,
+    //     status: 'warning',
+    //     title: 'More than 40 log errors in one hour',
+    //     description: 'Lodestar consensus client',
+    //     timestamp: 1673384953,
+    //   },
+    //   {
+    //     unread: false,
+    //     status: 'warning',
+    //     title: 'Disk usage near 90%',
+    //     description:
+    //       'All nodes affected. Consider upgrading your disk to one with at least 2TB of storage.',
+    //     timestamp: 1673384953,
+    //   },
+    //   {
+    //     unread: false,
+    //     status: 'warning',
+    //     title: 'Internet connection down for 12 minutes',
+    //     description: 'All nodes affected',
+    //     timestamp: 1673384953,
+    //   },
+    // ]);
+    // setNotifications(getNotifications);
     // setNotifications(removeNotifications);
     // addNotification({
     //   unread: true,

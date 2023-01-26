@@ -1,7 +1,18 @@
-// import { Notification } from 'electron';
+import { Notification } from 'electron';
 
-export const sendDesktopNotification = () => {
-  // notification API isn't working
+export type NotificationType = {
+  unread: boolean;
+  status: string;
+  title: string;
+  description: string;
+  timestamp: number;
+};
+
+export const displayNotification = (title: string, body: string) => {
+  new Notification({
+    title,
+    body,
+  }).show();
 };
 
 export const getNotifications = () => {
@@ -16,21 +27,31 @@ export const removeNotifications = () => {
   return [];
 };
 
-export const addNotification = (notification) => {
+export const addNotification = (notification: NotificationType) => {
   const notifications = getNotifications();
   notifications.push(notification);
 
   localStorage.setItem('notifications', JSON.stringify(notifications));
 };
 
+export const addNotifications = (notifications: NotificationType[]) => {
+  notifications.forEach((notification: NotificationType) => {
+    addNotification(notification);
+  });
+};
+
 export const markAllAsRead = () => {
   const notifications = JSON.parse(localStorage.getItem('notifications'));
 
-  notifications.forEach((notification) => {
+  notifications.forEach((notification: NotificationType) => {
     notification.unread = false;
   });
 
   localStorage.setItem('notifications', JSON.stringify(notifications));
 
   return notifications;
+};
+
+export const initialize = async () => {
+  console.log('test initialize');
 };

@@ -25,6 +25,7 @@ import {
 // eslint-disable-next-line import/no-cycle
 import * as ipc from './ipc';
 import * as power from './power';
+import * as notifications from './notifications';
 import * as processExit from './processExit';
 import * as systemInfo from './systemInfo';
 import { setCorsForNiceNode } from './corsMiddleware';
@@ -172,6 +173,7 @@ const initialize = () => {
   logger.info('Initializing main process work...');
   ipc.initialize();
   power.initialize();
+  notifications.initialize();
   initNodeManager();
   systemInfo.initialize();
   processExit.initialize();
