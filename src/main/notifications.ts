@@ -1,4 +1,4 @@
-import { Notification } from 'electron';
+// import { Notification } from 'electron';
 
 export type NotificationType = {
   unread: boolean;
@@ -9,10 +9,10 @@ export type NotificationType = {
 };
 
 export const displayNotification = (title: string, body: string) => {
-  new Notification({
-    title,
-    body,
-  }).show();
+  // new Notification({
+  //   title,
+  //   body,
+  // }).show();
 };
 
 export const getNotifications = () => {
