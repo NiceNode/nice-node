@@ -30,5 +30,10 @@
     ".erb/dll",
     "storybook-static",
     // "src/main/util/timestamp.js"
-  ]
+  ],
+  "include": [
+    // "src/**/*",
+    "node_modules/react-native/**/*.js",
+    "node_modules/react-native-reanimated/**/*.js"
+  ],
 }

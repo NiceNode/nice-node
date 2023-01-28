@@ -48,6 +48,7 @@ const configuration: webpack.Configuration = {
   target: ['web', 'electron-renderer'],
 
   entry: [
+    'babel-polyfill',
     `webpack-dev-server/client?http://localhost:${port}/dist`,
     'webpack/hot/only-dev-server',
     path.join(webpackPaths.srcRendererPath, 'index.tsx'),
@@ -67,7 +68,7 @@ const configuration: webpack.Configuration = {
       // Required for vanilla-extract to set classes on components
       {
         test: /\.(js|ts|tsx)$/,
-        exclude: [/node_modules/],
+        // exclude: /node_modules\/(?!react-native|react-native-reanimated)/,
         use: [
           {
             loader: 'babel-loader',
@@ -80,8 +81,13 @@ const configuration: webpack.Configuration = {
                   '@babel/preset-env',
                   { targets: { node: 14 }, modules: false },
                 ],
+                { plugins: ['@babel/plugin-proposal-class-properties'] },
               ],
-              plugins: ['@vanilla-extract/babel-plugin'],
+              plugins: [
+                '@vanilla-extract/babel-plugin',
+                '@babel/plugin-proposal-export-namespace-from',
+                'react-native-reanimated/plugin',
+              ],
             },
           },
         ],
@@ -189,6 +195,8 @@ const configuration: webpack.Configuration = {
       isDevelopment: process.env.NODE_ENV !== 'production',
       nodeModules: webpackPaths.appNodeModulesPath,
     }),
+    new webpack.EnvironmentPlugin({ JEST_WORKER_ID: null }),
+    new webpack.DefinePlugin({ process: { env: {} } }),
   ],
 
   node: {
