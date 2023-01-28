@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
+import { Stack } from '@react-navigation/stack';
 import NotificationsWrapper from './Presentational/Notifications/NotificationsWrapper';
 
 import './Generics/redesign/globalStyle.css';
@@ -10,12 +10,12 @@ import { initialize as initializeIpcListeners } from './ipc';
 import NodeScreen from './NodeScreen';
 import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
-import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
 import NNSplash from './Presentational/NNSplashScreen/NNSplashScreen';
 import { dragWindowContainer } from './app.css';
 import ThemeManager from './ThemeManager';
 import { Modal } from './Generics/redesign/Modal/Modal';
 import AddNodeStepper from './Presentational/AddNodeStepper/AddNodeStepper';
+import Routes from './Routes';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -23,14 +23,60 @@ Sentry.init({
 });
 
 const MainScreen = () => {
+  return (
+    <ThemeManager>
+      {sHasSeenSplashscreen === false ? (
+        <>
+          {!sHasClickedGetStarted && (
+            <NNSplash onClickGetStarted={onClickSplashGetStarted} />
+          )}
+        </>
+      ) : (
+        <>
+          <div className={dragWindowContainer} />
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <SidebarWrapper />
+            <div style={{ flex: 1, overflow: 'auto' }}>
+              <NodeScreen />
+              {/* <NotificationsWrapper /> */}
+            </div>
+          </div>
+
+          <DataRefresher />
+          {/* Todo: remove this when Modal Manager is created */}
+          {/* <Modal
+            title=""
+            isOpen={sIsModalOpenAddNode}
+            onClickCloseButton={() => setIsModalOpenAddNode(false)}
+            isFullScreen
+          >
+            <AddNodeStepper
+              onChange={(newValue: 'done' | 'cancel') => {
+                console.log(newValue);
+                if (newValue === 'done' || newValue === 'cancel') {
+                  setIsModalOpenAddNode(false);
+                }
+              }}
+            />
+          </Modal> */}
+        </>
+      )}
+    </ThemeManager>
+  );
+};
+
+export default function App() {
   const dispatch = useAppDispatch();
   const [sHasSeenSplashscreen, setHasSeenSplashscreen] = useState<boolean>();
   const [sHasClickedGetStarted, setHasClickedGetStarted] = useState<boolean>();
   const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
-
-  // const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
-  // console.log('isStartOnLogin: ', isStartOnLogin);
-  // setIsOpenOnLogin(isStartOnLogin);
 
   useEffect(() => {
     const callAsync = async () => {
@@ -68,59 +114,7 @@ const MainScreen = () => {
 
   return (
     <ThemeManager>
-      {sHasSeenSplashscreen === false ? (
-        <>
-          {!sHasClickedGetStarted && (
-            <NNSplash onClickGetStarted={onClickSplashGetStarted} />
-          )}
-        </>
-      ) : (
-        <>
-          <div className={dragWindowContainer} />
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              width: '100%',
-              height: '100%',
-            }}
-          >
-            <SidebarWrapper />
-            <div style={{ flex: 1, overflow: 'auto' }}>
-              <NodeScreen />
-              {/* <NotificationsWrapper /> */}
-            </div>
-          </div>
-
-          <DataRefresher />
-          {/* Todo: remove this when Modal Manager is created */}
-          <Modal
-            title=""
-            isOpen={sIsModalOpenAddNode}
-            onClickCloseButton={() => setIsModalOpenAddNode(false)}
-            isFullScreen
-          >
-            <AddNodeStepper
-              onChange={(newValue: 'done' | 'cancel') => {
-                console.log(newValue);
-                if (newValue === 'done' || newValue === 'cancel') {
-                  setIsModalOpenAddNode(false);
-                }
-              }}
-            />
-          </Modal>
-        </>
-      )}
+      <Routes />
     </ThemeManager>
-  );
-};
-
-export default function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainScreen />} />
-      </Routes>
-    </Router>
   );
 }
