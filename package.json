@@ -190,7 +190,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.20.5",
+    "@babel/core": "^7.20.12",
     "@mdx-js/react": "^2.1.5",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
     "@storybook/addon-actions": "^6.5.14",
