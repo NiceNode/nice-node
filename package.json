@@ -197,7 +197,7 @@
     "@storybook/addon-essentials": "^6.5.14",
     "@storybook/addon-interactions": "^6.5.14",
     "@storybook/addon-links": "^6.5.14",
-    "@storybook/builder-webpack4": "^6.5.14",
+    "@storybook/builder-webpack4": "^6.5.16",
     "@storybook/builder-webpack5": "^6.5.14",
     "@storybook/manager-webpack4": "^6.5.14",
     "@storybook/manager-webpack5": "^6.5.14",
