@@ -12,8 +12,7 @@ export interface SidebarWrapperProps {
   children: ReactElement;
 }
 
-export const SidebarWrapper = (props) => {
-  console.log(JSON.stringify(props));
+export const SidebarWrapper = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const sUserNodes = useAppSelector(selectUserNodes);
   const dispatch = useAppDispatch();
