@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { getNotifications } from 'main/notifications';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
 import { NodeId, NodeStatus, UserNodes } from '../../../common/node';
@@ -120,16 +121,7 @@ const Sidebar = ({
       return null;
     });
   };
-
-  const onClickLinkItem = useCallback((linkItemId: string) => {
-    console.log('sidebar link item clicked: ', linkItemId);
-    if (linkItemId === 'add') {
-      // open add node dialog
-      setIsModalOpenAddNode(true);
-    } else if (linkItemId === 'preferences') {
-      setIsModalOpenSettings(true);
-    }
-  }, []);
+  const navigate = useNavigate();
 
   return (
     <div className={container}>
@@ -165,7 +157,10 @@ const Sidebar = ({
               info={spec.displayName}
               status={sidebarStatus}
               selected={selectedNodeId === node.id}
-              onClick={() => dispatch(updateSelectedNodeId(node.id))}
+              onClick={() => {
+                navigate('/home/node');
+                dispatch(updateSelectedNodeId(node.id));
+              }}
             />
           );
         })}
@@ -178,7 +173,19 @@ const Sidebar = ({
               iconId={item.iconId}
               label={item.label}
               count={item.count}
-              onClick={() => onClickLinkItem(item.iconId)}
+              onClick={() => {
+                console.log('sidebar link item clicked: ', item.iconId);
+                if (item.iconId === 'add') {
+                  // open add node dialog
+                  setIsModalOpenAddNode(true);
+                } else if (item.iconId === 'preferences') {
+                  setIsModalOpenSettings(true);
+                } else if (item.iconId === 'bell') {
+                  navigate('/home/notification');
+                } else if (item.iconId === 'health') {
+                  navigate('/home/system');
+                }
+              }}
             />
           );
         })}
