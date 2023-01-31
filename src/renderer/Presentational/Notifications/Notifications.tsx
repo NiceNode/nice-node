@@ -5,7 +5,6 @@ import {
 } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import Button from '../../Generics/redesign/Button/Button';
 import {
-  container,
   headerContainer,
   spacer,
   titleStyle,
@@ -47,7 +46,7 @@ const Notifications = (props: NotificationsType) => {
   };
 
   return (
-    <div className={container}>
+    <>
       <div className={headerContainer}>
         <div className={titleStyle}>Notifications</div>
         <div className={spacer} />
@@ -67,7 +66,7 @@ const Notifications = (props: NotificationsType) => {
         />
       </div>
       {renderContent()}
-    </div>
+    </>
   );
 };
 export default Notifications;

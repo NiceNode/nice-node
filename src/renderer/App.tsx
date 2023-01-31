@@ -4,11 +4,11 @@ import {
   Routes,
   Route,
   Outlet,
-  Navigate,
   useLocation,
 } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
 import NotificationsWrapper from './Presentational/Notifications/NotificationsWrapper';
+import SystemMonitor from './Presentational/SystemMonitor/SystemMonitor';
 
 import './Generics/redesign/globalStyle.css';
 import './reset.css';
@@ -19,7 +19,11 @@ import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
 import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
 import NNSplash from './Presentational/NNSplashScreen/NNSplashScreen';
-import { dragWindowContainer } from './app.css';
+import {
+  dragWindowContainer,
+  homeContainer,
+  contentContainer,
+} from './app.css';
 import ThemeManager from './ThemeManager';
 import { Modal } from './Generics/redesign/Modal/Modal';
 import AddNodeStepper from './Presentational/AddNodeStepper/AddNodeStepper';
@@ -77,35 +81,39 @@ Sentry.init({
 //   );
 // };
 
-const NodeSetup = () => {
-  console.log('node setup');
-  return <div>Node setup screen here</div>;
-};
-
-const Home = () => {
+const WindowContainer = ({ children }) => {
   return (
     <>
       <div className={dragWindowContainer} />
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <SidebarWrapper />
-        <div style={{ flex: 1, overflow: 'auto' }}>
-          <Outlet />
-        </div>
-        <DataRefresher />
-      </div>
+      {children}
     </>
   );
 };
 
+const NodeSetup = () => {
+  return (
+    <WindowContainer>
+      <NNSplash />
+    </WindowContainer>
+  );
+};
+
+const Home = () => {
+  return (
+    <WindowContainer>
+      <div className={homeContainer}>
+        <SidebarWrapper />
+        <div className={contentContainer}>
+          <Outlet />
+        </div>
+        <DataRefresher />
+      </div>
+    </WindowContainer>
+  );
+};
+
 const System = () => {
-  return <div>System monitor screen here</div>;
+  return <SystemMonitor />;
 };
 
 export default function App() {

@@ -62,7 +62,7 @@ export const Modal = ({
               <Button
                 variant="icon"
                 iconId="close"
-                ghost
+                type="ghost"
                 onClick={onClickCloseButton}
               />
             </div>

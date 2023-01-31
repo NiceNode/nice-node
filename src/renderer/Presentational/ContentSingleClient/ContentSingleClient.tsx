@@ -62,7 +62,7 @@ const ContentSingleClient = (props: SingleNodeContent) => {
   // TODO: retrieve initial data for all pages
 
   return (
-    <div className={container}>
+    <>
       {/* todo: fix temp type casting */}
       <Header {...(nodeOverview as unknown as NodeOverviewProps)} />
       <HorizontalLine type="content" />
@@ -85,7 +85,7 @@ const ContentSingleClient = (props: SingleNodeContent) => {
           <TabContent tabId="Disk" />
         </div>
       </Tabs>
-    </div>
+    </>
   );
 };
 export default ContentSingleClient;

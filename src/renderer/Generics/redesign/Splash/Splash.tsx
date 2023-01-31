@@ -45,7 +45,7 @@ const Splash = ({
         <div className={descriptionFont}>{description}</div>
         <Button
           label={getStartedLabel ?? t('GetStarted')}
-          primary
+          type="primary"
           onClick={onClickGetStarted}
         />
       </div>

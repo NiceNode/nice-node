@@ -20,7 +20,7 @@ const Stepper = ({ onChange }: StepperProps) => {
       <div className={nextButton}>
         <Button
           label={t('NextStep')}
-          primary
+          type="primary"
           onClick={() => onChange('next')}
         />
       </div>

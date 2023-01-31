@@ -15,3 +15,17 @@ export const dragWindowContainer = style({
     opacity: 0.3,
   },
 } as ComplexStyleRule); // fix for lacking '-webkit-app-region' type
+
+export const homeContainer = style({
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100%',
+  height: '100%',
+});
+
+export const contentContainer = style({
+  padding: '64px 40px',
+  boxSizing: 'border-box',
+  flex: 1,
+  overflow: 'auto',
+});

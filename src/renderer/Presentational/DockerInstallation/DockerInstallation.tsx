@@ -120,7 +120,7 @@ const DockerInstallation = ({ onChange }: DockerInstallationProps) => {
                 {!sHasStartedDownload ? (
                   <div>
                     <Button
-                      primary
+                      type="primary"
                       label={t('DownloadAndInstall')}
                       onClick={onClickDownloadAndInstall}
                     />
@@ -154,7 +154,7 @@ const DockerInstallation = ({ onChange }: DockerInstallationProps) => {
         {isDockerInstalled && !isDockerRunning && (
           <>
             <Button
-              primary
+              type="primary"
               label={t('start docker')}
               onClick={onClickStartDocker}
             />
