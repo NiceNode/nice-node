@@ -45,7 +45,7 @@ const Button = ({
   size = 'medium',
   disabled = false,
   variant = 'text',
-  type,
+  type = 'secondary',
   iconId = 'settings',
   spaceBetween = false,
   wide = false,
@@ -53,8 +53,7 @@ const Button = ({
   label,
   ...props
 }: ButtonProps) => {
-  // initialization makes type backwards compatible with primary
-  let buttonStyle = 'primary';
+  let buttonStyle;
   if (type === 'secondary') {
     buttonStyle = secondaryButton;
   } else if (type === 'primary') {
