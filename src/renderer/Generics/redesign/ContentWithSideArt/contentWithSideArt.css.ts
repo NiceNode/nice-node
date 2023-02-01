@@ -16,4 +16,12 @@ export const graphicsContainer = style({
   },
 });
 
-export const contentContainer = style({ flexGrow: 1, paddingRight: 32 });
+export const contentContainer = style({
+  flexGrow: 1,
+  padding: '80px 64px',
+  selectors: {
+    [`&.modal`]: {
+      padding: 0,
+    },
+  },
+});

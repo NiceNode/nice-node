@@ -4,7 +4,7 @@ import { vars } from './Generics/redesign/theme.css';
 export const dragWindowContainer = style({
   WebkitUserSelect: 'none',
   '-webkit-app-region': 'drag',
-  height: 30,
+  height: 35,
   width: '100vw',
   position: 'absolute',
   top: 0,

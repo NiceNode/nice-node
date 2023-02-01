@@ -2,6 +2,7 @@
 // Just make sure to always render each child so that children component state isn't cleard
 import { useCallback, useEffect, useState } from 'react';
 
+import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
 import { componentContainer, container } from './addNodeStepper.css';
 import Stepper from '../../Generics/redesign/Stepper/Stepper';
 import AddEthereumNode, {
@@ -20,13 +21,18 @@ import { useAppDispatch } from '../../state/hooks';
 import { NodeLibrary } from '../../../main/state/nodeLibrary';
 // import { CheckStorageDetails } from '../../../main/files';
 
+import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
+import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
+import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
+
 export interface AddNodeStepperProps {
+  modal?: boolean;
   onChange: (newValue: 'done' | 'cancel') => void;
 }
 
 const TOTAL_STEPS = 3;
 
-const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
+const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const dispatch = useAppDispatch();
   const [sStep, setStep] = useState<number>(0);
   // const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
@@ -186,36 +192,50 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
     }
   };
 
-  return (
-    <div className={container}>
-      <div className={componentContainer}>
-        {/* Step 0 */}
-        <div style={{ display: sStep === 0 ? '' : 'none', height: '100%' }}>
+  const getStepScreen = () => {
+    let stepScreen = null;
+    let stepImage = step1;
+    switch (sStep) {
+      case 0:
+        stepScreen = (
           <AddEthereumNode
             onChange={onChangeAddEthereumNode}
             // beaconOptions={sBeaconNodeLibrary}
             // executionOptions={sExecutionClientLibrary}
           />
-        </div>
-
-        {/* Step 1 */}
-        <div style={{ display: sStep === 1 ? '' : 'none', height: '100%' }}>
+        );
+        stepImage = step1;
+        break;
+      case 1:
+        stepScreen = (
           <NodeRequirements
             nodeRequirements={sEthereumNodeRequirements}
             systemData={sSystemData}
             nodeStorageLocation={sNodeStorageLocation}
           />
-        </div>
+        );
+        stepImage = step2;
+        break;
+      case 2:
+        stepScreen = <DockerInstallation onChange={onChangeDockerInstall} />;
+        stepImage = step3;
+        break;
+      default:
+    }
 
-        {/* Step 2 - If Docker is not installed */}
-        <div style={{ display: sStep === 2 ? '' : 'none', height: '100%' }}>
-          <DockerInstallation onChange={onChangeDockerInstall} />
-        </div>
+    return (
+      <div style={{ height: '100%' }}>
+        <ContentWithSideArt modal={modal} graphic={stepImage}>
+          {stepScreen}
+        </ContentWithSideArt>
       </div>
+    );
+  };
 
-      <div>
-        <Stepper step={sStep} onChange={onStep} />
-      </div>
+  return (
+    <div className={container}>
+      <div className={componentContainer}>{getStepScreen()}</div>
+      <Stepper step={sStep} onChange={onStep} />
     </div>
   );
 };

@@ -190,14 +190,15 @@ const Sidebar = ({
           );
         })}
       </div>
-      {/* <NotificationsWrapper /> */}
       <Modal
+        type="stepper"
         title=""
         isOpen={sIsModalOpenAddNode}
         onClickCloseButton={() => setIsModalOpenAddNode(false)}
         isFullScreen
       >
         <AddNodeStepper
+          modal
           onChange={(newValue: 'done' | 'cancel') => {
             console.log(newValue);
             if (newValue === 'done' || newValue === 'cancel') {

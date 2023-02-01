@@ -18,8 +18,6 @@ import {
   useGetIsDockerInstalledQuery,
   useGetIsDockerRunningQuery,
 } from '../../state/settingsService';
-import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
-import graphicsPng from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 
 // 6.5 min on 2022 MacbookPro 16inch, baseline
 const TOTAL_INSTALL_TIME_SEC = 7 * 60;
@@ -102,68 +100,66 @@ const DockerInstallation = ({ onChange }: DockerInstallationProps) => {
 
   // listen to docker install messages
   return (
-    <ContentWithSideArt graphic={graphicsPng}>
-      <div className={container}>
-        <div className={titleFont}>{t('DockerInstallation')}</div>
-        <div className={descriptionFont}>
-          <>{t('dockerPurpose')}</>
-        </div>
-        <ExternalLink
-          text={t('LearnMoreDocker')}
-          url="https://www.docker.com/products/docker-desktop/"
-        />
-        {/* Docker is not installed */}
-        {!isDockerInstalled && (
-          <>
-            {!sDownloadComplete && !sInstallComplete && (
-              <>
-                {!sHasStartedDownload ? (
-                  <div>
-                    <Button
-                      type="primary"
-                      label={t('DownloadAndInstall')}
-                      onClick={onClickDownloadAndInstall}
-                    />
-                    <div className={captionText}>~600MB {t('download')}</div>
-                  </div>
-                ) : (
-                  <ProgressBar
-                    progress={sDownloadProgress}
-                    title={t('DownloadingDocker')}
-                    caption={t('DownloadedSomeMegaBytesOfTotal', {
-                      downloadedBytes: bytesToMB(sDownloadedBytes),
-                      totalBytes: bytesToMB(sTotalSizeBytes),
-                    })}
-                  />
-                )}
-              </>
-            )}
-            {sDownloadComplete && !sInstallComplete && (
-              <TimedProgressBar
-                totalTimeSeconds={TOTAL_INSTALL_TIME_SEC}
-                title={t('InstallingDocker')}
-              />
-            )}
-          </>
-        )}
-
-        {sDownloadComplete && sInstallComplete && (
-          <p>{t('DockerInstallComplete')}</p>
-        )}
-        {/* Docker is installed but not running */}
-        {isDockerInstalled && !isDockerRunning && (
-          <>
-            <Button
-              type="primary"
-              label={t('start docker')}
-              onClick={onClickStartDocker}
-            />
-            <div className={captionText}>{t('DockerUncheckOpenAtStartup')}</div>
-          </>
-        )}
-        {isDockerRunning && <>{t('DockerIsRunningProceed')}</>}
+    <div className={container}>
+      <div className={titleFont}>{t('DockerInstallation')}</div>
+      <div className={descriptionFont}>
+        <>{t('dockerPurpose')}</>
       </div>
-    </ContentWithSideArt>
+      <ExternalLink
+        text={t('LearnMoreDocker')}
+        url="https://www.docker.com/products/docker-desktop/"
+      />
+      {/* Docker is not installed */}
+      {!isDockerInstalled && (
+        <>
+          {!sDownloadComplete && !sInstallComplete && (
+            <>
+              {!sHasStartedDownload ? (
+                <div>
+                  <Button
+                    type="primary"
+                    label={t('DownloadAndInstall')}
+                    onClick={onClickDownloadAndInstall}
+                  />
+                  <div className={captionText}>~600MB {t('download')}</div>
+                </div>
+              ) : (
+                <ProgressBar
+                  progress={sDownloadProgress}
+                  title={t('DownloadingDocker')}
+                  caption={t('DownloadedSomeMegaBytesOfTotal', {
+                    downloadedBytes: bytesToMB(sDownloadedBytes),
+                    totalBytes: bytesToMB(sTotalSizeBytes),
+                  })}
+                />
+              )}
+            </>
+          )}
+          {sDownloadComplete && !sInstallComplete && (
+            <TimedProgressBar
+              totalTimeSeconds={TOTAL_INSTALL_TIME_SEC}
+              title={t('InstallingDocker')}
+            />
+          )}
+        </>
+      )}
+
+      {sDownloadComplete && sInstallComplete && (
+        <p>{t('DockerInstallComplete')}</p>
+      )}
+      {/* Docker is installed but not running */}
+      {isDockerInstalled && !isDockerRunning && (
+        <>
+          <Button
+            type="primary"
+            label={t('start docker')}
+            onClick={onClickStartDocker}
+          />
+          <div className={captionText}>{t('DockerUncheckOpenAtStartup')}</div>
+        </>
+      )}
+      {isDockerRunning && <>{t('DockerIsRunningProceed')}</>}
+    </div>
   );
 };
 

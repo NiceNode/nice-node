@@ -13,6 +13,7 @@ type Props = {
   onClickCloseButton: () => void;
   title?: string;
   isFullScreen?: boolean;
+  type?: string;
 };
 
 export const Modal = ({
@@ -21,6 +22,7 @@ export const Modal = ({
   onClickCloseButton,
   title,
   isFullScreen,
+  type = '',
 }: Props) => {
   const escFunction = useCallback(
     (event: { key: string }) => {
@@ -40,6 +42,15 @@ export const Modal = ({
     };
   }, [escFunction]);
 
+  // TODO: manage the default size via eventual modal manager
+  const modalSize =
+    type === 'stepper'
+      ? { width: 624, height: 673 }
+      : {
+          height: isFullScreen ? '95vh' : '',
+          width: isFullScreen ? '95vw' : '',
+        };
+
   return (
     <div
       style={{
@@ -49,13 +60,7 @@ export const Modal = ({
       }}
       className={modalBackdropStyle}
     >
-      <div
-        className={modalContentStyle}
-        style={{
-          height: isFullScreen ? '95vh' : '',
-          width: isFullScreen ? '95vw' : '',
-        }}
-      >
+      <div className={modalContentStyle} style={modalSize}>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ height: 40, alignSelf: 'flex-end' }}>
             <div style={{ position: 'absolute', top: 12, right: 14 }}>

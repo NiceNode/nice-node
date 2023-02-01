@@ -21,7 +21,6 @@ import ContentSingleClient, {
 } from '../ContentSingleClient/ContentSingleClient';
 import { hexToDecimal } from '../../utils';
 import { NodeAction } from '../../Generics/redesign/consts';
-import NNSplash from '../NNSplashScreen/NNSplashScreen';
 import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import Button from '../../Generics/redesign/Button/Button';
@@ -200,12 +199,14 @@ const NodeScreen = () => {
         )}
         {/* Todo: remove this when Modal Manager is created */}
         <Modal
+          type="stepper"
           title=""
           isOpen={sIsModalOpenAddNode}
           onClickCloseButton={() => setIsModalOpenAddNode(false)}
           isFullScreen
         >
           <AddNodeStepper
+            modal
             onChange={(newValue: 'done' | 'cancel') => {
               console.log(newValue);
               if (newValue === 'done' || newValue === 'cancel') {

@@ -18,7 +18,7 @@ import NodeScreen from './Presentational/NodeScreen/NodeScreen';
 import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
 import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
-import NNSplash from './Presentational/NNSplashScreen/NNSplashScreen';
+import NodeSetup from './Presentational/NodeSetup/NodeSetup';
 import {
   dragWindowContainer,
   homeContainer,
@@ -39,14 +39,6 @@ const WindowContainer = ({ children }) => {
       <div className={dragWindowContainer} />
       {children}
     </>
-  );
-};
-
-const NodeSetup = () => {
-  return (
-    <WindowContainer>
-      <NNSplash />
-    </WindowContainer>
   );
 };
 
@@ -85,11 +77,6 @@ export default function App() {
     initializeIpcListeners(dispatch);
   }, [dispatch]);
 
-  const onClickSplashGetStarted = () => {
-    setHasSeenSplashscreen(true);
-    electron.getSetHasSeenSplashscreen(true);
-  };
-
   if (sHasSeenSplashscreen === undefined) {
     console.log(
       'waiting for splash screen value to return... showing loading screen'
@@ -98,6 +85,7 @@ export default function App() {
   }
 
   let initialPage = '/main/node';
+  // electron.getSetHasSeenSplashscreen(false);
   if (sHasSeenSplashscreen === false) {
     initialPage = '/setup';
     console.log('User has not seen the splash screen yet');
@@ -108,7 +96,15 @@ export default function App() {
       <MemoryRouter initialEntries={[initialPage]}>
         <Routes>
           <Route path="/">
-            <Route index path="/setup" element={<NodeSetup />} />
+            <Route
+              index
+              path="/setup"
+              element={
+                <WindowContainer>
+                  <NodeSetup />
+                </WindowContainer>
+              }
+            />
             <Route path="/main" element={<Main />}>
               <Route path="/main/node" element={<NodeScreen />} />
               <Route
