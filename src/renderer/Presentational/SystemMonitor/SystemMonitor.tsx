@@ -1,4 +1,4 @@
-import { SystemMonitor as SystemMonitorComponent } from 'renderer/Generics/redesign/SystemMonitor/SystemMonitor';
+import { SystemMonitor as SystemMonitorLabels } from '../../Generics/redesign/SystemMonitor/SystemMonitor';
 import { headerContainer, titleStyle } from './systemMonitor.css';
 
 const SystemMonitor = () => {
@@ -7,7 +7,7 @@ const SystemMonitor = () => {
       <div className={headerContainer}>
         <div className={titleStyle}>System monitor</div>
       </div>
-      <SystemMonitorComponent />
+      <SystemMonitorLabels />
     </>
   );
 };
