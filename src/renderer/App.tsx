@@ -1,11 +1,5 @@
-import { useEffect, useState } from 'react';
-import {
-  MemoryRouter,
-  Routes,
-  Route,
-  Outlet,
-  useLocation,
-} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { MemoryRouter, Routes, Route, Outlet } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
 import NotificationsWrapper from './Presentational/Notifications/NotificationsWrapper';
 import SystemMonitor from './Presentational/SystemMonitor/SystemMonitor';
@@ -25,15 +19,13 @@ import {
   contentContainer,
 } from './app.css';
 import ThemeManager from './ThemeManager';
-import { Modal } from './Generics/redesign/Modal/Modal';
-import AddNodeStepper from './Presentational/AddNodeStepper/AddNodeStepper';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
   debug: true,
 });
 
-const WindowContainer = ({ children }) => {
+const WindowContainer = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <div className={dragWindowContainer} />

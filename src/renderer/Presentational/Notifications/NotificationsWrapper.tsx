@@ -1,10 +1,4 @@
-import {
-  getNotifications,
-  markAllAsRead,
-  addNotification,
-  removeNotifications,
-  addNotifications,
-} from 'main/notifications';
+import { getNotifications, markAllAsRead } from 'main/notifications';
 import { useState } from 'react';
 import Notifications from './Notifications';
 

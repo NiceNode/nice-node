@@ -7,7 +7,6 @@ import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/Horizonta
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
 // import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
-import { container } from './contentSingleClient.css';
 import { NodeAction, NodeOverviewProps } from '../../Generics/redesign/consts';
 
 // TODO: process retrieved client data into this format

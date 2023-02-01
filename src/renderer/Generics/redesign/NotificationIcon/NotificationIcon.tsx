@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import { IconId } from 'renderer/assets/images/icons';
 import {
   iconBackground,
@@ -8,7 +7,7 @@ import {
   containerStyle,
 } from './notificationIcon.css';
 import { Icon } from '../Icon/Icon';
-import { vars, common } from '../theme.css';
+import { common } from '../theme.css';
 
 export interface NotificationIconProps {
   /**
@@ -25,8 +24,6 @@ export interface NotificationIconProps {
  * Primary UI component for user interaction
  */
 export const NotificationIcon = ({ status, unread }: NotificationIconProps) => {
-  const { t } = useTranslation('genericComponents');
-
   let statusComponent = null;
   let unreadStyle = '';
   if (unread) {

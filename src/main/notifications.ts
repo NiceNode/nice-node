@@ -8,7 +8,7 @@ export type NotificationType = {
   timestamp: number;
 };
 
-export const displayNotification = (title: string, body: string) => {
+export const displayNotification = () => {
   // new Notification({
   //   title,
   //   body,
@@ -19,7 +19,7 @@ export const getNotifications = () => {
   if (!localStorage.getItem('notifications')) {
     localStorage.setItem('notifications', JSON.stringify([]));
   }
-  return JSON.parse(localStorage.getItem('notifications'));
+  return JSON.parse(localStorage.getItem('notifications') || '');
 };
 
 export const removeNotifications = () => {
@@ -41,7 +41,7 @@ export const addNotifications = (notifications: NotificationType[]) => {
 };
 
 export const markAllAsRead = () => {
-  const notifications = JSON.parse(localStorage.getItem('notifications'));
+  const notifications = JSON.parse(localStorage.getItem('notifications') || '');
 
   notifications.forEach((notification: NotificationType) => {
     notification.unread = false;

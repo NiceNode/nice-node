@@ -87,7 +87,7 @@ export const Header = (props: NodeOverviewProps) => {
           >
             <Button
               label="Update Available"
-              primary
+              type="primary"
               iconId="down"
               variant="icon-right"
               size="small"
@@ -113,7 +113,9 @@ export const Header = (props: NodeOverviewProps) => {
           {...startStopButtonProps}
           variant="icon-left"
           size="small"
-          primary={startStopButtonProps.iconId === 'play'}
+          type={
+            startStopButtonProps.iconId === 'play' ? 'primary' : 'secondary'
+          }
         />
         {logsButtonProps !== undefined && (
           <Button

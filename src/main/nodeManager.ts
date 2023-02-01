@@ -122,7 +122,7 @@ export const stopNode = async (nodeId: NodeId) => {
   node.status = NodeStatus.stopping;
   nodeStore.updateNode(node);
 
-  displayNotification('Stop Node', 'The node was stopped');
+  displayNotification();
 
   if (isDockerNode(node)) {
     const containerIds = await stopDockerNode(node);

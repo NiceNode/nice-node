@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { getNotifications } from 'main/notifications';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../state/hooks';

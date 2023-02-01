@@ -32,7 +32,7 @@ export interface NotificationItemProps {
   /**
    * What's the status?
    */
-  status?: NotificationStatus;
+  status: NotificationStatus;
   /**
    * Timestamp of when the event occurred
    */
@@ -68,12 +68,7 @@ export const NotificationItem = ({
       tabIndex={0}
     >
       <div className={iconContainer}>
-        <NotificationIcon
-          unread={unread}
-          status={status}
-          title={title}
-          description={description}
-        />
+        <NotificationIcon unread={unread} status={status} />
       </div>
       <div className={textContainer}>
         <div className={rowContainer}>

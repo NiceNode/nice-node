@@ -18,9 +18,6 @@ Primary.args = {
   onSettingsClick: () => {
     console.log('on settings click');
   },
-  updateNotifications: () => {
-    console.log('update notifications!');
-  },
   data: [
     {
       unread: true,
