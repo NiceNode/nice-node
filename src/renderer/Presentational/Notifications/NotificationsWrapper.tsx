@@ -1,5 +1,5 @@
-import { getNotifications, markAllAsRead } from 'main/notifications';
 import { useState } from 'react';
+import { getNotifications, markAllAsRead } from '../../../main/notifications';
 import Notifications from './Notifications';
 
 const NotificationsWrapper = () => {
