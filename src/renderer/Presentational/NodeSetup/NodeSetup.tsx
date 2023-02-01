@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import electron from 'renderer/electronGlobal';
+import electron from '../../electronGlobal';
 import NNSplash from '../NNSplashScreen/NNSplashScreen';
 import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
 
