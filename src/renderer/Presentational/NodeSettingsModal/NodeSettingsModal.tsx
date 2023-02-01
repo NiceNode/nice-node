@@ -62,7 +62,7 @@ const NodeSettings = ({
           <div style={{ display: 'flex', paddingTop: 8 }}>
             <p style={{ fontFamily: 'monospace' }}>{nodeStartCommand}</p>
             <Button
-              ghost
+              type="ghost"
               iconId="copy"
               variant="icon"
               onClick={() => {

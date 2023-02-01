@@ -14,7 +14,7 @@ import './Generics/redesign/globalStyle.css';
 import './reset.css';
 import { useAppDispatch } from './state/hooks';
 import { initialize as initializeIpcListeners } from './ipc';
-import NodeScreen from './NodeScreen';
+import NodeScreen from './Presentational/NodeScreen/NodeScreen';
 import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
 import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
@@ -71,12 +71,6 @@ const System = () => {
 export default function App() {
   const dispatch = useAppDispatch();
   const [sHasSeenSplashscreen, setHasSeenSplashscreen] = useState<boolean>();
-  const [sHasClickedGetStarted, setHasClickedGetStarted] = useState<boolean>();
-  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
-
-  // const isStartOnLogin = await electron.getStoreValue('isStartOnLogin');
-  // console.log('isStartOnLogin: ', isStartOnLogin);
-  // setIsOpenOnLogin(isStartOnLogin);
 
   useEffect(() => {
     const callAsync = async () => {
@@ -94,14 +88,8 @@ export default function App() {
   const onClickSplashGetStarted = () => {
     setHasSeenSplashscreen(true);
     electron.getSetHasSeenSplashscreen(true);
-    setHasClickedGetStarted(true);
-    setIsModalOpenAddNode(true);
   };
 
-  // const onChangeOpenOnLogin = (openOnLogin: boolean) => {
-  //   electron.setStoreValue('isStartOnLogin', openOnLogin);
-  //   setIsOpenOnLogin(openOnLogin);
-  // };
   if (sHasSeenSplashscreen === undefined) {
     console.log(
       'waiting for splash screen value to return... showing loading screen'
