@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { getNotifications } from 'main/notifications';
 import { useNavigate } from 'react-router-dom';
+import { getNotifications } from '../../../main/notifications';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
 import { NodeId, NodeStatus, UserNodes } from '../../../common/node';
