@@ -158,7 +158,7 @@ const Sidebar = ({
               status={sidebarStatus}
               selected={selectedNodeId === node.id}
               onClick={() => {
-                navigate('/home/node');
+                navigate('/main/node');
                 dispatch(updateSelectedNodeId(node.id));
               }}
             />
@@ -181,9 +181,9 @@ const Sidebar = ({
                 } else if (item.iconId === 'preferences') {
                   setIsModalOpenSettings(true);
                 } else if (item.iconId === 'bell') {
-                  navigate('/home/notification');
+                  navigate('/main/notification');
                 } else if (item.iconId === 'health') {
-                  navigate('/home/system');
+                  navigate('/main/system');
                 }
               }}
             />

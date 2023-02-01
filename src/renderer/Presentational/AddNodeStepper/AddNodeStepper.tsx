@@ -214,7 +214,7 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       </div>
 
       <div>
-        <Stepper onChange={onStep} />
+        <Stepper step={sStep} onChange={onStep} />
       </div>
     </div>
   );

@@ -33,54 +33,6 @@ Sentry.init({
   debug: true,
 });
 
-// const MainScreen = () => {
-//   return (
-//       {sHasSeenSplashscreen === false ? (
-//         <>
-//           {!sHasClickedGetStarted && (
-//             <NNSplash onClickGetStarted={onClickSplashGetStarted} />
-//           )}
-//         </>
-//       ) : (
-//         <>
-//           <div className={dragWindowContainer} />
-//           <div
-//             style={{
-//               display: 'flex',
-//               flexDirection: 'row',
-//               width: '100%',
-//               height: '100%',
-//             }}
-//           >
-//             <SidebarWrapper />
-//             <div style={{ flex: 1, overflow: 'auto' }}>
-//               <NodeScreen />
-//               {/* <NotificationsWrapper /> */}
-//             </div>
-//           </div>
-
-//           <DataRefresher />
-//           {/* Todo: remove this when Modal Manager is created */}
-//           // <Modal
-//           //   title=""
-//           //   isOpen={sIsModalOpenAddNode}
-//           //   onClickCloseButton={() => setIsModalOpenAddNode(false)}
-//           //   isFullScreen
-//           // >
-//           //   <AddNodeStepper
-//           //     onChange={(newValue: 'done' | 'cancel') => {
-//           //       console.log(newValue);
-//           //       if (newValue === 'done' || newValue === 'cancel') {
-//           //         setIsModalOpenAddNode(false);
-//           //       }
-//           //     }}
-//           //   />
-//           // </Modal>
-//         </>
-//       )}
-//   );
-// };
-
 const WindowContainer = ({ children }) => {
   return (
     <>
@@ -98,7 +50,7 @@ const NodeSetup = () => {
   );
 };
 
-const Home = () => {
+const Main = () => {
   return (
     <WindowContainer>
       <div className={homeContainer}>
@@ -157,7 +109,7 @@ export default function App() {
     return <></>;
   }
 
-  let initialPage = '/home/node';
+  let initialPage = '/main/node';
   if (sHasSeenSplashscreen === false) {
     initialPage = '/setup';
     console.log('User has not seen the splash screen yet');
@@ -169,13 +121,13 @@ export default function App() {
         <Routes>
           <Route path="/">
             <Route index path="/setup" element={<NodeSetup />} />
-            <Route path="/home" element={<Home />}>
-              <Route path="/home/node" element={<NodeScreen />} />
+            <Route path="/main" element={<Main />}>
+              <Route path="/main/node" element={<NodeScreen />} />
               <Route
-                path="/home/notification"
+                path="/main/notification"
                 element={<NotificationsWrapper />}
               />
-              <Route path="/home/system" element={<System />} />
+              <Route path="/main/system" element={<System />} />
             </Route>
 
             {/* Using path="*"" means "match anything", so this route

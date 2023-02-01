@@ -1,7 +1,7 @@
 import {
-  contentContianer,
-  contianer,
-  graphicsContianer,
+  contentContainer,
+  container,
+  graphicsContainer,
 } from './contentWithSideArt.css';
 import defaultGraphic from '../../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 
@@ -12,12 +12,12 @@ type Props = {
 
 const ContentWithSideArt = ({ children, graphic }: Props) => {
   return (
-    <div className={contianer}>
-      <div className={contentContianer}>{children}</div>
+    <div className={container}>
+      <div className={contentContainer}>{children}</div>
 
       {/* art graphic - background image matches content height more easily */}
       <div
-        className={graphicsContianer}
+        className={graphicsContainer}
         style={{ backgroundImage: `url(${graphic ?? defaultGraphic})` }}
       />
     </div>
