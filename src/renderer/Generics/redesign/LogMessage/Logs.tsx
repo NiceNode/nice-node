@@ -1,5 +1,6 @@
 import React, { SetStateAction, useState, useEffect } from 'react';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 import {
   container,
   filterContainer,
@@ -24,7 +25,6 @@ export interface LogsProps {
    * sLogs props
    */
   sLogs: LogWithMetadata[];
-  onClickCloseButton: () => void;
 }
 
 const timeframes = {
@@ -71,7 +71,7 @@ const isWithinTimeframe = (timestamp: number, timeframe: number) => {
   return moment(timestamp).isBetween(beforeTime, nowTime);
 };
 
-export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
+export const Logs = ({ sLogs }: LogsProps) => {
   const [logs, setLogs] = useState<LogWithMetadata[]>([]);
   const [isFilterBarDisplayed, setIsFilterBarDisplayed] =
     useState<boolean>(false);
@@ -133,6 +133,8 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
   const typeLabel = typeLabels[typeFilter];
   const timeframeLabel = timeframeLabels[timeframeFilter];
 
+  const navigate = useNavigate();
+
   return (
     <>
       <div className={container}>
@@ -142,7 +144,7 @@ export const Logs = ({ sLogs, onClickCloseButton }: LogsProps) => {
             title="Logs"
             leftButtonIconId="down"
             rightButtonIconId="filter"
-            leftButtonOnClick={onClickCloseButton}
+            leftButtonOnClick={() => navigate('/main/node')}
             rightButtonOnClick={() => {
               if (isFilterBarDisplayed) {
                 setIsFilterBarDisplayed(false);

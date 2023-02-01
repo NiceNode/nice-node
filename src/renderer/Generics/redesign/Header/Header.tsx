@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button, { ButtonProps } from '../Button/Button';
 import { NodeOverviewProps } from '../consts';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
@@ -19,7 +20,6 @@ import {
   menuButtonContainer,
 } from './header.css';
 import NodeSettingsWrapper from '../../../Presentational/NodeSettingsModal/NodeSettingsWrapper';
-import LogsModal from '../../../Presentational/NodeLogsModal/LogsModal';
 
 /**
  * Primary UI component for user interaction
@@ -32,7 +32,8 @@ export const Header = (props: NodeOverviewProps) => {
     useState<boolean>(false);
   const [sIsSettingsModalOpen, setIsSettingsModalOpen] =
     useState<boolean>(false);
-  const [sIsLogsModalOpen, setIsLogsModalOpen] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const startStopButtonProps: ButtonProps = {
     label: '',
@@ -122,7 +123,9 @@ export const Header = (props: NodeOverviewProps) => {
             {...logsButtonProps}
             variant="icon-left"
             size="small"
-            onClick={() => setIsLogsModalOpen(true)}
+            onClick={() => {
+              navigate('/main/node/logs');
+            }}
           />
         )}
         <div
@@ -188,10 +191,6 @@ export const Header = (props: NodeOverviewProps) => {
       <NodeSettingsWrapper
         isOpen={sIsSettingsModalOpen}
         onClickClose={() => setIsSettingsModalOpen(false)}
-      />
-      <LogsModal
-        isOpen={sIsLogsModalOpen}
-        onClickClose={() => setIsLogsModalOpen(false)}
       />
     </div>
   );

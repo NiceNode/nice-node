@@ -45,7 +45,7 @@ export const Modal = ({
   // TODO: manage the default size via eventual modal manager
   const modalSize =
     type === 'stepper'
-      ? { width: 624, height: 673 }
+      ? { width: 624, height: 'auto' }
       : {
           height: isFullScreen ? '95vh' : '',
           width: isFullScreen ? '95vw' : '',

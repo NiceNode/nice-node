@@ -13,6 +13,7 @@ export const container = style({
   width: 28,
   height: 28,
   borderRadius: 5,
+  zIndex: 9999999,
   color: vars.color.font,
   ':hover': {
     backgroundColor: vars.components.headerButtonHover,

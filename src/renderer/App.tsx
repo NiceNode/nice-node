@@ -12,6 +12,7 @@ import NodeScreen from './Presentational/NodeScreen/NodeScreen';
 import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
 import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
+import LogsWrapper from './Generics/redesign/LogMessage/LogsWrapper';
 import NodeSetup from './Presentational/NodeSetup/NodeSetup';
 import {
   dragWindowContainer,
@@ -39,9 +40,7 @@ const Main = () => {
     <WindowContainer>
       <div className={homeContainer}>
         <SidebarWrapper />
-        <div className={contentContainer}>
-          <Outlet />
-        </div>
+        <Outlet />
         <DataRefresher />
       </div>
     </WindowContainer>
@@ -98,12 +97,31 @@ export default function App() {
               }
             />
             <Route path="/main" element={<Main />}>
-              <Route path="/main/node" element={<NodeScreen />} />
+              <Route
+                path="/main/node"
+                element={
+                  <div className={contentContainer}>
+                    <NodeScreen />
+                  </div>
+                }
+              />
+              <Route path="/main/node/logs" element={<LogsWrapper />} />
               <Route
                 path="/main/notification"
-                element={<NotificationsWrapper />}
+                element={
+                  <div className={contentContainer}>
+                    <NotificationsWrapper />
+                  </div>
+                }
               />
-              <Route path="/main/system" element={<System />} />
+              <Route
+                path="/main/system"
+                element={
+                  <div className={contentContainer}>
+                    <System />
+                  </div>
+                }
+              />
             </Route>
 
             {/* Using path="*"" means "match anything", so this route
