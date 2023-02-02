@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
+import { useNavigate } from 'react-router-dom';
 import electron from '../../electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector } from '../../state/hooks';
@@ -174,6 +175,7 @@ const NodeScreen = () => {
   //     };
   //   },
   // });
+  const navigate = useNavigate();
   if (!selectedNode) {
     // if there is no node selected, prompt user to create a new node
     return (
@@ -192,13 +194,13 @@ const NodeScreen = () => {
                 variant="icon-left"
                 iconId="add"
                 type="primary"
-                onClick={() => setIsModalOpenAddNode(true)}
+                onClick={() => navigate('/modal/addNode')}
               />
             </div>
           </div>
         )}
         {/* Todo: remove this when Modal Manager is created */}
-        <Modal
+        {/* <Modal
           type="stepper"
           title=""
           isOpen={sIsModalOpenAddNode}
@@ -214,7 +216,7 @@ const NodeScreen = () => {
               }
             }}
           />
-        </Modal>
+        </Modal> */}
       </>
     );
   }

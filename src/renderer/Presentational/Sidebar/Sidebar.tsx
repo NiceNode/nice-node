@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ModalContext } from 'renderer/App';
 import { getNotifications } from '../../../main/notifications';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
@@ -122,6 +123,7 @@ const Sidebar = ({
     });
   };
   const navigate = useNavigate();
+  const { toggle } = useContext(ModalContext);
 
   return (
     <div className={container}>
@@ -176,8 +178,7 @@ const Sidebar = ({
               onClick={() => {
                 console.log('sidebar link item clicked: ', item.iconId);
                 if (item.iconId === 'add') {
-                  // open add node dialog
-                  setIsModalOpenAddNode(true);
+                  toggle();
                 } else if (item.iconId === 'preferences') {
                   setIsModalOpenSettings(true);
                 } else if (item.iconId === 'bell') {
@@ -190,7 +191,7 @@ const Sidebar = ({
           );
         })}
       </div>
-      <Modal
+      {/* <Modal
         type="stepper"
         title=""
         isOpen={sIsModalOpenAddNode}
@@ -206,7 +207,7 @@ const Sidebar = ({
             }
           }}
         />
-      </Modal>
+      </Modal> */}
       <PreferencesWrapper
         isOpen={sIsModalOpenSettings}
         onClose={() => setIsModalOpenSettings(false)}

@@ -13,8 +13,6 @@ const LogsWrapper = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const [sLogs, setLogs] = useState<LogWithMetadata[]>([]);
 
-  console.log('ding');
-
   const nodeLogsListener = (message: LogWithMetadata[]) => {
     setLogs((prevState) => {
       if (prevState.length < 1000) {
