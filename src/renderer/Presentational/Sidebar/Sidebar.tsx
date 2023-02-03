@@ -1,6 +1,6 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ModalContext } from 'renderer/App';
+import { setModalState } from '../../state/modal';
 import { getNotifications } from '../../../main/notifications';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
@@ -15,8 +15,6 @@ import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/Sideb
 import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
-import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
 import PreferencesWrapper from '../PreferencesModal/PreferencesWrapper';
 import { DockerStoppedBanner } from '../DockerInstallation/StartDockerBanner';
 
@@ -123,7 +121,6 @@ const Sidebar = ({
     });
   };
   const navigate = useNavigate();
-  const { toggle } = useContext(ModalContext);
 
   return (
     <div className={container}>
@@ -178,7 +175,12 @@ const Sidebar = ({
               onClick={() => {
                 console.log('sidebar link item clicked: ', item.iconId);
                 if (item.iconId === 'add') {
-                  toggle();
+                  dispatch(
+                    setModalState({
+                      isModalOpen: true,
+                      screen: { route: 'addNode', type: 'modal' },
+                    })
+                  );
                 } else if (item.iconId === 'preferences') {
                   setIsModalOpenSettings(true);
                 } else if (item.iconId === 'bell') {

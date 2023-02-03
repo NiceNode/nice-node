@@ -5,10 +5,12 @@ import { RtkqNodeService } from './nodeService';
 import { RtkqSettingsService } from './settingsService';
 import { RtkqNetwork } from './network';
 import nodeReducer from './node';
+import modalReducer from './modal';
 
 export const store = configureStore({
   reducer: {
     node: nodeReducer,
+    modal: modalReducer,
     [RtkqNodeService.reducerPath]: RtkqNodeService.reducer,
     [RtkqSettingsService.reducerPath]: RtkqSettingsService.reducer,
     [RtkqExecutionWs.reducerPath]: RtkqExecutionWs.reducer,
