@@ -20,14 +20,12 @@ export interface RemoveNodeProps {
 }
 
 const RemoveNode = ({
-  isOpen,
   onClickClose,
   nodeDisplayName,
   nodeStorageUsedGBs,
   onClickRemoveNode,
   errorMessage,
 }: RemoveNodeProps) => {
-  const { t: tNiceNode } = useTranslation();
   const [sShouldDeleteNodeStorage, setShouldDeleteNodeStorage] =
     useState<boolean>(false);
   const [sNodeStorageMessage, setNodeStorageMessage] = useState<string>(
@@ -47,31 +45,25 @@ const RemoveNode = ({
   }, [onClickRemoveNode, sShouldDeleteNodeStorage]);
 
   return (
-    <Modal
-      isOpen={isOpen}
-      title={`${tNiceNode('RemoveNode')}`}
-      onClickCloseButton={onClickClose}
-    >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <span>
-          Are you sure you want to remove <strong>{nodeDisplayName}</strong>?
-        </span>
-        <Checkbox
-          label={`${t('DeleteNodeDataQuestion')} ${sNodeStorageMessage}`}
-          onClick={(isChecked: boolean) => {
-            console.log('setShouldDeleteNodeStorage: ', isChecked);
-            setShouldDeleteNodeStorage(isChecked);
-          }}
-        />
-        {errorMessage && (
-          <Message type="error" description={errorMessage} title="" />
-        )}
-        <div className={actionButtonsContainer}>
-          <Button label={t('Cancel')} onClick={onClickClose} />
-          <Button label={t('Remove')} type="danger" onClick={onClickRemove} />
-        </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <span>
+        Are you sure you want to remove <strong>{nodeDisplayName}</strong>?
+      </span>
+      <Checkbox
+        label={`${t('DeleteNodeDataQuestion')} ${sNodeStorageMessage}`}
+        onClick={(isChecked: boolean) => {
+          console.log('setShouldDeleteNodeStorage: ', isChecked);
+          setShouldDeleteNodeStorage(isChecked);
+        }}
+      />
+      {errorMessage && (
+        <Message type="error" description={errorMessage} title="" />
+      )}
+      <div className={actionButtonsContainer}>
+        <Button label={t('Cancel')} onClick={onClickClose} />
+        <Button label={t('Remove')} type="danger" onClick={onClickRemove} />
       </div>
-    </Modal>
+    </div>
   );
 };
 

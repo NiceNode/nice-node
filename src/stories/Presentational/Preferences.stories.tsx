@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import Preferences from '../../renderer/Presentational/PreferencesModal/Preferences';
+import Preferences from '../../renderer/Presentational/Preferences/Preferences';
 
 export default {
   title: 'Presentational/Preferences',

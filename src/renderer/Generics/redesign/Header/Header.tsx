@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from 'renderer/state/hooks';
+import { setModalState } from 'renderer/state/modal';
 import Button, { ButtonProps } from '../Button/Button';
 import { NodeOverviewProps } from '../consts';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
@@ -19,7 +21,6 @@ import {
   popupContainer,
   menuButtonContainer,
 } from './header.css';
-import NodeSettingsWrapper from '../../../Presentational/NodeSettingsModal/NodeSettingsWrapper';
 
 /**
  * Primary UI component for user interaction
@@ -34,6 +35,7 @@ export const Header = (props: NodeOverviewProps) => {
     useState<boolean>(false);
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const startStopButtonProps: ButtonProps = {
     label: '',
@@ -141,9 +143,13 @@ export const Header = (props: NodeOverviewProps) => {
             variant="icon"
             size="small"
             onClick={() => {
-              setIsSettingsModalOpen(true);
               if (type === 'client') {
-                if (onAction) onAction('settings');
+                dispatch(
+                  setModalState({
+                    isModalOpen: true,
+                    screen: { route: 'nodeSettings', type: 'modal' },
+                  })
+                );
                 // setIsSettingsDisplayed(!isSettingsDisplayed);
               } else {
                 console.log('open preferences!');
@@ -187,11 +193,6 @@ export const Header = (props: NodeOverviewProps) => {
           )}
         </div>
       </div>
-
-      <NodeSettingsWrapper
-        isOpen={sIsSettingsModalOpen}
-        onClickClose={() => setIsSettingsModalOpen(false)}
-      />
     </div>
   );
 };

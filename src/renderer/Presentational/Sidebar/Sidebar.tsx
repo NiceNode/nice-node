@@ -15,7 +15,7 @@ import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/Sideb
 import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
-import PreferencesWrapper from '../PreferencesModal/PreferencesWrapper';
+import PreferencesWrapper from '../Preferences/PreferencesWrapper';
 import { DockerStoppedBanner } from '../DockerInstallation/StartDockerBanner';
 
 export interface SidebarProps {
@@ -182,7 +182,12 @@ const Sidebar = ({
                     })
                   );
                 } else if (item.iconId === 'preferences') {
-                  setIsModalOpenSettings(true);
+                  dispatch(
+                    setModalState({
+                      isModalOpen: true,
+                      screen: { route: 'preferences', type: 'modal' },
+                    })
+                  );
                 } else if (item.iconId === 'bell') {
                   navigate('/main/notification');
                 } else if (item.iconId === 'health') {
@@ -193,27 +198,6 @@ const Sidebar = ({
           );
         })}
       </div>
-      {/* <Modal
-        type="stepper"
-        title=""
-        isOpen={sIsModalOpenAddNode}
-        onClickCloseButton={() => setIsModalOpenAddNode(false)}
-        isFullScreen
-      >
-        <AddNodeStepper
-          modal
-          onChange={(newValue: 'done' | 'cancel') => {
-            console.log(newValue);
-            if (newValue === 'done' || newValue === 'cancel') {
-              setIsModalOpenAddNode(false);
-            }
-          }}
-        />
-      </Modal> */}
-      <PreferencesWrapper
-        isOpen={sIsModalOpenSettings}
-        onClose={() => setIsModalOpenSettings(false)}
-      />
     </div>
   );
 };

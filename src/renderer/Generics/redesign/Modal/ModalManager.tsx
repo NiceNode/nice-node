@@ -1,69 +1,102 @@
-import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'renderer/state/hooks';
+import AddNodeStepper from 'renderer/Presentational/AddNodeStepper/AddNodeStepper';
+import PreferencesWrapper from 'renderer/Presentational/Preferences/PreferencesWrapper';
+import { useTranslation } from 'react-i18next';
+import NodeSettingsWrapper from 'renderer/Presentational/NodeSettings/NodeSettingsWrapper';
+import RemoveNodeWrapper, {
+  RemoveNodeAction,
+} from 'renderer/Presentational/RemoveNodeModal/RemoveNodeWrapper';
 import { getModalState, setModalState } from '../../../state/modal';
-
-const Screen1 = () => <div>Add Node!</div>;
-const Screen2 = () => <div>Screen 2</div>;
+import { Modal } from './Modal';
 
 const ModalManager = () => {
   const dispatch = useAppDispatch();
   const { isModalOpen, screen } = useSelector(getModalState);
+  const { t } = useTranslation('genericComponents');
 
   if (!isModalOpen) {
     return null;
   }
 
-  let modalComponent = null;
+  const resetModal = () => {
+    dispatch(
+      setModalState({
+        isModalOpen: false,
+        screen: { route: undefined, type: undefined },
+      })
+    );
+  };
+
+  let modalContent = <></>;
+  let modalProps = {};
   // Render the appropriate screen based on the current `screen` value
   switch (screen.route) {
+    // Modals
     case 'addNode':
-      modalComponent = <Screen1 />;
+      modalProps = { isFullScreen: true, type: 'stepper', title: '' };
+      modalContent = (
+        <AddNodeStepper
+          modal
+          onChange={(newValue: 'done' | 'cancel') => {
+            if (newValue === 'done' || newValue === 'cancel') {
+              resetModal();
+            }
+          }}
+        />
+      );
       break;
-    case 'screen2':
-      modalComponent = <Screen2 />;
+    case 'nodeSettings':
+      modalProps = { title: t('NodeSettings') };
+      modalContent = (
+        <NodeSettingsWrapper isOpen onClickClose={() => resetModal()} />
+      );
+      break;
+    case 'preferences':
+      modalProps = { title: t('Preferences') };
+      modalContent = <PreferencesWrapper isOpen onClose={() => resetModal()} />;
+      break;
+    case 'addValidator':
+      modalContent = <>Add Validator</>;
+      break;
+    case 'clientVersions':
+      modalContent = <>Client Versions</>;
+      break;
+
+    // Alerts
+    case 'stopNode':
+      modalContent = <>Stop Node</>;
+      break;
+    case 'removeNode':
+      modalProps = { title: t('RemoveNode') };
+      modalContent = (
+        <RemoveNodeWrapper
+          isOpen
+          onClose={(action: RemoveNodeAction) => {
+            if (action === 'remove') {
+              resetModal();
+            } else {
+              dispatch(
+                setModalState({
+                  isModalOpen: true,
+                  screen: { route: 'nodeSettings', type: 'modal' },
+                })
+              );
+            }
+          }}
+        />
+      );
+      break;
+    case 'updateUnvailable':
+      modalContent = <>Update unavailable</>;
       break;
     default:
   }
 
   return (
-    <div
-      style={{
-        background: 'rgba(0, 0, 0, 0.5)',
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-        zIndex: 999,
-      }}
-    >
-      <div
-        style={{
-          background: 'white',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          padding: '1rem',
-        }}
-      >
-        {modalComponent}
-        <button
-          type="button"
-          onClick={() => {
-            dispatch(
-              setModalState({
-                isModalOpen: false,
-                screen: { route: undefined, type: undefined },
-              })
-            );
-          }}
-        >
-          Close
-        </button>
-      </div>
-    </div>
+    <Modal {...modalProps} isOpen onClickCloseButton={() => resetModal()}>
+      {modalContent}
+    </Modal>
   );
 };
 

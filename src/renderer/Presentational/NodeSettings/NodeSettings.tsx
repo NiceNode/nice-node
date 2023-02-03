@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
 import DynamicSettings, {
   CategoryConfig,
 } from '../../Generics/redesign/DynamicSettings/DynamicSettings';
@@ -27,7 +26,6 @@ export interface NodeSettingsProps {
 }
 
 const NodeSettings = ({
-  isOpen,
   onClickClose,
   categoryConfigs,
   configValuesMap,
@@ -98,15 +96,7 @@ const NodeSettings = ({
     return tabs;
   };
 
-  return (
-    <Modal
-      isOpen={isOpen}
-      title={tNiceNode('NodeSettings')}
-      onClickCloseButton={onClickClose}
-    >
-      <Tabs modal>{renderTabs()}</Tabs>
-    </Modal>
-  );
+  return <Tabs modal>{renderTabs()}</Tabs>;
 };
 
 export default NodeSettings;

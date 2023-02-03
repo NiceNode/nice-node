@@ -1,6 +1,4 @@
 import { useTranslation } from 'react-i18next';
-
-import { Modal } from '../../Generics/redesign/Modal/Modal';
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
 import LanguageSelect from '../../LanguageSelect';
@@ -39,11 +37,7 @@ const Preferences = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      title={t('Preferences')}
-      onClickCloseButton={onClose}
-    >
+    <>
       <span className={lineKeyText}>{t('Appearance')}</span>
       <div
         style={{
@@ -124,7 +118,7 @@ const Preferences = ({
         ]}
       />
       <span className={captionText}>NiceNode version {version}</span>
-    </Modal>
+    </>
   );
 };
 

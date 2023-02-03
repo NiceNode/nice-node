@@ -30,7 +30,6 @@ export const modalContentStyle = style({
   padding: '32px',
   paddingTop: '0px',
   borderRadius: 14,
-  width: '80%',
   top: '50%',
   left: '50%',
   color: 'inherit',

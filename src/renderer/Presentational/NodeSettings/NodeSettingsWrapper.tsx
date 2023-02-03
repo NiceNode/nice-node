@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { setModalState } from '../../state/modal';
 import { NodeId } from '../../../common/node';
 import {
   ConfigTranslation,
@@ -8,12 +9,9 @@ import {
 } from '../../../common/nodeConfig';
 import electron from '../../electronGlobal';
 import { CategoryConfig } from '../../Generics/redesign/DynamicSettings/DynamicSettings';
-import { useAppSelector } from '../../state/hooks';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import { selectSelectedNode } from '../../state/node';
-import RemoveNodeWrapper, {
-  RemoveNodeAction,
-} from '../RemoveNodeModal/RemoveNodeWrapper';
-import NodeSettings from './NodeSettingsModal';
+import NodeSettings from './NodeSettings';
 
 export type SettingChangeHandler = (
   configKey: string,
@@ -34,8 +32,6 @@ const NodeSettingsWrapper = ({
   const [sConfigTranslationMap, setConfigTranslationMap] =
     useState<ConfigTranslationMap>();
   const [sCategoryConfigs, setCategoryConfigs] = useState<CategoryConfig[]>();
-  const [sIsRemoveNodeModalOpen, setIsRemoveNodeModalOpen] =
-    useState<boolean>(false);
   const [sIsWalletSettingsEnabled, setIsWalletSettingsEnabled] =
     useState<boolean>(false);
   // find httpCors config translation for the wallet settings tab
@@ -44,6 +40,7 @@ const NodeSettingsWrapper = ({
   const [sNodeStartCommand, setNodeStartCommand] = useState<string>();
 
   const selectedNode = useAppSelector(selectSelectedNode);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     let isDisabled = true;
@@ -161,24 +158,6 @@ const NodeSettingsWrapper = ({
     }
   };
 
-  const onClickRemoveNode = useCallback(() => {
-    setIsRemoveNodeModalOpen(true);
-  }, []);
-
-  const onCloseRemoveNode = useCallback(
-    (action: RemoveNodeAction) => {
-      // if node was removed, close the node settings
-      //  select another node?
-      // if remove node was "cancel"'d, keep settings open
-      console.log('NodeSettingsWrapper: onCloseRemoveNode');
-      setIsRemoveNodeModalOpen(false);
-      if (action === 'remove') {
-        onClickClose();
-      }
-    },
-    [onClickClose]
-  );
-
   return (
     <>
       <NodeSettings
@@ -190,12 +169,16 @@ const NodeSettingsWrapper = ({
         isWalletSettingsEnabled={sIsWalletSettingsEnabled}
         isDisabled={sIsConfigDisabled}
         onChange={onNodeConfigChange}
-        onClickRemoveNode={onClickRemoveNode}
+        onClickRemoveNode={() => {
+          console.log('dispatch');
+          dispatch(
+            setModalState({
+              isModalOpen: true,
+              screen: { route: 'removeNode', type: 'alert' },
+            })
+          );
+        }}
         nodeStartCommand={sNodeStartCommand}
-      />
-      <RemoveNodeWrapper
-        isOpen={sIsRemoveNodeModalOpen}
-        onClose={onCloseRemoveNode}
       />
     </>
   );
