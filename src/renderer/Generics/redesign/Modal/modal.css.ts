@@ -51,6 +51,7 @@ export const titleFont = style({
   lineHeight: '28px',
   fontWeight: 590,
   paddingBottom: 16,
+  flexGrow: 1,
 });
 
 export const modalStepperContainer = style({
@@ -63,8 +64,13 @@ export const modalStepperContainer = style({
 });
 
 export const modalChildrenContainer = style({
-  padding: '0px 42px 0px 32px',
+  padding: '0px 32px',
   flex: 1,
   overflow: 'auto',
-  // extra padding from scrollbar
+  selectors: {
+    [`&.tabs`]: {
+      padding: 0,
+      overflow: 'hidden',
+    },
+  },
 });

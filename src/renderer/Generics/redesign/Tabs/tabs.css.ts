@@ -22,6 +22,11 @@ export const tabsList = style({
   height: 28,
   alignItems: 'center',
   padding: '10px 0',
+  selectors: {
+    '&.modal': {
+      paddingLeft: 32,
+    },
+  },
 });
 
 export const tabContent = style({
@@ -30,7 +35,9 @@ export const tabContent = style({
     '&.modal': {
       overflow: 'auto',
       // extra padding from scrollbar
-      paddingRight: 10,
+      padding: '36px 32px 64px 32px',
+      height: 474,
+      width: 720,
     },
   },
 });

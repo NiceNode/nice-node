@@ -40,7 +40,7 @@ export const Tabs = ({ children, id, modal }: TabsProps) => {
   return (
     <div className={container}>
       <div className={[tabsContainer, modalStyle].join(' ')}>
-        <ol className={tabsList}>
+        <ol className={[tabsList, modalStyle].join(' ')}>
           {children.map((child) => {
             const childId = child.props.id;
 

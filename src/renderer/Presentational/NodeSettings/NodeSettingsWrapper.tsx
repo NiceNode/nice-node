@@ -155,27 +155,25 @@ const NodeSettingsWrapper = ({ onClickClose }: NodeSettingsWrapperProps) => {
   };
 
   return (
-    <>
-      <NodeSettings
-        onClickClose={onClickClose}
-        categoryConfigs={sCategoryConfigs}
-        configValuesMap={selectedNode?.config.configValuesMap}
-        httpCorsConfigTranslation={sHttpCorsConfigTranslation}
-        isWalletSettingsEnabled={sIsWalletSettingsEnabled}
-        isDisabled={sIsConfigDisabled}
-        onChange={onNodeConfigChange}
-        onClickRemoveNode={() => {
-          console.log('dispatch');
-          dispatch(
-            setModalState({
-              isModalOpen: true,
-              screen: { route: 'removeNode', type: 'alert' },
-            })
-          );
-        }}
-        nodeStartCommand={sNodeStartCommand}
-      />
-    </>
+    <NodeSettings
+      onClickClose={onClickClose}
+      categoryConfigs={sCategoryConfigs}
+      configValuesMap={selectedNode?.config.configValuesMap}
+      httpCorsConfigTranslation={sHttpCorsConfigTranslation}
+      isWalletSettingsEnabled={sIsWalletSettingsEnabled}
+      isDisabled={sIsConfigDisabled}
+      onChange={onNodeConfigChange}
+      onClickRemoveNode={() => {
+        console.log('dispatch');
+        dispatch(
+          setModalState({
+            isModalOpen: true,
+            screen: { route: 'removeNode', type: 'alert' },
+          })
+        );
+      }}
+      nodeStartCommand={sNodeStartCommand}
+    />
   );
 };
 

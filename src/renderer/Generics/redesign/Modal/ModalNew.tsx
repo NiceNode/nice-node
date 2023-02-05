@@ -6,9 +6,9 @@ import {
   modalCloseButton,
   modalChildrenContainer,
   modalContentStyle,
+  modalStepperContainer,
   titleFont,
 } from './modal.css';
-import { ModalStepper } from './ModalStepper';
 
 type Props = {
   children: React.ReactElement[] | React.ReactElement;
@@ -54,6 +54,8 @@ export const ModalNew = ({
   //   };
   // }
 
+  const tabStyle = type === 'tabs' ? 'tabs' : '';
+
   return (
     <div className={modalBackdropStyle}>
       <div className={modalContentStyle} style={modalSize}>
@@ -66,12 +68,30 @@ export const ModalNew = ({
           />
         </div>
         <div className={modalHeaderContainer}>
-          <span className={titleFont} style={{ flexGrow: 1 }}>
-            {title}
-          </span>
+          <span className={titleFont}>{title}</span>
         </div>
-        <div className={modalChildrenContainer}>{children}</div>
-        <ModalStepper />
+        <div className={[modalChildrenContainer, tabStyle].join(' ')}>
+          {children}
+        </div>
+        <div className={modalStepperContainer}>
+          <Button
+            variant="text"
+            type="secondary"
+            label="Cancel"
+            onClick={() => {
+              onClickCloseButton();
+            }}
+          />
+          <Button
+            variant="text"
+            type="primary"
+            label="Save"
+            onClick={() => {
+              // Save settings here
+              onClickCloseButton();
+            }}
+          />
+        </div>
       </div>
     </div>
   );

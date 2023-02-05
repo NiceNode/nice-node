@@ -34,7 +34,7 @@ const ModalManager = () => {
   switch (screen.route) {
     // Modals
     case 'addNode':
-      modalProps = { isFullScreen: true, type: 'stepper', title: '' };
+      modalProps = { isFullScreen: true, title: '' };
       modalContent = (
         <AddNodeStepper
           modal
@@ -47,7 +47,7 @@ const ModalManager = () => {
       );
       break;
     case 'nodeSettings':
-      modalProps = { title: t('NodeSettings'), type: 'settings' };
+      modalProps = { title: t('NodeSettings'), type: 'tabs' };
       modalContent = <NodeSettingsWrapper onClickClose={() => resetModal()} />;
       break;
     case 'preferences':
@@ -92,7 +92,7 @@ const ModalManager = () => {
   }
 
   return (
-    <ModalNew {...modalProps} isOpen onClickCloseButton={() => resetModal()}>
+    <ModalNew {...modalProps} onClickCloseButton={() => resetModal()}>
       {modalContent}
     </ModalNew>
   );
