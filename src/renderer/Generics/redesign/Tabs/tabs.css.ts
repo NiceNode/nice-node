@@ -35,7 +35,7 @@ export const tabContent = style({
     '&.modal': {
       overflow: 'auto',
       // extra padding from scrollbar
-      padding: '36px 32px 64px 32px',
+      padding: '36px 32px 0px 32px',
       height: 474,
       width: 720,
     },

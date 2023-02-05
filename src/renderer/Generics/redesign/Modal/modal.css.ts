@@ -5,7 +5,7 @@ export const modalBackdropStyle = style({
   boxSizing: 'border-box',
   display: 'flex',
   position: 'fixed',
-  zIndex: 1,
+  zIndex: 2,
   alignItems: 'center',
   justifyContent: 'center',
   left: '0',
