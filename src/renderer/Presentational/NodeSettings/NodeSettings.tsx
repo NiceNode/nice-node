@@ -13,8 +13,6 @@ import Button from '../../Generics/redesign/Button/Button';
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Preference = 'theme' | 'isOpenOnStartup';
 export interface NodeSettingsProps {
-  isOpen: boolean;
-  onClickClose: () => void;
   categoryConfigs?: CategoryConfig[];
   configValuesMap?: ConfigValuesMap;
   httpCorsConfigTranslation?: ConfigTranslation;
@@ -26,7 +24,6 @@ export interface NodeSettingsProps {
 }
 
 const NodeSettings = ({
-  onClickClose,
   categoryConfigs,
   configValuesMap,
   httpCorsConfigTranslation,

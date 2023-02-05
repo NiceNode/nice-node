@@ -1,11 +1,8 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '../../Generics/redesign/theme.css';
 
-export const container = style({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: 16,
+export const preferencesContainer = style({
+  paddingBottom: 132,
 });
 
 export const captionText = style({

@@ -8,7 +8,7 @@ import RemoveNodeWrapper, {
   RemoveNodeAction,
 } from 'renderer/Presentational/RemoveNodeModal/RemoveNodeWrapper';
 import { getModalState, setModalState } from '../../../state/modal';
-import { Modal } from './Modal';
+import { ModalNew } from './ModalNew';
 
 const ModalManager = () => {
   const dispatch = useAppDispatch();
@@ -47,10 +47,8 @@ const ModalManager = () => {
       );
       break;
     case 'nodeSettings':
-      modalProps = { title: t('NodeSettings') };
-      modalContent = (
-        <NodeSettingsWrapper isOpen onClickClose={() => resetModal()} />
-      );
+      modalProps = { title: t('NodeSettings'), type: 'settings' };
+      modalContent = <NodeSettingsWrapper onClickClose={() => resetModal()} />;
       break;
     case 'preferences':
       modalProps = { title: t('Preferences') };
@@ -94,9 +92,9 @@ const ModalManager = () => {
   }
 
   return (
-    <Modal {...modalProps} isOpen onClickCloseButton={() => resetModal()}>
+    <ModalNew {...modalProps} isOpen onClickCloseButton={() => resetModal()}>
       {modalContent}
-    </Modal>
+    </ModalNew>
   );
 };
 

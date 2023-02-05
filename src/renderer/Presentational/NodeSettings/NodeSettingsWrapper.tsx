@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { setModalState } from '../../state/modal';
 import { NodeId } from '../../../common/node';
 import {
@@ -18,16 +18,12 @@ export type SettingChangeHandler = (
   newValue: ConfigValue
 ) => void;
 export interface NodeSettingsWrapperProps {
-  isOpen: boolean;
   onClickClose: () => void;
 }
 
 const HTTP_CORS_DOMAINS_KEY = 'httpCorsDomains';
 
-const NodeSettingsWrapper = ({
-  isOpen,
-  onClickClose,
-}: NodeSettingsWrapperProps) => {
+const NodeSettingsWrapper = ({ onClickClose }: NodeSettingsWrapperProps) => {
   const [sIsConfigDisabled, setIsConfigDisabled] = useState<boolean>(true);
   const [sConfigTranslationMap, setConfigTranslationMap] =
     useState<ConfigTranslationMap>();
@@ -161,7 +157,6 @@ const NodeSettingsWrapper = ({
   return (
     <>
       <NodeSettings
-        isOpen={isOpen}
         onClickClose={onClickClose}
         categoryConfigs={sCategoryConfigs}
         configValuesMap={selectedNode?.config.configValuesMap}

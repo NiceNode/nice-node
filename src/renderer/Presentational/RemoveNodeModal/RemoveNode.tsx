@@ -1,8 +1,5 @@
-import { useTranslation } from 'react-i18next';
-
 import { useCallback, useEffect, useState } from 'react';
 import { t } from 'i18next';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { actionButtonsContainer } from '../../Generics/redesign/Alert/alert.css';
 import Button from '../../Generics/redesign/Button/Button';
 import { Message } from '../../Generics/redesign/Message/Message';
@@ -11,7 +8,6 @@ import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Preference = 'theme' | 'isOpenOnStartup';
 export interface RemoveNodeProps {
-  isOpen: boolean;
   onClickClose: () => void;
   nodeDisplayName?: string;
   nodeStorageUsedGBs?: number;
