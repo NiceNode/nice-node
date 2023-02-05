@@ -1,27 +1,26 @@
 import { useCallback, useEffect } from 'react';
 import Button from '../Button/Button';
 import {
+  modalHeaderContainer,
   modalBackdropStyle,
+  modalCloseButton,
   modalChildrenContainer,
   modalContentStyle,
+  modalStepperContainer,
   titleFont,
 } from './modal.css';
 
 type Props = {
   children: React.ReactElement[] | React.ReactElement;
-  isOpen: boolean | undefined;
   onClickCloseButton: () => void;
   title?: string;
-  isFullScreen?: boolean;
   type?: string;
 };
 
 export const Modal = ({
   children,
-  isOpen,
   onClickCloseButton,
   title,
-  isFullScreen,
   type = '',
 }: Props) => {
   const escFunction = useCallback(
@@ -42,45 +41,43 @@ export const Modal = ({
     };
   }, [escFunction]);
 
-  // TODO: manage the default size via eventual modal manager
-  let modalSize = {};
-  if (type === 'stepper') {
-    modalSize = { width: 624, height: 'auto' };
-  } else if (type === 'settings') {
-    modalSize = { width: 720, height: 658 };
-  } else {
-    modalSize = {
-      height: isFullScreen ? '95vh' : '',
-      width: isFullScreen ? '95vw' : '',
-    };
-  }
-
+  const tabStyle = type === 'tabs' ? 'tabs' : '';
   return (
-    <div
-      style={{
-        display: isOpen ? 'flex' : 'none',
-        // paddingTop: 30 leaves room for the drag bar on mac
-        paddingTop: 30,
-      }}
-      className={modalBackdropStyle}
-    >
-      <div className={modalContentStyle} style={modalSize}>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ height: 40, alignSelf: 'flex-end' }}>
-            <div style={{ position: 'absolute', top: 12, right: 14 }}>
-              <Button
-                variant="icon"
-                iconId="close"
-                type="ghost"
-                onClick={onClickCloseButton}
-              />
-            </div>
-          </div>
-          <span className={titleFont} style={{ flexGrow: 1 }}>
-            {title}
-          </span>
+    <div className={modalBackdropStyle}>
+      <div className={modalContentStyle}>
+        <div className={modalCloseButton}>
+          <Button
+            variant="icon"
+            iconId="close"
+            type="ghost"
+            onClick={onClickCloseButton}
+          />
         </div>
-        <div className={modalChildrenContainer}>{children}</div>
+        <div className={modalHeaderContainer}>
+          <span className={titleFont}>{title}</span>
+        </div>
+        <div className={[modalChildrenContainer, tabStyle].join(' ')}>
+          {children}
+        </div>
+        <div className={modalStepperContainer}>
+          <Button
+            variant="text"
+            type="secondary"
+            label="Cancel"
+            onClick={() => {
+              onClickCloseButton();
+            }}
+          />
+          <Button
+            variant="text"
+            type="primary"
+            label="Save"
+            onClick={() => {
+              // Save settings here
+              onClickCloseButton();
+            }}
+          />
+        </div>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import RemoveNodeWrapper, {
   RemoveNodeAction,
 } from 'renderer/Presentational/RemoveNodeModal/RemoveNodeWrapper';
 import { getModalState, setModalState } from '../../../state/modal';
-import { ModalNew } from './ModalNew';
+import { Modal } from './Modal';
 
 const ModalManager = () => {
   const dispatch = useAppDispatch();
@@ -92,9 +92,9 @@ const ModalManager = () => {
   }
 
   return (
-    <ModalNew {...modalProps} onClickCloseButton={() => resetModal()}>
+    <Modal {...modalProps} onClickCloseButton={() => resetModal()}>
       {modalContent}
-    </ModalNew>
+    </Modal>
   );
 };
 
