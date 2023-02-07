@@ -3,9 +3,10 @@
 import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
 import { useNavigate } from 'react-router-dom';
+import { setModalState } from 'renderer/state/modal';
 import electron from '../../electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
-import { useAppSelector } from '../../state/hooks';
+import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import {
   selectIsAvailableForPolling,
   selectSelectedNode,
@@ -175,7 +176,7 @@ const NodeScreen = () => {
   //     };
   //   },
   // });
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   if (!selectedNode) {
     // if there is no node selected, prompt user to create a new node
     return (
@@ -194,7 +195,15 @@ const NodeScreen = () => {
                 variant="icon-left"
                 iconId="add"
                 type="primary"
-                onClick={() => navigate('/modal/addNode')}
+                onClick={() => {
+                  dispatch(
+                    setModalState({
+                      isModalOpen: true,
+                      screen: { route: 'addNode', type: 'modal' },
+                      config: {},
+                    })
+                  );
+                }}
               />
             </div>
           </div>

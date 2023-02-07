@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 import { BrowserWindow, dialog } from 'electron';
 
-import { NodeId } from '../common/node';
+import { NodeId, Node } from '../common/node';
 import {
   getNodesDirPath,
   CheckStorageDetails,
@@ -12,14 +12,7 @@ import logger from './logger';
 import { getMainWindow } from './main';
 import { getNode, updateNode } from './state/nodes';
 
-export const updateNodeDataDir = async (nodeId: NodeId, newDataDir: string) => {
-  const node = getNode(nodeId);
-  if (!node) {
-    logger.error(
-      `Unable to get node data dir. No node found for node id ${nodeId}`
-    );
-    return;
-  }
+export const updateNodeDataDir = async (node: Node, newDataDir: string) => {
   node.runtime.dataDir = newDataDir;
   node.config.configValuesMap.dataDir = newDataDir;
   updateNode(node);

@@ -116,8 +116,8 @@ export const initialize = () => {
   });
   ipcMain.handle(
     'updateNodeDataDir',
-    (_event, nodeId: NodeId, newDataDir: string) => {
-      return updateNodeDataDir(nodeId, newDataDir);
+    (_event, node: Node, newDataDir: string) => {
+      return updateNodeDataDir(node, newDataDir);
     }
   );
   ipcMain.handle('openDialogForNodeDataDir', (_event, nodeId: NodeId) => {

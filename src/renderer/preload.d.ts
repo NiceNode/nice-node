@@ -57,8 +57,8 @@ declare global {
       startNode(nodeId: NodeId): void;
       getNodeStartCommand(nodeId: NodeId): string;
       stopNode(nodeId: NodeId): void;
-      updateNodeDataDir(nodeId: NodeId, newDataDir: string): void;
-      openDialogForNodeDataDir(nodeId: NodeId): void;
+      updateNodeDataDir(node: Node, newDataDir: string): void;
+      openDialogForNodeDataDir(nodeId: NodeId): string;
       openDialogForStorageLocation(): CheckStorageDetails;
       updateNodeUsedDiskSpace(nodeId: NodeId): void;
       deleteNodeStorage(nodeId: NodeId): boolean;

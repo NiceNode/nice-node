@@ -28,11 +28,16 @@ import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 export interface AddNodeStepperProps {
   modal?: boolean;
   onChange: (newValue: 'done' | 'cancel') => void;
+  modalOnChangeConfig?: (config: object) => void;
 }
 
 const TOTAL_STEPS = 3;
 
-const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
+const AddNodeStepper = ({
+  onChange,
+  modal = false,
+  modalOnChangeConfig,
+}: AddNodeStepperProps) => {
   const dispatch = useAppDispatch();
   const [sStep, setStep] = useState<number>(0);
   // const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<

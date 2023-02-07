@@ -131,25 +131,25 @@ const NodeSettingsWrapper = ({
         configTranslation &&
         configTranslation[configKey]?.uiControl.type === FilePathControlType
       ) {
-        const newNodeDataDir = await electron.openDialogForNodeDataDir(
+        const newDataDir = await electron.openDialogForNodeDataDir(
           selectedNode.id
         );
         console.log(
           'openDialogForNodeDataDir before, and res:',
           currentValue,
-          newNodeDataDir
+          newDataDir
         );
 
         const newRuntime = {
           ...selectedNode.runtime,
-          dataDir: newNodeDataDir,
+          dataDir: newDataDir,
         };
 
         const newConfig = {
           ...selectedNode.config,
           configValuesMap: {
             ...configValuesMap,
-            dataDir: newNodeDataDir,
+            dataDir: newDataDir,
           },
         };
 
@@ -160,7 +160,7 @@ const NodeSettingsWrapper = ({
         };
 
         setSelectedNode(newNode);
-        modalOnChangeConfig({ newNodeDataDir, selectedNode });
+        modalOnChangeConfig({ newDataDir, selectedNode });
       } else {
         const newConfig = {
           ...selectedNode.config,
@@ -174,7 +174,6 @@ const NodeSettingsWrapper = ({
           ...selectedNode,
           config: newConfig,
         };
-        console.log(JSON.stringify(newNode.config));
         setSelectedNode(newNode);
         modalOnChangeConfig({
           config: newConfig,
