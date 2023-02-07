@@ -7,6 +7,8 @@ import NodeSettingsWrapper from 'renderer/Presentational/NodeSettings/NodeSettin
 import RemoveNodeWrapper, {
   RemoveNodeAction,
 } from 'renderer/Presentational/RemoveNodeModal/RemoveNodeWrapper';
+import { useState } from 'react';
+import electron from 'renderer/electronGlobal';
 import { getModalState, setModalState } from '../../../state/modal';
 import { Modal } from './Modal';
 
@@ -14,10 +16,35 @@ const ModalManager = () => {
   const dispatch = useAppDispatch();
   const { isModalOpen, screen } = useSelector(getModalState);
   const { t } = useTranslation('genericComponents');
+  const [modalConfig, setModalConfig] = useState({});
 
   if (!isModalOpen) {
     return null;
   }
+
+  const modalOnChangeConfig = (configObject: object) => {
+    setModalConfig(configObject);
+  };
+
+  const modalOnSaveConfig = async () => {
+    // save route consts in a separate file
+    switch (screen.route) {
+      case 'preferences':
+        // eslint-disable-next-line no-case-declarations
+        const { theme, isOpenOnStartup } = modalConfig?.preferences;
+        if (theme) {
+          await electron.setThemeSetting(theme);
+        }
+        if (isOpenOnStartup) {
+          await electron.setIsOpenOnStartup(isOpenOnStartup);
+        }
+        break;
+      case 'addNode':
+        break;
+      default:
+    }
+    setModalConfig({});
+  };
 
   const resetModal = () => {
     dispatch(
@@ -52,7 +79,13 @@ const ModalManager = () => {
       break;
     case 'preferences':
       modalProps = { title: t('Preferences') };
-      modalContent = <PreferencesWrapper isOpen onClose={() => resetModal()} />;
+      modalContent = (
+        <PreferencesWrapper
+          isOpen
+          modalOnChangeConfig={modalOnChangeConfig}
+          onClose={() => resetModal()}
+        />
+      );
       break;
     case 'addValidator':
       modalContent = <>Add Validator</>;
@@ -92,7 +125,11 @@ const ModalManager = () => {
   }
 
   return (
-    <Modal {...modalProps} onClickCloseButton={() => resetModal()}>
+    <Modal
+      {...modalProps}
+      modalOnSaveConfig={modalOnSaveConfig}
+      onClickCloseButton={() => resetModal()}
+    >
       {modalContent}
     </Modal>
   );

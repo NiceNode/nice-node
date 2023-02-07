@@ -164,7 +164,6 @@ const NodeSettingsWrapper = ({ onClickClose }: NodeSettingsWrapperProps) => {
       isDisabled={sIsConfigDisabled}
       onChange={onNodeConfigChange}
       onClickRemoveNode={() => {
-        console.log('dispatch');
         dispatch(
           setModalState({
             isModalOpen: true,

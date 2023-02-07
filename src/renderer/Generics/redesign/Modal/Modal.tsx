@@ -13,6 +13,7 @@ import {
 type Props = {
   children: React.ReactElement[] | React.ReactElement;
   onClickCloseButton: () => void;
+  modalOnSaveConfig: () => void;
   title?: string;
   type?: string;
 };
@@ -20,6 +21,7 @@ type Props = {
 export const Modal = ({
   children,
   onClickCloseButton,
+  modalOnSaveConfig,
   title,
   type = '',
 }: Props) => {
@@ -73,7 +75,7 @@ export const Modal = ({
             type="primary"
             label="Save"
             onClick={() => {
-              // Save settings here
+              modalOnSaveConfig();
               onClickCloseButton();
             }}
           />
