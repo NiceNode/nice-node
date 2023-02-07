@@ -1,22 +1,21 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useAppDispatch } from 'renderer/state/hooks';
+import { setModalConfig } from 'renderer/state/modal';
 import electron from '../../electronGlobal';
 
 import Preferences, { Preference, ThemeSetting } from './Preferences';
 
 export interface PreferencesWrapperProps {
-  isOpen: boolean;
-  onClose: () => void;
   modalOnChangeConfig: (config: object) => void;
 }
 
 const PreferencesWrapper = ({
-  isOpen,
-  onClose,
   modalOnChangeConfig,
 }: PreferencesWrapperProps) => {
   const [sThemeSetting, setThemeSetting] = useState<ThemeSetting>();
   const [sIsOpenOnStartup, setIsOpenOnStartup] = useState<boolean>();
   const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const asyncData = async () => {
@@ -49,17 +48,13 @@ const PreferencesWrapper = ({
         const theme = value as ThemeSetting;
         setThemeSetting(theme);
         modalOnChangeConfig({
-          preferences: {
-            theme,
-          },
+          theme,
         });
       } else if (preference === 'isOpenOnStartup') {
         const isOpenOnStartup = value as boolean;
         setIsOpenOnStartup(isOpenOnStartup);
         modalOnChangeConfig({
-          preferences: {
-            isOpenOnStartup: value,
-          },
+          isOpenOnStartup: value,
         });
       }
     },
@@ -68,8 +63,6 @@ const PreferencesWrapper = ({
 
   return (
     <Preferences
-      isOpen={isOpen}
-      onClose={onClose}
       themeSetting={sThemeSetting}
       isOpenOnStartup={sIsOpenOnStartup}
       version={sNiceNodeVersion}

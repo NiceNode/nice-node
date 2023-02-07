@@ -18,12 +18,14 @@ export type SettingChangeHandler = (
   newValue: ConfigValue
 ) => void;
 export interface NodeSettingsWrapperProps {
-  onClickClose: () => void;
+  modalOnChangeConfig: (config: object) => void;
 }
 
 const HTTP_CORS_DOMAINS_KEY = 'httpCorsDomains';
 
-const NodeSettingsWrapper = ({ onClickClose }: NodeSettingsWrapperProps) => {
+const NodeSettingsWrapper = ({
+  modalOnChangeConfig,
+}: NodeSettingsWrapperProps) => {
   const [sIsConfigDisabled, setIsConfigDisabled] = useState<boolean>(true);
   const [sConfigTranslationMap, setConfigTranslationMap] =
     useState<ConfigTranslationMap>();
@@ -34,8 +36,9 @@ const NodeSettingsWrapper = ({ onClickClose }: NodeSettingsWrapperProps) => {
   const [sHttpCorsConfigTranslation, setHttpCorsConfigTranslation] =
     useState<ConfigTranslation>();
   const [sNodeStartCommand, setNodeStartCommand] = useState<string>();
+  const sSelectedNode = useAppSelector(selectSelectedNode);
+  const [selectedNode, setSelectedNode] = useState(sSelectedNode);
 
-  const selectedNode = useAppSelector(selectSelectedNode);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -128,13 +131,36 @@ const NodeSettingsWrapper = ({ onClickClose }: NodeSettingsWrapperProps) => {
         configTranslation &&
         configTranslation[configKey]?.uiControl.type === FilePathControlType
       ) {
-        const openDialogForNodeDataDir =
-          await electron.openDialogForNodeDataDir(selectedNode.id);
+        const newNodeDataDir = await electron.openDialogForNodeDataDir(
+          selectedNode.id
+        );
         console.log(
           'openDialogForNodeDataDir before, and res:',
           currentValue,
-          openDialogForNodeDataDir
+          newNodeDataDir
         );
+
+        const newRuntime = {
+          ...selectedNode.runtime,
+          dataDir: newNodeDataDir,
+        };
+
+        const newConfig = {
+          ...selectedNode.config,
+          configValuesMap: {
+            ...configValuesMap,
+            dataDir: newNodeDataDir,
+          },
+        };
+
+        const newNode = {
+          ...selectedNode,
+          config: newConfig,
+          runtime: newRuntime,
+        };
+
+        setSelectedNode(newNode);
+        modalOnChangeConfig({ newNodeDataDir, selectedNode });
       } else {
         const newConfig = {
           ...selectedNode.config,
@@ -144,8 +170,15 @@ const NodeSettingsWrapper = ({ onClickClose }: NodeSettingsWrapperProps) => {
           },
         };
         console.log('updating node with newConfig: ', newConfig);
-        await electron.updateNode(selectedNode.id, {
+        const newNode = {
+          ...selectedNode,
           config: newConfig,
+        };
+        console.log(JSON.stringify(newNode.config));
+        setSelectedNode(newNode);
+        modalOnChangeConfig({
+          config: newConfig,
+          selectedNode,
         });
       }
       // todo: show the user it was successful or not
@@ -156,7 +189,6 @@ const NodeSettingsWrapper = ({ onClickClose }: NodeSettingsWrapperProps) => {
 
   return (
     <NodeSettings
-      onClickClose={onClickClose}
       categoryConfigs={sCategoryConfigs}
       configValuesMap={selectedNode?.config.configValuesMap}
       httpCorsConfigTranslation={sHttpCorsConfigTranslation}
@@ -168,6 +200,7 @@ const NodeSettingsWrapper = ({ onClickClose }: NodeSettingsWrapperProps) => {
           setModalState({
             isModalOpen: true,
             screen: { route: 'removeNode', type: 'alert' },
+            config: {},
           })
         );
       }}

@@ -179,6 +179,7 @@ const Sidebar = ({
                     setModalState({
                       isModalOpen: true,
                       screen: { route: 'addNode', type: 'modal' },
+                      config: {},
                     })
                   );
                 } else if (item.iconId === 'preferences') {
@@ -186,6 +187,7 @@ const Sidebar = ({
                     setModalState({
                       isModalOpen: true,
                       screen: { route: 'preferences', type: 'modal' },
+                      config: {},
                     })
                   );
                 } else if (item.iconId === 'bell') {

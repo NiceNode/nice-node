@@ -6,10 +6,17 @@ export interface ModalScreen {
   type: 'alert' | 'modal' | undefined;
 }
 
+export interface ModalConfig {
+  preferences: object;
+  addNodes: object;
+  nodeSettings: object;
+}
+
 // Define a type for the slice state
 export interface ModalState {
   isModalOpen: boolean;
   screen: ModalScreen;
+  config: ModalConfig;
 }
 
 // Define the initial state using that type
@@ -18,6 +25,11 @@ export const initialState: ModalState = {
   screen: {
     route: undefined,
     type: undefined,
+  },
+  config: {
+    preferences: {},
+    addNodes: {},
+    nodeSettings: {},
   },
 };
 
@@ -29,19 +41,22 @@ export const modalSlice = createSlice({
   initialState,
   reducers: {
     setModalState: (state, action: PayloadAction<ModalState>) => {
-      state.isModalOpen = action.payload.isModalOpen;
-      state.screen = action.payload.screen;
+      const { isModalOpen, screen, config } = action.payload;
+      state.isModalOpen = isModalOpen;
+      state.screen = screen;
+      if (Object.keys(config).length === 0 && config.constructor === Object) {
+        state.config = initialState.config;
+      }
+    },
+    setModalConfig: (state, action: PayloadAction<ModalConfig>) => {
+      const configKey = Object.keys(action.payload)[0];
+      state.config[configKey as keyof ModalConfig] =
+        action.payload[configKey as keyof ModalConfig];
     },
   },
 });
 
-export const { setModalState } = modalSlice.actions;
-
-export const getIsModalOpen = (state: RootState): boolean | undefined =>
-  state.modal.isModalOpen;
-
-export const getModalScreen = (state: RootState): ModalScreen =>
-  state.modal.screen;
+export const { setModalState, setModalConfig } = modalSlice.actions;
 
 export const getModalState = (state: RootState): ModalState => state.modal;
 

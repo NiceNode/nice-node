@@ -33,6 +33,7 @@ import installDocker from './docker/install';
 import {
   openDialogForNodeDataDir,
   openDialogForStorageLocation,
+  updateNodeDataDir,
 } from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
 import {
@@ -113,6 +114,12 @@ export const initialize = () => {
   ipcMain.handle('stopNode', (_event, nodeId: NodeId) => {
     return stopNode(nodeId);
   });
+  ipcMain.handle(
+    'updateNodeDataDir',
+    (_event, nodeId: NodeId, newDataDir: string) => {
+      return updateNodeDataDir(nodeId, newDataDir);
+    }
+  );
   ipcMain.handle('openDialogForNodeDataDir', (_event, nodeId: NodeId) => {
     return openDialogForNodeDataDir(nodeId);
   });

@@ -23,15 +23,29 @@ const ModalManager = () => {
   }
 
   const modalOnChangeConfig = (configObject: object) => {
-    setModalConfig(configObject);
+    let updatedObject = {};
+    if (Object.keys(configObject).length > 1) {
+      updatedObject = {
+        ...modalConfig,
+        ...configObject,
+      };
+    } else {
+      const key = Object.keys(configObject)[0];
+      updatedObject = {
+        ...modalConfig,
+        [key]: configObject[key],
+      };
+    }
+    setModalConfig(updatedObject);
   };
 
   const modalOnSaveConfig = async () => {
+    // move this into a redux reducer?
     // save route consts in a separate file
     switch (screen.route) {
       case 'preferences':
         // eslint-disable-next-line no-case-declarations
-        const { theme, isOpenOnStartup } = modalConfig?.preferences;
+        const { theme, isOpenOnStartup } = modalConfig;
         if (theme) {
           await electron.setThemeSetting(theme);
         }
@@ -39,11 +53,19 @@ const ModalManager = () => {
           await electron.setIsOpenOnStartup(isOpenOnStartup);
         }
         break;
-      case 'addNode':
+      case 'nodeSettings':
+        const { config, selectedNode, newNodeDataDir } = modalConfig;
+        if (config) {
+          await electron.updateNode(selectedNode.id, {
+            config,
+          });
+        }
+        if (newNodeDataDir) {
+          await electron.updateNodeDataDir(selectedNode.id, newNodeDataDir);
+        }
         break;
       default:
     }
-    setModalConfig({});
   };
 
   const resetModal = () => {
@@ -51,6 +73,7 @@ const ModalManager = () => {
       setModalState({
         isModalOpen: false,
         screen: { route: undefined, type: undefined },
+        config: {},
       })
     );
   };
@@ -75,16 +98,14 @@ const ModalManager = () => {
       break;
     case 'nodeSettings':
       modalProps = { title: t('NodeSettings'), type: 'tabs' };
-      modalContent = <NodeSettingsWrapper onClickClose={() => resetModal()} />;
+      modalContent = (
+        <NodeSettingsWrapper modalOnChangeConfig={modalOnChangeConfig} />
+      );
       break;
     case 'preferences':
       modalProps = { title: t('Preferences') };
       modalContent = (
-        <PreferencesWrapper
-          isOpen
-          modalOnChangeConfig={modalOnChangeConfig}
-          onClose={() => resetModal()}
-        />
+        <PreferencesWrapper modalOnChangeConfig={modalOnChangeConfig} />
       );
       break;
     case 'addValidator':
@@ -111,6 +132,7 @@ const ModalManager = () => {
                 setModalState({
                   isModalOpen: true,
                   screen: { route: 'nodeSettings', type: 'modal' },
+                  config: {},
                 })
               );
             }

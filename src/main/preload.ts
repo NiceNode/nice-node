@@ -77,6 +77,8 @@ contextBridge.exposeInMainWorld('electron', {
   stopNode: (nodeId: NodeId) => {
     ipcRenderer.invoke('stopNode', nodeId);
   },
+  updateNodeDataDir: (nodeId: NodeId, newDataDir: string) =>
+    ipcRenderer.invoke('updateNodeDataDir', nodeId, newDataDir),
   openDialogForNodeDataDir: (nodeId: NodeId) =>
     ipcRenderer.invoke('openDialogForNodeDataDir', nodeId),
   openDialogForStorageLocation: () =>
