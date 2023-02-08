@@ -7,11 +7,10 @@ import RemoveNode from './RemoveNode';
 export type RemoveNodeAction = 'cancel' | 'remove';
 
 export interface RemoveNodeWrapperProps {
-  isOpen: boolean;
   onClose: (action: RemoveNodeAction) => void;
 }
 
-const RemoveNodeWrapper = ({ isOpen, onClose }: RemoveNodeWrapperProps) => {
+const RemoveNodeWrapper = ({ onClose }: RemoveNodeWrapperProps) => {
   const selectedNode = useAppSelector(selectSelectedNode);
   const [sNodeStorageUsedGBs, setNodeStorageUsedGBs] = useState<number>();
   const [sError, setError] = useState<string>('');
@@ -55,7 +54,6 @@ const RemoveNodeWrapper = ({ isOpen, onClose }: RemoveNodeWrapperProps) => {
 
   return (
     <RemoveNode
-      isOpen={isOpen}
       nodeStorageUsedGBs={sNodeStorageUsedGBs}
       onClickClose={() => onClose('cancel')}
       onClickRemoveNode={onClickRemoveNode}

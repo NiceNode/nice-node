@@ -18,6 +18,7 @@ import {
   modalStepperContainer,
   titleFont,
 } from './modal.css';
+import { modalRoutes } from './modalRoutes';
 
 type Props = {
   screen: ModalScreen;
@@ -31,11 +32,15 @@ export const Modal = ({
   screen,
 }: Props) => {
   const { t } = useTranslation('genericComponents');
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
+  const [step, setStep] = useState(0);
   const dispatch = useAppDispatch();
 
-  const disableButton = useCallback(() => {
-    setIsButtonDisabled(true);
+  // keep track of steps here
+  // but keep the modalConfig info, in modalManager.
+
+  const disableSaveButton = useCallback(() => {
+    setIsSaveButtonDisabled(true);
   }, []);
 
   const resetModal = useCallback(() => {
@@ -46,7 +51,7 @@ export const Modal = ({
         config: {},
       })
     );
-    setIsButtonDisabled(false);
+    setIsSaveButtonDisabled(false);
   }, [dispatch]);
 
   const escFunction = useCallback(
@@ -70,56 +75,50 @@ export const Modal = ({
   let modalTitle = '';
   let modalType = '';
   let buttonSaveLabel = 'Save';
+  let noOp = () => {};
   // Render the appropriate screen based on the current `screen` value
   switch (screen.route) {
     // Modals
-    case 'addNode':
+    case modalRoutes.addNode:
       modalContent = (
-        <AddNodeStepper
-          modal
-          modalOnChangeConfig={modalOnChangeConfig}
-          onChange={(newValue: 'done' | 'cancel') => {
-            if (newValue === 'done' || newValue === 'cancel') {
-              resetModal();
-            }
-          }}
-        />
+        <AddNodeStepper modal modalOnChangeConfig={modalOnChangeConfig} />
       );
+      buttonSaveLabel = step === 0 ? 'Next' : 'Done';
+      noOp = () => {};
       break;
-    case 'nodeSettings':
+    case modalRoutes.nodeSettings:
       modalTitle = t('NodeSettings');
       modalType = 'tabs';
       modalContent = (
         <NodeSettingsWrapper
           modalOnChangeConfig={modalOnChangeConfig}
-          disableButton={disableButton}
+          disableSaveButton={disableSaveButton}
         />
       );
       buttonSaveLabel = 'Save changes';
       break;
-    case 'preferences':
+    case modalRoutes.preferences:
       modalTitle = t('Preferences');
       modalContent = (
         <PreferencesWrapper modalOnChangeConfig={modalOnChangeConfig} />
       );
       break;
-    case 'addValidator':
+    case modalRoutes.addValidator:
       modalContent = <>Add Validator</>;
       break;
-    case 'clientVersions':
+    case modalRoutes.clientVersions:
       modalContent = <>Client Versions</>;
       break;
 
     // Alerts
-    case 'stopNode':
+    case modalRoutes.stopNode:
       modalContent = <>Stop Node</>;
       buttonSaveLabel = 'Stop node';
       break;
-    case 'removeNode':
+    case modalRoutes.removeNode:
       modalTitle = t('RemoveNode');
       modalContent = (
         <RemoveNodeWrapper
-          isOpen
           onClose={(action: RemoveNodeAction) => {
             if (action === 'remove') {
               resetModal();
@@ -137,7 +136,7 @@ export const Modal = ({
       );
       buttonSaveLabel = 'Remove node';
       break;
-    case 'updateUnvailable':
+    case modalRoutes.updateUnvailable:
       modalContent = <>Update unavailable</>;
       break;
     default:
@@ -171,7 +170,7 @@ export const Modal = ({
           <Button
             variant="text"
             type="primary"
-            disabled={isButtonDisabled}
+            disabled={isSaveButtonDisabled}
             label={buttonSaveLabel}
             onClick={() => {
               modalOnSaveConfig();

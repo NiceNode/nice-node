@@ -2,6 +2,7 @@
 // Just make sure to always render each child so that children component state isn't cleard
 import { useCallback, useEffect, useState } from 'react';
 
+import { setModalConfig, setModalState } from 'renderer/state/modal';
 import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
 import { componentContainer, container } from './addNodeStepper.css';
 import Stepper from '../../Generics/redesign/Stepper/Stepper';
@@ -25,19 +26,17 @@ import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
 import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 
-export interface AddNodeStepperProps {
+export interface AddNodeStepperModalProps {
   modal?: boolean;
-  onChange: (newValue: 'done' | 'cancel') => void;
-  modalOnChangeConfig?: (config: object) => void;
+  modalOnChangeConfig: (config: object) => void;
 }
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 2;
 
-const AddNodeStepper = ({
-  onChange,
+const AddNodeStepperModal = ({
   modal = false,
   modalOnChangeConfig,
-}: AddNodeStepperProps) => {
+}: AddNodeStepperModalProps) => {
   const dispatch = useAppDispatch();
   const [sStep, setStep] = useState<number>(0);
   const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
@@ -49,6 +48,16 @@ const AddNodeStepper = ({
 
   const [sSystemData, setSystemData] = useState<SystemData>();
 
+  const resetModal = () => {
+    dispatch(
+      setModalState({
+        isModalOpen: false,
+        screen: { route: undefined, type: undefined },
+        config: {},
+      })
+    );
+  };
+
   const getData = async () => {
     setSystemData(await electron.getSystemInfo());
   };
@@ -58,7 +67,7 @@ const AddNodeStepper = ({
     getData();
   }, []);
 
-  // Load ALL node spec's when AddNodeStepper is created
+  // Load ALL node spec's when AddNodeStepperModal is created
   //  This can later be optimized to only retrieve NodeSpecs as needed
   useEffect(() => {
     const fetchNodeLibrary = async () => {
@@ -146,6 +155,12 @@ const AddNodeStepper = ({
       return;
     }
 
+    modalOnChangeConfig({
+      ecNodeSpec,
+      ccNodeSpec,
+      storageLocation: sNodeStorageLocation,
+    });
+
     const { ecNode, ccNode } = await electron.addEthereumNode(
       ecNodeSpec,
       ccNodeSpec,
@@ -161,32 +176,9 @@ const AddNodeStepper = ({
     const startCcResult = await electron.startNode(ccNode.id);
     console.log('startCcResult result: ', startCcResult);
 
-    // close?
-
-    onChange('done');
+    // close modal
+    resetModal();
     setStep(0);
-  };
-
-  const onStep = (newValue: string) => {
-    console.log('onStep: ', newValue);
-    if (newValue === 'next') {
-      // = sign because sStep index starts at 0
-      if (sStep + 1 >= TOTAL_STEPS) {
-        // done
-        onChange('done');
-        // if DockerInstallDone, add nodes, close modal (loading?)
-        addNodes();
-      } else {
-        setStep(sStep + 1);
-      }
-    } else if (newValue === 'previous') {
-      if (sStep - 1 < 0) {
-        // cancelled
-        onChange('cancel');
-      } else {
-        setStep(sStep - 1);
-      }
-    }
   };
 
   const getStepScreen = () => {
@@ -194,26 +186,10 @@ const AddNodeStepper = ({
     let stepImage = step1;
     switch (sStep) {
       case 0:
-        stepScreen = (
-          <AddEthereumNode
-            onChange={onChangeAddEthereumNode}
-            // beaconOptions={sBeaconNodeLibrary}
-            // executionOptions={sExecutionClientLibrary}
-          />
-        );
+        stepScreen = <AddEthereumNode onChange={onChangeAddEthereumNode} />;
         stepImage = step1;
         break;
       case 1:
-        stepScreen = (
-          <NodeRequirements
-            nodeRequirements={sEthereumNodeRequirements}
-            systemData={sSystemData}
-            nodeStorageLocation={sNodeStorageLocation}
-          />
-        );
-        stepImage = step2;
-        break;
-      case 2:
         stepScreen = <DockerInstallation onChange={onChangeDockerInstall} />;
         stepImage = step3;
         break;
@@ -232,9 +208,8 @@ const AddNodeStepper = ({
   return (
     <div className={container}>
       <div className={componentContainer}>{getStepScreen()}</div>
-      {!modal && <Stepper step={sStep} onChange={onStep} />}
     </div>
   );
 };
 
-export default AddNodeStepper;
+export default AddNodeStepperModal;
