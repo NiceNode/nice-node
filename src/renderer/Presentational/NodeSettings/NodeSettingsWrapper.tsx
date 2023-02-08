@@ -19,12 +19,14 @@ export type SettingChangeHandler = (
 ) => void;
 export interface NodeSettingsWrapperProps {
   modalOnChangeConfig: (config: object) => void;
+  disableButton: () => void;
 }
 
 const HTTP_CORS_DOMAINS_KEY = 'httpCorsDomains';
 
 const NodeSettingsWrapper = ({
   modalOnChangeConfig,
+  disableButton,
 }: NodeSettingsWrapperProps) => {
   const [sIsConfigDisabled, setIsConfigDisabled] = useState<boolean>(true);
   const [sConfigTranslationMap, setConfigTranslationMap] =
@@ -52,10 +54,13 @@ const NodeSettingsWrapper = ({
       isWalletSettingsEnabled =
         selectedNode.spec.category === 'L1/ExecutionClient';
     }
+    if (isDisabled) {
+      disableButton();
+    }
     setIsConfigDisabled(isDisabled);
     setConfigTranslationMap(configTranslationMap);
     setIsWalletSettingsEnabled(isWalletSettingsEnabled);
-  }, [selectedNode]);
+  }, [disableButton, selectedNode]);
   // configTranslationMap = selectedNode.spec.configTranslation;
 
   useEffect(() => {

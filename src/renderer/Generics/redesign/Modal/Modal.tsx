@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ModalScreen, setModalState } from 'renderer/state/modal';
 import { useAppDispatch } from 'renderer/state/hooks';
 import AddNodeStepper from 'renderer/Presentational/AddNodeStepper/AddNodeStepper';
@@ -31,7 +31,12 @@ export const Modal = ({
   screen,
 }: Props) => {
   const { t } = useTranslation('genericComponents');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const dispatch = useAppDispatch();
+
+  const disableButton = useCallback(() => {
+    setIsButtonDisabled(true);
+  }, []);
 
   const resetModal = useCallback(() => {
     dispatch(
@@ -41,6 +46,7 @@ export const Modal = ({
         config: {},
       })
     );
+    setIsButtonDisabled(false);
   }, [dispatch]);
 
   const escFunction = useCallback(
@@ -63,6 +69,7 @@ export const Modal = ({
   let modalContent = <></>;
   let modalTitle = '';
   let modalType = '';
+  let buttonSaveLabel = 'Save';
   // Render the appropriate screen based on the current `screen` value
   switch (screen.route) {
     // Modals
@@ -83,8 +90,12 @@ export const Modal = ({
       modalTitle = t('NodeSettings');
       modalType = 'tabs';
       modalContent = (
-        <NodeSettingsWrapper modalOnChangeConfig={modalOnChangeConfig} />
+        <NodeSettingsWrapper
+          modalOnChangeConfig={modalOnChangeConfig}
+          disableButton={disableButton}
+        />
       );
+      buttonSaveLabel = 'Save changes';
       break;
     case 'preferences':
       modalTitle = t('Preferences');
@@ -102,6 +113,7 @@ export const Modal = ({
     // Alerts
     case 'stopNode':
       modalContent = <>Stop Node</>;
+      buttonSaveLabel = 'Stop node';
       break;
     case 'removeNode':
       modalTitle = t('RemoveNode');
@@ -123,6 +135,7 @@ export const Modal = ({
           }}
         />
       );
+      buttonSaveLabel = 'Remove node';
       break;
     case 'updateUnvailable':
       modalContent = <>Update unavailable</>;
@@ -158,7 +171,8 @@ export const Modal = ({
           <Button
             variant="text"
             type="primary"
-            label="Save"
+            disabled={isButtonDisabled}
+            label={buttonSaveLabel}
             onClick={() => {
               modalOnSaveConfig();
               resetModal();
