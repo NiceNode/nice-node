@@ -28,7 +28,9 @@ const ModalManager = () => {
         [key]: config[key],
       };
     }
+    console.log('updatedObject', updatedObject);
     setModalConfig(updatedObject);
+    console.log('onChange', modalConfig);
   };
 
   const modalOnSaveConfig = async () => {
@@ -37,10 +39,11 @@ const ModalManager = () => {
     switch (screen.route) {
       case modalRoutes.addNode:
         // eslint-disable-next-line no-case-declarations
-        const {} = modalConfig;
+        console.log('modalConfig', modalConfig);
         break;
       case modalRoutes.preferences:
         // eslint-disable-next-line no-case-declarations
+        console.log('modalConfig', modalConfig);
         const { theme, isOpenOnStartup } = modalConfig;
         if (theme) {
           await electron.setThemeSetting(theme);
@@ -66,6 +69,9 @@ const ModalManager = () => {
 
   return (
     <Modal
+      modalOnClose={() => {
+        setModalConfig({});
+      }}
       modalOnChangeConfig={modalOnChangeConfig}
       modalOnSaveConfig={modalOnSaveConfig}
       screen={screen}

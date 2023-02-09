@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { setModalConfig, setModalState } from 'renderer/state/modal';
+import { SelectOption } from 'renderer/Generics/redesign/SpecialSelect/SpecialSelect';
 import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
 import { componentContainer, container } from './addNodeStepper.css';
 import Stepper from '../../Generics/redesign/Stepper/Stepper';
@@ -29,6 +30,7 @@ import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 export interface AddNodeStepperModalProps {
   modal?: boolean;
   modalOnChangeConfig: (config: object) => void;
+  modalOnSaveConfig: () => void;
 }
 
 const TOTAL_STEPS = 2;
@@ -36,17 +38,42 @@ const TOTAL_STEPS = 2;
 const AddNodeStepperModal = ({
   modal = false,
   modalOnChangeConfig,
+  modalOnSaveConfig,
 }: AddNodeStepperModalProps) => {
   const dispatch = useAppDispatch();
   const [sStep, setStep] = useState<number>(0);
   const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
   const [sEthereumNodeConfig, setEthereumNodeConfig] =
     useState<AddEthereumNodeValues>();
-  const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
-    useState<SystemRequirements>();
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
 
-  const [sSystemData, setSystemData] = useState<SystemData>();
+  useEffect(() => {
+    console.log('initialize add node stepper modal');
+  }, []);
+
+  const setConsensusClient = (
+    clClient: SelectOption,
+    ethereumNodeConfig: AddEthereumNodeValues
+  ) => {
+    const config = { ...ethereumNodeConfig, consensusClient: clClient };
+    modalOnChangeConfig({ consensusClient: clClient.value });
+    setEthereumNodeConfig(config);
+  };
+
+  const setExecutionClient = (
+    elClient: SelectOption,
+    ethereumNodeConfig: AddEthereumNodeValues
+  ) => {
+    console.log('set execution client');
+    const config = { ...ethereumNodeConfig, executionClient: elClient };
+    modalOnChangeConfig({ executionClient: elClient.value });
+    setEthereumNodeConfig(config);
+  };
+
+  const setStorageLocation = (storageLocation: string) => {
+    modalOnChangeConfig({ storageLocation });
+    setNodeStorageLocation(storageLocation);
+  };
 
   const resetModal = () => {
     dispatch(
@@ -57,15 +84,6 @@ const AddNodeStepperModal = ({
       })
     );
   };
-
-  const getData = async () => {
-    setSystemData(await electron.getSystemInfo());
-  };
-
-  useEffect(() => {
-    // on load, refresh the static data
-    getData();
-  }, []);
 
   // Load ALL node spec's when AddNodeStepperModal is created
   //  This can later be optimized to only retrieve NodeSpecs as needed
@@ -89,104 +107,64 @@ const AddNodeStepperModal = ({
     console.log('onChangeDockerInstall newValue ', newValue);
   }, []);
 
-  const onChangeAddEthereumNode = useCallback(
-    (newValue: AddEthereumNodeValues) => {
-      console.log('onChangeAddEthereumNode newValue ', newValue);
-      setEthereumNodeConfig(newValue);
-      let ecReqs;
-      let ccReqs;
+  // const onChangeAddEthereumNode = (newValue: AddEthereumNodeValues) => {
+  //   console.log('onChangeAddEthereumNode newValue ', newValue);
+  //   setEthereumNodeConfig(newValue);
+  //   // save storage location (and other settings)
+  //   setNodeStorageLocation(newValue.storageLocation);
 
-      if (newValue?.executionClient) {
-        const ecValue = newValue?.executionClient;
-        if (sNodeLibrary) {
-          ecReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
-        }
-      }
-      if (newValue?.consensusClient) {
-        const ccValue = newValue?.consensusClient;
-        if (sNodeLibrary) {
-          ccReqs = sNodeLibrary?.[`${ccValue}-beacon`]?.systemRequirements;
-        }
-      }
-      try {
-        if (ecReqs && ccReqs) {
-          const mergedReqs = mergeSystemRequirements([ecReqs, ccReqs]);
-          setEthereumNodeRequirements(mergedReqs);
-        } else {
-          throw new Error('ec or ec node requirements undefined');
-        }
-      } catch (e) {
-        console.error(e);
-      }
+  //   if (
+  //     (newValue.executionClient === '' &&
+  //       newValue.consensusClient === '' &&
+  //       newValue.storageLocation === undefined) ||
+  //     sNodeLibrary === undefined
+  //   ) {
+  //     return;
+  //   }
 
-      // save storage location (and other settings)
-      setNodeStorageLocation(newValue.storageLocation);
-    },
-    [sNodeLibrary]
-  );
+  //   let ecNodeSpec;
+  //   let ccNodeSpec;
+  //   if (newValue?.executionClient) {
+  //     const ecValue = newValue?.executionClient;
+  //     if (sNodeLibrary) {
+  //       ecNodeSpec = sNodeLibrary?.[ecValue];
+  //     }
+  //   }
+  //   if (newValue?.consensusClient) {
+  //     const ccValue = newValue?.consensusClient;
+  //     if (sNodeLibrary) {
+  //       ccNodeSpec = sNodeLibrary?.[`${ccValue}-beacon`];
+  //     }
+  //   }
+  //   console.log(
+  //     'adding nodes with storage location set to: ',
+  //     sNodeStorageLocation
+  //   );
+  //   if (!ecNodeSpec || !ccNodeSpec) {
+  //     throw new Error('ecNodeSpec or ccNodeSpec is undefined');
+  //     return;
+  //   }
 
-  // useState when eth node changes, get node spec from value,
-  //   and call func below
-  // func: takes a NodeSpec & NodeSettings and returns NodeRequirements
-
-  // "mergeNodeSpecs?"
-
-  const addNodes = async () => {
-    let ecNodeSpec;
-    let ccNodeSpec;
-    if (sEthereumNodeConfig?.executionClient) {
-      const ecValue = sEthereumNodeConfig?.executionClient;
-      if (sNodeLibrary) {
-        ecNodeSpec = sNodeLibrary?.[ecValue];
-      }
-    }
-    if (sEthereumNodeConfig?.consensusClient) {
-      const ccValue = sEthereumNodeConfig?.consensusClient;
-      if (sNodeLibrary) {
-        ccNodeSpec = sNodeLibrary?.[`${ccValue}-beacon`];
-      }
-    }
-    console.log(
-      'adding nodes with storage location set to: ',
-      sNodeStorageLocation
-    );
-    if (!ecNodeSpec || !ccNodeSpec) {
-      throw new Error('ecNodeSpec or ccNodeSpec is undefined');
-      return;
-    }
-
-    modalOnChangeConfig({
-      ecNodeSpec,
-      ccNodeSpec,
-      storageLocation: sNodeStorageLocation,
-    });
-
-    const { ecNode, ccNode } = await electron.addEthereumNode(
-      ecNodeSpec,
-      ccNodeSpec,
-      { storageLocation: sNodeStorageLocation }
-    );
-    // const ecNode = await electron.addNode(ecNodeSpec, sNodeStorageLocation);
-    console.log('addNode returned node: ', ecNode);
-    // const ccNode = await electron.addNode(ccNodeSpec, sNodeStorageLocation);
-    console.log('addNode returned node: ', ccNode);
-    dispatch(updateSelectedNodeId(ecNode.id));
-    const startEcResult = await electron.startNode(ecNode.id);
-    console.log('startEcResult result: ', startEcResult);
-    const startCcResult = await electron.startNode(ccNode.id);
-    console.log('startCcResult result: ', startCcResult);
-
-    // close modal
-    resetModal();
-    setStep(0);
-  };
+  //   modalOnChangeConfig({
+  //     ecNodeSpec,
+  //     ccNodeSpec,
+  //     storageLocation: sNodeStorageLocation,
+  //   });
+  // };
 
   const getStepScreen = () => {
     let stepScreen = null;
     let stepImage = step1;
     switch (sStep) {
       case 0:
-        stepScreen = <AddEthereumNode onChange={onChangeAddEthereumNode} />;
+        stepScreen = (
+          <AddEthereumNode
+            ethereumNodeConfig={sEthereumNodeConfig}
+            setConsensusClient={setConsensusClient}
+            setExecutionClient={setExecutionClient}
+            setStorageLocation={setStorageLocation}
+          />
+        );
         stepImage = step1;
         break;
       case 1:
@@ -208,6 +186,7 @@ const AddNodeStepperModal = ({
   return (
     <div className={container}>
       <div className={componentContainer}>{getStepScreen()}</div>
+      <button type="button" label="test" onClick={modalOnSaveConfig} />
     </div>
   );
 };

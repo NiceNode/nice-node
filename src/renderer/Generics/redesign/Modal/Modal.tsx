@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ModalScreen, setModalState } from 'renderer/state/modal';
 import { useAppDispatch } from 'renderer/state/hooks';
-import AddNodeStepper from 'renderer/Presentational/AddNodeStepper/AddNodeStepper';
+import AddNodeStepperModal from 'renderer/Presentational/AddNodeStepper/AddNodeStepperModal';
 import PreferencesWrapper from 'renderer/Presentational/Preferences/PreferencesWrapper';
 import { useTranslation } from 'react-i18next';
 import NodeSettingsWrapper from 'renderer/Presentational/NodeSettings/NodeSettingsWrapper';
@@ -24,11 +24,13 @@ type Props = {
   screen: ModalScreen;
   modalOnSaveConfig: () => void;
   modalOnChangeConfig: (config: object) => void;
+  modalOnClose: () => void;
 };
 
 export const Modal = ({
   modalOnSaveConfig,
   modalOnChangeConfig,
+  modalOnClose,
   screen,
 }: Props) => {
   const { t } = useTranslation('genericComponents');
@@ -51,8 +53,9 @@ export const Modal = ({
         config: {},
       })
     );
+    modalOnClose();
     setIsSaveButtonDisabled(false);
-  }, [dispatch]);
+  }, [dispatch, modalOnClose]);
 
   const escFunction = useCallback(
     (event: { key: string }) => {
@@ -81,7 +84,11 @@ export const Modal = ({
     // Modals
     case modalRoutes.addNode:
       modalContent = (
-        <AddNodeStepper modal modalOnChangeConfig={modalOnChangeConfig} />
+        <AddNodeStepperModal
+          modal
+          modalOnSaveConfig={modalOnSaveConfig}
+          modalOnChangeConfig={modalOnChangeConfig}
+        />
       );
       buttonSaveLabel = step === 0 ? 'Next' : 'Done';
       noOp = () => {};
