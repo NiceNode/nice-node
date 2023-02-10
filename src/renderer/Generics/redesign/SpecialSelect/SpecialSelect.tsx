@@ -15,17 +15,6 @@ const Option = (props: OptionProps) => {
   );
 };
 
-const SingleValue = ({ children, ...props }: ValueContainerProps) => {
-  const selectedOptionValue = props.getValue();
-  const selectCardProps = selectedOptionValue[0] as SelectCardProps;
-
-  return (
-    <div {...props.innerProps}>
-      <SelectCard {...selectCardProps} />
-    </div>
-  );
-};
-
 export type SelectOption = {
   value: string;
   label: string;
@@ -35,6 +24,7 @@ export interface SpecialSelectProps {
   options?: SelectOption[];
   onChange?: (newValue: SelectOption | undefined) => void;
   selectedOption?: SelectOption;
+  isSelected: boolean;
 }
 
 /**
@@ -44,15 +34,29 @@ const SpecialSelect = ({
   options,
   onChange,
   selectedOption,
+  isSelected,
 }: SpecialSelectProps) => {
   const [sSelectedOption, setSelectedOption] =
     useState<SelectOption>(selectedOption);
+  const [isSelectSelected, setIsSelectSelected] = useState(isSelected);
+
+  const SingleValue = ({ children, ...props }: ValueContainerProps) => {
+    const selectedOptionValue = props.getValue();
+    const selectCardProps = selectedOptionValue[0] as SelectCardProps;
+
+    return (
+      <div {...props.innerProps}>
+        <SelectCard isSelected={isSelectSelected} {...selectCardProps} />
+      </div>
+    );
+  };
 
   const onSelectChange = (newValue: unknown) => {
     const newlySelectedOption = newValue as SelectOption;
     console.log('onSelectChange: ', newlySelectedOption);
     if (onChange) onChange(newlySelectedOption);
     setSelectedOption(newlySelectedOption);
+    setIsSelectSelected(true);
   };
 
   return (

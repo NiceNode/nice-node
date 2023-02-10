@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { NodeLibrary } from 'main/state/nodeLibrary';
 import {
   container,
   descriptionFont,
@@ -105,7 +106,6 @@ export interface AddEthereumNodeProps {
   /**
    * Listen to node config changes
    */
-  onChange: (newValue: AddEthereumNodeValues) => void;
   ethereumNodeConfig: AddEthereumNodeValues;
   setConsensusClient: (
     elClient: SelectOption,
@@ -115,14 +115,16 @@ export interface AddEthereumNodeProps {
     clClient: SelectOption,
     object: AddEthereumNodeValues
   ) => void;
-  setStorageLocation: (storageLocation: string) => void;
+  modalOnChangeConfig: (config: object) => void;
+  isSelected: boolean;
 }
 
 const AddEthereumNode = ({
   ethereumNodeConfig,
   setConsensusClient,
   setExecutionClient,
-  setStorageLocation,
+  modalOnChangeConfig,
+  isSelected,
 }: /**
  * Todo: Pass options from the node spec files
  */
@@ -145,13 +147,16 @@ AddEthereumNodeProps) => {
   ] = useState<number>();
 
   useEffect(() => {
-    console.log('initialize add ethereum node');
     const fetchData = async () => {
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
+      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
       console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
       setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
-      setStorageLocation(defaultNodesStorageDetails.folderPath);
+      modalOnChangeConfig({
+        storageLocation: defaultNodesStorageDetails.folderPath,
+        nodeLibrary,
+      });
       setNodeStorageLocationFreeStorageGBs(
         defaultNodesStorageDetails.freeStorageGBs
       );
@@ -179,6 +184,7 @@ AddEthereumNodeProps) => {
       setExecutionClient,
     ]
   );
+
   const onChangeCc = useCallback(
     (newCc?: SelectOption) => {
       console.log('new selected consensus client: ', newCc);
@@ -212,12 +218,14 @@ AddEthereumNodeProps) => {
       />
       <p className={sectionFont}>Execution client</p>
       <SpecialSelect
+        isSelected={isSelected}
         selectedOption={sSelectedExecutionClient}
         onChange={onChangeEc}
         options={ecOptions}
       />
       <p className={sectionFont}>Consensus client</p>
       <SpecialSelect
+        isSelected={isSelected}
         selectedOption={sSelectedConsensusClient}
         onChange={onChangeCc}
         options={ccOptions}
@@ -270,7 +278,9 @@ AddEthereumNodeProps) => {
           console.log('storageLocationDetails', storageLocationDetails);
           if (storageLocationDetails) {
             setNodeStorageLocation(storageLocationDetails.folderPath);
-            setStorageLocation(storageLocationDetails.folderPath);
+            modalOnChangeConfig({
+              storageLocation: storageLocationDetails.folderPath,
+            });
             setNodeStorageLocationFreeStorageGBs(
               storageLocationDetails.freeStorageGBs
             );

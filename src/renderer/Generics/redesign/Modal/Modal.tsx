@@ -36,6 +36,7 @@ export const Modal = ({
   const { t } = useTranslation('genericComponents');
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
   const [step, setStep] = useState(0);
+  const [isSelected, setIsSelected] = useState(false);
   const dispatch = useAppDispatch();
 
   // keep track of steps here
@@ -78,20 +79,22 @@ export const Modal = ({
   let modalTitle = '';
   let modalType = '';
   let buttonSaveLabel = 'Save';
-  let noOp = () => {};
+  let backButtonEnabled = true;
+  const noOp = () => {};
   // Render the appropriate screen based on the current `screen` value
   switch (screen.route) {
     // Modals
     case modalRoutes.addNode:
       modalContent = (
         <AddNodeStepperModal
+          step={step}
+          isSelected={isSelected}
           modal
-          modalOnSaveConfig={modalOnSaveConfig}
           modalOnChangeConfig={modalOnChangeConfig}
         />
       );
       buttonSaveLabel = step === 0 ? 'Next' : 'Done';
-      noOp = () => {};
+      backButtonEnabled = step === 0;
       break;
     case modalRoutes.nodeSettings:
       modalTitle = t('NodeSettings');
@@ -168,20 +171,37 @@ export const Modal = ({
           {modalContent}
         </div>
         <div className={modalStepperContainer}>
-          <Button
-            variant="text"
-            type="secondary"
-            label="Cancel"
-            onClick={resetModal}
-          />
+          {backButtonEnabled && (
+            <Button
+              variant="text"
+              type="secondary"
+              label="Cancel"
+              onClick={() => {
+                if (screen.route === 'addNode') {
+                  if (step === 0) {
+                    resetModal();
+                  } else {
+                    setStep(0);
+                    setIsSelected(true);
+                  }
+                } else {
+                  resetModal();
+                }
+              }}
+            />
+          )}
           <Button
             variant="text"
             type="primary"
             disabled={isSaveButtonDisabled}
             label={buttonSaveLabel}
             onClick={() => {
-              modalOnSaveConfig();
-              resetModal();
+              if (step === 0) {
+                setStep(1);
+              } else {
+                modalOnSaveConfig();
+                resetModal();
+              }
             }}
           />
         </div>
