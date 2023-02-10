@@ -79,9 +79,9 @@ export const Modal = ({
   let modalTitle = '';
   let modalType = '';
   let buttonSaveLabel = 'Save';
-  let backButtonEnabled = true;
+  let buttonCancelLabel = 'Cancel';
+  const backButtonEnabled = true;
   let buttonType: ButtonProps['type'] = 'primary';
-  const noOp = () => {};
   // Render the appropriate screen based on the current `screen` value
   switch (screen.route) {
     // Modals
@@ -98,7 +98,8 @@ export const Modal = ({
         />
       );
       buttonSaveLabel = step === 0 ? 'Next' : 'Done';
-      backButtonEnabled = step === 0;
+      buttonCancelLabel = step === 0 ? 'Cancel' : 'Back';
+      // backButtonEnabled = step === 0;
       break;
     case modalRoutes.nodeSettings:
       modalTitle = t('NodeSettings');
@@ -137,7 +138,7 @@ export const Modal = ({
       buttonSaveLabel = 'Remove node';
       buttonType = 'danger';
       break;
-    case modalRoutes.updateUnvailable:
+    case modalRoutes.updateUnavailable:
       modalContent = <>Update unavailable</>;
       break;
     default:
@@ -173,7 +174,7 @@ export const Modal = ({
             <Button
               variant="text"
               type="secondary"
-              label="Cancel"
+              label={buttonCancelLabel}
               onClick={() => {
                 if (screen.route === 'addNode') {
                   if (step === 0) {

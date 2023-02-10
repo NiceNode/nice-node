@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 // Options replaceable component docs:
 // https://react-select.com/components#Option
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Select, { OptionProps, ValueContainerProps } from 'react-select';
 import SelectCard, { SelectCardProps } from '../SelectCard/SelectCard';
 import { vars } from '../theme.css';
@@ -10,6 +10,17 @@ const Option = (props: OptionProps) => {
   const selectCardProps = props.data as SelectCardProps;
   return (
     <div ref={props.innerRef} {...props.innerProps}>
+      <SelectCard {...selectCardProps} />
+    </div>
+  );
+};
+
+const SingleValue = ({ children, ...props }: ValueContainerProps) => {
+  const selectedOptionValue = props.getValue();
+  const selectCardProps = selectedOptionValue[0] as SelectCardProps;
+
+  return (
+    <div {...props.innerProps}>
       <SelectCard {...selectCardProps} />
     </div>
   );
@@ -24,7 +35,6 @@ export interface SpecialSelectProps {
   options?: SelectOption[];
   onChange?: (newValue: SelectOption | undefined) => void;
   selectedOption?: SelectOption;
-  isSelected: boolean;
 }
 
 /**
@@ -34,29 +44,15 @@ const SpecialSelect = ({
   options,
   onChange,
   selectedOption,
-  isSelected,
 }: SpecialSelectProps) => {
   const [sSelectedOption, setSelectedOption] =
     useState<SelectOption>(selectedOption);
-  const [isSelectSelected, setIsSelectSelected] = useState(isSelected);
-
-  const SingleValue = ({ children, ...props }: ValueContainerProps) => {
-    const selectedOptionValue = props.getValue();
-    const selectCardProps = selectedOptionValue[0] as SelectCardProps;
-
-    return (
-      <div {...props.innerProps}>
-        <SelectCard isSelected={isSelectSelected} {...selectCardProps} />
-      </div>
-    );
-  };
 
   const onSelectChange = (newValue: unknown) => {
     const newlySelectedOption = newValue as SelectOption;
     console.log('onSelectChange: ', newlySelectedOption);
     if (onChange) onChange(newlySelectedOption);
     setSelectedOption(newlySelectedOption);
-    setIsSelectSelected(true);
   };
 
   return (

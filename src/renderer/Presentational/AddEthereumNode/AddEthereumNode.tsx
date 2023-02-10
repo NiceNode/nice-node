@@ -3,7 +3,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { NodeLibrary } from 'main/state/nodeLibrary';
-import { container, descriptionFont, sectionFont } from './addEthereumNode.css';
+import {
+  container,
+  descriptionFont,
+  sectionFont,
+  titleFont,
+} from './addEthereumNode.css';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import SpecialSelect, {
   SelectOption,
@@ -101,17 +106,17 @@ export interface AddEthereumNodeProps {
   /**
    * Listen to node config changes
    */
-  ethereumNodeConfig: AddEthereumNodeValues;
-  setConsensusClient: (
+  onChange?: (newValue: AddEthereumNodeValues) => void;
+  ethereumNodeConfig?: AddEthereumNodeValues;
+  setConsensusClient?: (
     elClient: SelectOption,
     object: AddEthereumNodeValues
   ) => void;
-  setExecutionClient: (
+  setExecutionClient?: (
     clClient: SelectOption,
     object: AddEthereumNodeValues
   ) => void;
-  modalOnChangeConfig: (config: object) => void;
-  isSelected: boolean;
+  modalOnChangeConfig?: (config: object) => void;
 }
 
 const AddEthereumNode = ({
@@ -119,7 +124,7 @@ const AddEthereumNode = ({
   setConsensusClient,
   setExecutionClient,
   modalOnChangeConfig,
-  isSelected,
+  onChange,
 }: /**
  * Todo: Pass options from the node spec files
  */
@@ -148,10 +153,12 @@ AddEthereumNodeProps) => {
       const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
       console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
       setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
-      modalOnChangeConfig({
-        storageLocation: defaultNodesStorageDetails.folderPath,
-        nodeLibrary,
-      });
+      if (modalOnChangeConfig) {
+        modalOnChangeConfig({
+          storageLocation: defaultNodesStorageDetails.folderPath,
+          nodeLibrary,
+        });
+      }
       setNodeStorageLocationFreeStorageGBs(
         defaultNodesStorageDetails.freeStorageGBs
       );
@@ -170,7 +177,7 @@ AddEthereumNodeProps) => {
       };
       if (newEc) {
         setSelectedExecutionClient(newEc);
-        setExecutionClient(newEc, ethNodeConfig);
+        if (setExecutionClient) setExecutionClient(newEc, ethNodeConfig);
       }
     },
     [
@@ -191,7 +198,7 @@ AddEthereumNodeProps) => {
       };
       if (newCc) {
         setSelectedConsensusClient(newCc);
-        setConsensusClient(newCc, ethNodeConfig);
+        if (setConsensusClient) setConsensusClient(newCc, ethNodeConfig);
       }
     },
     [
@@ -202,8 +209,26 @@ AddEthereumNodeProps) => {
     ]
   );
 
+  useEffect(() => {
+    if (onChange) {
+      onChange({
+        executionClient: sSelectedExecutionClient,
+        consensusClient: sSelectedConsensusClient,
+        storageLocation: sNodeStorageLocation,
+      });
+    }
+  }, [
+    sSelectedExecutionClient,
+    sSelectedConsensusClient,
+    sNodeStorageLocation,
+    onChange,
+  ]);
+
   return (
     <div className={container}>
+      {!modalOnChangeConfig && (
+        <div className={titleFont}>{t('LaunchAnEthereumNode')}</div>
+      )}
       <div className={descriptionFont}>
         <>{t('AddEthereumNodeDescription')}</>
       </div>
@@ -213,14 +238,12 @@ AddEthereumNodeProps) => {
       />
       <p className={sectionFont}>Execution client</p>
       <SpecialSelect
-        isSelected={isSelected}
         selectedOption={sSelectedExecutionClient}
         onChange={onChangeEc}
         options={ecOptions}
       />
       <p className={sectionFont}>Consensus client</p>
       <SpecialSelect
-        isSelected={isSelected}
         selectedOption={sSelectedConsensusClient}
         onChange={onChangeCc}
         options={ccOptions}
@@ -273,9 +296,11 @@ AddEthereumNodeProps) => {
           console.log('storageLocationDetails', storageLocationDetails);
           if (storageLocationDetails) {
             setNodeStorageLocation(storageLocationDetails.folderPath);
-            modalOnChangeConfig({
-              storageLocation: storageLocationDetails.folderPath,
-            });
+            if (modalOnChangeConfig) {
+              modalOnChangeConfig({
+                storageLocation: storageLocationDetails.folderPath,
+              });
+            }
             setNodeStorageLocationFreeStorageGBs(
               storageLocationDetails.freeStorageGBs
             );

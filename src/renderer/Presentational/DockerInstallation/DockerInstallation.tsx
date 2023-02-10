@@ -33,7 +33,7 @@ export interface DockerInstallationProps {
 const DockerInstallation = ({
   onChange,
   disableSaveButton,
-  type,
+  type = '',
 }: DockerInstallationProps) => {
   const { t } = useTranslation();
   const qIsDockerInstalled = useGetIsDockerInstalledQuery();
@@ -111,7 +111,7 @@ const DockerInstallation = ({
 
   // listen to docker install messages
   return (
-    <div className={container}>
+    <div className={[container, type].join(' ')}>
       {type !== 'modal' && (
         <div className={titleFont}>{t('DockerInstallation')}</div>
       )}

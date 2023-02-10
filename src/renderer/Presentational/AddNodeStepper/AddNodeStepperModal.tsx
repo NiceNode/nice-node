@@ -81,6 +81,7 @@ const AddNodeStepperModal = ({
           <DockerInstallation
             disableSaveButton={disableSaveButton}
             onChange={onChangeDockerInstall}
+            type="modal"
           />
         );
         stepImage = step3;

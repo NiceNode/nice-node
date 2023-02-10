@@ -28,19 +28,22 @@ import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 export interface AddNodeStepperProps {
   modal?: boolean;
   onChange: (newValue: 'done' | 'cancel') => void;
-  modalOnChangeConfig?: (config: object) => void;
 }
 
 const TOTAL_STEPS = 3;
 
-const AddNodeStepper = ({
-  onChange,
-  modal = false,
-  modalOnChangeConfig,
-}: AddNodeStepperProps) => {
+const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const dispatch = useAppDispatch();
   const [sStep, setStep] = useState<number>(0);
+  // const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
+  //   NodeSpecification[]
+  // >([]);
+  // const [sBeaconNodeLibrary, setBeaconNodeLibrary] = useState<
+  //   NodeSpecification[]
+  // >([]);
   const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
+  // <string, NodeSpecification>{}
+
   const [sEthereumNodeConfig, setEthereumNodeConfig] =
     useState<AddEthereumNodeValues>();
   const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
@@ -88,13 +91,13 @@ const AddNodeStepper = ({
       let ccReqs;
 
       if (newValue?.executionClient) {
-        const ecValue = newValue?.executionClient;
+        const ecValue = newValue?.executionClient.value;
         if (sNodeLibrary) {
           ecReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
         }
       }
       if (newValue?.consensusClient) {
-        const ccValue = newValue?.consensusClient;
+        const ccValue = newValue?.consensusClient.value;
         if (sNodeLibrary) {
           ccReqs = sNodeLibrary?.[`${ccValue}-beacon`]?.systemRequirements;
         }
@@ -128,13 +131,13 @@ const AddNodeStepper = ({
     if (sEthereumNodeConfig?.executionClient) {
       const ecValue = sEthereumNodeConfig?.executionClient;
       if (sNodeLibrary) {
-        ecNodeSpec = sNodeLibrary?.[ecValue];
+        ecNodeSpec = sNodeLibrary?.[ecValue.value];
       }
     }
     if (sEthereumNodeConfig?.consensusClient) {
       const ccValue = sEthereumNodeConfig?.consensusClient;
       if (sNodeLibrary) {
-        ccNodeSpec = sNodeLibrary?.[`${ccValue}-beacon`];
+        ccNodeSpec = sNodeLibrary?.[`${ccValue.value}-beacon`];
       }
     }
     console.log(
@@ -189,10 +192,10 @@ const AddNodeStepper = ({
     }
   };
 
-  const getStepScreen = () => {
+  const getStepScreen = (step: number) => {
     let stepScreen = null;
     let stepImage = step1;
-    switch (sStep) {
+    switch (step) {
       case 0:
         stepScreen = (
           <AddEthereumNode
@@ -221,18 +224,31 @@ const AddNodeStepper = ({
     }
 
     return (
-      <div style={{ height: '100%' }}>
-        <ContentWithSideArt modal={modal} graphic={stepImage}>
-          {stepScreen}
-        </ContentWithSideArt>
-      </div>
+      <ContentWithSideArt modal={modal} graphic={stepImage}>
+        {stepScreen}
+      </ContentWithSideArt>
     );
   };
 
   return (
     <div className={container}>
-      <div className={componentContainer}>{getStepScreen()}</div>
-      {!modal && <Stepper step={sStep} onChange={onStep} />}
+      <div className={componentContainer}>
+        {/* Step 0 */}
+        <div style={{ display: sStep === 0 ? '' : 'none', height: '100%' }}>
+          {getStepScreen(0)}
+        </div>
+
+        {/* Step 1 */}
+        <div style={{ display: sStep === 1 ? '' : 'none', height: '100%' }}>
+          {getStepScreen(1)}
+        </div>
+
+        {/* Step 2 - If Docker is not installed */}
+        <div style={{ display: sStep === 2 ? '' : 'none', height: '100%' }}>
+          {getStepScreen(2)}
+        </div>
+      </div>
+      <Stepper step={sStep} onChange={onStep} />
     </div>
   );
 };

@@ -6,5 +6,5 @@ export const modalRoutes = Object.freeze({
   clientVersions: 'clientVersions',
   stopNode: 'stopNode',
   removeNode: 'removeNode',
-  updateUnvailable: 'updateUnvailable',
+  updateUnavailable: 'updateUnavailable',
 });
