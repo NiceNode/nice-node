@@ -19,7 +19,7 @@ export type SettingChangeHandler = (
 ) => void;
 export interface NodeSettingsWrapperProps {
   modalOnChangeConfig: (config: object) => void;
-  disableSaveButton: () => void;
+  disableSaveButton: (value: boolean) => void;
 }
 
 const HTTP_CORS_DOMAINS_KEY = 'httpCorsDomains';
@@ -55,7 +55,7 @@ const NodeSettingsWrapper = ({
         selectedNode.spec.category === 'L1/ExecutionClient';
     }
     if (isDisabled) {
-      disableSaveButton();
+      disableSaveButton(true);
     }
     setIsConfigDisabled(isDisabled);
     setConfigTranslationMap(configTranslationMap);

@@ -26,10 +26,15 @@ export interface DockerInstallationProps {
    * Listen to node config changes
    */
   onChange: (newValue: string) => void;
+  disableSaveButton?: (newValue: boolean) => void;
   type?: string;
 }
 
-const DockerInstallation = ({ onChange, type }: DockerInstallationProps) => {
+const DockerInstallation = ({
+  onChange,
+  disableSaveButton,
+  type,
+}: DockerInstallationProps) => {
   const { t } = useTranslation();
   const qIsDockerInstalled = useGetIsDockerInstalledQuery();
   const isDockerInstalled = qIsDockerInstalled?.data;
@@ -43,6 +48,11 @@ const DockerInstallation = ({ onChange, type }: DockerInstallationProps) => {
   const [sTotalSizeBytes, setTotalSizeBytes] = useState<number>(0);
   const [sDownloadedBytes, setDownloadedBytes] = useState<number>(0);
   const [sInstallComplete, setInstallComplete] = useState<boolean>();
+
+  useEffect(() => {
+    if (disableSaveButton) disableSaveButton(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (isDockerRunning) {

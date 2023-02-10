@@ -42,8 +42,8 @@ export const Modal = ({
   // keep track of steps here
   // but keep the modalConfig info, in modalManager.
 
-  const disableSaveButton = useCallback(() => {
-    setIsSaveButtonDisabled(true);
+  const disableSaveButton = useCallback((value: boolean) => {
+    setIsSaveButtonDisabled(value);
   }, []);
 
   const resetModal = useCallback(() => {
@@ -94,6 +94,7 @@ export const Modal = ({
           isSelected={isSelected}
           modal
           modalOnChangeConfig={modalOnChangeConfig}
+          disableSaveButton={disableSaveButton}
         />
       );
       buttonSaveLabel = step === 0 ? 'Next' : 'Done';

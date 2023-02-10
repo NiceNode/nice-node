@@ -18,6 +18,7 @@ export interface AddNodeStepperModalProps {
   modalOnChangeConfig: (config: object) => void;
   step: number;
   isSelected: boolean;
+  disableSaveButton: (value: boolean) => void;
 }
 
 const AddNodeStepperModal = ({
@@ -25,6 +26,7 @@ const AddNodeStepperModal = ({
   modalOnChangeConfig,
   step,
   isSelected,
+  disableSaveButton,
 }: AddNodeStepperModalProps) => {
   const [sEthereumNodeConfig, setEthereumNodeConfig] =
     useState<AddEthereumNodeValues>();
@@ -53,6 +55,9 @@ const AddNodeStepperModal = ({
 
   const onChangeDockerInstall = useCallback((newValue: string) => {
     console.log('onChangeDockerInstall newValue ', newValue);
+    if (newValue === 'done') {
+      disableSaveButton(false);
+    }
   }, []);
 
   const getStepScreen = () => {
@@ -72,7 +77,12 @@ const AddNodeStepperModal = ({
         stepImage = step1;
         break;
       case 1:
-        stepScreen = <DockerInstallation onChange={onChangeDockerInstall} />;
+        stepScreen = (
+          <DockerInstallation
+            disableSaveButton={disableSaveButton}
+            onChange={onChangeDockerInstall}
+          />
+        );
         stepImage = step3;
         break;
       default:
