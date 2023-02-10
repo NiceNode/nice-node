@@ -3,12 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { NodeLibrary } from 'main/state/nodeLibrary';
-import {
-  container,
-  descriptionFont,
-  sectionFont,
-  titleFont,
-} from './addEthereumNode.css';
+import { container, descriptionFont, sectionFont } from './addEthereumNode.css';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import SpecialSelect, {
   SelectOption,
@@ -208,7 +203,6 @@ AddEthereumNodeProps) => {
 
   return (
     <div className={container}>
-      <div className={titleFont}>{t('LaunchAnEthereumNode')}</div>
       <div className={descriptionFont}>
         <>{t('AddEthereumNodeDescription')}</>
       </div>

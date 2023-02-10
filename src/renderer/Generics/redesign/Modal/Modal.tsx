@@ -8,7 +8,7 @@ import NodeSettingsWrapper from 'renderer/Presentational/NodeSettings/NodeSettin
 import RemoveNodeWrapper, {
   RemoveNodeAction,
 } from 'renderer/Presentational/RemoveNodeModal/RemoveNodeWrapper';
-import Button from '../Button/Button';
+import Button, { ButtonProps } from '../Button/Button';
 import {
   modalHeaderContainer,
   modalBackdropStyle,
@@ -80,11 +80,14 @@ export const Modal = ({
   let modalType = '';
   let buttonSaveLabel = 'Save';
   let backButtonEnabled = true;
+  let buttonType: ButtonProps['type'] = 'primary';
   const noOp = () => {};
   // Render the appropriate screen based on the current `screen` value
   switch (screen.route) {
     // Modals
     case modalRoutes.addNode:
+      modalTitle =
+        step === 0 ? 'Launch an Ethereum Node' : 'Docker Installation';
       modalContent = (
         <AddNodeStepperModal
           step={step}
@@ -126,25 +129,12 @@ export const Modal = ({
       buttonSaveLabel = 'Stop node';
       break;
     case modalRoutes.removeNode:
-      modalTitle = t('RemoveNode');
+      modalTitle = 'Are you sure you want to remove this node?';
       modalContent = (
-        <RemoveNodeWrapper
-          onClose={(action: RemoveNodeAction) => {
-            if (action === 'remove') {
-              resetModal();
-            } else {
-              dispatch(
-                setModalState({
-                  isModalOpen: true,
-                  screen: { route: 'nodeSettings', type: 'modal' },
-                  config: {},
-                })
-              );
-            }
-          }}
-        />
+        <RemoveNodeWrapper modalOnChangeConfig={modalOnChangeConfig} />
       );
       buttonSaveLabel = 'Remove node';
+      buttonType = 'danger';
       break;
     case modalRoutes.updateUnvailable:
       modalContent = <>Update unavailable</>;
@@ -153,24 +143,31 @@ export const Modal = ({
   }
 
   const tabStyle = modalType === 'tabs' ? 'tabs' : '';
+  const alertStyle = screen.type === 'alert' ? 'alert' : '';
   return (
     <div className={modalBackdropStyle}>
       <div className={modalContentStyle}>
-        <div className={modalCloseButton}>
-          <Button
-            variant="icon"
-            iconId="close"
-            type="ghost"
-            onClick={resetModal}
-          />
+        {screen.type !== 'alert' && (
+          <div className={modalCloseButton}>
+            <Button
+              variant="icon"
+              iconId="close"
+              type="ghost"
+              onClick={resetModal}
+            />
+          </div>
+        )}
+        <div className={[modalHeaderContainer, alertStyle].join(' ')}>
+          <span className={[titleFont, alertStyle].join(' ')}>
+            {modalTitle}
+          </span>
         </div>
-        <div className={modalHeaderContainer}>
-          <span className={titleFont}>{modalTitle}</span>
-        </div>
-        <div className={[modalChildrenContainer, tabStyle].join(' ')}>
+        <div
+          className={[modalChildrenContainer, tabStyle, alertStyle].join(' ')}
+        >
           {modalContent}
         </div>
-        <div className={modalStepperContainer}>
+        <div className={[modalStepperContainer, alertStyle].join(' ')}>
           {backButtonEnabled && (
             <Button
               variant="text"
@@ -184,6 +181,14 @@ export const Modal = ({
                     setStep(0);
                     setIsSelected(true);
                   }
+                } else if (screen.route === 'removeNode') {
+                  dispatch(
+                    setModalState({
+                      isModalOpen: true,
+                      screen: { route: 'nodeSettings', type: 'modal' },
+                      config: {},
+                    })
+                  );
                 } else {
                   resetModal();
                 }
@@ -192,11 +197,11 @@ export const Modal = ({
           )}
           <Button
             variant="text"
-            type="primary"
+            type={buttonType}
             disabled={isSaveButtonDisabled}
             label={buttonSaveLabel}
             onClick={() => {
-              if (step === 0) {
+              if (screen.route === 'addNode' && step === 0) {
                 setStep(1);
               } else {
                 modalOnSaveConfig();

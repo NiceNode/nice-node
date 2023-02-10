@@ -44,6 +44,11 @@ export const modalCloseButton = style({
 
 export const modalHeaderContainer = style({
   padding: '40px 32px 16px 32px',
+  selectors: {
+    [`&.alert`]: {
+      padding: '24px 24px 6px 24px',
+    },
+  },
 });
 
 export const titleFont = style({
@@ -52,6 +57,14 @@ export const titleFont = style({
   fontWeight: 590,
   paddingBottom: 16,
   flexGrow: 1,
+  selectors: {
+    [`&.alert`]: {
+      fontSize: '15px',
+      lineHeight: '20px',
+      fontWeight: 590,
+      paddingBottom: 6,
+    },
+  },
 });
 
 export const modalStepperContainer = style({
@@ -61,6 +74,12 @@ export const modalStepperContainer = style({
   padding: 14,
   justifyContent: 'flex-end',
   gap: 8,
+  selectors: {
+    [`&.alert`]: {
+      borderTop: 'none',
+      padding: 24,
+    },
+  },
 });
 
 export const modalChildrenContainer = style({
@@ -70,6 +89,10 @@ export const modalChildrenContainer = style({
   selectors: {
     [`&.tabs`]: {
       padding: 0,
+      overflow: 'hidden',
+    },
+    [`&.alert`]: {
+      padding: '0px 24px',
       overflow: 'hidden',
     },
   },

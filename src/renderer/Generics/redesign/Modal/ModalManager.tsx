@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import electron from 'renderer/electronGlobal';
 import { useAppDispatch } from 'renderer/state/hooks';
 import { updateSelectedNodeId } from 'renderer/state/node';
@@ -35,10 +35,11 @@ const ModalManager = () => {
   };
 
   const modalOnSaveConfig = async () => {
-    // move this into a redux reducer?
+    // TODO: move this into a redux reducer?
+    // TODO: add error handling for electron failures
     const {
-      executionClient,
-      consensusClient,
+      executionClient = 'besu',
+      consensusClient = 'nimbus',
       storageLocation,
       nodeLibrary,
       theme,
@@ -46,20 +47,16 @@ const ModalManager = () => {
       config,
       selectedNode,
       newDataDir,
+      isDeleteStorage = true,
     } = modalConfig;
 
-    let execution;
-    let consensus;
     let ecNodeSpec;
     let ccNodeSpec;
     switch (screen.route) {
       case modalRoutes.addNode:
-        execution = executionClient || 'besu';
-        consensus = consensusClient || 'nimbus';
-
         if (nodeLibrary) {
-          ecNodeSpec = nodeLibrary?.[execution];
-          ccNodeSpec = nodeLibrary?.[`${consensus}-beacon`];
+          ecNodeSpec = nodeLibrary?.[executionClient];
+          ccNodeSpec = nodeLibrary?.[`${consensusClient}-beacon`];
         }
 
         if (!ecNodeSpec || !ccNodeSpec) {
@@ -92,6 +89,18 @@ const ModalManager = () => {
         }
         if (newDataDir) {
           await electron.updateNodeDataDir(selectedNode, newDataDir);
+        }
+        break;
+      case modalRoutes.removeNode:
+        try {
+          await electron.removeNode(selectedNode.id, {
+            isDeleteStorage,
+          });
+        } catch (err) {
+          console.error(err);
+          throw new Error(
+            'There was an error removing the node. Try again and please report the error to the NiceNode team in Discord.'
+          );
         }
         break;
       default:

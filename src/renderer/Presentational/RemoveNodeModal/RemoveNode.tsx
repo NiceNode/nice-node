@@ -1,29 +1,21 @@
-import { useCallback, useEffect, useState } from 'react';
-import { t } from 'i18next';
-import { actionButtonsContainer } from '../../Generics/redesign/Alert/alert.css';
-import Button from '../../Generics/redesign/Button/Button';
-import { Message } from '../../Generics/redesign/Message/Message';
+import { useEffect, useState } from 'react';
+import Node from 'common/node';
 import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
+import { container, removeText } from './removeNode.css';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Preference = 'theme' | 'isOpenOnStartup';
 export interface RemoveNodeProps {
-  onClickClose: () => void;
-  nodeDisplayName?: string;
   nodeStorageUsedGBs?: number;
-  onClickRemoveNode: (isDeletingData: boolean) => void;
-  errorMessage?: string;
+  modalOnChangeConfig: (config: object) => void;
+  selectedNode: Node;
 }
 
 const RemoveNode = ({
-  onClickClose,
-  nodeDisplayName,
   nodeStorageUsedGBs,
-  onClickRemoveNode,
-  errorMessage,
+  modalOnChangeConfig,
+  selectedNode,
 }: RemoveNodeProps) => {
-  const [sShouldDeleteNodeStorage, setShouldDeleteNodeStorage] =
-    useState<boolean>(false);
   const [sNodeStorageMessage, setNodeStorageMessage] = useState<string>(
     'calculating data size...'
   );
@@ -36,29 +28,21 @@ const RemoveNode = ({
     }
   }, [nodeStorageUsedGBs]);
 
-  const onClickRemove = useCallback(() => {
-    onClickRemoveNode(sShouldDeleteNodeStorage);
-  }, [onClickRemoveNode, sShouldDeleteNodeStorage]);
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <span>
-        Are you sure you want to remove <strong>{nodeDisplayName}</strong>?
-      </span>
+    <div className={container}>
+      <p className={removeText}>
+        All settings and data for this node will be removed from your computer.
+      </p>
+      <p className={removeText}>
+        Optionally you can choose to keep the current chain data to shorten
+        future sync times for NiceNode or alternative uses.
+      </p>
       <Checkbox
-        label={`${t('DeleteNodeDataQuestion')} ${sNodeStorageMessage}`}
+        label={`Keep node related chain data ${sNodeStorageMessage}`}
         onClick={(isChecked: boolean) => {
-          console.log('setShouldDeleteNodeStorage: ', isChecked);
-          setShouldDeleteNodeStorage(isChecked);
+          modalOnChangeConfig({ isDeleteStorage: !isChecked, selectedNode });
         }}
       />
-      {errorMessage && (
-        <Message type="error" description={errorMessage} title="" />
-      )}
-      <div className={actionButtonsContainer}>
-        <Button label={t('Cancel')} onClick={onClickClose} />
-        <Button label={t('Remove')} type="danger" onClick={onClickRemove} />
-      </div>
     </div>
   );
 };

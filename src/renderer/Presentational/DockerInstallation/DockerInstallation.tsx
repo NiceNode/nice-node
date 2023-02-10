@@ -26,9 +26,10 @@ export interface DockerInstallationProps {
    * Listen to node config changes
    */
   onChange: (newValue: string) => void;
+  type?: string;
 }
 
-const DockerInstallation = ({ onChange }: DockerInstallationProps) => {
+const DockerInstallation = ({ onChange, type }: DockerInstallationProps) => {
   const { t } = useTranslation();
   const qIsDockerInstalled = useGetIsDockerInstalledQuery();
   const isDockerInstalled = qIsDockerInstalled?.data;
@@ -101,7 +102,9 @@ const DockerInstallation = ({ onChange }: DockerInstallationProps) => {
   // listen to docker install messages
   return (
     <div className={container}>
-      <div className={titleFont}>{t('DockerInstallation')}</div>
+      {type !== 'modal' && (
+        <div className={titleFont}>{t('DockerInstallation')}</div>
+      )}
       <div className={descriptionFont}>
         <>{t('dockerPurpose')}</>
       </div>
