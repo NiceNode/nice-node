@@ -34,7 +34,7 @@ export type SelectOption = {
 export interface SpecialSelectProps {
   options?: SelectOption[];
   onChange?: (newValue: SelectOption | undefined) => void;
-  selectedOption?: SelectOption;
+  selectedOption: SelectOption;
 }
 
 /**

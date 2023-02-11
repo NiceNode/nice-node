@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setModalState } from '../../state/modal';
 import { getNotifications } from '../../../main/notifications';
@@ -15,7 +14,6 @@ import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/Sideb
 import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
-import PreferencesWrapper from '../Preferences/PreferencesWrapper';
 import { DockerStoppedBanner } from '../DockerInstallation/StartDockerBanner';
 
 export interface SidebarProps {
@@ -82,9 +80,6 @@ const Sidebar = ({
   selectedNodeId,
 }: SidebarProps) => {
   const dispatch = useAppDispatch();
-  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
-  const [sIsModalOpenSettings, setIsModalOpenSettings] =
-    useState<boolean>(false);
 
   // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
   // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
@@ -179,7 +174,6 @@ const Sidebar = ({
                     setModalState({
                       isModalOpen: true,
                       screen: { route: 'addNode', type: 'modal' },
-                      config: {},
                     })
                   );
                 } else if (item.iconId === 'preferences') {
@@ -187,7 +181,6 @@ const Sidebar = ({
                     setModalState({
                       isModalOpen: true,
                       screen: { route: 'preferences', type: 'modal' },
-                      config: {},
                     })
                   );
                 } else if (item.iconId === 'bell') {

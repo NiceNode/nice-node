@@ -2,8 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
-import { useNavigate } from 'react-router-dom';
-import { setModalState } from 'renderer/state/modal';
+import { setModalState } from '../../state/modal';
 import electron from '../../electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector, useAppDispatch } from '../../state/hooks';
@@ -23,8 +22,6 @@ import ContentSingleClient, {
 } from '../ContentSingleClient/ContentSingleClient';
 import { hexToDecimal } from '../../utils';
 import { NodeAction } from '../../Generics/redesign/consts';
-import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
 import Button from '../../Generics/redesign/Button/Button';
 import {
   container,
@@ -65,7 +62,6 @@ const NodeScreen = () => {
       pollingInterval,
     }
   );
-  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
 
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
@@ -180,35 +176,30 @@ const NodeScreen = () => {
   if (!selectedNode) {
     // if there is no node selected, prompt user to create a new node
     return (
-      <>
-        {!sIsModalOpenAddNode && (
-          <div className={container}>
-            <div className={contentContainer}>
-              <div className={titleFont}>No active nodes</div>
-              <div className={descriptionFont}>
-                Add your first node and start verifying the validty of every
-                block of your favourite blockchain. Running a node also helps
-                others to download and update their copies.
-              </div>
-              <Button
-                label="Add node"
-                variant="icon-left"
-                iconId="add"
-                type="primary"
-                onClick={() => {
-                  dispatch(
-                    setModalState({
-                      isModalOpen: true,
-                      screen: { route: 'addNode', type: 'modal' },
-                      config: {},
-                    })
-                  );
-                }}
-              />
-            </div>
+      <div className={container}>
+        <div className={contentContainer}>
+          <div className={titleFont}>No active nodes</div>
+          <div className={descriptionFont}>
+            Add your first node and start verifying the validty of every block
+            of your favourite blockchain. Running a node also helps others to
+            download and update their copies.
           </div>
-        )}
-      </>
+          <Button
+            label="Add node"
+            variant="icon-left"
+            iconId="add"
+            type="primary"
+            onClick={() => {
+              dispatch(
+                setModalState({
+                  isModalOpen: true,
+                  screen: { route: 'addNode', type: 'modal' },
+                })
+              );
+            }}
+          />
+        </div>
+      </div>
     );
   }
 

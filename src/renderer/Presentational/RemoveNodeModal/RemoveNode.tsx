@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Node from 'common/node';
+import { ModalConfig } from '../../Generics/redesign/Modal/ModalManager';
 import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
 import { container, removeText } from './removeNode.css';
 
@@ -7,8 +8,8 @@ export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Preference = 'theme' | 'isOpenOnStartup';
 export interface RemoveNodeProps {
   nodeStorageUsedGBs?: number;
-  modalOnChangeConfig: (config: object) => void;
-  selectedNode: Node;
+  modalOnChangeConfig: (config: ModalConfig) => void;
+  selectedNode?: Node;
 }
 
 const RemoveNode = ({

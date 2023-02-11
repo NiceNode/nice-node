@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 import { BrowserWindow, dialog } from 'electron';
 
-import { NodeId, Node } from '../common/node';
+import Node, { NodeId } from '../common/node';
 import {
   getNodesDirPath,
   CheckStorageDetails,

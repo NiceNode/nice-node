@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { NodeLibrary } from 'main/state/nodeLibrary';
+import { ModalConfig } from '../../Generics/redesign/Modal/ModalManager';
 import {
   container,
   descriptionFont,
@@ -116,7 +117,7 @@ export interface AddEthereumNodeProps {
     clClient: SelectOption,
     object: AddEthereumNodeValues
   ) => void;
-  modalOnChangeConfig?: (config: object) => void;
+  modalOnChangeConfig?: (config: ModalConfig) => void;
 }
 
 const AddEthereumNode = ({

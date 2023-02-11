@@ -2,7 +2,8 @@
 // Just make sure to always render each child so that children component state isn't cleard
 import { useCallback, useState } from 'react';
 
-import { SelectOption } from 'renderer/Generics/redesign/SpecialSelect/SpecialSelect';
+import { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
+import { ModalConfig } from '../../Generics/redesign/Modal/ModalManager';
 import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
 import { componentContainer, container } from './addNodeStepper.css';
 import AddEthereumNode, {
@@ -15,9 +16,8 @@ import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 
 export interface AddNodeStepperModalProps {
   modal?: boolean;
-  modalOnChangeConfig: (config: object) => void;
+  modalOnChangeConfig: (config: ModalConfig) => void;
   step: number;
-  isSelected: boolean;
   disableSaveButton: (value: boolean) => void;
 }
 
@@ -25,7 +25,6 @@ const AddNodeStepperModal = ({
   modal = false,
   modalOnChangeConfig,
   step,
-  isSelected,
   disableSaveButton,
 }: AddNodeStepperModalProps) => {
   const [sEthereumNodeConfig, setEthereumNodeConfig] =
@@ -58,6 +57,7 @@ const AddNodeStepperModal = ({
     if (newValue === 'done') {
       disableSaveButton(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getStepScreen = () => {
@@ -67,7 +67,6 @@ const AddNodeStepperModal = ({
       case 0:
         stepScreen = (
           <AddEthereumNode
-            isSelected={isSelected}
             ethereumNodeConfig={sEthereumNodeConfig}
             setConsensusClient={setConsensusClient}
             setExecutionClient={setExecutionClient}

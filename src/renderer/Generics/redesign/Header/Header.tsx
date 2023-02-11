@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from 'renderer/state/hooks';
-import { setModalState } from 'renderer/state/modal';
+import { setModalState } from '../../../state/modal';
+import { useAppDispatch } from '../../../state/hooks';
 import Button, { ButtonProps } from '../Button/Button';
 import { NodeOverviewProps } from '../consts';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
@@ -30,8 +30,6 @@ export const Header = (props: NodeOverviewProps) => {
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
   const [isSettingsDisplayed, setIsSettingsDisplayed] =
-    useState<boolean>(false);
-  const [sIsSettingsModalOpen, setIsSettingsModalOpen] =
     useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -148,7 +146,6 @@ export const Header = (props: NodeOverviewProps) => {
                   setModalState({
                     isModalOpen: true,
                     screen: { route: 'nodeSettings', type: 'modal' },
-                    config: {},
                   })
                 );
                 // setIsSettingsDisplayed(!isSettingsDisplayed);

@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAppDispatch } from 'renderer/state/hooks';
-import { setModalConfig } from 'renderer/state/modal';
+import { ModalConfig } from '../../Generics/redesign/Modal/ModalManager';
 import electron from '../../electronGlobal';
 
 import Preferences, { Preference, ThemeSetting } from './Preferences';
 
 export interface PreferencesWrapperProps {
-  modalOnChangeConfig: (config: object) => void;
+  modalOnChangeConfig: (config: ModalConfig) => void;
 }
 
 const PreferencesWrapper = ({
@@ -15,7 +14,6 @@ const PreferencesWrapper = ({
   const [sThemeSetting, setThemeSetting] = useState<ThemeSetting>();
   const [sIsOpenOnStartup, setIsOpenOnStartup] = useState<boolean>();
   const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const asyncData = async () => {
@@ -54,7 +52,7 @@ const PreferencesWrapper = ({
         const isOpenOnStartup = value as boolean;
         setIsOpenOnStartup(isOpenOnStartup);
         modalOnChangeConfig({
-          isOpenOnStartup: value,
+          isOpenOnStartup,
         });
       }
     },

@@ -1,11 +1,27 @@
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
-import electron from 'renderer/electronGlobal';
-import { useAppDispatch } from 'renderer/state/hooks';
-import { updateSelectedNodeId } from 'renderer/state/node';
+import { ThemeSetting } from 'main/state/settings';
+import Node from 'common/node';
+import electron from '../../../electronGlobal';
+import { updateSelectedNodeId } from '../../../state/node';
+import { useAppDispatch } from '../../../state/hooks';
 import { getModalState } from '../../../state/modal';
 import { Modal } from './Modal';
 import { modalRoutes } from './modalRoutes';
+
+export type ModalConfig = {
+  executionClient?: string;
+  consensusClient?: string;
+  storageLocation?: string;
+  theme?: ThemeSetting;
+  isOpenOnStartup?: boolean;
+  selectedNode?: Node;
+  isDeleteStorage?: boolean;
+  config?: object;
+  newDataDir?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+};
 
 const ModalManager = () => {
   const { isModalOpen, screen } = useSelector(getModalState);
@@ -16,7 +32,7 @@ const ModalManager = () => {
     return null;
   }
 
-  const modalOnChangeConfig = (config: object) => {
+  const modalOnChangeConfig = (config: ModalConfig) => {
     let updatedConfig = {};
     const keys = Object.keys(config);
     if (keys.length > 1) {
@@ -48,7 +64,7 @@ const ModalManager = () => {
       selectedNode,
       newDataDir,
       isDeleteStorage = true,
-    } = modalConfig;
+    } = modalConfig as ModalConfig;
 
     let ecNodeSpec;
     let ccNodeSpec;
@@ -63,6 +79,7 @@ const ModalManager = () => {
           throw new Error('ecNodeSpec or ccNodeSpec is undefined');
         }
 
+        // eslint-disable-next-line no-case-declarations
         const { ecNode, ccNode } = await electron.addEthereumNode(
           ecNodeSpec,
           ccNodeSpec,
@@ -82,20 +99,22 @@ const ModalManager = () => {
         }
         break;
       case modalRoutes.nodeSettings:
-        if (config) {
+        if (config && selectedNode) {
           await electron.updateNode(selectedNode.id, {
             config,
           });
         }
-        if (newDataDir) {
+        if (newDataDir && selectedNode) {
           await electron.updateNodeDataDir(selectedNode, newDataDir);
         }
         break;
       case modalRoutes.removeNode:
         try {
-          await electron.removeNode(selectedNode.id, {
-            isDeleteStorage,
-          });
+          if (selectedNode) {
+            await electron.removeNode(selectedNode.id, {
+              isDeleteStorage,
+            });
+          }
         } catch (err) {
           console.error(err);
           throw new Error(

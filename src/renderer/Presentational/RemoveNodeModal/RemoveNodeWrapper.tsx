@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
+import { ModalConfig } from '../../Generics/redesign/Modal/ModalManager';
 import { useAppSelector } from '../../state/hooks';
 import { selectSelectedNode } from '../../state/node';
 import RemoveNode from './RemoveNode';
 
-export type RemoveNodeAction = 'cancel' | 'remove';
-
 export interface RemoveNodeWrapperProps {
-  modalOnChangeConfig: (config: object) => void;
+  modalOnChangeConfig: (config: ModalConfig) => void;
 }
 
 const RemoveNodeWrapper = ({ modalOnChangeConfig }: RemoveNodeWrapperProps) => {

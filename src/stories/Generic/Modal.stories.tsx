@@ -7,13 +7,12 @@ export default {
   component: Modal,
 } as ComponentMeta<typeof Modal>;
 
-const Template: ComponentStory<typeof Modal> = (args) => (
-  <Modal {...args} />
-);
+const Template: ComponentStory<typeof Modal> = (args) => <Modal {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-  title: 'Modal popup',
-  isOpen: true,
-  children: <><p>Hey, user! Take a look at this!</p></>
+  screen: {
+    route: 'addNode',
+    type: 'modal',
+  },
 };

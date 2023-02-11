@@ -14,8 +14,6 @@ const Template: ComponentStory<typeof Preferences> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  isOpen: true,
-  onClose: () => alert('close'),
   themeSetting: 'dark',
   isOpenOnStartup: true,
   version: 'v69.69',

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { ModalConfig } from '../../Generics/redesign/Modal/ModalManager';
 import { setModalState } from '../../state/modal';
-import { NodeId } from '../../../common/node';
+import Node, { NodeId } from '../../../common/node';
 import {
   ConfigTranslation,
   ConfigTranslationMap,
@@ -18,7 +19,7 @@ export type SettingChangeHandler = (
   newValue: ConfigValue
 ) => void;
 export interface NodeSettingsWrapperProps {
-  modalOnChangeConfig: (config: object) => void;
+  modalOnChangeConfig: (config: ModalConfig) => void;
   disableSaveButton: (value: boolean) => void;
 }
 
@@ -39,7 +40,9 @@ const NodeSettingsWrapper = ({
     useState<ConfigTranslation>();
   const [sNodeStartCommand, setNodeStartCommand] = useState<string>();
   const sSelectedNode = useAppSelector(selectSelectedNode);
-  const [selectedNode, setSelectedNode] = useState(sSelectedNode);
+  const [selectedNode, setSelectedNode] = useState<Node | undefined>(
+    sSelectedNode
+  );
 
   const dispatch = useAppDispatch();
 
@@ -179,7 +182,7 @@ const NodeSettingsWrapper = ({
           ...selectedNode,
           config: newConfig,
         };
-        setSelectedNode(newNode);
+        setSelectedNode(newNode as Node);
         modalOnChangeConfig({
           config: newConfig,
           selectedNode,
@@ -204,7 +207,6 @@ const NodeSettingsWrapper = ({
           setModalState({
             isModalOpen: true,
             screen: { route: 'removeNode', type: 'alert' },
-            config: {},
           })
         );
       }}

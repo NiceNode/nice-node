@@ -44,7 +44,7 @@ export type NodeRuntime = {
   };
 };
 
-export type Node = {
+type Node = {
   id: NodeId;
   spec: NodeSpecification;
   config: NodeConfig;

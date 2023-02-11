@@ -24,8 +24,6 @@ const configValuesMap: ConfigValuesMap = {
 
 export const Primary = Template.bind({});
 Primary.args = {
-  isOpen: true,
-  onClickClose: () => alert('close clicked'),
   configValuesMap,
   categoryConfigs: [
     {

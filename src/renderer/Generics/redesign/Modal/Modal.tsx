@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ModalScreen, setModalState } from 'renderer/state/modal';
-import { useAppDispatch } from 'renderer/state/hooks';
-import AddNodeStepperModal from 'renderer/Presentational/AddNodeStepper/AddNodeStepperModal';
-import PreferencesWrapper from 'renderer/Presentational/Preferences/PreferencesWrapper';
 import { useTranslation } from 'react-i18next';
-import NodeSettingsWrapper from 'renderer/Presentational/NodeSettings/NodeSettingsWrapper';
-import RemoveNodeWrapper, {
-  RemoveNodeAction,
-} from 'renderer/Presentational/RemoveNodeModal/RemoveNodeWrapper';
+import AddNodeStepperModal from '../../../Presentational/AddNodeStepper/AddNodeStepperModal';
+import PreferencesWrapper from '../../../Presentational/Preferences/PreferencesWrapper';
+import NodeSettingsWrapper from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
+import RemoveNodeWrapper from '../../../Presentational/RemoveNodeModal/RemoveNodeWrapper';
+import { useAppDispatch } from '../../../state/hooks';
+import { ModalScreen, setModalState } from '../../../state/modal';
 import Button, { ButtonProps } from '../Button/Button';
 import {
   modalHeaderContainer,
@@ -19,11 +17,12 @@ import {
   titleFont,
 } from './modal.css';
 import { modalRoutes } from './modalRoutes';
+import { ModalConfig } from './ModalManager';
 
 type Props = {
   screen: ModalScreen;
   modalOnSaveConfig: () => void;
-  modalOnChangeConfig: (config: object) => void;
+  modalOnChangeConfig: (config: ModalConfig) => void;
   modalOnClose: () => void;
 };
 
@@ -36,7 +35,6 @@ export const Modal = ({
   const { t } = useTranslation('genericComponents');
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
   const [step, setStep] = useState(0);
-  const [isSelected, setIsSelected] = useState(false);
   const dispatch = useAppDispatch();
 
   // keep track of steps here
@@ -51,7 +49,6 @@ export const Modal = ({
       setModalState({
         isModalOpen: false,
         screen: { route: undefined, type: undefined },
-        config: {},
       })
     );
     modalOnClose();
@@ -91,7 +88,6 @@ export const Modal = ({
       modalContent = (
         <AddNodeStepperModal
           step={step}
-          isSelected={isSelected}
           modal
           modalOnChangeConfig={modalOnChangeConfig}
           disableSaveButton={disableSaveButton}
@@ -181,14 +177,12 @@ export const Modal = ({
                     resetModal();
                   } else {
                     setStep(0);
-                    setIsSelected(true);
                   }
                 } else if (screen.route === 'removeNode') {
                   dispatch(
                     setModalState({
                       isModalOpen: true,
                       screen: { route: 'nodeSettings', type: 'modal' },
-                      config: {},
                     })
                   );
                 } else {
