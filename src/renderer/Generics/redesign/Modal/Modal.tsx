@@ -142,9 +142,16 @@ export const Modal = ({
 
   const tabStyle = modalType === 'tabs' ? 'tabs' : '';
   const alertStyle = screen.type === 'alert' ? 'alert' : '';
+  const addNodeStyle = screen.route === 'addNode' ? 'addNode' : '';
+  const nodeSettingsStyle =
+    screen.route === 'nodeSettings' ? 'nodeSettings' : '';
   return (
     <div className={modalBackdropStyle}>
-      <div className={modalContentStyle}>
+      <div
+        className={[modalContentStyle, addNodeStyle, nodeSettingsStyle].join(
+          ' '
+        )}
+      >
         {screen.type !== 'alert' && (
           <div className={modalCloseButton}>
             <Button
@@ -161,7 +168,12 @@ export const Modal = ({
           </span>
         </div>
         <div
-          className={[modalChildrenContainer, tabStyle, alertStyle].join(' ')}
+          className={[
+            modalChildrenContainer,
+            tabStyle,
+            alertStyle,
+            addNodeStyle,
+          ].join(' ')}
         >
           {modalContent}
         </div>

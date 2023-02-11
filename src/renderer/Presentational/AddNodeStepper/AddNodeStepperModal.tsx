@@ -97,8 +97,10 @@ const AddNodeStepperModal = ({
     );
   };
 
+  const modalStyle = modal ? 'modal' : '';
+
   return (
-    <div className={container}>
+    <div className={[container, modalStyle].join(' ')}>
       <div className={componentContainer}>{getStepScreen()}</div>
     </div>
   );

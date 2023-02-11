@@ -34,6 +34,14 @@ export const modalContentStyle = style({
   color: 'inherit',
   justifyContent: 'space-between',
   // a: { color: 'inherit' },
+  selectors: {
+    [`&.addNode`]: {
+      maxHeight: 'none',
+    },
+    [`&.nodeSettings`]: {
+      maxHeight: 'none',
+    },
+  },
 });
 
 export const modalCloseButton = style({
@@ -94,6 +102,9 @@ export const modalChildrenContainer = style({
     [`&.alert`]: {
       padding: '0px 24px',
       overflow: 'hidden',
+    },
+    [`&.addNode`]: {
+      overflow: 'visible',
     },
   },
 });

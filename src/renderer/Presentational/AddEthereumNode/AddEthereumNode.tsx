@@ -9,6 +9,7 @@ import {
   descriptionFont,
   sectionFont,
   titleFont,
+  descriptionContainer,
 } from './addEthereumNode.css';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import SpecialSelect, {
@@ -230,20 +231,22 @@ AddEthereumNodeProps) => {
       {!modalOnChangeConfig && (
         <div className={titleFont}>{t('LaunchAnEthereumNode')}</div>
       )}
-      <div className={descriptionFont}>
-        <>{t('AddEthereumNodeDescription')}</>
+      <div className={descriptionContainer}>
+        <div className={descriptionFont}>
+          <>{t('AddEthereumNodeDescription')}</>
+        </div>
+        <ExternalLink
+          text={t('LearnMoreClientDiversity')}
+          url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
+        />
       </div>
-      <ExternalLink
-        text={t('LearnMoreClientDiversity')}
-        url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
-      />
-      <p className={sectionFont}>Execution client</p>
+      <p className={sectionFont}>Recommended execution client</p>
       <SpecialSelect
         selectedOption={sSelectedExecutionClient}
         onChange={onChangeEc}
         options={ecOptions}
       />
-      <p className={sectionFont}>Consensus client</p>
+      <p className={sectionFont}>Recommended consensus client</p>
       <SpecialSelect
         selectedOption={sSelectedConsensusClient}
         onChange={onChangeCc}
