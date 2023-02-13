@@ -35,6 +35,10 @@ const NodeSettings = ({
 }: NodeSettingsProps) => {
   const { t: tNiceNode } = useTranslation();
 
+  if (!categoryConfigs || categoryConfigs.length === 0) {
+    return null;
+  }
+
   const renderTabs = () => {
     const tabs = [];
     tabs.push(

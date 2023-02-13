@@ -173,6 +173,7 @@ export const Modal = ({
             tabStyle,
             alertStyle,
             addNodeStyle,
+            nodeSettingsStyle,
           ].join(' ')}
         >
           {modalContent}

@@ -106,5 +106,9 @@ export const modalChildrenContainer = style({
     [`&.addNode`]: {
       overflow: 'visible',
     },
+    [`&.nodeSettings`]: {
+      width: 784,
+      minHeight: 559,
+    },
   },
 });
