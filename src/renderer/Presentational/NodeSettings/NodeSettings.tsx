@@ -9,6 +9,11 @@ import InternalLink from '../../Generics/redesign/Link/InternalLink';
 import { WalletSettings } from './WalletSettings';
 import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
 import Button from '../../Generics/redesign/Button/Button';
+import {
+  nodeCommandTitle,
+  nodeCommandContainer,
+  nodeCommand,
+} from './NodeSettings.css';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Preference = 'theme' | 'isOpenOnStartup';
@@ -51,26 +56,31 @@ const NodeSettings = ({
         )}
         {/* todo: tab1 */}
         <DynamicSettings
+          type="modal"
           categoryConfigs={categoryConfigs}
           configValuesMap={configValuesMap}
           isDisabled={isDisabled}
           onChange={onChange}
         />
-        <p>Node start command</p>
         {nodeStartCommand && (
-          <div style={{ display: 'flex', paddingTop: 8 }}>
-            <p style={{ fontFamily: 'monospace' }}>{nodeStartCommand}</p>
-            <Button
-              type="ghost"
-              iconId="copy"
-              variant="icon"
-              onClick={() => {
-                if (nodeStartCommand) {
-                  navigator.clipboard.writeText(nodeStartCommand);
-                }
-              }}
-            />
-          </div>
+          <>
+            <p className={nodeCommandTitle}>
+              Node start command (must save changes to take effect)
+            </p>
+            <div className={nodeCommandContainer}>
+              <p className={nodeCommand}>{nodeStartCommand}</p>
+              <Button
+                type="ghost"
+                iconId="copy"
+                variant="icon"
+                onClick={() => {
+                  if (nodeStartCommand) {
+                    navigator.clipboard.writeText(nodeStartCommand);
+                  }
+                }}
+              />
+            </div>
+          </>
         )}
         {/* Remove Node link */}
         <div style={{ padding: '16px 0px 16px 0px' }}>

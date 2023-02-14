@@ -17,12 +17,14 @@ export type DynamicSettingsProps = {
   configValuesMap?: ConfigValuesMap;
   isDisabled?: boolean;
   onChange?: SettingChangeHandler;
+  type?: string;
 };
 const DynamicSettings = ({
   categoryConfigs,
   configValuesMap,
   isDisabled,
   onChange,
+  type,
 }: DynamicSettingsProps) => {
   const [sSections, setSections] = useState<LabelSettingsSectionProps>({
     items: [],
@@ -45,7 +47,7 @@ const DynamicSettings = ({
 
   return (
     <>
-      <LineLabelSettings items={[sSections]} />
+      <LineLabelSettings type={type} items={[sSections]} />
     </>
   );
 };

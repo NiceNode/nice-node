@@ -47,6 +47,37 @@ const NodeSettingsWrapper = ({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (selectedNode?.config && sConfigTranslationMap) {
+      const { configValuesMap } = selectedNode.config;
+
+      const keysToIgnore = [
+        'dataDir',
+        'http' /* add any other keys to ignore here */,
+      ];
+
+      const newConfigValuesMap = { ...configValuesMap };
+      for (const [key, value] of Object.entries(sConfigTranslationMap)) {
+        if (keysToIgnore.includes(key)) {
+          continue;
+        }
+        if (!(key in configValuesMap)) {
+          newConfigValuesMap[key] = value.defaultValue;
+        }
+      }
+
+      const newConfig = {
+        ...selectedNode.config,
+        configValuesMap: newConfigValuesMap,
+      };
+
+      modalOnChangeConfig({
+        config: newConfig,
+        selectedNode,
+      });
+    }
+  }, [sCategoryConfigs, sConfigTranslationMap, selectedNode]);
+
+  useEffect(() => {
     let isDisabled = true;
     let configTranslationMap;
     let isWalletSettingsEnabled = false;
