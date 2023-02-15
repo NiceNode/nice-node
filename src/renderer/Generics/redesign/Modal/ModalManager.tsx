@@ -32,7 +32,7 @@ const ModalManager = () => {
     return null;
   }
 
-  const modalOnChangeConfig = (config: ModalConfig) => {
+  const modalOnChangeConfig = async (config: ModalConfig, save?: boolean) => {
     let updatedConfig = {};
     const keys = Object.keys(config);
     if (keys.length > 1) {
@@ -48,9 +48,12 @@ const ModalManager = () => {
       };
     }
     setModalConfig(updatedConfig);
+    if (save) {
+      await modalOnSaveConfig(updatedConfig);
+    }
   };
 
-  const modalOnSaveConfig = async () => {
+  const modalOnSaveConfig = async (updatedConfig: ModalConfig) => {
     // TODO: move this into a redux reducer?
     // TODO: add error handling for electron failures
     const {
@@ -64,7 +67,7 @@ const ModalManager = () => {
       selectedNode,
       newDataDir,
       isDeleteStorage = true,
-    } = modalConfig as ModalConfig;
+    } = updatedConfig || (modalConfig as ModalConfig);
 
     let ecNodeSpec;
     let ccNodeSpec;

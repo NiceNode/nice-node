@@ -22,7 +22,7 @@ import { ModalConfig } from './ModalManager';
 type Props = {
   screen: ModalScreen;
   modalOnSaveConfig: () => void;
-  modalOnChangeConfig: (config: ModalConfig) => void;
+  modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
   modalOnClose: () => void;
 };
 

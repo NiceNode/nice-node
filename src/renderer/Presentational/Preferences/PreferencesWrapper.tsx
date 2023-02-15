@@ -5,7 +5,7 @@ import electron from '../../electronGlobal';
 import Preferences, { Preference, ThemeSetting } from './Preferences';
 
 export interface PreferencesWrapperProps {
-  modalOnChangeConfig: (config: ModalConfig) => void;
+  modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
 }
 
 const PreferencesWrapper = ({

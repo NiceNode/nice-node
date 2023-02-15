@@ -8,7 +8,7 @@ export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Preference = 'theme' | 'isOpenOnStartup';
 export interface RemoveNodeProps {
   nodeStorageUsedGBs?: number;
-  modalOnChangeConfig: (config: ModalConfig) => void;
+  modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
   selectedNode?: Node;
 }
 

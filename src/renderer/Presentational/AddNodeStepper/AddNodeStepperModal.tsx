@@ -16,7 +16,7 @@ import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 
 export interface AddNodeStepperModalProps {
   modal?: boolean;
-  modalOnChangeConfig: (config: ModalConfig) => void;
+  modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
   step: number;
   disableSaveButton: (value: boolean) => void;
 }

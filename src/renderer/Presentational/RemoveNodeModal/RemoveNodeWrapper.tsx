@@ -5,7 +5,7 @@ import { selectSelectedNode } from '../../state/node';
 import RemoveNode from './RemoveNode';
 
 export interface RemoveNodeWrapperProps {
-  modalOnChangeConfig: (config: ModalConfig) => void;
+  modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
 }
 
 const RemoveNodeWrapper = ({ modalOnChangeConfig }: RemoveNodeWrapperProps) => {

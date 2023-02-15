@@ -19,7 +19,7 @@ export type SettingChangeHandler = (
   newValue: ConfigValue
 ) => void;
 export interface NodeSettingsWrapperProps {
-  modalOnChangeConfig: (config: ModalConfig) => void;
+  modalOnChangeConfig: (config: ModalConfig, save?: true) => void;
   disableSaveButton: (value: boolean) => void;
 }
 
@@ -43,12 +43,21 @@ const NodeSettingsWrapper = ({
   const [selectedNode, setSelectedNode] = useState<Node | undefined>(
     sSelectedNode
   );
+  const [initialized, setInitialized] = useState(false);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (selectedNode?.config && sConfigTranslationMap) {
+    if (selectedNode?.config && sConfigTranslationMap && !initialized) {
       const { configValuesMap } = selectedNode.config;
+
+      const configValuesKeys = Object.keys(configValuesMap);
+      const configTranslationsKeys = Object.keys(sConfigTranslationMap);
+
+      // check if there are any new keys in configValues compared to default configTranslations
+      if (configValuesKeys.length === configTranslationsKeys.length) {
+        return;
+      }
 
       const keysToIgnore = [
         'dataDir',
@@ -58,25 +67,25 @@ const NodeSettingsWrapper = ({
       const newConfigValuesMap: {
         [key: string]: string | string[] | undefined;
       } = { ...configValuesMap };
-      Object.keys(sConfigTranslationMap)
-        .filter((key) => !keysToIgnore.includes(key))
-        .forEach((key) => {
-          newConfigValuesMap[key] =
-            sConfigTranslationMap[key].defaultValue || '';
-        });
+
+      for (const key of configTranslationsKeys) {
+        if (keysToIgnore.includes(key) || key in newConfigValuesMap) {
+          continue;
+        }
+        newConfigValuesMap[key] =
+          sConfigTranslationMap[key]?.defaultValue || '';
+      }
 
       const newConfig = {
         ...selectedNode.config,
         configValuesMap: newConfigValuesMap,
       };
 
-      modalOnChangeConfig({
-        config: newConfig,
-        selectedNode,
-      });
+      modalOnChangeConfig({ config: newConfig, selectedNode }, true);
+      setInitialized(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sCategoryConfigs, sConfigTranslationMap, selectedNode]);
+  }, [sCategoryConfigs, sConfigTranslationMap, selectedNode, initialized]);
 
   useEffect(() => {
     let isDisabled = true;
