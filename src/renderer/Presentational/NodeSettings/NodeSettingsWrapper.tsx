@@ -47,18 +47,9 @@ const NodeSettingsWrapper = ({
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (selectedNode?.config && sConfigTranslationMap && !initialized) {
+  const getUpdatedConfigValuesMap = () => {
+    if (selectedNode?.config && sConfigTranslationMap) {
       const { configValuesMap } = selectedNode.config;
-
-      const configValuesKeys = Object.keys(configValuesMap);
-      const configTranslationsKeys = Object.keys(sConfigTranslationMap);
-
-      // check if there are any new keys in configValues compared to default configTranslations
-      if (configValuesKeys.length === configTranslationsKeys.length) {
-        return;
-      }
-
       const keysToIgnore = [
         'dataDir',
         'http' /* add any other keys to ignore here */,
@@ -68,7 +59,7 @@ const NodeSettingsWrapper = ({
         [key: string]: string | string[] | undefined;
       } = { ...configValuesMap };
 
-      configTranslationsKeys
+      Object.keys(sConfigTranslationMap)
         .filter(
           (key) => !keysToIgnore.includes(key) && !(key in newConfigValuesMap)
         )
@@ -76,10 +67,29 @@ const NodeSettingsWrapper = ({
           newConfigValuesMap[key] =
             sConfigTranslationMap[key]?.defaultValue || '';
         });
+      return newConfigValuesMap;
+    }
+    return null;
+  };
+
+  const updatedConfig = getUpdatedConfigValuesMap();
+
+  useEffect(() => {
+    if (selectedNode?.config && sConfigTranslationMap && !initialized) {
+      const { configValuesMap } = selectedNode.config;
+
+      // check if there are any new keys in configTranslations compared to config values
+      if (
+        Object.keys(configValuesMap).length ===
+        Object.keys(sConfigTranslationMap).length
+      ) {
+        setInitialized(true);
+        return;
+      }
 
       const newConfig = {
         ...selectedNode.config,
-        configValuesMap: newConfigValuesMap,
+        configValuesMap: updatedConfig,
       };
 
       modalOnChangeConfig({ config: newConfig, selectedNode }, true);
@@ -172,10 +182,9 @@ const NodeSettingsWrapper = ({
   ) => {
     // updateNode
     console.log('updating node with newValue: ', newValue);
-    if (selectedNode?.config) {
+    if (selectedNode?.config && updatedConfig) {
       // If the configChange is for a folder location, open electron
-      const { configValuesMap } = selectedNode.config;
-      const currentValue = configValuesMap[configKey];
+      const currentValue = updatedConfig[configKey];
       const { configTranslation } = selectedNode.spec;
       if (
         configTranslation &&
@@ -198,7 +207,7 @@ const NodeSettingsWrapper = ({
         const newConfig = {
           ...selectedNode.config,
           configValuesMap: {
-            ...configValuesMap,
+            ...updatedConfig,
             dataDir: newDataDir,
           },
         };
@@ -215,7 +224,7 @@ const NodeSettingsWrapper = ({
         const newConfig = {
           ...selectedNode.config,
           configValuesMap: {
-            ...configValuesMap,
+            ...updatedConfig,
             [configKey]: newValue,
           },
         };
