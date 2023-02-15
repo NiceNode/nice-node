@@ -68,13 +68,14 @@ const NodeSettingsWrapper = ({
         [key: string]: string | string[] | undefined;
       } = { ...configValuesMap };
 
-      for (const key of configTranslationsKeys) {
-        if (keysToIgnore.includes(key) || key in newConfigValuesMap) {
-          continue;
-        }
-        newConfigValuesMap[key] =
-          sConfigTranslationMap[key]?.defaultValue || '';
-      }
+      configTranslationsKeys
+        .filter(
+          (key) => !keysToIgnore.includes(key) && !(key in newConfigValuesMap)
+        )
+        .forEach((key) => {
+          newConfigValuesMap[key] =
+            sConfigTranslationMap[key]?.defaultValue || '';
+        });
 
       const newConfig = {
         ...selectedNode.config,

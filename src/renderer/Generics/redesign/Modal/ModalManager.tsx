@@ -32,28 +32,7 @@ const ModalManager = () => {
     return null;
   }
 
-  const modalOnChangeConfig = async (config: ModalConfig, save?: boolean) => {
-    let updatedConfig = {};
-    const keys = Object.keys(config);
-    if (keys.length > 1) {
-      updatedConfig = {
-        ...modalConfig,
-        ...config,
-      };
-    } else {
-      const key = keys[0];
-      updatedConfig = {
-        ...modalConfig,
-        [key]: config[key],
-      };
-    }
-    setModalConfig(updatedConfig);
-    if (save) {
-      await modalOnSaveConfig(updatedConfig);
-    }
-  };
-
-  const modalOnSaveConfig = async (updatedConfig: ModalConfig) => {
+  const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
     // TODO: move this into a redux reducer?
     // TODO: add error handling for electron failures
     const {
@@ -126,6 +105,27 @@ const ModalManager = () => {
         }
         break;
       default:
+    }
+  };
+
+  const modalOnChangeConfig = async (config: ModalConfig, save?: boolean) => {
+    let updatedConfig = {};
+    const keys = Object.keys(config);
+    if (keys.length > 1) {
+      updatedConfig = {
+        ...modalConfig,
+        ...config,
+      };
+    } else {
+      const key = keys[0];
+      updatedConfig = {
+        ...modalConfig,
+        [key]: config[key],
+      };
+    }
+    setModalConfig(updatedConfig);
+    if (save) {
+      await modalOnSaveConfig(updatedConfig);
     }
   };
 
