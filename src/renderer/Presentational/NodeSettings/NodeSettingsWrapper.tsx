@@ -55,15 +55,15 @@ const NodeSettingsWrapper = ({
         'http' /* add any other keys to ignore here */,
       ];
 
-      const newConfigValuesMap = { ...configValuesMap };
-      for (const [key, value] of Object.entries(sConfigTranslationMap)) {
-        if (keysToIgnore.includes(key)) {
-          continue;
-        }
-        if (!(key in configValuesMap)) {
-          newConfigValuesMap[key] = value.defaultValue;
-        }
-      }
+      const newConfigValuesMap: {
+        [key: string]: string | string[] | undefined;
+      } = { ...configValuesMap };
+      Object.keys(sConfigTranslationMap)
+        .filter((key) => !keysToIgnore.includes(key))
+        .forEach((key) => {
+          newConfigValuesMap[key] =
+            sConfigTranslationMap[key].defaultValue || '';
+        });
 
       const newConfig = {
         ...selectedNode.config,
@@ -75,6 +75,7 @@ const NodeSettingsWrapper = ({
         selectedNode,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sCategoryConfigs, sConfigTranslationMap, selectedNode]);
 
   useEffect(() => {
