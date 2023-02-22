@@ -5,13 +5,14 @@ import { useAppDispatch } from 'renderer/state/hooks';
 import { setModalState } from 'renderer/state/modal';
 import { Modal } from './Modal';
 import { ModalConfig } from './ModalManager';
+import modalOnChangeConfig from './modalOnChangeConfig';
 
 type Props = {
   modalOnClose: () => void;
 };
 
 export const RemoveNodeModal = ({ modalOnClose }: Props) => {
-  const [modalConfig, setModalConfig] = useState({});
+  const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const dispatch = useAppDispatch();
   const modalTitle = 'Are you sure you want to remove this node?';
   const buttonSaveLabel = 'Remove node';
@@ -36,27 +37,6 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
     modalOnClose();
   };
 
-  const modalOnChangeConfig = async (config: ModalConfig, save?: boolean) => {
-    let updatedConfig = {};
-    const keys = Object.keys(config);
-    if (keys.length > 1) {
-      updatedConfig = {
-        ...modalConfig,
-        ...config,
-      };
-    } else {
-      const key = keys[0];
-      updatedConfig = {
-        ...modalConfig,
-        [key]: config[key],
-      };
-    }
-    setModalConfig(updatedConfig);
-    if (save) {
-      await modalOnSaveConfig(updatedConfig);
-    }
-  };
-
   const onCancel = () => {
     dispatch(
       setModalState({
@@ -75,7 +55,17 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
       modalOnSaveConfig={modalOnSaveConfig}
       modalOnClose={onCancel}
     >
-      <RemoveNodeWrapper modalOnChangeConfig={modalOnChangeConfig} />
+      <RemoveNodeWrapper
+        modalOnChangeConfig={(config, save) => {
+          modalOnChangeConfig(
+            config,
+            modalConfig,
+            setModalConfig,
+            save,
+            modalOnSaveConfig
+          );
+        }}
+      />
     </Modal>
   );
 };

@@ -5,14 +5,16 @@ import { useAppDispatch } from 'renderer/state/hooks';
 import { updateSelectedNodeId } from 'renderer/state/node';
 import { Modal } from './Modal';
 import { ModalConfig } from './ModalManager';
+import modalOnChangeConfig from './modalOnChangeConfig';
 
 type Props = {
   modalOnClose: () => void;
 };
 
 export const AddNodeModal = ({ modalOnClose }: Props) => {
-  const [modalConfig, setModalConfig] = useState({});
-  const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
+  const [modalConfig, setModalConfig] = useState<ModalConfig>({});
+  const [isSaveButtonDisabled, setIsSaveButtonDisabled] =
+    useState<boolean>(false);
   const [step, setStep] = useState(0);
   const dispatch = useAppDispatch();
 
@@ -53,27 +55,6 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     await electron.startNode(ccNode.id);
   };
 
-  const modalOnChangeConfig = async (config: ModalConfig, save?: boolean) => {
-    let updatedConfig = {};
-    const keys = Object.keys(config);
-    if (keys.length > 1) {
-      updatedConfig = {
-        ...modalConfig,
-        ...config,
-      };
-    } else {
-      const key = keys[0];
-      updatedConfig = {
-        ...modalConfig,
-        [key]: config[key],
-      };
-    }
-    setModalConfig(updatedConfig);
-    if (save) {
-      await modalOnSaveConfig(updatedConfig);
-    }
-  };
-
   const disableSaveButton = useCallback((value: boolean) => {
     setIsSaveButtonDisabled(value);
   }, []);
@@ -108,7 +89,15 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       <AddNodeStepperModal
         step={step}
         modal
-        modalOnChangeConfig={modalOnChangeConfig}
+        modalOnChangeConfig={(config, save) => {
+          modalOnChangeConfig(
+            config,
+            modalConfig,
+            setModalConfig,
+            save,
+            modalOnSaveConfig
+          );
+        }}
         disableSaveButton={disableSaveButton}
       />
     </Modal>

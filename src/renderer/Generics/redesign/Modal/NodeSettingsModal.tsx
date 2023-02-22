@@ -4,13 +4,14 @@ import NodeSettingsWrapper from 'renderer/Presentational/NodeSettings/NodeSettin
 import electron from 'renderer/electronGlobal';
 import { Modal } from './Modal';
 import { ModalConfig } from './ModalManager';
+import modalOnChangeConfig from './modalOnChangeConfig';
 
 type Props = {
   modalOnClose: () => void;
 };
 
 export const NodeSettingsModal = ({ modalOnClose }: Props) => {
-  const [modalConfig, setModalConfig] = useState({});
+  const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
   const { t } = useTranslation('genericComponents');
   const modalTitle = t('NodeSettings');
@@ -27,27 +28,6 @@ export const NodeSettingsModal = ({ modalOnClose }: Props) => {
     }
     if (newDataDir && selectedNode) {
       await electron.updateNodeDataDir(selectedNode, newDataDir);
-    }
-  };
-
-  const modalOnChangeConfig = async (config: ModalConfig, save?: boolean) => {
-    let updatedConfig = {};
-    const keys = Object.keys(config);
-    if (keys.length > 1) {
-      updatedConfig = {
-        ...modalConfig,
-        ...config,
-      };
-    } else {
-      const key = keys[0];
-      updatedConfig = {
-        ...modalConfig,
-        [key]: config[key],
-      };
-    }
-    setModalConfig(updatedConfig);
-    if (save) {
-      await modalOnSaveConfig(updatedConfig);
     }
   };
 
@@ -68,7 +48,15 @@ export const NodeSettingsModal = ({ modalOnClose }: Props) => {
       isSaveButtonDisabled={isSaveButtonDisabled}
     >
       <NodeSettingsWrapper
-        modalOnChangeConfig={modalOnChangeConfig}
+        modalOnChangeConfig={(config, save) => {
+          modalOnChangeConfig(
+            config,
+            modalConfig,
+            setModalConfig,
+            save,
+            modalOnSaveConfig
+          );
+        }}
         disableSaveButton={disableSaveButton}
       />
     </Modal>

@@ -4,13 +4,14 @@ import PreferencesWrapper from 'renderer/Presentational/Preferences/PreferencesW
 import electron from 'renderer/electronGlobal';
 import { Modal } from './Modal';
 import { ModalConfig } from './ModalManager';
+import modalOnChangeConfig from './modalOnChangeConfig';
 
 type Props = {
   modalOnClose: () => void;
 };
 
 export const PreferencesModal = ({ modalOnClose }: Props) => {
-  const [modalConfig, setModalConfig] = useState({});
+  const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const { t } = useTranslation('genericComponents');
   const modalTitle = t('Preferences');
   const buttonSaveLabel = 'Save changes';
@@ -28,27 +29,6 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
     modalOnClose();
   };
 
-  const modalOnChangeConfig = async (config: ModalConfig, save?: boolean) => {
-    let updatedConfig = {};
-    const keys = Object.keys(config);
-    if (keys.length > 1) {
-      updatedConfig = {
-        ...modalConfig,
-        ...config,
-      };
-    } else {
-      const key = keys[0];
-      updatedConfig = {
-        ...modalConfig,
-        [key]: config[key],
-      };
-    }
-    setModalConfig(updatedConfig);
-    if (save) {
-      await modalOnSaveConfig(updatedConfig);
-    }
-  };
-
   return (
     <Modal
       modalTitle={modalTitle}
@@ -56,7 +36,17 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
       modalOnSaveConfig={modalOnSaveConfig}
       modalOnClose={modalOnClose}
     >
-      <PreferencesWrapper modalOnChangeConfig={modalOnChangeConfig} />
+      <PreferencesWrapper
+        modalOnChangeConfig={(config, save) => {
+          modalOnChangeConfig(
+            config,
+            modalConfig,
+            setModalConfig,
+            save,
+            modalOnSaveConfig
+          );
+        }}
+      />
     </Modal>
   );
 };
