@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useCallback } from 'react';
-import { useAppDispatch } from '../../../state/hooks';
-import { getModalState, setModalState } from '../../../state/modal';
+import { useAppDispatch } from '../../state/hooks';
+import { getModalState, setModalState } from '../../state/modal';
 import { modalRoutes } from './modalUtils';
 import { NodeSettingsModal } from './NodeSettingsModal';
 import { PreferencesModal } from './PreferencesModal';

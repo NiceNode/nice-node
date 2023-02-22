@@ -20,7 +20,7 @@ import {
   contentContainer,
 } from './app.css';
 import ThemeManager from './ThemeManager';
-import ModalManager from './Generics/redesign/Modal/ModalManager';
+import ModalManager from './Presentational/ModalManager/ModalManager';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Node from 'common/node';
-import { ModalConfig } from '../../Generics/redesign/Modal/ModalManager';
+import { ModalConfig } from '../ModalManager/ModalManager';
 import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
 import { container, removeText } from './removeNode.css';
 

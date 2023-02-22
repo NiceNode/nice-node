@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import PreferencesWrapper from 'renderer/Presentational/Preferences/PreferencesWrapper';
 import electron from 'renderer/electronGlobal';
-import { Modal } from './Modal';
+import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 
 type Props = {

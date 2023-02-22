@@ -3,7 +3,7 @@ import RemoveNodeWrapper from 'renderer/Presentational/RemoveNodeModal/RemoveNod
 import electron from 'renderer/electronGlobal';
 import { useAppDispatch } from 'renderer/state/hooks';
 import { setModalState } from 'renderer/state/modal';
-import { Modal } from './Modal';
+import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 
 type Props = {

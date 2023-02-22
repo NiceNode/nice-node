@@ -3,7 +3,7 @@ import AddNodeStepperModal from 'renderer/Presentational/AddNodeStepper/AddNodeS
 import electron from 'renderer/electronGlobal';
 import { useAppDispatch } from 'renderer/state/hooks';
 import { updateSelectedNodeId } from 'renderer/state/node';
-import { Modal } from './Modal';
+import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 
 type Props = {

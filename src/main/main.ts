@@ -89,6 +89,8 @@ const createWindow = async () => {
     titleBarOverlay: true,
     titleBarStyle: 'hiddenInset',
     show: false,
+    minWidth: 980,
+    minHeight: 480,
     width: 1200,
     height: 820,
     icon: getAssetPath('icon.png'),
