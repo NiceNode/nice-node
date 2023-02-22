@@ -1,13 +1,14 @@
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useCallback } from 'react';
 import { ThemeSetting } from 'main/state/settings';
 import Node from 'common/node';
-import electron from '../../../electronGlobal';
-import { updateSelectedNodeId } from '../../../state/node';
 import { useAppDispatch } from '../../../state/hooks';
-import { getModalState } from '../../../state/modal';
-import { Modal } from './Modal';
+import { getModalState, setModalState } from '../../../state/modal';
 import { modalRoutes } from './modalRoutes';
+import { NodeSettingsModal } from './NodeSettingsModal';
+import { PreferencesModal } from './PreferencesModal';
+import { RemoveNodeModal } from './RemoveNodeModal';
+import { AddNodeModal } from './AddNodeModal';
 
 export type ModalConfig = {
   executionClient?: string;
@@ -17,7 +18,7 @@ export type ModalConfig = {
   isOpenOnStartup?: boolean;
   selectedNode?: Node;
   isDeleteStorage?: boolean;
-  config?: object;
+  settingsConfig?: object;
   newDataDir?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
@@ -25,120 +26,45 @@ export type ModalConfig = {
 
 const ModalManager = () => {
   const { isModalOpen, screen } = useSelector(getModalState);
-  const [modalConfig, setModalConfig] = useState({});
   const dispatch = useAppDispatch();
+
+  const modalOnClose = useCallback(() => {
+    dispatch(
+      setModalState({
+        isModalOpen: false,
+        screen: { route: undefined, type: undefined },
+      })
+    );
+  }, [dispatch]);
 
   if (!isModalOpen) {
     return null;
   }
 
-  const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
-    // TODO: move this into a redux reducer?
-    // TODO: add error handling for electron failures
-    const {
-      executionClient = 'besu',
-      consensusClient = 'nimbus',
-      storageLocation,
-      nodeLibrary,
-      theme,
-      isOpenOnStartup,
-      config,
-      selectedNode,
-      newDataDir,
-      isDeleteStorage = true,
-    } = updatedConfig || (modalConfig as ModalConfig);
+  // Render the appropriate screen based on the current `screen` value
+  switch (screen.route) {
+    // Modals
+    case modalRoutes.addNode:
+      return <AddNodeModal modalOnClose={modalOnClose} />;
+    case modalRoutes.nodeSettings:
+      return <NodeSettingsModal modalOnClose={modalOnClose} />;
+    case modalRoutes.preferences:
+      return <PreferencesModal modalOnClose={modalOnClose} />;
+    case modalRoutes.addValidator:
+      return null;
+    case modalRoutes.clientVersions:
+      return null;
 
-    let ecNodeSpec;
-    let ccNodeSpec;
-    switch (screen.route) {
-      case modalRoutes.addNode:
-        if (nodeLibrary) {
-          ecNodeSpec = nodeLibrary?.[executionClient];
-          ccNodeSpec = nodeLibrary?.[`${consensusClient}-beacon`];
-        }
-
-        if (!ecNodeSpec || !ccNodeSpec) {
-          throw new Error('ecNodeSpec or ccNodeSpec is undefined');
-        }
-
-        // eslint-disable-next-line no-case-declarations
-        const { ecNode, ccNode } = await electron.addEthereumNode(
-          ecNodeSpec,
-          ccNodeSpec,
-          { storageLocation }
-        );
-
-        dispatch(updateSelectedNodeId(ecNode.id));
-        await electron.startNode(ecNode.id);
-        await electron.startNode(ccNode.id);
-        break;
-      case modalRoutes.preferences:
-        if (theme) {
-          await electron.setThemeSetting(theme);
-        }
-        if (isOpenOnStartup) {
-          await electron.setIsOpenOnStartup(isOpenOnStartup);
-        }
-        break;
-      case modalRoutes.nodeSettings:
-        if (config && selectedNode) {
-          await electron.updateNode(selectedNode.id, {
-            config,
-          });
-        }
-        if (newDataDir && selectedNode) {
-          await electron.updateNodeDataDir(selectedNode, newDataDir);
-        }
-        break;
-      case modalRoutes.removeNode:
-        try {
-          if (selectedNode) {
-            await electron.removeNode(selectedNode.id, {
-              isDeleteStorage,
-            });
-          }
-        } catch (err) {
-          console.error(err);
-          throw new Error(
-            'There was an error removing the node. Try again and please report the error to the NiceNode team in Discord.'
-          );
-        }
-        break;
-      default:
-    }
-  };
-
-  const modalOnChangeConfig = async (config: ModalConfig, save?: boolean) => {
-    let updatedConfig = {};
-    const keys = Object.keys(config);
-    if (keys.length > 1) {
-      updatedConfig = {
-        ...modalConfig,
-        ...config,
-      };
-    } else {
-      const key = keys[0];
-      updatedConfig = {
-        ...modalConfig,
-        [key]: config[key],
-      };
-    }
-    setModalConfig(updatedConfig);
-    if (save) {
-      await modalOnSaveConfig(updatedConfig);
-    }
-  };
-
-  return (
-    <Modal
-      modalOnClose={() => {
-        setModalConfig({});
-      }}
-      modalOnChangeConfig={modalOnChangeConfig}
-      modalOnSaveConfig={modalOnSaveConfig}
-      screen={screen}
-    />
-  );
+    // Alerts
+    case modalRoutes.stopNode:
+      return null;
+    case modalRoutes.removeNode:
+      return <RemoveNodeModal modalOnClose={modalOnClose} />;
+    case modalRoutes.updateUnavailable:
+      return null;
+    default:
+      return null;
+  }
 };
 
 export default ModalManager;

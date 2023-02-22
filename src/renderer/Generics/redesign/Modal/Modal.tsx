@@ -1,11 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import AddNodeStepperModal from '../../../Presentational/AddNodeStepper/AddNodeStepperModal';
-import PreferencesWrapper from '../../../Presentational/Preferences/PreferencesWrapper';
-import NodeSettingsWrapper from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
-import RemoveNodeWrapper from '../../../Presentational/RemoveNodeModal/RemoveNodeWrapper';
-import { useAppDispatch } from '../../../state/hooks';
-import { ModalScreen, setModalState } from '../../../state/modal';
+import { useCallback, useEffect } from 'react';
 import Button, { ButtonProps } from '../Button/Button';
 import {
   modalHeaderContainer,
@@ -16,52 +9,42 @@ import {
   modalStepperContainer,
   titleFont,
 } from './modal.css';
-import { modalRoutes } from './modalRoutes';
 import { ModalConfig } from './ModalManager';
 
 type Props = {
-  screen: ModalScreen;
-  modalOnSaveConfig: (updatedConfig?: ModalConfig) => void;
-  modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
+  modalType?: 'alert' | 'modal';
+  modalStyle?: string;
+  modalTitle: string;
+  backButtonEnabled?: boolean;
+  children: React.ReactElement[] | React.ReactElement;
+  buttonCancelLabel?: string;
+  buttonSaveLabel?: string;
+  buttonSaveType?: ButtonProps['type'];
+  isSaveButtonDisabled?: boolean;
+  modalOnSaveConfig: (updatedConfig: ModalConfig | undefined) => void;
   modalOnClose: () => void;
 };
 
 export const Modal = ({
+  children,
+  modalType = 'modal',
+  modalStyle = '',
+  modalTitle = '',
+  backButtonEnabled = true,
+  buttonCancelLabel = 'Cancel',
+  buttonSaveLabel = 'Save',
+  buttonSaveType = 'primary',
+  isSaveButtonDisabled = false,
   modalOnSaveConfig,
-  modalOnChangeConfig,
   modalOnClose,
-  screen,
 }: Props) => {
-  const { t } = useTranslation('genericComponents');
-  const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
-  const [step, setStep] = useState(0);
-  const dispatch = useAppDispatch();
-
-  // keep track of steps here
-  // but keep the modalConfig info, in modalManager.
-
-  const disableSaveButton = useCallback((value: boolean) => {
-    setIsSaveButtonDisabled(value);
-  }, []);
-
-  const resetModal = useCallback(() => {
-    dispatch(
-      setModalState({
-        isModalOpen: false,
-        screen: { route: undefined, type: undefined },
-      })
-    );
-    modalOnClose();
-    setIsSaveButtonDisabled(false);
-  }, [dispatch, modalOnClose]);
-
   const escFunction = useCallback(
     (event: { key: string }) => {
       if (event.key === 'Escape') {
-        resetModal();
+        modalOnClose();
       }
     },
-    [resetModal]
+    [modalOnClose]
   );
 
   useEffect(() => {
@@ -72,150 +55,43 @@ export const Modal = ({
     };
   }, [escFunction]);
 
-  let modalContent = <></>;
-  let modalTitle = '';
-  let modalType = '';
-  let buttonSaveLabel = 'Save';
-  let buttonCancelLabel = 'Cancel';
-  const backButtonEnabled = true;
-  let buttonType: ButtonProps['type'] = 'primary';
-  // Render the appropriate screen based on the current `screen` value
-  switch (screen.route) {
-    // Modals
-    case modalRoutes.addNode:
-      modalTitle =
-        step === 0 ? 'Launch an Ethereum Node' : 'Docker Installation';
-      modalContent = (
-        <AddNodeStepperModal
-          step={step}
-          modal
-          modalOnChangeConfig={modalOnChangeConfig}
-          disableSaveButton={disableSaveButton}
-        />
-      );
-      buttonSaveLabel = step === 0 ? 'Next' : 'Done';
-      buttonCancelLabel = step === 0 ? 'Cancel' : 'Back';
-      // backButtonEnabled = step === 0;
-      break;
-    case modalRoutes.nodeSettings:
-      modalTitle = t('NodeSettings');
-      modalType = 'tabs';
-      modalContent = (
-        <NodeSettingsWrapper
-          modalOnChangeConfig={modalOnChangeConfig}
-          disableSaveButton={disableSaveButton}
-        />
-      );
-      buttonSaveLabel = 'Save changes';
-      break;
-    case modalRoutes.preferences:
-      modalTitle = t('Preferences');
-      modalContent = (
-        <PreferencesWrapper modalOnChangeConfig={modalOnChangeConfig} />
-      );
-      break;
-    case modalRoutes.addValidator:
-      modalContent = <>Add Validator</>;
-      break;
-    case modalRoutes.clientVersions:
-      modalContent = <>Client Versions</>;
-      break;
-
-    // Alerts
-    case modalRoutes.stopNode:
-      modalContent = <>Stop Node</>;
-      buttonSaveLabel = 'Stop node';
-      break;
-    case modalRoutes.removeNode:
-      modalTitle = 'Are you sure you want to remove this node?';
-      modalContent = (
-        <RemoveNodeWrapper modalOnChangeConfig={modalOnChangeConfig} />
-      );
-      buttonSaveLabel = 'Remove node';
-      buttonType = 'danger';
-      break;
-    case modalRoutes.updateUnavailable:
-      modalContent = <>Update unavailable</>;
-      break;
-    default:
-  }
-
-  const tabStyle = modalType === 'tabs' ? 'tabs' : '';
-  const alertStyle = screen.type === 'alert' ? 'alert' : '';
-  const addNodeStyle = screen.route === 'addNode' ? 'addNode' : '';
-  const nodeSettingsStyle =
-    screen.route === 'nodeSettings' ? 'nodeSettings' : '';
   return (
     <div className={modalBackdropStyle}>
-      <div
-        className={[modalContentStyle, addNodeStyle, nodeSettingsStyle].join(
-          ' '
-        )}
-      >
-        {screen.type !== 'alert' && (
+      <div className={[modalContentStyle, modalStyle].join(' ')}>
+        {modalType !== 'alert' && (
           <div className={modalCloseButton}>
             <Button
               variant="icon"
               iconId="close"
               type="ghost"
-              onClick={resetModal}
+              onClick={modalOnClose}
             />
           </div>
         )}
-        <div className={[modalHeaderContainer, alertStyle].join(' ')}>
-          <span className={[titleFont, alertStyle].join(' ')}>
-            {modalTitle}
-          </span>
+        <div className={[modalHeaderContainer, modalType].join(' ')}>
+          <span className={[titleFont, modalType].join(' ')}>{modalTitle}</span>
         </div>
         <div
-          className={[
-            modalChildrenContainer,
-            tabStyle,
-            alertStyle,
-            addNodeStyle,
-            nodeSettingsStyle,
-          ].join(' ')}
+          className={[modalChildrenContainer, modalStyle, modalType].join(' ')}
         >
-          {modalContent}
+          {children}
         </div>
-        <div className={[modalStepperContainer, alertStyle].join(' ')}>
+        <div className={[modalStepperContainer, modalType].join(' ')}>
           {backButtonEnabled && (
             <Button
               variant="text"
               type="secondary"
               label={buttonCancelLabel}
-              onClick={() => {
-                if (screen.route === 'addNode') {
-                  if (step === 0) {
-                    resetModal();
-                  } else {
-                    setStep(0);
-                  }
-                } else if (screen.route === 'removeNode') {
-                  dispatch(
-                    setModalState({
-                      isModalOpen: true,
-                      screen: { route: 'nodeSettings', type: 'modal' },
-                    })
-                  );
-                } else {
-                  resetModal();
-                }
-              }}
+              onClick={modalOnClose}
             />
           )}
           <Button
             variant="text"
-            type={buttonType}
+            type={buttonSaveType}
             disabled={isSaveButtonDisabled}
             label={buttonSaveLabel}
             onClick={() => {
-              if (screen.route === 'addNode' && step === 0) {
-                setStep(1);
-              } else {
-                modalOnSaveConfig();
-                resetModal();
-              }
+              modalOnSaveConfig(undefined);
             }}
           />
         </div>

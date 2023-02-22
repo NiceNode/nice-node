@@ -95,10 +95,6 @@ export const modalChildrenContainer = style({
   flex: 1,
   overflow: 'auto',
   selectors: {
-    [`&.tabs`]: {
-      padding: 0,
-      overflow: 'hidden',
-    },
     [`&.alert`]: {
       padding: '0px 24px',
       overflow: 'hidden',
@@ -107,6 +103,8 @@ export const modalChildrenContainer = style({
       overflow: 'visible',
     },
     [`&.nodeSettings`]: {
+      padding: 0,
+      overflow: 'hidden',
       width: 784,
       minHeight: 559,
     },

@@ -92,7 +92,7 @@ const NodeSettingsWrapper = ({
         configValuesMap: updatedConfig,
       };
 
-      modalOnChangeConfig({ config: newConfig, selectedNode }, true);
+      modalOnChangeConfig({ settingsConfig: newConfig, selectedNode }, true);
       setInitialized(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -235,7 +235,7 @@ const NodeSettingsWrapper = ({
         };
         setSelectedNode(newNode as Node);
         modalOnChangeConfig({
-          config: newConfig,
+          settingsConfig: newConfig,
           selectedNode,
         });
       }
