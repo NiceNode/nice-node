@@ -3,8 +3,7 @@ import { useState } from 'react';
 import PreferencesWrapper from 'renderer/Presentational/Preferences/PreferencesWrapper';
 import electron from 'renderer/electronGlobal';
 import { Modal } from './Modal';
-import { ModalConfig } from './ModalManager';
-import modalOnChangeConfig from './modalOnChangeConfig';
+import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 
 type Props = {
   modalOnClose: () => void;

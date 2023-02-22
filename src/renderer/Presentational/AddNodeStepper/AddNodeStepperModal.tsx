@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 
 import { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
-import { ModalConfig } from '../../Generics/redesign/Modal/ModalManager';
+import { ModalConfig } from '../../Generics/redesign/Modal/modalUtils';
 import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
 import { componentContainer, container } from './addNodeStepper.css';
 import AddEthereumNode, {

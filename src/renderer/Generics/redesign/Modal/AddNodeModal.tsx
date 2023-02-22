@@ -4,8 +4,7 @@ import electron from 'renderer/electronGlobal';
 import { useAppDispatch } from 'renderer/state/hooks';
 import { updateSelectedNodeId } from 'renderer/state/node';
 import { Modal } from './Modal';
-import { ModalConfig } from './ModalManager';
-import modalOnChangeConfig from './modalOnChangeConfig';
+import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 
 type Props = {
   modalOnClose: () => void;

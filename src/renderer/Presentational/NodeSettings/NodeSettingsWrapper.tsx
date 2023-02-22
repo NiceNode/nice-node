@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ModalConfig } from '../../Generics/redesign/Modal/ModalManager';
+import { ModalConfig } from '../../Generics/redesign/Modal/modalUtils';
 import { setModalState } from '../../state/modal';
 import Node, { NodeId } from '../../../common/node';
 import {

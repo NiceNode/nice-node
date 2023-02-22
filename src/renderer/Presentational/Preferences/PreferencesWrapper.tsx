@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ModalConfig } from '../../Generics/redesign/Modal/ModalManager';
+import { ModalConfig } from '../../Generics/redesign/Modal/modalUtils';
 import electron from '../../electronGlobal';
 
 import Preferences, { Preference, ThemeSetting } from './Preferences';

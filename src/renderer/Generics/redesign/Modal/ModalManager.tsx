@@ -1,28 +1,12 @@
 import { useSelector } from 'react-redux';
 import { useCallback } from 'react';
-import { ThemeSetting } from 'main/state/settings';
-import Node from 'common/node';
 import { useAppDispatch } from '../../../state/hooks';
 import { getModalState, setModalState } from '../../../state/modal';
-import { modalRoutes } from './modalRoutes';
+import { modalRoutes } from './modalUtils';
 import { NodeSettingsModal } from './NodeSettingsModal';
 import { PreferencesModal } from './PreferencesModal';
 import { RemoveNodeModal } from './RemoveNodeModal';
 import { AddNodeModal } from './AddNodeModal';
-
-export type ModalConfig = {
-  executionClient?: string;
-  consensusClient?: string;
-  storageLocation?: string;
-  theme?: ThemeSetting;
-  isOpenOnStartup?: boolean;
-  selectedNode?: Node;
-  isDeleteStorage?: boolean;
-  settingsConfig?: object;
-  newDataDir?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-};
 
 const ModalManager = () => {
   const { isModalOpen, screen } = useSelector(getModalState);

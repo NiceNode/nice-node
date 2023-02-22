@@ -9,7 +9,7 @@ import {
   modalStepperContainer,
   titleFont,
 } from './modal.css';
-import { ModalConfig } from './ModalManager';
+import { ModalConfig } from './modalUtils';
 
 type Props = {
   modalType?: 'alert' | 'modal';
