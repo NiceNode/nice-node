@@ -88,6 +88,7 @@ const createWindow = async () => {
   mainWindow = new BrowserWindow({
     titleBarOverlay: true,
     titleBarStyle: 'hiddenInset',
+
     show: false,
     minWidth: 980,
     minHeight: 480,
@@ -95,6 +96,7 @@ const createWindow = async () => {
     height: 820,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      enableBlinkFeatures: 'CSSColorSchemeUARendering',
       nodeIntegration: true,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')

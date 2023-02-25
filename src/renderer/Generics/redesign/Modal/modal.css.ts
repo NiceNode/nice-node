@@ -100,12 +100,11 @@ export const modalChildrenContainer = style({
       overflow: 'hidden',
     },
     [`&.addNode`]: {
-      overflowY: 'scroll',
+      overflowY: 'auto',
     },
     [`&.nodeSettings`]: {
       padding: 0,
       overflowX: 'hidden',
-      width: 784,
       // minHeight: 559,
     },
   },
