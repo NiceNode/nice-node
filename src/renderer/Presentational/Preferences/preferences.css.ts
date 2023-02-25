@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '../../Generics/redesign/theme.css';
 
 export const preferencesContainer = style({
-  paddingBottom: 132,
+  paddingBottom: 32,
 });
 
 export const captionText = style({

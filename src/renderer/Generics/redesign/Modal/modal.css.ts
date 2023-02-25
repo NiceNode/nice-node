@@ -10,8 +10,8 @@ export const modalBackdropStyle = style({
   justifyContent: 'center',
   left: '0',
   top: '0',
-  paddingTop: 30,
-  paddingBottom: 30,
+  paddingTop: 48,
+  paddingBottom: 48,
   width: '100%',
   height: '100%',
   overflow: 'auto',
@@ -25,7 +25,7 @@ export const modalContentStyle = style({
   boxSizing: 'border-box',
   filter:
     'drop-shadow(0px 32px 64px rgba(0, 0, 0, 0.1876)) drop-shadow(0px 2px 21px rgba(0, 0, 0, 0.1474))',
-  maxHeight: '90vh',
+  maxHeight: '80vh',
   backgroundColor: vars.color.background,
   paddingTop: '0px',
   borderRadius: 14,
@@ -36,10 +36,10 @@ export const modalContentStyle = style({
   // a: { color: 'inherit' },
   selectors: {
     [`&.addNode`]: {
-      maxHeight: 'none',
+      // maxHeight: 'none',
     },
     [`&.nodeSettings`]: {
-      maxHeight: 'none',
+      // maxHeight: 'none',
     },
   },
 });
@@ -100,13 +100,13 @@ export const modalChildrenContainer = style({
       overflow: 'hidden',
     },
     [`&.addNode`]: {
-      overflow: 'visible',
+      overflowY: 'scroll',
     },
     [`&.nodeSettings`]: {
       padding: 0,
-      overflow: 'hidden',
+      overflowX: 'hidden',
       width: 784,
-      minHeight: 559,
+      // minHeight: 559,
     },
   },
 });

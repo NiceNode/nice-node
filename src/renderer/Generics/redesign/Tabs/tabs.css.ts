@@ -33,10 +33,10 @@ export const tabContent = style({
   paddingTop: 36,
   selectors: {
     '&.modal': {
-      overflow: 'auto',
+      overflowY: 'scroll',
       // extra padding from scrollbar
       padding: '36px 32px 0px 32px',
-      height: 474,
+      height: 'auto',
       width: 720,
     },
   },
