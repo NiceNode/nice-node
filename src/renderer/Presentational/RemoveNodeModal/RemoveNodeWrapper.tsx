@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ModalConfig } from '../ModalManager/ModalManager';
+import { ModalConfig } from '../ModalManager/modalUtils';
 import { useAppSelector } from '../../state/hooks';
 import { selectSelectedNode } from '../../state/node';
 import RemoveNode from './RemoveNode';

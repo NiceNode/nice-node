@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import RemoveNodeWrapper from 'renderer/Presentational/RemoveNodeModal/RemoveNodeWrapper';
-import electron from 'renderer/electronGlobal';
-import { useAppDispatch } from 'renderer/state/hooks';
-import { setModalState } from 'renderer/state/modal';
+import { setModalState } from '../../state/modal';
+import electron from '../../electronGlobal';
+import { useAppDispatch } from '../../state/hooks';
+import RemoveNodeWrapper from '../RemoveNodeModal/RemoveNodeWrapper';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 

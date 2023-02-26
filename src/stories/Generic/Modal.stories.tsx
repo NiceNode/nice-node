@@ -10,9 +10,9 @@ export default {
 const Template: ComponentStory<typeof Modal> = (args) => <Modal {...args} />;
 
 export const Primary = Template.bind({});
-Primary.args = {
-  screen: {
-    route: 'addNode',
-    type: 'modal',
-  },
-};
+// Primary.args = {
+//   screen: {
+//     route: 'addNode',
+//     type: 'modal',
+//   },
+// };

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { NodeLibrary } from 'main/state/nodeLibrary';
-import { ModalConfig } from '../ModalManager/ModalManager';
+import { ModalConfig } from '../ModalManager/modalUtils';
 import {
   container,
   descriptionFont,

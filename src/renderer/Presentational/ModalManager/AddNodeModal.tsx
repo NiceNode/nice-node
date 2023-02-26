@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
-import AddNodeStepperModal from 'renderer/Presentational/AddNodeStepper/AddNodeStepperModal';
-import electron from 'renderer/electronGlobal';
-import { useAppDispatch } from 'renderer/state/hooks';
-import { updateSelectedNodeId } from 'renderer/state/node';
+import electron from '../../electronGlobal';
+import { useAppDispatch } from '../../state/hooks';
+import { updateSelectedNodeId } from '../../state/node';
+import AddNodeStepperModal from '../AddNodeStepper/AddNodeStepperModal';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 
