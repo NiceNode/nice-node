@@ -27,6 +27,9 @@ export const modalRoutes = Object.freeze({
   updateUnavailable: 'updateUnavailable',
 });
 
+/* Use this to change config settings, saved temporarily in the modal file with backend apis until it's saved by modalOnSaveConfig
+You can also pass in a save flag to update the config immediately with the temporarily saved config settings
+This should always be called in the XXModal.tsx file due to needing access to setModalConfig, and current modalConfig, and passed into appropriate Wrapper file */
 export const modalOnChangeConfig = async (
   config: ModalConfig,
   modalConfig: ModalConfig,
