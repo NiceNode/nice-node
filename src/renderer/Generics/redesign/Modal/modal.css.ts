@@ -101,6 +101,7 @@ export const modalChildrenContainer = style({
     },
     [`&.addNode`]: {
       overflowY: 'auto',
+      overflowX: 'hidden',
     },
     [`&.nodeSettings`]: {
       padding: 0,

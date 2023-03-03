@@ -6,12 +6,6 @@ export interface ModalScreen {
   type: 'alert' | 'modal' | undefined;
 }
 
-export interface ModalConfig {
-  preferences: object;
-  addNodes: object;
-  nodeSettings: object;
-}
-
 // Define a type for the slice state
 export interface ModalState {
   isModalOpen: boolean;

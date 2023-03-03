@@ -5,6 +5,7 @@ import { updateSelectedNodeId } from '../../state/node';
 import AddNodeStepperModal from '../AddNodeStepper/AddNodeStepperModal';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
+import { useGetIsDockerRunningQuery } from '../../state/settingsService';
 
 type Props = {
   modalOnClose: () => void;
@@ -15,13 +16,33 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] =
     useState<boolean>(false);
   const [step, setStep] = useState(0);
+
+  const qIsDockerRunning = useGetIsDockerRunningQuery(null, {
+    pollingInterval: 15000,
+  });
+  const isDockerRunning = qIsDockerRunning?.data;
+
   const dispatch = useAppDispatch();
 
-  const modalTitle =
-    step === 0 ? 'Launch an Ethereum Node' : 'Docker Installation';
+  let modalTitle = '';
+  switch (step) {
+    case 0:
+      modalTitle = 'Launch an Ethereum Node';
+      break;
+    case 1:
+      modalTitle = 'Node Requirements';
+      break;
+    case 2:
+      modalTitle = 'Docker Installation';
+      break;
+    default:
+  }
 
-  const buttonSaveLabel = step === 0 ? 'Next' : 'Done';
+  const buttonSaveLabel =
+    (step === 1 || step === 2) && isDockerRunning ? 'Start node' : 'Continue';
   const buttonCancelLabel = step === 0 ? 'Cancel' : 'Back';
+  const buttonSaveVariant =
+    (step === 1 || step === 2) && isDockerRunning ? 'icon-left' : 'text';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
     const {
@@ -61,14 +82,18 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const onCancel = () => {
     if (step === 0) {
       modalOnClose();
-    } else {
+    } else if (step === 1) {
       setStep(0);
+    } else {
+      setStep(1);
     }
   };
 
   const onSave = () => {
     if (step === 0) {
       setStep(1);
+    } else if (step === 1 && !isDockerRunning) {
+      setStep(2);
     } else {
       modalOnSaveConfig(undefined);
       modalOnClose();
@@ -80,6 +105,8 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       modalTitle={modalTitle}
       modalStyle="addNode"
       buttonSaveLabel={buttonSaveLabel}
+      buttonSaveVariant={buttonSaveVariant}
+      buttonSaveIcon="play"
       buttonCancelLabel={buttonCancelLabel}
       modalOnSaveConfig={onSave}
       modalOnClose={onCancel}
@@ -88,6 +115,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       <AddNodeStepperModal
         step={step}
         modal
+        modalConfig={modalConfig}
         modalOnChangeConfig={(config, save) => {
           modalOnChangeConfig(
             config,

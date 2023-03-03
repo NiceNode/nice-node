@@ -20,6 +20,8 @@ type Props = {
   buttonCancelLabel?: string;
   buttonSaveLabel?: string;
   buttonSaveType?: ButtonProps['type'];
+  buttonSaveVariant?: ButtonProps['variant'];
+  buttonSaveIcon?: ButtonProps['iconId'];
   isSaveButtonDisabled?: boolean;
   modalOnSaveConfig: (updatedConfig: ModalConfig | undefined) => void;
   modalOnClose: () => void;
@@ -34,6 +36,8 @@ export const Modal = ({
   buttonCancelLabel = 'Cancel',
   buttonSaveLabel = 'Save',
   buttonSaveType = 'primary',
+  buttonSaveVariant = 'text',
+  buttonSaveIcon = 'play',
   isSaveButtonDisabled = false,
   modalOnSaveConfig,
   modalOnClose,
@@ -86,8 +90,9 @@ export const Modal = ({
             />
           )}
           <Button
-            variant="text"
+            variant={buttonSaveVariant}
             type={buttonSaveType}
+            iconId={buttonSaveIcon}
             disabled={isSaveButtonDisabled}
             label={buttonSaveLabel}
             onClick={() => {
