@@ -52,7 +52,8 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
       buttonSaveLabel={buttonSaveLabel}
       buttonSaveType={buttonSaveType}
       modalOnSaveConfig={modalOnSaveConfig}
-      modalOnClose={onCancel}
+      modalOnClose={modalOnClose}
+      modalOnCancel={onCancel}
     >
       <RemoveNodeWrapper
         modalOnChangeConfig={(config, save) => {

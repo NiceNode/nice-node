@@ -44,6 +44,7 @@ export const NodeSettingsModal = ({ modalOnClose }: Props) => {
         modalOnClose();
       }}
       modalOnClose={modalOnClose}
+      modalOnCancel={modalOnClose}
       isSaveButtonDisabled={isSaveButtonDisabled}
     >
       <NodeSettingsWrapper

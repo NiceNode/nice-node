@@ -48,6 +48,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
       buttonSaveLabel={buttonSaveLabel}
       modalOnSaveConfig={modalOnSaveConfig}
       modalOnClose={modalOnClose}
+      modalOnCancel={modalOnClose}
     >
       <PreferencesWrapper
         modalOnChangeConfig={(config, save) => {

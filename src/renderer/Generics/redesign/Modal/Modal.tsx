@@ -25,6 +25,7 @@ type Props = {
   isSaveButtonDisabled?: boolean;
   modalOnSaveConfig: (updatedConfig: ModalConfig | undefined) => void;
   modalOnClose: () => void;
+  modalOnCancel: () => void;
 };
 
 export const Modal = ({
@@ -41,6 +42,7 @@ export const Modal = ({
   isSaveButtonDisabled = false,
   modalOnSaveConfig,
   modalOnClose,
+  modalOnCancel,
 }: Props) => {
   const escFunction = useCallback(
     (event: { key: string }) => {
@@ -86,7 +88,7 @@ export const Modal = ({
               variant="text"
               type="secondary"
               label={buttonCancelLabel}
-              onClick={modalOnClose}
+              onClick={modalOnCancel}
             />
           )}
           <Button

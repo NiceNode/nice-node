@@ -108,7 +108,8 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       buttonSaveIcon="play"
       buttonCancelLabel={buttonCancelLabel}
       modalOnSaveConfig={onSave}
-      modalOnClose={onCancel}
+      modalOnClose={modalOnClose}
+      modalOnCancel={onCancel}
       isSaveButtonDisabled={isSaveButtonDisabled}
     >
       <AddNodeStepperModal
