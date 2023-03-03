@@ -38,11 +38,10 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     default:
   }
 
-  const buttonSaveLabel =
-    (step === 1 || step === 2) && isDockerRunning ? 'Start node' : 'Continue';
+  const startNode = (step === 1 || step === 2) && isDockerRunning;
+  const buttonSaveLabel = startNode ? 'Start node' : 'Continue';
   const buttonCancelLabel = step === 0 ? 'Cancel' : 'Back';
-  const buttonSaveVariant =
-    (step === 1 || step === 2) && isDockerRunning ? 'icon-left' : 'text';
+  const buttonSaveVariant = startNode ? 'icon-left' : 'text';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
     const {
