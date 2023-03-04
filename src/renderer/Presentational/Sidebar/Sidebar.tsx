@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { setModalState } from '../../state/modal';
-import { getNotifications } from '../../../main/notifications';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
 import { NodeId, NodeStatus, UserNodes } from '../../../common/node';
@@ -15,6 +15,7 @@ import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
 import { DockerStoppedBanner } from '../DockerInstallation/StartDockerBanner';
+import { getNotifications } from '../../state/notifications';
 
 export interface SidebarProps {
   /**
@@ -32,26 +33,6 @@ export interface SidebarProps {
   sUserNodes?: UserNodes;
   selectedNodeId?: NodeId;
 }
-
-const itemListData: { iconId: IconId; label: string; count?: number }[] = [
-  {
-    iconId: 'bell',
-    label: 'Notifications',
-    count: getNotifications().length, // this needs to be updated based on changes in global state
-  },
-  {
-    iconId: 'add',
-    label: 'Add Node',
-  },
-  {
-    iconId: 'preferences',
-    label: 'Preferences',
-  },
-  {
-    iconId: 'health',
-    label: 'System Monitor',
-  },
-];
 
 const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
   created: 'stopped',
@@ -80,6 +61,27 @@ const Sidebar = ({
   selectedNodeId,
 }: SidebarProps) => {
   const dispatch = useAppDispatch();
+  const notifications = useSelector(getNotifications);
+
+  const itemListData: { iconId: IconId; label: string; count?: number }[] = [
+    {
+      iconId: 'bell',
+      label: 'Notifications',
+      count: notifications?.length,
+    },
+    {
+      iconId: 'add',
+      label: 'Add Node',
+    },
+    {
+      iconId: 'preferences',
+      label: 'Preferences',
+    },
+    {
+      iconId: 'health',
+      label: 'System Monitor',
+    },
+  ];
 
   // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
   // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {

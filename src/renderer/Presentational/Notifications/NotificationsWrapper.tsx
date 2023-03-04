@@ -1,20 +1,25 @@
-import { useState } from 'react';
-import { getNotifications, markAllAsRead } from '../../../main/notifications';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from 'renderer/state/hooks';
+import {
+  getNotifications,
+  markAllAsRead,
+  // removeNotifications,
+  // addNotification,
+} from '../../state/notifications';
 import Notifications from './Notifications';
 
 const NotificationsWrapper = () => {
-  const [notifications, setNotifications] = useState(getNotifications);
+  const dispatch = useAppDispatch();
+  const notifications = useSelector(getNotifications);
 
   const markAllNotificationsAsRead = () => {
-    const updatedNotifications = markAllAsRead();
-    setNotifications(updatedNotifications);
+    dispatch(markAllAsRead());
   };
 
   const onSettingsClick = () => {
     console.log('setting was clicked!');
-    // removeNotifications();
-    // setNotifications(getNotifications);
-    // addNotifications([
+    // dispatch(removeNotifications());
+    // dispatch(addNotifications([
     //   {
     //     unread: true,
     //     status: 'info',
@@ -65,17 +70,16 @@ const NotificationsWrapper = () => {
     //     description: 'All nodes affected',
     //     timestamp: 1673384953,
     //   },
-    // ]);
-    // setNotifications(getNotifications);
-    // setNotifications(removeNotifications);
-    // addNotification({
-    //   unread: true,
-    //   status: 'info',
-    //   title: 'Scheduled for Sync Commitee Duty',
-    //   description: 'Validator 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-    //   timestamp: moment().unix(),
-    // });
-    // setNotifications(getNotifications);
+    // ]));
+    // dispatch(
+    //   addNotification({
+    //     unread: true,
+    //     status: 'info',
+    //     title: 'TEST!',
+    //     description: 'Validator 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+    //     timestamp: 1673384953,
+    //   })
+    // );
   };
 
   const onNotificationItemClick = () => {

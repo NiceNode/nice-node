@@ -1,8 +1,6 @@
 // import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
-import {
-  NotificationItem,
-  NotificationItemProps,
-} from '../../Generics/redesign/NotificationItem/NotificationItem';
+import { NotificationType } from 'renderer/state/notifications';
+import { NotificationItem } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import Button from '../../Generics/redesign/Button/Button';
 import {
   headerContainer,
@@ -12,7 +10,7 @@ import {
 } from './notifications.css';
 
 export type NotificationsType = {
-  data: NotificationItemProps[];
+  data: NotificationType[];
   markAllNotificationsAsRead: () => void;
   onSettingsClick: () => void;
   onNotificationItemClick: () => void;
