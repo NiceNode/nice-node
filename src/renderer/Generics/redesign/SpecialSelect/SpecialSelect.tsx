@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 // Options replaceable component docs:
 // https://react-select.com/components#Option
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Select, { OptionProps, ValueContainerProps } from 'react-select';
 import SelectCard, { SelectCardProps } from '../SelectCard/SelectCard';
 import { vars } from '../theme.css';
@@ -34,39 +34,24 @@ export type SelectOption = {
 export interface SpecialSelectProps {
   options?: SelectOption[];
   onChange?: (newValue: SelectOption | undefined) => void;
+  selectedOption: SelectOption;
 }
 
 /**
  * Used for selecting Ethereum node client
  */
-const SpecialSelect = ({ options, onChange }: SpecialSelectProps) => {
-  const [sSelectedOption, setSelectedOption] = useState<SelectOption>();
-
-  useEffect(() => {
-    // if (onChange && options && options[0]) {
-    // todo: fix, may call multiple times
-    console.log('useEffect(sSelectedOption, options): ');
-
-    if (!sSelectedOption && options && options[0]) {
-      setSelectedOption(options[0]);
-    }
-    // }
-  }, [sSelectedOption, options]);
-
-  useEffect(() => {
-    // if (onChange && options && options[0]) {
-    // todo: fix, may call multiple times
-    console.log('useEffect(sSelectedOption, onChange): ');
-
-    if (onChange) {
-      onChange(sSelectedOption);
-    }
-    // }
-  }, [sSelectedOption, onChange]);
+const SpecialSelect = ({
+  options,
+  onChange,
+  selectedOption,
+}: SpecialSelectProps) => {
+  const [sSelectedOption, setSelectedOption] =
+    useState<SelectOption>(selectedOption);
 
   const onSelectChange = (newValue: unknown) => {
     const newlySelectedOption = newValue as SelectOption;
     console.log('onSelectChange: ', newlySelectedOption);
+    if (onChange) onChange(newlySelectedOption);
     setSelectedOption(newlySelectedOption);
   };
 

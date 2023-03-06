@@ -2,7 +2,7 @@ import {
   ConfigTranslation,
   ConfigValuesMap,
 } from '../../../../common/nodeConfig';
-import { SettingChangeHandler } from '../../../Presentational/NodeSettingsModal/NodeSettingsWrapper';
+import { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
 import {
   LabelSettingsItem,
   LabelSettingsSectionProps,

@@ -271,7 +271,7 @@ export const WalletSettings = ({
         <div className={networkValue}>
           <div>{networkDetails[key as keyof NetworkLabelsProps]}</div>
           <Button
-            ghost
+            type="ghost"
             iconId="copy"
             variant="icon"
             onClick={() => {
@@ -385,7 +385,7 @@ export const WalletSettings = ({
           </div>
           <div className={buttonContainer}>
             <Button
-              ghost
+              type="ghost"
               variant="icon"
               iconId="close"
               size="small"

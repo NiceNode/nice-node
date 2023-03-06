@@ -32,7 +32,7 @@ export const UpdateCallout = ({ onClick }: UpdateCalloutProps) => {
       </div>
       <div className={buttonContainer}>
         <Button
-          primary
+          type="primary"
           wide
           label="Install Update"
           size="small"

@@ -1,20 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
-import electron from '../../electronGlobal';
+import { useEffect, useState } from 'react';
+import { ModalConfig } from '../ModalManager/modalUtils';
 import { useAppSelector } from '../../state/hooks';
 import { selectSelectedNode } from '../../state/node';
 import RemoveNode from './RemoveNode';
 
-export type RemoveNodeAction = 'cancel' | 'remove';
-
 export interface RemoveNodeWrapperProps {
-  isOpen: boolean;
-  onClose: (action: RemoveNodeAction) => void;
+  modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
 }
 
-const RemoveNodeWrapper = ({ isOpen, onClose }: RemoveNodeWrapperProps) => {
+const RemoveNodeWrapper = ({ modalOnChangeConfig }: RemoveNodeWrapperProps) => {
   const selectedNode = useAppSelector(selectSelectedNode);
   const [sNodeStorageUsedGBs, setNodeStorageUsedGBs] = useState<number>();
-  const [sError, setError] = useState<string>('');
 
   useEffect(() => {
     console.log(selectedNode);
@@ -24,42 +20,15 @@ const RemoveNodeWrapper = ({ isOpen, onClose }: RemoveNodeWrapperProps) => {
     } else {
       setNodeStorageUsedGBs(undefined);
     }
+    modalOnChangeConfig({ selectedNode });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNode]);
-
-  const onClickRemoveNode = useCallback(
-    async (isDeletingData: boolean) => {
-      // open remove node modal/prompt
-      console.log('onClickRemoveNode', selectedNode?.id, isDeletingData);
-      if (!selectedNode) {
-        throw new Error(
-          'Unable to remove the node. No selected node detected.'
-        );
-      }
-      try {
-        setError('');
-        await electron.removeNode(selectedNode.id, {
-          isDeleteStorage: isDeletingData,
-        });
-        // unselect the current node?
-        // or call remove node through a hook which updates this?
-        onClose('remove');
-      } catch (err) {
-        console.error(err);
-        setError(
-          'There was an error removing the node. Try again and please report the error to the NiceNode team in Discord.'
-        );
-      }
-    },
-    [selectedNode, onClose]
-  );
 
   return (
     <RemoveNode
-      isOpen={isOpen}
       nodeStorageUsedGBs={sNodeStorageUsedGBs}
-      onClickClose={() => onClose('cancel')}
-      onClickRemoveNode={onClickRemoveNode}
-      errorMessage={sError}
+      modalOnChangeConfig={modalOnChangeConfig}
+      selectedNode={selectedNode}
     />
   );
 };

@@ -1,25 +1,29 @@
 import {
-  contentContianer,
-  contianer,
-  graphicsContianer,
+  contentContainer,
+  container,
+  graphicsContainer,
 } from './contentWithSideArt.css';
 import defaultGraphic from '../../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 
 type Props = {
   children: React.ReactNode;
   graphic?: string;
+  modal: boolean;
 };
 
-const ContentWithSideArt = ({ children, graphic }: Props) => {
+const ContentWithSideArt = ({ children, graphic, modal }: Props) => {
+  const modalStyle = modal ? 'modal' : '';
   return (
-    <div className={contianer}>
-      <div className={contentContianer}>{children}</div>
+    <div className={container}>
+      <div className={[contentContainer, modalStyle].join(' ')}>{children}</div>
 
       {/* art graphic - background image matches content height more easily */}
-      <div
-        className={graphicsContianer}
-        style={{ backgroundImage: `url(${graphic ?? defaultGraphic})` }}
-      />
+      {!modal && (
+        <div
+          className={graphicsContainer}
+          style={{ backgroundImage: `url(${graphic ?? defaultGraphic})` }}
+        />
+      )}
     </div>
   );
 };

@@ -27,16 +27,18 @@ export interface LabelSettingsSectionProps {
    * The sections label value items
    */
   items: LabelSettingsItem[];
+  type?: string;
 }
 
 const LabelSettingsSection = ({
   sectionTitle,
   items,
+  type,
 }: LabelSettingsSectionProps) => {
   const { t } = useTranslation('genericComponents');
 
   return (
-    <div className={sectionContainer}>
+    <div className={[sectionContainer, type].join(' ')}>
       {sectionTitle && (
         <div className={sectionHeaderContainer}>
           <div className={sectionHeaderText}>{sectionTitle}</div>

@@ -6,6 +6,12 @@ export const container = style({
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: 16,
+  paddingBottom: 15,
+  selectors: {
+    '&.modal': {
+      width: 560,
+    },
+  },
 });
 
 export const titleFont = style({

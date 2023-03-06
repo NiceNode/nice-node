@@ -14,10 +14,8 @@ export interface ButtonProps {
   /**
    * Is this the principal call to action on the page?
    */
-  primary?: boolean;
   disabled?: boolean;
   backgroundColor?: string;
-  ghost?: boolean;
   spaceBetween?: boolean;
   size?: 'small' | 'medium' | 'large';
   /**
@@ -44,7 +42,6 @@ export interface ButtonProps {
 }
 
 const Button = ({
-  primary = false,
   size = 'medium',
   disabled = false,
   variant = 'text',
@@ -52,13 +49,11 @@ const Button = ({
   iconId = 'settings',
   spaceBetween = false,
   wide = false,
-  ghost = false,
   backgroundColor,
   label,
   ...props
 }: ButtonProps) => {
-  // initialization makes type backwards compatible with primary
-  let buttonStyle = primary ? primaryButton : secondaryButton;
+  let buttonStyle;
   if (type === 'secondary') {
     buttonStyle = secondaryButton;
   } else if (type === 'primary') {
@@ -67,9 +62,6 @@ const Button = ({
     buttonStyle = ghostButton;
   } else if (type === 'danger') {
     buttonStyle = dangerButton;
-  }
-  if (ghost) {
-    buttonStyle = ghostButton;
   }
   const classNames = [baseButton, buttonStyle];
   const wideStyle = wide ? 'wide' : '';

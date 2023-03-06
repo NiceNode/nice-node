@@ -1,35 +1,56 @@
 import { useCallback, useEffect } from 'react';
-import Button from '../Button/Button';
+import Button, { ButtonProps } from '../Button/Button';
 import {
+  modalHeaderContainer,
   modalBackdropStyle,
+  modalCloseButton,
   modalChildrenContainer,
   modalContentStyle,
+  modalStepperContainer,
   titleFont,
 } from './modal.css';
+import { ModalConfig } from '../../../Presentational/ModalManager/modalUtils';
 
 type Props = {
+  modalType?: 'alert' | 'modal';
+  modalStyle?: string;
+  modalTitle: string;
+  backButtonEnabled?: boolean;
   children: React.ReactElement[] | React.ReactElement;
-  isOpen: boolean | undefined;
-  onClickCloseButton: () => void;
-  title?: string;
-  isFullScreen?: boolean;
+  buttonCancelLabel?: string;
+  buttonSaveLabel?: string;
+  buttonSaveType?: ButtonProps['type'];
+  buttonSaveVariant?: ButtonProps['variant'];
+  buttonSaveIcon?: ButtonProps['iconId'];
+  isSaveButtonDisabled?: boolean;
+  modalOnSaveConfig: (updatedConfig: ModalConfig | undefined) => void;
+  modalOnClose: () => void;
+  modalOnCancel: () => void;
 };
 
 export const Modal = ({
   children,
-  isOpen,
-  onClickCloseButton,
-  title,
-  isFullScreen,
+  modalType = 'modal',
+  modalStyle = '',
+  modalTitle = '',
+  backButtonEnabled = true,
+  buttonCancelLabel = 'Cancel',
+  buttonSaveLabel = 'Save',
+  buttonSaveType = 'primary',
+  buttonSaveVariant = 'text',
+  buttonSaveIcon = 'play',
+  isSaveButtonDisabled = false,
+  modalOnSaveConfig,
+  modalOnClose,
+  modalOnCancel,
 }: Props) => {
   const escFunction = useCallback(
     (event: { key: string }) => {
       if (event.key === 'Escape') {
-        // Do whatever when esc is pressed
-        onClickCloseButton();
+        modalOnClose();
       }
     },
-    [onClickCloseButton]
+    [modalOnClose]
   );
 
   useEffect(() => {
@@ -41,37 +62,46 @@ export const Modal = ({
   }, [escFunction]);
 
   return (
-    <div
-      style={{
-        display: isOpen ? 'flex' : 'none',
-        // paddingTop: 30 leaves room for the drag bar on mac
-        paddingTop: 30,
-      }}
-      className={modalBackdropStyle}
-    >
-      <div
-        className={modalContentStyle}
-        style={{
-          height: isFullScreen ? '95vh' : '',
-          width: isFullScreen ? '95vw' : '',
-        }}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ height: 40, alignSelf: 'flex-end' }}>
-            <div style={{ position: 'absolute', top: 12, right: 14 }}>
-              <Button
-                variant="icon"
-                iconId="close"
-                ghost
-                onClick={onClickCloseButton}
-              />
-            </div>
+    <div className={modalBackdropStyle}>
+      <div className={[modalContentStyle, modalStyle].join(' ')}>
+        {modalType !== 'alert' && (
+          <div className={modalCloseButton}>
+            <Button
+              variant="icon"
+              iconId="close"
+              type="ghost"
+              onClick={modalOnClose}
+            />
           </div>
-          <span className={titleFont} style={{ flexGrow: 1 }}>
-            {title}
-          </span>
+        )}
+        <div className={[modalHeaderContainer, modalType].join(' ')}>
+          <span className={[titleFont, modalType].join(' ')}>{modalTitle}</span>
         </div>
-        <div className={modalChildrenContainer}>{children}</div>
+        <div
+          className={[modalChildrenContainer, modalStyle, modalType].join(' ')}
+        >
+          {children}
+        </div>
+        <div className={[modalStepperContainer, modalType].join(' ')}>
+          {backButtonEnabled && (
+            <Button
+              variant="text"
+              type="secondary"
+              label={buttonCancelLabel}
+              onClick={modalOnCancel}
+            />
+          )}
+          <Button
+            variant={buttonSaveVariant}
+            type={buttonSaveType}
+            iconId={buttonSaveIcon}
+            disabled={isSaveButtonDisabled}
+            label={buttonSaveLabel}
+            onClick={() => {
+              modalOnSaveConfig(undefined);
+            }}
+          />
+        </div>
       </div>
     </div>
   );

@@ -9,8 +9,6 @@ import { SystemRequirements } from '../../../common/systemRequirements';
 // eslint-disable-next-line import/no-cycle
 import { makeCheckList } from './requirementsChecklistUtil';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
-import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
-import graphicsPng from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
 
 export interface NodeRequirementsProps {
   /**
@@ -25,12 +23,14 @@ export interface NodeRequirementsProps {
    * A folder path where the node data will be stored.
    */
   nodeStorageLocation?: string;
+  type?: string;
 }
 
 const NodeRequirements = ({
   nodeRequirements,
   systemData,
   nodeStorageLocation,
+  type,
 }: NodeRequirementsProps) => {
   const { t } = useTranslation('systemRequirements');
   const [sItems, setItems] = useState<ChecklistItemProps[]>([]);
@@ -58,26 +58,24 @@ const NodeRequirements = ({
   }, [nodeRequirements, systemData, nodeStorageLocation]);
 
   return (
-    <ContentWithSideArt graphic={graphicsPng}>
-      <div className={container}>
-        <div className={titleFont}>Node Requirements</div>
-        <div className={descriptionFont}>
-          {nodeRequirements?.description ? (
-            nodeRequirements.description
-          ) : (
-            <>{t('nodeRequirementsDefaultDescription')}</>
-          )}
-        </div>
-        {nodeRequirements?.documentationUrl && (
-          <ExternalLink
-            text={t('nodeRequirementsLearnMore')}
-            url={nodeRequirements.documentationUrl}
-          />
+    <div className={container}>
+      {type !== 'modal' && <div className={titleFont}>Node Requirements</div>}
+      <div className={descriptionFont}>
+        {nodeRequirements?.description ? (
+          nodeRequirements.description
+        ) : (
+          <>{t('nodeRequirementsDefaultDescription')}</>
         )}
-        {!nodeRequirements && <>{t('nodeRequirementsUnavailable')}</>}
-        <Checklist items={sItems} />
       </div>
-    </ContentWithSideArt>
+      {nodeRequirements?.documentationUrl && (
+        <ExternalLink
+          text={t('nodeRequirementsLearnMore')}
+          url={nodeRequirements.documentationUrl}
+        />
+      )}
+      {!nodeRequirements && <>{t('nodeRequirementsUnavailable')}</>}
+      <Checklist items={sItems} />
+    </div>
   );
 };
 

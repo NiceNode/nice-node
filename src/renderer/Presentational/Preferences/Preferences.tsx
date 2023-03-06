@@ -1,10 +1,13 @@
 import { useTranslation } from 'react-i18next';
-
-import { Modal } from '../../Generics/redesign/Modal/Modal';
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
 import LanguageSelect from '../../LanguageSelect';
-import { captionText, selectedThemeImage, themeImage } from './preferences.css';
+import {
+  preferencesContainer,
+  captionText,
+  selectedThemeImage,
+  themeImage,
+} from './preferences.css';
 import DarkModeThumbnail from '../../assets/images/artwork/DarkModeThumbnail.png';
 import LightModeThumbnail from '../../assets/images/artwork/LightModeThumbnail.png';
 import AutoDarkLightModeThumbnail from '../../assets/images/artwork/AutoDarkLightModeThumbnail.png';
@@ -14,8 +17,6 @@ import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/Horizonta
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Preference = 'theme' | 'isOpenOnStartup';
 export interface PreferencesProps {
-  isOpen: boolean;
-  onClose: () => void;
   themeSetting?: ThemeSetting;
   isOpenOnStartup?: boolean;
   version?: string;
@@ -23,8 +24,6 @@ export interface PreferencesProps {
 }
 
 const Preferences = ({
-  isOpen,
-  onClose,
   themeSetting,
   isOpenOnStartup,
   version,
@@ -39,11 +38,7 @@ const Preferences = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      title={t('Preferences')}
-      onClickCloseButton={onClose}
-    >
+    <div className={preferencesContainer}>
       <span className={lineKeyText}>{t('Appearance')}</span>
       <div
         style={{
@@ -51,6 +46,7 @@ const Preferences = ({
           flexDirection: 'row',
           gap: 10,
           paddingBottom: 24,
+          paddingTop: 12,
         }}
       >
         {[
@@ -124,7 +120,7 @@ const Preferences = ({
         ]}
       />
       <span className={captionText}>NiceNode version {version}</span>
-    </Modal>
+    </div>
   );
 };
 

@@ -1,13 +1,13 @@
 import { style } from '@vanilla-extract/css';
 
-export const contianer = style({
+export const container = style({
   display: 'flex',
   flexDirection: 'row',
   width: '100%',
   height: '100%',
 });
 
-export const graphicsContianer = style({
+export const graphicsContainer = style({
   minWidth: 380, // min-width works with flexGrow: 1 on the content
   '@media': {
     'screen and (max-width: 980px)': {
@@ -16,4 +16,12 @@ export const graphicsContianer = style({
   },
 });
 
-export const contentContianer = style({ flexGrow: 1, paddingRight: 32 });
+export const contentContainer = style({
+  flexGrow: 1,
+  padding: '80px 64px',
+  selectors: {
+    [`&.modal`]: {
+      padding: 0,
+    },
+  },
+});

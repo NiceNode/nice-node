@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { setModalState } from '../../../state/modal';
+import { useAppDispatch } from '../../../state/hooks';
 import Button, { ButtonProps } from '../Button/Button';
 import { NodeOverviewProps } from '../consts';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
@@ -18,8 +21,6 @@ import {
   popupContainer,
   menuButtonContainer,
 } from './header.css';
-import NodeSettingsWrapper from '../../../Presentational/NodeSettingsModal/NodeSettingsWrapper';
-import LogsModal from '../../../Presentational/NodeLogsModal/LogsModal';
 
 /**
  * Primary UI component for user interaction
@@ -30,9 +31,9 @@ export const Header = (props: NodeOverviewProps) => {
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
   const [isSettingsDisplayed, setIsSettingsDisplayed] =
     useState<boolean>(false);
-  const [sIsSettingsModalOpen, setIsSettingsModalOpen] =
-    useState<boolean>(false);
-  const [sIsLogsModalOpen, setIsLogsModalOpen] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const startStopButtonProps: ButtonProps = {
     label: '',
@@ -87,7 +88,7 @@ export const Header = (props: NodeOverviewProps) => {
           >
             <Button
               label="Update Available"
-              primary
+              type="primary"
               iconId="down"
               variant="icon-right"
               size="small"
@@ -113,14 +114,18 @@ export const Header = (props: NodeOverviewProps) => {
           {...startStopButtonProps}
           variant="icon-left"
           size="small"
-          primary={startStopButtonProps.iconId === 'play'}
+          type={
+            startStopButtonProps.iconId === 'play' ? 'primary' : 'secondary'
+          }
         />
         {logsButtonProps !== undefined && (
           <Button
             {...logsButtonProps}
             variant="icon-left"
             size="small"
-            onClick={() => setIsLogsModalOpen(true)}
+            onClick={() => {
+              navigate('/main/node/logs');
+            }}
           />
         )}
         <div
@@ -136,9 +141,13 @@ export const Header = (props: NodeOverviewProps) => {
             variant="icon"
             size="small"
             onClick={() => {
-              setIsSettingsModalOpen(true);
               if (type === 'client') {
-                if (onAction) onAction('settings');
+                dispatch(
+                  setModalState({
+                    isModalOpen: true,
+                    screen: { route: 'nodeSettings', type: 'modal' },
+                  })
+                );
                 // setIsSettingsDisplayed(!isSettingsDisplayed);
               } else {
                 console.log('open preferences!');
@@ -182,15 +191,6 @@ export const Header = (props: NodeOverviewProps) => {
           )}
         </div>
       </div>
-
-      <NodeSettingsWrapper
-        isOpen={sIsSettingsModalOpen}
-        onClickClose={() => setIsSettingsModalOpen(false)}
-      />
-      <LogsModal
-        isOpen={sIsLogsModalOpen}
-        onClickClose={() => setIsLogsModalOpen(false)}
-      />
     </div>
   );
 };

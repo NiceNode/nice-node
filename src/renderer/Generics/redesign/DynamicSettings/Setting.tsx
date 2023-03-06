@@ -9,7 +9,7 @@ import FolderInput from '../Input/FolderInput';
 import Input from '../Input/Input';
 import Select from '../Select/Select';
 import MultiSelect from '../Select/MultiSelect';
-import { SettingChangeHandler } from '../../../Presentational/NodeSettingsModal/NodeSettingsWrapper';
+import { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
 
 export type SettingProps = {
   configTranslation: ConfigTranslation;
