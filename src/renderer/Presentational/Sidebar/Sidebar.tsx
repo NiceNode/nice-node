@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { setModalState } from '../../state/modal';
 import { getNotifications } from '../../../main/notifications';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
@@ -14,9 +14,6 @@ import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/Sideb
 import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
-import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
-import PreferencesWrapper from '../PreferencesModal/PreferencesWrapper';
 import { DockerStoppedBanner } from '../DockerInstallation/StartDockerBanner';
 
 export interface SidebarProps {
@@ -83,9 +80,6 @@ const Sidebar = ({
   selectedNodeId,
 }: SidebarProps) => {
   const dispatch = useAppDispatch();
-  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
-  const [sIsModalOpenSettings, setIsModalOpenSettings] =
-    useState<boolean>(false);
 
   // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
   // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
@@ -176,10 +170,19 @@ const Sidebar = ({
               onClick={() => {
                 console.log('sidebar link item clicked: ', item.iconId);
                 if (item.iconId === 'add') {
-                  // open add node dialog
-                  setIsModalOpenAddNode(true);
+                  dispatch(
+                    setModalState({
+                      isModalOpen: true,
+                      screen: { route: 'addNode', type: 'modal' },
+                    })
+                  );
                 } else if (item.iconId === 'preferences') {
-                  setIsModalOpenSettings(true);
+                  dispatch(
+                    setModalState({
+                      isModalOpen: true,
+                      screen: { route: 'preferences', type: 'modal' },
+                    })
+                  );
                 } else if (item.iconId === 'bell') {
                   navigate('/main/notification');
                 } else if (item.iconId === 'health') {
@@ -190,27 +193,6 @@ const Sidebar = ({
           );
         })}
       </div>
-      <Modal
-        type="stepper"
-        title=""
-        isOpen={sIsModalOpenAddNode}
-        onClickCloseButton={() => setIsModalOpenAddNode(false)}
-        isFullScreen
-      >
-        <AddNodeStepper
-          modal
-          onChange={(newValue: 'done' | 'cancel') => {
-            console.log(newValue);
-            if (newValue === 'done' || newValue === 'cancel') {
-              setIsModalOpenAddNode(false);
-            }
-          }}
-        />
-      </Modal>
-      <PreferencesWrapper
-        isOpen={sIsModalOpenSettings}
-        onClose={() => setIsModalOpenSettings(false)}
-      />
     </div>
   );
 };

@@ -7,7 +7,7 @@ export const dragWindowContainer = style({
   width: '100vw',
   position: 'absolute',
   top: 0,
-  zIndex: 100,
+  zIndex: 3,
   cursor: 'grab',
 } as ComplexStyleRule); // fix for lacking '-webkit-app-region' type
 

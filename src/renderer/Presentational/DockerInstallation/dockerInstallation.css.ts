@@ -7,6 +7,11 @@ export const container = style({
   alignItems: 'flex-start',
   gap: 16,
   paddingBottom: 15,
+  selectors: {
+    '&.modal': {
+      width: 560,
+    },
+  },
 });
 
 export const titleFont = style({

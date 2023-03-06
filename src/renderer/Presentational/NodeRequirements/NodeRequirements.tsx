@@ -23,12 +23,14 @@ export interface NodeRequirementsProps {
    * A folder path where the node data will be stored.
    */
   nodeStorageLocation?: string;
+  type?: string;
 }
 
 const NodeRequirements = ({
   nodeRequirements,
   systemData,
   nodeStorageLocation,
+  type,
 }: NodeRequirementsProps) => {
   const { t } = useTranslation('systemRequirements');
   const [sItems, setItems] = useState<ChecklistItemProps[]>([]);
@@ -57,7 +59,7 @@ const NodeRequirements = ({
 
   return (
     <div className={container}>
-      <div className={titleFont}>Node Requirements</div>
+      {type !== 'modal' && <div className={titleFont}>Node Requirements</div>}
       <div className={descriptionFont}>
         {nodeRequirements?.description ? (
           nodeRequirements.description

@@ -20,6 +20,7 @@ import {
   contentContainer,
 } from './app.css';
 import ThemeManager from './ThemeManager';
+import ModalManager from './Presentational/ModalManager/ModalManager';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -85,6 +86,7 @@ export default function App() {
   return (
     <ThemeManager>
       <MemoryRouter initialEntries={[initialPage]}>
+        <ModalManager />
         <Routes>
           <Route path="/">
             <Route
@@ -123,7 +125,6 @@ export default function App() {
                 }
               />
             </Route>
-
             {/* Using path="*"" means "match anything", so this route
             acts like a catch-all for URLs that we don't have explicit
             routes for. */}

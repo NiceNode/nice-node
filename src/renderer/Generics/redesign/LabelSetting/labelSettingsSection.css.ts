@@ -6,6 +6,11 @@ export const sectionContainer = style({
   flexDirection: 'column',
   alignItems: 'flex-start',
   padding: '8px 0px',
+  selectors: {
+    [`&.modal`]: {
+      padding: '0px 0px 8px 0px',
+    },
+  },
 });
 export const sectionHeaderContainer = style({
   display: 'flex',

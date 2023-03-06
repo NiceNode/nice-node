@@ -2,11 +2,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { NodeLibrary } from 'main/state/nodeLibrary';
+import { ModalConfig } from '../ModalManager/modalUtils';
 import {
   container,
   descriptionFont,
   sectionFont,
   titleFont,
+  descriptionContainer,
 } from './addEthereumNode.css';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import SpecialSelect, {
@@ -95,8 +98,8 @@ const ccOptions = [
 ];
 
 export type AddEthereumNodeValues = {
-  executionClient?: string;
-  consensusClient?: string;
+  executionClient?: SelectOption;
+  consensusClient?: SelectOption;
   storageLocation?: string;
 };
 export interface AddEthereumNodeProps {
@@ -105,10 +108,24 @@ export interface AddEthereumNodeProps {
   /**
    * Listen to node config changes
    */
-  onChange: (newValue: AddEthereumNodeValues) => void;
+  onChange?: (newValue: AddEthereumNodeValues) => void;
+  ethereumNodeConfig?: AddEthereumNodeValues;
+  setConsensusClient?: (
+    elClient: SelectOption,
+    object: AddEthereumNodeValues
+  ) => void;
+  setExecutionClient?: (
+    clClient: SelectOption,
+    object: AddEthereumNodeValues
+  ) => void;
+  modalOnChangeConfig?: (config: ModalConfig) => void;
 }
 
 const AddEthereumNode = ({
+  ethereumNodeConfig,
+  setConsensusClient,
+  setExecutionClient,
+  modalOnChangeConfig,
   onChange,
 }: /**
  * Todo: Pass options from the node spec files
@@ -120,10 +137,12 @@ AddEthereumNodeProps) => {
   const { t: tGeneric } = useTranslation('genericComponents');
   const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const [sSelectedExecutionClient, setSelectedExecutionClient] =
-    useState<string>();
+    useState<SelectOption>(ethereumNodeConfig?.executionClient || ecOptions[0]);
   const [sSelectedConsensusClient, setSelectedConsensusClient] =
-    useState<string>();
-  const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
+    useState<SelectOption>(ethereumNodeConfig?.consensusClient || ccOptions[0]);
+  const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>(
+    ethereumNodeConfig?.storageLocation || ''
+  );
   const [
     sNodeStorageLocationFreeStorageGBs,
     setNodeStorageLocationFreeStorageGBs,
@@ -133,23 +152,64 @@ AddEthereumNodeProps) => {
     const fetchData = async () => {
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
+      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
       console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
       setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
+      if (modalOnChangeConfig) {
+        modalOnChangeConfig({
+          storageLocation: defaultNodesStorageDetails.folderPath,
+          nodeLibrary,
+        });
+      }
       setNodeStorageLocationFreeStorageGBs(
         defaultNodesStorageDetails.freeStorageGBs
       );
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onChangeEc = useCallback((newEc?: SelectOption) => {
-    console.log('new selected execution client: ', newEc);
-    if (newEc) setSelectedExecutionClient(newEc.value);
-  }, []);
-  const onChangeCc = useCallback((newCc?: SelectOption) => {
-    console.log('new selected consensus client: ', newCc);
-    if (newCc) setSelectedConsensusClient(newCc.value);
-  }, []);
+  const onChangeEc = useCallback(
+    (newEc?: SelectOption) => {
+      console.log('new selected execution client: ', newEc);
+      const ethNodeConfig = {
+        executionClient: sSelectedExecutionClient,
+        consensusClient: sSelectedConsensusClient,
+        storageLocation: sNodeStorageLocation,
+      };
+      if (newEc) {
+        setSelectedExecutionClient(newEc);
+        if (setExecutionClient) setExecutionClient(newEc, ethNodeConfig);
+      }
+    },
+    [
+      sSelectedExecutionClient,
+      sSelectedConsensusClient,
+      sNodeStorageLocation,
+      setExecutionClient,
+    ]
+  );
+
+  const onChangeCc = useCallback(
+    (newCc?: SelectOption) => {
+      console.log('new selected consensus client: ', newCc);
+      const ethNodeConfig = {
+        executionClient: sSelectedExecutionClient,
+        consensusClient: sSelectedConsensusClient,
+        storageLocation: sNodeStorageLocation,
+      };
+      if (newCc) {
+        setSelectedConsensusClient(newCc);
+        if (setConsensusClient) setConsensusClient(newCc, ethNodeConfig);
+      }
+    },
+    [
+      sSelectedExecutionClient,
+      sSelectedConsensusClient,
+      sNodeStorageLocation,
+      setConsensusClient,
+    ]
+  );
 
   useEffect(() => {
     if (onChange) {
@@ -168,18 +228,30 @@ AddEthereumNodeProps) => {
 
   return (
     <div className={container}>
-      <div className={titleFont}>{t('LaunchAnEthereumNode')}</div>
-      <div className={descriptionFont}>
-        <>{t('AddEthereumNodeDescription')}</>
+      {!modalOnChangeConfig && (
+        <div className={titleFont}>{t('LaunchAnEthereumNode')}</div>
+      )}
+      <div className={descriptionContainer}>
+        <div className={descriptionFont}>
+          <>{t('AddEthereumNodeDescription')}</>
+        </div>
+        <ExternalLink
+          text={t('LearnMoreClientDiversity')}
+          url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
+        />
       </div>
-      <ExternalLink
-        text={t('LearnMoreClientDiversity')}
-        url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
+      <p className={sectionFont}>Recommended execution client</p>
+      <SpecialSelect
+        selectedOption={sSelectedExecutionClient}
+        onChange={onChangeEc}
+        options={ecOptions}
       />
-      <p className={sectionFont}>Execution client</p>
-      <SpecialSelect onChange={onChangeEc} options={ecOptions} />
-      <p className={sectionFont}>Consensus client</p>
-      <SpecialSelect onChange={onChangeCc} options={ccOptions} />
+      <p className={sectionFont}>Recommended consensus client</p>
+      <SpecialSelect
+        selectedOption={sSelectedConsensusClient}
+        onChange={onChangeCc}
+        options={ccOptions}
+      />
       <DropdownLink
         text={`${
           sIsOptionsOpen
@@ -228,6 +300,11 @@ AddEthereumNodeProps) => {
           console.log('storageLocationDetails', storageLocationDetails);
           if (storageLocationDetails) {
             setNodeStorageLocation(storageLocationDetails.folderPath);
+            if (modalOnChangeConfig) {
+              modalOnChangeConfig({
+                storageLocation: storageLocationDetails.folderPath,
+              });
+            }
             setNodeStorageLocationFreeStorageGBs(
               storageLocationDetails.freeStorageGBs
             );
