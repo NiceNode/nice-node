@@ -242,6 +242,10 @@ export const initialize = async () => {
           const containerDetails = await getContainerDetails(
             dockerNode.runtime.processIds
           );
+          console.log(
+            'NodeManager.initialize containerDetails: ',
+            containerDetails
+          );
           // {..."State": {
           //     "Status": "exited",
           //     "Running": false,

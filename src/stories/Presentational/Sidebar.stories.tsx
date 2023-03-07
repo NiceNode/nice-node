@@ -332,7 +332,7 @@ Primary.args = {
               },
               docker: {
                 containerVolumePath: '/home/user/nimbus-eth2/build/data',
-                raw: '--add-host=host.containers.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052',
+                raw: '-p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052',
                 forcedRawNodeInput:
                   '--data-dir=build/data/shared_mainnet_0 --network=mainnet',
               },

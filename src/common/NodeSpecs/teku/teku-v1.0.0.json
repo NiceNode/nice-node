@@ -16,7 +16,7 @@
       },
       "docker": {
         "containerVolumePath": "/var/lib/teku",
-        "raw": "--add-host=host.containers.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
+        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
         "forcedRawNodeInput": "--data-path=\"/var/lib/teku\" --ee-jwt-secret-file=\"/var/lib/teku/jwtsecret\""
       }
     }

@@ -15,8 +15,7 @@ const updateNodeUsage = async () => {
     allContainerStats = await runDockerCommand(
       'stats --no-stream --no-trunc --format "{{ json . }}"'
     );
-    console.log('podman stats result allContainerStats: ', allContainerStats);
-    allContainerStats = allContainerStats.raw.trim();
+    allContainerStats = allContainerStats.trim();
     allContainerStats = `[${allContainerStats.split('\n').join(',')}]`;
     allContainerStats = JSON.parse(allContainerStats);
   } catch (err) {

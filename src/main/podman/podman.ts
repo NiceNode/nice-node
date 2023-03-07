@@ -56,23 +56,48 @@ const watchPodmanEvents = async () => {
   });
 
   rl.on('line', (log: string) => {
-    // console.log('podmanWatchProcess event::::::', log);
-    // {"status":"start","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"start","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480501042702}
-    // {"status":"die","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"die","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"exitCode":"0","git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480851573969}
+    console.log('podmanWatchProcess event::::::', log);
+    /**
+     * {"Name":"docker.io/hyperledger/besu:latest",
+     *    "Status":"pull","Time":"2023-03-07T11:24:33.736404783-08:00","Type":"image",
+     *      "Attributes":{"podId":""}}
+              {
+              "ID":"1fb9cc9d810b1481cd0e4a380f1b47a4f3ff1b3771a069f3a382e0f90bfc6bb4",
+              "Image":"docker.io/hyperledger/besu:latest",
+              "Name":"besu",
+              "Status":"start",
+              "Time":"2023-03-07T11:26:30.597007105-08:00",
+              "Type":"container",
+              "Attributes":{
+                  "org.label-schema.build-date":"2023-02-17T08:07Z",
+                  "org.label-schema.description":"Enterprise Ethereum client",
+                  "org.label-schema.name":"Besu",
+                  "org.label-schema.schema-version":"1.0",
+                  "org.label-schema.url":"https://besu.hyperledger.org/",
+                  "org.label-schema.vcs-ref":"79c1a97f",
+                  "org.label-schema.vcs-url":"https://github.com/hyperledger/besu.git",
+                  "org.label-schema.vendor":"Hyperledger",
+                  "org.label-schema.version":"23.1.0",
+                  "org.opencontainers.image.ref.name":"ubuntu",
+                  "org.opencontainers.image.version":"20.04",
+                  "podId":""
+              }
+        }
+     */
     // a die without a stop or kill is a crash
     try {
       const podmanEvent = JSON.parse(log);
-      if (podmanEvent.Action === 'die' && podmanEvent.Type === 'container') {
+      if (podmanEvent.Status === 'died' && podmanEvent.Type === 'container') {
         // mark node as stopped
         logger.info('Podman container die event');
-        setPodmanNodeStatus(podmanEvent.id, NodeStatus.stopped);
+        setPodmanNodeStatus(podmanEvent.ID, NodeStatus.stopped);
       } else if (
-        podmanEvent.Action === 'start' &&
+        podmanEvent.Status === 'start' &&
         podmanEvent.Type === 'container'
       ) {
         logger.info('Podman container start event');
         // mark node as started
-        setPodmanNodeStatus(podmanEvent.id, NodeStatus.running);
+        setPodmanNodeStatus(podmanEvent.ID, NodeStatus.running);
       }
     } catch (err) {
       logger.error(`Error parsing podman event log ${log}`, err);
@@ -138,13 +163,13 @@ export const getContainerDetails = async (containerIds: string[]) => {
   const data = await runCommand(
     `inspect ${containerIds.join(' ')} --format="{{json .}}"`
   );
-  console.log('getContainerDetails containerIds: ', data);
+  // console.log('getContainerDetails containerIds: ', data);
   // let details;
   // if (data?.object) {
   //   // eslint-disable-next-line prefer-destructuring
   //   details = data?.object;
   // }
-  return data;
+  return JSON.parse(data);
 };
 
 let sendLogsToUIProc: ChildProcess;
@@ -261,10 +286,10 @@ export const initialize = async () => {
   logger.info('Connecting to local podman dameon...');
   try {
     // podman = new Podman(options);
-    // watchPodmanEvents();
-    // monitoring.initialize(runCommand);
+    watchPodmanEvents();
+    monitoring.initialize(runCommand);
     // todo: update podman node usages
-    runCommand('-v');
+    // runCommand('-v');
   } catch (err) {
     console.error(err);
     // podman not installed?

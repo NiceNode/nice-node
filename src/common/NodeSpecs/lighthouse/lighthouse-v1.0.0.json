@@ -11,11 +11,12 @@
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "http://localhost",
         "websockets": "Enabled",
-        "executionEndpoint": "http://host.containers.internal:8551"
+        "executionEndpoint": "http://host.containers.internal:8551",
+        "checkpointSyncUrl": "https://mainnet.checkpoint.sigp.io"
       },
       "docker": {
         "containerVolumePath": "/root/.lighthouse",
-        "raw": "--add-host=host.containers.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052",
+        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052",
         "forcedRawNodeInput": "lighthouse --network mainnet beacon --execution-jwt /root/.lighthouse/jwtsecret"
       }
     },
@@ -61,6 +62,14 @@
       },
       "infoDescription": "Used to specify a custom root data directory for lighthouse keys and databases. Defaults to $HOME/.lighthouse/{network} where network is the value of the `network` flag Note: Users should specify separate custom datadirs for different networks.",
       "documentation": "https://lighthouse-book.sigmaprime.io/advanced-datadir.html?highlight=--datadir#relative-paths"
+    },
+    "checkpointSyncUrl": {
+      "displayName": "The URL of a trusted checkpoint sync",
+      "cliConfigPrefix": "--checkpoint-sync-url ",
+      "defaultValue": "https://mainnet.checkpoint.sigp.io",
+      "uiControl": {
+        "type": "text"
+      }
     },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",
