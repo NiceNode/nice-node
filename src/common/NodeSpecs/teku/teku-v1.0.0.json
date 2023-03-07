@@ -5,18 +5,18 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "consensys/teku:latest",
+    "imageName": "docker.io/consensys/teku:latest",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
         "httpPort": "5052",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
-        "executionEndpoint": "http://host.docker.internal:8551"
+        "executionEndpoint": "http://host.containers.internal:8551"
       },
       "docker": {
         "containerVolumePath": "/var/lib/teku",
-        "raw": "--add-host=host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
+        "raw": "--add-host=host.containers.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
         "forcedRawNodeInput": "--data-path=\"/var/lib/teku\" --ee-jwt-secret-file=\"/var/lib/teku/jwtsecret\""
       }
     }
@@ -95,7 +95,7 @@
     "executionEndpoint": {
       "displayName": "URL of the execution client's Engine JSON-RPC APIs",
       "cliConfigPrefix": "--ee-endpoint=",
-      "defaultValue": "http://host.docker.internal:8551",
+      "defaultValue": "http://host.containers.internal:8551",
       "uiControl": {
         "type": "text"
       },

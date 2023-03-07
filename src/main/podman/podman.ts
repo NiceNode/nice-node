@@ -1,55 +1,37 @@
-import { Docker, Options } from 'docker-cli-js';
-import path from 'node:path';
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
 
 import logger from '../logger';
 import Node, { NodeStatus } from '../../common/node';
-import { DockerExecution } from '../../common/nodeSpec';
-import { setDockerNodeStatus } from '../state/nodes';
+import { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
+import { setDockerNodeStatus as setPodmanNodeStatus } from '../state/nodes';
 import { buildCliConfig } from '../../common/nodeConfig';
 import { send } from '../messenger';
 import * as monitoring from './monitoring';
-import * as dockerCompose from './docker-compose';
 import { killChildProcess } from '../processExit';
-import { parseDockerLogMetadata } from '../util/nodeLogUtils';
-// const options = {
-//   machineName: undefined, // uses local docker
-//   currentWorkingDirectory: undefined, // uses current working directory
-//   echo: true, // echo command output to stdout/stderr
-//   env: undefined,
-//   stdin: undefined,
-// };
+import { parseDockerLogMetadata as parsePodmanLogMetadata } from '../util/nodeLogUtils';
+import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
 
-const options = new Options(
-  undefined,
-  path.join(__dirname),
-  false,
-  undefined,
-  undefined
-);
-let docker: Docker;
-
-let dockerWatchProcess: ChildProcess;
+let podmanWatchProcess: ChildProcess;
 
 const runCommand = async (command: string) => {
   if (!command.includes('stats') && !command.includes('info')) {
-    logger.info(`Running docker ${command}`);
+    logger.info(`Running podman ${command}`);
   }
-  const data = await docker.command(command);
+  const data = await podmanExecPromise(`podman ${command}`);
   if (!command.includes('stats') && !command.includes('info')) {
-    logger.info(`DOCKER ${command} data: ${JSON.stringify(data)}`);
+    logger.info(`Podman ${command} data: ${JSON.stringify(data)}`);
   }
   return data;
 };
 
-const watchDockerEvents = async () => {
-  logger.info('Starting dockerWatchProcess');
+const watchPodmanEvents = async () => {
+  logger.info('Starting podmanWatchProcess');
 
-  // dockerWatchProcess is killed if (killed || exitCode === null)
-  if (dockerWatchProcess && !dockerWatchProcess.killed) {
+  // podmanWatchProcess is killed if (killed || exitCode === null)
+  if (podmanWatchProcess && !podmanWatchProcess.killed) {
     logger.error(
-      'dockerWatchProcess process still running. Wait to stop or stop first.'
+      'podmanWatchProcess process still running. Wait to stop or stop first.'
     );
     return;
   }
@@ -63,69 +45,69 @@ const watchDockerEvents = async () => {
   // if(isWindows()) {
   const watchInput = ['--format', '"{{json .}}"'];
   // }
-  const childProcess = spawn('docker events', watchInput, spawnOptions);
-  dockerWatchProcess = childProcess;
-  if (!dockerWatchProcess.stdout) {
-    throw new Error('Docker watch events stdout stream is undefined.');
+  const childProcess = spawn('podman events', watchInput, spawnOptions);
+  podmanWatchProcess = childProcess;
+  if (!podmanWatchProcess.stdout) {
+    throw new Error('Podman watch events stdout stream is undefined.');
     return;
   }
   const rl = readline.createInterface({
-    input: dockerWatchProcess.stdout,
+    input: podmanWatchProcess.stdout,
   });
 
   rl.on('line', (log: string) => {
-    // console.log('dockerWatchProcess event::::::', log);
+    // console.log('podmanWatchProcess event::::::', log);
     // {"status":"start","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"start","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480501042702}
     // {"status":"die","id":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","from":"nethermind/nethermind","Type":"container","Action":"die","Actor":{"ID":"0c60f8cc2c9a990d992aa1a1cfd5ffdc1190ca2191afe88036f5210609bc483c","Attributes":{"exitCode":"0","git_commit":"2d3dd486d","image":"nethermind/nethermind","name":"magical_heyrovsky"}},"scope":"local","time":1651539480,"timeNano":1651539480851573969}
     // a die without a stop or kill is a crash
     try {
-      const dockerEvent = JSON.parse(log);
-      if (dockerEvent.Action === 'die' && dockerEvent.Type === 'container') {
+      const podmanEvent = JSON.parse(log);
+      if (podmanEvent.Action === 'die' && podmanEvent.Type === 'container') {
         // mark node as stopped
-        logger.info('Docker container die event');
-        setDockerNodeStatus(dockerEvent.id, NodeStatus.stopped);
+        logger.info('Podman container die event');
+        setPodmanNodeStatus(podmanEvent.id, NodeStatus.stopped);
       } else if (
-        dockerEvent.Action === 'start' &&
-        dockerEvent.Type === 'container'
+        podmanEvent.Action === 'start' &&
+        podmanEvent.Type === 'container'
       ) {
-        logger.info('Docker container start event');
+        logger.info('Podman container start event');
         // mark node as started
-        setDockerNodeStatus(dockerEvent.id, NodeStatus.running);
+        setPodmanNodeStatus(podmanEvent.id, NodeStatus.running);
       }
     } catch (err) {
-      logger.error(`Error parsing docker event log ${log}`, err);
+      logger.error(`Error parsing podman event log ${log}`, err);
     }
   });
 
-  dockerWatchProcess.stderr?.on('data', (data) => {
-    logger.error(`dockerWatchProcess::error:: `, data);
+  podmanWatchProcess.stderr?.on('data', (data) => {
+    logger.error(`podmanWatchProcess::error:: `, data);
   });
 
-  dockerWatchProcess.on('error', (data) => {
-    logger.error(`dockerWatchProcess::error:: `, data);
+  podmanWatchProcess.on('error', (data) => {
+    logger.error(`podmanWatchProcess::error:: `, data);
   });
-  dockerWatchProcess.on('disconnect', () => {
-    logger.info(`dockerWatchProcess::disconnect::`);
+  podmanWatchProcess.on('disconnect', () => {
+    logger.info(`podmanWatchProcess::disconnect::`);
   });
   // todo: restart?
-  dockerWatchProcess.on('close', (code) => {
+  podmanWatchProcess.on('close', (code) => {
     // code == 0, clean exit
     // code == 1, crash
     rl.close();
-    logger.info(`dockerWatchProcess::close:: ${code}`);
+    logger.info(`podmanWatchProcess::close:: ${code}`);
     if (code !== 0) {
       logger.error(
-        `dockerWatchProcess::close:: with non-zero exit code ${code}`
+        `podmanWatchProcess::close:: with non-zero exit code ${code}`
       );
       // todo: determine the error and show geth error logs to user.
     }
   });
-  dockerWatchProcess.on('exit', (code, signal) => {
+  podmanWatchProcess.on('exit', (code, signal) => {
     // code == 0, clean exit
     // code == 1, crash
-    logger.info(`dockerWatchProcess::exit:: ${code}, ${signal}`);
+    logger.info(`podmanWatchProcess::exit:: ${code}, ${signal}`);
     if (code === 1) {
-      logger.error('dockerWatchProcess::exit::error::');
+      logger.error('podmanWatchProcess::exit::error::');
     }
   });
 };
@@ -144,29 +126,30 @@ const watchDockerEvents = async () => {
 // ]
 export const getRunningContainers = async () => {
   const data = await runCommand(`ps --no-trunc`);
-  console.log('DOCKER ps -s data: ', data);
-  let containers = [];
-  if (data?.containerList && Array.isArray(data.containerList)) {
-    containers = data.containerList;
-  }
-  return containers;
+  console.log('podman ps -s data: ', data);
+  // let containers = [];
+  // if (data?.containerList && Array.isArray(data.containerList)) {
+  //   containers = data.containerList;
+  // }
+  return data;
 };
 
 export const getContainerDetails = async (containerIds: string[]) => {
   const data = await runCommand(
     `inspect ${containerIds.join(' ')} --format="{{json .}}"`
   );
-  let details;
-  if (data?.object) {
-    // eslint-disable-next-line prefer-destructuring
-    details = data?.object;
-  }
-  return details;
+  console.log('getContainerDetails containerIds: ', data);
+  // let details;
+  // if (data?.object) {
+  //   // eslint-disable-next-line prefer-destructuring
+  //   details = data?.object;
+  // }
+  return data;
 };
 
 let sendLogsToUIProc: ChildProcess;
 export const stopSendingLogsToUI = () => {
-  // logger.info(`docker.stopSendingLogsToUI`);
+  // logger.info(`podman.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
     logger.info(
       'sendLogsToUI process was running for another node. Killing that process.'
@@ -175,7 +158,7 @@ export const stopSendingLogsToUI = () => {
   }
 };
 export const sendLogsToUI = (node: Node) => {
-  logger.info(`Starting docker.sendLogsToUI for node ${node.spec.specId}`);
+  logger.info(`Starting podman.sendLogsToUI for node ${node.spec.specId}`);
 
   stopSendingLogsToUI();
   const spawnOptions: SpawnOptions = {
@@ -193,7 +176,7 @@ export const sendLogsToUI = (node: Node) => {
   }
   const containerId = node.runtime.processIds[0];
   const childProcess = spawn(
-    `docker logs --follow --timestamps -n 100 ${containerId}`,
+    `podman logs --follow --timestamps --tail 100 ${containerId}`,
     watchInput,
     spawnOptions
   );
@@ -201,7 +184,7 @@ export const sendLogsToUI = (node: Node) => {
   // todo some containers send to stderr, some send to stdout!
   //  ex. lighthouse sends logs to stderr
   if (!sendLogsToUIProc.stderr && !sendLogsToUIProc.stdout) {
-    throw new Error('Docker watch events stdout stream is undefined.');
+    throw new Error('Podman watch events stdout stream is undefined.');
     return;
   }
   let rlStdErr: readline.Interface;
@@ -211,11 +194,11 @@ export const sendLogsToUI = (node: Node) => {
     });
     // some nodes, such as geth, send all logs over stderr
     rlStdErr.on('line', (log: string) => {
-      // logger.info(`docker log read for ${node.spec.specId}`);
+      // logger.info(`podman log read for ${node.spec.specId}`);
       try {
-        send('nodeLogs', parseDockerLogMetadata(log));
+        send('nodeLogs', parsePodmanLogMetadata(log));
       } catch (err) {
-        logger.error(`Error parsing docker event log ${log}`, err);
+        logger.error(`Error parsing podman event log ${log}`, err);
       }
     });
   }
@@ -225,26 +208,26 @@ export const sendLogsToUI = (node: Node) => {
       input: sendLogsToUIProc.stdout,
     });
     rlStdOut.on('line', (log: string) => {
-      // logger.info(`docker log read for ${node.spec.specId}`);
+      // logger.info(`podman log read for ${node.spec.specId}`);
 
       // can use these logs to generate tests
       // console.log('log metadata without:', log);
-      // logger.info('log metadata:', parseDockerLogMetadata(log));
+      // logger.info('log metadata:', parsePodmanLogMetadata(log));
       try {
         // parse log metadata before sending to the UI
-        send('nodeLogs', parseDockerLogMetadata(log));
+        send('nodeLogs', parsePodmanLogMetadata(log));
         // send('nodeLogs', log);
       } catch (err) {
-        logger.error(`Error parsing docker event log ${log}`, err);
+        logger.error(`Error parsing podman event log ${log}`, err);
       }
     });
   }
 
   sendLogsToUIProc.on('error', (data) => {
-    logger.error(`docker.sendLogsToUI::error:: `, data);
+    logger.error(`podman.sendLogsToUI::error:: `, data);
   });
   sendLogsToUIProc.on('disconnect', () => {
-    logger.info(`docker.sendLogsToUI::disconnect::`);
+    logger.info(`podman.sendLogsToUI::disconnect::`);
   });
   // todo: restart?
   sendLogsToUIProc.on('close', (code) => {
@@ -256,10 +239,10 @@ export const sendLogsToUI = (node: Node) => {
     if (rlStdOut) {
       rlStdOut.close();
     }
-    logger.info(`docker.sendLogsToUI::close:: ${code}`);
+    logger.info(`podman.sendLogsToUI::close:: ${code}`);
     if (code !== 0) {
       logger.error(
-        `docker.sendLogsToUI::close:: with non-zero exit code ${code}`
+        `podman.sendLogsToUI::close:: with non-zero exit code ${code}`
       );
       // todo: determine the error and show geth error logs to user.
     }
@@ -267,35 +250,34 @@ export const sendLogsToUI = (node: Node) => {
   sendLogsToUIProc.on('exit', (code, signal) => {
     // code == 0, clean exit
     // code == 1, crash
-    logger.info(`docker.sendLogsToUI::exit:: ${code}, ${signal}`);
+    logger.info(`podman.sendLogsToUI::exit:: ${code}, ${signal}`);
     if (code === 1) {
-      logger.error('docker.sendLogsToUI::exit::error::');
+      logger.error('podman.sendLogsToUI::exit::error::');
     }
   });
 };
 
 export const initialize = async () => {
-  logger.info('Connecting to local docker dameon...');
+  logger.info('Connecting to local podman dameon...');
   try {
-    docker = new Docker(options);
-    watchDockerEvents();
-    monitoring.initialize(runCommand);
-    dockerCompose.initialize();
-
-    // todo: update docker node usages
+    // podman = new Podman(options);
+    // watchPodmanEvents();
+    // monitoring.initialize(runCommand);
+    // todo: update podman node usages
+    runCommand('-v');
   } catch (err) {
     console.error(err);
-    // docker not installed?
-    logger.info('Unable to initialize Docker. Docker may not be installed.');
+    // podman not installed?
+    logger.info('Unable to initialize Podman. Podman may not be installed.');
   }
 };
 
-export const stopDockerNode = async (node: Node) => {
+export const stopPodmanNode = async (node: Node) => {
   // todo: could try stopping container by name using node spec
   let isRemoved = false;
   try {
     await runCommand(`stop ${node.spec.specId}`);
-    logger.info(`stopDockerNode container stopped by name ${node.spec.specId}`);
+    logger.info(`stopPodmanNode container stopped by name ${node.spec.specId}`);
     isRemoved = true;
   } catch (err) {
     // todo: returns an error?
@@ -313,25 +295,26 @@ export const stopDockerNode = async (node: Node) => {
     await runCommand(`stop ${containerIds[0]}`);
   } else {
     throw new Error('Unable to stop the node. No containerIds found.');
+    // marked as stopped?
   }
 
   return containerIds;
 };
 
-export const removeDockerNode = async (node: Node) => {
-  logger.info(`removeDockerNode node specId ${node.spec.specId}`);
+export const removePodmanNode = async (node: Node) => {
+  logger.info(`removePodmanNode node specId ${node.spec.specId}`);
   let isRemoved = false;
-  // (stop &) remove possible previous docker container for this node
+  // (stop &) remove possible previous podman container for this node
   try {
-    await stopDockerNode(node);
+    await stopPodmanNode(node);
   } catch (err) {
     logger.error(err);
-    logger.info('Error in stopping docker node. Continuing remove node.');
+    logger.info('Error in stopping podman node. Continuing remove node.');
   }
   try {
     await runCommand(`container rm ${node.spec.specId}`);
     logger.info(
-      `removeDockerNode container removed by name ${node.spec.specId}`
+      `removePodmanNode container removed by name ${node.spec.specId}`
     );
     isRemoved = true;
   } catch (err) {
@@ -347,10 +330,10 @@ export const removeDockerNode = async (node: Node) => {
   ) {
     const containerIds = node.runtime.processIds;
     await runCommand(`container rm ${containerIds[0]}`);
-    logger.info(`removeDockerNode container removed ${containerIds[0]}`);
+    logger.info(`removePodmanNode container removed ${containerIds[0]}`);
     isRemoved = true;
   } else {
-    logger.info('Unable to remove docker containers. No containerIds found.');
+    logger.info('Unable to remove podman containers. No containerIds found.');
   }
 
   return isRemoved;
@@ -358,25 +341,25 @@ export const removeDockerNode = async (node: Node) => {
 
 export const createRunCommand = (node: Node): string => {
   const { specId, execution } = node.spec;
-  const { imageName, input } = execution as DockerExecution;
-  // try catch? .. docker dameon might need to be restarted if a bad gateway error occurs
+  const { imageName, input } = execution as PodmanExecution;
+  // try catch? .. podman dameon might need to be restarted if a bad gateway error occurs
 
-  let dockerRawInput = '';
-  let dockerVolumePath = '';
-  let finalDockerInput = '';
-  if (input?.docker) {
-    dockerRawInput = input?.docker.raw ?? '';
-    dockerVolumePath = input.docker.containerVolumePath;
-    if (dockerRawInput) {
-      finalDockerInput = dockerRawInput;
+  let podmanRawInput = '';
+  let podmanVolumePath = '';
+  let finalPodmanInput = '';
+  if (input?.podman) {
+    podmanRawInput = input?.podman.raw ?? '';
+    podmanVolumePath = input.podman.containerVolumePath;
+    if (podmanRawInput) {
+      finalPodmanInput = podmanRawInput;
     }
-    if (dockerVolumePath) {
-      finalDockerInput = `-v "${node.runtime.dataDir}":${dockerVolumePath} ${finalDockerInput}`;
+    if (podmanVolumePath) {
+      finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath} ${finalPodmanInput}`;
     }
   }
   let nodeInput = '';
-  if (input?.docker?.forcedRawNodeInput) {
-    nodeInput = input?.docker?.forcedRawNodeInput;
+  if (input?.podman?.forcedRawNodeInput) {
+    nodeInput = input?.podman?.forcedRawNodeInput;
   }
   const cliConfigInput = buildCliConfig({
     configValuesMap: node.config.configValuesMap,
@@ -385,83 +368,86 @@ export const createRunCommand = (node: Node): string => {
   });
   nodeInput += ` ${cliConfigInput}`;
 
-  const dockerCommand = `run -d --name ${specId} ${finalDockerInput} ${imageName} ${nodeInput}`;
-  logger.info(`docker run command ${dockerCommand}`);
-  return dockerCommand;
+  // -q quiets podman logs (pulling new image logs) so we can parse the containerId
+  const podmanCommand = `run -q -d --name ${specId} ${finalPodmanInput} ${imageName} ${nodeInput}`;
+  logger.info(`podman run command ${podmanCommand}`);
+  return podmanCommand;
 };
 
-export const startDockerNode = async (node: Node): Promise<string[]> => {
+export const startPodmanNode = async (node: Node): Promise<string[]> => {
   // pull image
   const { execution } = node.spec;
-  const { imageName } = execution as DockerExecution;
-  // try catch? .. docker dameon might need to be restarted if a bad gateway error occurs
+  const { imageName } = execution as PodmanExecution;
+  // try catch? .. podman dameon might need to be restarted if a bad gateway error occurs
   await runCommand(`pull ${imageName}`);
 
   // todo: custom setup: ex. use network specific data directory?
   // todo: check if there is a stopped container?
 
-  // (stop &) remove possible previous docker container for this node
+  // (stop &) remove possible previous podman container for this node
   try {
-    await removeDockerNode(node);
+    await removePodmanNode(node);
   } catch (err) {
     logger.info('Continuing start node.');
   }
 
-  const dockerCommand = createRunCommand(node);
+  const podmanCommand = createRunCommand(node);
   // todo: test if input is empty string
-  const runData = await runCommand(dockerCommand);
-
-  const { containerId } = runData;
+  const runData = await runCommand(podmanCommand);
+  logger.info('runData: ', runData);
+  // todoo: get containerId by container name?
+  const containerId = runData;
   return [containerId];
 };
 
-export const isDockerInstalled = async () => {
-  let bIsDockerInstalled;
-  logger.info('Checking isDockerInstalled...');
+export const isPodmanInstalled = async () => {
+  let bIsPodmanInstalled;
+  logger.info('Checking isPodmanInstalled...');
   try {
     const infoResult = await runCommand('-v');
-    console.log('docker infoResult: ', infoResult);
-    bIsDockerInstalled = true;
+    console.log('podman infoResult: ', infoResult);
+    bIsPodmanInstalled = true;
     logger.info(
-      'Docker is installed. Docker version command did not throw error.'
+      'Podman is installed. Podman version command did not throw error.'
     );
   } catch (err) {
     logger.error(err);
-    bIsDockerInstalled = false;
-    // docker not installed?
-    logger.info('Docker install not found.');
+    bIsPodmanInstalled = false;
+    // podman not installed?
+    logger.info('Podman install not found.');
   }
-  logger.info(`isDockerInstalled: ${bIsDockerInstalled}`);
-  return bIsDockerInstalled;
+  logger.info(`isPodmanInstalled: ${bIsPodmanInstalled}`);
+  return bIsPodmanInstalled;
 };
 
-export const isDockerRunning = async () => {
-  let bIsDockerRunning;
-  // logger.info('Checking isDockerRunning...');
+export const isPodmanRunning = async () => {
+  let bIsPodmanRunning;
+  logger.info('Checking isPodmanRunning...');
   try {
-    // Docker is running if the info command did not throw error.
+    // Podman is running if the info command did not throw error.
     await runCommand('info');
-    bIsDockerRunning = true;
+    bIsPodmanRunning = true;
   } catch (err) {
-    // [mac verified] "error cannot connect to the docker dameon"
+    // [mac verified] "error cannot connect to the podman dameon"
     logger.error(err);
-    bIsDockerRunning = false;
-    // logger.info('Docker engine not found.');
+    bIsPodmanRunning = false;
+    logger.info('Podman engine not found.');
   }
-  if (!bIsDockerRunning) {
-    // logger.info(`isDockerRunning: ${bIsDockerRunning}`);
+  if (!bIsPodmanRunning) {
+    logger.info(`isPodmanRunning: ${bIsPodmanRunning}`);
   }
-  return bIsDockerRunning;
+  return bIsPodmanRunning;
 };
 
+// todoo
 // setTimeout(() => {
-//   isDockerRunning();
+//   isPodmanRunning();
 // }, 5000);
 
 export const onExit = () => {
   monitoring.onExit();
-  if (dockerWatchProcess) {
-    killChildProcess(dockerWatchProcess);
+  if (podmanWatchProcess) {
+    killChildProcess(podmanWatchProcess);
   }
   stopSendingLogsToUI();
 };

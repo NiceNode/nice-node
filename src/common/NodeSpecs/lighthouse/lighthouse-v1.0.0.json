@@ -11,18 +11,18 @@
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "http://localhost",
         "websockets": "Enabled",
-        "executionEndpoint": "http://host.docker.internal:8551"
+        "executionEndpoint": "http://host.containers.internal:8551"
       },
       "docker": {
         "containerVolumePath": "/root/.lighthouse",
-        "raw": "--add-host=host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052",
+        "raw": "--add-host=host.containers.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052",
         "forcedRawNodeInput": "lighthouse --network mainnet beacon --execution-jwt /root/.lighthouse/jwtsecret"
       }
     },
     "architectures": {
       "docker": ["amd64", "arm64"]
     },
-    "imageName": "sigp/lighthouse:latest-modern",
+    "imageName": "docker.io/sigp/lighthouse:latest-modern",
     "binaryDownload": {
       "type": "githubReleases",
       "latestVersionUrl": "https://api.github.com/repos/sigp/lighthouse/releases/latest",
@@ -109,7 +109,7 @@
     "executionEndpoint": {
       "displayName": "The URL of the local execution engine API",
       "cliConfigPrefix": "--execution-endpoint ",
-      "defaultValue": "http://host.docker.internal:8551",
+      "defaultValue": "http://host.containers.internal:8551",
       "uiControl": {
         "type": "text"
       }

@@ -5,15 +5,15 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "hyperledger/besu:latest",
+    "imageName": "docker.io/hyperledger/besu:latest",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
         "webSockets": "Enabled",
         "httpCorsDomains": "\"http://localhost\"",
-        "hostAllowList": "localhost,host.docker.internal",
+        "hostAllowList": "localhost,host.containers.internal",
         "engineRpc" : "Enabled",
-        "engineHostAllowList": "localhost,host.docker.internal"
+        "engineHostAllowList": "localhost,host.containers.internal"
 
       },
       "docker": {
@@ -233,7 +233,7 @@
         "type": "text"
       },
       "infoDescription": "Example value: medomain.com,meotherdomain.com",
-      "defaultValue": "localhost,host.docker.internal,127.0.0.1"
+      "defaultValue": "localhost,host.containers.internal,127.0.0.1"
     },
     "dataStorageFormat": {
       "displayName": "The data storage format to use",

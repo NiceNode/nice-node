@@ -72,7 +72,7 @@ export const getSystemInfo = async (): Promise<SystemData> => {
     blockDevices,
     fsSize,
   };
-  console.log('systemData data: ', JSON.stringify(systemData, null, 4));
+  // console.log('systemData data: ', JSON.stringify(systemData, null, 4));
 
   return systemData;
   // start monitoring sys_usage?

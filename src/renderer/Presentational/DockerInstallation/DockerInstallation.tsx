@@ -50,7 +50,9 @@ const DockerInstallation = ({
   const [sInstallComplete, setInstallComplete] = useState<boolean>();
 
   useEffect(() => {
-    if (disableSaveButton) disableSaveButton(true);
+    // todoo
+    // if (disableSaveButton) disableSaveButton(true);
+    if (disableSaveButton) disableSaveButton(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

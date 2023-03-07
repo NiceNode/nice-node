@@ -98,6 +98,7 @@ const AddNodeStepperModal = ({
 
   const onChangeDockerInstall = useCallback((newValue: string) => {
     console.log('onChangeDockerInstall newValue ', newValue);
+    disableSaveButton(false);
     if (newValue === 'done') {
       disableSaveButton(false);
     }
