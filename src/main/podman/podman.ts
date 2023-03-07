@@ -347,9 +347,9 @@ export const createRunCommand = (node: Node): string => {
   let podmanRawInput = '';
   let podmanVolumePath = '';
   let finalPodmanInput = '';
-  if (input?.podman) {
-    podmanRawInput = input?.podman.raw ?? '';
-    podmanVolumePath = input.podman.containerVolumePath;
+  if (input?.docker) {
+    podmanRawInput = input?.docker.raw ?? '';
+    podmanVolumePath = input.docker.containerVolumePath;
     if (podmanRawInput) {
       finalPodmanInput = podmanRawInput;
     }
@@ -358,8 +358,8 @@ export const createRunCommand = (node: Node): string => {
     }
   }
   let nodeInput = '';
-  if (input?.podman?.forcedRawNodeInput) {
-    nodeInput = input?.podman?.forcedRawNodeInput;
+  if (input?.docker?.forcedRawNodeInput) {
+    nodeInput = input?.docker?.forcedRawNodeInput;
   }
   const cliConfigInput = buildCliConfig({
     configValuesMap: node.config.configValuesMap,
@@ -394,7 +394,6 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
   const podmanCommand = createRunCommand(node);
   // todo: test if input is empty string
   const runData = await runCommand(podmanCommand);
-  logger.info('runData: ', runData);
   // todoo: get containerId by container name?
   const containerId = runData;
   return [containerId];
