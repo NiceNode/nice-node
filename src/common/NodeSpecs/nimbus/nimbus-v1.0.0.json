@@ -6,7 +6,6 @@
     "executionTypes": ["docker", "binary"],
     "defaultExecutionType": "docker",
     "imageName": "docker.io/statusim/nimbus-eth2:multiarch-latest",
-    "execPath": "run-mainnet-beacon-node.sh",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
@@ -15,9 +14,9 @@
         "executionEndpoint": "\"http://host.containers.internal:8551\""
       },
       "docker": {
-        "containerVolumePath": "/home/user/nimbus-eth2/build/data",
+        "containerVolumePath": "/home/user/data",
         "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
-        "forcedRawNodeInput": "--data-dir=build/data/shared_mainnet_0 --network=mainnet --web3-url=http://host.containers.internal:8551 --jwt-secret=/home/user/nimbus-eth2/build/data/jwtsecret"
+        "forcedRawNodeInput": "--data-dir=data/beacon_node/mainnet_0 --network=mainnet --web3-url=http://host.containers.internal:8551 --jwt-secret=/home/user/nimbus-eth2/build/data/jwtsecret"
       }
     },
     "binaryDownload": {
@@ -53,6 +52,14 @@
       },
       "infoDescription": "Nimbus root directory",
       "documentation": "https://nimbus.guide/options.html"
+    },
+    "checkpointSyncUrl": {
+      "displayName": "The URL of a trusted checkpoint sync",
+      "cliConfigPrefix": "--trusted-node-url=",
+      "defaultValue": "https://beaconstate.ethstaker.cc",
+      "uiControl": {
+        "type": "text"
+      }
     },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",

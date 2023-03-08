@@ -10,7 +10,8 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpPort": "5052",
-        "executionEndpoint": "http://host.containers.internal:8551"
+        "executionEndpoint": "http://host.containers.internal:8551",
+        "checkpointSyncUrl": "https://beaconstate-mainnet.chainsafe.io"
       },
       "docker": {
         "containerVolumePath": "/usr/app/data",
@@ -49,6 +50,14 @@
         "type": "filePath"
       },
       "infoDescription": "Lodestar root directory"
+    },
+    "checkpointSyncUrl": {
+      "displayName": "The URL of a trusted checkpoint sync",
+      "cliConfigPrefix": "--checkpointSyncUrl ",
+      "defaultValue": "https://beaconstate-mainnet.chainsafe.io",
+      "uiControl": {
+        "type": "text"
+      }
     },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",

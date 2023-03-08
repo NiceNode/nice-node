@@ -12,7 +12,8 @@
         "httpPort": "5052",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
-        "executionEndpoint": "http://host.containers.internal:8551"
+        "executionEndpoint": "http://host.containers.internal:8551",
+        "checkpointSyncUrl": "https://beaconstate.ethstaker.cc"
       },
       "docker": {
         "containerVolumePath": "/var/lib/teku",
@@ -52,6 +53,14 @@
       },
       "infoDescription": "Teku root directory",
       "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#data-base-path-data-path"
+    },
+    "checkpointSyncUrl": {
+      "displayName": "The URL of a trusted checkpoint sync",
+      "cliConfigPrefix": "--initial-state=",
+      "defaultValue": "https://beaconstate.ethstaker.cc",
+      "uiControl": {
+        "type": "text"
+      }
     },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",

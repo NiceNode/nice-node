@@ -11,7 +11,8 @@
         "http": "Enabled",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
-        "executionEndpoint": "http://host.containers.internal:8551"
+        "executionEndpoint": "http://host.containers.internal:8551",
+        "checkpointSyncUrl": "https://beaconstate.ethstaker.cc"
       },
       "docker": {
         "containerVolumePath": "/data",
@@ -51,6 +52,14 @@
       },
       "infoDescription": "Prysm root directory",
       "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters/"
+    },
+    "checkpointSyncUrl": {
+      "displayName": "The URL of a trusted checkpoint sync",
+      "cliConfigPrefix": "--checkpoint-sync-url=",
+      "defaultValue": "https://beaconstate.ethstaker.cc",
+      "uiControl": {
+        "type": "text"
+      }
     },
     "httpPort": {
       "displayName": "The host on which the gateway server runs on",
