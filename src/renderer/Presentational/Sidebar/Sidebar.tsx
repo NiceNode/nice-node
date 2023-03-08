@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { setModalState } from '../../state/modal';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
@@ -15,7 +14,6 @@ import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
 import { DockerStoppedBanner } from '../DockerInstallation/StartDockerBanner';
-import { getNotifications } from '../../state/notifications';
 
 export interface SidebarProps {
   /**
