@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - podman-runtime
+      - feat/podman-runtime
 
 # asar is disabled for pm2 & electron build to work
 #   with asar disabled, hard links needs to be disabled
