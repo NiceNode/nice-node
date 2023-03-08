@@ -2,7 +2,16 @@
 import { send } from '../messenger';
 import store from './store';
 
+const { Notification } = require('electron');
+
 export const NOTIFICATIONS_KEY = 'notifications';
+
+export interface NotificationPopupType {
+  title: string;
+  body: string;
+  silent: boolean;
+  icon: string;
+}
 
 /**
  * Called on app launch.
@@ -51,4 +60,9 @@ export const markAllAsRead = () => {
 
 export const removeNotifications = () => {
   store.set(NOTIFICATIONS_KEY, []);
+};
+
+export const displayNotification = (notification: NotificationPopupType) => {
+  const renderNotification = new Notification(notification);
+  renderNotification.show();
 };
