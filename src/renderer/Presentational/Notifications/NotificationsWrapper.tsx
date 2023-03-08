@@ -1,19 +1,15 @@
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from 'renderer/state/hooks';
-import {
-  getNotifications,
-  markAllAsRead,
-  // removeNotifications,
-  // addNotification,
-} from '../../state/notifications';
+import { useEffect } from 'react';
+import electron from 'renderer/electronGlobal';
+import { useGetNotificationsQuery } from 'renderer/state/notificationsService';
 import Notifications from './Notifications';
 
 const NotificationsWrapper = () => {
-  const dispatch = useAppDispatch();
-  const notifications = useSelector(getNotifications);
+  const qNotifications = useGetNotificationsQuery(null, {
+    pollingInterval: 1000,
+  });
 
   const markAllNotificationsAsRead = () => {
-    dispatch(markAllAsRead());
+    electron.markAllAsRead();
   };
 
   const onSettingsClick = () => {
@@ -71,15 +67,13 @@ const NotificationsWrapper = () => {
     //     timestamp: 1673384953,
     //   },
     // ]));
-    // dispatch(
-    //   addNotification({
-    //     unread: true,
-    //     status: 'info',
-    //     title: 'TEST!',
-    //     description: 'Validator 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-    //     timestamp: 1673384953,
-    //   })
-    // );
+    electron.addNotification({
+      unread: true,
+      status: 'info',
+      title: 'DING!!!!',
+      description: 'Validator 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+      timestamp: 1673384953,
+    });
   };
 
   const onNotificationItemClick = () => {
@@ -88,7 +82,7 @@ const NotificationsWrapper = () => {
 
   return (
     <Notifications
-      data={notifications}
+      data={qNotifications.data || []}
       markAllNotificationsAsRead={markAllNotificationsAsRead}
       onSettingsClick={onSettingsClick}
       onNotificationItemClick={onNotificationItemClick}

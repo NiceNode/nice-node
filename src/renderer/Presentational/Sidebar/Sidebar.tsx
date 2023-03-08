@@ -59,9 +59,9 @@ const Sidebar = ({
   offline,
   dockerStopped,
   selectedNodeId,
+  notifications,
 }: SidebarProps) => {
   const dispatch = useAppDispatch();
-  const notifications = useSelector(getNotifications);
 
   const itemListData: { iconId: IconId; label: string; count?: number }[] = [
     {

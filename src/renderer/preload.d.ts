@@ -83,6 +83,13 @@ declare global {
       setLanguage(languageCode: string): void;
       setThemeSetting(theme: ThemeSetting): void;
       setIsOpenOnStartup(isOpenOnStartup: boolean): void;
+
+      // Notifications
+      getNotifications(): any;
+      addNotification(notification: any): void;
+      addNotifications(notifications: any[]): void;
+      removeNotifications(): void;
+      markAllAsRead(): void;
     };
 
     performance: Performance;

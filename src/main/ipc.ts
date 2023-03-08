@@ -47,6 +47,13 @@ import {
 import { getSystemInfo } from './systemInfo';
 import startDocker from './docker/start';
 import { addEthereumNode } from './specialNodes/ethereumNode';
+import {
+  addNotification,
+  addNotifications,
+  getNotifications,
+  removeNotifications,
+  markAllAsRead,
+} from './state/notifications';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -162,4 +169,15 @@ export const initialize = () => {
   ipcMain.handle('setIsOpenOnStartup', (_event, isOpenOnStartup: boolean) => {
     return setIsOpenOnStartup(isOpenOnStartup);
   });
+
+  // Notifications
+  ipcMain.handle('getNotifications', getNotifications);
+  ipcMain.handle('addNotification', async (_event, notification) => {
+    return addNotification(notification);
+  });
+  ipcMain.handle('addNotifications', async (_event, notifications) => {
+    return addNotifications(notifications);
+  });
+  ipcMain.handle('removeNotifications', removeNotifications);
+  ipcMain.handle('markAllAsRead', markAllAsRead);
 };

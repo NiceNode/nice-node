@@ -1,4 +1,5 @@
 import { ReactElement, useEffect } from 'react';
+import { useGetNotificationsQuery } from '../../state/notificationsService';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import {
   selectSelectedNodeId,
@@ -27,6 +28,11 @@ export const SidebarWrapper = () => {
     isDockerRunning = qIsDockerRunning.data;
   }
 
+  const qNotifications = useGetNotificationsQuery(null, {
+    pollingInterval: 1000,
+  });
+  const notifications = qNotifications?.data;
+
   // Default selected node to be the first node
   useEffect(() => {
     if (
@@ -41,6 +47,7 @@ export const SidebarWrapper = () => {
 
   return (
     <Sidebar
+      notifications={qNotifications?.data}
       offline={false}
       updateAvailable={false}
       dockerStopped={!isDockerRunning}
