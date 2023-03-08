@@ -24,8 +24,8 @@ const initialize = () => {
   }
 
   // Notify the UI when values change
-  store.onDidChange(NOTIFICATIONS_KEY, (newValue) => {
-    send('notifications', newValue);
+  store.onDidChange(NOTIFICATIONS_KEY, () => {
+    send(NOTIFICATIONS_KEY);
   });
 };
 initialize();

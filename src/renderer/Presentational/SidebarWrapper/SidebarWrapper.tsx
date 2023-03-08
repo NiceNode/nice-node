@@ -1,4 +1,5 @@
-import { ReactElement, useEffect } from 'react';
+import { ReactElement, useEffect, useCallback } from 'react';
+import electron from 'renderer/electronGlobal';
 import { useGetNotificationsQuery } from '../../state/notificationsService';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import {
@@ -28,10 +29,27 @@ export const SidebarWrapper = () => {
     isDockerRunning = qIsDockerRunning.data;
   }
 
-  const qNotifications = useGetNotificationsQuery(null, {
-    pollingInterval: 1000,
-  });
-  const notifications = qNotifications?.data;
+  const qNotifications = useGetNotificationsQuery();
+
+  // subscribes to a channel which notifies when dark mode settings change
+  const onNotificationChange = useCallback(() => {
+    console.log('onNotificationChange');
+    qNotifications?.refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const listenForNotifications = useCallback(async () => {
+    electron.ipcRenderer.on('notifications', onNotificationChange);
+    return () =>
+      electron.ipcRenderer.removeListener(
+        'notifications',
+        onNotificationChange
+      );
+  }, [onNotificationChange]);
+
+  useEffect(() => {
+    listenForNotifications();
+  }, [listenForNotifications]);
 
   // Default selected node to be the first node
   useEffect(() => {

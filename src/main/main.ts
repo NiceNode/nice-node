@@ -29,6 +29,7 @@ import * as processExit from './processExit';
 import * as systemInfo from './systemInfo';
 import { setCorsForNiceNode } from './corsMiddleware';
 import * as updater from './updater';
+import * as notifications from './notifications';
 
 require('dotenv').config();
 
@@ -180,6 +181,7 @@ const initialize = () => {
   systemInfo.initialize();
   processExit.initialize();
   processExit.registerExitHandler(onExit);
+  notifications.initialize();
   console.log('app locale: ', app.getLocale());
   console.log('app LocaleCountryCode: ', app.getLocaleCountryCode());
 };

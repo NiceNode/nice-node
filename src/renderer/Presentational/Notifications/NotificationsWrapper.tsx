@@ -4,9 +4,7 @@ import { useGetNotificationsQuery } from 'renderer/state/notificationsService';
 import Notifications from './Notifications';
 
 const NotificationsWrapper = () => {
-  const qNotifications = useGetNotificationsQuery(null, {
-    pollingInterval: 1000,
-  });
+  const qNotifications = useGetNotificationsQuery();
 
   const markAllNotificationsAsRead = () => {
     electron.markAllAsRead();
@@ -67,6 +65,7 @@ const NotificationsWrapper = () => {
     //     timestamp: 1673384953,
     //   },
     // ]));
+    // electron.removeNotifications();
     electron.addNotification({
       unread: true,
       status: 'info',
