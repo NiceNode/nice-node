@@ -35,17 +35,58 @@ export const getNotifications = () => {
   return notifications;
 };
 
-export const addNotification = (notification) => {
-  const notifications = store.get('notifications') || [];
-  notifications.push(notification);
-  store.set(NOTIFICATIONS_KEY, notifications);
-  console.log('notification added', notification);
+export const displayNotification = (notification) => {
+  const { title, description } = notification;
+  const electronNotification = {
+    title,
+    body: description,
+    silent: false,
+  };
+  const renderNotification = new Notification(electronNotification);
+  renderNotification.show();
+};
+
+const checkNotification = (storedNotifications, notificationObject) => {
+  const currentTimestamp = Date.now();
+
+  if (storedNotifications.length === 0) return true;
+
+  const existingNotificationIndex = storedNotifications.findIndex(
+    (notification) => notification.title === notificationObject.title
+  );
+  const existingNotification = storedNotifications[existingNotificationIndex];
+
+  if (existingNotificationIndex === -1) return true;
+
+  // can be added if the current timestamp is more than the existing notification timestamp + the limit
+  return (
+    currentTimestamp > existingNotification.timestamp + notificationObject.limit
+  );
+};
+
+export const addNotification = (notificationObject, variable) => {
+  const notifications = store.get(NOTIFICATIONS_KEY) || [];
+  if (checkNotification(notifications, notificationObject)) {
+    const { title, description } = notificationObject;
+    const status =
+      notificationObject[Object.keys(notificationObject)[1]].toLowerCase();
+    const newNotification = {
+      title,
+      description,
+      unread: true,
+      status,
+      timestamp: Date.now(),
+    };
+    notifications.unshift(newNotification);
+    store.set(NOTIFICATIONS_KEY, notifications);
+    displayNotification(newNotification);
+  }
   return notifications;
 };
 
 export const addNotifications = (notifications) => {
-  const notificationsStore = store.get('notifications') || [];
-  notificationsStore.push(...notifications);
+  const notificationsStore = store.get(NOTIFICATIONS_KEY) || [];
+  notificationsStore.unshift(...notifications);
   store.set(NOTIFICATIONS_KEY, notificationsStore);
   return notificationsStore;
 };
@@ -60,9 +101,4 @@ export const markAllAsRead = () => {
 
 export const removeNotifications = () => {
   store.set(NOTIFICATIONS_KEY, []);
-};
-
-export const displayNotification = (notification: NotificationPopupType) => {
-  const renderNotification = new Notification(notification);
-  renderNotification.show();
 };

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import electron from 'renderer/electronGlobal';
 import { useGetNotificationsQuery } from 'renderer/state/notificationsService';
+import { NOTIFICATIONS } from '../../../main/consts/notifications';
 import Notifications from './Notifications';
 
 const NotificationsWrapper = () => {
@@ -66,13 +67,7 @@ const NotificationsWrapper = () => {
     //   },
     // ]));
     // electron.removeNotifications();
-    electron.addNotification({
-      unread: true,
-      status: 'info',
-      title: 'DING!!!!',
-      description: 'Validator 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-      timestamp: 1673384953,
-    });
+    electron.addNotification(NOTIFICATIONS.INFO.SYNC_COMMITTEE);
   };
 
   const onNotificationItemClick = () => {
