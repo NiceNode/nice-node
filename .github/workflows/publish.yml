@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - main
-      - ui-redesign
-      - chore/update-deps
+      - podman-runtime
 
 # asar is disabled for pm2 & electron build to work
 #   with asar disabled, hard links needs to be disabled
