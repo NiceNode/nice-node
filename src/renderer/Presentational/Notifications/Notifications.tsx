@@ -12,9 +12,12 @@ import {
   headerContainer,
   spacer,
   titleStyle,
-  emptyNotifications,
+  emptyContainer,
   popupContainer,
   menuButtonContainer,
+  contentContainer,
+  titleFont,
+  descriptionFont,
 } from './notifications.css';
 
 export type NotificationsType = {
@@ -51,7 +54,16 @@ const Notifications = (props: NotificationsType) => {
         </div>
       );
     }
-    return <div className={emptyNotifications}>There are no notifications</div>;
+    return (
+      <div className={emptyContainer}>
+        <div className={contentContainer}>
+          <div className={titleFont}>No notifications yet</div>
+          <div className={descriptionFont}>
+            We’ll let you know when something interesting happens!
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -96,6 +108,7 @@ const Notifications = (props: NotificationsType) => {
                     setIsSettingsDisplayed(false);
                     removeNotifications();
                   }}
+                  disabled={data.length === 0}
                 />
                 <HorizontalLine type="menu" />
                 <MenuItem
