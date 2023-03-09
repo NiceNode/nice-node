@@ -27,6 +27,7 @@ import { ReactComponent as External } from './External.svg';
 import { ReactComponent as FilterLargeFilled } from './Filter-large-filled.svg';
 import { ReactComponent as FilterLarge } from './Filter-large.svg';
 import { ReactComponent as Filter } from './Filter.svg';
+import { ReactComponent as Ellipsis } from './Ellipsis.svg';
 import { ReactComponent as Health } from './Health.svg';
 import { ReactComponent as InfoCircleFilled } from './Info-circle-filled.svg';
 import { ReactComponent as InfoCircle } from './Info-circle.svg';
@@ -93,6 +94,7 @@ export interface Icons {
   download1?: React.ReactNode;
   download?: React.ReactNode;
   external?: React.ReactNode;
+  ellipsis?: React.ReactNode;
   filterlargefilled?: React.ReactNode;
   filterlarge?: React.ReactNode;
   filter?: React.ReactNode;
@@ -164,6 +166,7 @@ export const ICONS: Icons = {
   download1: <Download1 />,
   download: <Download />,
   external: <External />,
+  ellipsis: <Ellipsis />,
   filterlargefilled: <FilterLargeFilled />,
   filterlarge: <FilterLarge />,
   filter: <Filter />,

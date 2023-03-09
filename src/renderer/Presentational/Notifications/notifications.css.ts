@@ -29,3 +29,13 @@ export const titleStyle = style({
 });
 
 export const emptyNotifications = style({});
+
+export const popupContainer = style({
+  position: 'absolute',
+  right: 0,
+  top: 32,
+});
+
+export const menuButtonContainer = style({
+  position: 'relative',
+});

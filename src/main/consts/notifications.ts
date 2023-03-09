@@ -1,3 +1,12 @@
+export const TIME = Object.freeze({
+  SECOND: 1000,
+  MINUTE: 60000,
+  HOUR: 3600000,
+  DAY: 86400000,
+  WEEK: 604800000,
+});
+
+// TODO: replace titles and description with string keys
 export const NOTIFICATIONS = Object.freeze({
   INFO: {
     SYNC_COMMITTEE: {
@@ -27,9 +36,9 @@ export const NOTIFICATIONS = Object.freeze({
   },
   WARNING: {
     CONNECTION_DOWN: {
-      title: 'Internet connection down for 12 minutes',
+      title: 'Internet connection down',
       description: 'All nodes affected',
-      limit: 3600000,
+      limit: TIME.HOUR,
     },
   },
 });
