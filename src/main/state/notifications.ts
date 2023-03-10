@@ -52,17 +52,15 @@ const checkNotification = (
   storedNotifications: NotificationItemProps[],
   notificationObject: NotificationProps
 ) => {
-  const currentTimestamp = Date.now();
-
   if (storedNotifications.length === 0) return true;
-
+  const currentTimestamp = Date.now();
   const existingNotificationIndex = storedNotifications.findIndex(
     (notification: NotificationItemProps) =>
       notification.title === notificationObject.title
   );
-  const existingNotification = storedNotifications[existingNotificationIndex];
-
   if (existingNotificationIndex === -1) return true;
+
+  const existingNotification = storedNotifications[existingNotificationIndex];
 
   // can be added if the current timestamp is more than the existing notification timestamp + the limit
   return (
@@ -86,7 +84,6 @@ export const addNotification = (notificationObject: NotificationProps) => {
     store.set(NOTIFICATIONS_KEY, notifications);
     displayNotification(newNotification);
   }
-  return notifications;
 };
 
 export const addNotifications = (notifications: NotificationProps[]) => {
