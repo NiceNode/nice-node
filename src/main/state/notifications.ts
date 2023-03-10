@@ -85,13 +85,6 @@ export const addNotification = (notificationObject: NotificationProps) => {
   }
 };
 
-export const addNotifications = (notifications: NotificationProps[]) => {
-  const notificationsStore = store.get(NOTIFICATIONS_KEY) || [];
-  notificationsStore.unshift(...notifications);
-  store.set(NOTIFICATIONS_KEY, notificationsStore);
-  return notificationsStore;
-};
-
 export const markAllAsRead = () => {
   const notifications = store.get(NOTIFICATIONS_KEY) || [];
   notifications.forEach((notification: NotificationItemProps) => {

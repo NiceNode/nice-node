@@ -87,7 +87,6 @@ declare global {
       // Notifications
       getNotifications(): any;
       addNotification(notification: any): void;
-      addNotifications(notifications: any[]): void;
       removeNotifications(): void;
       markAllAsRead(): void;
     };

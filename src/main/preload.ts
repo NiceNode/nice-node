@@ -124,9 +124,6 @@ contextBridge.exposeInMainWorld('electron', {
   addNotification: (notification: Notification) => {
     ipcRenderer.invoke('addNotification', notification);
   },
-  addNotifications: (notifications: Notification[]) => {
-    ipcRenderer.invoke('addNotifications', notifications);
-  },
   removeNotifications: () => ipcRenderer.invoke('removeNotifications'),
   markAllAsRead: () => ipcRenderer.invoke('markAllAsRead'),
 });

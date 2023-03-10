@@ -49,7 +49,6 @@ import startDocker from './docker/start';
 import { addEthereumNode } from './specialNodes/ethereumNode';
 import {
   addNotification,
-  addNotifications,
   getNotifications,
   removeNotifications,
   markAllAsRead,
@@ -174,9 +173,6 @@ export const initialize = () => {
   ipcMain.handle('getNotifications', getNotifications);
   ipcMain.handle('addNotification', async (_event, notification) => {
     return addNotification(notification);
-  });
-  ipcMain.handle('addNotifications', async (_event, notifications) => {
-    return addNotifications(notifications);
   });
   ipcMain.handle('removeNotifications', removeNotifications);
   ipcMain.handle('markAllAsRead', markAllAsRead);
