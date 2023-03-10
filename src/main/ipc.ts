@@ -28,7 +28,7 @@ import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import Node, { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
 import { isDockerInstalled, isDockerRunning } from './docker/docker';
-import installDocker from './docker/install';
+import installPodman from './podman/install';
 // eslint-disable-next-line import/no-cycle
 import {
   openDialogForNodeDataDir,
@@ -45,7 +45,7 @@ import {
   ThemeSetting,
 } from './state/settings';
 import { getSystemInfo } from './systemInfo';
-import startDocker from './docker/start';
+import startPodman from './podman/start';
 import { addEthereumNode } from './specialNodes/ethereumNode';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -144,9 +144,9 @@ export const initialize = () => {
 
   // Docker
   ipcMain.handle('getIsDockerInstalled', isDockerInstalled);
-  ipcMain.handle('installDocker', installDocker);
+  ipcMain.handle('installDocker', installPodman);
   ipcMain.handle('getIsDockerRunning', isDockerRunning);
-  ipcMain.handle('startDocker', startDocker);
+  ipcMain.handle('startDocker', startPodman);
 
   // Settings
   ipcMain.handle('getSetHasSeenSplashscreen', (_event, hasSeen?: boolean) => {

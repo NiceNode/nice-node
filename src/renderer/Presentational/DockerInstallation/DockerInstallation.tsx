@@ -136,7 +136,7 @@ const DockerInstallation = ({
                     label={t('DownloadAndInstall')}
                     onClick={onClickDownloadAndInstall}
                   />
-                  <div className={captionText}>~600MB {t('download')}</div>
+                  <div className={captionText}>~100MB {t('download')}</div>
                 </div>
               ) : (
                 <ProgressBar
