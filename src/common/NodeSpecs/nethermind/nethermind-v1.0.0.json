@@ -84,7 +84,7 @@
       "displayName": "Enabled HTTP APIs",
       "category": "RPC APIs",
       "cliConfigPrefix": "--JsonRpc.EnabledModules ",
-      "valuesJoinStr": ", ",
+      "valuesJoinStr": ",",
       "uiControl": {
         "type": "select/multiple",
         "controlTranslations": [
