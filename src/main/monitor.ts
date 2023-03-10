@@ -1,10 +1,14 @@
 import { net } from 'electron';
-import { getSystemDiskSize, getUsedDiskSpace } from './files';
+import { getNodesDirPathDetails, getUsedDiskSpace } from './files';
 
 import { NodeId } from '../common/node';
 import logger from './logger';
 import * as storeNodes from './state/nodes';
+import { addNotification } from './state/notifications';
+import { NOTIFICATIONS } from './consts/notifications';
 
+const watchProcessPollingInterval = 300000;
+let monitoringInterval: NodeJS.Timer;
 const pidusage = require('pidusage');
 
 export const getProcessUsageByPid = async (pid: number) => {
@@ -38,17 +42,20 @@ export const checkSystemHardware = async () => {
     logger.info(`${totalMemoryGB}GB memory is sufficient.`);
   }
   // Is disk size < 1 TB?
-  const sizeDiskGB = Math.round(await getSystemDiskSize());
-  if (sizeDiskGB < 1000) {
+  const getStorageDetails = await getNodesDirPathDetails();
+  const sizeDiskGB = Math.round(getStorageDetails.freeStorageGBs);
+  if (sizeDiskGB < 40) {
     warnings.push(
       `Computer storage is only ${sizeDiskGB}GB. The recommended amount is greater than 1TB (1000GB).`
     );
+    addNotification(NOTIFICATIONS.WARNING.LOW_DISK_SPACE);
   } else {
     logger.info(`${sizeDiskGB}GB size storage is sufficient.`);
   }
   // Is the internet connected?
   if (!net.isOnline()) {
     warnings.push(`Internet connection may be disconnected.`);
+    addNotification(NOTIFICATIONS.WARNING.CONNECTION_DOWN);
   } else {
     logger.info(`Internet connection appears connected.`);
   }
@@ -67,4 +74,16 @@ export const updateNodeUsedDiskSpace = async (nodeId: NodeId) => {
       storeNodes.updateNode(node);
     }
   }
+};
+
+export const initialize = () => {
+  checkSystemHardware();
+  monitoringInterval = setInterval(
+    checkSystemHardware,
+    watchProcessPollingInterval
+  );
+};
+
+export const onExit = () => {
+  clearInterval(monitoringInterval);
 };

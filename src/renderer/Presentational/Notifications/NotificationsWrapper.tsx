@@ -1,8 +1,8 @@
-import electron from 'renderer/electronGlobal';
-import { useGetNotificationsQuery } from 'renderer/state/notificationsService';
+import electron from '../../electronGlobal';
+import { useGetNotificationsQuery } from '../../state/notificationsService';
 import Notifications from './Notifications';
 
-const NotificationsWrapper = () => {
+export const NotificationsWrapper = () => {
   const qNotifications = useGetNotificationsQuery();
 
   const onNotificationItemClick = () => {
@@ -18,4 +18,3 @@ const NotificationsWrapper = () => {
     />
   );
 };
-export default NotificationsWrapper;

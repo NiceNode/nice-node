@@ -1,12 +1,13 @@
-// import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
-import { NotificationType } from 'renderer/state/notifications';
 import { useState } from 'react';
-import { Menu } from 'renderer/Generics/redesign/Menu/Menu';
-import { MenuItem } from 'renderer/Generics/redesign/MenuItem/MenuItem';
-import { HorizontalLine } from 'renderer/Generics/redesign/HorizontalLine/HorizontalLine';
-import { useAppDispatch } from 'renderer/state/hooks';
-import { setModalState } from 'renderer/state/modal';
-import { NotificationItem } from '../../Generics/redesign/NotificationItem/NotificationItem';
+import { Menu } from '../../Generics/redesign/Menu/Menu';
+import { MenuItem } from '../../Generics/redesign/MenuItem/MenuItem';
+import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
+import { useAppDispatch } from '../../state/hooks';
+import { setModalState } from '../../state/modal';
+import {
+  NotificationItem,
+  NotificationItemProps,
+} from '../../Generics/redesign/NotificationItem/NotificationItem';
 import Button from '../../Generics/redesign/Button/Button';
 import {
   headerContainer,
@@ -21,7 +22,7 @@ import {
 } from './notifications.css';
 
 export type NotificationsType = {
-  data: NotificationType[];
+  data: NotificationItemProps[];
   markAllNotificationsAsRead: () => void;
   removeNotifications: () => void;
   onNotificationItemClick: () => void;

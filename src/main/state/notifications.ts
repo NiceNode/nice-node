@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { NotificationProps } from 'main/consts/notifications';
+import { NotificationItemProps } from 'renderer/Generics/redesign/NotificationItem/NotificationItem';
 import { send } from '../messenger';
 import store from './store';
 
@@ -35,7 +37,7 @@ export const getNotifications = () => {
   return notifications;
 };
 
-export const displayNotification = (notification) => {
+export const displayNotification = (notification: NotificationItemProps) => {
   const { title, description } = notification;
   const electronNotification = {
     title,
@@ -46,13 +48,17 @@ export const displayNotification = (notification) => {
   renderNotification.show();
 };
 
-const checkNotification = (storedNotifications, notificationObject) => {
+const checkNotification = (
+  storedNotifications: NotificationItemProps[],
+  notificationObject: NotificationProps
+) => {
   const currentTimestamp = Date.now();
 
   if (storedNotifications.length === 0) return true;
 
   const existingNotificationIndex = storedNotifications.findIndex(
-    (notification) => notification.title === notificationObject.title
+    (notification: NotificationItemProps) =>
+      notification.title === notificationObject.title
   );
   const existingNotification = storedNotifications[existingNotificationIndex];
 
@@ -65,17 +71,15 @@ const checkNotification = (storedNotifications, notificationObject) => {
 };
 
 // TODO: add variable support for language string keys
-export const addNotification = (notificationObject, variable) => {
+export const addNotification = (notificationObject: NotificationProps) => {
   const notifications = store.get(NOTIFICATIONS_KEY) || [];
   if (checkNotification(notifications, notificationObject)) {
-    const { title, description } = notificationObject;
-    const status =
-      notificationObject[Object.keys(notificationObject)[1]].toLowerCase();
+    const { title, description, status } = notificationObject;
     const newNotification = {
       title,
       description,
       unread: true,
-      status,
+      status: status as NotificationItemProps['status'],
       timestamp: Date.now(),
     };
     notifications.unshift(newNotification);
@@ -85,7 +89,7 @@ export const addNotification = (notificationObject, variable) => {
   return notifications;
 };
 
-export const addNotifications = (notifications) => {
+export const addNotifications = (notifications: NotificationProps[]) => {
   const notificationsStore = store.get(NOTIFICATIONS_KEY) || [];
   notificationsStore.unshift(...notifications);
   store.set(NOTIFICATIONS_KEY, notificationsStore);
@@ -94,7 +98,7 @@ export const addNotifications = (notifications) => {
 
 export const markAllAsRead = () => {
   const notifications = store.get(NOTIFICATIONS_KEY) || [];
-  notifications.forEach((notification) => {
+  notifications.forEach((notification: NotificationItemProps) => {
     notification.unread = false;
   });
   store.set(NOTIFICATIONS_KEY, notifications);

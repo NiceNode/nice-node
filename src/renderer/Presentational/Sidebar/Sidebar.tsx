@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import { setModalState } from '../../state/modal';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
@@ -30,6 +31,7 @@ export interface SidebarProps {
   dockerStopped: boolean;
   sUserNodes?: UserNodes;
   selectedNodeId?: NodeId;
+  notifications: NotificationItemProps[];
 }
 
 const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
