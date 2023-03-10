@@ -70,7 +70,13 @@ const checkNotification = (
 // TODO: add variable support for language string keys
 export const addNotification = (notificationObject: NotificationProps) => {
   const notifications = store.get(NOTIFICATIONS_KEY) || [];
-  if (checkNotification(notifications, notificationObject)) {
+  const isNotificationsEnabled = store.get(
+    'settings.appIsNotificationsEnabled'
+  );
+  if (
+    isNotificationsEnabled &&
+    checkNotification(notifications, notificationObject)
+  ) {
     const { title, description, status } = notificationObject;
     const newNotification = {
       title,

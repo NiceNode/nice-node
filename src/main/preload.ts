@@ -118,6 +118,9 @@ contextBridge.exposeInMainWorld('electron', {
   setIsOpenOnStartup: (isOpenOnStartup: boolean) => {
     ipcRenderer.invoke('setIsOpenOnStartup', isOpenOnStartup);
   },
+  setIsNotificationsEnabled: (isNotificationsEnabled: boolean) => {
+    ipcRenderer.invoke('setIsNotificationsEnabled', isNotificationsEnabled);
+  },
 
   // Notifications
   getNotifications: () => ipcRenderer.invoke('getNotifications'),

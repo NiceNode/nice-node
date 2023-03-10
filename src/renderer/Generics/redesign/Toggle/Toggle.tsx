@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { container, inputContainer, toggleText } from './toggle.css';
 
 export interface ToggleProps {
@@ -28,13 +28,18 @@ export interface ToggleProps {
  * Primary UI component for user interaction
  */
 export const Toggle = ({
-  checked,
+  checked: initialChecked,
   disabled,
   onChange,
   onText,
   offText,
 }: ToggleProps) => {
-  const [isChecked, setChecked] = useState(checked);
+  const [isChecked, setChecked] = useState(initialChecked);
+
+  useEffect(() => {
+    setChecked(initialChecked);
+  }, [initialChecked]);
+
   return (
     <div className={container}>
       {onText && offText && (
@@ -46,12 +51,11 @@ export const Toggle = ({
           type: 'checkbox',
           role: 'switch',
           id: 'flexSwitchCheckDefault',
-          defaultChecked: isChecked,
+          checked: isChecked,
           ...(disabled && { disabled }),
-          onChange: () => {
-            setChecked(!isChecked);
+          onChange: (e) => {
             if (onChange) {
-              onChange(!isChecked);
+              onChange(e.target.checked);
             }
           },
         }}

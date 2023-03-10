@@ -29,15 +29,18 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
   };
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
-    const { theme, isOpenOnStartup } =
+    const { theme, isOpenOnStartup, isNotificationsEnabled } =
       updatedConfig || (modalConfig as ModalConfig);
 
     if (theme) {
       await electron.setThemeSetting(theme);
       handleColorSchemeChange(theme);
     }
-    if (isOpenOnStartup) {
+    if (isOpenOnStartup !== undefined) {
       await electron.setIsOpenOnStartup(isOpenOnStartup);
+    }
+    if (isNotificationsEnabled !== undefined) {
+      await electron.setIsNotificationsEnabled(isNotificationsEnabled);
     }
     modalOnClose();
   };
