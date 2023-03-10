@@ -12,7 +12,6 @@ export interface NotificationPopupType {
   title: string;
   body: string;
   silent: boolean;
-  icon: string;
 }
 
 /**
@@ -43,7 +42,7 @@ export const displayNotification = (notification: NotificationItemProps) => {
     title,
     body: description,
     silent: false,
-  };
+  } as NotificationPopupType;
   const renderNotification = new Notification(electronNotification);
   renderNotification.show();
 };
