@@ -24,9 +24,14 @@ export type LogWithMetadata = {
 export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
   // try to parse timestamp from beginning of log
   // Docker timestampe format with padded zeros giving consistent length
-  // Example: 2014-09-16T06:17:46.000000000Z
-  const message = log.slice(31); // 30+1 to remove a space
-  const nanoTimestampStr = log.substring(0, 30);
+  // Examples:
+  // docker: 2014-09-16T06:17:46.000000000Z
+  // podman:  2023-03-09T15:12:17-08:00
+  // docker:
+  // const message = log.slice(31); // 30+1 to remove a space
+  // podman:
+  const message = log.slice(26); // 25+1 to remove a space
+  const nanoTimestampStr = log.substring(0, 25);
   // returns timestamp in seconds
   const timestamp = timestampFromString(nanoTimestampStr);
   // Timestamp library silently fails and returns invalid timestamps
