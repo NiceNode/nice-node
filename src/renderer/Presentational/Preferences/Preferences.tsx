@@ -114,7 +114,7 @@ const Preferences = ({
                 ),
               },
               {
-                label: 'Use desktop notifications',
+                label: 'Desktop notifications',
                 value: (
                   <Toggle
                     onText="Enabled"
