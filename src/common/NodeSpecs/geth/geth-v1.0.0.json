@@ -114,28 +114,28 @@
         "controlTranslations": [
           {
             "value": "eth",
-            "config": "Eth"
+            "config": "eth"
           },
           {
             "value": "net",
-            "config": "Net"
+            "config": "net"
           },
           {
             "value": "web3",
-            "config": "Web3"
+            "config": "web3"
           },
           {
             "value": "debug",
-            "config": "Debug"
+            "config": "debug"
           },
 
           {
             "value": "personal",
-            "config": "Personal"
+            "config": "personal"
           },
           {
             "value": "admin",
-            "config": "Admin"
+            "config": "admin"
           }
         ]
       }
