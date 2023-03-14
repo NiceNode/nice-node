@@ -97,7 +97,6 @@ const createWindow = async () => {
     height: 820,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      enableBlinkFeatures: 'CSSColorSchemeUARendering',
       nodeIntegration: true,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')

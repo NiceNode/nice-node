@@ -47,11 +47,12 @@ export const displayNotification = (notification: NotificationItemProps) => {
   renderNotification.show();
 };
 
-const checkNotification = (
+const checkIfNotificationCanBeAdded = (
   storedNotifications: NotificationItemProps[],
   notificationObject: NotificationProps
 ) => {
-  if (storedNotifications.length === 0) return true;
+  if (storedNotifications.length === 0 || storedNotifications.length < 1000)
+    return true;
   const currentTimestamp = Date.now();
   const existingNotificationIndex = storedNotifications.findIndex(
     (notification: NotificationItemProps) =>
@@ -70,7 +71,7 @@ const checkNotification = (
 // TODO: add variable support for language string keys
 export const addNotification = (notificationObject: NotificationProps) => {
   const notifications = store.get(NOTIFICATIONS_KEY) || [];
-  if (checkNotification(notifications, notificationObject)) {
+  if (checkIfNotificationCanBeAdded(notifications, notificationObject)) {
     const { title, description, status } = notificationObject;
     const newNotification = {
       title,

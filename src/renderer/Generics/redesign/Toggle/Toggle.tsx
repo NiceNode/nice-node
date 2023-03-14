@@ -51,7 +51,7 @@ export const Toggle = ({
           type: 'checkbox',
           role: 'switch',
           id: 'flexSwitchCheckDefault',
-          checked: isChecked,
+          checked: isChecked || false,
           ...(disabled && { disabled }),
           onChange: (e) => {
             if (onChange) {
