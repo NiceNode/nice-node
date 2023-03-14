@@ -5,7 +5,7 @@ import { updateSelectedNodeId } from '../../state/node';
 import AddNodeStepperModal from '../AddNodeStepper/AddNodeStepperModal';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
-import { useGetIsDockerRunningQuery } from '../../state/settingsService';
+import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 
 type Props = {
   modalOnClose: () => void;
@@ -17,10 +17,10 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     useState<boolean>(false);
   const [step, setStep] = useState(0);
 
-  const qIsDockerRunning = useGetIsDockerRunningQuery(null, {
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
-  const isDockerRunning = qIsDockerRunning?.data;
+  const isPodmanRunning = qIsPodmanRunning?.data;
 
   const dispatch = useAppDispatch();
 
@@ -33,12 +33,12 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       modalTitle = 'Node Requirements';
       break;
     case 2:
-      modalTitle = 'Docker Installation';
+      modalTitle = 'Podman Installation';
       break;
     default:
   }
 
-  const startNode = (step === 1 || step === 2) && isDockerRunning;
+  const startNode = (step === 1 || step === 2) && isPodmanRunning;
   const buttonSaveLabel = startNode ? 'Start node' : 'Continue';
   const buttonCancelLabel = step === 0 ? 'Cancel' : 'Back';
   const buttonSaveVariant = startNode ? 'icon-left' : 'text';
@@ -91,7 +91,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const onSave = () => {
     if (step === 0) {
       setStep(1);
-    } else if (step === 1 && !isDockerRunning) {
+    } else if (step === 1 && !isPodmanRunning) {
       setStep(2);
     } else {
       modalOnSaveConfig(undefined);

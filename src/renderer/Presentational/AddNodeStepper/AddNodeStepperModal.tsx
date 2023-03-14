@@ -9,7 +9,6 @@ import { componentContainer, container } from './addNodeStepper.css';
 import AddEthereumNode, {
   AddEthereumNodeValues,
 } from '../AddEthereumNode/AddEthereumNode';
-import DockerInstallation from '../DockerInstallation/DockerInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import { SystemData } from '../../../main/systemInfo';
 import { SystemRequirements } from '../../../common/systemRequirements';
@@ -19,6 +18,7 @@ import { mergeSystemRequirements } from './mergeNodeRequirements';
 import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
 import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
+import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 
 export interface AddNodeStepperModalProps {
   modal?: boolean;
@@ -133,7 +133,7 @@ const AddNodeStepperModal = ({
         break;
       case 2:
         stepScreen = (
-          <DockerInstallation
+          <PodmanInstallation
             disableSaveButton={disableSaveButton}
             onChange={onChangeDockerInstall}
             type="modal"

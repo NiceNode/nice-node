@@ -27,7 +27,7 @@ import {
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import Node, { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
-import { isDockerInstalled, isDockerRunning } from './docker/docker';
+import { isPodmanInstalled, isPodmanRunning } from './podman/podman';
 import installPodman from './podman/install';
 // eslint-disable-next-line import/no-cycle
 import {
@@ -142,11 +142,11 @@ export const initialize = () => {
   // Node library
   ipcMain.handle('getNodeLibrary', getNodeLibrary);
 
-  // Docker
-  ipcMain.handle('getIsDockerInstalled', isDockerInstalled);
-  ipcMain.handle('installDocker', installPodman);
-  ipcMain.handle('getIsDockerRunning', isDockerRunning);
-  ipcMain.handle('startDocker', startPodman);
+  // Podman
+  ipcMain.handle('getIsPodmanInstalled', isPodmanInstalled);
+  ipcMain.handle('installPodman', installPodman);
+  ipcMain.handle('getIsPodmanRunning', isPodmanRunning);
+  ipcMain.handle('startPodman', startPodman);
 
   // Settings
   ipcMain.handle('getSetHasSeenSplashscreen', (_event, hasSeen?: boolean) => {

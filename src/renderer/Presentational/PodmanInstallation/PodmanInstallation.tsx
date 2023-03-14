@@ -6,7 +6,7 @@ import {
   container,
   descriptionFont,
   titleFont,
-} from './dockerInstallation.css';
+} from './podmanInstallation.css';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import electron from '../../electronGlobal';
 import Button from '../../Generics/redesign/Button/Button';
@@ -15,13 +15,13 @@ import { FileDownloadProgress } from '../../../main/downloadFile';
 import { bytesToMB } from '../../utils';
 import TimedProgressBar from '../../Generics/redesign/ProgressBar/TimedProgressBar';
 import {
-  useGetIsDockerInstalledQuery,
-  useGetIsDockerRunningQuery,
+  useGetIsPodmanInstalledQuery,
+  useGetIsPodmanRunningQuery,
 } from '../../state/settingsService';
 
-// 6.5 min on 2022 MacbookPro 16inch, baseline
-const TOTAL_INSTALL_TIME_SEC = 7 * 60;
-export interface DockerInstallationProps {
+// 6.5(docker), ? min on 2022 MacbookPro 16inch, baseline
+const TOTAL_INSTALL_TIME_SEC = 2 * 60;
+export interface PodmanInstallationProps {
   /**
    * Listen to node config changes
    */
@@ -30,18 +30,18 @@ export interface DockerInstallationProps {
   type?: string;
 }
 
-const DockerInstallation = ({
+const PodmanInstallation = ({
   onChange,
   disableSaveButton,
   type = '',
-}: DockerInstallationProps) => {
+}: PodmanInstallationProps) => {
   const { t } = useTranslation();
-  const qIsDockerInstalled = useGetIsDockerInstalledQuery();
-  const isDockerInstalled = qIsDockerInstalled?.data;
-  const qIsDockerRunning = useGetIsDockerRunningQuery(null, {
+  const qIsPodmanInstalled = useGetIsPodmanInstalledQuery();
+  const isPodmanInstalled = qIsPodmanInstalled?.data;
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
-  const isDockerRunning = qIsDockerRunning?.data;
+  const isPodmanRunning = qIsPodmanRunning?.data;
   const [sHasStartedDownload, setHasStartedDownload] = useState<boolean>();
   const [sDownloadComplete, setDownloadComplete] = useState<boolean>();
   const [sDownloadProgress, setDownloadProgress] = useState<number>(0);
@@ -57,29 +57,29 @@ const DockerInstallation = ({
   }, []);
 
   useEffect(() => {
-    if (isDockerRunning) {
+    if (isPodmanRunning) {
       onChange('done');
     }
-  }, [isDockerRunning, onChange]);
+  }, [isPodmanRunning, onChange]);
 
   const onClickDownloadAndInstall = async () => {
     setHasStartedDownload(true);
-    const installResult = await electron.installDocker();
-    qIsDockerInstalled.refetch();
-    qIsDockerRunning.refetch();
+    const installResult = await electron.installPodman();
+    qIsPodmanInstalled.refetch();
+    qIsPodmanRunning.refetch();
     if (installResult && !installResult.error) {
       setInstallComplete(true);
       // notify parent that everything is done
-      // todo: confirm/check docker version installed?
+      // todo: confirm/check podman version installed?
     }
-    console.log('installDocker finished. Install result: ', installResult);
+    console.log('installPodman finished. Install result: ', installResult);
   };
 
-  const onClickStartDocker = async () => {
+  const onClickStartPodman = async () => {
     setHasStartedDownload(true);
-    const installResult = await electron.startDocker();
-    qIsDockerRunning.refetch();
-    console.log('installDocker finished. Install result: ', installResult);
+    const installResult = await electron.startPodman();
+    qIsPodmanRunning.refetch();
+    console.log('installPodman finished. Install result: ', installResult);
   };
 
   const nodeLogsListener = (message: FileDownloadProgress[]) => {
@@ -97,35 +97,32 @@ const DockerInstallation = ({
         setDownloadComplete(true);
       }
     } else {
-      console.error('recieved empty docker message');
+      console.error('recieved empty podman message');
     }
   };
 
-  const listenForDockerInstallUpdates = useCallback(async () => {
-    electron.ipcRenderer.on('docker', nodeLogsListener);
+  const listenForPodmanInstallUpdates = useCallback(async () => {
+    electron.ipcRenderer.on('podman', nodeLogsListener);
   }, []);
 
   useEffect(() => {
-    console.log('DockerInstallation.tsx: listenForDockerInstallUpdates .');
-    listenForDockerInstallUpdates();
-    return () => electron.ipcRenderer.removeAllListeners('docker');
-  }, [listenForDockerInstallUpdates]);
+    console.log('PodmanInstallation.tsx: listenForPodmanInstallUpdates .');
+    listenForPodmanInstallUpdates();
+    return () => electron.ipcRenderer.removeAllListeners('podman');
+  }, [listenForPodmanInstallUpdates]);
 
-  // listen to docker install messages
+  // listen to podman install messages
   return (
     <div className={[container, type].join(' ')}>
       {type !== 'modal' && (
-        <div className={titleFont}>{t('DockerInstallation')}</div>
+        <div className={titleFont}>{t('PodmanInstallation')}</div>
       )}
       <div className={descriptionFont}>
-        <>{t('dockerPurpose')}</>
+        <>{t('podmanPurpose')}</>
       </div>
-      <ExternalLink
-        text={t('LearnMoreDocker')}
-        url="https://www.docker.com/products/docker-desktop/"
-      />
-      {/* Docker is not installed */}
-      {!isDockerInstalled && (
+      <ExternalLink text={t('LearnMorePodman')} url="https://podman.io/" />
+      {/* Podman is not installed */}
+      {!isPodmanInstalled && (
         <>
           {!sDownloadComplete && !sInstallComplete && (
             <>
@@ -141,7 +138,7 @@ const DockerInstallation = ({
               ) : (
                 <ProgressBar
                   progress={sDownloadProgress}
-                  title={t('DownloadingDocker')}
+                  title={t('DownloadingPodman')}
                   caption={t('DownloadedSomeMegaBytesOfTotal', {
                     downloadedBytes: bytesToMB(sDownloadedBytes),
                     totalBytes: bytesToMB(sTotalSizeBytes),
@@ -153,29 +150,29 @@ const DockerInstallation = ({
           {sDownloadComplete && !sInstallComplete && (
             <TimedProgressBar
               totalTimeSeconds={TOTAL_INSTALL_TIME_SEC}
-              title={t('InstallingDocker')}
+              title={t('InstallingPodman')}
             />
           )}
         </>
       )}
 
       {sDownloadComplete && sInstallComplete && (
-        <p>{t('DockerInstallComplete')}</p>
+        <p>{t('PodmanInstallComplete')}</p>
       )}
-      {/* Docker is installed but not running */}
-      {isDockerInstalled && !isDockerRunning && (
+      {/* Podman is installed but not running */}
+      {isPodmanInstalled && !isPodmanRunning && (
         <>
           <Button
             type="primary"
-            label={t('start docker')}
-            onClick={onClickStartDocker}
+            label={t('start podman')}
+            onClick={onClickStartPodman}
           />
-          <div className={captionText}>{t('DockerUncheckOpenAtStartup')}</div>
+          <div className={captionText}>{t('PodmanUncheckOpenAtStartup')}</div>
         </>
       )}
-      {isDockerRunning && <>{t('DockerIsRunningProceed')}</>}
+      {isPodmanRunning && <>{t('PodmanIsRunningProceed')}</>}
     </div>
   );
 };
 
-export default DockerInstallation;
+export default PodmanInstallation;

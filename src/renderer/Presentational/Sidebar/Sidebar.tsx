@@ -14,7 +14,7 @@ import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/Sideb
 import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
-import { DockerStoppedBanner } from '../DockerInstallation/StartDockerBanner';
+import { PodmanStoppedBanner } from '../PodmanInstallation/StartPodmanBanner';
 
 export interface SidebarProps {
   /**
@@ -119,7 +119,7 @@ const Sidebar = ({
 
   return (
     <div className={container}>
-      {dockerStopped && <DockerStoppedBanner />}
+      {dockerStopped && <PodmanStoppedBanner />}
       {renderBanners()}
       <div className={nodeList}>
         <div className={titleItem}>

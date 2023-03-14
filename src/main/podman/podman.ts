@@ -11,6 +11,15 @@ import * as monitoring from './monitoring';
 import { killChildProcess } from '../processExit';
 import { parseDockerLogMetadata as parsePodmanLogMetadata } from '../util/nodeLogUtils';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
+import { execAwait } from '../execHelper';
+import { LibpodDockerode } from './podman-desktop/libpod-dockerode';
+
+const libPodDockerode = new LibpodDockerode();
+libPodDockerode.enhancePrototypeWithLibPod();
+// get socket path
+// https://github.com/containers/podman-desktop/blob/main/extensions/podman/src/extension.ts#L192
+
+const NICENODE_MACHINE_NAME = 'nicenode-machine';
 
 let podmanWatchProcess: ChildProcess;
 
@@ -444,13 +453,39 @@ export const isPodmanInstalled = async () => {
   return bIsPodmanInstalled;
 };
 
+/**
+ * Returns true if the podman machine is running on Mac or Win
+ * Returns true on Linux if podman is installed?
+ */
 export const isPodmanRunning = async () => {
   let bIsPodmanRunning;
   logger.info('Checking isPodmanRunning...');
   try {
     // Podman is running if the info command did not throw error.
-    await runCommand('info');
-    bIsPodmanRunning = true;
+    // await runCommand('info');
+    let stdout;
+    let stderr;
+    // prefer array format like so https://github.com/containers/podman-desktop/blob/main/extensions/podman/src/extension.ts#L73
+    // eslint-disable-next-line prefer-const
+    ({ stdout, stderr } = await execAwait(`podman machine ls --format "json"`, {
+      log: true,
+    }));
+    console.log('WOOOOTT', stdout);
+
+    // todo: stop start other machine logic here
+    try {
+      const machines = JSON.parse(stdout);
+      if (
+        Array.isArray(machines) &&
+        machines[0] &&
+        machines[0].Name === NICENODE_MACHINE_NAME
+      ) {
+        console.log('WOOOOT');
+        bIsPodmanRunning = machines[0].Running === true;
+      }
+    } catch (err) {
+      console.error('Error parsing machine ls output');
+    }
   } catch (err) {
     // [mac verified] "error cannot connect to the podman dameon"
     logger.error(err);

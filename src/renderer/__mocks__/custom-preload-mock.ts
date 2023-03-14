@@ -86,8 +86,8 @@ export const getSettings = () => {
   };
 };
 export const getSetHasSeenSplashscreen = () => true;
-export const getIsDockerInstalled = () => true;
-export const getIsDockerRunning = () => true;
+export const getIsPodmanInstalled = () => true;
+export const getIsPodmanRunning = () => true;
 
 export const getSystemInfo = () => {};
 

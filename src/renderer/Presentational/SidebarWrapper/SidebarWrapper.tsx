@@ -5,7 +5,7 @@ import {
   selectUserNodes,
   updateSelectedNodeId,
 } from '../../state/node';
-import { useGetIsDockerRunningQuery } from '../../state/settingsService';
+import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import Sidebar from '../Sidebar/Sidebar';
 
 export interface SidebarWrapperProps {
@@ -17,14 +17,14 @@ export const SidebarWrapper = () => {
   const sUserNodes = useAppSelector(selectUserNodes);
   const dispatch = useAppDispatch();
   // todo: implement a back-off polling strategy which can be "reset"
-  const qIsDockerRunning = useGetIsDockerRunningQuery(null, {
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
   // default to docker is running while data is being fetched, so
   //  the user isn't falsely warned
-  let isDockerRunning = true;
-  if (qIsDockerRunning && !qIsDockerRunning.fetching) {
-    isDockerRunning = qIsDockerRunning.data;
+  let isPodmanRunning = true;
+  if (qIsPodmanRunning && !qIsPodmanRunning.fetching) {
+    isPodmanRunning = qIsPodmanRunning.data;
   }
 
   // Default selected node to be the first node
@@ -43,7 +43,7 @@ export const SidebarWrapper = () => {
     <Sidebar
       offline={false}
       updateAvailable={false}
-      dockerStopped={!isDockerRunning}
+      dockerStopped={!isPodmanRunning}
       sUserNodes={sUserNodes}
       selectedNodeId={sSelectedNodeId}
     />

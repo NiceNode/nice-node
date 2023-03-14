@@ -71,11 +71,11 @@ declare global {
       // Node library
       getNodeLibrary(): NodeLibrary;
 
-      // Docker
-      getIsDockerInstalled(): boolean;
-      installDocker(): any;
-      getIsDockerRunning(): true;
-      startDocker(): any;
+      // Podman
+      getIsPodmanInstalled(): boolean;
+      installPodman(): any;
+      getIsPodmanRunning(): true;
+      startPodman(): any;
 
       // Settings
       getSetHasSeenSplashscreen(hasSeen?: boolean): boolean;

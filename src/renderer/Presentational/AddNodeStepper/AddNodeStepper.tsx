@@ -8,7 +8,7 @@ import Stepper from '../../Generics/redesign/Stepper/Stepper';
 import AddEthereumNode, {
   AddEthereumNodeValues,
 } from '../AddEthereumNode/AddEthereumNode';
-import DockerInstallation from '../DockerInstallation/DockerInstallation';
+import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import electron from '../../electronGlobal';
 // import { NodeSpecification } from '../../../common/nodeSpec';
@@ -79,8 +79,8 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     fetchNodeLibrary();
   }, []);
 
-  const onChangeDockerInstall = useCallback((newValue: string) => {
-    console.log('onChangeDockerInstall newValue ', newValue);
+  const onChangePodmanInstall = useCallback((newValue: string) => {
+    console.log('onChangePodmanInstall newValue ', newValue);
   }, []);
 
   const onChangeAddEthereumNode = useCallback(
@@ -177,7 +177,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       if (sStep + 1 >= TOTAL_STEPS) {
         // done
         onChange('done');
-        // if DockerInstallDone, add nodes, close modal (loading?)
+        // if PodmanInstallDone, add nodes, close modal (loading?)
         addNodes();
       } else {
         setStep(sStep + 1);
@@ -217,7 +217,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         stepImage = step2;
         break;
       case 2:
-        stepScreen = <DockerInstallation onChange={onChangeDockerInstall} />;
+        stepScreen = <PodmanInstallation onChange={onChangePodmanInstall} />;
         stepImage = step3;
         break;
       default:
@@ -243,7 +243,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
           {getStepScreen(1)}
         </div>
 
-        {/* Step 2 - If Docker is not installed */}
+        {/* Step 2 - If Podman is not installed */}
         <div style={{ display: sStep === 2 ? '' : 'none', height: '100%' }}>
           {getStepScreen(2)}
         </div>
