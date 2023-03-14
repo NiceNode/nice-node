@@ -51,8 +51,8 @@ const checkIfNotificationCanBeAdded = (
   storedNotifications: NotificationItemProps[],
   notificationObject: NotificationProps
 ) => {
-  if (storedNotifications.length === 0 || storedNotifications.length < 1000)
-    return true;
+  if (storedNotifications.length === 0) return true;
+  if (storedNotifications.length === 1000) return false;
   const currentTimestamp = Date.now();
   const existingNotificationIndex = storedNotifications.findIndex(
     (notification: NotificationItemProps) =>
