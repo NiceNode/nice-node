@@ -50,10 +50,10 @@ export const Banner = ({
     };
   } else if (dockerStopped) {
     iconId = 'play';
-    title = 'Docker is not running';
-    description = 'Click to start Docker';
+    title = 'Podman is not running';
+    description = 'Click to start Podman';
     internalOnClick = () => {
-      console.log('Start Docker!');
+      console.log('Start Podman!');
     };
   }
   const onClickBanner = () => {

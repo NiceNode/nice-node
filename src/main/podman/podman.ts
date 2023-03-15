@@ -9,7 +9,7 @@ import { buildCliConfig } from '../../common/nodeConfig';
 import { send } from '../messenger';
 import * as monitoring from './monitoring';
 import { killChildProcess } from '../processExit';
-import { parseDockerLogMetadata as parsePodmanLogMetadata } from '../util/nodeLogUtils';
+import { parsePodmanLogMetadata } from '../util/nodeLogUtils';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
 import { execAwait } from '../execHelper';
 import { LibpodDockerode } from './podman-desktop/libpod-dockerode';
@@ -470,7 +470,9 @@ export const isPodmanRunning = async () => {
     ({ stdout, stderr } = await execAwait(`podman machine ls --format "json"`, {
       log: true,
     }));
-    console.log('WOOOOTT', stdout);
+    if (stderr) {
+      logger.error(`Podman machine ls error: ${stderr}`);
+    }
 
     // todo: stop start other machine logic here
     try {
@@ -480,7 +482,7 @@ export const isPodmanRunning = async () => {
         machines[0] &&
         machines[0].Name === NICENODE_MACHINE_NAME
       ) {
-        console.log('WOOOOT');
+        logger.info('Podman machine found.');
         bIsPodmanRunning = machines[0].Running === true;
       }
     } catch (err) {

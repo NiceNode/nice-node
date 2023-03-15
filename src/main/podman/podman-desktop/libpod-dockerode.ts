@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable func-names */
 /**
  * Use this file like so:
  *  const libPodDockerode = new LibpodDockerode();

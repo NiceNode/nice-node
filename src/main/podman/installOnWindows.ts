@@ -13,7 +13,7 @@ const iconv = require('iconv-lite');
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const installOnWindows = async (version: string): Promise<any> => {
-  logger.info(`Starting docker install...`);
+  logger.info(`Starting podman install of version ${version}...`);
 
   try {
     // check if wsl is installed and install

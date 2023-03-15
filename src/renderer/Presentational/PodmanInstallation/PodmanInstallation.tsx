@@ -20,7 +20,7 @@ import {
 } from '../../state/settingsService';
 
 // 6.5(docker), ? min on 2022 MacbookPro 16inch, baseline
-const TOTAL_INSTALL_TIME_SEC = 2 * 60;
+const TOTAL_INSTALL_TIME_SEC = 3 * 60;
 export interface PodmanInstallationProps {
   /**
    * Listen to node config changes
@@ -51,8 +51,8 @@ const PodmanInstallation = ({
 
   useEffect(() => {
     // todoo
-    // if (disableSaveButton) disableSaveButton(true);
-    if (disableSaveButton) disableSaveButton(false);
+    if (disableSaveButton) disableSaveButton(true);
+    // if (disableSaveButton) disableSaveButton(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -164,10 +164,9 @@ const PodmanInstallation = ({
         <>
           <Button
             type="primary"
-            label={t('start podman')}
+            label={t('StartPodman')}
             onClick={onClickStartPodman}
           />
-          <div className={captionText}>{t('PodmanUncheckOpenAtStartup')}</div>
         </>
       )}
       {isPodmanRunning && <>{t('PodmanIsRunningProceed')}</>}

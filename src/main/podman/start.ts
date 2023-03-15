@@ -81,8 +81,8 @@ export const startOnMac = async (): Promise<any> => {
 
 export const startOnWindows = async (): Promise<any> => {
   try {
-    let stdout;
-    let stderr;
+    let stdout = '';
+    let stderr = '';
     // the first time podman machine init is called, podman will install windows subsystem
     //  linux v2 and then require a restart
     // eslint-disable-next-line prefer-const
@@ -92,6 +92,8 @@ export const startOnWindows = async (): Promise<any> => {
         log: true,
       }
     ));
+    logger.info(stdout);
+    if (stderr) logger.error(stderr);
     // todoo?: prompt user for restart?
     // todoo?: save a settings flag to do something on restart?
 

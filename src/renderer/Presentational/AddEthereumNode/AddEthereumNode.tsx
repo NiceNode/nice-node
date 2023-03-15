@@ -21,6 +21,7 @@ import Select from '../../Generics/redesign/Select/Select';
 // import { NodeSpecification } from '../../../common/nodeSpec';
 import FolderInput from '../../Generics/redesign/Input/FolderInput';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
+import { captionText } from '../PodmanInstallation/podmanInstallation.css';
 
 const ecOptions = [
   {
@@ -291,7 +292,9 @@ AddEthereumNodeProps) => {
       )}
       <HorizontalLine />
       <p className={sectionFont}>{tGeneric('DataLocation')}</p>
+      <p className={captionText}>Changing location coming soon</p>
       <FolderInput
+        disabled
         placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
         freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
         onClickChange={async () => {
