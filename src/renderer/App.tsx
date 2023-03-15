@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MemoryRouter, Routes, Route, Outlet } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
-import NotificationsWrapper from './Presentational/Notifications/NotificationsWrapper';
+import { NotificationsWrapper } from './Presentational/Notifications/NotificationsWrapper';
 import SystemMonitor from './Presentational/SystemMonitor/SystemMonitor';
 
 import './Generics/redesign/globalStyle.css';

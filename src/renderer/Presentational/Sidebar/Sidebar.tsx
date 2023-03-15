@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import { setModalState } from '../../state/modal';
-import { getNotifications } from '../../../main/notifications';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
 import { NodeId, NodeStatus, UserNodes } from '../../../common/node';
@@ -31,27 +31,8 @@ export interface SidebarProps {
   dockerStopped: boolean;
   sUserNodes?: UserNodes;
   selectedNodeId?: NodeId;
+  notifications: NotificationItemProps[];
 }
-
-const itemListData: { iconId: IconId; label: string; count?: number }[] = [
-  {
-    iconId: 'bell',
-    label: 'Notifications',
-    count: getNotifications().length, // this needs to be updated based on changes in global state
-  },
-  {
-    iconId: 'add',
-    label: 'Add Node',
-  },
-  {
-    iconId: 'preferences',
-    label: 'Preferences',
-  },
-  {
-    iconId: 'health',
-    label: 'System Monitor',
-  },
-];
 
 const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
   created: 'stopped',
@@ -78,8 +59,29 @@ const Sidebar = ({
   offline,
   dockerStopped,
   selectedNodeId,
+  notifications,
 }: SidebarProps) => {
   const dispatch = useAppDispatch();
+
+  const itemListData: { iconId: IconId; label: string; count?: number }[] = [
+    {
+      iconId: 'bell',
+      label: 'Notifications',
+      count: notifications?.length,
+    },
+    {
+      iconId: 'add',
+      label: 'Add Node',
+    },
+    {
+      iconId: 'preferences',
+      label: 'Preferences',
+    },
+    {
+      iconId: 'health',
+      label: 'System Monitor',
+    },
+  ];
 
   // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
   // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
