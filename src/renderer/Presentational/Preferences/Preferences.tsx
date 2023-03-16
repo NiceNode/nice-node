@@ -1,4 +1,7 @@
+/* eslint-disable no-case-declarations */
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
+import { Icon } from 'renderer/Generics/redesign/Icon/Icon';
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
 import LanguageSelect from '../../LanguageSelect';
@@ -6,12 +9,23 @@ import {
   preferencesContainer,
   captionText,
   selectedThemeImage,
+  themeContainer,
+  themeInnerContainer,
+  selectedThemeContainer,
   themeImage,
+  themeCircleContainer,
+  themeCircleIcon,
+  themeCircleBackground,
+  sectionTitle,
+  preferenceSection,
+  appearanceSection,
 } from './preferences.css';
-import DarkModeThumbnail from '../../assets/images/artwork/DarkModeThumbnail.png';
-import LightModeThumbnail from '../../assets/images/artwork/LightModeThumbnail.png';
-import AutoDarkLightModeThumbnail from '../../assets/images/artwork/AutoDarkLightModeThumbnail.png';
-import { lineKeyText } from '../../Generics/redesign/LabelSetting/labelSettingsSection.css';
+import AutoDark from '../../assets/images/artwork/auto-dark.png';
+import DarkDark from '../../assets/images/artwork/dark-dark.png';
+import LightDark from '../../assets/images/artwork/light-dark.png';
+import AutoLight from '../../assets/images/artwork/auto-light.png';
+import DarkLight from '../../assets/images/artwork/dark-light.png';
+import LightLight from '../../assets/images/artwork/light-light.png';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
@@ -19,6 +33,7 @@ export type Preference = 'theme' | 'isOpenOnStartup' | 'isNotificationsEnabled';
 export interface PreferencesProps {
   themeSetting?: ThemeSetting;
   isOpenOnStartup?: boolean;
+  osDarkMode?: boolean;
   isNotificationsEnabled?: boolean;
   version?: string;
   onChange?: (preference: Preference, value: unknown) => void;
@@ -27,11 +42,13 @@ export interface PreferencesProps {
 const Preferences = ({
   themeSetting,
   isOpenOnStartup,
+  osDarkMode,
   isNotificationsEnabled,
   version,
   onChange,
 }: PreferencesProps) => {
   const { t } = useTranslation('genericComponents');
+  const [initialThemeSetting] = useState(themeSetting);
 
   const onClickTheme = (theme: ThemeSetting) => {
     if (onChange) {
@@ -39,103 +56,145 @@ const Preferences = ({
     }
   };
 
+  const getThemeThumbnail = (theme: ThemeSetting) => {
+    const lightTheme = initialThemeSetting === 'light';
+    switch (theme) {
+      case 'auto':
+        return !osDarkMode || initialThemeSetting === 'light'
+          ? AutoLight
+          : AutoDark;
+      case 'light':
+        return lightTheme ? LightLight : LightDark;
+      case 'dark':
+        return lightTheme ? DarkLight : DarkDark;
+      default:
+    }
+    return AutoLight;
+  };
+
   return (
     <div className={preferencesContainer}>
-      <span className={lineKeyText}>{t('Appearance')}</span>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: 10,
-          paddingBottom: 24,
-          paddingTop: 12,
-        }}
-      >
+      <div className={sectionTitle}>{t('Appearance')}</div>
+      <div className={appearanceSection}>
         {[
           {
             theme: 'auto',
-            thumbnail: AutoDarkLightModeThumbnail,
             label: t('AutoFollowsComputerSetting'),
           },
           {
             theme: 'light',
-            thumbnail: LightModeThumbnail,
             label: t('LightMode'),
           },
           {
             theme: 'dark',
-            thumbnail: DarkModeThumbnail,
             label: t('DarkMode'),
           },
         ].map((themeDetails, index) => {
           const isSelected = themeSetting === themeDetails.theme;
-          const imgClassNames = [themeImage];
+          const selectedStyle = [themeInnerContainer];
+          const imgClassNames = [themeImage, themeDetails.theme];
           if (isSelected) {
             imgClassNames.push(selectedThemeImage);
+            selectedStyle.push(selectedThemeContainer);
           }
+          const thumbnail = getThemeThumbnail(
+            themeDetails.theme as ThemeSetting
+          );
           return (
             <div
               key={themeDetails.theme}
               role="button"
               tabIndex={index}
-              style={{ display: 'flex', flexDirection: 'column' }}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'relative',
+              }}
               onClick={() => onClickTheme(themeDetails.theme as ThemeSetting)}
               onKeyDown={() => onClickTheme(themeDetails.theme as ThemeSetting)}
             >
-              <img
-                src={themeDetails.thumbnail}
-                alt={themeDetails.theme}
-                className={imgClassNames.join(' ')}
-              />
+              <div className={themeContainer}>
+                {isSelected && (
+                  <div className={themeCircleContainer}>
+                    <div className={themeCircleIcon}>
+                      <Icon iconId="checkcirclefilled" />
+                    </div>
+                    <div className={themeCircleBackground} />
+                  </div>
+                )}
+                <div className={selectedStyle.join(' ')}>
+                  <img
+                    src={thumbnail}
+                    alt={themeDetails.label}
+                    className={imgClassNames.join(' ')}
+                  />
+                </div>
+              </div>
               <span className={captionText}>{themeDetails.label}</span>
             </div>
           );
         })}
       </div>
-      <HorizontalLine />
-      <LineLabelSettings
-        items={[
-          {
-            sectionTitle: '',
-            items: [
-              {
-                label: t('LaunchOnLogin'),
-                value: (
-                  <Toggle
-                    onText="Enabled"
-                    offText="Disabled"
-                    checked={isOpenOnStartup}
-                    onChange={(newValue) => {
-                      if (onChange) {
-                        onChange('isOpenOnStartup', newValue);
-                      }
-                    }}
-                  />
-                ),
-              },
-              {
-                label: 'Desktop notifications',
-                value: (
-                  <Toggle
-                    onText="Enabled"
-                    offText="Disabled"
-                    checked={isNotificationsEnabled}
-                    onChange={(newValue) => {
-                      if (onChange) {
-                        onChange('isNotificationsEnabled', newValue);
-                      }
-                    }}
-                  />
-                ),
-              },
-              {
-                label: t('Language'),
-                value: <LanguageSelect />,
-              },
-            ],
-          },
-        ]}
-      />
+      <div className={preferenceSection}>
+        <div className={sectionTitle}>General</div>
+        <HorizontalLine />
+        <LineLabelSettings
+          items={[
+            {
+              sectionTitle: '',
+              items: [
+                {
+                  label: t('LaunchOnStartup'),
+                  value: (
+                    <Toggle
+                      onText="Enabled"
+                      offText="Disabled"
+                      checked={isOpenOnStartup}
+                      onChange={(newValue) => {
+                        if (onChange) {
+                          onChange('isOpenOnStartup', newValue);
+                        }
+                      }}
+                    />
+                  ),
+                },
+                {
+                  label: t('Language'),
+                  value: <LanguageSelect />,
+                },
+              ],
+            },
+          ]}
+        />
+      </div>
+      <div className={preferenceSection}>
+        <div className={sectionTitle}>Notifications</div>
+        <HorizontalLine />
+        <LineLabelSettings
+          items={[
+            {
+              sectionTitle: '',
+              items: [
+                {
+                  label: 'Desktop notifications',
+                  value: (
+                    <Toggle
+                      onText="Enabled"
+                      offText="Disabled"
+                      checked={isNotificationsEnabled}
+                      onChange={(newValue) => {
+                        if (onChange) {
+                          onChange('isNotificationsEnabled', newValue);
+                        }
+                      }}
+                    />
+                  ),
+                },
+              ],
+            },
+          ]}
+        />
+      </div>
       <span className={captionText}>NiceNode version {version}</span>
     </div>
   );
