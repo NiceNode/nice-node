@@ -20,7 +20,7 @@ import {
 } from '../../state/settingsService';
 
 // 6.5(docker), ? min on 2022 MacbookPro 16inch, baseline
-const TOTAL_INSTALL_TIME_SEC = 3 * 60;
+const TOTAL_INSTALL_TIME_SEC = 5 * 60;
 export interface PodmanInstallationProps {
   /**
    * Listen to node config changes

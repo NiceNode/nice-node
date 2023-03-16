@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { execAwait } from '../execHelper';
 import logger from '../logger';
 import * as platform from '../platform';
-import { execAwait } from '../execHelper';
+import { runCommand as runPodmanCommand } from './podman';
 
 const NICENODE_MACHINE_NAME = 'nicenode-machine';
 
@@ -11,15 +12,13 @@ const NICENODE_MACHINE_NAME = 'nicenode-machine';
 export const startOnMac = async (): Promise<any> => {
   logger.info('Podman startOnMac...');
   try {
-    let stdout;
-    let stderr;
-    // start podman app
-
     // todoo: start without machine init
     // todoo: implement podman check on startup
-    ({ stdout, stderr } = await execAwait(`sysctl -n hw.ncpu hw.memsize`, {
+
+    // Get computer cpu count and total memory size
+    const { stdout } = await execAwait(`sysctl -n hw.ncpu hw.memsize`, {
       log: true,
-    }));
+    });
     const output = stdout.split('\n'); // get the first line of output
     let cpuCount = parseInt(output[0], 10); // get the first line of output
     // qemu requires extra properties if cpu > 8
@@ -31,28 +30,25 @@ export const startOnMac = async (): Promise<any> => {
     // todoo: machine ls command
     //          if machine, yay? if not, start?
     //          name machine nicenode-machine?
-    ({ stdout, stderr } = await execAwait(`podman machine list --format json`, {
-      log: true,
-    }));
+    const machineListOutput = await runPodmanCommand(
+      `machine list --format json`
+    );
 
     let isNiceNodeMachineCreated = false;
     // todo: stop start other machine logic here
     try {
-      const machines = JSON.parse(stdout);
+      const machines = JSON.parse(machineListOutput);
       if (
         Array.isArray(machines) &&
         machines[0] &&
         machines[0].Name === NICENODE_MACHINE_NAME
       ) {
-        console.log('WOOOOT', machines);
         isNiceNodeMachineCreated = true;
         if (!machines[0].Running) {
-          ({ stdout, stderr } = await execAwait(
-            `podman machine start ${NICENODE_MACHINE_NAME}`,
-            {
-              log: true,
-            }
-          ));
+          logger.info(
+            "Podman machine found, but it isn't running. Starting..."
+          );
+          await runPodmanCommand(`machine start ${NICENODE_MACHINE_NAME}`);
           // todoo: validate machine started properly
         }
       }
@@ -61,13 +57,12 @@ export const startOnMac = async (): Promise<any> => {
     }
 
     if (!isNiceNodeMachineCreated) {
-      ({ stdout, stderr } = await execAwait(
-        `podman machine init --rootful --cpus ${cpuCount} --memory ${memory} --disk-size 200 --now ${NICENODE_MACHINE_NAME}`,
-        {
-          log: true,
-        }
-      ));
-      console.log('Start podman (machine init) stdout, stderr', stdout, stderr);
+      // Set disk size to 2TB for now (ok even though system disk is smaller)
+      const diskSize = 2000;
+      const machineInitOutput = await runPodmanCommand(
+        `machine init --rootful --cpus ${cpuCount} --memory ${memory} --disk-size ${diskSize} --now ${NICENODE_MACHINE_NAME}`
+      );
+      logger.info(`Start podman (machine init) output: ${machineInitOutput}`);
       // todoo: validate machine started properly
     }
     logger.info('Podman startOnMac finished.');
@@ -82,19 +77,14 @@ export const startOnMac = async (): Promise<any> => {
 
 export const startOnWindows = async (): Promise<any> => {
   try {
-    let stdout = '';
-    let stderr = '';
     // the first time podman machine init is called, podman will install windows subsystem
     //  linux v2 and then require a restart
     // eslint-disable-next-line prefer-const
-    ({ stdout, stderr } = await execAwait(
-      `podman machine init --rootful --cpus 8 --memory 8500 --disk-size 2000 --now`,
-      {
-        log: true,
-      }
-    ));
-    logger.info(stdout);
-    if (stderr) logger.error(stderr);
+    const machineInitOutput = await runPodmanCommand(
+      `podman machine init --rootful --cpus 8 --memory 8500 --disk-size 2000 --now`
+    );
+    logger.info(`Start podman (machine init) output: ${machineInitOutput}`);
+
     // todoo?: prompt user for restart?
     // todoo?: save a settings flag to do something on restart?
 

@@ -8,6 +8,7 @@ import { startOnMac } from './start';
 
 /**
  * Download podman-arch-verson.pkg, install podman, start podman
+ * @param version example: 4.4.2 (without a v prefix)
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const installOnMac = async (version: string): Promise<any> => {
@@ -31,6 +32,7 @@ const installOnMac = async (version: string): Promise<any> => {
     );
     let stdout;
     let stderr;
+    // todo: wrap
     // eslint-disable-next-line prefer-const
     ({ stdout, stderr } = await execAwait(
       `installer -pkg "${podmanPkgFilePath}" -target / -verbose`,

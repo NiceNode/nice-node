@@ -11,24 +11,41 @@ import * as monitoring from './monitoring';
 import { killChildProcess } from '../processExit';
 import { parsePodmanLogMetadata } from '../util/nodeLogUtils';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
-import { execAwait } from '../execHelper';
-import { LibpodDockerode } from './podman-desktop/libpod-dockerode';
+// import { LibpodDockerode } from './podman-desktop/libpod-dockerode';
+import { getPodmanEnvWithPath } from './podman-env-path';
 
-const libPodDockerode = new LibpodDockerode();
-libPodDockerode.enhancePrototypeWithLibPod();
+// const libPodDockerode = new LibpodDockerode();
+// libPodDockerode.enhancePrototypeWithLibPod();
 // get socket path
 // https://github.com/containers/podman-desktop/blob/main/extensions/podman/src/extension.ts#L192
 
 const NICENODE_MACHINE_NAME = 'nicenode-machine';
 
+// Sets the podman install path on env for podman commands
+// export const execAwait: typeof execHelperExecAwait = (command, options) =>
+//   execHelperExecAwait(command, { ...options, env: getPodmanEnvWithPath() });
+
 let podmanWatchProcess: ChildProcess;
 
-const runCommand = async (command: string) => {
-  if (!command.includes('stats') && !command.includes('info')) {
+/**
+ * sets the env.path, executes a podman command, and formats output
+ * @param command after podman
+ * @returns a combination of stdout and stderr depending on the result
+ */
+export const runCommand = async (command: string) => {
+  if (
+    !command.includes('stats') &&
+    !command.includes('info') &&
+    !command.includes('machine list')
+  ) {
     logger.info(`Running podman ${command}`);
   }
   const data = await podmanExecPromise(`podman ${command}`);
-  if (!command.includes('stats') && !command.includes('info')) {
+  if (
+    !command.includes('stats') &&
+    !command.includes('info') &&
+    !command.includes('machine list')
+  ) {
     logger.info(`Podman ${command} data: ${JSON.stringify(data)}`);
   }
   return data;
@@ -48,6 +65,7 @@ const watchPodmanEvents = async () => {
     stdio: [null, 'pipe', 'pipe'],
     detached: false,
     shell: true,
+    env: getPodmanEnvWithPath(),
   };
   // --format '{{json .}}'
   // let watchInput = ['--format', "'{{json .}}'"];
@@ -195,10 +213,15 @@ export const sendLogsToUI = (node: Node) => {
   logger.info(`Starting podman.sendLogsToUI for node ${node.spec.specId}`);
 
   stopSendingLogsToUI();
+  logger.info(
+    'sendLogsToUI getPodmanEnvWithPath(): ',
+    getPodmanEnvWithPath().PATH
+  );
   const spawnOptions: SpawnOptions = {
     stdio: [null, 'pipe', 'pipe'],
     detached: false,
     shell: true,
+    env: getPodmanEnvWithPath(),
   };
   const watchInput = [''];
   if (
@@ -461,22 +484,15 @@ export const isPodmanRunning = async () => {
   let bIsPodmanRunning;
   logger.info('Checking isPodmanRunning...');
   try {
-    // Podman is running if the info command did not throw error.
-    // await runCommand('info');
-    let stdout;
-    let stderr;
-    // prefer array format like so https://github.com/containers/podman-desktop/blob/main/extensions/podman/src/extension.ts#L73
-    // eslint-disable-next-line prefer-const
-    ({ stdout, stderr } = await execAwait(`podman machine ls --format "json"`, {
-      log: true,
-    }));
-    if (stderr) {
-      logger.error(`Podman machine ls error: ${stderr}`);
+    // Podman is properly running if the nicenode machine is running
+    const result = await runCommand(`machine list --format json`);
+    if (!result) {
+      logger.error(`Podman machine ls result returned: ${result}`);
     }
 
     // todo: stop start other machine logic here
     try {
-      const machines = JSON.parse(stdout);
+      const machines = JSON.parse(result);
       if (
         Array.isArray(machines) &&
         machines[0] &&
