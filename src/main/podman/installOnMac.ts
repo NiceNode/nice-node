@@ -7,7 +7,7 @@ import { sendMessageOnDownloadProgress } from './messageFrontEnd';
 import { startOnMac } from './start';
 
 /**
- * Download podman.dmg, install podman, start podman
+ * Download podman-arch-verson.pkg, install podman, start podman
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const installOnMac = async (version: string): Promise<any> => {

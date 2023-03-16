@@ -82,7 +82,7 @@ const PodmanInstallation = ({
     console.log('installPodman finished. Install result: ', installResult);
   };
 
-  const nodeLogsListener = (message: FileDownloadProgress[]) => {
+  const podmanMessageListener = (message: FileDownloadProgress[]) => {
     // set totalSize & progress
     if (message[0]) {
       console.log('downloadupdate: ', message[0]);
@@ -102,7 +102,7 @@ const PodmanInstallation = ({
   };
 
   const listenForPodmanInstallUpdates = useCallback(async () => {
-    electron.ipcRenderer.on('podman', nodeLogsListener);
+    electron.ipcRenderer.on('podman', podmanMessageListener);
   }, []);
 
   useEffect(() => {

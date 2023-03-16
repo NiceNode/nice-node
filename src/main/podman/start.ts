@@ -9,6 +9,7 @@ const NICENODE_MACHINE_NAME = 'nicenode-machine';
  * calls podman machine init
  */
 export const startOnMac = async (): Promise<any> => {
+  logger.info('Podman startOnMac...');
   try {
     let stdout;
     let stderr;
@@ -30,7 +31,7 @@ export const startOnMac = async (): Promise<any> => {
     // todoo: machine ls command
     //          if machine, yay? if not, start?
     //          name machine nicenode-machine?
-    ({ stdout, stderr } = await execAwait(`podman machine ls --format "json"`, {
+    ({ stdout, stderr } = await execAwait(`podman machine list --format json`, {
       log: true,
     }));
 
@@ -61,7 +62,7 @@ export const startOnMac = async (): Promise<any> => {
 
     if (!isNiceNodeMachineCreated) {
       ({ stdout, stderr } = await execAwait(
-        `podman machine init --rootful --cpus ${cpuCount} --memory ${memory} --disk-size 2000 --now ${NICENODE_MACHINE_NAME}`,
+        `podman machine init --rootful --cpus ${cpuCount} --memory ${memory} --disk-size 200 --now ${NICENODE_MACHINE_NAME}`,
         {
           log: true,
         }
@@ -69,12 +70,12 @@ export const startOnMac = async (): Promise<any> => {
       console.log('Start podman (machine init) stdout, stderr', stdout, stderr);
       // todoo: validate machine started properly
     }
+    logger.info('Podman startOnMac finished.');
 
     return true;
   } catch (err) {
-    console.log(err);
     logger.error(err);
-    logger.info('Unable to start podman.');
+    logger.info('Unable to start podman.', err);
     return { error: `Unable to start Podman. ${err}` };
   }
 };
@@ -119,7 +120,7 @@ const startPodman = async (): Promise<any> => {
   } else {
     result = { error: 'Unable to start Podman on this operating system.' };
   }
-  logger.info(`Finished starting podman. Result: ${result}`);
+  logger.info(`Finished starting podman. Result:`, result);
   return result;
 };
 
