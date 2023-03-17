@@ -118,4 +118,15 @@ contextBridge.exposeInMainWorld('electron', {
   setIsOpenOnStartup: (isOpenOnStartup: boolean) => {
     ipcRenderer.invoke('setIsOpenOnStartup', isOpenOnStartup);
   },
+  setIsNotificationsEnabled: (isNotificationsEnabled: boolean) => {
+    ipcRenderer.invoke('setIsNotificationsEnabled', isNotificationsEnabled);
+  },
+
+  // Notifications
+  getNotifications: () => ipcRenderer.invoke('getNotifications'),
+  addNotification: (notification: Notification) => {
+    ipcRenderer.invoke('addNotification', notification);
+  },
+  removeNotifications: () => ipcRenderer.invoke('removeNotifications'),
+  markAllAsRead: () => ipcRenderer.invoke('markAllAsRead'),
 });

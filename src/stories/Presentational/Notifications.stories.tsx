@@ -15,9 +15,6 @@ const Template: ComponentStory<typeof Notifications> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  onSettingsClick: () => {
-    console.log('on settings click');
-  },
   data: [
     {
       unread: true,

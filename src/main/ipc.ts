@@ -40,6 +40,7 @@ import {
   getSetHasSeenSplashscreen,
   getSettings,
   setIsOpenOnStartup,
+  setIsNotificationsEnabled,
   setLanguage,
   setThemeSetting,
   ThemeSetting,
@@ -47,6 +48,12 @@ import {
 import { getSystemInfo } from './systemInfo';
 import startPodman from './podman/start';
 import { addEthereumNode } from './specialNodes/ethereumNode';
+import {
+  addNotification,
+  getNotifications,
+  removeNotifications,
+  markAllAsRead,
+} from './state/notifications';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -162,4 +169,18 @@ export const initialize = () => {
   ipcMain.handle('setIsOpenOnStartup', (_event, isOpenOnStartup: boolean) => {
     return setIsOpenOnStartup(isOpenOnStartup);
   });
+  ipcMain.handle(
+    'setIsNotificationsEnabled',
+    (_event, isNotificationsEnabled: boolean) => {
+      return setIsNotificationsEnabled(isNotificationsEnabled);
+    }
+  );
+
+  // Notifications
+  ipcMain.handle('getNotifications', getNotifications);
+  ipcMain.handle('addNotification', async (_event, notification) => {
+    return addNotification(notification);
+  });
+  ipcMain.handle('removeNotifications', removeNotifications);
+  ipcMain.handle('markAllAsRead', markAllAsRead);
 };

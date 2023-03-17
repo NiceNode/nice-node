@@ -23,4 +23,6 @@ export const contentContainer = style({
   boxSizing: 'border-box',
   flex: 1,
   overflow: 'auto',
+  display: 'flex',
+  flexDirection: 'column',
 });

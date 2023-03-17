@@ -1,4 +1,7 @@
-import { ReactElement, useEffect } from 'react';
+import { ReactElement, useEffect, useCallback } from 'react';
+import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
+import electron from '../../electronGlobal';
+import { useGetNotificationsQuery } from '../../state/notificationsService';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import {
   selectSelectedNodeId,
@@ -27,6 +30,29 @@ export const SidebarWrapper = () => {
     isPodmanRunning = qIsPodmanRunning.data;
   }
 
+  const qNotifications = useGetNotificationsQuery();
+  const notifications: NotificationItemProps[] = qNotifications?.data;
+
+  // subscribes to a channel which notifies when dark mode settings change
+  const onNotificationChange = useCallback(() => {
+    console.log('onNotificationChange');
+    qNotifications?.refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const listenForNotifications = useCallback(async () => {
+    electron.ipcRenderer.on('notifications', onNotificationChange);
+    return () =>
+      electron.ipcRenderer.removeListener(
+        'notifications',
+        onNotificationChange
+      );
+  }, [onNotificationChange]);
+
+  useEffect(() => {
+    listenForNotifications();
+  }, [listenForNotifications]);
+
   // Default selected node to be the first node
   useEffect(() => {
     if (
@@ -41,6 +67,7 @@ export const SidebarWrapper = () => {
 
   return (
     <Sidebar
+      notifications={notifications}
       offline={false}
       updateAvailable={false}
       dockerStopped={!isPodmanRunning}

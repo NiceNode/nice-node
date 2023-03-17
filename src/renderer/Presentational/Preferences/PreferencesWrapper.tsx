@@ -13,6 +13,8 @@ const PreferencesWrapper = ({
 }: PreferencesWrapperProps) => {
   const [sThemeSetting, setThemeSetting] = useState<ThemeSetting>();
   const [sIsOpenOnStartup, setIsOpenOnStartup] = useState<boolean>();
+  const [sIsNotificationsEnabled, setIsNotificationsEnabled] =
+    useState<boolean>();
   const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
 
   useEffect(() => {
@@ -24,7 +26,10 @@ const PreferencesWrapper = ({
       if (userSettings.appThemeSetting) {
         themeSetting = userSettings.appThemeSetting;
       }
+      const notificationsSetting =
+        userSettings.appIsNotificationsEnabled || false;
       setThemeSetting(themeSetting);
+      setIsNotificationsEnabled(notificationsSetting);
     };
     asyncData();
 
@@ -54,16 +59,22 @@ const PreferencesWrapper = ({
         modalOnChangeConfig({
           isOpenOnStartup,
         });
+      } else if (preference === 'isNotificationsEnabled') {
+        const isNotificationsEnabled = value as boolean;
+        setIsNotificationsEnabled(isNotificationsEnabled);
+        modalOnChangeConfig({
+          isNotificationsEnabled,
+        });
       }
     },
     [modalOnChangeConfig]
   );
-
   return (
     <Preferences
       themeSetting={sThemeSetting}
       isOpenOnStartup={sIsOpenOnStartup}
       version={sNiceNodeVersion}
+      isNotificationsEnabled={sIsNotificationsEnabled}
       onChange={onChangePreference}
     />
   );

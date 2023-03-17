@@ -22,5 +22,12 @@ export const CHANNELS = {
   nodeLogs: 'nodeLogs',
   podman: 'podman',
   theme: 'theme',
+  notifications: 'notifications',
 };
-export const CHANNELS_ARRAY = ['userNodes', 'nodeLogs', 'podman', 'theme'];
+export const CHANNELS_ARRAY = [
+  'userNodes',
+  'nodeLogs',
+  'podman',
+  'theme',
+  'notifications',
+];

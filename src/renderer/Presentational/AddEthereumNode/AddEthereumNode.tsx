@@ -16,8 +16,8 @@ import SpecialSelect, {
   SelectOption,
 } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import electron from '../../electronGlobal';
-import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
-import Select from '../../Generics/redesign/Select/Select';
+// import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
+// import Select from '../../Generics/redesign/Select/Select';
 // import { NodeSpecification } from '../../../common/nodeSpec';
 import FolderInput from '../../Generics/redesign/Input/FolderInput';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
@@ -136,7 +136,7 @@ const AddEthereumNode = ({
 AddEthereumNodeProps) => {
   const { t } = useTranslation();
   const { t: tGeneric } = useTranslation('genericComponents');
-  const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
+  // const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const [sSelectedExecutionClient, setSelectedExecutionClient] =
     useState<SelectOption>(ethereumNodeConfig?.executionClient || ecOptions[0]);
   const [sSelectedConsensusClient, setSelectedConsensusClient] =
@@ -253,7 +253,8 @@ AddEthereumNodeProps) => {
         onChange={onChangeCc}
         options={ccOptions}
       />
-      <DropdownLink
+      {/* Todo: add and make work */}
+      {/* <DropdownLink
         text={`${
           sIsOptionsOpen
             ? tGeneric('HideAdvancedOptions')
@@ -289,7 +290,7 @@ AddEthereumNodeProps) => {
             />
           </div>
         </div>
-      )}
+      )} */}
       <HorizontalLine />
       <p className={sectionFont}>{tGeneric('DataLocation')}</p>
       <p className={captionText}>Changing location coming soon</p>

@@ -15,10 +15,11 @@ import { lineKeyText } from '../../Generics/redesign/LabelSetting/labelSettingsS
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
-export type Preference = 'theme' | 'isOpenOnStartup';
+export type Preference = 'theme' | 'isOpenOnStartup' | 'isNotificationsEnabled';
 export interface PreferencesProps {
   themeSetting?: ThemeSetting;
   isOpenOnStartup?: boolean;
+  isNotificationsEnabled?: boolean;
   version?: string;
   onChange?: (preference: Preference, value: unknown) => void;
 }
@@ -26,6 +27,7 @@ export interface PreferencesProps {
 const Preferences = ({
   themeSetting,
   isOpenOnStartup,
+  isNotificationsEnabled,
   version,
   onChange,
 }: PreferencesProps) => {
@@ -106,6 +108,21 @@ const Preferences = ({
                     onChange={(newValue) => {
                       if (onChange) {
                         onChange('isOpenOnStartup', newValue);
+                      }
+                    }}
+                  />
+                ),
+              },
+              {
+                label: 'Desktop notifications',
+                value: (
+                  <Toggle
+                    onText="Enabled"
+                    offText="Disabled"
+                    checked={isNotificationsEnabled}
+                    onChange={(newValue) => {
+                      if (onChange) {
+                        onChange('isNotificationsEnabled', newValue);
                       }
                     }}
                   />

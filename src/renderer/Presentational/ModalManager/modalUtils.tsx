@@ -8,6 +8,7 @@ export interface ModalConfig {
   storageLocation?: string;
   theme?: ThemeSetting;
   isOpenOnStartup?: boolean;
+  isNotificationsEnabled?: boolean;
   selectedNode?: Node;
   isDeleteStorage?: boolean;
   settingsConfig?: object;

@@ -29,6 +29,7 @@ import * as processExit from './processExit';
 import * as systemInfo from './systemInfo';
 import { setCorsForNiceNode } from './corsMiddleware';
 import * as updater from './updater';
+import * as monitor from './monitor';
 
 require('dotenv').config();
 
@@ -96,7 +97,6 @@ const createWindow = async () => {
     height: 820,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      enableBlinkFeatures: 'CSSColorSchemeUARendering',
       nodeIntegration: true,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
@@ -169,6 +169,7 @@ app
 
 const onExit = () => {
   onExitNodeManager();
+  monitor.onExit();
 };
 
 // no blocking work
@@ -180,6 +181,7 @@ const initialize = () => {
   systemInfo.initialize();
   processExit.initialize();
   processExit.registerExitHandler(onExit);
+  monitor.initialize();
   console.log('app locale: ', app.getLocale());
   console.log('app LocaleCountryCode: ', app.getLocaleCountryCode());
 };
