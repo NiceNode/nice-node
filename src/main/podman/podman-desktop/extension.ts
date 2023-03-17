@@ -74,7 +74,7 @@
 // let isDisguisedPodmanSocket = true;
 // let disguisedPodmanSocketWatcher: extensionApi.FileSystemWatcher;
 
-// type MachineJSON = {
+// export type MachineJSON = {
 //   Name: string;
 //   CPUs: number;
 //   Memory: string;

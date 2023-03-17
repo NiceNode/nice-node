@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  isPodmanRunning,
+  isPodmanStarting,
+  runCommand as runPodmanCommand,
+} from './podman';
 import { execAwait } from '../execHelper';
 import logger from '../logger';
 import * as platform from '../platform';
-import { runCommand as runPodmanCommand } from './podman';
+import { startMachineIfCreated } from './machine';
 
 const NICENODE_MACHINE_NAME = 'nicenode-machine';
 
-/**
- * calls podman machine init
- */
 export const startOnMac = async (): Promise<any> => {
   logger.info('Podman startOnMac...');
   try {
-    // todoo: start without machine init
-    // todoo: implement podman check on startup
-
     // Get computer cpu count and total memory size
     const { stdout } = await execAwait(`sysctl -n hw.ncpu hw.memsize`, {
       log: true,
@@ -30,31 +29,9 @@ export const startOnMac = async (): Promise<any> => {
     // todoo: machine ls command
     //          if machine, yay? if not, start?
     //          name machine nicenode-machine?
-    const machineListOutput = await runPodmanCommand(
-      `machine list --format json`
-    );
 
-    let isNiceNodeMachineCreated = false;
+    const isNiceNodeMachineCreated = await startMachineIfCreated();
     // todo: stop start other machine logic here
-    try {
-      const machines = JSON.parse(machineListOutput);
-      if (
-        Array.isArray(machines) &&
-        machines[0] &&
-        machines[0].Name === NICENODE_MACHINE_NAME
-      ) {
-        isNiceNodeMachineCreated = true;
-        if (!machines[0].Running) {
-          logger.info(
-            "Podman machine found, but it isn't running. Starting..."
-          );
-          await runPodmanCommand(`machine start ${NICENODE_MACHINE_NAME}`);
-          // todoo: validate machine started properly
-        }
-      }
-    } catch (err) {
-      console.error('Error parsing machine ls output');
-    }
 
     if (!isNiceNodeMachineCreated) {
       // Set disk size to 2TB for now (ok even though system disk is smaller)
@@ -80,13 +57,19 @@ export const startOnWindows = async (): Promise<any> => {
     // the first time podman machine init is called, podman will install windows subsystem
     //  linux v2 and then require a restart
     // eslint-disable-next-line prefer-const
-    const machineInitOutput = await runPodmanCommand(
-      `podman machine init --rootful --cpus 8 --memory 8500 --disk-size 2000 --now`
-    );
-    logger.info(`Start podman (machine init) output: ${machineInitOutput}`);
+    const isNiceNodeMachineCreated = await startMachineIfCreated();
 
-    // todoo?: prompt user for restart?
-    // todoo?: save a settings flag to do something on restart?
+    if (!isNiceNodeMachineCreated) {
+      // todoo?: prompt user for restart?
+      // todoo?: save a settings flag to do something on restart?
+
+      // Can't set podman machine hardware resources on Windows. WSL2 scales automatically.
+      // (optionally, we could change a wslconfig file)
+      const machineInitOutput = await runPodmanCommand(
+        `machine init --rootful --now ${NICENODE_MACHINE_NAME}`
+      );
+      logger.info(`Start podman (machine init) output: ${machineInitOutput}`);
+    }
 
     // todo: wait to verfiy if it was started?
     return true;
@@ -98,16 +81,26 @@ export const startOnWindows = async (): Promise<any> => {
   }
 };
 
+/**
+ * Creates a podman machine if one does not exists. Starts
+ * the machine. No machine required on Linux.
+ */
 const startPodman = async (): Promise<any> => {
   logger.info(`Starting podman...`);
 
-  // todo: add podman machine ls check?
+  if (await isPodmanRunning()) {
+    return true;
+  }
+  if (await isPodmanStarting()) {
+    return true;
+  }
   let result;
   if (platform.isMac()) {
     result = await startOnMac();
   } else if (platform.isWindows()) {
     result = await startOnWindows();
   } else {
+    // Machine not req'd on Linux
     result = { error: 'Unable to start Podman on this operating system.' };
   }
   logger.info(`Finished starting podman. Result:`, result);

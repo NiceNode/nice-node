@@ -13,13 +13,13 @@ import { parsePodmanLogMetadata } from '../util/nodeLogUtils';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
 // import { LibpodDockerode } from './podman-desktop/libpod-dockerode';
 import { getPodmanEnvWithPath } from './podman-env-path';
+import { getNiceNodeMachine } from './machine';
+import startPodman from './start';
 
 // const libPodDockerode = new LibpodDockerode();
 // libPodDockerode.enhancePrototypeWithLibPod();
 // get socket path
 // https://github.com/containers/podman-desktop/blob/main/extensions/podman/src/extension.ts#L192
-
-const NICENODE_MACHINE_NAME = 'nicenode-machine';
 
 // Sets the podman install path on env for podman commands
 // export const execAwait: typeof execHelperExecAwait = (command, options) =>
@@ -435,6 +435,10 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
   // pull image
   const { execution } = node.spec;
   const { imageName } = execution as PodmanExecution;
+
+  // Ensure a podman machine is running (Mac and Win)
+  await startPodman();
+
   // try catch? .. podman dameon might need to be restarted if a bad gateway error occurs
   await runCommand(`pull ${imageName}`);
 
@@ -481,37 +485,25 @@ export const isPodmanInstalled = async () => {
  * Returns true on Linux if podman is installed?
  */
 export const isPodmanRunning = async () => {
-  let bIsPodmanRunning;
-  logger.info('Checking isPodmanRunning...');
-  try {
-    // Podman is properly running if the nicenode machine is running
-    const result = await runCommand(`machine list --format json`);
-    if (!result) {
-      logger.error(`Podman machine ls result returned: ${result}`);
-    }
-
-    // todo: stop start other machine logic here
-    try {
-      const machines = JSON.parse(result);
-      if (
-        Array.isArray(machines) &&
-        machines[0] &&
-        machines[0].Name === NICENODE_MACHINE_NAME
-      ) {
-        logger.info('Podman machine found.');
-        bIsPodmanRunning = machines[0].Running === true;
-      }
-    } catch (err) {
-      console.error('Error parsing machine ls output');
-    }
-  } catch (err) {
-    // [mac verified] "error cannot connect to the podman dameon"
-    logger.error(err);
-    bIsPodmanRunning = false;
-    logger.info('Podman engine not found.');
-  }
+  // todo: add linux support
+  const nnMachine = await getNiceNodeMachine();
+  const bIsPodmanRunning = nnMachine?.Running === true;
   if (!bIsPodmanRunning) {
-    logger.info(`isPodmanRunning: ${bIsPodmanRunning}`);
+    logger.info(`Podman isn't running`);
+  }
+  return bIsPodmanRunning;
+};
+
+/**
+ * Returns true if the podman machine is starting (Mac or Win)
+ * Returns true on Linux if podman is installed?
+ */
+export const isPodmanStarting = async () => {
+  // todo: add linux support
+  const nnMachine = await getNiceNodeMachine();
+  const bIsPodmanRunning = nnMachine?.Starting === true;
+  if (!bIsPodmanRunning) {
+    logger.info(`Podman isn't running`);
   }
   return bIsPodmanRunning;
 };
