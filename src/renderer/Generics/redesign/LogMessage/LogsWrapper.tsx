@@ -6,9 +6,6 @@ import { selectSelectedNodeId } from '../../../state/node';
 
 import { Logs } from './Logs';
 
-export type ThemeSetting = 'light' | 'dark' | 'auto';
-export type Preference = 'theme' | 'isOpenOnStartup';
-
 const LogsWrapper = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const [sLogs, setLogs] = useState<LogWithMetadata[]>([]);

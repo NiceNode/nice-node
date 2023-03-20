@@ -15,8 +15,6 @@ import {
   nodeCommand,
 } from './NodeSettings.css';
 
-export type ThemeSetting = 'light' | 'dark' | 'auto';
-export type Preference = 'theme' | 'isOpenOnStartup';
 export interface NodeSettingsProps {
   categoryConfigs?: CategoryConfig[];
   configValuesMap?: ConfigValuesMap;

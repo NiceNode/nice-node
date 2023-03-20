@@ -4,8 +4,6 @@ import { ModalConfig } from '../ModalManager/modalUtils';
 import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
 import { container, removeText } from './removeNode.css';
 
-export type ThemeSetting = 'light' | 'dark' | 'auto';
-export type Preference = 'theme' | 'isOpenOnStartup';
 export interface RemoveNodeProps {
   nodeStorageUsedGBs?: number;
   modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
