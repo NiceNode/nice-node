@@ -25,7 +25,9 @@ export const LogMessage = ({ timestamp, level, message }: LogMessageProps) => {
   return (
     <div className={container}>
       <div className={timestampStyle}>
-        {moment(timestamp).format('MMM DD HH:MM:ss:SSS')}
+        {/* docs: https://momentjs.com/docs/#/displaying/format/ */}
+        {/* {moment(timestamp).format('MMM DD HH:mm:ss:SSS')} */}
+        {moment(timestamp).format('MMM DD HH:mm:ss')}
       </div>
       <div className={[levelStyle, `${level}`].join(' ')}>{level}</div>
       <div className={messageStyle}>{message}</div>
