@@ -39,8 +39,9 @@ const installOnWindows = async (version: string): Promise<any> => {
     // eslint-disable-next-line prefer-const
     ({ stdout, stderr } = await execAwait(
       `msiexec /a ${podmanMsiFilePath} /qn /lv .\\log.txt`,
-      { log: true }
+      { log: true, sudo: true }
     ));
+    // todo: report logs if fails?
     console.log('podman install stdout, stderr', stdout, stderr);
 
     await startOnWindows();
