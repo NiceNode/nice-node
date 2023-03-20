@@ -1,3 +1,4 @@
+import path from 'node:path';
 import logger from '../logger';
 import { execAwait } from '../execHelper';
 import * as arch from '../arch';
@@ -38,7 +39,10 @@ const installOnWindows = async (version: string): Promise<any> => {
     );
     // eslint-disable-next-line prefer-const
     ({ stdout, stderr } = await execAwait(
-      `msiexec /a ${podmanMsiFilePath} /qn /lv .\\log.txt`,
+      `msiexec /i ${podmanMsiFilePath} /qn /lv ${path.join(
+        getNNDirPath(),
+        'podman-install-log.txt'
+      )}`,
       { log: true, sudo: true }
     ));
     // todo: report logs if fails?
