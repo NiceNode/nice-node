@@ -106,7 +106,6 @@ export function execPromise(
     process.stdout.setEncoding('utf8');
     process.stdout.on('data', (data) => {
       stdOut += data;
-      console.log(data);
     });
     process.stderr.setEncoding('utf8');
     process.stderr.on('data', (data) => {

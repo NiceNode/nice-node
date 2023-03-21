@@ -41,6 +41,9 @@ export const modalContentStyle = style({
     [`&.nodeSettings`]: {
       // maxHeight: 'none',
     },
+    [`&.failSystemRequirements`]: {
+      width: '380px',
+    },
   },
 });
 
@@ -71,6 +74,11 @@ export const titleFont = style({
       lineHeight: '20px',
       fontWeight: 590,
       paddingBottom: 6,
+    },
+    [`&.failSystemRequirements`]: {
+      fontSize: '20px',
+      lineHeight: '24px',
+      letterSpacing: '-0.4px',
     },
   },
 });

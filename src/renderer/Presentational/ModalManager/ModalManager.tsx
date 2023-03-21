@@ -7,6 +7,7 @@ import { NodeSettingsModal } from './NodeSettingsModal';
 import { PreferencesModal } from './PreferencesModal';
 import { RemoveNodeModal } from './RemoveNodeModal';
 import { AddNodeModal } from './AddNodeModal';
+import FailSystemRequirementsModal from './FailSystemRequirementsModal';
 
 const ModalManager = () => {
   const { isModalOpen, screen } = useSelector(getModalState);
@@ -34,6 +35,8 @@ const ModalManager = () => {
       return <NodeSettingsModal modalOnClose={modalOnClose} />;
     case modalRoutes.preferences:
       return <PreferencesModal modalOnClose={modalOnClose} />;
+    case modalRoutes.failSystemRequirements:
+      return <FailSystemRequirementsModal modalOnClose={modalOnClose} />;
     case modalRoutes.addValidator:
       return null;
     case modalRoutes.clientVersions:

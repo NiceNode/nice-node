@@ -11,19 +11,9 @@ import * as monitoring from './monitoring';
 import { killChildProcess } from '../processExit';
 import { parsePodmanLogMetadata } from '../util/nodeLogUtils';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
-// import { LibpodDockerode } from './podman-desktop/libpod-dockerode';
 import { getPodmanEnvWithPath } from './podman-env-path';
 import { getNiceNodeMachine } from './machine';
 import startPodman from './start';
-
-// const libPodDockerode = new LibpodDockerode();
-// libPodDockerode.enhancePrototypeWithLibPod();
-// get socket path
-// https://github.com/containers/podman-desktop/blob/main/extensions/podman/src/extension.ts#L192
-
-// Sets the podman install path on env for podman commands
-// export const execAwait: typeof execHelperExecAwait = (command, options) =>
-//   execHelperExecAwait(command, { ...options, env: getPodmanEnvWithPath() });
 
 let podmanWatchProcess: ChildProcess;
 
@@ -32,20 +22,12 @@ let podmanWatchProcess: ChildProcess;
  * @param command after podman
  * @returns a combination of stdout and stderr depending on the result
  */
-export const runCommand = async (command: string) => {
-  if (
-    !command.includes('stats') &&
-    !command.includes('info') &&
-    !command.includes('machine list')
-  ) {
+export const runCommand = async (command: string, log?: boolean) => {
+  if (log) {
     logger.info(`Running podman ${command}`);
   }
   const data = await podmanExecPromise(`podman ${command}`);
-  if (
-    !command.includes('stats') &&
-    !command.includes('info') &&
-    !command.includes('machine list')
-  ) {
+  if (log) {
     logger.info(`Podman ${command} data: ${JSON.stringify(data)}`);
   }
   return data;
@@ -178,7 +160,7 @@ const watchPodmanEvents = async () => {
 // ]
 export const getRunningContainers = async () => {
   const data = await runCommand(`ps --no-trunc`);
-  console.log('podman ps -s data: ', data);
+  // console.log('podman ps -s data: ', data);
   // let containers = [];
   // if (data?.containerList && Array.isArray(data.containerList)) {
   //   containers = data.containerList;
@@ -501,11 +483,8 @@ export const isPodmanRunning = async () => {
 export const isPodmanStarting = async () => {
   // todo: add linux support
   const nnMachine = await getNiceNodeMachine();
-  const bIsPodmanRunning = nnMachine?.Starting === true;
-  if (!bIsPodmanRunning) {
-    logger.info(`Podman isn't running`);
-  }
-  return bIsPodmanRunning;
+  const bIsPodmanStarting = nnMachine?.Starting === true;
+  return bIsPodmanStarting;
 };
 
 // todoo

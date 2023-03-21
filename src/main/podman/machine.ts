@@ -14,7 +14,7 @@ export const getNiceNodeMachine = async (): Promise<
   try {
     const result = await runCommand(`machine list --format json`);
     if (!result) {
-      logger.error(`Podman machine ls result returned: ${result}`);
+      // logger.error(`Podman machine ls result returned: ${result}`);
       return undefined;
     }
 
@@ -23,7 +23,7 @@ export const getNiceNodeMachine = async (): Promise<
       if (Array.isArray(machines)) {
         for (const machine of machines) {
           if (machine && machine.Name === NICENODE_MACHINE_NAME) {
-            logger.info('Podman machine found.');
+            // logger.info('Podman machine found.');
             return machine;
           }
         }

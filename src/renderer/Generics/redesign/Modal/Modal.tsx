@@ -75,7 +75,9 @@ export const Modal = ({
           </div>
         )}
         <div className={[modalHeaderContainer, modalType].join(' ')}>
-          <span className={[titleFont, modalType].join(' ')}>{modalTitle}</span>
+          <span className={[titleFont, modalType, modalStyle].join(' ')}>
+            {modalTitle}
+          </span>
         </div>
         <div
           className={[modalChildrenContainer, modalStyle, modalType].join(' ')}

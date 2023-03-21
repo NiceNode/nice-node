@@ -42,6 +42,7 @@ declare global {
       getMainProcessUsage(): any;
       checkSystemHardware(): string[];
       getSystemInfo(): SystemData;
+      getFailSystemRequirements(): Promise<FailSystemRequirementsData>;
 
       // Multi-node
       getNodes(): Node[];

@@ -26,6 +26,7 @@ export const modalRoutes = Object.freeze({
   stopNode: 'stopNode',
   removeNode: 'removeNode',
   updateUnavailable: 'updateUnavailable',
+  failSystemRequirements: 'failSystemRequirements',
 });
 
 /* Use this to change config settings, saved temporarily in the modal file with backend apis until it's saved by modalOnSaveConfig

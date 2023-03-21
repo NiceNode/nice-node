@@ -54,6 +54,7 @@ import {
   removeNotifications,
   markAllAsRead,
 } from './state/notifications';
+import { getFailSystemRequirements } from './minSystemRequirement';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -79,6 +80,7 @@ export const initialize = () => {
   ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
   ipcMain.handle('getSystemInfo', getSystemInfo);
+  ipcMain.handle('getFailSystemRequirements', getFailSystemRequirements);
 
   // Multi-nodegetUserNodes
   ipcMain.handle('getNodes', getNodes);
