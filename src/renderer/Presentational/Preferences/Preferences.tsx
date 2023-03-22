@@ -99,7 +99,7 @@ const Preferences = ({
             sectionTitle: '',
             items: [
               {
-                label: t('LaunchOnStartup'),
+                label: t('LaunchOnLogin'),
                 value: (
                   <Toggle
                     onText="Enabled"

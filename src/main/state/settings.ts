@@ -85,9 +85,13 @@ export const setThemeSetting = (theme: ThemeSetting) => {
 
 export const setIsOpenOnStartup = (isOpenOnStartup: boolean) => {
   logger.info(`Setting isOpenOnStartup to ${isOpenOnStartup}`);
+  // electron tells OS to open at login
+  app.setLoginItemSettings({ openAtLogin: isOpenOnStartup });
   store.set(`${SETTINGS_KEY}.${APP_IS_OPEN_ON_STARTUP}`, isOpenOnStartup);
   logger.info(
-    `App isOpenOnStartup is ${store.get(SETTINGS_KEY, APP_IS_OPEN_ON_STARTUP)}`
+    `App isOpenOnStartup is ${store.get(
+      `${SETTINGS_KEY}.${APP_IS_OPEN_ON_STARTUP}`
+    )}`
   );
 };
 

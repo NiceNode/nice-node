@@ -28,8 +28,10 @@ const PreferencesWrapper = ({
       }
       const notificationsSetting =
         userSettings.appIsNotificationsEnabled || false;
+      const isOpenAtStartupSetting = userSettings.appIsOpenOnStartup || false;
       setThemeSetting(themeSetting);
       setIsNotificationsEnabled(notificationsSetting);
+      setIsOpenOnStartup(isOpenAtStartupSetting);
     };
     asyncData();
 
