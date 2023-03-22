@@ -43,7 +43,9 @@ const FailSystemRequirementsModal = ({
       modalTitle={modalTitle}
       modalStyle="failSystemRequirements"
       buttonSaveLabel={t('Quit NiceNode')}
-      modalOnSaveConfig={() => {}}
+      modalOnSaveConfig={() => {
+        electron.closeApp();
+      }}
       modalOnClose={modalOnClose}
       modalOnCancel={() => {}}
     >

@@ -47,6 +47,7 @@ contextBridge.exposeInMainWorld('electron', {
   getSystemInfo: () => ipcRenderer.invoke('getSystemInfo'),
   getFailSystemRequirements: () =>
     ipcRenderer.invoke('getFailSystemRequirements'),
+  closeApp: () => ipcRenderer.invoke('closeApp'),
 
   // Multi-node
   getNodes: () => ipcRenderer.invoke('getNodes'),

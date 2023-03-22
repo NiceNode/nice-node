@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ipcMain } from 'electron';
+import { ipcMain, app } from 'electron';
 import getDebugInfo from './debug';
 import {
   getGethLogs,
@@ -81,6 +81,7 @@ export const initialize = () => {
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
   ipcMain.handle('getSystemInfo', getSystemInfo);
   ipcMain.handle('getFailSystemRequirements', getFailSystemRequirements);
+  ipcMain.handle('closeApp', () => app.quit());
 
   // Multi-nodegetUserNodes
   ipcMain.handle('getNodes', getNodes);

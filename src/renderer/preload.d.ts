@@ -43,6 +43,7 @@ declare global {
       checkSystemHardware(): string[];
       getSystemInfo(): SystemData;
       getFailSystemRequirements(): Promise<FailSystemRequirementsData>;
+      closeApp(): void;
 
       // Multi-node
       getNodes(): Node[];
