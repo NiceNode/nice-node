@@ -11,7 +11,7 @@ const iconv = require('iconv-lite');
 
 /**
  * Download podman.msi, install podman, handle reboot, and start podman
- * @param version example: 4.4.2 (without a v prefix)
+ * @param version example: 4.4.3 (without a v prefix)
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const installOnWindows = async (version: string): Promise<any> => {
