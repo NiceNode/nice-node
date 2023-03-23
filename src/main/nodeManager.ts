@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { NodeSpecification } from '../common/nodeSpec';
 import {
   getContainerDetails,
@@ -210,6 +211,17 @@ export const stopSendingNodeLogs = (nodeId?: NodeId) => {
   }
 };
 
+/**
+ * Removes all nodes and deletes their storage data
+ */
+export const removeAllNodes = async () => {
+  const nodes = nodeStore.getNodes();
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    await removeNode(node.id, { isDeleteStorage: true });
+  }
+};
+
 export const sendNodeLogs = (nodeId: NodeId) => {
   const node = nodeStore.getNode(nodeId);
   if (isDockerNode(node)) {
@@ -238,7 +250,6 @@ export const initialize = async () => {
       const dockerNode = node;
       if (Array.isArray(dockerNode?.runtime?.processIds)) {
         try {
-          // eslint-disable-next-line no-await-in-loop
           const containerDetails = await getContainerDetails(
             dockerNode.runtime.processIds
           );

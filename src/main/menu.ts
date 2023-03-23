@@ -10,6 +10,8 @@ import { getSetHasSeenSplashscreen } from './state/settings';
 
 import { getDebugInfoString, getGithubIssueProblemURL } from './debug';
 import { checkForUpdates } from './updater';
+import uninstallPodman from './podman/uninstall/uninstall';
+import nuclearUninstall from './nuclearUninstall';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -184,6 +186,19 @@ export default class MenuBuilder {
           label: 'Show Splash Screen On Launch',
           click() {
             getSetHasSeenSplashscreen(false);
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Uninstall podman',
+          click() {
+            uninstallPodman();
+          },
+        },
+        {
+          label: 'Nuclear uninstall (unistall podman and delete all NN data)',
+          click() {
+            nuclearUninstall();
           },
         },
       ],

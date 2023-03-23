@@ -61,3 +61,21 @@ export const startMachineIfCreated = async (): Promise<boolean> => {
   }
   return false;
 };
+
+/**
+ *
+ * @returns an error message if it fails. undefined if successful.
+ */
+export const removeNiceNodeMachine = async (): Promise<string | undefined> => {
+  // --force stops the machine and does not prompt before removing
+  const command = `machine rm --force ${NICENODE_MACHINE_NAME}`;
+  try {
+    await runCommand(command);
+  } catch (err) {
+    const errorMessage = `Error running command podman ${command}`;
+    logger.error(errorMessage);
+    logger.error(err);
+    return errorMessage;
+  }
+  return undefined;
+};

@@ -20,9 +20,28 @@ import { spawn } from 'node:child_process';
 // import { configuration } from '@tmpwip/extension-api';
 import { isMac, isWindows } from './util';
 
+/**
+ * macOS and Windows only
+ * @returns the default podman install path. Use getInstallationPath() for
+ * a more rebust method to get an env.path with podman included.
+ */
+export function getDefaultPodmanPath(): string | undefined {
+  if (isWindows()) {
+    return 'c:\\Program Files\\RedHat\\Podman';
+  }
+  if (isMac()) {
+    return '/opt/podman';
+  }
+  return undefined;
+}
+
 const macosExtraPath =
   '/usr/local/bin:/opt/homebrew/bin:/opt/local/bin:/opt/podman/bin';
 
+/**
+ * macOS and Windows only
+ * @returns an env.PATH variable with the podman path at the front
+ */
 export function getInstallationPath(): string {
   const { env } = process;
   if (isWindows()) {
