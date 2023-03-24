@@ -293,9 +293,11 @@ AddEthereumNodeProps) => {
       )} */}
       <HorizontalLine />
       <p className={sectionFont}>{tGeneric('DataLocation')}</p>
-      <p className={captionText}>Changing location coming soon</p>
+      <p
+        className={captionText}
+      >{`Changing location only supported on Mac and only locations under /Users/<current-user>/ or /Volumes/`}</p>
       <FolderInput
-        disabled
+        // disabled
         placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
         freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
         onClickChange={async () => {
