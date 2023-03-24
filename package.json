@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "3.3.0-alpha",
+  "version": "3.4.0-alpha",
   "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./src/main/main.ts",
@@ -67,12 +67,12 @@
     "dmg": {
       "contents": [
         {
-          "x": 130,
-          "y": 220
+          "x": 180,
+          "y": 195
         },
         {
-          "x": 410,
-          "y": 220,
+          "x": 440,
+          "y": 195,
           "type": "link",
           "path": "/Applications"
         }
