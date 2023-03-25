@@ -3,7 +3,7 @@ import logger from '../logger';
 import { runCommand } from './podman';
 import { MachineJSON } from './types';
 
-const NICENODE_MACHINE_NAME = 'nicenode-machine';
+export const NICENODE_MACHINE_NAME = 'nicenode-machine';
 
 /**
  * @returns the podman machine created by NiceNode (name NICENODE_MACHINE_NAME)

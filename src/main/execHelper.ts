@@ -9,7 +9,13 @@ const sudo = require('@vscode/sudo-prompt');
 const PROCESS_CWD = process.cwd();
 export const execAwait = (
   command: string,
-  options: { log?: boolean; cwd?: string; sudo?: boolean; env?: any } = {
+  options: {
+    log?: boolean;
+    cwd?: string;
+    sudo?: boolean;
+    env?: any;
+    shell?: string;
+  } = {
     log: false,
     cwd: PROCESS_CWD,
     sudo: false,

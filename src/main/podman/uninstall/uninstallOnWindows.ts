@@ -1,6 +1,9 @@
 import { app } from 'electron';
+import path from 'node:path';
+import { getNNDirPath } from '../../files';
 import logger from '../../logger';
 import { execAwait } from '../../execHelper';
+import { NICENODE_MACHINE_NAME } from '../machine';
 
 const iconv = require('iconv-lite');
 
@@ -18,6 +21,12 @@ const uninstallOnWindows = async (
     let stderr;
 
     // may need to run wsl -t podman-nicenode-machine and wsl --unregister podman-nicenode-machine
+    const deleteWslPodmanVm = `wsl --unregister podman-${NICENODE_MACHINE_NAME}`;
+    ({ stdout, stderr } = await execAwait(deleteWslPodmanVm, {
+      log: true,
+    }));
+    logger.info(`podman uninstall unregister wsl2 vm ${stdout}, ${stderr}`);
+
     // Returns C:\Users\<user> (Ex. C:\Users\johns)
     const userHome = app.getPath('home');
     const foldersToDelete = [
@@ -30,21 +39,25 @@ const uninstallOnWindows = async (
       const rmCommand = `Remove-Item -Path ${folderPath} -Recurse -Force`;
       ({ stdout, stderr } = await execAwait(rmCommand, {
         log: true,
+        shell: 'powershell.exe',
       }));
       logger.info(`podman uninstall rm ${folderPath} ${stdout}, ${stderr}`);
     });
 
     // This uninstall command is equivalent to the user going to Add & Remove programs UI
-    // and clicking Uninstall. Command requires sudo.
-    // get the name of the application
-    const getPodmanAppName = `Get-WmiObject -Class Win32_Product -Filter "Name LIKE '%Podman%'" | Select-Object -ExpandProperty Name`;
-    ({ stdout, stderr } = await execAwait(getPodmanAppName, {
+    // and clicking Uninstall. msi uninstall command requires sudo.
+    const getPodmanAppIdCommand = `Get-WmiObject -Class Win32_Product -Filter "Name LIKE '%Podman%'" | Select-Object -ExpandProperty IdentifyingNumber`;
+    ({ stdout, stderr } = await execAwait(getPodmanAppIdCommand, {
       log: true,
+      shell: 'powershell.exe',
     }));
-    const appName = stdout;
-    logger.info(`podman uninstall getPodmanAppName ${stdout}, ${stderr}`);
+    const podmanAppId = stdout.replace(/(\r\n|\n|\r)/gm, '');
+    logger.info(`podman uninstall podmanAppId ${stdout}, ${stderr}`);
 
-    const uninstallCommand = `(Get-WmiObject -Class Win32_Product -Filter "Name = '${appName}'").Uninstall()`;
+    const uninstallCommand = `msiexec /x ${podmanAppId} /qn /lv ${path.join(
+      getNNDirPath(),
+      'podman-uninstall-log.txt'
+    )}`;
     ({ stdout, stderr } = await execAwait(uninstallCommand, {
       log: true,
       sudo: true,

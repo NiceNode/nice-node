@@ -296,6 +296,18 @@ export default class MenuBuilder {
               clipboard.writeText(getDebugInfoString());
             },
           },
+          {
+            label: 'Uninstall podman',
+            click() {
+              uninstallPodman();
+            },
+          },
+          {
+            label: 'Nuclear uninstall (unistall podman and delete all NN data)',
+            click() {
+              nuclearUninstall();
+            },
+          },
         ],
       },
     ];
