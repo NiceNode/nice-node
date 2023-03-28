@@ -7,7 +7,7 @@ Set up an Ethereum node in no-time on every modern computer without any technica
 For the latest information, visit https://nicenode.xyz
 
 [![Downloads](https://badgen.net/badge/icon/alpha?label=downloads)](https://www.nicenode.xyz/#download) [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/k3dpYU4Pn9)
-[![gitpoap badge](https://public-api.gitpoap.io/v1/repo/jgresham/nice-node/badge)](https://www.gitpoap.io/gh/jgresham/nice-node)
+[![gitpoap badge](https://public-api.gitpoap.io/v1/repo/jgresham/nice-node/badge)](https://www.gitpoap.io/gh/NiceNode/nice-node)
 
 <img width="1164" alt="Nice Node Screenshot captioned work in progress" src="https://user-images.githubusercontent.com/3721291/213537206-fa5380f4-af5b-4d81-a07b-ea9072f07b24.png">
 
