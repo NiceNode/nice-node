@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "3.4.1-alpha",
+  "version": "3.4.2-alpha",
   "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./src/main/main.ts",
@@ -71,7 +71,7 @@
           "y": 195
         },
         {
-          "x": 440,
+          "x": 462,
           "y": 195,
           "type": "link",
           "path": "/Applications"
@@ -282,8 +282,8 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
-    "@sentry/electron": "^4.1.2",
-    "@sentry/integrations": "^7.23.0",
+    "@sentry/electron": "^4.3.0",
+    "@sentry/integrations": "^7.45.0",
     "@vanilla-extract/css": "^1.9.3",
     "@vscode/sudo-prompt": "^9.3.1",
     "await-sleep": "0.0.1",

@@ -11,7 +11,6 @@
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import * as Sentry from '@sentry/electron/main';
-// import { CaptureConsole } from '@sentry/integrations';
 
 import logger from './logger';
 import MenuBuilder from './menu';
@@ -34,15 +33,10 @@ import * as monitor from './monitor';
 require('dotenv').config();
 
 fixPathEnvVar();
-// debug({ isEnabled: true });
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   maxBreadcrumbs: 50,
-  // integrations: [
-  //   new CaptureConsole({
-  //     levels: ['error', 'warn'],
-  //   }),
-  // ],
+  debug: process.env.NODE_ENV === 'development',
 });
 
 let mainWindow: BrowserWindow | null = null;
