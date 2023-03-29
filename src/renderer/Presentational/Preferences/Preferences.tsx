@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Icon } from 'renderer/Generics/redesign/Icon/Icon';
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';

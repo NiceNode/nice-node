@@ -4,27 +4,45 @@ import electron from './electronGlobal';
 import { Settings } from '../main/state/settings';
 import { darkTheme, lightTheme } from './Generics/redesign/theme.css';
 import { useGetSettingsQuery } from './state/settingsService';
+import { ThemeSetting } from './Presentational/Preferences/Preferences';
 
 type Props = {
   children: React.ReactNode;
 };
 
+interface MetaElement extends HTMLMetaElement {
+  content: ThemeSetting;
+}
+
 const ThemeManager = ({ children }: Props) => {
   const qSettings = useGetSettingsQuery();
   const [sIsDarkTheme, setIsDarkTheme] = useState<boolean>();
+
+  const handleColorSchemeChange = (colorScheme: ThemeSetting) => {
+    const meta = document.querySelector(
+      'meta[name="color-scheme"]'
+    ) as MetaElement;
+    meta.content = colorScheme as ThemeSetting;
+  };
+
   // Sets the app language based on user or os setting
   useEffect(() => {
     const settingsData = qSettings?.data as Settings;
     if (settingsData) {
+      const { osIsDarkMode, appThemeSetting } = settingsData;
       // check user and os settings
-      if (settingsData.appThemeSetting === 'light') {
+      if (appThemeSetting === 'light') {
         setIsDarkTheme(false);
-      } else if (settingsData.appThemeSetting === 'dark') {
+        handleColorSchemeChange('light');
+      } else if (appThemeSetting === 'dark') {
         setIsDarkTheme(true);
-      } else if (settingsData.appThemeSetting === 'auto') {
-        setIsDarkTheme(settingsData.osIsDarkMode);
+        handleColorSchemeChange('dark');
+      } else if (appThemeSetting === 'auto') {
+        setIsDarkTheme(osIsDarkMode);
+        handleColorSchemeChange(osIsDarkMode ? 'dark' : 'light');
       } else {
-        setIsDarkTheme(settingsData.osIsDarkMode);
+        setIsDarkTheme(osIsDarkMode);
+        handleColorSchemeChange(osIsDarkMode ? 'dark' : 'light');
       }
     }
   }, [qSettings.data]);
