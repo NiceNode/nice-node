@@ -207,12 +207,27 @@ const NodeScreen = () => {
   // todo: get node type, single or multi-service
   // parse node details from selectedNode => SingleNodeContent
   // todo: add stop/start ability?
+
+  // TODO: make this more flexible for other client specs
+  const formatSpec = (info: string | undefined) => {
+    if (!info) {
+      return '';
+    }
+    if (info.includes('BeaconNode')) {
+      return 'Consensus Client — Ethereum Mainnet';
+    }
+    if (info.includes('Execution')) {
+      return 'Execution Client — Ethereum Mainnet';
+    }
+    return info;
+  };
+
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
     name: spec.specId.replace('-beacon', ''),
     type: 'client',
     version: qNodeVersion?.currentData,
-    info: spec.category,
+    info: formatSpec(spec.category),
     status: {
       stopped: status === 'stopped',
       error: status.includes('error'),
