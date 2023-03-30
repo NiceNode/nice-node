@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import logger from '../logger';
 import { isDockerNode } from '../../common/node';
 import * as nodeStore from '../state/nodes';
 
@@ -19,7 +18,8 @@ const updateNodeUsage = async () => {
     allContainerStats = `[${allContainerStats.split('\n').join(',')}]`;
     allContainerStats = JSON.parse(allContainerStats);
   } catch (err) {
-    logger.error('Error parsing docker stats: ', err);
+    console.error('Error parsing podman stats: ', err);
+    // logger.error('Error parsing podman stats: ', err);
   }
   // eslint-disable-next-line no-plusplus
   for (let i = 0; i < nodes.length; i++) {

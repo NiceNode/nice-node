@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
@@ -6,6 +7,7 @@ import AddNodeStepperModal from '../AddNodeStepper/AddNodeStepperModal';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
+import { reportEvent } from '../../events/reportEvent';
 
 type Props = {
   modalOnClose: () => void;
@@ -16,6 +18,10 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] =
     useState<boolean>(false);
   const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    reportEvent('OpenAddNodeModal');
+  }, []);
 
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
@@ -68,7 +74,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       ccNodeSpec,
       { storageLocation }
     );
-
+    reportEvent('AddNode');
     dispatch(updateSelectedNodeId(ecNode.id));
     await electron.startNode(ecNode.id);
     await electron.startNode(ccNode.id);

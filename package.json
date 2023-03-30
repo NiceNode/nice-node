@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "3.4.2-alpha",
+  "version": "3.4.3-alpha",
   "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./src/main/main.ts",
@@ -293,6 +293,7 @@
     "electron-debug": "^3.2.0",
     "electron-store": "^8.1.0",
     "electron-updater": "^5.3.0",
+    "fathom-client": "^3.5.0",
     "i18next": "^21.10.0",
     "i18next-browser-languagedetector": "^7.0.1",
     "iconv-lite": "^0.6.3",

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
 import LanguageSelect from '../../LanguageSelect';

@@ -17,6 +17,9 @@ jobs:
     # config in package.json > "build" and remove the conditional below
     # if: ${{ github.repository_owner == 'electron-react-boilerplate' }}
 
+    # all published versions are considered "staging" until we release a non-alpha version
+    environment: staging
+
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -57,6 +60,9 @@ jobs:
           WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
           # CSC_IDENTITY_AUTO_DISCOVERY: false
+          # This is used for app event tracking
+          FATHOM_SITE_ID: ${{ secrets.FATHOM_SITE_ID }}
+          FATHOM_SITE_ENV: ${{ secrets.FATHOM_SITE_ENV }}
           # This is used for uploading release assets to github
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |

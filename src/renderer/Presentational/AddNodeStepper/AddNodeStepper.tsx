@@ -19,6 +19,7 @@ import { mergeSystemRequirements } from './mergeNodeRequirements';
 import { updateSelectedNodeId } from '../../state/node';
 import { useAppDispatch } from '../../state/hooks';
 import { NodeLibrary } from '../../../main/state/nodeLibrary';
+import { reportEvent } from '../../events/reportEvent';
 // import { CheckStorageDetails } from '../../../main/files';
 
 import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
@@ -154,6 +155,8 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       ccNodeSpec,
       { storageLocation: sNodeStorageLocation }
     );
+    reportEvent('AddNode');
+
     // const ecNode = await electron.addNode(ecNodeSpec, sNodeStorageLocation);
     console.log('addNode returned node: ', ecNode);
     // const ccNode = await electron.addNode(ccNodeSpec, sNodeStorageLocation);
@@ -165,7 +168,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     console.log('startCcResult result: ', startCcResult);
 
     // close?
-
     onChange('done');
     setStep(0);
   };
