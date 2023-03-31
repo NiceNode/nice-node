@@ -27,6 +27,12 @@ jobs:
         os: [macos-latest]
 
     steps:
+      - name: Used variables
+        run: |
+          echo "FATHOM_SITE_ID variable : ${{ secrets.FATHOM_SITE_ID }}"
+          echo "FATHOM_SITE_ENV variable : ${{ vars.FATHOM_SITE_ENV }}"
+          echo "NICENODE_ENV variable : ${{ vars.NICENODE_ENV }}"
+
       - name: Checkout git repo
         uses: actions/checkout@v3
 
