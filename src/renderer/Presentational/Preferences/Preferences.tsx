@@ -137,7 +137,7 @@ const Preferences = ({
               },
               {
                 label: `Event reporting`,
-                description: `(${process.env.FATHOM_SITE_ENV})`,
+                description: `(${process.env.FATHOM_SITE_ENV} ${process.env.FATHOM_SITE_ID})`,
                 value: (
                   <Toggle
                     onText="Enabled"
