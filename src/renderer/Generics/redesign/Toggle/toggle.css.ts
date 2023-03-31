@@ -31,6 +31,7 @@ export const inputContainer = style({
     filter: 'none',
     opacity: '0.5',
   },
+  cursor: 'pointer',
 });
 
 export const toggleText = style({

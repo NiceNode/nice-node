@@ -16,11 +16,16 @@ import { lineKeyText } from '../../Generics/redesign/LabelSetting/labelSettingsS
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
-export type Preference = 'theme' | 'isOpenOnStartup' | 'isNotificationsEnabled';
+export type Preference =
+  | 'theme'
+  | 'isOpenOnStartup'
+  | 'isNotificationsEnabled'
+  | 'isEventReportingEnabled';
 export interface PreferencesProps {
   themeSetting?: ThemeSetting;
   isOpenOnStartup?: boolean;
   isNotificationsEnabled?: boolean;
+  isEventReportingEnabled?: boolean;
   version?: string;
   onChange?: (preference: Preference, value: unknown) => void;
 }
@@ -29,6 +34,7 @@ const Preferences = ({
   themeSetting,
   isOpenOnStartup,
   isNotificationsEnabled,
+  isEventReportingEnabled,
   version,
   onChange,
 }: PreferencesProps) => {
@@ -124,6 +130,21 @@ const Preferences = ({
                     onChange={(newValue) => {
                       if (onChange) {
                         onChange('isNotificationsEnabled', newValue);
+                      }
+                    }}
+                  />
+                ),
+              },
+              {
+                label: 'Event reporting',
+                value: (
+                  <Toggle
+                    onText="Enabled"
+                    offText="Disabled"
+                    checked={isEventReportingEnabled}
+                    onChange={(newValue) => {
+                      if (onChange) {
+                        onChange('isEventReportingEnabled', newValue);
                       }
                     }}
                   />

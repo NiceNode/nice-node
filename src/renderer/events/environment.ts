@@ -13,21 +13,21 @@ type Envs = 'dev' | 'staging' | 'prod';
 const envEvent: Record<Envs, EventIdRecord> = {
   dev: {
     AddNode: 'UETFB2BF',
-    OpenApp: '03ZA5M3X',
     InstalledPodman: 'EF8NEAIC',
     OpenAddNodeModal: 'V7S4NG8K',
+    OpenApp: '03ZA5M3X',
   },
   staging: {
-    AddNode: 'UETFB2BF',
-    OpenApp: '03ZA5M3X',
-    InstalledPodman: 'EF8NEAIC',
-    OpenAddNodeModal: 'V7S4NG8K',
+    AddNode: 'T1LEWHGY',
+    InstalledPodman: 'EQGFLK5H',
+    OpenAddNodeModal: 'EJHGTXNC',
+    OpenApp: 'OFXHZEAX',
   },
   prod: {
-    AddNode: 'UETFB2BF',
-    OpenApp: '03ZA5M3X',
-    InstalledPodman: 'EF8NEAIC',
-    OpenAddNodeModal: 'V7S4NG8K',
+    AddNode: 'UTGUO1JU',
+    InstalledPodman: 'UVMEIFSC',
+    OpenAddNodeModal: 'GTW5WHUI',
+    OpenApp: '2BLFQCM7',
   },
 };
 

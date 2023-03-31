@@ -86,6 +86,7 @@ declare global {
       setThemeSetting(theme: ThemeSetting): void;
       setIsOpenOnStartup(isOpenOnStartup: boolean): void;
       setIsNotificationsEnabled(isNotificationsEnabled: boolean): void;
+      setIsEventReportingEnabled(isEventReportingEnabled: boolean): void;
 
       // Notifications
       getNotifications(): any;
