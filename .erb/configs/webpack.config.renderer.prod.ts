@@ -149,6 +149,7 @@ const configuration: webpack.Configuration = {
       // these are required to be declared here so webpack knows which to replace in code
       FATHOM_SITE_ID: 'null',
       FATHOM_SITE_ENV: 'null',
+      NICENODE_ENV: 'development',
     }),
 
     new MiniCssExtractPlugin({

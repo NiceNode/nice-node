@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "3.4.3-alpha",
+  "version": "3.4.4-alpha",
   "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./dist/main/main.js",
