@@ -136,7 +136,8 @@ const Preferences = ({
                 ),
               },
               {
-                label: 'Event reporting',
+                label: `Event reporting`,
+                description: `(${process.env.FATHOM_SITE_ENV})`,
                 value: (
                   <Toggle
                     onText="Enabled"
@@ -158,7 +159,9 @@ const Preferences = ({
           },
         ]}
       />
-      <span className={captionText}>NiceNode version {version}</span>
+      <span className={captionText}>{version}</span>
+      <br />
+      <span className={captionText}>{process.env.NICENODE_ENV}</span>
     </div>
   );
 };

@@ -147,9 +147,10 @@ const configuration: webpack.Configuration = {
       DEBUG_PROD: false,
       // setting process.env.FATHOM_SITE_ID & FATHOM_SITE_ID overrides this
       // these are required to be declared here so webpack knows which to replace in code
-      FATHOM_SITE_ID: 'null',
-      FATHOM_SITE_ENV: 'null',
-      NICENODE_ENV: 'development',
+      // undefined means webpack with throw an error if not set on process.env
+      FATHOM_SITE_ID: undefined,
+      FATHOM_SITE_ENV: undefined,
+      NICENODE_ENV: undefined,
     }),
 
     new MiniCssExtractPlugin({

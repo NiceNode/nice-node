@@ -30,10 +30,13 @@ import { setCorsForNiceNode } from './corsMiddleware';
 import * as updater from './updater';
 import * as monitor from './monitor';
 
-require('dotenv').config();
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config();
+}
 
 fixPathEnvVar();
 logger.info(`NICENODE_ENV: ${process.env.NICENODE_ENV}`);
+logger.info(`FATHOM_SITE_ENV: ${process.env.FATHOM_SITE_ENV}`);
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   maxBreadcrumbs: 50,
