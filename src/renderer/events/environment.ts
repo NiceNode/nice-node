@@ -31,9 +31,8 @@ const envEvent: Record<Envs, EventIdRecord> = {
   },
 };
 
-const environment = 'dev';
 export const eventIdLookup = (event: NNEvent): string => {
   let eventId = '';
-  eventId = envEvent[environment][event];
+  eventId = envEvent[FATHOM_SITE_ENV][event];
   return eventId;
 };
