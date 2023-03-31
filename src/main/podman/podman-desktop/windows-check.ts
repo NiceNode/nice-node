@@ -2,6 +2,7 @@
  * Based from WinCheck in podman-desktop repo src/extensions/podman/podman-install
  */
 import * as os from 'node:os';
+import logger from '../../logger';
 import { FailSystemRequirements } from '../../minSystemRequirement';
 import { execPromise } from './podman-cli';
 
@@ -27,16 +28,19 @@ export const getFailSystemRequirements = async (): Promise<
   }
 
   let isVmpEnabled = false;
-  // set CurrentUICulture to force output in english
+  // todo?: set CurrentUICulture to force output in english
   try {
-    const res = await execPromise('powershell.exe', [
-      '(Get-WmiObject -Query "Select * from Win32_OptionalFeature where InstallState = \'1\'").Name | select-string VirtualMachinePlatform',
-    ]);
+    const res = await execPromise(
+      '(Get-WmiObject -Query "Select * from Win32_OptionalFeature where InstallState = \'1\'").Name | select-string VirtualMachinePlatform'
+    );
+    logger.info(`Get-WmiObject for VirtualMachinePlatform result: ${res}`);
     if (res.indexOf('VirtualMachinePlatform') >= 0) {
       isVmpEnabled = true;
     }
   } catch (err) {
-    // ignore error, it means it is disabled
+    // it may throw an error if it is disabled, however, we need to log true errors
+    // potentially in the powershell command, path, etc.
+    logger.error(`isVmpEnabled false or error. Error: ${err}`);
   }
 
   if (!isVmpEnabled) {

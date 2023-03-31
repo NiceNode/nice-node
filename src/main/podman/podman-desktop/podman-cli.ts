@@ -108,10 +108,15 @@ export function execPromise(
   if (options?.env) {
     env = Object.assign(env, options.env);
   }
+  let shellValue: boolean | string = true;
+  // see https://stackoverflow.com/a/61219838 for example/background
+  if (isWindows()) {
+    shellValue = 'powershell.exe';
+  }
   return new Promise((resolve, reject) => {
     let stdOut = '';
     let stdErr = '';
-    const process = spawn(command, args, { env, shell: true });
+    const process = spawn(command, args, { env, shell: shellValue });
     process.on('error', (error) => {
       let content = '';
       if (stdOut && stdOut !== '') {

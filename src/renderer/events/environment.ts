@@ -5,7 +5,8 @@ import { NNEvent } from './events';
 declare let process: { env: Record<string, string> };
 // do not destruct because webpack replaces exact string match to 'process.env.<var>'
 export const FATHOM_SITE_ID = process.env.FATHOM_SITE_ID;
-export const FATHOM_SITE_ENV = process.env.FATHOM_SITE_ENV as Envs;
+export const FATHOM_SITE_ENV: Envs =
+  (process.env.FATHOM_SITE_ENV as Envs) || 'dev';
 
 type EventIdRecord = Record<NNEvent, string>;
 type Envs = 'dev' | 'staging' | 'prod';
