@@ -26,7 +26,11 @@ export const runCommand = async (command: string, log?: boolean) => {
   if (log) {
     logger.info(`Running podman ${command}`);
   }
-  const data = await podmanExecPromise(`podman ${command}`);
+  // use Windows default cmd as shell for easier path escaping compatibility
+  // over powershell.
+  const data = await podmanExecPromise(`podman ${command}`, [], {
+    shell: true,
+  });
   if (log) {
     logger.info(`Podman ${command} data: ${JSON.stringify(data)}`);
   }

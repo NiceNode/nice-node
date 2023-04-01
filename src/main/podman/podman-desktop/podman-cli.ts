@@ -75,10 +75,13 @@ export function getPodmanCli(): string {
   }
   return 'podman';
 }
-
+/**
+ * @param shell ex. 'powershell.exe'
+ */
 export interface ExecOptions {
   // logger?: Logger;
   env?: NodeJS.ProcessEnv | undefined;
+  shell?: boolean | string;
 }
 
 export function execPromise(
@@ -108,11 +111,15 @@ export function execPromise(
   if (options?.env) {
     env = Object.assign(env, options.env);
   }
+
   let shellValue: boolean | string = true;
-  // see https://stackoverflow.com/a/61219838 for example/background
-  if (isWindows()) {
+  if (options?.shell) {
+    shellValue = options.shell;
+  } else if (isWindows()) {
+    // see https://stackoverflow.com/a/61219838 for example/background
     shellValue = 'powershell.exe';
   }
+
   return new Promise((resolve, reject) => {
     let stdOut = '';
     let stdErr = '';
