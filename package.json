@@ -78,7 +78,8 @@
         }
       ],
       "icon": "installer.icns",
-      "title": "${productName} ${version} installer"
+      "title": "${productName} ${version} installer",
+      "background": "background.tiff"
     },
     "win": {
       "target": [
