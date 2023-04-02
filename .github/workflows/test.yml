@@ -10,6 +10,7 @@ env:
 jobs:
   test:
     timeout-minutes: 25
+    environment: staging
 
     runs-on: ${{ matrix.os }}
 
@@ -31,9 +32,9 @@ jobs:
         run: |
           npm install
 
-      # - name: npm build
-      #   run: |
-      #     npm run build
+      - name: npm build
+        run: |
+          npm run build
 
       - name: npm lint
         run: |
