@@ -37,6 +37,7 @@ import {
 } from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
 import {
+  getSetHasSeenAlphaModal,
   getSetHasSeenSplashscreen,
   getSettings,
   setIsOpenOnStartup,
@@ -161,6 +162,9 @@ export const initialize = () => {
   // Settings
   ipcMain.handle('getSetHasSeenSplashscreen', (_event, hasSeen?: boolean) => {
     return getSetHasSeenSplashscreen(hasSeen);
+  });
+  ipcMain.handle('getSetHasSeenAlphaModal', (_event, hasSeen?: boolean) => {
+    return getSetHasSeenAlphaModal(hasSeen);
   });
   ipcMain.handle('getSettings', getSettings);
   ipcMain.handle('setLanguage', (_event, languageCode: string) => {

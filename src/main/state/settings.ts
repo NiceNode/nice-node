@@ -15,6 +15,7 @@ const OS_COUNTRY_KEY = 'osCountry';
 const OS_IS_DARK_MODE_KEY = 'osIsDarkMode';
 const APP_LANGUAGE_KEY = 'appLanguage';
 const APP_HAS_SEEN_SPLASHSCREEN_KEY = 'appHasSeenSplashscreen';
+const APP_HAS_SEEN_ALPHA_MODAL = 'appHasSeenAlphaModal';
 const APP_THEME_SETTING = 'appThemeSetting';
 const APP_IS_OPEN_ON_STARTUP = 'appIsOpenOnStartup';
 const APP_IS_NOTIFICATIONS_ENABLED = 'appIsNotificationsEnabled';
@@ -56,6 +57,16 @@ export const getSetHasSeenSplashscreen = (hasSeen?: boolean): boolean => {
   }
   const savedHasSeenValue: boolean = store.get(
     `${SETTINGS_KEY}.${APP_HAS_SEEN_SPLASHSCREEN_KEY}`
+  );
+  return savedHasSeenValue;
+};
+
+export const getSetHasSeenAlphaModal = (hasSeen?: boolean): boolean => {
+  if (hasSeen !== undefined) {
+    store.set(`${SETTINGS_KEY}.${APP_HAS_SEEN_ALPHA_MODAL}`, hasSeen);
+  }
+  const savedHasSeenValue: boolean = store.get(
+    `${SETTINGS_KEY}.${APP_HAS_SEEN_ALPHA_MODAL}`
   );
   return savedHasSeenValue;
 };

@@ -81,6 +81,7 @@ declare global {
 
       // Settings
       getSetHasSeenSplashscreen(hasSeen?: boolean): boolean;
+      getSetHasSeenAlphaModal(hasSeen?: boolean): boolean;
       getSettings(): Settings;
       setLanguage(languageCode: string): void;
       setThemeSetting(theme: ThemeSetting): void;

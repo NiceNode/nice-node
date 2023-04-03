@@ -6,7 +6,10 @@ import {
   MenuItemConstructorOptions,
   clipboard,
 } from 'electron';
-import { getSetHasSeenSplashscreen } from './state/settings';
+import {
+  getSetHasSeenSplashscreen,
+  getSetHasSeenAlphaModal,
+} from './state/settings';
 
 import { getDebugInfoString, getGithubIssueProblemURL } from './debug';
 import { checkForUpdates } from './updater';
@@ -186,6 +189,13 @@ export default class MenuBuilder {
           label: 'Show Splash Screen On Launch',
           click() {
             getSetHasSeenSplashscreen(false);
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Show Alpha Modal',
+          click() {
+            getSetHasSeenAlphaModal(false);
           },
         },
         { type: 'separator' },

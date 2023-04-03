@@ -95,6 +95,10 @@ export const modalStepperContainer = style({
       borderTop: 'none',
       padding: 24,
     },
+    [`&.info`]: {
+      borderTop: 'none',
+      padding: 24,
+    },
   },
 });
 
@@ -105,6 +109,10 @@ export const modalChildrenContainer = style({
   selectors: {
     [`&.alert`]: {
       padding: '0px 24px',
+      overflow: 'hidden',
+    },
+    [`&.info`]: {
+      padding: 0,
       overflow: 'hidden',
     },
     [`&.addNode`]: {

@@ -86,6 +86,7 @@ export const getSettings = () => {
   };
 };
 export const getSetHasSeenSplashscreen = () => true;
+export const getSetHasSeenAlphaModal = () => true;
 export const getIsPodmanInstalled = () => true;
 export const getIsPodmanRunning = () => true;
 

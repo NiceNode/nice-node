@@ -12,9 +12,9 @@ import {
 import { ModalConfig } from '../../../Presentational/ModalManager/modalUtils';
 
 type Props = {
-  modalType?: 'alert' | 'modal';
+  modalType?: 'alert' | 'modal' | 'info';
   modalStyle?: string;
-  modalTitle: string;
+  modalTitle?: string;
   backButtonEnabled?: boolean;
   children: React.ReactElement[] | React.ReactElement;
   buttonCancelLabel?: string;
@@ -64,7 +64,7 @@ export const Modal = ({
   return (
     <div className={modalBackdropStyle}>
       <div className={[modalContentStyle, modalStyle].join(' ')}>
-        {modalType !== 'alert' && (
+        {modalType !== 'alert' && modalType !== 'info' && (
           <div className={modalCloseButton}>
             <Button
               variant="icon"
@@ -74,11 +74,13 @@ export const Modal = ({
             />
           </div>
         )}
-        <div className={[modalHeaderContainer, modalType].join(' ')}>
-          <span className={[titleFont, modalType, modalStyle].join(' ')}>
-            {modalTitle}
-          </span>
-        </div>
+        {modalTitle !== '' && (
+          <div className={[modalHeaderContainer, modalType].join(' ')}>
+            <span className={[titleFont, modalType, modalStyle].join(' ')}>
+              {modalTitle}
+            </span>
+          </div>
+        )}
         <div
           className={[modalChildrenContainer, modalStyle, modalType].join(' ')}
         >

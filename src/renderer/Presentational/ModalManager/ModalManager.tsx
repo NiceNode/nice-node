@@ -7,6 +7,7 @@ import { NodeSettingsModal } from './NodeSettingsModal';
 import { PreferencesModal } from './PreferencesModal';
 import { RemoveNodeModal } from './RemoveNodeModal';
 import { AddNodeModal } from './AddNodeModal';
+import { AlphaBuildModal } from './AlphaBuildModal';
 import FailSystemRequirementsModal from './FailSystemRequirementsModal';
 
 const ModalManager = () => {
@@ -41,6 +42,10 @@ const ModalManager = () => {
       return null;
     case modalRoutes.clientVersions:
       return null;
+
+    // Info
+    case modalRoutes.alphaBuild:
+      return <AlphaBuildModal modalOnClose={modalOnClose} />;
 
     // Alerts
     case modalRoutes.stopNode:

@@ -58,8 +58,8 @@ export default function App() {
 
   useEffect(() => {
     const callAsync = async () => {
-      const hasSeen = await electron.getSetHasSeenSplashscreen();
-      setHasSeenSplashscreen(hasSeen ?? false);
+      const hasSeenSplash = await electron.getSetHasSeenSplashscreen();
+      setHasSeenSplashscreen(hasSeenSplash ?? false);
     };
     callAsync();
   }, []);

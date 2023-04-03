@@ -30,6 +30,8 @@ import {
   descriptionFont,
 } from './NodeScreen.css';
 
+let alphaModalRendered = false;
+
 const NodeScreen = () => {
   // const { t } = useTranslation();
   const selectedNode = useAppSelector(selectSelectedNode);
@@ -39,6 +41,7 @@ const NodeScreen = () => {
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
+  const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>();
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
@@ -159,6 +162,14 @@ const NodeScreen = () => {
     },
     [selectedNode]
   );
+
+  useEffect(() => {
+    const setAlphaModal = async () => {
+      const hasSeenAlpha = await electron.getSetHasSeenAlphaModal();
+      setHasSeenAlphaModal(hasSeenAlpha || false);
+    };
+    setAlphaModal();
+  }, []);
   // useEffect(() => {
   //   qNodeInfo.refetch();
   // }, [selectedNode]);
@@ -173,6 +184,17 @@ const NodeScreen = () => {
   //   },
   // });
   const dispatch = useAppDispatch();
+
+  if (sHasSeenAlphaModal === false && !alphaModalRendered) {
+    dispatch(
+      setModalState({
+        isModalOpen: true,
+        screen: { route: 'alphaBuild', type: 'info' },
+      })
+    );
+    alphaModalRendered = true;
+  }
+
   if (!selectedNode) {
     // if there is no node selected, prompt user to create a new node
     return (
