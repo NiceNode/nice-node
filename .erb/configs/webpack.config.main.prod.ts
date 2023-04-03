@@ -14,6 +14,7 @@ import deleteSourceMaps from '../scripts/delete-source-maps';
 
 checkNodeEnv('production');
 deleteSourceMaps();
+require('dotenv').config();
 
 const devtoolsConfig =
   process.env.DEBUG_PROD === 'true'
