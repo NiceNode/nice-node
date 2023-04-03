@@ -79,7 +79,7 @@
       ],
       "icon": "installer.icns",
       "title": "${productName} ${version} installer",
-      "background": "background.tiff"
+      "background": "assets/background.tiff"
     },
     "win": {
       "target": [
