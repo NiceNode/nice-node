@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { common } from 'renderer/Generics/redesign/theme.css';
+import { common } from '../../Generics/redesign/theme.css';
 
 export const container = style({
   display: 'flex',

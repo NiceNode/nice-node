@@ -1,4 +1,4 @@
-import Linking from 'renderer/Generics/redesign/Link/Linking';
+import Linking from '../../Generics/redesign/Link/Linking';
 import {
   container,
   contentContainer,
@@ -35,11 +35,11 @@ const AlphaBuild = () => {
         <div className={contentSection}>
           <span className={contentTitle}>Error reporting turned on</span>
           <p>
-            Reporting errors is essential to improve NiceNode's performance and
-            compatibility with different systems. The collected data is
-            anonymous but includes basic system information and encountered
-            errors. This is an alpha specific measure and will be opt-out by
-            default in a public release.
+            Reporting errors is essential to improve NiceNode&rsquo;s
+            performance and compatibility with different systems. The collected
+            data is anonymous but includes basic system information and
+            encountered errors. This is an alpha specific measure and will be
+            opt-out by default in a public release.
           </p>
         </div>
       </div>
