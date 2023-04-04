@@ -36,6 +36,8 @@ export const getFailSystemRequirements = async (): Promise<
     logger.info(`Get-WmiObject for VirtualMachinePlatform result: ${res}`);
     if (res.indexOf('VirtualMachinePlatform') >= 0) {
       isVmpEnabled = true;
+    } else {
+      // try dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
     }
   } catch (err) {
     // it may throw an error if it is disabled, however, we need to log true errors
