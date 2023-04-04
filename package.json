@@ -77,6 +77,11 @@
           "path": "/Applications"
         }
       ],
+      "window" : {
+        "width" : 640,
+        "height" : 432
+      },
+      "background" : "assets/background.png",
       "icon": "installer.icns",
       "title": "${productName} ${version} installer"
     },
