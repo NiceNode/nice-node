@@ -54,10 +54,10 @@ export const modalCloseButton = style({
 });
 
 export const modalHeaderContainer = style({
-  padding: '40px 32px 16px 32px',
+  padding: '0px 0px 16px 0px',
   selectors: {
     [`&.alert`]: {
-      padding: '24px 24px 6px 24px',
+      padding: '24px 0px 6px 0px',
     },
   },
 });
@@ -74,6 +74,9 @@ export const titleFont = style({
       lineHeight: '20px',
       fontWeight: 590,
       paddingBottom: 6,
+    },
+    [`&.nodeSettings`]: {
+      paddingLeft: 32,
     },
     [`&.failSystemRequirements`]: {
       fontSize: '20px',

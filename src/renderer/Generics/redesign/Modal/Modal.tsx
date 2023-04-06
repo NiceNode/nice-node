@@ -1,15 +1,15 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import Button, { ButtonProps } from '../Button/Button';
 import {
   modalHeaderContainer,
   modalBackdropStyle,
-  modalCloseButton,
   modalChildrenContainer,
   modalContentStyle,
   modalStepperContainer,
   titleFont,
 } from './modal.css';
 import { ModalConfig } from '../../../Presentational/ModalManager/modalUtils';
+import { ContentHeader } from '../ContentHeader/ContentHeader';
 
 type Props = {
   modalType?: 'alert' | 'modal' | 'info';
@@ -44,6 +44,9 @@ export const Modal = ({
   modalOnClose,
   modalOnCancel,
 }: Props) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const modalContentRef = useRef<HTMLDivElement>(null);
+
   const escFunction = useCallback(
     (event: { key: string }) => {
       if (event.key === 'Escape') {
@@ -61,29 +64,54 @@ export const Modal = ({
     };
   }, [escFunction]);
 
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    function handleScroll() {
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => {
+        console.log('hello?');
+        const modalContent = modalContentRef.current;
+        if (modalContent && modalContent.scrollTop > 20) {
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+        }
+      }, 100);
+    }
+
+    const modalContent = modalContentRef.current;
+
+    if (modalContent) {
+      modalContent.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (modalContent) {
+        modalContent.removeEventListener('scroll', handleScroll);
+      }
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <div className={modalBackdropStyle}>
       <div className={[modalContentStyle, modalStyle].join(' ')}>
-        {modalType !== 'alert' && modalType !== 'info' && (
-          <div className={modalCloseButton}>
-            <Button
-              variant="icon"
-              iconId="close"
-              type="ghost"
-              onClick={modalOnClose}
-            />
-          </div>
-        )}
-        {modalTitle !== '' && (
+        <ContentHeader
+          title={modalTitle}
+          textAlign="center"
+          isVisible={isVisible}
+          manualVisibility
+        />
+        <div
+          className={[modalChildrenContainer, modalStyle, modalType].join(' ')}
+          ref={modalContentRef}
+        >
           <div className={[modalHeaderContainer, modalType].join(' ')}>
             <span className={[titleFont, modalType, modalStyle].join(' ')}>
               {modalTitle}
             </span>
           </div>
-        )}
-        <div
-          className={[modalChildrenContainer, modalStyle, modalType].join(' ')}
-        >
           {children}
         </div>
         <div className={[modalStepperContainer, modalType].join(' ')}>
