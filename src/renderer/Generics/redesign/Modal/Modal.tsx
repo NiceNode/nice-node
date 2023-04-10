@@ -70,7 +70,6 @@ export const Modal = ({
       clearTimeout(timeoutId);
 
       timeoutId = setTimeout(() => {
-        console.log('hello?');
         const modalContent = modalContentRef.current;
         if (modalContent && modalContent.scrollTop > 20) {
           setIsVisible(true);
