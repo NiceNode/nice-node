@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { ThemeSetting } from 'main/state/settings';
+import { useGetSettingsQuery } from 'renderer/state/settingsService';
 import electron from '../../electronGlobal';
 import PreferencesWrapper from '../Preferences/PreferencesWrapper';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
@@ -20,6 +21,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
   const { t } = useTranslation('genericComponents');
   const modalTitle = t('Preferences');
   const buttonSaveLabel = 'Save changes';
+  const qSettings = useGetSettingsQuery();
 
   const handleColorSchemeChange = (colorScheme: ThemeSetting) => {
     const meta = document.querySelector(
@@ -35,6 +37,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
       isOpenOnStartup,
       isNotificationsEnabled,
       isEventReportingEnabled,
+      language,
     } = updatedConfig || (modalConfig as ModalConfig);
 
     if (theme) {
@@ -50,6 +53,10 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
     if (isEventReportingEnabled !== undefined) {
       await electron.setIsEventReportingEnabled(isEventReportingEnabled);
       setRemoteEventReportingEnabled(isEventReportingEnabled);
+    }
+    if (language) {
+      await electron.setLanguage(language);
+      qSettings.refetch();
     }
     modalOnClose();
   };

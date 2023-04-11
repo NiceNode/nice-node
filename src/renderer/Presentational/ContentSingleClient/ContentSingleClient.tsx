@@ -64,9 +64,13 @@ const ContentSingleClient = (props: SingleNodeContent) => {
     <>
       {/* todo: fix temp type casting */}
       <Header {...(nodeOverview as unknown as NodeOverviewProps)} />
-      <HorizontalLine type="content" />
+      <div>
+        <HorizontalLine type="content" />
+      </div>
       <HeaderMetrics {...(nodeOverview as unknown as NodeOverviewProps)} />
-      <HorizontalLine type="above-tab" />
+      <div>
+        <HorizontalLine type="above-tab" />
+      </div>
       <Tabs>
         <div id="Sync">
           <TabContent tabId="Sync" />

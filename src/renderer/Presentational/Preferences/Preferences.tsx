@@ -34,7 +34,8 @@ export type Preference =
   | 'theme'
   | 'isOpenOnStartup'
   | 'isNotificationsEnabled'
-  | 'isEventReportingEnabled';
+  | 'isEventReportingEnabled'
+  | 'language';
 export interface PreferencesProps {
   themeSetting?: ThemeSetting;
   isOpenOnStartup?: boolean;
@@ -42,6 +43,7 @@ export interface PreferencesProps {
   isNotificationsEnabled?: boolean;
   isEventReportingEnabled?: boolean;
   version?: string;
+  language?: string;
   onChange?: (preference: Preference, value: unknown) => void;
 }
 
@@ -52,6 +54,7 @@ const Preferences = ({
   isNotificationsEnabled,
   isEventReportingEnabled,
   version,
+  language,
   onChange,
 }: PreferencesProps) => {
   const { t } = useTranslation('genericComponents');
@@ -167,7 +170,16 @@ const Preferences = ({
                 },
                 {
                   label: t('Language'),
-                  value: <LanguageSelect />,
+                  value: (
+                    <LanguageSelect
+                      language={language}
+                      onChange={(newValue) => {
+                        if (onChange) {
+                          onChange('language', newValue);
+                        }
+                      }}
+                    />
+                  ),
                 },
               ],
             },

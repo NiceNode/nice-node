@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useGetSettingsQuery } from 'renderer/state/settingsService';
+import { useTranslation } from 'react-i18next';
+import { Settings } from 'main/state/settings';
 import { ModalConfig } from '../ModalManager/modalUtils';
 import electron from '../../electronGlobal';
 
@@ -19,6 +22,10 @@ const PreferencesWrapper = ({
   const [sIsEventReportingEnabled, setIsEventReportingEnabled] =
     useState<boolean>();
   const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
+  const [sLanguageSetting, setLanguageSetting] = useState<string>();
+
+  const { i18n } = useTranslation();
+  const qSettings = useGetSettingsQuery();
 
   useEffect(() => {
     const asyncData = async () => {
@@ -56,6 +63,27 @@ const PreferencesWrapper = ({
       }
     };
     getNiceNodeVersion();
+
+    const getLanguageSetting = async () => {
+      let appLanguage = 'en';
+      if (qSettings?.data) {
+        const settings: Settings = qSettings.data;
+        if (settings.appLanguage) {
+          appLanguage = settings.appLanguage;
+        } else if (settings.osLanguage) {
+          // Only 2-letter language codes supported right now
+          //   OS's can return 4+ letter language codes
+          appLanguage = settings.osLanguage.substring(0, 2);
+        }
+      }
+      // This will set the language when the app loads.
+      if (appLanguage !== i18n.language) {
+        i18n.changeLanguage(appLanguage);
+      }
+      setLanguageSetting(appLanguage);
+    };
+    getLanguageSetting();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangePreference = useCallback(
@@ -84,6 +112,12 @@ const PreferencesWrapper = ({
         modalOnChangeConfig({
           isEventReportingEnabled,
         });
+      } else if (preference === 'language') {
+        const language = value as string;
+        setLanguageSetting(language);
+        modalOnChangeConfig({
+          language,
+        });
       }
     },
     [modalOnChangeConfig]
@@ -98,6 +132,7 @@ const PreferencesWrapper = ({
       version={sNiceNodeVersion}
       isNotificationsEnabled={sIsNotificationsEnabled}
       isEventReportingEnabled={sIsEventReportingEnabled}
+      language={sLanguageSetting}
       onChange={onChangePreference}
     />
   );

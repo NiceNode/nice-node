@@ -7,6 +7,7 @@ export interface ModalConfig {
   consensusClient?: string;
   storageLocation?: string;
   theme?: ThemeSetting;
+  language?: string;
   isOpenOnStartup?: boolean;
   isNotificationsEnabled?: boolean;
   isEventReportingEnabled?: boolean;
