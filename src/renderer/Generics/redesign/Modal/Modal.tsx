@@ -65,43 +65,49 @@ export const Modal = ({
   }, [escFunction]);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    function handleScroll() {
-      clearTimeout(timeoutId);
+    if (modalType === 'modal') {
+      let timeoutId: NodeJS.Timeout;
+      const handleScroll = () => {
+        clearTimeout(timeoutId);
 
-      timeoutId = setTimeout(() => {
-        const modalContent = modalContentRef.current;
-        if (modalContent && modalContent.scrollTop > 20) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
-      }, 100);
-    }
+        timeoutId = setTimeout(() => {
+          const modalContent = modalContentRef.current;
+          if (modalContent && modalContent.scrollTop > 20) {
+            setIsVisible(true);
+          } else {
+            setIsVisible(false);
+          }
+        }, 100);
+      };
 
-    const modalContent = modalContentRef.current;
+      const modalContent = modalContentRef.current;
 
-    if (modalContent) {
-      modalContent.addEventListener('scroll', handleScroll);
-    }
-
-    return () => {
       if (modalContent) {
-        modalContent.removeEventListener('scroll', handleScroll);
+        modalContent.addEventListener('scroll', handleScroll);
       }
-      clearTimeout(timeoutId);
-    };
+
+      return () => {
+        if (modalContent) {
+          modalContent.removeEventListener('scroll', handleScroll);
+        }
+        clearTimeout(timeoutId);
+      };
+    }
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className={modalBackdropStyle}>
       <div className={[modalContentStyle, modalStyle].join(' ')}>
-        <ContentHeader
-          title={modalTitle}
-          textAlign="center"
-          isVisible={isVisible}
-          manualVisibility
-        />
+        {modalType === 'modal' && (
+          <ContentHeader
+            title={modalTitle}
+            textAlign="center"
+            isVisible={isVisible}
+            manualVisibility
+          />
+        )}
         <div
           className={[modalChildrenContainer, modalStyle, modalType].join(' ')}
           ref={modalContentRef}

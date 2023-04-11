@@ -224,7 +224,7 @@ const Preferences = ({
               items: [
                 {
                   label: `Send error reports`,
-                  description: `(${process.env.FATHOM_SITE_ENV} ${process.env.FATHOM_SITE_ID})`,
+                  description: `Enabled by default in alpha releases to fix bugs and improve the app. (${process.env.FATHOM_SITE_ENV} ${process.env.FATHOM_SITE_ID})`,
                   value: (
                     <Toggle
                       onText="Enabled"
