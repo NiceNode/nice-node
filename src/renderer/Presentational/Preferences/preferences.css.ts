@@ -89,3 +89,10 @@ export const sectionTitle = style({
   color: vars.color.font,
   marginBottom: 16,
 });
+
+export const versionContainer = style({
+  paddingTop: 56,
+  fontSize: 11,
+  lineHeight: '14px',
+  color: vars.color.font50,
+});

@@ -18,6 +18,7 @@ import {
   useGetIsPodmanInstalledQuery,
   useGetIsPodmanRunningQuery,
 } from '../../state/settingsService';
+import { reportEvent } from '../../events/reportEvent';
 
 // 6.5(docker), ? min on 2022 MacbookPro 16inch, baseline
 const TOTAL_INSTALL_TIME_SEC = 5 * 60;
@@ -69,6 +70,7 @@ const PodmanInstallation = ({
     qIsPodmanRunning.refetch();
     if (installResult && !installResult.error) {
       setInstallComplete(true);
+      reportEvent('InstalledPodman');
       // notify parent that everything is done
       // todo: confirm/check podman version installed?
     }

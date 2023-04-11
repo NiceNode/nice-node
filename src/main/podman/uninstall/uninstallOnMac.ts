@@ -13,10 +13,13 @@ const uninstallOnMac = async (): Promise<boolean | { error: string }> => {
 
     const foldersToDelete = [
       '/opt/podman',
-      `${userHome}/.local/share/containers/podman`,
-      `${userHome}/.config/containers/podman`,
+      `${userHome}/.local/share/containers`,
+      `${userHome}/.config/containers`,
       `${userHome}/.ssh/*podman*`,
       `${userHome}/.ssh/*nicenode*`,
+      `/private/etc/paths.d/podman-pkg`,
+      `/usr/local/podman`,
+      `/Library/LaunchDaemons/*podman*`,
     ];
     // This can throw return an error if a file or folder doesn't exist.
     // This is ok, because it will still delete the other folders that do exist.

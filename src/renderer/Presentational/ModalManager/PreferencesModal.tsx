@@ -5,6 +5,7 @@ import electron from '../../electronGlobal';
 import PreferencesWrapper from '../Preferences/PreferencesWrapper';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
+import { setRemoteEventReportingEnabled } from '../../events/reportEvent';
 
 type Props = {
   modalOnClose: () => void;
@@ -29,8 +30,12 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
   };
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
-    const { theme, isOpenOnStartup, isNotificationsEnabled } =
-      updatedConfig || (modalConfig as ModalConfig);
+    const {
+      theme,
+      isOpenOnStartup,
+      isNotificationsEnabled,
+      isEventReportingEnabled,
+    } = updatedConfig || (modalConfig as ModalConfig);
 
     if (theme) {
       await electron.setThemeSetting(theme);
@@ -41,6 +46,10 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
     }
     if (isNotificationsEnabled !== undefined) {
       await electron.setIsNotificationsEnabled(isNotificationsEnabled);
+    }
+    if (isEventReportingEnabled !== undefined) {
+      await electron.setIsEventReportingEnabled(isEventReportingEnabled);
+      setRemoteEventReportingEnabled(isEventReportingEnabled);
     }
     modalOnClose();
   };

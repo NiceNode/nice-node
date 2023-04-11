@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { MemoryRouter, Routes, Route, Outlet } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
+
 import { NotificationsWrapper } from './Presentational/Notifications/NotificationsWrapper';
 import SystemMonitor from './Presentational/SystemMonitor/SystemMonitor';
-
 import './Generics/redesign/globalStyle.css';
 import './reset.css';
 import { useAppDispatch } from './state/hooks';
@@ -21,11 +21,13 @@ import {
 } from './app.css';
 import ThemeManager from './ThemeManager';
 import ModalManager from './Presentational/ModalManager/ModalManager';
+import { reportEvent } from './events/reportEvent';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
   debug: true,
 });
+reportEvent('OpenApp');
 
 const WindowContainer = ({ children }: { children: React.ReactNode }) => {
   return (

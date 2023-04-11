@@ -9,12 +9,9 @@ const iconv = require('iconv-lite');
 
 /**
  * Uninstall podman from Windows, and remove various configuration files
- * @param version example: 4.4.2 (without a v prefix)
  */
-const uninstallOnWindows = async (
-  version: string
-): Promise<boolean | { error: string }> => {
-  logger.info(`Starting podman uninstall of version ${version}...`);
+const uninstallOnWindows = async (): Promise<boolean | { error: string }> => {
+  logger.info(`Starting Windows specific podman uninstall steps...`);
 
   try {
     let stdout;

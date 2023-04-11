@@ -19,6 +19,7 @@ import {
   sectionTitle,
   preferenceSection,
   appearanceSection,
+  versionContainer,
 } from './preferences.css';
 import AutoDark from '../../assets/images/artwork/auto-dark.png';
 import DarkDark from '../../assets/images/artwork/dark-dark.png';
@@ -29,12 +30,17 @@ import LightLight from '../../assets/images/artwork/light-light.png';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
-export type Preference = 'theme' | 'isOpenOnStartup' | 'isNotificationsEnabled';
+export type Preference =
+  | 'theme'
+  | 'isOpenOnStartup'
+  | 'isNotificationsEnabled'
+  | 'isEventReportingEnabled';
 export interface PreferencesProps {
   themeSetting?: ThemeSetting;
   isOpenOnStartup?: boolean;
   osDarkMode?: boolean;
   isNotificationsEnabled?: boolean;
+  isEventReportingEnabled?: boolean;
   version?: string;
   onChange?: (preference: Preference, value: unknown) => void;
 }
@@ -44,6 +50,7 @@ const Preferences = ({
   isOpenOnStartup,
   osDarkMode,
   isNotificationsEnabled,
+  isEventReportingEnabled,
   version,
   onChange,
 }: PreferencesProps) => {
@@ -195,7 +202,38 @@ const Preferences = ({
           ]}
         />
       </div>
-      <span className={captionText}>NiceNode version {version}</span>
+      <div className={preferenceSection}>
+        <div className={sectionTitle}>Privacy</div>
+        <HorizontalLine />
+        <LineLabelSettings
+          items={[
+            {
+              sectionTitle: '',
+              items: [
+                {
+                  label: `Send error reports`,
+                  description: `(${process.env.FATHOM_SITE_ENV} ${process.env.FATHOM_SITE_ID})`,
+                  value: (
+                    <Toggle
+                      onText="Enabled"
+                      offText="Disabled"
+                      checked={isEventReportingEnabled}
+                      onChange={(newValue) => {
+                        if (onChange) {
+                          onChange('isEventReportingEnabled', newValue);
+                        }
+                      }}
+                    />
+                  ),
+                },
+              ],
+            },
+          ]}
+        />
+      </div>
+      <div className={versionContainer}>
+        You are running NiceNode {version} {process.env.NICENODE_ENV}
+      </div>
     </div>
   );
 };

@@ -45,6 +45,7 @@ import {
   setLanguage,
   setThemeSetting,
   ThemeSetting,
+  setIsEventReportingEnabled,
 } from './state/settings';
 import { getSystemInfo } from './systemInfo';
 import startPodman from './podman/start';
@@ -180,6 +181,12 @@ export const initialize = () => {
     'setIsNotificationsEnabled',
     (_event, isNotificationsEnabled: boolean) => {
       return setIsNotificationsEnabled(isNotificationsEnabled);
+    }
+  );
+  ipcMain.handle(
+    'setIsEventReportingEnabled',
+    (_event, isEventReportingEnabled: boolean) => {
+      return setIsEventReportingEnabled(isEventReportingEnabled);
     }
   );
 
