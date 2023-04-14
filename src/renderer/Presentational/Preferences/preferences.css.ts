@@ -15,7 +15,7 @@ export const captionText = style({
 export const appearanceSection = style({
   display: 'flex',
   flexDirection: 'row',
-  gap: 10,
+  gap: 23,
 });
 
 export const themeCircleContainer = style({

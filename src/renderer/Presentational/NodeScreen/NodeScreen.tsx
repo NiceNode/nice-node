@@ -244,11 +244,47 @@ const NodeScreen = () => {
     return info;
   };
 
+  const formatVersion = (version: string | undefined, name: string) => {
+    if (!version) {
+      return '';
+    }
+    const capitalize = (s: string) =>
+      (s && s[0].toUpperCase() + s.slice(1)) || '';
+
+    let regex;
+    switch (name) {
+      case 'geth':
+        regex = /Geth\/v(\d+\.\d+\.\d+)/;
+        break;
+      case 'erigon':
+        regex = /(\d+\.\d+\.\d+)-dev/;
+        break;
+      case 'nethermind':
+      case 'lighthouse':
+        // eslint-disable-next-line no-useless-escape
+        regex = new RegExp(`${capitalize(name)}\/v(\\d+\\.\\d+\\.\\d+)`);
+        break;
+      default:
+        console.error(`Invalid software name: ${name}`);
+        return '';
+    }
+
+    const match = version.match(regex);
+
+    if (match) {
+      const versionString = `v${match[1]}`;
+      return versionString;
+    }
+    console.error(`No version number found for ${name}`);
+  };
+
+  const clientName = spec.specId.replace('-beacon', '');
+
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
-    name: spec.specId.replace('-beacon', ''),
+    name: clientName,
     type: 'client',
-    version: qNodeVersion?.currentData,
+    version: formatVersion(qNodeVersion?.currentData, clientName),
     info: formatSpec(spec.category),
     status: {
       stopped: status === 'stopped',
