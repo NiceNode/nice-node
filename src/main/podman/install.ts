@@ -3,7 +3,7 @@ import * as platform from '../platform';
 import installOnMac from './installOnMac';
 import installOnWindows from './installOnWindows';
 
-export const VERSION = '4.4.4';
+export const VERSION = '4.5.0';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const installPodman = async (): Promise<any> => {
