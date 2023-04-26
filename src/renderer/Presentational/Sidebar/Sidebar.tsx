@@ -6,9 +6,9 @@ import { updateSelectedNodeId } from '../../state/node';
 import { NodeId, NodeStatus, UserNodes } from '../../../common/node';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
 import {
-  SidebarNodeItem,
+  SidebarNodeItemWrapper,
   SidebarNodeStatus,
-} from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
+} from '../SidebarNodeItemWrapper/SidebarNodeItemWrapper';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
 import { container, nodeList, itemList, titleItem } from './sidebar.css';
@@ -33,25 +33,6 @@ export interface SidebarProps {
   selectedNodeId?: NodeId;
   notifications: NotificationItemProps[];
 }
-
-const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
-  created: 'stopped',
-  initializing: 'updating',
-  [NodeStatus.checkingForUpdates]: 'updating',
-  downloading: 'updating',
-  downloaded: 'stopped',
-  [NodeStatus.errorDownloading]: 'error',
-  extracting: 'updating',
-  [NodeStatus.readyToStart]: 'stopped',
-  starting: 'sync',
-  running: 'healthy',
-  stopping: 'healthy',
-  stopped: 'stopped',
-  [NodeStatus.errorRunning]: 'error',
-  [NodeStatus.errorStarting]: 'error',
-  [NodeStatus.errorStopping]: 'error',
-  unknown: 'error',
-};
 
 const Sidebar = ({
   sUserNodes,
@@ -141,17 +122,11 @@ const Sidebar = ({
         )} */}
         {sUserNodes?.nodeIds.map((nodeId: NodeId) => {
           const node = sUserNodes.nodes[nodeId];
-          const { spec, status } = node;
-          const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[status];
-          console.log(node, 'sidebarStatus', sidebarStatus);
           return (
-            <SidebarNodeItem
+            <SidebarNodeItemWrapper
               // temp fix
-              key={node.id}
-              iconId={spec.specId.replace('-beacon', '')}
-              title={spec.displayName}
-              info={spec.displayName}
-              status={sidebarStatus}
+              id={node.id}
+              node={node}
               selected={selectedNodeId === node.id}
               onClick={() => {
                 navigate('/main/node');

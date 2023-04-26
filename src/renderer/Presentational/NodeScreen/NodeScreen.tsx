@@ -45,7 +45,7 @@ const NodeScreen = () => {
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>();
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
-  const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(
+  const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     selectedNode?.spec.rpcTranslation,
     {
       pollingInterval,
@@ -93,13 +93,13 @@ const NodeScreen = () => {
   }, [sIsAvailableForPolling]);
 
   useEffect(() => {
-    console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
-    if (qExeuctionIsSyncing.isError) {
+    console.log('qExecutionIsSyncing: ', qExecutionIsSyncing);
+    if (qExecutionIsSyncing.isError) {
       setSyncPercent('');
       setIsSyncing(undefined);
       return;
     }
-    const syncingData = qExeuctionIsSyncing.data;
+    const syncingData = qExecutionIsSyncing.data;
     if (typeof syncingData === 'object') {
       setSyncPercent(syncingData.syncPercent);
       setIsSyncing(syncingData.isSyncing);
@@ -113,7 +113,7 @@ const NodeScreen = () => {
       setSyncPercent('');
       setIsSyncing(undefined);
     }
-  }, [qExeuctionIsSyncing]);
+  }, [qExecutionIsSyncing]);
 
   useEffect(() => {
     if (qExecutionPeers.isError) {

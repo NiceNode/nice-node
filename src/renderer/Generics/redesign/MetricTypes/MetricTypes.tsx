@@ -79,6 +79,11 @@ export const MetricTypes = ({
             ? 'Blocks behind'
             : 'Low Peer Count';
         break;
+      case SYNC_STATUS.ERROR:
+        statusColorStyle = red;
+        titleText = 'Error';
+        labelText = 'Error occured';
+        break;
       case SYNC_STATUS.NO_NETWORK:
         statusColorStyle = red;
         titleText = 'Offline';

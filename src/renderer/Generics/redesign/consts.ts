@@ -46,6 +46,7 @@ export interface ClientStatusProps {
 }
 
 export interface SyncStatusProps {
+  ERROR: string;
   INITIALIZING: string;
   CATCHING_UP: string;
   SYNCHRONIZED: string;
@@ -56,6 +57,7 @@ export interface SyncStatusProps {
 }
 
 export const SYNC_STATUS = Object.freeze({
+  ERROR: 'error',
   UPDATING: 'updating',
   INITIALIZING: 'initializing',
   CATCHING_UP: 'catchingUp',

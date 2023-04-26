@@ -4,6 +4,9 @@ export const getSyncStatus = (status: ClientStatusProps) => {
   let syncStatus;
   switch (true) {
     // find worst cases first
+    case status.error:
+      syncStatus = SYNC_STATUS.ERROR;
+      break;
     case status.updating:
       syncStatus = SYNC_STATUS.UPDATING;
       break;
