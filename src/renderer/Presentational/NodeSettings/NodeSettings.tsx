@@ -13,6 +13,7 @@ import {
   nodeCommandTitle,
   nodeCommandContainer,
   nodeCommand,
+  emptyContainer,
 } from './NodeSettings.css';
 
 export interface NodeSettingsProps {
@@ -39,7 +40,7 @@ const NodeSettings = ({
   const { t: tNiceNode } = useTranslation();
 
   if (!categoryConfigs || categoryConfigs.length === 0) {
-    return null;
+    return <div className={emptyContainer} />;
   }
 
   const renderTabs = () => {

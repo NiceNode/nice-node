@@ -143,8 +143,14 @@ const NodeScreen = () => {
       qLatestBlock?.data?.number &&
       typeof qLatestBlock.data.number === 'string'
     ) {
+      const updateNodeLSB = async (latestBlockNum: number) => {
+        await electron.updateNodeLastSyncedBlock(
+          selectedNode.id,
+          latestBlockNum
+        );
+      };
       const latestBlockNum = hexToDecimal(qLatestBlock.data.number);
-      electron.updateNodeLastSyncedBlock(selectedNode.id, latestBlockNum);
+      updateNodeLSB(latestBlockNum);
       setLatestBlockNumber(latestBlockNum);
     } else if (selectedNode) {
       setLatestBlockNumber(selectedNode?.runtime?.usage?.syncedBlock || 0);

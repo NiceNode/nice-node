@@ -125,7 +125,6 @@ export const modalChildrenContainer = style({
     [`&.nodeSettings`]: {
       padding: 0,
       overflowX: 'hidden',
-      // minHeight: 559,
     },
   },
 });
