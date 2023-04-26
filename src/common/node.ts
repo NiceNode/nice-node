@@ -41,6 +41,7 @@ export type NodeRuntime = {
     diskGBs?: number;
     memoryBytes?: number;
     cpuPercent?: number;
+    syncedBlock?: number;
   };
 };
 

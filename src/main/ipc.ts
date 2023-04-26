@@ -12,6 +12,7 @@ import logger from './logger';
 import {
   checkSystemHardware,
   getMainProcessUsage,
+  updateNodeLastSyncedBlock,
   updateNodeUsedDiskSpace,
 } from './monitor';
 import {
@@ -63,6 +64,12 @@ export const initialize = () => {
   ipcMain.handle('updateNodeUsedDiskSpace', (_event, nodeId: NodeId) => {
     return updateNodeUsedDiskSpace(nodeId);
   });
+  ipcMain.handle(
+    'updateNodeLastSyncedBlock',
+    (_event, nodeId: NodeId, block: number) => {
+      return updateNodeLastSyncedBlock(nodeId, block);
+    }
+  );
   ipcMain.handle('getSystemFreeDiskSpace', () => {
     return getSystemFreeDiskSpace();
   });

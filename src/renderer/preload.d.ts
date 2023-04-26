@@ -63,6 +63,7 @@ declare global {
       openDialogForNodeDataDir(nodeId: NodeId): string;
       openDialogForStorageLocation(): CheckStorageDetails;
       updateNodeUsedDiskSpace(nodeId: NodeId): void;
+      updateNodeLastSyncedBlock(nodeId: NodeId, block: number): void;
       deleteNodeStorage(nodeId: NodeId): boolean;
       sendNodeLogs(nodeId: NodeId): void;
       stopSendingNodeLogs(nodeId?: NodeId): void;

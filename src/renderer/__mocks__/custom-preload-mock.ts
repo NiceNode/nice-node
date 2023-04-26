@@ -68,6 +68,7 @@ export const openDialogForNodeDataDir = () => {};
 export const openDialogForStorageLocation = () => {};
 export const getNodesDefaultStorageLocation = () => '/user/storage/nodes/';
 export const updateNodeUsedDiskSpace = () => {};
+export const updateNodeLastSyncedBlock = () => {};
 export const deleteNodeStorage = () => true;
 export const sendNodeLogs = () => {};
 export const stopSendingNodeLogs = () => {};

@@ -42,7 +42,7 @@ const NodeScreen = () => {
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
-  const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>();
+  const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
@@ -88,7 +88,7 @@ const NodeScreen = () => {
       setSyncPercent('');
       setIsSyncing(undefined);
       setPeers(undefined);
-      setLatestBlockNumber(undefined);
+      setLatestBlockNumber(0);
     }
   }, [sIsAvailableForPolling]);
 
@@ -131,19 +131,27 @@ const NodeScreen = () => {
 
   useEffect(() => {
     if (qLatestBlock.isError) {
-      setLatestBlockNumber(undefined);
+      if (selectedNode) {
+        setLatestBlockNumber(selectedNode?.runtime?.usage?.syncedBlock || 0);
+      } else {
+        setLatestBlockNumber(0);
+      }
       return;
     }
     if (
+      selectedNode &&
       qLatestBlock?.data?.number &&
       typeof qLatestBlock.data.number === 'string'
     ) {
       const latestBlockNum = hexToDecimal(qLatestBlock.data.number);
+      electron.updateNodeLastSyncedBlock(selectedNode.id, latestBlockNum);
       setLatestBlockNumber(latestBlockNum);
+    } else if (selectedNode) {
+      setLatestBlockNumber(selectedNode?.runtime?.usage?.syncedBlock || 0);
     } else {
-      setLatestBlockNumber(undefined);
+      setLatestBlockNumber(0);
     }
-  }, [qLatestBlock]);
+  }, [qLatestBlock, selectedNode]);
 
   const onNodeAction = useCallback(
     (action: NodeAction) => {
