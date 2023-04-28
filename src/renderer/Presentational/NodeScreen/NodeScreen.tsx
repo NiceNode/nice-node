@@ -116,6 +116,7 @@ const NodeScreen = () => {
   }, [qExecutionIsSyncing]);
 
   useEffect(() => {
+    console.log('qExecutionPeers: ', qExecutionPeers.data);
     if (qExecutionPeers.isError) {
       setPeers(undefined);
       return;
@@ -138,18 +139,24 @@ const NodeScreen = () => {
       }
       return;
     }
-    if (
-      selectedNode &&
-      qLatestBlock?.data?.number &&
-      typeof qLatestBlock.data.number === 'string'
-    ) {
+
+    // TODO: we'll need to create a flexible way to get the latest block number for all types of nodes (not just Ethereum)
+    const blockOrSlotNumber =
+      qLatestBlock?.data?.number || qLatestBlock?.data?.header?.message?.slot;
+    const blockOrSlotIsString =
+      typeof qLatestBlock?.data?.number === 'string' ||
+      typeof qLatestBlock?.data?.header?.message?.slot === 'string';
+
+    console.log('syncedBlock - blockOrSlotNumber: ', blockOrSlotNumber);
+    console.log('syncedBlock', selectedNode?.runtime?.usage?.syncedBlock);
+    if (selectedNode && blockOrSlotNumber && blockOrSlotIsString) {
       const updateNodeLSB = async (latestBlockNum: number) => {
         await electron.updateNodeLastSyncedBlock(
           selectedNode.id,
           latestBlockNum
         );
       };
-      const latestBlockNum = hexToDecimal(qLatestBlock.data.number);
+      const latestBlockNum = hexToDecimal(blockOrSlotNumber);
       updateNodeLSB(latestBlockNum);
       setLatestBlockNumber(latestBlockNum);
     } else if (selectedNode) {
@@ -278,6 +285,9 @@ const NodeScreen = () => {
         // eslint-disable-next-line no-useless-escape
         regex = new RegExp(`${capitalize(name)}\/v(\\d+\\.\\d+\\.\\d+)`);
         break;
+      case 'lodestar':
+        regex = /Lodestar\/v(\d+\.\d+\.\d+)/;
+        break;
       default:
         console.error(`Invalid software name: ${name}`);
         return '';
@@ -293,12 +303,14 @@ const NodeScreen = () => {
   };
 
   const clientName = spec.specId.replace('-beacon', '');
+  const nodeVersionData =
+    typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
 
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
     name: clientName,
     type: 'client',
-    version: formatVersion(qNodeVersion?.currentData, clientName),
+    version: formatVersion(nodeVersionData, clientName),
     info: formatSpec(spec.category),
     status: {
       stopped: status === 'stopped',

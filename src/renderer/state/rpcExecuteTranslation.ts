@@ -126,11 +126,11 @@ export const executeTranslation = async (
       }
     } else if (rpcCall === 'latestBlock') {
       const resp = await callFetch(
-        `${beaconBaseUrl}​/eth​/v2​/beacon​/blocks​/head`
+        `${beaconBaseUrl}/eth/v1/beacon/headers/head`
       );
       console.log('latestBlock fetch resp ', resp);
-      if (resp?.data?.connected !== undefined) {
-        return resp.data.connected;
+      if (resp?.data !== undefined) {
+        return resp.data;
       }
     } else if (rpcCall === 'clientVersion') {
       const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/version`);
