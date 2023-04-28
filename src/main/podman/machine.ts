@@ -53,11 +53,13 @@ export const startMachineIfCreated = async (): Promise<boolean> => {
         );
         await runCommand(`machine start ${NICENODE_MACHINE_NAME}`);
         // todoo: validate machine started properly
+      } else {
+        logger.info('Podman machine in state of running or starting');
       }
       return true;
     }
   } catch (err) {
-    console.error('Error getting the machine.');
+    logger.error('Error getting the machine.');
   }
   return false;
 };

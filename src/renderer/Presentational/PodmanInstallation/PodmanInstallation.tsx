@@ -19,6 +19,11 @@ import {
   useGetIsPodmanRunningQuery,
 } from '../../state/settingsService';
 import { reportEvent } from '../../events/reportEvent';
+import { CHANNELS } from '../../../main/messenger';
+import {
+  IpcMessage,
+  MessageGrantPermissionToInstallPodman,
+} from '../../../main/podman/messageFrontEnd';
 
 // 6.5(docker), ? min on 2022 MacbookPro 16inch, baseline
 const TOTAL_INSTALL_TIME_SEC = 5 * 60;
@@ -48,6 +53,10 @@ const PodmanInstallation = ({
   const [sDownloadProgress, setDownloadProgress] = useState<number>(0);
   const [sTotalSizeBytes, setTotalSizeBytes] = useState<number>(0);
   const [sDownloadedBytes, setDownloadedBytes] = useState<number>(0);
+  const [
+    sDidUserGrantPermissionToInstallPodman,
+    setDidUserGrantPermissionToInstallPodman,
+  ] = useState<boolean>();
   const [sInstallComplete, setInstallComplete] = useState<boolean>();
 
   useEffect(() => {
@@ -103,9 +112,32 @@ const PodmanInstallation = ({
     }
   };
 
+  const podmanInstallMessageListener = (messageArray: [IpcMessage]) => {
+    // set totalSize & progress
+    const message = messageArray[0];
+    console.log('podmanInstallMessageListener message: ', message);
+    if (message.messageId === 'isGrantPermission') {
+      console.log('message: ', message);
+      // if false, notify user that podman is required and allow them another try
+      //  to grant permissions
+      setDidUserGrantPermissionToInstallPodman(message.value);
+    } else {
+      // ignore for now?
+    }
+  };
+
   const listenForPodmanInstallUpdates = useCallback(async () => {
     electron.ipcRenderer.on('podman', podmanMessageListener);
+    electron.ipcRenderer.on(
+      CHANNELS.podmanInstall,
+      podmanInstallMessageListener
+    );
   }, []);
+
+  useEffect(() => {
+    // if granted, start install & countdown
+    // if not granted, show warning
+  }, [sDidUserGrantPermissionToInstallPodman]);
 
   useEffect(() => {
     console.log('PodmanInstallation.tsx: listenForPodmanInstallUpdates .');
@@ -172,6 +204,12 @@ const PodmanInstallation = ({
         </>
       )}
       {isPodmanRunning && <>{t('PodmanIsRunningProceed')}</>}
+      {sDidUserGrantPermissionToInstallPodman === false && (
+        <p>
+          Podman is required by NiceNode. You must grant permissions to NiceNode
+          in the popup.
+        </p>
+      )}
     </div>
   );
 };

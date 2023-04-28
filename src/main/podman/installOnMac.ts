@@ -3,7 +3,10 @@ import * as arch from '../arch';
 import logger from '../logger';
 import { execAwait } from '../execHelper';
 import { downloadFile } from '../downloadFile';
-import { sendMessageOnDownloadProgress } from './messageFrontEnd';
+import {
+  sendMessageOnDownloadProgress,
+  sendMessageOnGrantPermissionToInstallPodman,
+} from './messageFrontEnd';
 import { startOnMac } from './start';
 
 /**
@@ -34,10 +37,20 @@ const installOnMac = async (version: string): Promise<any> => {
     let stderr;
     // todo: wrap
     // eslint-disable-next-line prefer-const
-    ({ stdout, stderr } = await execAwait(
-      `installer -pkg "${podmanPkgFilePath}" -target / -verbose`,
-      { log: true, sudo: true }
-    ));
+    try {
+      ({ stdout, stderr } = await execAwait(
+        `installer -pkg "${podmanPkgFilePath}" -target / -verbose`,
+        { log: true, sudo: true }
+      ));
+      sendMessageOnGrantPermissionToInstallPodman(true);
+    } catch (installErr) {
+      // if user does not enter their password...
+      //  installErr = "User did not grant permission"
+      sendMessageOnGrantPermissionToInstallPodman(false);
+      return {
+        error: `Unable to install Podman. User denied granting NiceNode permission.`,
+      };
+    }
     console.log('sudo installer -pkg stdout, stderr', stdout, stderr);
     // start podman app
     await startOnMac();
@@ -50,7 +63,7 @@ const installOnMac = async (version: string): Promise<any> => {
 
     return true;
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     logger.error(err);
     logger.info('Unable to install podman.');
     return { error: `Unable to install Podman. ${err}` };
