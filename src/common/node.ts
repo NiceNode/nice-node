@@ -29,11 +29,11 @@ export type NodeConfig = {
   configValuesMap: ConfigValuesMap;
 };
 
-type MetricData = {
+export type MetricData = {
   x: number;
   y: number;
 };
-type MetricMap = Record<string, MetricData>;
+export type MetricMap = Record<string, MetricData>;
 /**
  * @property processIds is either containerIds or childProcessIds
  */

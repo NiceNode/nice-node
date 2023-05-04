@@ -1,7 +1,7 @@
 // import { useState, useCallback } from 'react';
 // import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 // import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
-import { MetricStats } from 'renderer/Generics/redesign/MetricTypes/MetricTypes';
+import { MetricData } from 'common/node';
 import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
 import TabContent from '../../Generics/redesign/TabContent/TabContent';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
@@ -39,8 +39,8 @@ export type SingleNodeContent = {
     diskUsageGBs?: number; // in MB?
   };
   tabsData?: {
-    memoryPercent: MetricStats;
-    cpuPercent: MetricStats;
+    memoryPercent: MetricData[];
+    cpuPercent: MetricData[];
   };
   onAction?: (action: NodeAction) => void;
 };

@@ -1,3 +1,4 @@
+import { MetricData } from 'common/node';
 import { PeriodBreakdownDataProps } from './TabContent';
 
 interface BreakDownObjects {
@@ -21,6 +22,43 @@ interface BreakDownObjects {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any; // index signature
 }
+
+export const roundAndFormatPercentage = (num: number) => {
+  const roundedNum = Math.round(num);
+  return `${roundedNum}%`;
+};
+
+export const processMinMaxAverage = (data: MetricData[]) => {
+  if (data === undefined || data.length === 0) {
+    return {
+      lowest: 0,
+      highest: 0,
+      average: 0,
+    };
+  }
+
+  let lowest = data[0].y;
+  let highest = data[0].y;
+  let sum = 0;
+
+  for (const item of data) {
+    if (item.y < lowest) {
+      lowest = item.y;
+    }
+    if (item.y > highest) {
+      highest = item.y;
+    }
+    sum += item.y;
+  }
+
+  const average = sum / data.length;
+
+  return {
+    lowest,
+    highest,
+    average,
+  };
+};
 
 export const getBreakdown = (
   tabId: string,
