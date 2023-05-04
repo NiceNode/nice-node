@@ -1,8 +1,9 @@
 // import { useState, useCallback } from 'react';
 // import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 // import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
+import { MetricStats } from 'renderer/Generics/redesign/MetricTypes/MetricTypes';
 import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
-import { TabContent } from '../../Generics/redesign/TabContent/TabContent';
+import TabContent from '../../Generics/redesign/TabContent/TabContent';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
@@ -36,6 +37,10 @@ export type SingleNodeContent = {
     highestBlock?: number;
     cpuLoad?: number;
     diskUsageGBs?: number; // in MB?
+  };
+  tabsData?: {
+    memoryPercent: MetricStats;
+    cpuPercent: MetricStats;
   };
   onAction?: (action: NodeAction) => void;
 };
@@ -72,21 +77,29 @@ const ContentSingleClient = (props: SingleNodeContent) => {
         <HorizontalLine type="above-tab" />
       </div>
       <Tabs>
-        <div id="Sync">
+        {/* <div id="Sync">
           <TabContent tabId="Sync" />
-        </div>
+        </div> */}
         <div id="CPU">
-          <TabContent tabId="CPU" />
+          <TabContent
+            name={nodeOverview.name}
+            tabId="CPU"
+            data={nodeOverview.tabsData?.cpuPercent}
+          />
         </div>
         <div id="Memory">
-          <TabContent tabId="Memory" />
+          <TabContent
+            name={nodeOverview.name}
+            tabId="Memory"
+            data={nodeOverview.tabsData?.memoryPercent}
+          />
         </div>
-        <div id="Network">
+        {/* <div id="Network">
           <TabContent tabId="Network" />
         </div>
         <div id="Disk">
           <TabContent tabId="Disk" />
-        </div>
+        </div> */}
       </Tabs>
     </>
   );

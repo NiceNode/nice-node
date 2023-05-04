@@ -15,7 +15,9 @@ const updateAllNodeMetrics = async () => {
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     if (isDockerNode(node)) {
+      console.log('test1');
       if (Array.isArray(node?.runtime?.processIds)) {
+        console.log('test2');
         try {
           const containerId = node.runtime.processIds[0];
           const matchedContainerMetrics = allContainerMetrics.find(
@@ -24,18 +26,38 @@ const updateAllNodeMetrics = async () => {
             }
           );
 
+          console.log('test3');
           if (matchedContainerMetrics) {
-            // save metrics
+            if (
+              node.runtime.usage.memoryBytes === undefined &&
+              node.runtime.usage.cpuPercent === undefined
+            ) {
+              console.log('test4');
+              node.runtime.usage.memoryBytes = [];
+              node.runtime.usage.cpuPercent = [];
+            }
+            node.runtime.usage.memoryBytes.unshift({
+              x: Date.now(), // timestamp
+              y: matchedContainerMetrics.MemPerc, // percent
+            });
+            node.runtime.usage.cpuPercent.unshift({
+              x: Date.now(), // timestamp
+              y: matchedContainerMetrics.PercCPU, // percent
+            });
           } else {
-            // save a null data point? undefined/error data point?
+            console.log('test5');
+            node.runtime.usage.memoryBytes = [];
+            node.runtime.usage.cpuPercent = [];
           }
-
-          // electronStore.saveSomething();
-          // nodeStore.updateNode(node);
+          // node.runtime.usage.memoryBytes = [];
+          // node.runtime.usage.cpuPercent = [];
+          console.log('cpuPercent', node.runtime.usage.cpuPercent);
+          nodeStore.updateNode(node);
         } catch (err) {
           logger.error('Error setting metrics for a node', err);
         }
       } else {
+        console.log('test6');
         // no containerId for a node
         // save a null data point? undefined/error data point?
       }

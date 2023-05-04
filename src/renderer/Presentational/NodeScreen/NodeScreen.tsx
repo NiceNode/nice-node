@@ -74,6 +74,8 @@ const NodeScreen = () => {
 
   const diskUsed =
     selectedNode?.runtime?.usage?.diskGBs?.toPrecision(2) ?? undefined;
+  const cpuPercent = selectedNode?.runtime?.usage?.cpuPercent ?? undefined;
+  const memoryPercent = selectedNode?.runtime?.usage?.memoryBytes ?? undefined;
   // eslint-disable-next-line eqeqeq
   // const isHttpEnabled =
   //   selectedNode?.config?.configValuesMap?.http &&
@@ -151,6 +153,11 @@ const NodeScreen = () => {
     console.log('syncedBlock', selectedNode?.runtime?.usage?.syncedBlock);
     if (selectedNode && blockOrSlotNumber && blockOrSlotIsString) {
       const updateNodeLSB = async (latestBlockNum: number) => {
+        console.log(
+          'selectedNode.spec.displayName',
+          selectedNode.spec.displayName
+        );
+        console.log('latestBlockNum', latestBlockNum);
         await electron.updateNodeLastSyncedBlock(
           selectedNode.id,
           latestBlockNum
@@ -321,6 +328,10 @@ const NodeScreen = () => {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,
       diskUsageGBs: diskUsed ? parseFloat(diskUsed) : undefined,
+    },
+    tabsData: {
+      cpuPercent,
+      memoryPercent,
     },
     onAction: onNodeAction,
   };

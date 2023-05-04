@@ -29,6 +29,11 @@ export type NodeConfig = {
   configValuesMap: ConfigValuesMap;
 };
 
+type MetricData = {
+  x: number;
+  y: number;
+};
+type MetricMap = Record<string, MetricData>;
 /**
  * @property processIds is either containerIds or childProcessIds
  */
@@ -39,8 +44,8 @@ export type NodeRuntime = {
   processIds?: string[];
   usage: {
     diskGBs?: number;
-    memoryBytes?: number;
-    cpuPercent?: number;
+    memoryBytes?: MetricMap | [];
+    cpuPercent?: MetricMap | [];
     syncedBlock?: number;
   };
 };

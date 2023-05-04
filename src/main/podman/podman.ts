@@ -7,7 +7,7 @@ import { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
 import { setDockerNodeStatus as setPodmanNodeStatus } from '../state/nodes';
 import { buildCliConfig } from '../../common/nodeConfig';
 import { send } from '../messenger';
-import * as monitoring from './monitoring';
+import * as metricsPolling from './metricsPolling';
 import { killChildProcess } from '../processExit';
 import { parsePodmanLogMetadata } from '../util/nodeLogUtils';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
@@ -305,7 +305,7 @@ export const initialize = async () => {
   try {
     // podman = new Podman(options);
     watchPodmanEvents();
-    monitoring.initialize(runCommand);
+    metricsPolling.initialize();
     // todo: update podman node usages
     // runCommand('-v');
   } catch (err) {
@@ -497,7 +497,7 @@ export const isPodmanStarting = async () => {
 // }, 5000);
 
 export const onExit = () => {
-  monitoring.onExit();
+  metricsPolling.onExit();
   if (podmanWatchProcess) {
     killChildProcess(podmanWatchProcess);
   }

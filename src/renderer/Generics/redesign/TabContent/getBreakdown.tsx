@@ -34,23 +34,23 @@ export const getBreakdown = (
         items: [
           {
             label: 'Maximum blocks behind',
-            value: periodBreakdownData.sync.maximumBlocksBehind,
+            value: periodBreakdownData?.sync?.maximumBlocksBehind,
           },
           {
             label: 'Minimum block time',
-            value: periodBreakdownData.sync.minimumBlockTime,
+            value: periodBreakdownData?.sync?.minimumBlockTime,
           },
           {
             label: 'Maximum block time',
-            value: periodBreakdownData.sync.maximumBlockTime,
+            value: periodBreakdownData?.sync?.maximumBlockTime,
           },
           {
             label: 'Average block time',
-            value: periodBreakdownData.sync.averageBlockTime,
+            value: periodBreakdownData?.sync?.averageBlockTime,
           },
           {
             label: 'Total downtime',
-            value: periodBreakdownData.sync.maximumBlocksBehind,
+            value: periodBreakdownData?.sync?.maximumBlocksBehind,
           },
         ],
       },
@@ -60,15 +60,15 @@ export const getBreakdown = (
         items: [
           {
             label: 'Highest peer count',
-            value: periodBreakdownData.network.highestPeerCount,
+            value: periodBreakdownData?.network?.highestPeerCount,
           },
           {
             label: 'Lowest peer count',
-            value: periodBreakdownData.network.lowestPeerCount,
+            value: periodBreakdownData?.network?.lowestPeerCount,
           },
           {
             label: 'Average peer count',
-            value: periodBreakdownData.network.averagePeerCount,
+            value: periodBreakdownData?.network?.averagePeerCount,
           },
         ],
       },
@@ -79,15 +79,15 @@ export const getBreakdown = (
         items: [
           {
             label: 'Minimum usage',
-            value: periodBreakdownData.cpu.minimumUsage,
+            value: periodBreakdownData?.cpu?.minimumUsage,
           },
           {
             label: 'Max usage',
-            value: periodBreakdownData.cpu.maxUsage,
+            value: periodBreakdownData?.cpu?.maxUsage,
           },
           {
             label: 'Average usage',
-            value: periodBreakdownData.cpu.averageUsage,
+            value: periodBreakdownData?.cpu?.averageUsage,
           },
         ],
       },
@@ -98,15 +98,15 @@ export const getBreakdown = (
         items: [
           {
             label: 'Minimum usage',
-            value: periodBreakdownData.memory.minimumUsage,
+            value: periodBreakdownData?.memory?.minimumUsage,
           },
           {
             label: 'Max usage',
-            value: periodBreakdownData.memory.maxUsage,
+            value: periodBreakdownData?.memory?.maxUsage,
           },
           {
             label: 'Average usage',
-            value: periodBreakdownData.memory.averageUsage,
+            value: periodBreakdownData?.memory?.averageUsage,
           },
         ],
       },
@@ -118,11 +118,11 @@ export const getBreakdown = (
         items: [
           {
             label: 'Data received',
-            value: periodBreakdownData.network.dataReceived,
+            value: periodBreakdownData?.network?.dataReceived,
           },
           {
             label: 'Data sent',
-            value: periodBreakdownData.network.dataSent,
+            value: periodBreakdownData?.network?.dataSent,
           },
         ],
       },
@@ -132,15 +132,15 @@ export const getBreakdown = (
         items: [
           {
             label: 'Highest peer count',
-            value: periodBreakdownData.network.highestPeerCount,
+            value: periodBreakdownData?.network?.highestPeerCount,
           },
           {
             label: 'Lowest peer count',
-            value: periodBreakdownData.network.lowestPeerCount,
+            value: periodBreakdownData?.network?.lowestPeerCount,
           },
           {
             label: 'Average peer count',
-            value: periodBreakdownData.network.averagePeerCount,
+            value: periodBreakdownData?.network?.averagePeerCount,
           },
         ],
       },
@@ -150,15 +150,15 @@ export const getBreakdown = (
         items: [
           {
             label: 'Highest download speed',
-            value: periodBreakdownData.network.highestDownloadSpeed,
+            value: periodBreakdownData?.network?.highestDownloadSpeed,
           },
           {
             label: 'Lowest download speed',
-            value: periodBreakdownData.network.lowestDownloadSpeed,
+            value: periodBreakdownData?.network?.lowestDownloadSpeed,
           },
           {
             label: 'Average download speed',
-            value: periodBreakdownData.network.averageDownloadSpeed,
+            value: periodBreakdownData?.network?.averageDownloadSpeed,
           },
         ],
       },
@@ -170,11 +170,11 @@ export const getBreakdown = (
         items: [
           {
             label: 'Data written',
-            value: periodBreakdownData.disk.dataWritten,
+            value: periodBreakdownData?.disk?.dataWritten,
           },
           {
             label: 'Data read',
-            value: periodBreakdownData.disk.dataRead,
+            value: periodBreakdownData?.disk?.dataRead,
           },
         ],
       },
@@ -184,15 +184,15 @@ export const getBreakdown = (
         items: [
           {
             label: 'Highest write speed',
-            value: periodBreakdownData.disk.highestWriteSpeed,
+            value: periodBreakdownData?.disk?.highestWriteSpeed,
           },
           {
             label: 'Lowest write speed',
-            value: periodBreakdownData.disk.lowestWriteSpeed,
+            value: periodBreakdownData?.disk?.lowestWriteSpeed,
           },
           {
             label: 'Average write speed',
-            value: periodBreakdownData.disk.averageWriteSpeed,
+            value: periodBreakdownData?.disk?.averageWriteSpeed,
           },
         ],
       },
@@ -202,15 +202,15 @@ export const getBreakdown = (
         items: [
           {
             label: 'Highest read speed',
-            value: periodBreakdownData.disk.highestReadSpeed,
+            value: periodBreakdownData?.disk?.highestReadSpeed,
           },
           {
             label: 'Lowest read speed',
-            value: periodBreakdownData.disk.lowestReadSpeed,
+            value: periodBreakdownData?.disk?.lowestReadSpeed,
           },
           {
             label: 'Average read speed',
-            value: periodBreakdownData.disk.averageReadSpeed,
+            value: periodBreakdownData?.disk?.averageReadSpeed,
           },
         ],
       },
