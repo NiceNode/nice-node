@@ -41,6 +41,7 @@ export type SingleNodeContent = {
   tabsData?: {
     memoryPercent: MetricData[];
     cpuPercent: MetricData[];
+    diskUsed: MetricData[];
   };
   onAction?: (action: NodeAction) => void;
 };
@@ -96,10 +97,14 @@ const ContentSingleClient = (props: SingleNodeContent) => {
         </div>
         {/* <div id="Network">
           <TabContent tabId="Network" />
-        </div>
-        <div id="Disk">
-          <TabContent tabId="Disk" />
         </div> */}
+        <div id="Disk">
+          <TabContent
+            name={nodeOverview.name}
+            tabId="Disk"
+            data={nodeOverview.tabsData?.diskUsed}
+          />
+        </div>
       </Tabs>
     </>
   );

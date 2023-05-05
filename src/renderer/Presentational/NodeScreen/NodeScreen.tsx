@@ -72,8 +72,7 @@ const NodeScreen = () => {
   //   pollingInterval: typeof sPeers === 'number' && sPeers === 0 ? 30000 : 0,
   // });
 
-  const diskUsed =
-    selectedNode?.runtime?.usage?.diskGBs?.toPrecision(2) ?? undefined;
+  const diskUsed = selectedNode?.runtime?.usage?.diskGBs?.[0]?.y ?? undefined;
   const cpuPercent = selectedNode?.runtime?.usage?.cpuPercent ?? undefined;
   const memoryPercent = selectedNode?.runtime?.usage?.memoryBytes ?? undefined;
   // eslint-disable-next-line eqeqeq
@@ -332,6 +331,7 @@ const NodeScreen = () => {
     tabsData: {
       cpuPercent,
       memoryPercent,
+      diskUsed: selectedNode?.runtime?.usage?.diskGBs,
     },
     onAction: onNodeAction,
   };

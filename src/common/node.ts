@@ -43,7 +43,7 @@ export type NodeRuntime = {
   dataDir: string;
   processIds?: string[];
   usage: {
-    diskGBs?: number;
+    diskGBs?: MetricMap | [];
     memoryBytes?: MetricMap | [];
     cpuPercent?: MetricMap | [];
     syncedBlock?: number;

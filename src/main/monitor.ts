@@ -70,7 +70,17 @@ export const updateNodeUsedDiskSpace = async (nodeId: NodeId) => {
     const diskGBs = await getUsedDiskSpace(dataDir);
     if (diskGBs !== undefined) {
       logger.info(`Disk usaged ${diskGBs}GBs calculated for nodeId ${nodeId}`);
-      node.runtime.usage.diskGBs = diskGBs;
+      if (
+        !Array.isArray(node.runtime.usage.diskGBs) ||
+        node.runtime.usage.diskGBs.length < 1
+      ) {
+        node.runtime.usage.diskGBs = [];
+      }
+      // node.runtime.usage.diskGBs = [];
+      node.runtime.usage.diskGBs.unshift({
+        x: Date.now(), // timestamp
+        y: parseFloat(diskGBs.toPrecision(1)), // GBs
+      });
       storeNodes.updateNode(node);
     }
   }

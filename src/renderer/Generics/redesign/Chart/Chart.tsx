@@ -6,11 +6,33 @@ type ChartStyleProp = {
   linearGradient: string[];
   lineColor: string;
   toolTipColor: string;
+  yAxisFormat: string;
 };
 
 type ChartProps = {
   tabId: string;
   data: MetricData[];
+};
+
+// Function to convert GB to human-readable format (GB or TB)
+const gbToSize = (gb: number, xAxis = false) => {
+  if (gb < 1024) {
+    return xAxis ? `GB` : `{value} GB`;
+  }
+  return xAxis ? `TB` : `{value} TB`;
+};
+
+const getToolTipFormat = (value, tabId) => {
+  switch (tabId) {
+    case 'CPU':
+      return `${value}%`;
+    case 'Memory':
+      return `${value}%`;
+    case 'Disk':
+      return `${value} ${gbToSize(value, true)}`;
+    default:
+      return '';
+  }
 };
 
 export const Chart = ({ tabId, data }: ChartProps) => {
@@ -29,6 +51,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
           ],
           lineColor: 'rgba(76, 128, 246, 1)',
           toolTipColor: 'rgba(76, 128, 246, 1)',
+          yAxisFormat: '{value}%',
         };
         break;
       case 'Memory':
@@ -39,6 +62,18 @@ export const Chart = ({ tabId, data }: ChartProps) => {
           ],
           lineColor: 'rgba(247, 144, 9, 0.85)',
           toolTipColor: 'rgba(247, 144, 9, 1)',
+          yAxisFormat: '{value}%',
+        };
+        break;
+      case 'Disk':
+        chartProps = {
+          linearGradient: [
+            'rgba(18, 186, 108, 0.16)',
+            'rgba(18, 186, 108, 0.04)',
+          ],
+          lineColor: 'rgba(62, 187, 100, 1)',
+          toolTipColor: 'rgba(62, 187, 100, 1)',
+          yAxisFormat: gbToSize(data[0].y),
         };
         break;
       default:
@@ -54,7 +89,13 @@ export const Chart = ({ tabId, data }: ChartProps) => {
     return chartProps;
   };
 
-  const { linearGradient, lineColor, toolTipColor } = getChartProps();
+  const {
+    linearGradient,
+    lineColor,
+    toolTipColor,
+    yAxisFormat,
+    toolTipFormat,
+  } = getChartProps();
 
   const chartOptions = {
     chart: {
@@ -92,7 +133,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
         text: null,
       },
       labels: {
-        format: '{value}%',
+        format: yAxisFormat,
         style: {
           color: 'rgba(0, 0, 2, 0.4)', // Change the Y-axis text color
           fontFamily: "'SF Pro', sans-serif",
@@ -103,7 +144,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
           fontFeatureSettings: "'tnum' on, 'lnum' on",
         },
       },
-      tickPositions: [0, 25, 50, 75, 100],
+      tickPositions: null,
       gridLineColor: 'rgba(0, 0, 2, 0.08)',
       opposite: true,
     },
@@ -141,7 +182,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
         color: 'rgba(255, 255, 255, 1)',
       },
       formatter() {
-        return `${this.y}%`;
+        return getToolTipFormat(this.y, tabId);
       },
     },
     credits: {
