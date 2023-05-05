@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { getUsedDiskSpace } from '../files';
 import logger from '../logger';
 import { isDockerNode } from '../../common/node';
 import * as nodeStore from '../state/nodes';
@@ -26,15 +27,15 @@ const updateAllNodeMetrics = async () => {
             }
           );
 
-          console.log('test3');
           if (matchedContainerMetrics) {
             if (
               node.runtime.usage.memoryBytes === undefined &&
-              node.runtime.usage.cpuPercent === undefined
+              node.runtime.usage.cpuPercent === undefined &&
+              node.runtime.usage.diskGBs === undefined
             ) {
-              console.log('test4');
               node.runtime.usage.memoryBytes = [];
               node.runtime.usage.cpuPercent = [];
+              node.runtime.usage.diskGBs = [];
             }
             node.runtime.usage.memoryBytes.unshift({
               x: Date.now(), // timestamp
@@ -44,20 +45,27 @@ const updateAllNodeMetrics = async () => {
               x: Date.now(), // timestamp
               y: matchedContainerMetrics.PercCPU, // percent
             });
+
+            const getUsedDiskSpaceFunc = async () => {
+              const { dataDir } = node.runtime;
+              return getUsedDiskSpace(dataDir) || 0;
+            };
+            // eslint-disable-next-line no-await-in-loop
+            const diskGBs = await getUsedDiskSpaceFunc();
+            node.runtime.usage.diskGBs.unshift({
+              x: Date.now(), // timestamp
+              y: parseFloat(diskGBs.toPrecision(1)), // GBs
+            });
           } else {
-            console.log('test5');
             node.runtime.usage.memoryBytes = [];
             node.runtime.usage.cpuPercent = [];
+            node.runtime.usage.diskGBs = [];
           }
-          // node.runtime.usage.memoryBytes = [];
-          // node.runtime.usage.cpuPercent = [];
-          console.log('cpuPercent', node.runtime.usage.cpuPercent);
           nodeStore.updateNode(node);
         } catch (err) {
           logger.error('Error setting metrics for a node', err);
         }
       } else {
-        console.log('test6');
         // no containerId for a node
         // save a null data point? undefined/error data point?
       }
@@ -66,6 +74,7 @@ const updateAllNodeMetrics = async () => {
 };
 
 export const initialize = () => {
+  updateAllNodeMetrics();
   monitoringInterval = setInterval(
     updateAllNodeMetrics,
     METRICS_POLLING_INTERVAL

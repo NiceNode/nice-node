@@ -63,29 +63,6 @@ export const checkSystemHardware = async () => {
   return warnings;
 };
 
-export const updateNodeUsedDiskSpace = async (nodeId: NodeId) => {
-  const node = storeNodes.getNode(nodeId);
-  if (node) {
-    const { dataDir } = node.runtime;
-    const diskGBs = await getUsedDiskSpace(dataDir);
-    if (diskGBs !== undefined) {
-      logger.info(`Disk usaged ${diskGBs}GBs calculated for nodeId ${nodeId}`);
-      if (
-        !Array.isArray(node.runtime.usage.diskGBs) ||
-        node.runtime.usage.diskGBs.length < 1
-      ) {
-        node.runtime.usage.diskGBs = [];
-      }
-      // node.runtime.usage.diskGBs = [];
-      node.runtime.usage.diskGBs.unshift({
-        x: Date.now(), // timestamp
-        y: parseFloat(diskGBs.toPrecision(1)), // GBs
-      });
-      storeNodes.updateNode(node);
-    }
-  }
-};
-
 export const updateNodeLastSyncedBlock = async (
   nodeId: NodeId,
   block: number

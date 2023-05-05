@@ -101,7 +101,6 @@ const TabContent = ({ tabId, data }: TabContentProps) => {
           <div className={contentHeader}>
             <div className={contentTitle}>Capacity</div>
           </div>
-          <div className="contentCharts">Disk Capacity chart goes here</div>
           <HorizontalLine type="content" />
         </>
       );

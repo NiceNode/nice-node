@@ -1,14 +1,12 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from './state/hooks';
-import { selectSelectedNode, selectSelectedNodeId } from './state/node';
-import electron from './electronGlobal';
+import { selectSelectedNode } from './state/node';
 import { useGetNodeVersionQuery } from './state/services';
 import { useGetSettingsQuery } from './state/settingsService';
 import { Settings } from '../main/state/settings';
 
 const DataRefresher = () => {
-  const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const selectedNode = useAppSelector(selectSelectedNode);
   const qNodeVersion = useGetNodeVersionQuery(
     selectedNode?.spec.rpcTranslation
@@ -17,18 +15,6 @@ const DataRefresher = () => {
   const qSettings = useGetSettingsQuery();
 
   console.log('qNodeVersion', JSON.stringify(qNodeVersion));
-  useEffect(() => {
-    const updateNodeDU = async () => {
-      // todo: fix warnings for multi-client
-      if (sSelectedNodeId) {
-        await electron.updateNodeUsedDiskSpace(sSelectedNodeId);
-      }
-    };
-    updateNodeDU();
-    const intveral = setInterval(updateNodeDU, 120000);
-    return () => clearInterval(intveral);
-  }, [sSelectedNodeId]);
-
   useEffect(() => {
     console.log(
       'DataRefresher: selected node or nodeVersion query changed. Refetching node version.'

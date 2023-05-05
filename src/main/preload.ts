@@ -27,8 +27,6 @@ contextBridge.exposeInMainWorld('electron', {
       console.log(`Removed all listeners on ${channel} channel.`);
     },
   },
-  updateNodeUsedDiskSpace: (nodeId: NodeId) =>
-    ipcRenderer.invoke('updateNodeUsedDiskSpace', nodeId),
   updateNodeLastSyncedBlock: (nodeId: NodeId, block: number) =>
     ipcRenderer.invoke('updateNodeLastSyncedBlock', nodeId, block),
   getSystemFreeDiskSpace: () => ipcRenderer.invoke('getSystemFreeDiskSpace'),

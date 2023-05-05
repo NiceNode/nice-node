@@ -41,6 +41,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
       linearGradient: [],
       lineColor: '',
       toolTipColor: '',
+      yAxisFormat: '',
     } as ChartStyleProp;
     switch (tabId) {
       case 'CPU':
@@ -73,7 +74,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
           ],
           lineColor: 'rgba(62, 187, 100, 1)',
           toolTipColor: 'rgba(62, 187, 100, 1)',
-          yAxisFormat: gbToSize(data[0].y),
+          yAxisFormat: gbToSize((data && data[0]?.y) || 0),
         };
         break;
       default:
@@ -84,18 +85,14 @@ export const Chart = ({ tabId, data }: ChartProps) => {
           ],
           lineColor: 'rgba(76, 128, 246, 1)',
           toolTipColor: 'rgba(76, 128, 246, 1)',
+          yAxisFormat: '{value}%',
         };
     }
     return chartProps;
   };
 
-  const {
-    linearGradient,
-    lineColor,
-    toolTipColor,
-    yAxisFormat,
-    toolTipFormat,
-  } = getChartProps();
+  const { linearGradient, lineColor, toolTipColor, yAxisFormat } =
+    getChartProps();
 
   const chartOptions = {
     chart: {
@@ -173,6 +170,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
           enabled: false,
         },
         threshold: null,
+        turboThreshold: 0,
       },
     ],
     tooltip: {
@@ -182,7 +180,8 @@ export const Chart = ({ tabId, data }: ChartProps) => {
         color: 'rgba(255, 255, 255, 1)',
       },
       formatter() {
-        return getToolTipFormat(this.y, tabId);
+        const { y } = this;
+        return getToolTipFormat(y, tabId);
       },
     },
     credits: {

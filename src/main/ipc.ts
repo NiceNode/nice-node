@@ -13,7 +13,6 @@ import {
   checkSystemHardware,
   getMainProcessUsage,
   updateNodeLastSyncedBlock,
-  updateNodeUsedDiskSpace,
 } from './monitor';
 import {
   addNode,
@@ -61,9 +60,6 @@ import { getFailSystemRequirements } from './minSystemRequirement';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
-  ipcMain.handle('updateNodeUsedDiskSpace', (_event, nodeId: NodeId) => {
-    return updateNodeUsedDiskSpace(nodeId);
-  });
   ipcMain.handle(
     'updateNodeLastSyncedBlock',
     (_event, nodeId: NodeId, block: number) => {

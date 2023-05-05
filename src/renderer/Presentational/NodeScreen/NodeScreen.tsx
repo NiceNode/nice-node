@@ -326,7 +326,7 @@ const NodeScreen = () => {
     stats: {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,
-      diskUsageGBs: diskUsed ? parseFloat(diskUsed) : undefined,
+      diskUsageGBs: diskUsed ? parseFloat(diskUsed) : 0,
     },
     tabsData: {
       cpuPercent,
