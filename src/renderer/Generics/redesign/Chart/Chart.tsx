@@ -1,3 +1,4 @@
+import React, { useRef, useEffect } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { MetricData } from 'common/node';
@@ -22,7 +23,7 @@ const gbToSize = (gb: number, xAxis = false) => {
   return xAxis ? `TB` : `{value} TB`;
 };
 
-const getToolTipFormat = (value, tabId) => {
+const getToolTipFormat = (value: number, tabId: string) => {
   switch (tabId) {
     case 'CPU':
       return `${value}%`;
@@ -36,6 +37,17 @@ const getToolTipFormat = (value, tabId) => {
 };
 
 export const Chart = ({ tabId, data }: ChartProps) => {
+  const chartComponent = useRef(null);
+
+  useEffect(() => {
+    if (chartComponent.current) {
+      const { chart } = chartComponent.current;
+      chart.series[0].setData(
+        data !== undefined ? JSON.parse(JSON.stringify(data)) : [{ x: 0, y: 0 }]
+      );
+    }
+  }, [data]);
+
   const getChartProps = () => {
     let chartProps = {
       linearGradient: [],
@@ -102,6 +114,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
         fontFamily: "'SF Pro', sans-serif",
       },
       backgroundColor: 'transparent',
+      spacingLeft: 0,
     },
     title: {
       text: null,
@@ -148,10 +161,6 @@ export const Chart = ({ tabId, data }: ChartProps) => {
     series: [
       {
         name: '',
-        data:
-          data !== undefined
-            ? JSON.parse(JSON.stringify(data))
-            : [{ x: 0, y: 0 }],
         color: lineColor,
         fillColor: {
           linearGradient: {
@@ -171,6 +180,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
         },
         threshold: null,
         turboThreshold: 0,
+        animation: false,
       },
     ],
     tooltip: {
@@ -180,8 +190,9 @@ export const Chart = ({ tabId, data }: ChartProps) => {
         color: 'rgba(255, 255, 255, 1)',
       },
       formatter() {
-        const { y } = this;
-        return getToolTipFormat(y, tabId);
+        // eslint-disable-next-line react/no-this-in-sfc
+        const yValue = this.y;
+        return getToolTipFormat(yValue, tabId);
       },
     },
     credits: {
@@ -194,7 +205,11 @@ export const Chart = ({ tabId, data }: ChartProps) => {
 
   return (
     <div className="charts">
-      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={chartOptions}
+        ref={chartComponent}
+      />
     </div>
   );
 };

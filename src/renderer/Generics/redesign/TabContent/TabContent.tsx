@@ -116,7 +116,7 @@ const TabContent = ({ tabId, data }: TabContentProps) => {
 
   return (
     <div className={container}>
-      {renderDiskCapacity()}
+      {/* {renderDiskCapacity()} */}
       <div className={contentHeader}>
         <div className={contentTitle}>{contentLabels[tabId]}</div>
         {/* <div className={contentPeriod}>Dropdown</div> */}
