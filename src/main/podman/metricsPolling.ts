@@ -1,13 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getUsedDiskSpace } from '../files';
 import logger from '../logger';
-import { isDockerNode } from '../../common/node';
+import { MetricData, isDockerNode } from '../../common/node';
 import * as nodeStore from '../state/nodes';
 import { getAllContainerMetrics } from './metrics';
 import { ContainerStats } from './types';
 
 const METRICS_POLLING_INTERVAL = 15000; // 15 seconds
 let monitoringInterval: NodeJS.Timer;
+
+const removeOldItems = (data: MetricData[] | []) => {
+  if (data.length === 0) {
+    return;
+  }
+  const now = Date.now();
+  const msIn24Hours = 24 * 60 * 60 * 1000;
+
+  for (let i = data.length - 1; i >= 0; i--) {
+    const item = data[i];
+    if (now - item.x > msIn24Hours) {
+      data.pop();
+    } else {
+      break;
+    }
+  }
+};
 
 const updateAllNodeMetrics = async () => {
   // get all nodes and filter for container nodes (isDocker legacy naming)
@@ -16,9 +33,7 @@ const updateAllNodeMetrics = async () => {
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     if (isDockerNode(node)) {
-      console.log('test1');
       if (Array.isArray(node?.runtime?.processIds)) {
-        console.log('test2');
         try {
           const containerId = node.runtime.processIds[0];
           const matchedContainerMetrics = allContainerMetrics.find(
@@ -37,6 +52,10 @@ const updateAllNodeMetrics = async () => {
               node.runtime.usage.cpuPercent = [];
               node.runtime.usage.diskGBs = [];
             }
+            removeOldItems(node.runtime.usage.memoryBytes);
+            removeOldItems(node.runtime.usage.cpuPercent);
+            removeOldItems(node.runtime.usage.diskGBs);
+
             node.runtime.usage.memoryBytes.unshift({
               x: Date.now(), // timestamp
               y: matchedContainerMetrics.MemPerc, // percent
@@ -51,7 +70,7 @@ const updateAllNodeMetrics = async () => {
               return getUsedDiskSpace(dataDir) || 0;
             };
             // eslint-disable-next-line no-await-in-loop
-            const diskGBs = await getUsedDiskSpaceFunc();
+            const diskGBs = (await getUsedDiskSpaceFunc()) as number;
             node.runtime.usage.diskGBs.unshift({
               x: Date.now(), // timestamp
               y: parseFloat(diskGBs.toPrecision(1)), // GBs
