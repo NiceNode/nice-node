@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { MetricData } from 'common/node';
@@ -43,7 +43,12 @@ export const Chart = ({ tabId, data }: ChartProps) => {
     if (chartComponent.current) {
       const { chart } = chartComponent.current;
       chart.series[0].setData(
-        data !== undefined ? JSON.parse(JSON.stringify(data)) : [{ x: 0, y: 0 }]
+        data !== undefined
+          ? JSON.parse(JSON.stringify(data))
+          : [{ x: 0, y: 0 }],
+        true,
+        true,
+        false // changing this to true causes the chart to render incorrectly on the 2nd render
       );
     }
   }, [data]);
@@ -157,6 +162,9 @@ export const Chart = ({ tabId, data }: ChartProps) => {
       tickPositions: null,
       gridLineColor: 'rgba(0, 0, 2, 0.08)',
       opposite: true,
+    },
+    time: {
+      useUTC: false,
     },
     series: [
       {
