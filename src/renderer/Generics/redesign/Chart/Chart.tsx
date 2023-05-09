@@ -45,7 +45,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
       chart.series[0].setData(
         data !== undefined
           ? JSON.parse(JSON.stringify(data))
-          : [{ x: 0, y: 0 }],
+          : [{ x: Date.now(), y: 0 }],
         true,
         true,
         false // changing this to true causes the chart to render incorrectly on the 2nd render
