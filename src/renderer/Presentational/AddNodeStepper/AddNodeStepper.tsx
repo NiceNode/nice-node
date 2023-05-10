@@ -36,6 +36,7 @@ const TOTAL_STEPS = 3;
 const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const dispatch = useAppDispatch();
   const [sStep, setStep] = useState<number>(0);
+  const [sDisabledSaveButton, setDisabledSaveButton] = useState<boolean>(true);
   // const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
   //   NodeSpecification[]
   // >([]);
@@ -82,6 +83,10 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
 
   const onChangePodmanInstall = useCallback((newValue: string) => {
     console.log('onChangePodmanInstall newValue ', newValue);
+    setDisabledSaveButton(false);
+    if (newValue === 'done') {
+      setDisabledSaveButton(false);
+    }
   }, []);
 
   const onChangeAddEthereumNode = useCallback(
@@ -219,7 +224,12 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         stepImage = step2;
         break;
       case 2:
-        stepScreen = <PodmanInstallation onChange={onChangePodmanInstall} />;
+        stepScreen = (
+          <PodmanInstallation
+            onChange={onChangePodmanInstall}
+            disableSaveButton={setDisabledSaveButton}
+          />
+        );
         stepImage = step3;
         break;
       default:
@@ -250,7 +260,11 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
           {getStepScreen(2)}
         </div>
       </div>
-      <Stepper step={sStep} onChange={onStep} />
+      <Stepper
+        step={sStep}
+        onChange={onStep}
+        disabledSaveButton={sDisabledSaveButton}
+      />
     </div>
   );
 };
