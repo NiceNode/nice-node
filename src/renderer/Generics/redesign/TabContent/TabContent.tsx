@@ -1,12 +1,7 @@
 import React from 'react';
-import { MetricMap } from 'common/node';
+import { MetricData } from 'common/node';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
-import {
-  container,
-  contentHeader,
-  contentTitle,
-  contentPeriod,
-} from './tabContent.css';
+import { container, contentHeader, contentTitle } from './tabContent.css';
 import LabelValues from '../LabelValues/LabelValues';
 import {
   getBreakdown,
@@ -17,7 +12,7 @@ import { Chart } from '../Chart/Chart';
 
 export interface TabContentProps {
   tabId: string;
-  data: MetricMap;
+  data?: MetricData[];
   name: string;
 }
 
@@ -78,7 +73,6 @@ const contentLabels: SectionLabelProps = {
 
 const TabContent = ({ tabId, data }: TabContentProps) => {
   // switch statement here to determine which charts and sections to show?
-  console.log('render for tabId: ', tabId + data);
 
   const processPeriodBreakdownData = () => {
     if (tabId === 'CPU' || tabId === 'Memory') {
@@ -137,7 +131,11 @@ const areEqual = (prevProps: TabContentProps, nextProps: TabContentProps) => {
   if (prevProps.data === undefined && nextProps.data !== undefined)
     // render when data is fetched for the node
     return false;
-  return prevProps.data.length === nextProps.data.length; // don't render when data length is the same (no new data)
+  return (
+    prevProps.data &&
+    nextProps.data &&
+    prevProps.data.length === nextProps.data.length
+  ); // don't render when data length is the same (no new data)
 };
 
 export default React.memo(TabContent, areEqual);

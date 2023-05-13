@@ -12,7 +12,7 @@ type ChartStyleProp = {
 
 type ChartProps = {
   tabId: string;
-  data: MetricData[];
+  data?: MetricData[];
 };
 
 // Function to convert GB to human-readable format (GB or TB)

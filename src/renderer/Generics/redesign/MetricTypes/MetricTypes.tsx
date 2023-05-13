@@ -1,3 +1,4 @@
+import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
 import { IconId } from '../../../assets/images/icons';
 import { SYNC_STATUS } from '../consts';
 import { Icon } from '../Icon/Icon';
@@ -41,6 +42,7 @@ export interface MetricTypesProps {
    * Info
    */
   info?: string;
+  rpcTranslation?: NiceNodeRpcTranslation;
 }
 
 /**
@@ -50,6 +52,7 @@ export const MetricTypes = ({
   statsType,
   statsValue,
   info,
+  rpcTranslation,
 }: MetricTypesProps) => {
   let iconComponent = null;
   let titleText = '';
@@ -117,13 +120,10 @@ export const MetricTypes = ({
     switch (statsType) {
       case 'currentBlock':
         iconId = 'slots';
-        titleText = `${statsValue}`;
-        labelText = 'Last synced block';
-        break;
-      case 'currentSlot':
-        iconId = 'slots';
-        titleText = Number(statsValue).toLocaleString();
-        labelText = 'Current slot';
+        titleText = `${statsValue.toLocaleString()}`;
+        labelText = `Last synced ${
+          rpcTranslation === 'eth-l1-beacon' ? 'slot' : 'block'
+        }`;
         break;
       case 'peers':
         iconId = 'peers';

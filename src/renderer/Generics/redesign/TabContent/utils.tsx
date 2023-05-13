@@ -28,7 +28,7 @@ export const roundAndFormatPercentage = (num: number) => {
   return `${roundedNum}%`;
 };
 
-export const processMinMaxAverage = (data: MetricData[]) => {
+export const processMinMaxAverage = (data?: MetricData[]) => {
   if (data === undefined || data.length === 0) {
     return {
       lowest: 0,

@@ -1,5 +1,5 @@
 import { net } from 'electron';
-import { getNodesDirPathDetails, getUsedDiskSpace } from './files';
+import { getNodesDirPathDetails } from './files';
 
 import { NodeId } from '../common/node';
 import logger from './logger';
