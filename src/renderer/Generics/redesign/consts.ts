@@ -1,4 +1,5 @@
 import { NodeBackgroundId } from 'renderer/assets/images/nodeBackgrounds';
+import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
 
 export interface ClientProps {
   name: NodeBackgroundId;
@@ -13,7 +14,8 @@ export interface NodeOverviewProps {
   name: NodeBackgroundId;
   title: string;
   info: string;
-  type: 'altruistic' | 'client' | 'validator';
+  screenType: 'altruistic' | 'client' | 'validator';
+  rpcTranslation: NiceNodeRpcTranslation;
   version?: string;
   status: ClientStatusProps;
   stats: ClientStatsProps;

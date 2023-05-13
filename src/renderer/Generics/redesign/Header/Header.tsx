@@ -26,7 +26,7 @@ import {
  * Primary UI component for user interaction
  */
 export const Header = (props: NodeOverviewProps) => {
-  const { name, title, info, type, status, version, onAction } = props;
+  const { name, title, info, screenType, status, version, onAction } = props;
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
   const [isSettingsDisplayed, setIsSettingsDisplayed] =
@@ -55,7 +55,7 @@ export const Header = (props: NodeOverviewProps) => {
     };
   }
   let logsButtonProps: ButtonProps | undefined;
-  if (type !== 'altruistic') {
+  if (screenType !== 'altruistic') {
     logsButtonProps = {
       label: 'Logs',
       iconId: 'logs',
@@ -141,7 +141,7 @@ export const Header = (props: NodeOverviewProps) => {
             variant="icon"
             size="small"
             onClick={() => {
-              if (type === 'client') {
+              if (screenType === 'client') {
                 dispatch(
                   setModalState({
                     isModalOpen: true,

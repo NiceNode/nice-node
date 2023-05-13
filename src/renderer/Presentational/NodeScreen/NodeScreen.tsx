@@ -140,30 +140,69 @@ const NodeScreen = () => {
       return;
     }
 
-    // TODO: we'll need to create a flexible way to get the latest block number for all types of nodes (not just Ethereum)
-    const blockOrSlotNumber =
-      qLatestBlock?.data?.number || qLatestBlock?.data?.header?.message?.slot;
-    const blockOrSlotIsString =
-      typeof qLatestBlock?.data?.number === 'string' ||
-      typeof qLatestBlock?.data?.header?.message?.slot === 'string';
+    const updateNodeLSB = async (latestBlockNum: number) => {
+      await electron.updateNodeLastSyncedBlock(selectedNode.id, latestBlockNum);
+    };
 
-    console.log('syncedBlock - blockOrSlotNumber: ', blockOrSlotNumber);
-    console.log('syncedBlock', selectedNode?.runtime?.usage?.syncedBlock);
-    if (selectedNode && blockOrSlotNumber && blockOrSlotIsString) {
-      const updateNodeLSB = async (latestBlockNum: number) => {
-        await electron.updateNodeLastSyncedBlock(
-          selectedNode.id,
-          latestBlockNum
-        );
-      };
-      const latestBlockNum = hexToDecimal(blockOrSlotNumber);
-      updateNodeLSB(latestBlockNum);
+    const blockNumber = qLatestBlock?.data?.number;
+    const slotNumber = qLatestBlock?.data?.header?.message?.slot;
+    const rpcTranslation = selectedNode?.spec?.rpcTranslation;
+
+    console.log('latestBlockNum - blockNumber', blockNumber);
+    console.log('latestBlockNum - slotNumber', slotNumber);
+
+    if (
+      blockNumber &&
+      typeof blockNumber === 'string' &&
+      rpcTranslation === 'eth-l1'
+    ) {
+      const latestBlockNum = hexToDecimal(blockNumber);
       setLatestBlockNumber(latestBlockNum);
-    } else if (selectedNode) {
-      setLatestBlockNumber(selectedNode?.runtime?.usage?.syncedBlock || 0);
+      updateNodeLSB(latestBlockNum);
+    }
+    if (
+      slotNumber &&
+      typeof slotNumber === 'string' &&
+      rpcTranslation === 'eth-l1-beacon'
+    ) {
+      console.log('latestBlockNum', slotNumber);
+      setLatestBlockNumber(slotNumber);
+      updateNodeLSB(slotNumber);
     } else {
       setLatestBlockNumber(0);
     }
+
+    // // TODO: we'll need to create a flexible way to get the latest block number for all types of nodes (not just Ethereum)
+    // const blockOrSlotNumber =
+    //   qLatestBlock?.data?.number || qLatestBlock?.data?.header?.message?.slot;
+    // const blockOrSlotIsString =
+    //   typeof qLatestBlock?.data?.number === 'string' ||
+    //   typeof qLatestBlock?.data?.header?.message?.slot === 'string';
+
+    // console.log(
+    //   'syncedBlock - qLatestBlock?.data?.number',
+    //   qLatestBlock?.data?.number
+    // );
+    // console.log(
+    //   'syncedBlock - qLatestBlock?.data?.header?.message?.slot',
+    //   qLatestBlock?.data?.header?.message?.slot
+    // );
+    // console.log('syncedBlock', selectedNode?.runtime?.usage?.syncedBlock);
+    // if (selectedNode && blockOrSlotNumber && blockOrSlotIsString) {
+    //   const updateNodeLSB = async (latestBlockNum: number) => {
+    //     await electron.updateNodeLastSyncedBlock(
+    //       selectedNode.id,
+    //       latestBlockNum
+    //     );
+    //   };
+    //   const latestBlockNum = hexToDecimal(blockOrSlotNumber);
+    //   updateNodeLSB(latestBlockNum);
+    //   setLatestBlockNumber(latestBlockNum);
+    // } else if (selectedNode) {
+    //   setLatestBlockNumber(selectedNode?.runtime?.usage?.syncedBlock || 0);
+    // } else {
+    //   setLatestBlockNumber(0);
+    // }
   }, [qLatestBlock, selectedNode]);
 
   const onNodeAction = useCallback(
@@ -309,7 +348,8 @@ const NodeScreen = () => {
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
     name: clientName,
-    type: 'client',
+    screenType: 'client',
+    rpcTranslation: spec.rpcTranslation,
     version: formatVersion(nodeVersionData, clientName),
     info: formatSpec(spec.category),
     status: {

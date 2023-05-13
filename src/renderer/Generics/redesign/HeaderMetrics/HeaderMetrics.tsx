@@ -6,20 +6,17 @@ import { getSyncStatus } from '../utils';
 import { NodeOverviewProps } from '../consts';
 
 export const HeaderMetrics = (props: NodeOverviewProps) => {
-  const { type, status, stats } = props;
-  const getSlotOrBlockMetricType = stats.currentSlot
-    ? 'currentSlot'
-    : 'currentBlock';
+  const { screenType, status, stats, rpcTranslation } = props;
   const metricTypeArray: {
     altruistic: MetricStats[];
     client: MetricStats[];
     validator: MetricStats[];
   } = {
     altruistic: ['status', 'currentSlot', 'cpuLoad', 'diskUsageGBs'],
-    client: ['status', getSlotOrBlockMetricType, 'peers', 'diskUsageGBs'],
+    client: ['status', 'currentBlock', 'peers', 'diskUsageGBs'],
     validator: ['status', 'stake', 'rewards', 'balance'],
   };
-  const assignedMetric = metricTypeArray[type];
+  const assignedMetric = metricTypeArray[screenType];
   return (
     <div className={container}>
       {assignedMetric?.map((metric, index) => {
@@ -35,6 +32,7 @@ export const HeaderMetrics = (props: NodeOverviewProps) => {
             <MetricTypes
               statsValue={statsValue}
               statsType={assignedMetric[index]}
+              rpcTranslation={rpcTranslation}
             />
             {index !== 3 && <VerticalLine />}
           </React.Fragment>
