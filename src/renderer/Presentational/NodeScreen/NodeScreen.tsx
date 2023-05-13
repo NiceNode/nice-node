@@ -149,7 +149,7 @@ const NodeScreen = () => {
     const slotNumber = qLatestBlock?.data?.header?.message?.slot;
     const rpcTranslation = selectedNode?.spec?.rpcTranslation;
 
-    let latestBlockNum;
+    let latestBlockNum = 0;
     if (
       blockNumber &&
       typeof blockNumber === 'string' &&
@@ -162,8 +162,6 @@ const NodeScreen = () => {
       rpcTranslation === 'eth-l1-beacon'
     ) {
       latestBlockNum = parseFloat(slotNumber);
-    } else {
-      latestBlockNum = 0;
     }
 
     const syncedBlock =
