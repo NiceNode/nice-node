@@ -1,4 +1,10 @@
-import React, { SetStateAction, useState, useEffect } from 'react';
+import React, {
+  SetStateAction,
+  useState,
+  useEffect,
+  useRef,
+  RefObject,
+} from 'react';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -19,6 +25,7 @@ import Input from '../Input/Input';
 import Button from '../Button/Button';
 import { ContentHeader } from '../ContentHeader/ContentHeader';
 import { LogWithMetadata } from '../../../../main/util/nodeLogUtils';
+import FloatingButton from '../FloatingButton/FloatingButton';
 
 export interface LogsProps {
   /**
@@ -126,9 +133,65 @@ export const Logs = ({ sLogs }: LogsProps) => {
     setTimeframeFilter(0);
   };
 
+  const [isButtonVisible, setButtonVisible] = useState<boolean>(false);
+  const [hasUserScrolledToBottom, setUserScrolledToBottom] =
+    useState<boolean>(false);
+  const [newLogsAdded, setNewLogsAdded] = useState<boolean>(false);
+  const logEndRef = useRef<HTMLDivElement | null>(null);
+  const logContainerRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     setLogs(sLogs);
-  }, [sLogs]);
+    setNewLogsAdded(true);
+    if (
+      logContainerRef.current &&
+      logContainerRef.current.scrollHeight >
+        logContainerRef.current.clientHeight &&
+      !hasUserScrolledToBottom
+    ) {
+      setButtonVisible(true);
+    }
+  }, [sLogs, hasUserScrolledToBottom]);
+
+  useEffect(() => {
+    if (
+      logContainerRef.current &&
+      logContainerRef.current.scrollHeight >
+        logContainerRef.current.clientHeight &&
+      (!hasUserScrolledToBottom || newLogsAdded)
+    ) {
+      setButtonVisible(true);
+    }
+  }, [logs, hasUserScrolledToBottom, newLogsAdded]);
+
+  const scrollToBottom = () => {
+    logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    setButtonVisible(false);
+    setUserScrolledToBottom(true);
+    setNewLogsAdded(false);
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        logContainerRef.current &&
+        logContainerRef.current.scrollTop +
+          logContainerRef.current.clientHeight >=
+          logContainerRef.current.scrollHeight
+      ) {
+        setButtonVisible(false);
+        setUserScrolledToBottom(true);
+        setNewLogsAdded(false);
+      } else if (!hasUserScrolledToBottom || newLogsAdded) {
+        setButtonVisible(true);
+      }
+    };
+
+    logContainerRef.current?.addEventListener('scroll', handleScroll);
+
+    return () =>
+      logContainerRef.current?.removeEventListener('scroll', handleScroll);
+  }, [hasUserScrolledToBottom, newLogsAdded]);
 
   const typeLabel = typeLabels[typeFilter];
   const timeframeLabel = timeframeLabels[timeframeFilter];
@@ -138,6 +201,14 @@ export const Logs = ({ sLogs }: LogsProps) => {
   return (
     <>
       <div className={container}>
+        {isButtonVisible && (
+          <FloatingButton
+            variant="icon-right"
+            iconId="down"
+            label="12 New messages"
+            onClick={scrollToBottom}
+          />
+        )}
         <div>
           <ContentHeader
             textAlign="left"
@@ -325,7 +396,10 @@ export const Logs = ({ sLogs }: LogsProps) => {
             </div>
           )}
         </div>
-        <div className={logsContainer}>{filteredLogMessages}</div>
+        <div ref={logContainerRef} className={logsContainer}>
+          {filteredLogMessages}
+          <div ref={logEndRef} />
+        </div>
       </div>
     </>
   );
