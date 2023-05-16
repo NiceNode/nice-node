@@ -9,6 +9,7 @@ import {
   roundAndFormatPercentage,
 } from './utils';
 import { Chart } from '../Chart/Chart';
+import DiskCapacityBarChart from '../DiskCapacityBarChart/DiskCapacityBarChart';
 
 export interface TabContentProps {
   tabId: string;
@@ -71,7 +72,7 @@ const contentLabels: SectionLabelProps = {
   Disk: 'Disk',
 };
 
-const TabContent = ({ tabId, data }: TabContentProps) => {
+const TabContent = ({ tabId, data, name }: TabContentProps) => {
   // switch statement here to determine which charts and sections to show?
 
   const processPeriodBreakdownData = () => {
@@ -90,11 +91,18 @@ const TabContent = ({ tabId, data }: TabContentProps) => {
 
   const renderDiskCapacity = () => {
     if (tabId === 'Disk') {
+      const clientSpace = (data && data[0]?.y) || 0;
       return (
         <>
           <div className={contentHeader}>
             <div className={contentTitle}>Capacity</div>
           </div>
+          <DiskCapacityBarChart
+            otherSpace={100}
+            clientSpace={100}
+            totalSpace={500}
+            name={name}
+          />
           <HorizontalLine type="content" />
         </>
       );
@@ -110,7 +118,7 @@ const TabContent = ({ tabId, data }: TabContentProps) => {
 
   return (
     <div className={container}>
-      {/* {renderDiskCapacity()} */}
+      {renderDiskCapacity()}
       <div className={contentHeader}>
         <div className={contentTitle}>{contentLabels[tabId]}</div>
         {/* <div className={contentPeriod}>Dropdown</div> */}

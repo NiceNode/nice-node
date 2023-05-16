@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState, useEffect } from 'react';
+import React, { SetStateAction, useState, useEffect, useRef } from 'react';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -19,6 +19,7 @@ import Input from '../Input/Input';
 import Button from '../Button/Button';
 import { ContentHeader } from '../ContentHeader/ContentHeader';
 import { LogWithMetadata } from '../../../../main/util/nodeLogUtils';
+import FloatingButton from '../FloatingButton/FloatingButton';
 
 export interface LogsProps {
   /**
@@ -126,18 +127,106 @@ export const Logs = ({ sLogs }: LogsProps) => {
     setTimeframeFilter(0);
   };
 
+  const [isButtonVisible, setButtonVisible] = useState<boolean>(false);
+  const [hasUserEverScrolledToBottom, setHasUserEverScrolledToBottom] =
+    useState<boolean>(false);
+  const [hasUserScrolledToBottom, setUserScrolledToBottom] =
+    useState<boolean>(false);
+  const [newLogsAdded, setNewLogsAdded] = useState<boolean>(false);
+  const logEndRef = useRef<HTMLDivElement | null>(null);
+  const logContainerRef = useRef<HTMLDivElement | null>(null);
+  const [lastKnownLogCount, setLastKnownLogCount] = useState<number>(0);
+
+  const newLogsCount = sLogs.length - lastKnownLogCount;
+
   useEffect(() => {
     setLogs(sLogs);
-  }, [sLogs]);
+    setNewLogsAdded(true);
+    if (
+      logContainerRef.current &&
+      logContainerRef.current.scrollHeight >
+        logContainerRef.current.clientHeight &&
+      !hasUserScrolledToBottom
+    ) {
+      setButtonVisible(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sLogs, hasUserScrolledToBottom]);
+
+  useEffect(() => {
+    if (
+      logContainerRef.current &&
+      logContainerRef.current.scrollHeight >
+        logContainerRef.current.clientHeight &&
+      (!hasUserScrolledToBottom || newLogsAdded)
+    ) {
+      setButtonVisible(true);
+    }
+  }, [logs, hasUserScrolledToBottom, newLogsAdded]);
+
+  const scrollToBottom = () => {
+    logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    setButtonVisible(false);
+    setUserScrolledToBottom(true);
+    setNewLogsAdded(false);
+    setLastKnownLogCount(sLogs.length);
+    if (!hasUserEverScrolledToBottom) {
+      setHasUserEverScrolledToBottom(true);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        logContainerRef.current &&
+        logContainerRef.current.scrollTop +
+          logContainerRef.current.clientHeight >=
+          logContainerRef.current.scrollHeight
+      ) {
+        setButtonVisible(false);
+        setUserScrolledToBottom(true);
+        setNewLogsAdded(false);
+        setLastKnownLogCount(sLogs.length);
+        if (!hasUserEverScrolledToBottom) {
+          setHasUserEverScrolledToBottom(true);
+        }
+      } else if (!hasUserScrolledToBottom || newLogsAdded) {
+        setButtonVisible(true);
+      }
+    };
+
+    logContainerRef.current?.addEventListener('scroll', handleScroll);
+
+    return () =>
+      logContainerRef.current?.removeEventListener('scroll', handleScroll);
+  }, [
+    sLogs,
+    hasUserScrolledToBottom,
+    newLogsAdded,
+    hasUserEverScrolledToBottom,
+  ]);
 
   const typeLabel = typeLabels[typeFilter];
   const timeframeLabel = timeframeLabels[timeframeFilter];
 
   const navigate = useNavigate();
 
+  const floatingButtonLabel =
+    hasUserEverScrolledToBottom && newLogsCount > 0
+      ? `${newLogsCount} New messages`
+      : 'New messages';
+
   return (
     <>
       <div className={container}>
+        {isButtonVisible && (
+          <FloatingButton
+            variant="icon-right"
+            iconId="down"
+            label={floatingButtonLabel}
+            onClick={scrollToBottom}
+          />
+        )}
         <div>
           <ContentHeader
             textAlign="left"
@@ -325,7 +414,10 @@ export const Logs = ({ sLogs }: LogsProps) => {
             </div>
           )}
         </div>
-        <div className={logsContainer}>{filteredLogMessages}</div>
+        <div ref={logContainerRef} className={logsContainer}>
+          {filteredLogMessages}
+          <div ref={logEndRef} />
+        </div>
       </div>
     </>
   );

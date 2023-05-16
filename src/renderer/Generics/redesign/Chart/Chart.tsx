@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { MetricData } from 'common/node';
+import { vars } from '../theme.css';
 
 type ChartStyleProp = {
   linearGradient: string[];
@@ -130,7 +131,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
       labels: {
         format: '{value:%H:%M}',
         style: {
-          color: 'rgba(0, 0, 2, 0.4)', // Change the Y-axis text color
+          color: vars.color.font40, // Change the Y-axis text color
           fontFamily: "'SF Pro', sans-serif",
           fontStyle: 'normal',
           fontWeight: 400,
@@ -150,7 +151,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
       labels: {
         format: yAxisFormat,
         style: {
-          color: 'rgba(0, 0, 2, 0.4)', // Change the Y-axis text color
+          color: vars.color.font40, // Change the Y-axis text color
           fontFamily: "'SF Pro', sans-serif",
           fontStyle: 'normal',
           fontWeight: 400,
@@ -160,7 +161,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
         },
       },
       tickPositions: null,
-      gridLineColor: 'rgba(0, 0, 2, 0.08)',
+      gridLineColor: vars.color.font8,
       opposite: true,
     },
     time: {
