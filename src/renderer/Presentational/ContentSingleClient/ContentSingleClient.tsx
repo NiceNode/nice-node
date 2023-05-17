@@ -43,6 +43,8 @@ export type SingleNodeContent = {
     memoryPercent: MetricData[];
     cpuPercent: MetricData[];
     diskUsed: MetricData[];
+    diskFree: number;
+    diskTotal: number;
   };
   onAction?: (action: NodeAction) => void;
 };
@@ -67,6 +69,8 @@ const ContentSingleClient = (props: SingleNodeContent) => {
 
   // TODO: retrieve initial data for all pages
 
+  console.log('diskFree', nodeOverview.tabsData?.diskFree);
+
   return (
     <>
       {/* todo: fix temp type casting */}
@@ -86,14 +90,14 @@ const ContentSingleClient = (props: SingleNodeContent) => {
           <TabContent
             name={nodeOverview.name}
             tabId="CPU"
-            data={nodeOverview.tabsData?.cpuPercent}
+            metricData={nodeOverview.tabsData?.cpuPercent}
           />
         </div>
         <div id="Memory">
           <TabContent
             name={nodeOverview.name}
             tabId="Memory"
-            data={nodeOverview.tabsData?.memoryPercent}
+            metricData={nodeOverview.tabsData?.memoryPercent}
           />
         </div>
         {/* <div id="Network">
@@ -103,7 +107,11 @@ const ContentSingleClient = (props: SingleNodeContent) => {
           <TabContent
             name={nodeOverview.name}
             tabId="Disk"
-            data={nodeOverview.tabsData?.diskUsed}
+            metricData={nodeOverview.tabsData?.diskUsed}
+            diskData={{
+              diskFree: nodeOverview.tabsData?.diskFree,
+              diskTotal: nodeOverview.tabsData?.diskTotal,
+            }}
           />
         </div>
       </Tabs>

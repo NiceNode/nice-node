@@ -41,6 +41,8 @@ const NodeScreen = () => {
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
+  const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>();
+  const [sTotalDiskSize, setTotalDiskSize] = useState<number>();
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
@@ -82,6 +84,26 @@ const NodeScreen = () => {
   //     selectedNode?.config?.configValuesMap?.http
   //   );
   // todo: http apis
+
+  const getNodesDefaultStorageLocation = async () => {
+    const defaultNodesStorageDetails =
+      await electron.getNodesDefaultStorageLocation();
+    setFreeStorageGBs(defaultNodesStorageDetails.freeStorageGBs);
+  };
+
+  useEffect(() => {
+    getNodesDefaultStorageLocation();
+    const interval = setInterval(getNodesDefaultStorageLocation, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getSystemSize = async () => {
+    setTotalDiskSize(await electron.getSystemDiskSize());
+  };
+
+  useEffect(() => {
+    getSystemSize();
+  }, []);
 
   useEffect(() => {
     if (!sIsAvailableForPolling) {
@@ -332,6 +354,8 @@ const NodeScreen = () => {
       cpuPercent,
       memoryPercent,
       diskUsed: selectedNode?.runtime?.usage?.diskGBs,
+      diskFree: sFreeStorageGBs,
+      diskTotal: sTotalDiskSize,
     },
     onAction: onNodeAction,
   };

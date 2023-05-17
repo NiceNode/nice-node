@@ -33,6 +33,7 @@ declare global {
         removeAllListeners(channel: string): void;
       };
       getSystemFreeDiskSpace(): number;
+      getSystemDiskSize(): number;
       getDebugInfo(): any;
       getStoreValue(key: string): any;
       setStoreValue(key: string, value: any): void;

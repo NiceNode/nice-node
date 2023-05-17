@@ -9,6 +9,10 @@ export const getSystemFreeDiskSpace = (): number => {
   return 2000;
 };
 
+export const getSystemDiskSize = (): number => {
+  return 3000;
+};
+
 export const getStoreValue = (): any => {
   return true;
 };

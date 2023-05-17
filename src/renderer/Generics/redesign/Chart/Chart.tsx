@@ -13,7 +13,7 @@ type ChartStyleProp = {
 
 type ChartProps = {
   tabId: string;
-  data?: MetricData[];
+  metricData?: MetricData[];
 };
 
 // Function to convert GB to human-readable format (GB or TB)
@@ -37,22 +37,22 @@ const getToolTipFormat = (value: number, tabId: string) => {
   }
 };
 
-export const Chart = ({ tabId, data }: ChartProps) => {
+export const Chart = ({ tabId, metricData }: ChartProps) => {
   const chartComponent = useRef(null);
 
   useEffect(() => {
     if (chartComponent.current) {
       const { chart } = chartComponent.current;
       chart.series[0].setData(
-        data !== undefined
-          ? JSON.parse(JSON.stringify(data))
+        metricData !== undefined
+          ? JSON.parse(JSON.stringify(metricData))
           : [{ x: Date.now(), y: 0 }],
         true,
         true,
         false // changing this to true causes the chart to render incorrectly on the 2nd render
       );
     }
-  }, [data]);
+  }, [metricData]);
 
   const getChartProps = () => {
     let chartProps = {
@@ -92,7 +92,7 @@ export const Chart = ({ tabId, data }: ChartProps) => {
           ],
           lineColor: 'rgba(62, 187, 100, 1)',
           toolTipColor: 'rgba(62, 187, 100, 1)',
-          yAxisFormat: gbToSize((data && data[0]?.y) || 0),
+          yAxisFormat: gbToSize((metricData && metricData[0]?.y) || 0),
         };
         break;
       default:

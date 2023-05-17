@@ -6,6 +6,7 @@ import {
   getGethErrorLogs,
   getSystemFreeDiskSpace,
   getNodesDirPathDetails,
+  getSystemDiskSize,
 } from './files';
 import store from './state/store';
 import logger from './logger';
@@ -68,6 +69,9 @@ export const initialize = () => {
   );
   ipcMain.handle('getSystemFreeDiskSpace', () => {
     return getSystemFreeDiskSpace();
+  });
+  ipcMain.handle('getSystemDiskSize', () => {
+    return getSystemDiskSize();
   });
   ipcMain.handle('getDebugInfo', getDebugInfo);
   ipcMain.handle('getStoreValue', (_event, key: string) => {

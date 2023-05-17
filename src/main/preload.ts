@@ -30,6 +30,7 @@ contextBridge.exposeInMainWorld('electron', {
   updateNodeLastSyncedBlock: (nodeId: NodeId, block: number) =>
     ipcRenderer.invoke('updateNodeLastSyncedBlock', nodeId, block),
   getSystemFreeDiskSpace: () => ipcRenderer.invoke('getSystemFreeDiskSpace'),
+  getSystemDiskSize: () => ipcRenderer.invoke('getSystemDiskSize'),
   getDebugInfo: () => ipcRenderer.invoke('getDebugInfo'),
   getStoreValue: (key: string) => ipcRenderer.invoke('getStoreValue', key),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
