@@ -28,7 +28,7 @@ const DiskCapacityBarChart = ({
   totalSpace,
   name,
 }: DiskCapacityBarChartProps) => {
-  const otherSpace = totalSpace - (freeSpace + clientSpace);
+  const otherSpace = totalSpace - freeSpace;
   const otherPercentage = (otherSpace / totalSpace) * 100;
   const clientPercentage = (clientSpace / totalSpace) * 100;
   const freePercentage = (freeSpace / totalSpace) * 100;
