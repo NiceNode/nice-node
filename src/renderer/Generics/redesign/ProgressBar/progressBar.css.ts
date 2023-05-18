@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '../theme.css';
+import { vars, common } from '../theme.css';
 
 export const outerDiv = style({
   height: 16,
@@ -14,7 +14,7 @@ export const outerDiv = style({
 
 export const innerDiv = style({
   height: 16,
-  backgroundColor: vars.color.primary,
+  backgroundColor: vars.components.progressBarBackground,
 });
 
 export const sectionFont = style({

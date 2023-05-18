@@ -1,11 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Icon } from 'renderer/Generics/redesign/Icon/Icon';
 import {
   captionText,
   container,
   descriptionFont,
   titleFont,
+  learnMore,
+  installContentContainer,
+  installationContainer,
+  installationIcon,
+  installationComplete,
+  installationSteps,
 } from './podmanInstallation.css';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import electron from '../../electronGlobal';
@@ -20,10 +27,7 @@ import {
 } from '../../state/settingsService';
 import { reportEvent } from '../../events/reportEvent';
 import { CHANNELS } from '../../../main/messenger';
-import {
-  IpcMessage,
-  MessageGrantPermissionToInstallPodman,
-} from '../../../main/podman/messageFrontEnd';
+import { IpcMessage } from '../../../main/podman/messageFrontEnd';
 
 // 6.5(docker), ? min on 2022 MacbookPro 16inch, baseline
 const TOTAL_INSTALL_TIME_SEC = 5 * 60;
@@ -154,62 +158,75 @@ const PodmanInstallation = ({
       <div className={descriptionFont}>
         <>{t('podmanPurpose')}</>
       </div>
-      <ExternalLink text={t('LearnMorePodman')} url="https://podman.io/" />
+      <div className={learnMore}>
+        <ExternalLink text={t('LearnMorePodman')} url="https://podman.io/" />
+      </div>
       {/* Podman is not installed */}
-      {!isPodmanInstalled && (
-        <>
-          {!sDownloadComplete && !sInstallComplete && (
-            <>
-              {!sHasStartedDownload ? (
-                <div>
-                  <Button
-                    type="primary"
-                    label={t('DownloadAndInstall')}
-                    onClick={onClickDownloadAndInstall}
+      <div className={installContentContainer}>
+        {!isPodmanInstalled && (
+          <>
+            {!sDownloadComplete && !sInstallComplete && (
+              <>
+                {!sHasStartedDownload ? (
+                  <div>
+                    <Button
+                      type="primary"
+                      label={t('DownloadAndInstall')}
+                      onClick={onClickDownloadAndInstall}
+                    />
+                    <div className={captionText}>~100MB {t('download')}</div>
+                  </div>
+                ) : (
+                  <ProgressBar
+                    progress={sDownloadProgress}
+                    title={t('DownloadingPodman')}
+                    caption={t('DownloadedSomeMegaBytesOfTotal', {
+                      downloadedBytes: bytesToMB(sDownloadedBytes),
+                      totalBytes: bytesToMB(sTotalSizeBytes),
+                    })}
                   />
-                  <div className={captionText}>~100MB {t('download')}</div>
-                </div>
-              ) : (
-                <ProgressBar
-                  progress={sDownloadProgress}
-                  title={t('DownloadingPodman')}
-                  caption={t('DownloadedSomeMegaBytesOfTotal', {
-                    downloadedBytes: bytesToMB(sDownloadedBytes),
-                    totalBytes: bytesToMB(sTotalSizeBytes),
-                  })}
-                />
-              )}
-            </>
-          )}
-          {sDownloadComplete && !sInstallComplete && (
-            <TimedProgressBar
-              totalTimeSeconds={TOTAL_INSTALL_TIME_SEC}
-              title={t('InstallingPodman')}
-            />
-          )}
-        </>
-      )}
+                )}
+              </>
+            )}
+            {sDownloadComplete && !sInstallComplete && (
+              <TimedProgressBar
+                totalTimeSeconds={TOTAL_INSTALL_TIME_SEC}
+                title={t('InstallingPodman')}
+              />
+            )}
+          </>
+        )}
 
-      {sDownloadComplete && sInstallComplete && (
-        <p>{t('PodmanInstallComplete')}</p>
-      )}
-      {/* Podman is installed but not running */}
-      {isPodmanInstalled && !isPodmanRunning && (
-        <>
-          <Button
-            type="primary"
-            label={t('StartPodman')}
-            onClick={onClickStartPodman}
-          />
-        </>
-      )}
-      {isPodmanRunning && <>{t('PodmanIsRunningProceed')}</>}
-      {sDidUserGrantPermissionToInstallPodman === false && (
-        <p>
-          Podman is required by NiceNode. You must grant permissions to NiceNode
-          in the popup.
-        </p>
-      )}
+        {sDownloadComplete && sInstallComplete && (
+          <div className={installationContainer}>
+            <div className={installationIcon}>
+              <Icon iconId="checkcirclefilled" />
+            </div>
+            <div className={installationComplete}>
+              {t('PodmanInstallComplete')}
+            </div>
+            <div className={installationSteps}>
+              Podman is installed. Proceed by clicking "Start Node"
+            </div>
+          </div>
+        )}
+        {/* Podman is installed but not running */}
+        {isPodmanInstalled && !isPodmanRunning && (
+          <>
+            <Button
+              type="primary"
+              label={t('StartPodman')}
+              onClick={onClickStartPodman}
+            />
+          </>
+        )}
+        {sDidUserGrantPermissionToInstallPodman === false && (
+          <p>
+            Podman is required by NiceNode. You must grant permissions to
+            NiceNode in the popup.
+          </p>
+        )}
+      </div>
     </div>
   );
 };
