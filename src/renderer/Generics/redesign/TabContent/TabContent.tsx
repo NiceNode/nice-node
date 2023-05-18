@@ -128,9 +128,11 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
       </div>
       <Chart metricData={metricData} tabId={tabId} />
       <HorizontalLine type="content" />
-      <div className="breakdown">
-        <LabelValues {...breakdownData} />
-      </div>
+      {tabId !== 'Disk' && (
+        <div className="breakdown">
+          <LabelValues {...breakdownData} />
+        </div>
+      )}
     </div>
   );
 };

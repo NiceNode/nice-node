@@ -73,7 +73,7 @@ const updateAllNodeMetrics = async () => {
             const diskGBs = (await getUsedDiskSpaceFunc()) as number;
             node.runtime.usage.diskGBs.unshift({
               x: Date.now(), // timestamp
-              y: parseFloat(diskGBs.toPrecision(1)), // GBs
+              y: parseFloat(diskGBs.toFixed(2)), // GBs
             });
           } else {
             node.runtime.usage.memoryBytes = [];
