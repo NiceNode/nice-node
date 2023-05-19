@@ -476,6 +476,8 @@ export const isPodmanRunning = async () => {
   const bIsPodmanRunning = nnMachine?.Running === true;
   if (!bIsPodmanRunning) {
     logger.info(`Podman isn't running`);
+  } else {
+    logger.info(`Podman is running`);
   }
   return bIsPodmanRunning;
 };

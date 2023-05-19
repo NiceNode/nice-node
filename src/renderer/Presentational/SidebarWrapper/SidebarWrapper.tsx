@@ -30,6 +30,13 @@ export const SidebarWrapper = () => {
     isPodmanRunning = qIsPodmanRunning.data;
   }
 
+  const onClickStartPodman = async () => {
+    await electron.startPodman();
+    // todo: verify it is started and changed banner for 5 secs?
+    qIsPodmanRunning.refetch();
+    // console.log('installPodman finished. Install result: ', installResult);
+  };
+
   const qNotifications = useGetNotificationsQuery();
   const notifications: NotificationItemProps[] = qNotifications?.data;
 
@@ -70,9 +77,10 @@ export const SidebarWrapper = () => {
       notifications={notifications}
       offline={false}
       updateAvailable={false}
-      dockerStopped={!isPodmanRunning}
+      podmanStopped={!isPodmanRunning}
       sUserNodes={sUserNodes}
       selectedNodeId={sSelectedNodeId}
+      onClickStartPodman={onClickStartPodman}
     />
   );
 };

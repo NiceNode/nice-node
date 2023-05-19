@@ -70,11 +70,14 @@ const PodmanInstallation = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (isPodmanRunning) {
-      onChange('done');
-    }
-  }, [isPodmanRunning, onChange]);
+  console.log('isPodmanRunning: ', isPodmanRunning);
+
+  // useEffect(() => {
+  //   console.log('isPodmanRunning: ', isPodmanRunning);
+  //   if (isPodmanRunning) {
+  //     onChange('done');
+  //   }
+  // }, [isPodmanRunning, onChange]);
 
   const onClickDownloadAndInstall = async () => {
     setHasStartedDownload(true);
@@ -92,9 +95,9 @@ const PodmanInstallation = ({
 
   const onClickStartPodman = async () => {
     setHasStartedDownload(true);
-    const installResult = await electron.startPodman();
+    const startResult = await electron.startPodman();
     qIsPodmanRunning.refetch();
-    console.log('installPodman finished. Install result: ', installResult);
+    console.log('startPodman finished. Start result: ', startResult);
   };
 
   const podmanMessageListener = (message: FileDownloadProgress[]) => {
@@ -206,7 +209,8 @@ const PodmanInstallation = ({
               {t('PodmanInstallComplete')}
             </div>
             <div className={installationSteps}>
-              Podman is installed. Proceed by clicking "Start Node"
+              Podman is installed. Proceed by clicking{' '}
+              {!isPodmanRunning ? 'Start Podman' : 'Start Node'}
             </div>
           </div>
         )}
