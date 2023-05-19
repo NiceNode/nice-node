@@ -37,12 +37,14 @@ export interface PodmanInstallationProps {
    */
   onChange: (newValue: string) => void;
   disableSaveButton?: (newValue: boolean) => void;
+  setIsPodmanRunning?: (newValue: boolean) => void;
   type?: string;
 }
 
 const PodmanInstallation = ({
   onChange,
   disableSaveButton,
+  setIsPodmanRunning = () => {},
   type = '',
 }: PodmanInstallationProps) => {
   const { t } = useTranslation();
@@ -72,12 +74,11 @@ const PodmanInstallation = ({
 
   console.log('isPodmanRunning: ', isPodmanRunning);
 
-  // useEffect(() => {
-  //   console.log('isPodmanRunning: ', isPodmanRunning);
-  //   if (isPodmanRunning) {
-  //     onChange('done');
-  //   }
-  // }, [isPodmanRunning, onChange]);
+  useEffect(() => {
+    if (isPodmanRunning) {
+      onChange('done');
+    }
+  }, [isPodmanRunning, onChange]);
 
   const onClickDownloadAndInstall = async () => {
     setHasStartedDownload(true);
@@ -151,6 +152,15 @@ const PodmanInstallation = ({
     listenForPodmanInstallUpdates();
     return () => electron.ipcRenderer.removeAllListeners('podman');
   }, [listenForPodmanInstallUpdates]);
+
+  // useEffect(() => {
+  //   return () => {
+  //     qIsPodmanRunning.unsubscribe();
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  console.log('isPodmanInstalled', isPodmanInstalled);
 
   // listen to podman install messages
   return (

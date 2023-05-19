@@ -17,15 +17,14 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] =
     useState<boolean>(false);
+  const [sIsPodmanRunning, setIsPodmanRunning] = useState<boolean>(false);
   const [step, setStep] = useState(0);
 
   useEffect(() => {
     reportEvent('OpenAddNodeModal');
   }, []);
 
-  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
-    pollingInterval: 15000,
-  });
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery();
   const isPodmanRunning = qIsPodmanRunning?.data;
 
   const dispatch = useAppDispatch();
@@ -44,7 +43,8 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     default:
   }
 
-  const startNode = (step === 1 || step === 2) && isPodmanRunning;
+  const startNode =
+    (step === 1 || step === 2) && (isPodmanRunning || sIsPodmanRunning);
   const buttonSaveLabel = startNode ? 'Start node' : 'Continue';
   const buttonCancelLabel = step === 0 ? 'Cancel' : 'Back';
   const buttonSaveVariant = startNode ? 'icon-left' : 'text';
@@ -97,8 +97,13 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const onSave = () => {
     if (step === 0) {
       setStep(1);
-    } else if (step === 1 && !isPodmanRunning) {
-      setStep(2);
+    } else if (step === 1) {
+      if (isPodmanRunning || sIsPodmanRunning) {
+        modalOnSaveConfig(undefined);
+        modalOnClose();
+      } else {
+        setStep(2);
+      }
     } else {
       modalOnSaveConfig(undefined);
       modalOnClose();
@@ -120,6 +125,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     >
       <AddNodeStepperModal
         step={step}
+        setIsPodmanRunning={setIsPodmanRunning}
         modal
         modalConfig={modalConfig}
         modalOnChangeConfig={(config, save) => {
