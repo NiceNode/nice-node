@@ -29,10 +29,12 @@ export interface SidebarProps {
    * Is podman not running?
    */
   podmanStopped: boolean;
+  podmanInstalled: boolean;
   sUserNodes?: UserNodes;
   selectedNodeId?: NodeId;
   notifications: NotificationItemProps[];
   onClickStartPodman: () => void;
+  onClickInstallPodman: () => void;
 }
 
 const Sidebar = ({
@@ -40,9 +42,11 @@ const Sidebar = ({
   updateAvailable,
   offline,
   podmanStopped,
+  podmanInstalled,
   selectedNodeId,
   notifications,
   onClickStartPodman,
+  onClickInstallPodman,
 }: SidebarProps) => {
   const dispatch = useAppDispatch();
 
@@ -82,8 +86,13 @@ const Sidebar = ({
 
   const renderBanners = () => {
     // TODO: integrate this with code below
-    if (podmanStopped) {
-      return <Banner podmanStopped onClick={onClickStartPodman} />;
+    if (podmanStopped || !podmanInstalled) {
+      return (
+        <Banner
+          podmanStopped
+          onClick={!podmanInstalled ? onClickInstallPodman : onClickStartPodman}
+        />
+      );
     }
     const bannerProps = {
       updateAvailable,
