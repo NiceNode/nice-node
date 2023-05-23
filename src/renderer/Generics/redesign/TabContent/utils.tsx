@@ -5,19 +5,22 @@ interface BreakDownObjects {
   sync: {
     key: string;
     sectionTitle: string;
-    items: { label: string; value: string }[];
+    items: { label: string; value: string | undefined }[];
   }[];
-  cpu: { key: string; items: { label: string; value: string }[] }[];
-  memory: { key: string; items: { label: string; value: string }[] }[];
+  cpu: { key: string; items: { label: string; value: string | undefined }[] }[];
+  memory: {
+    key: string;
+    items: { label: string; value: string | undefined }[];
+  }[];
   network: {
     key: string;
     sectionTitle: string;
-    items: { label: string; value: string }[];
+    items: { label: string; value: string | undefined }[];
   }[];
   disk: {
     key: string;
     sectionTitle: string;
-    items: { label: string; value: string }[];
+    items: { label: string; value: string | undefined }[];
   }[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any; // index signature
@@ -37,19 +40,23 @@ export const processMinMaxAverage = (data?: MetricData[]) => {
     };
   }
 
-  let lowest = data[0].y;
-  let highest = data[0].y;
-  let sum = 0;
-
-  for (const item of data) {
-    if (item.y < lowest) {
-      lowest = item.y;
+  const { lowest, highest, sum } = data.reduce(
+    (accumulator, item) => {
+      if (item.y < accumulator.lowest) {
+        accumulator.lowest = item.y;
+      }
+      if (item.y > accumulator.highest) {
+        accumulator.highest = item.y;
+      }
+      accumulator.sum += item.y;
+      return accumulator;
+    },
+    {
+      lowest: data[0].y,
+      highest: data[0].y,
+      sum: 0,
     }
-    if (item.y > highest) {
-      highest = item.y;
-    }
-    sum += item.y;
-  }
+  );
 
   const average = sum / data.length;
 
@@ -62,7 +69,7 @@ export const processMinMaxAverage = (data?: MetricData[]) => {
 
 export const getBreakdown = (
   tabId: string,
-  periodBreakdownData: PeriodBreakdownDataProps
+  periodBreakdownData: Partial<PeriodBreakdownDataProps>
 ) => {
   const breakDownObjects: BreakDownObjects = {
     sync: [

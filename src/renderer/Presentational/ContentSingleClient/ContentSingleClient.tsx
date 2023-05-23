@@ -3,6 +3,7 @@
 // import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
 import { MetricData } from 'common/node';
 import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
+import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
 import TabContent from '../../Generics/redesign/TabContent/TabContent';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
@@ -14,7 +15,7 @@ import { NodeAction, NodeOverviewProps } from '../../Generics/redesign/consts';
 // TODO: process retrieved client data into this format
 export type SingleNodeContent = {
   nodeId: string;
-  name: string; // lowercase for supported node icons
+  name: NodeBackgroundId; // lowercase for supported node icons
   version?: string;
   screenType?: string;
   nodeType?: string;
@@ -110,8 +111,8 @@ const ContentSingleClient = (props: SingleNodeContent) => {
             tabId="Disk"
             metricData={nodeOverview.tabsData?.diskUsed}
             diskData={{
-              diskFree: nodeOverview.tabsData?.diskFree,
-              diskTotal: nodeOverview.tabsData?.diskTotal,
+              diskFree: nodeOverview.tabsData?.diskFree || 0,
+              diskTotal: nodeOverview.tabsData?.diskTotal || 0,
             }}
           />
         </div>

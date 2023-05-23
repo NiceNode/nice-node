@@ -10,12 +10,17 @@ import {
 } from './utils';
 import { Chart } from '../Chart/Chart';
 import DiskCapacityBarChart from '../DiskCapacityBarChart/DiskCapacityBarChart';
+import { NodeBackgroundId } from '../../../assets/images/nodeBackgrounds';
 
+type DiskDataType = {
+  diskFree: number;
+  diskTotal: number;
+};
 export interface TabContentProps {
   tabId: string;
   metricData?: MetricData[];
-  diskData?: Record<string, unknown>;
-  name: string;
+  diskData?: DiskDataType;
+  name: NodeBackgroundId;
 }
 
 export interface PeriodBreakdownDataProps {
@@ -87,14 +92,13 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
         },
       };
     }
-    return null;
+    return {};
   };
 
   const renderDiskCapacity = () => {
     if (tabId === 'Disk') {
       const clientSpace = (metricData && metricData[0]?.y) || 0;
-      const { diskFree, diskTotal } = diskData;
-      console.log('diskTotal', diskTotal);
+      const { diskFree, diskTotal } = diskData as DiskDataType;
       return (
         <>
           <div className={contentHeader}>

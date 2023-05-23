@@ -21,17 +21,6 @@ import Node, {
 } from '../common/node';
 import * as nodeStore from './state/nodes';
 import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
-import {
-  startBinary,
-  stopBinary,
-  initialize as initBinary,
-  onExit as onExitBinary,
-  getBinaryStatus,
-  removeBinaryNode,
-  sendLogsToUI as binarySendLogsToUI,
-  stopSendingLogsToUI as binaryStopSendingLogsToUI,
-  getProcess,
-} from './binary';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
 import { ConfigValuesMap } from '../common/nodeConfig';
 
@@ -49,7 +38,12 @@ export const addNode = async (
   console.log('adding node with dataDir: ', dataDir);
   const nodeRuntime: NodeRuntime = {
     dataDir,
-    usage: {},
+    usage: {
+      diskGBs: [],
+      memoryBytes: [],
+      cpuPercent: [],
+      syncedBlock: 0,
+    },
   };
   const node: Node = createNode({
     spec: nodeSpec,
@@ -102,9 +96,6 @@ export const startNode = async (nodeId: NodeId) => {
       dockerNode.runtime.processIds = containerIds;
       dockerNode.status = NodeStatus.running;
       nodeStore.updateNode(dockerNode);
-    } else {
-      logger.info('nodeManager starting binary node');
-      await startBinary(node);
     }
   } catch (err) {
     logger.error(err);
@@ -126,11 +117,6 @@ export const stopNode = async (nodeId: NodeId) => {
     if (isDockerNode(node)) {
       const containerIds = await stopPodmanNode(node);
       logger.info(`${containerIds} stopped`);
-      node.status = NodeStatus.stopped;
-      nodeStore.updateNode(node);
-    } else {
-      // assuming binary
-      await stopBinary(node);
       node.status = NodeStatus.stopped;
       nodeStore.updateNode(node);
     }
@@ -177,14 +163,6 @@ export const removeNode = async (
       logger.error(err);
       // todo: try to remove container with same name?
     }
-  } else {
-    // assuming binary
-    try {
-      const isBinaryNode = await removeBinaryNode(node);
-      logger.info(`isBinaryNode ${isBinaryNode}`);
-    } catch (err) {
-      logger.error(err);
-    }
   }
 
   if (options?.isDeleteStorage) {
@@ -199,15 +177,11 @@ export const removeNode = async (
 export const stopSendingNodeLogs = (nodeId?: NodeId) => {
   if (nodeId === undefined) {
     dockerStopSendingLogsToUI();
-    binaryStopSendingLogsToUI();
     return;
   }
   const node = nodeStore.getNode(nodeId);
   if (isDockerNode(node)) {
     dockerStopSendingLogsToUI();
-  } else {
-    // assume binary
-    binaryStopSendingLogsToUI();
   }
 };
 
@@ -226,9 +200,6 @@ export const sendNodeLogs = (nodeId: NodeId) => {
   const node = nodeStore.getNode(nodeId);
   if (isDockerNode(node)) {
     dockerSendLogsToUI(node);
-  } else {
-    // assume binary
-    binarySendLogsToUI(node);
   }
 };
 
@@ -238,7 +209,6 @@ export const sendNodeLogs = (nodeId: NodeId) => {
  */
 export const initialize = async () => {
   initDocker();
-  initBinary();
   initNodeLibrary();
 
   // get all nodes
@@ -289,41 +259,11 @@ export const initialize = async () => {
       } else {
         throw new Error(`No containerIds found for nodeId ${node.id}`);
       }
-    } else {
-      // todo: check binary process
-      const binaryNode = node;
-      if (
-        Array.isArray(binaryNode?.runtime?.processIds) &&
-        binaryNode.runtime.processIds.length > 0
-      ) {
-        try {
-          const pid = parseInt(binaryNode.runtime.processIds[0], 10);
-          // eslint-disable-next-line no-await-in-loop
-          const proc = await getProcess(pid);
-          if (proc) {
-            const nodeStatus = getBinaryStatus(proc);
-            logger.info(
-              `NodeStatus for ${binaryNode.spec.specId} is ${nodeStatus}`
-            );
-            node.status = nodeStatus;
-            nodeStore.updateNode(node);
-          }
-        } catch (err) {
-          console.error(err);
-          node.status = NodeStatus.stopped;
-          nodeStore.updateNode(node);
-        }
-      } else {
-        node.status = NodeStatus.errorStopping;
-        nodeStore.updateNode(node);
-        // no process id so node is lost? set as stopped?
-      }
     }
   }
 };
 
 export const onExit = () => {
-  onExitBinary();
   onExitDocker();
 };
 

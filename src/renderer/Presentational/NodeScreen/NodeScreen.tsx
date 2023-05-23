@@ -29,6 +29,7 @@ import {
   titleFont,
   descriptionFont,
 } from './NodeScreen.css';
+import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 
 let alphaModalRendered = false;
 
@@ -41,8 +42,8 @@ const NodeScreen = () => {
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
-  const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>();
-  const [sTotalDiskSize, setTotalDiskSize] = useState<number>();
+  const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>(0);
+  const [sTotalDiskSize, setTotalDiskSize] = useState<number>(0);
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
@@ -74,9 +75,13 @@ const NodeScreen = () => {
   //   pollingInterval: typeof sPeers === 'number' && sPeers === 0 ? 30000 : 0,
   // });
 
-  const diskUsed = selectedNode?.runtime?.usage?.diskGBs?.[0]?.y ?? undefined;
-  const cpuPercent = selectedNode?.runtime?.usage?.cpuPercent ?? undefined;
-  const memoryPercent = selectedNode?.runtime?.usage?.memoryBytes ?? undefined;
+  const diskUsed = selectedNode?.runtime?.usage?.diskGBs?.[0]?.y ?? 0;
+  const cpuPercent = selectedNode?.runtime?.usage?.cpuPercent ?? [
+    { x: 0, y: 0 },
+  ];
+  const memoryPercent = selectedNode?.runtime?.usage?.memoryBytes ?? [
+    { x: 0, y: 0 },
+  ];
   // eslint-disable-next-line eqeqeq
   // const isHttpEnabled =
   //   selectedNode?.config?.configValuesMap?.http &&
@@ -335,7 +340,7 @@ const NodeScreen = () => {
 
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
-    name: clientName,
+    name: clientName as NodeBackgroundId,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
     version: formatVersion(nodeVersionData, clientName),
@@ -348,7 +353,7 @@ const NodeScreen = () => {
     stats: {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,
-      diskUsageGBs: diskUsed ? parseFloat(diskUsed) : 0,
+      diskUsageGBs: diskUsed,
     },
     tabsData: {
       cpuPercent,
