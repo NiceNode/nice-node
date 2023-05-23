@@ -17,6 +17,7 @@ export type SingleNodeContent = {
   name: string; // lowercase for supported node icons
   version?: string;
   screenType?: string;
+  nodeType?: string;
   rpcTranslation?: NiceNodeRpcTranslation;
   info?: string;
   network?: string;

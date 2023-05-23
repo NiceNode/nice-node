@@ -8,7 +8,10 @@ import {
   selectUserNodes,
   updateSelectedNodeId,
 } from '../../state/node';
-import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
+import {
+  useGetIsPodmanRunningQuery,
+  useGetIsPodmanInstalledQuery,
+} from '../../state/settingsService';
 import Sidebar from '../Sidebar/Sidebar';
 
 export interface SidebarWrapperProps {
@@ -20,6 +23,8 @@ export const SidebarWrapper = () => {
   const sUserNodes = useAppSelector(selectUserNodes);
   const dispatch = useAppDispatch();
   // todo: implement a back-off polling strategy which can be "reset"
+  const qIsPodmanInstalled = useGetIsPodmanInstalledQuery();
+  const isPodmanInstalled = qIsPodmanInstalled?.data;
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
@@ -29,6 +34,23 @@ export const SidebarWrapper = () => {
   if (qIsPodmanRunning && !qIsPodmanRunning.fetching) {
     isPodmanRunning = qIsPodmanRunning.data;
   }
+
+  const onClickInstallPodman = async () => {
+    console.log('install podman');
+    const installResult = await electron.installPodman();
+    qIsPodmanInstalled.refetch();
+    qIsPodmanRunning.refetch();
+    if (installResult && !installResult.error) {
+      console.log('podman installed, do something');
+    }
+  };
+
+  const onClickStartPodman = async () => {
+    await electron.startPodman();
+    // todo: verify it is started and changed banner for 5 secs?
+    qIsPodmanRunning.refetch();
+    // console.log('installPodman finished. Install result: ', installResult);
+  };
 
   const qNotifications = useGetNotificationsQuery();
   const notifications: NotificationItemProps[] = qNotifications?.data;
@@ -70,9 +92,12 @@ export const SidebarWrapper = () => {
       notifications={notifications}
       offline={false}
       updateAvailable={false}
-      dockerStopped={!isPodmanRunning}
+      podmanInstalled={isPodmanInstalled}
+      podmanStopped={!isPodmanRunning}
       sUserNodes={sUserNodes}
       selectedNodeId={sSelectedNodeId}
+      onClickStartPodman={onClickStartPodman}
+      onClickInstallPodman={onClickInstallPodman}
     />
   );
 };

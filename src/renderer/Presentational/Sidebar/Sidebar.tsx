@@ -3,18 +3,14 @@ import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/
 import { setModalState } from '../../state/modal';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
-import { NodeId, NodeStatus, UserNodes } from '../../../common/node';
+import { NodeId, UserNodes } from '../../../common/node';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
-import {
-  SidebarNodeItemWrapper,
-  SidebarNodeStatus,
-} from '../SidebarNodeItemWrapper/SidebarNodeItemWrapper';
+import { SidebarNodeItemWrapper } from '../SidebarNodeItemWrapper/SidebarNodeItemWrapper';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
 import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
-import { PodmanStoppedBanner } from '../PodmanInstallation/StartPodmanBanner';
 
 export interface SidebarProps {
   /**
@@ -26,21 +22,27 @@ export interface SidebarProps {
    */
   updateAvailable: boolean;
   /**
-   * Is docker not running?
+   * Is podman not running?
    */
-  dockerStopped: boolean;
+  podmanStopped: boolean;
+  podmanInstalled: boolean;
   sUserNodes?: UserNodes;
   selectedNodeId?: NodeId;
   notifications: NotificationItemProps[];
+  onClickStartPodman: () => void;
+  onClickInstallPodman: () => void;
 }
 
 const Sidebar = ({
   sUserNodes,
   updateAvailable,
   offline,
-  dockerStopped,
+  podmanStopped,
+  podmanInstalled,
   selectedNodeId,
   notifications,
+  onClickStartPodman,
+  onClickInstallPodman,
 }: SidebarProps) => {
   const dispatch = useAppDispatch();
 
@@ -79,6 +81,15 @@ const Sidebar = ({
   // });
 
   const renderBanners = () => {
+    // TODO: integrate this with code below
+    if (podmanStopped || !podmanInstalled) {
+      return (
+        <Banner
+          podmanStopped
+          onClick={!podmanInstalled ? onClickInstallPodman : onClickStartPodman}
+        />
+      );
+    }
     const bannerProps = {
       updateAvailable,
       offline,
@@ -102,7 +113,6 @@ const Sidebar = ({
 
   return (
     <div className={container}>
-      {dockerStopped && <PodmanStoppedBanner />}
       {renderBanners()}
       <div className={nodeList}>
         <div className={titleItem}>

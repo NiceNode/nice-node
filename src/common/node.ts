@@ -22,6 +22,8 @@ export enum NodeStatus {
   errorStarting = 'error starting',
   errorStopping = 'error stopping',
   unknown = 'unknown',
+  error = 'error',
+  updating = 'updating',
 }
 
 export type NodeConfig = {

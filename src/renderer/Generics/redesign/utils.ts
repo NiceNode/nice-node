@@ -32,6 +32,7 @@ export const getSyncStatus = (status: ClientStatusProps) => {
       syncStatus = SYNC_STATUS.SYNCHRONIZED;
       break;
     default:
+      syncStatus = SYNC_STATUS.ERROR;
       break;
   }
   return syncStatus;

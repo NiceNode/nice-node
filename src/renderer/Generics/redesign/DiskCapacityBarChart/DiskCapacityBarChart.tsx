@@ -1,4 +1,4 @@
-import { NodeBackgroundId } from 'renderer/assets/images/nodeBackgrounds';
+import { NodeBackgroundId } from '../../../assets/images/nodeBackgrounds';
 import {
   wrapper,
   container,
