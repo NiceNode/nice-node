@@ -90,7 +90,7 @@ export const executeTranslation = async (
     } else if (rpcCall === 'latestBlock') {
       const resp = await provider.send('eth_getBlockByNumber', [
         'latest',
-        false,
+        true,
       ]);
       return resp;
     } else if (rpcCall === 'clientVersion') {

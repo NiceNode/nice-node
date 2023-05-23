@@ -176,12 +176,11 @@ export const Logs = ({ sLogs }: LogsProps) => {
   };
 
   useEffect(() => {
+    const { current } = logContainerRef;
     const handleScroll = () => {
       if (
-        logContainerRef.current &&
-        logContainerRef.current.scrollTop +
-          logContainerRef.current.clientHeight >=
-          logContainerRef.current.scrollHeight
+        current &&
+        current.scrollTop + current.clientHeight >= current.scrollHeight
       ) {
         setButtonVisible(false);
         setUserScrolledToBottom(true);
@@ -195,10 +194,9 @@ export const Logs = ({ sLogs }: LogsProps) => {
       }
     };
 
-    logContainerRef.current?.addEventListener('scroll', handleScroll);
+    current?.addEventListener('scroll', handleScroll);
 
-    return () =>
-      logContainerRef.current?.removeEventListener('scroll', handleScroll);
+    return () => current?.removeEventListener('scroll', handleScroll);
   }, [
     sLogs,
     hasUserScrolledToBottom,

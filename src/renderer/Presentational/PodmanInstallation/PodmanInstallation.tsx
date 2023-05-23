@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from 'renderer/Generics/redesign/Icon/Icon';
+import { Icon } from '../../Generics/redesign/Icon/Icon';
 import {
   captionText,
   container,
@@ -37,14 +37,12 @@ export interface PodmanInstallationProps {
    */
   onChange: (newValue: string) => void;
   disableSaveButton?: (newValue: boolean) => void;
-  setIsPodmanRunning?: (newValue: boolean) => void;
   type?: string;
 }
 
 const PodmanInstallation = ({
   onChange,
   disableSaveButton,
-  setIsPodmanRunning = () => {},
   type = '',
 }: PodmanInstallationProps) => {
   const { t } = useTranslation();
@@ -128,7 +126,7 @@ const PodmanInstallation = ({
       console.log('message: ', message);
       // if false, notify user that podman is required and allow them another try
       //  to grant permissions
-      setDidUserGrantPermissionToInstallPodman(message.value);
+      setDidUserGrantPermissionToInstallPodman(message?.value as boolean);
     } else {
       // ignore for now?
     }

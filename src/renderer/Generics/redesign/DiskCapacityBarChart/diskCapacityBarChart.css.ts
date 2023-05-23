@@ -1,5 +1,4 @@
 import { style } from '@vanilla-extract/css';
-import { common, vars } from '../theme.css';
 
 export const wrapper = style({
   width: '100%',
@@ -72,11 +71,9 @@ export const colorBox = style({
 });
 
 export const otherColorBox = style({
-  extend: colorBox,
   backgroundColor: 'lightgray',
 });
 
 export const freeColorBox = style({
-  extend: colorBox,
   backgroundColor: 'transparent',
 });

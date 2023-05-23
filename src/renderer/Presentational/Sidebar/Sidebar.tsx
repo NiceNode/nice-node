@@ -3,18 +3,14 @@ import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/
 import { setModalState } from '../../state/modal';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
-import { NodeId, NodeStatus, UserNodes } from '../../../common/node';
+import { NodeId, UserNodes } from '../../../common/node';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
-import {
-  SidebarNodeItemWrapper,
-  SidebarNodeStatus,
-} from '../SidebarNodeItemWrapper/SidebarNodeItemWrapper';
+import { SidebarNodeItemWrapper } from '../SidebarNodeItemWrapper/SidebarNodeItemWrapper';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
 import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
-import { PodmanStoppedBanner } from '../PodmanInstallation/StartPodmanBanner';
 
 export interface SidebarProps {
   /**

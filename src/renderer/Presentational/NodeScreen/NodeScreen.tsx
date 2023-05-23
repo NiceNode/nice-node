@@ -131,16 +131,16 @@ const NodeScreen = () => {
   }, [qExecutionPeers]);
 
   useEffect(() => {
+    const savedSyncedBlock = selectedNode?.runtime?.usage?.syncedBlock || 0;
     if (qLatestBlock.isError) {
-      if (selectedNode) {
-        setLatestBlockNumber(selectedNode?.runtime?.usage?.syncedBlock || 0);
-      } else {
-        setLatestBlockNumber(0);
-      }
+      setLatestBlockNumber(savedSyncedBlock);
       return;
     }
 
     const updateNodeLSB = async (latestBlockNum: number) => {
+      if (!selectedNode) {
+        return;
+      }
       await electron.updateNodeLastSyncedBlock(selectedNode.id, latestBlockNum);
     };
 
@@ -148,61 +148,27 @@ const NodeScreen = () => {
     const slotNumber = qLatestBlock?.data?.header?.message?.slot;
     const rpcTranslation = selectedNode?.spec?.rpcTranslation;
 
-    console.log('latestBlockNum - blockNumber', blockNumber);
-    console.log('latestBlockNum - slotNumber', slotNumber);
-
+    let latestBlockNum;
     if (
       blockNumber &&
       typeof blockNumber === 'string' &&
       rpcTranslation === 'eth-l1'
     ) {
-      const latestBlockNum = hexToDecimal(blockNumber);
-      setLatestBlockNumber(latestBlockNum);
-      updateNodeLSB(latestBlockNum);
-    }
-    if (
+      latestBlockNum = hexToDecimal(blockNumber);
+    } else if (
       slotNumber &&
       typeof slotNumber === 'string' &&
       rpcTranslation === 'eth-l1-beacon'
     ) {
-      console.log('latestBlockNum', slotNumber);
-      setLatestBlockNumber(slotNumber);
-      updateNodeLSB(slotNumber);
+      latestBlockNum = parseFloat(slotNumber);
     } else {
-      setLatestBlockNumber(0);
+      latestBlockNum = 0;
     }
 
-    // // TODO: we'll need to create a flexible way to get the latest block number for all types of nodes (not just Ethereum)
-    // const blockOrSlotNumber =
-    //   qLatestBlock?.data?.number || qLatestBlock?.data?.header?.message?.slot;
-    // const blockOrSlotIsString =
-    //   typeof qLatestBlock?.data?.number === 'string' ||
-    //   typeof qLatestBlock?.data?.header?.message?.slot === 'string';
-
-    // console.log(
-    //   'syncedBlock - qLatestBlock?.data?.number',
-    //   qLatestBlock?.data?.number
-    // );
-    // console.log(
-    //   'syncedBlock - qLatestBlock?.data?.header?.message?.slot',
-    //   qLatestBlock?.data?.header?.message?.slot
-    // );
-    // console.log('syncedBlock', selectedNode?.runtime?.usage?.syncedBlock);
-    // if (selectedNode && blockOrSlotNumber && blockOrSlotIsString) {
-    //   const updateNodeLSB = async (latestBlockNum: number) => {
-    //     await electron.updateNodeLastSyncedBlock(
-    //       selectedNode.id,
-    //       latestBlockNum
-    //     );
-    //   };
-    //   const latestBlockNum = hexToDecimal(blockOrSlotNumber);
-    //   updateNodeLSB(latestBlockNum);
-    //   setLatestBlockNumber(latestBlockNum);
-    // } else if (selectedNode) {
-    //   setLatestBlockNumber(selectedNode?.runtime?.usage?.syncedBlock || 0);
-    // } else {
-    //   setLatestBlockNumber(0);
-    // }
+    const syncedBlock =
+      latestBlockNum > savedSyncedBlock ? latestBlockNum : savedSyncedBlock;
+    setLatestBlockNumber(syncedBlock);
+    updateNodeLSB(syncedBlock);
   }, [qLatestBlock, selectedNode]);
 
   const onNodeAction = useCallback(
@@ -339,6 +305,7 @@ const NodeScreen = () => {
       return versionString;
     }
     console.error(`No version number found for ${name}`);
+    return '';
   };
 
   const clientName = spec.specId.replace('-beacon', '');

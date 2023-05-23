@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
-import Node, { NodeStatus } from 'common/node';
+import Node, { NodeStatus } from '../../../common/node';
 import { getSyncStatus } from '../../Generics/redesign/utils';
 import { useGetExecutionIsSyncingQuery } from '../../state/services';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 
-const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
+const NODE_SIDEBAR_STATUS_MAP: Record<string, SidebarNodeStatus> = {
   created: 'stopped',
   initializing: 'sync',
   [NodeStatus.checkingForUpdates]: 'updating',
   downloading: 'updating',
   downloaded: 'stopped',
   [NodeStatus.errorDownloading]: 'error',
+  updating: 'updating',
   extracting: 'updating',
   [NodeStatus.readyToStart]: 'stopped',
   starting: 'sync',
@@ -94,7 +95,6 @@ export const SidebarNodeItemWrapper = ({
   };
 
   const syncStatus = getSyncStatus(nodeStatus);
-  console.log('syncStatus', syncStatus);
   const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[syncStatus];
 
   return (

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { ThemeSetting } from 'main/state/settings';
-import { useGetSettingsQuery } from 'renderer/state/settingsService';
+import { useGetSettingsQuery } from '../../state/settingsService';
 import electron from '../../electronGlobal';
 import PreferencesWrapper from '../Preferences/PreferencesWrapper';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
