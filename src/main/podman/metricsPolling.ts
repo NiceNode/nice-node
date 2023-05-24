@@ -43,24 +43,20 @@ const updateAllNodeMetrics = async () => {
           );
 
           if (matchedContainerMetrics) {
-            if (
-              node.runtime.usage.memoryBytes === undefined &&
-              node.runtime.usage.cpuPercent === undefined &&
-              node.runtime.usage.diskGBs === undefined
-            ) {
-              node.runtime.usage.memoryBytes = [];
-              node.runtime.usage.cpuPercent = [];
-              node.runtime.usage.diskGBs = [];
-            }
+            node.runtime.usage.memoryBytes =
+              node.runtime.usage.memoryBytes || [];
+            node.runtime.usage.cpuPercent = node.runtime.usage.cpuPercent || [];
+            node.runtime.usage.diskGBs = node.runtime.usage.diskGBs || [];
+
             removeOldItems(node.runtime.usage.memoryBytes);
             removeOldItems(node.runtime.usage.cpuPercent);
             removeOldItems(node.runtime.usage.diskGBs);
 
-            node.runtime.usage.memoryBytes.unshift({
+            (node.runtime.usage.memoryBytes as MetricData[]).unshift({
               x: Date.now(), // timestamp
               y: matchedContainerMetrics.MemPerc, // percent
             });
-            node.runtime.usage.cpuPercent.unshift({
+            (node.runtime.usage.cpuPercent as MetricData[]).unshift({
               x: Date.now(), // timestamp
               y: matchedContainerMetrics.PercCPU, // percent
             });
@@ -71,7 +67,7 @@ const updateAllNodeMetrics = async () => {
             };
             // eslint-disable-next-line no-await-in-loop
             const diskGBs = (await getUsedDiskSpaceFunc()) as number;
-            node.runtime.usage.diskGBs.unshift({
+            (node.runtime.usage.diskGBs as MetricData[]).unshift({
               x: Date.now(), // timestamp
               y: parseFloat(diskGBs.toFixed(2)), // GBs
             });

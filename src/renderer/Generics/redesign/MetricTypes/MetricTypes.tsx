@@ -120,7 +120,7 @@ export const MetricTypes = ({
     switch (statsType) {
       case 'currentBlock':
         iconId = 'slots';
-        titleText = `${statsValue.toLocaleString()}`;
+        titleText = `${(statsValue || 0).toLocaleString()}`;
         labelText = `Last synced ${
           rpcTranslation === 'eth-l1-beacon' ? 'slot' : 'block'
         }`;

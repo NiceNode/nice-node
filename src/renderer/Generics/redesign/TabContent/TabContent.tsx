@@ -141,18 +141,18 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
   );
 };
 
-const areEqual = (prevProps: TabContentProps, nextProps: TabContentProps) => {
+const areEqual = (
+  prevProps: Readonly<TabContentProps>,
+  nextProps: Readonly<TabContentProps>
+): boolean => {
   // this prevents unnecessary rerenders
   if (nextProps.name !== prevProps.name) return false; // render when tab is changed
   if (nextProps.metricData === undefined) return true; // don't render when metricData doesn't exist for node yet (initial run)
   if (prevProps.metricData === undefined && nextProps.metricData !== undefined)
     // render when metricData is fetched for the node
     return false;
-  return (
-    prevProps.metricData &&
-    nextProps.metricData &&
-    prevProps.metricData.length === nextProps.metricData.length
-  ); // don't render when metricData length is the same (no new metricData)
+  if (!prevProps.metricData || !nextProps.metricData) return false;
+  return prevProps.metricData.length === nextProps.metricData.length; // don't render when metricData length is the same (no new metricData)
 };
 
 export default React.memo(TabContent, areEqual);

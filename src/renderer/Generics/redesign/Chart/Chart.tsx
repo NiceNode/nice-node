@@ -42,7 +42,7 @@ export const Chart = ({ tabId, metricData }: ChartProps) => {
 
   useEffect(() => {
     if (chartComponent.current) {
-      const { chart } = chartComponent.current;
+      const { chart } = chartComponent.current as { chart: Highcharts.Chart };
       chart.series[0].setData(
         metricData !== undefined
           ? JSON.parse(JSON.stringify(metricData))
@@ -198,9 +198,9 @@ export const Chart = ({ tabId, metricData }: ChartProps) => {
       style: {
         color: 'rgba(255, 255, 255, 1)',
       },
-      formatter() {
+      formatter(this: Highcharts.TooltipFormatterContextObject): string {
         // eslint-disable-next-line react/no-this-in-sfc
-        const yValue = this.y;
+        const yValue = this.y || 0;
         return getToolTipFormat(yValue, tabId);
       },
     },
