@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - feat/podman-runtime
+      - fix/build-mac-signing
 
 # asar is disabled for pm2 & electron build to work
 #   with asar disabled, hard links needs to be disabled
