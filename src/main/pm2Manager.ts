@@ -1,5 +1,4 @@
 import { promisify } from 'node:util';
-import { Proc, ProcessDescription } from 'pm2';
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
 
@@ -7,9 +6,19 @@ import Node from '../common/node';
 import logger from './logger';
 import { send } from './messenger';
 import { killChildProcess } from './processExit';
-import { isMac } from './platform';
 
-const pm2 = require('pm2');
+// const pm2 = require('pm2');
+// temp fix until pm2 is removed
+const pm2 = {
+  connect: () => {},
+  describe: () => {},
+  start: () => {},
+  stop: () => {},
+  delete: () => {},
+  list: () => {},
+  restart: () => {},
+  monit: () => {},
+};
 
 pm2.connect = promisify(pm2.connect);
 pm2.describe = promisify(pm2.describe);
@@ -22,20 +31,25 @@ pm2.restart = promisify(pm2.restart);
 pm2.monit = promisify(pm2.monit);
 
 export const deleteProcess = async (pmId: number) => {
-  return pm2.delete(pmId);
+  // tmp: return pm2.delete(pmId);
+  return pmId || pm2.delete();
 };
-export const getProcesses = async (): Promise<ProcessDescription[]> => {
+// tmp: export const getProcesses = async (): Promise<ProcessDescription[]> => {
+export const getProcesses = async (): Promise<void> => {
+  // tmp: return pm2.delete(pmId);
   return pm2.list();
 };
 
 export const getProcess = async (
   pmId: number
-): Promise<ProcessDescription | undefined> => {
-  const proc = await pm2.describe(pmId);
-  if (proc && proc[0]) {
-    return proc[0];
-  }
-  return undefined;
+  // tmp: ): Promise<ProcessDescription | undefined> => {
+): Promise<number | undefined> => {
+  const proc = pmId; // tmp: await pm2.describe(pmId);
+  return proc;
+  // if (proc && proc[0]) {
+  //   return proc[0];
+  // }
+  // return undefined;
 };
 
 let sendLogsToUIProc: ChildProcess;
@@ -123,23 +137,24 @@ export const sendLogsToUI = (node: Node) => {
  */
 export const initialize = async () => {
   logger.info('initialize pm2 connection');
-  try {
-    const isNoDaemonMode = true;
-    logger.info(`Starting pm2 in daemon mode? : ${!isNoDaemonMode}`);
-    const result = await pm2.connect(isNoDaemonMode);
-    logger.info(
-      `pm2Manager connected to the pm2 instance result: ${JSON.stringify(
-        result
-      )}`
-    );
-  } catch (err) {
-    logger.error('initialize pm2Manager error:', err);
-  }
+  // try {
+  //   const isNoDaemonMode = true;
+  //   logger.info(`Starting pm2 in daemon mode? : ${!isNoDaemonMode}`);
+  //   const result = await pm2.connect(isNoDaemonMode);
+  //   logger.info(
+  //     `pm2Manager connected to the pm2 instance result: ${JSON.stringify(
+  //       result
+  //     )}`
+  //   );
+  // } catch (err) {
+  //   logger.error('initialize pm2Manager error:', err);
+  // }
 };
-export const stopProcess = async (pm_id: number): Promise<Proc> => {
-  const stopResult = await pm2.stop(pm_id);
-  console.log('pm2Manager stopResult: ', stopResult);
-  return stopResult;
+export const stopProcess = async (pm_id: number): Promise<number> => {
+  return pm_id;
+  // const stopResult = await pm2.stop(pm_id);
+  // console.log('pm2Manager stopResult: ', stopResult);
+  // return stopResult;
 };
 
 // todo: already started, running, idk
@@ -151,40 +166,41 @@ export const startProccess = async (
   logger.info(
     `pm2Manager startProccess ${name} with ${script} and args ${args}`
   );
-  try {
-    let startResult;
-    if (isMac()) {
-      // pm2 seems to ignore args on mac, so include them in the script string
-      startResult = await pm2.start({
-        script: `${script}  ${args}`,
-        name,
-      });
-    } else {
-      startResult = await pm2.start({
-        script,
-        args,
-        name,
-      });
-    }
-    logger.info(`pm2Manager startResult: `);
+  return 0;
+  // try {
+  //   let startResult;
+  //   if (isMac()) {
+  //     // pm2 seems to ignore args on mac, so include them in the script string
+  //     startResult = await pm2.start({
+  //       script: `${script}  ${args}`,
+  //       name,
+  //     });
+  //   } else {
+  //     startResult = await pm2.start({
+  //       script,
+  //       args,
+  //       name,
+  //     });
+  //   }
+  //   logger.info(`pm2Manager startResult: `);
 
-    // todo: pm_id is undefined some times, can be fixed with another start
-    if (Array.isArray(startResult) && startResult[0]) {
-      logger.info(
-        `startProccess binary name and command ${name} and ${script} has pid ${startResult[0].pm_id}`
-      );
+  //   // todo: pm_id is undefined some times, can be fixed with another start
+  //   if (Array.isArray(startResult) && startResult[0]) {
+  //     logger.info(
+  //       `startProccess binary name and command ${name} and ${script} has pid ${startResult[0].pm_id}`
+  //     );
 
-      if (startResult[0].pm2_env?.pm_id !== undefined) {
-        return startResult[0].pm2_env?.pm_id;
-      }
-    }
-    const errorMessage = `Unable to get pid for recently started binary name and command ${name} and ${script}`;
-    logger.error(errorMessage);
-    throw new Error(errorMessage);
-  } catch (err: unknown) {
-    logger.error(err);
-    throw err;
-  }
+  //     if (startResult[0].pm2_env?.pm_id !== undefined) {
+  //       return startResult[0].pm2_env?.pm_id;
+  //     }
+  //   }
+  //   const errorMessage = `Unable to get pid for recently started binary name and command ${name} and ${script}`;
+  //   logger.error(errorMessage);
+  //   throw new Error(errorMessage);
+  // } catch (err: unknown) {
+  //   logger.error(err);
+  //   throw err;
+  // }
 
   // pm2Manager startResult:  [
   //   {
@@ -212,6 +228,6 @@ export const startProccess = async (
 };
 
 export const onExit = () => {
-  pm2.disconnect();
-  stopSendingLogsToUI();
+  // pm2.disconnect();
+  // stopSendingLogsToUI();
 };
