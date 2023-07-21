@@ -77,11 +77,11 @@
           "path": "/Applications"
         }
       ],
-      "window" : {
-        "width" : 640,
-        "height" : 432
+      "window": {
+        "width": 640,
+        "height": 432
       },
-      "background" : "background.png",
+      "background": "assets/background.png",
       "icon": "installer.icns",
       "title": "${productName} ${version} installer"
     },
@@ -238,10 +238,9 @@
     "css-minimizer-webpack-plugin": "^4.2.2",
     "detect-port": "^1.5.1",
     "electron": "^22.2.0",
-    "electron-builder": "^23.6.0",
+    "electron-builder": "^24.4.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-mock-ipc": "^0.3.12",
-    "electron-notarize": "^1.1.1",
     "electron-rebuild": "^3.2.5",
     "electronmon": "^2.0.2",
     "eslint": "^8.29.0",
