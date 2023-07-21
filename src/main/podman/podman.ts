@@ -14,6 +14,7 @@ import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
 import { getPodmanEnvWithPath } from './podman-env-path';
 import { getNiceNodeMachine } from './machine';
 import startPodman from './start';
+import { isLinux } from '../platform';
 
 let podmanWatchProcess: ChildProcess;
 
@@ -467,11 +468,15 @@ export const isPodmanInstalled = async () => {
 };
 
 /**
- * Returns true if the podman machine is running on Mac or Win
- * Returns true on Linux if podman is installed?
+ * Returns true if the podman machine is `running` on Mac or Win
+ * Returns true on Linux if podman is installed
  */
 export const isPodmanRunning = async () => {
-  // todo: add linux support
+  if (isLinux() && (await isPodmanInstalled())) {
+    return true;
+  }
+
+  // A virtual machine or "podman machine" is required for non-linux OS's
   const nnMachine = await getNiceNodeMachine();
   const bIsPodmanRunning = nnMachine?.Running === true;
   if (!bIsPodmanRunning) {

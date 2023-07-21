@@ -80,15 +80,18 @@ const Sidebar = ({
   //   }
   // });
 
+  const onClickBanner = () => {
+    if (podmanInstalled) {
+      onClickStartPodman();
+    } else {
+      onClickInstallPodman();
+    }
+  };
+
   const renderBanners = () => {
     // TODO: integrate this with code below
     if (podmanStopped || !podmanInstalled) {
-      return (
-        <Banner
-          podmanStopped
-          onClick={!podmanInstalled ? onClickInstallPodman : onClickStartPodman}
-        />
-      );
+      return <Banner podmanStopped onClick={onClickBanner} />;
     }
     const bannerProps = {
       updateAvailable,

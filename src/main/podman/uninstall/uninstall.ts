@@ -3,6 +3,7 @@ import * as platform from '../../platform';
 import { removeNiceNodeMachine } from '../machine';
 import uninstallOnMac from './uninstallOnMac';
 import uninstallOnWindows from './uninstallOnWindows';
+import uninstallOnLinux from './uninstallOnLinux';
 
 const uninstallPodman = async (): Promise<boolean | { error: string }> => {
   logger.info(`Starting podman uninstall...`);
@@ -15,6 +16,8 @@ const uninstallPodman = async (): Promise<boolean | { error: string }> => {
     result = await uninstallOnMac();
   } else if (platform.isWindows()) {
     result = await uninstallOnWindows();
+  } else if (platform.isLinux()) {
+    result = await uninstallOnLinux();
   } else {
     result = { error: 'Unable to uninstall Podman on this operating system.' };
   }

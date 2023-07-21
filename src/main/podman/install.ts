@@ -2,6 +2,7 @@ import logger from '../logger';
 import * as platform from '../platform';
 import installOnMac from './installOnMac';
 import installOnWindows from './installOnWindows';
+import installOnLinux from './installOnLinux';
 
 export const VERSION = '4.5.0';
 
@@ -14,6 +15,8 @@ const installPodman = async (): Promise<any> => {
     result = await installOnMac(VERSION);
   } else if (platform.isWindows()) {
     result = await installOnWindows(VERSION);
+  } else if (platform.isLinux()) {
+    result = await installOnLinux();
   } else {
     result = { error: 'Unable to install Podman on this operating system.' };
   }
