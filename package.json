@@ -43,7 +43,8 @@
   "build": {
     "productName": "NiceNode",
     "appId": "org.jgr.NiceNode",
-    "asar": false,
+    "asar": true,
+    "asarUnpack": "**\\*.{node,dll}",
     "files": [
       "dist",
       "node_modules",
