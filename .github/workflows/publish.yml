@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - feat/podman-runtime
+      - fix/build-mac-signing
 
 # asar is disabled for pm2 & electron build to work
 #   with asar disabled, hard links needs to be disabled
@@ -60,6 +60,8 @@ jobs:
           # These values are used for auto updates signing
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASS }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           WIN_CSC_LINK: ${{ secrets.WIN_CSC_BASE64 }}
