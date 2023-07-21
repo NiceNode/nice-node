@@ -29,36 +29,36 @@ export const RtkqSettingsService: any = createApi({
         return { data };
       },
     }),
-    getIsDockerInstalled: builder.query<boolean, null>({
+    getIsPodmanInstalled: builder.query<boolean, null>({
       queryFn: async () => {
         let data;
         try {
-          console.log('RtkqSettingsService isDockerInstalled() calling..');
-          data = await electron.getIsDockerInstalled();
+          console.log('RtkqSettingsService isPodmanInstalled() calling..');
+          data = await electron.getIsPodmanInstalled();
           console.log(
-            'RtkqSettingsService isDockerInstalled() returned ',
+            'RtkqSettingsService isPodmanInstalled() returned ',
             data
           );
         } catch (e) {
-          const error = { message: 'Unable to getIsDockerInstalled' };
+          const error = { message: 'Unable to getIsPodmanInstalled' };
           console.log(e);
           return { error };
         }
         return { data };
       },
     }),
-    getIsDockerRunning: builder.query<boolean, null>({
+    getIsPodmanRunning: builder.query<boolean, null>({
       queryFn: async () => {
         let data;
         try {
-          console.log('RtkqSettingsService getIsDockerRunning() calling..');
-          data = await electron.getIsDockerRunning();
+          console.log('RtkqSettingsService getIsPodmanRunning() calling..');
+          data = await electron.getIsPodmanRunning();
           console.log(
-            'RtkqSettingsService getIsDockerRunning() returned ',
+            'RtkqSettingsService getIsPodmanRunning() returned ',
             data
           );
         } catch (e) {
-          const error = { message: 'Unable to getIsDockerRunning' };
+          const error = { message: 'Unable to getIsPodmanRunning' };
           console.log(e);
           return { error };
         }
@@ -70,6 +70,6 @@ export const RtkqSettingsService: any = createApi({
 
 export const {
   useGetSettingsQuery,
-  useGetIsDockerInstalledQuery,
-  useGetIsDockerRunningQuery,
+  useGetIsPodmanInstalledQuery,
+  useGetIsPodmanRunningQuery,
 } = RtkqSettingsService;

@@ -16,7 +16,7 @@ const Template: ComponentStory<typeof NodeSettings> = (args) => (
 const configValuesMap: ConfigValuesMap = {
   dataDir:
     '/Users/johns/Library/Application Support/NiceNode/nodes/besu-1667947772',
-  hostAllowlist: 'localhost,host.docker.internal',
+  hostAllowlist: 'localhost,host.containers.internal',
   http: 'Enabled',
   httpCorsDomains: '"http://localhost"',
   webSockets: 'Disabled',

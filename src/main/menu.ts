@@ -6,10 +6,15 @@ import {
   MenuItemConstructorOptions,
   clipboard,
 } from 'electron';
-import { getSetHasSeenSplashscreen } from './state/settings';
+import {
+  getSetHasSeenSplashscreen,
+  getSetHasSeenAlphaModal,
+} from './state/settings';
 
 import { getDebugInfoString, getGithubIssueProblemURL } from './debug';
 import { checkForUpdates } from './updater';
+import uninstallPodman from './podman/uninstall/uninstall';
+import nuclearUninstall from './nuclearUninstall';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -186,6 +191,26 @@ export default class MenuBuilder {
             getSetHasSeenSplashscreen(false);
           },
         },
+        { type: 'separator' },
+        {
+          label: 'Show Alpha Modal',
+          click() {
+            getSetHasSeenAlphaModal(false);
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Uninstall podman',
+          click() {
+            uninstallPodman();
+          },
+        },
+        {
+          label: 'Nuclear uninstall (unistall podman and delete all NN data)',
+          click() {
+            nuclearUninstall();
+          },
+        },
       ],
     };
 
@@ -279,6 +304,18 @@ export default class MenuBuilder {
             label: 'Copy Configuration Details to Clipboard',
             click() {
               clipboard.writeText(getDebugInfoString());
+            },
+          },
+          {
+            label: 'Uninstall podman',
+            click() {
+              uninstallPodman();
+            },
+          },
+          {
+            label: 'Nuclear uninstall (unistall podman and delete all NN data)',
+            click() {
+              nuclearUninstall();
             },
           },
         ],

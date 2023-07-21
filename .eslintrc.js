@@ -13,6 +13,7 @@ module.exports = {
     '@typescript-eslint/lines-between-class-members': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
+    'no-plusplus': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

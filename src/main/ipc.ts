@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ipcMain } from 'electron';
+import { ipcMain, app } from 'electron';
 import getDebugInfo from './debug';
 import {
   getGethLogs,
@@ -12,6 +12,7 @@ import logger from './logger';
 import {
   checkSystemHardware,
   getMainProcessUsage,
+  updateNodeLastSyncedBlock,
   updateNodeUsedDiskSpace,
 } from './monitor';
 import {
@@ -27,8 +28,8 @@ import {
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import Node, { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
-import { isDockerInstalled, isDockerRunning } from './docker/docker';
-import installDocker from './docker/install';
+import { isPodmanInstalled, isPodmanRunning } from './podman/podman';
+import installPodman from './podman/install';
 // eslint-disable-next-line import/no-cycle
 import {
   openDialogForNodeDataDir,
@@ -37,6 +38,7 @@ import {
 } from './dialog';
 import { getNodeLibrary } from './state/nodeLibrary';
 import {
+  getSetHasSeenAlphaModal,
   getSetHasSeenSplashscreen,
   getSettings,
   setIsOpenOnStartup,
@@ -44,9 +46,10 @@ import {
   setLanguage,
   setThemeSetting,
   ThemeSetting,
+  setIsEventReportingEnabled,
 } from './state/settings';
 import { getSystemInfo } from './systemInfo';
-import startDocker from './docker/start';
+import startPodman from './podman/start';
 import { addEthereumNode } from './specialNodes/ethereumNode';
 import {
   addNotification,
@@ -54,12 +57,19 @@ import {
   removeNotifications,
   markAllAsRead,
 } from './state/notifications';
+import { getFailSystemRequirements } from './minSystemRequirement';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
   ipcMain.handle('updateNodeUsedDiskSpace', (_event, nodeId: NodeId) => {
     return updateNodeUsedDiskSpace(nodeId);
   });
+  ipcMain.handle(
+    'updateNodeLastSyncedBlock',
+    (_event, nodeId: NodeId, block: number) => {
+      return updateNodeLastSyncedBlock(nodeId, block);
+    }
+  );
   ipcMain.handle('getSystemFreeDiskSpace', () => {
     return getSystemFreeDiskSpace();
   });
@@ -79,6 +89,8 @@ export const initialize = () => {
   ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
   ipcMain.handle('getSystemInfo', getSystemInfo);
+  ipcMain.handle('getFailSystemRequirements', getFailSystemRequirements);
+  ipcMain.handle('closeApp', () => app.quit());
 
   // Multi-nodegetUserNodes
   ipcMain.handle('getNodes', getNodes);
@@ -149,15 +161,18 @@ export const initialize = () => {
   // Node library
   ipcMain.handle('getNodeLibrary', getNodeLibrary);
 
-  // Docker
-  ipcMain.handle('getIsDockerInstalled', isDockerInstalled);
-  ipcMain.handle('installDocker', installDocker);
-  ipcMain.handle('getIsDockerRunning', isDockerRunning);
-  ipcMain.handle('startDocker', startDocker);
+  // Podman
+  ipcMain.handle('getIsPodmanInstalled', isPodmanInstalled);
+  ipcMain.handle('installPodman', installPodman);
+  ipcMain.handle('getIsPodmanRunning', isPodmanRunning);
+  ipcMain.handle('startPodman', startPodman);
 
   // Settings
   ipcMain.handle('getSetHasSeenSplashscreen', (_event, hasSeen?: boolean) => {
     return getSetHasSeenSplashscreen(hasSeen);
+  });
+  ipcMain.handle('getSetHasSeenAlphaModal', (_event, hasSeen?: boolean) => {
+    return getSetHasSeenAlphaModal(hasSeen);
   });
   ipcMain.handle('getSettings', getSettings);
   ipcMain.handle('setLanguage', (_event, languageCode: string) => {
@@ -173,6 +188,12 @@ export const initialize = () => {
     'setIsNotificationsEnabled',
     (_event, isNotificationsEnabled: boolean) => {
       return setIsNotificationsEnabled(isNotificationsEnabled);
+    }
+  );
+  ipcMain.handle(
+    'setIsEventReportingEnabled',
+    (_event, isEventReportingEnabled: boolean) => {
+      return setIsEventReportingEnabled(isEventReportingEnabled);
     }
   );
 

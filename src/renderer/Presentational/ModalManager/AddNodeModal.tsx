@@ -1,11 +1,13 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
 import AddNodeStepperModal from '../AddNodeStepper/AddNodeStepperModal';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
-import { useGetIsDockerRunningQuery } from '../../state/settingsService';
+import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
+import { reportEvent } from '../../events/reportEvent';
 
 type Props = {
   modalOnClose: () => void;
@@ -15,12 +17,15 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] =
     useState<boolean>(false);
+  const [sIsPodmanRunning, setIsPodmanRunning] = useState<boolean>(false);
   const [step, setStep] = useState(0);
 
-  const qIsDockerRunning = useGetIsDockerRunningQuery(null, {
-    pollingInterval: 15000,
-  });
-  const isDockerRunning = qIsDockerRunning?.data;
+  useEffect(() => {
+    reportEvent('OpenAddNodeModal');
+  }, []);
+
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery();
+  const isPodmanRunning = qIsPodmanRunning?.data;
 
   const dispatch = useAppDispatch();
 
@@ -33,12 +38,13 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       modalTitle = 'Node Requirements';
       break;
     case 2:
-      modalTitle = 'Docker Installation';
+      modalTitle = 'Podman Installation';
       break;
     default:
   }
 
-  const startNode = (step === 1 || step === 2) && isDockerRunning;
+  const startNode =
+    (step === 1 || step === 2) && (isPodmanRunning || sIsPodmanRunning);
   const buttonSaveLabel = startNode ? 'Start node' : 'Continue';
   const buttonCancelLabel = step === 0 ? 'Cancel' : 'Back';
   const buttonSaveVariant = startNode ? 'icon-left' : 'text';
@@ -68,7 +74,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       ccNodeSpec,
       { storageLocation }
     );
-
+    reportEvent('AddNode');
     dispatch(updateSelectedNodeId(ecNode.id));
     await electron.startNode(ecNode.id);
     await electron.startNode(ccNode.id);
@@ -91,8 +97,13 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const onSave = () => {
     if (step === 0) {
       setStep(1);
-    } else if (step === 1 && !isDockerRunning) {
-      setStep(2);
+    } else if (step === 1) {
+      if (isPodmanRunning || sIsPodmanRunning) {
+        modalOnSaveConfig(undefined);
+        modalOnClose();
+      } else {
+        setStep(2);
+      }
     } else {
       modalOnSaveConfig(undefined);
       modalOnClose();
@@ -114,6 +125,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     >
       <AddNodeStepperModal
         step={step}
+        setIsPodmanRunning={setIsPodmanRunning}
         modal
         modalConfig={modalConfig}
         modalOnChangeConfig={(config, save) => {

@@ -217,6 +217,7 @@ export const [lightTheme, vars] = createTheme({
     contentHeaderTitle: common.color.black70,
     contentHeaderSubtitle: common.color.black50,
     filterBackground: common.color.white100,
+    progressBarBackground: common.color.purple500,
   },
 });
 
@@ -316,5 +317,6 @@ export const darkTheme = createTheme(vars, {
     contentHeaderTitle: common.color.white85,
     contentHeaderSubtitle: common.color.white50,
     filterBackground: common.color.osMac,
+    progressBarBackground: common.color.purple600,
   },
 });

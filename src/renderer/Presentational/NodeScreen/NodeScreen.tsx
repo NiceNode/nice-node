@@ -30,6 +30,8 @@ import {
   descriptionFont,
 } from './NodeScreen.css';
 
+let alphaModalRendered = false;
+
 const NodeScreen = () => {
   // const { t } = useTranslation();
   const selectedNode = useAppSelector(selectSelectedNode);
@@ -39,10 +41,11 @@ const NodeScreen = () => {
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
-  const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>();
+  const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
+  const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
-  const qExeuctionIsSyncing = useGetExecutionIsSyncingQuery(
+  const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     selectedNode?.spec.rpcTranslation,
     {
       pollingInterval,
@@ -85,18 +88,18 @@ const NodeScreen = () => {
       setSyncPercent('');
       setIsSyncing(undefined);
       setPeers(undefined);
-      setLatestBlockNumber(undefined);
+      setLatestBlockNumber(0);
     }
   }, [sIsAvailableForPolling]);
 
   useEffect(() => {
-    console.log('qExeuctionIsSyncing: ', qExeuctionIsSyncing);
-    if (qExeuctionIsSyncing.isError) {
+    console.log('qExecutionIsSyncing: ', qExecutionIsSyncing);
+    if (qExecutionIsSyncing.isError) {
       setSyncPercent('');
       setIsSyncing(undefined);
       return;
     }
-    const syncingData = qExeuctionIsSyncing.data;
+    const syncingData = qExecutionIsSyncing.data;
     if (typeof syncingData === 'object') {
       setSyncPercent(syncingData.syncPercent);
       setIsSyncing(syncingData.isSyncing);
@@ -110,9 +113,10 @@ const NodeScreen = () => {
       setSyncPercent('');
       setIsSyncing(undefined);
     }
-  }, [qExeuctionIsSyncing]);
+  }, [qExecutionIsSyncing]);
 
   useEffect(() => {
+    console.log('qExecutionPeers: ', qExecutionPeers.data);
     if (qExecutionPeers.isError) {
       setPeers(undefined);
       return;
@@ -127,20 +131,45 @@ const NodeScreen = () => {
   }, [qExecutionPeers]);
 
   useEffect(() => {
+    const savedSyncedBlock = selectedNode?.runtime?.usage?.syncedBlock || 0;
     if (qLatestBlock.isError) {
-      setLatestBlockNumber(undefined);
+      setLatestBlockNumber(savedSyncedBlock);
       return;
     }
+
+    const updateNodeLSB = async (latestBlockNum: number) => {
+      if (!selectedNode) {
+        return;
+      }
+      await electron.updateNodeLastSyncedBlock(selectedNode.id, latestBlockNum);
+    };
+
+    const blockNumber = qLatestBlock?.data?.number;
+    const slotNumber = qLatestBlock?.data?.header?.message?.slot;
+    const rpcTranslation = selectedNode?.spec?.rpcTranslation;
+
+    let latestBlockNum;
     if (
-      qLatestBlock?.data?.number &&
-      typeof qLatestBlock.data.number === 'string'
+      blockNumber &&
+      typeof blockNumber === 'string' &&
+      rpcTranslation === 'eth-l1'
     ) {
-      const latestBlockNum = hexToDecimal(qLatestBlock.data.number);
-      setLatestBlockNumber(latestBlockNum);
+      latestBlockNum = hexToDecimal(blockNumber);
+    } else if (
+      slotNumber &&
+      typeof slotNumber === 'string' &&
+      rpcTranslation === 'eth-l1-beacon'
+    ) {
+      latestBlockNum = parseFloat(slotNumber);
     } else {
-      setLatestBlockNumber(undefined);
+      latestBlockNum = 0;
     }
-  }, [qLatestBlock]);
+
+    const syncedBlock =
+      latestBlockNum > savedSyncedBlock ? latestBlockNum : savedSyncedBlock;
+    setLatestBlockNumber(syncedBlock);
+    updateNodeLSB(syncedBlock);
+  }, [qLatestBlock, selectedNode]);
 
   const onNodeAction = useCallback(
     (action: NodeAction) => {
@@ -159,6 +188,14 @@ const NodeScreen = () => {
     },
     [selectedNode]
   );
+
+  useEffect(() => {
+    const setAlphaModal = async () => {
+      const hasSeenAlpha = await electron.getSetHasSeenAlphaModal();
+      setHasSeenAlphaModal(hasSeenAlpha || false);
+    };
+    setAlphaModal();
+  }, []);
   // useEffect(() => {
   //   qNodeInfo.refetch();
   // }, [selectedNode]);
@@ -173,6 +210,17 @@ const NodeScreen = () => {
   //   },
   // });
   const dispatch = useAppDispatch();
+
+  if (sHasSeenAlphaModal === false && !alphaModalRendered) {
+    dispatch(
+      setModalState({
+        isModalOpen: true,
+        screen: { route: 'alphaBuild', type: 'info' },
+      })
+    );
+    alphaModalRendered = true;
+  }
+
   if (!selectedNode) {
     // if there is no node selected, prompt user to create a new node
     return (
@@ -207,12 +255,70 @@ const NodeScreen = () => {
   // todo: get node type, single or multi-service
   // parse node details from selectedNode => SingleNodeContent
   // todo: add stop/start ability?
+
+  // TODO: make this more flexible for other client specs
+  const formatSpec = (info: string | undefined) => {
+    if (!info) {
+      return '';
+    }
+    if (info.includes('BeaconNode')) {
+      return 'Consensus Client — Ethereum Mainnet';
+    }
+    if (info.includes('Execution')) {
+      return 'Execution Client — Ethereum Mainnet';
+    }
+    return info;
+  };
+
+  const formatVersion = (version: string | undefined, name: string) => {
+    if (!version) {
+      return '';
+    }
+    const capitalize = (s: string) =>
+      (s && s[0].toUpperCase() + s.slice(1)) || '';
+
+    let regex;
+    switch (name) {
+      case 'geth':
+        regex = /Geth\/v(\d+\.\d+\.\d+)/;
+        break;
+      case 'erigon':
+        regex = /(\d+\.\d+\.\d+)-dev/;
+        break;
+      case 'nethermind':
+      case 'lighthouse':
+        // eslint-disable-next-line no-useless-escape
+        regex = new RegExp(`${capitalize(name)}\/v(\\d+\\.\\d+\\.\\d+)`);
+        break;
+      case 'lodestar':
+        regex = /Lodestar\/v(\d+\.\d+\.\d+)/;
+        break;
+      default:
+        console.error(`Invalid software name: ${name}`);
+        return '';
+    }
+
+    const match = version.match(regex);
+
+    if (match) {
+      const versionString = `v${match[1]}`;
+      return versionString;
+    }
+    console.error(`No version number found for ${name}`);
+    return '';
+  };
+
+  const clientName = spec.specId.replace('-beacon', '');
+  const nodeVersionData =
+    typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
+
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
-    name: spec.specId.replace('-beacon', ''),
-    type: 'client',
-    version: qNodeVersion?.currentData,
-    info: spec.category,
+    name: clientName,
+    screenType: 'client',
+    rpcTranslation: spec.rpcTranslation,
+    version: formatVersion(nodeVersionData, clientName),
+    info: formatSpec(spec.category),
     status: {
       stopped: status === 'stopped',
       error: status.includes('error'),

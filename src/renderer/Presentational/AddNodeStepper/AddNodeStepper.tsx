@@ -8,7 +8,7 @@ import Stepper from '../../Generics/redesign/Stepper/Stepper';
 import AddEthereumNode, {
   AddEthereumNodeValues,
 } from '../AddEthereumNode/AddEthereumNode';
-import DockerInstallation from '../DockerInstallation/DockerInstallation';
+import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import electron from '../../electronGlobal';
 // import { NodeSpecification } from '../../../common/nodeSpec';
@@ -19,6 +19,7 @@ import { mergeSystemRequirements } from './mergeNodeRequirements';
 import { updateSelectedNodeId } from '../../state/node';
 import { useAppDispatch } from '../../state/hooks';
 import { NodeLibrary } from '../../../main/state/nodeLibrary';
+import { reportEvent } from '../../events/reportEvent';
 // import { CheckStorageDetails } from '../../../main/files';
 
 import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
@@ -35,6 +36,7 @@ const TOTAL_STEPS = 3;
 const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const dispatch = useAppDispatch();
   const [sStep, setStep] = useState<number>(0);
+  const [sDisabledSaveButton, setDisabledSaveButton] = useState<boolean>(true);
   // const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
   //   NodeSpecification[]
   // >([]);
@@ -79,8 +81,12 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     fetchNodeLibrary();
   }, []);
 
-  const onChangeDockerInstall = useCallback((newValue: string) => {
-    console.log('onChangeDockerInstall newValue ', newValue);
+  const onChangePodmanInstall = useCallback((newValue: string) => {
+    console.log('onChangePodmanInstall newValue ', newValue);
+    setDisabledSaveButton(false);
+    if (newValue === 'done') {
+      setDisabledSaveButton(false);
+    }
   }, []);
 
   const onChangeAddEthereumNode = useCallback(
@@ -154,6 +160,8 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       ccNodeSpec,
       { storageLocation: sNodeStorageLocation }
     );
+    reportEvent('AddNode');
+
     // const ecNode = await electron.addNode(ecNodeSpec, sNodeStorageLocation);
     console.log('addNode returned node: ', ecNode);
     // const ccNode = await electron.addNode(ccNodeSpec, sNodeStorageLocation);
@@ -165,7 +173,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     console.log('startCcResult result: ', startCcResult);
 
     // close?
-
     onChange('done');
     setStep(0);
   };
@@ -177,7 +184,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       if (sStep + 1 >= TOTAL_STEPS) {
         // done
         onChange('done');
-        // if DockerInstallDone, add nodes, close modal (loading?)
+        // if PodmanInstallDone, add nodes, close modal (loading?)
         addNodes();
       } else {
         setStep(sStep + 1);
@@ -217,7 +224,12 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         stepImage = step2;
         break;
       case 2:
-        stepScreen = <DockerInstallation onChange={onChangeDockerInstall} />;
+        stepScreen = (
+          <PodmanInstallation
+            onChange={onChangePodmanInstall}
+            disableSaveButton={setDisabledSaveButton}
+          />
+        );
         stepImage = step3;
         break;
       default:
@@ -243,12 +255,16 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
           {getStepScreen(1)}
         </div>
 
-        {/* Step 2 - If Docker is not installed */}
+        {/* Step 2 - If Podman is not installed */}
         <div style={{ display: sStep === 2 ? '' : 'none', height: '100%' }}>
           {getStepScreen(2)}
         </div>
       </div>
-      <Stepper step={sStep} onChange={onStep} />
+      <Stepper
+        step={sStep}
+        onChange={onStep}
+        disabledSaveButton={sDisabledSaveButton}
+      />
     </div>
   );
 };

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import ExternalLink from '../Link/ExternalLink';
@@ -45,27 +46,25 @@ const LabelSettingsSection = ({
         </div>
       )}
       {items &&
-        items.map((item) => (
-          <>
-            <div className={lineContainer}>
-              <div className={labelAndDescriptionContainer}>
-                <div className={lineKeyText}>{item.label}</div>
-                <Caption>
-                  {item.description}{' '}
-                  {item.learnMoreLink && (
-                    <ExternalLink
-                      url={item.learnMoreLink}
-                      text={t('LearnMore')}
-                      inline
-                      hideIcon
-                    />
-                  )}
-                </Caption>
-              </div>
-
-              <div className={lineValueText}>{item.value}</div>
+        items.map((item, index) => (
+          <div className={lineContainer} key={index}>
+            <div className={labelAndDescriptionContainer}>
+              <div className={lineKeyText}>{item.label}</div>
+              <Caption>
+                {item.description}{' '}
+                {item.learnMoreLink && (
+                  <ExternalLink
+                    url={item.learnMoreLink}
+                    text={t('LearnMore')}
+                    inline
+                    hideIcon
+                  />
+                )}
+              </Caption>
             </div>
-          </>
+
+            <div className={lineValueText}>{item.value}</div>
+          </div>
         ))}
     </div>
   );

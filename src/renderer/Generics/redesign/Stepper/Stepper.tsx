@@ -8,10 +8,12 @@ export interface StepperProps {
    * When a step changes ('previous' or 'next')
    */
   onChange: (change: 'next' | 'previous') => void;
+  disabledSaveButton?: boolean;
 }
 
-const Stepper = ({ onChange, step }: StepperProps) => {
+const Stepper = ({ onChange, step, disabledSaveButton }: StepperProps) => {
   const { t } = useTranslation('genericComponents');
+  const buttonDisabled = step === 2 && disabledSaveButton;
 
   return (
     <div className={bottomBar}>
@@ -24,6 +26,7 @@ const Stepper = ({ onChange, step }: StepperProps) => {
         <Button
           label={t('NextStep')}
           type="primary"
+          disabled={buttonDisabled}
           onClick={() => onChange('next')}
         />
       </div>

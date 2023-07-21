@@ -68,6 +68,7 @@ export const openDialogForNodeDataDir = () => {};
 export const openDialogForStorageLocation = () => {};
 export const getNodesDefaultStorageLocation = () => '/user/storage/nodes/';
 export const updateNodeUsedDiskSpace = () => {};
+export const updateNodeLastSyncedBlock = () => {};
 export const deleteNodeStorage = () => true;
 export const sendNodeLogs = () => {};
 export const stopSendingNodeLogs = () => {};
@@ -86,8 +87,9 @@ export const getSettings = () => {
   };
 };
 export const getSetHasSeenSplashscreen = () => true;
-export const getIsDockerInstalled = () => true;
-export const getIsDockerRunning = () => true;
+export const getSetHasSeenAlphaModal = () => true;
+export const getIsPodmanInstalled = () => true;
+export const getIsPodmanRunning = () => true;
 
 export const getSystemInfo = () => {};
 

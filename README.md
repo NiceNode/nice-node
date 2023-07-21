@@ -15,8 +15,6 @@ For the latest information, visit https://nicenode.xyz
 
 [![Test](https://github.com/jgresham/nice-node/actions/workflows/test.yml/badge.svg)](https://github.com/jgresham/nice-node/actions/workflows/test.yml)
 
-
-
 ## Install
 
 Clone the repo and install dependencies:
@@ -32,6 +30,15 @@ Start the app in the `dev` environment:
 
 ```bash
 npm start
+```
+
+To set env vars locally, create a `.env` file at the top level with:
+
+```
+SENTRY_DSN=<...>
+FATHOM_SITE_ID=<...>
+FATHOM_SITE_ENV=<...>
+NICENODE_ENV=development
 ```
 
 ## Packaging for Production

@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "2.4.0-alpha",
+  "version": "3.5.0-alpha",
   "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./src/main/main.ts",
@@ -67,16 +67,21 @@
     "dmg": {
       "contents": [
         {
-          "x": 130,
-          "y": 220
+          "x": 180,
+          "y": 195
         },
         {
-          "x": 410,
-          "y": 220,
+          "x": 462,
+          "y": 195,
           "type": "link",
           "path": "/Applications"
         }
       ],
+      "window" : {
+        "width" : 640,
+        "height" : 432
+      },
+      "background" : "background.png",
       "icon": "installer.icns",
       "title": "${productName} ${version} installer"
     },
@@ -207,6 +212,7 @@
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "@types/dockerode": "^3.3.15",
     "@types/jest": "^29.2.4",
     "@types/node": "18.11.18",
     "@types/react": "^18.0.26",
@@ -281,8 +287,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
-    "@sentry/electron": "^4.1.2",
-    "@sentry/integrations": "^7.23.0",
+    "@sentry/electron": "^4.3.0",
     "@vanilla-extract/css": "^1.9.3",
     "@vscode/sudo-prompt": "^9.3.1",
     "await-sleep": "0.0.1",
@@ -293,6 +298,7 @@
     "electron-debug": "^3.2.0",
     "electron-store": "^8.1.0",
     "electron-updater": "^5.3.0",
+    "fathom-client": "^3.5.0",
     "i18next": "^21.10.0",
     "i18next-browser-languagedetector": "^7.0.1",
     "iconv-lite": "^0.6.3",

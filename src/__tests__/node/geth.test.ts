@@ -12,6 +12,14 @@ import gethv1 from '../../common/NodeSpecs/geth/geth-v1.0.0.json';
 import Node, { createNode, NodeStatus } from '../../common/node';
 import { NodeSpecification } from '../../common/nodeSpec';
 
+jest.mock('@sentry/electron/main', () => {
+  return {
+    init: () => {},
+    configureScope: () => {},
+    ElectronMainOptions: {},
+  };
+});
+
 jest.mock('electron', () => {
   return {
     app: {

@@ -21,6 +21,9 @@ import electron from '../../electronGlobal';
 // import { NodeSpecification } from '../../../common/nodeSpec';
 import FolderInput from '../../Generics/redesign/Input/FolderInput';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
+import { captionText } from '../PodmanInstallation/podmanInstallation.css';
+import { useAppDispatch } from '../../state/hooks';
+import { setModalState } from '../../state/modal';
 
 const ecOptions = [
   {
@@ -97,6 +100,8 @@ const ccOptions = [
   },
 ];
 
+let alphaModalRendered = false;
+
 export type AddEthereumNodeValues = {
   executionClient?: SelectOption;
   consensusClient?: SelectOption;
@@ -147,9 +152,14 @@ AddEthereumNodeProps) => {
     sNodeStorageLocationFreeStorageGBs,
     setNodeStorageLocationFreeStorageGBs,
   ] = useState<number>();
+  const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
+      const hasSeenAlpha = await electron.getSetHasSeenAlphaModal();
+      setHasSeenAlphaModal(hasSeenAlpha || false);
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
       const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
@@ -226,6 +236,16 @@ AddEthereumNodeProps) => {
     onChange,
   ]);
 
+  if (sHasSeenAlphaModal === false && !alphaModalRendered) {
+    dispatch(
+      setModalState({
+        isModalOpen: true,
+        screen: { route: 'alphaBuild', type: 'info' },
+      })
+    );
+    alphaModalRendered = true;
+  }
+
   return (
     <div className={container}>
       {!modalOnChangeConfig && (
@@ -292,7 +312,11 @@ AddEthereumNodeProps) => {
       )} */}
       <HorizontalLine />
       <p className={sectionFont}>{tGeneric('DataLocation')}</p>
+      <p
+        className={captionText}
+      >{`Changing location only supported on Mac and only locations under /Users/<current-user>/ or /Volumes/`}</p>
       <FolderInput
+        // disabled
         placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
         freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
         onClickChange={async () => {
