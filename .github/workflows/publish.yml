@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - fix/build-mac-signing
+      - fix/asar-true
 
 jobs:
   publish:
