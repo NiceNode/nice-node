@@ -50,7 +50,7 @@
       "node_modules",
       "package.json"
     ],
-    "afterPack": ".erb/scripts/notarize.js",
+    "afterSign": ".erb/scripts/notarize.js",
     "mac": {
       "target": {
         "target": "default",
@@ -63,8 +63,7 @@
       "hardenedRuntime": true,
       "entitlements": "assets/entitlements.mac.plist",
       "entitlementsInherit": "assets/entitlements.mac.plist",
-      "gatekeeperAssess": false,
-      "notarize": false
+      "gatekeeperAssess": false
     },
     "dmg": {
       "contents": [
@@ -241,7 +240,7 @@
     "css-minimizer-webpack-plugin": "^4.2.2",
     "detect-port": "^1.5.1",
     "electron": "^22.2.0",
-    "electron-builder": "^24.4.0",
+    "electron-builder": "^24.6.1",
     "electron-devtools-installer": "^3.2.0",
     "electron-mock-ipc": "^0.3.12",
     "electronmon": "^2.0.2",

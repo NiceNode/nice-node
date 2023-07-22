@@ -5,7 +5,7 @@ import { createWriteStream } from 'fs';
 import { access, chmod } from 'fs/promises';
 import sleep from 'await-sleep';
 
-import { ProcessDescription } from 'pm2';
+// import { ProcessDescription } from 'pm2';
 import { parseFileNameFromPath } from './util/parseFileNameFromPath';
 import * as platform from './platform';
 import * as arch from './arch';
@@ -341,14 +341,15 @@ export const stopBinary = async (node: Node) => {
     try {
       const proc = await getProcess(pid);
       if (proc) {
-        const nodeStatus = getBinaryStatus(proc);
-        const proccessUsage = proc.monit;
-        if (proccessUsage) {
-          node.runtime.usage.memoryBytes = proccessUsage.memory ?? undefined;
-          node.runtime.usage.cpuPercent = proccessUsage.cpu ?? undefined;
-        }
-        node.status = nodeStatus;
-        nodeStore.updateNode(node);
+        console.log(proc);
+        // const nodeStatus = getBinaryStatus(proc);
+        // const proccessUsage = proc.monit;
+        // if (proccessUsage) {
+        //   node.runtime.usage.memoryBytes = proccessUsage.memory ?? undefined;
+        //   node.runtime.usage.cpuPercent = proccessUsage.cpu ?? undefined;
+        // }
+        // node.status = nodeStatus;
+        // nodeStore.updateNode(node);
       } else {
         // todo: fix: this happens on computer restart
         logger.error(
@@ -401,16 +402,17 @@ const watchBinaryProcesses = async () => {
           // eslint-disable-next-line no-await-in-loop
           const proc = await getProcess(pid);
           if (proc) {
-            const nodeStatus = getBinaryStatus(proc);
-            const proccessUsage = proc.monit;
-            if (proccessUsage) {
-              node.runtime.usage.memoryBytes =
-                proccessUsage.memory ?? undefined;
-              node.runtime.usage.cpuPercent = proccessUsage.cpu ?? undefined;
-            }
-            // logger.info(`NodeStatus for ${node.spec.specId} is ${nodeStatus}`);
-            node.status = nodeStatus;
-            nodeStore.updateNode(node);
+            console.log(proc);
+            // const nodeStatus = getBinaryStatus(proc);
+            // const proccessUsage = proc.monit;
+            // if (proccessUsage) {
+            //   node.runtime.usage.memoryBytes =
+            //     proccessUsage.memory ?? undefined;
+            //   node.runtime.usage.cpuPercent = proccessUsage.cpu ?? undefined;
+            // }
+            // // logger.info(`NodeStatus for ${node.spec.specId} is ${nodeStatus}`);
+            // node.status = nodeStatus;
+            // nodeStore.updateNode(node);
           } else {
             // todo: fix: this happens on computer restart
             logger.error(

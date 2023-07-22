@@ -110,7 +110,6 @@ Primary.args = {
       v8: '9.6.180.23-electron.0',
       npm: '8.18.0',
       yarn: '',
-      pm2: '5.2.0',
       gulp: '',
       grunt: '',
       git: '2.37.0',
