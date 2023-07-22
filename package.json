@@ -49,6 +49,7 @@
       "node_modules",
       "package.json"
     ],
+    "afterSign": ".erb/scripts/notarize.js",
     "mac": {
       "target": {
         "target": "default",
@@ -61,8 +62,7 @@
       "hardenedRuntime": true,
       "entitlements": "assets/entitlements.mac.plist",
       "entitlementsInherit": "assets/entitlements.mac.plist",
-      "gatekeeperAssess": false,
-      "notarize": false
+      "gatekeeperAssess": false
     },
     "dmg": {
       "contents": [
