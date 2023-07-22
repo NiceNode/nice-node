@@ -27,6 +27,9 @@ exports.default = async function notarizeMacos(context) {
   }
 
   const appName = context.packager.appInfo.productFilename;
+  console.info(
+    'Notarizing for macOS build. Calling @electron/notarize.notarize()'
+  );
 
   await notarize({
     tool: 'notarytool',
