@@ -49,7 +49,6 @@
       "node_modules",
       "package.json"
     ],
-    "afterPack": ".erb/scripts/notarize.js",
     "mac": {
       "target": {
         "target": "default",
