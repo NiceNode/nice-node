@@ -301,7 +301,7 @@ export const initialize = async () => {
           // eslint-disable-next-line no-await-in-loop
           const proc = await getProcess(pid);
           if (proc) {
-            const nodeStatus = getBinaryStatus(proc);
+            const nodeStatus = getBinaryStatus();
             logger.info(
               `NodeStatus for ${binaryNode.spec.specId} is ${nodeStatus}`
             );
