@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "3.5.0-alpha",
+  "version": "3.5.2-alpha",
   "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./src/main/main.ts",
@@ -43,7 +43,8 @@
   "build": {
     "productName": "NiceNode",
     "appId": "org.jgr.NiceNode",
-    "asar": false,
+    "asar": true,
+    "asarUnpack": "**\\*.{node,dll}",
     "files": [
       "dist",
       "node_modules",
@@ -239,7 +240,7 @@
     "css-minimizer-webpack-plugin": "^4.2.2",
     "detect-port": "^1.5.1",
     "electron": "^22.2.0",
-    "electron-builder": "^24.6.1",
+    "electron-builder": "^24.6.3",
     "electron-devtools-installer": "^3.2.0",
     "electron-mock-ipc": "^0.3.12",
     "electronmon": "^2.0.2",
@@ -303,7 +304,6 @@
     "iconv-lite": "^0.6.3",
     "moment": "^2.29.4",
     "pidusage": "^3.0.2",
-    "pm2": "^5.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.0.0",
