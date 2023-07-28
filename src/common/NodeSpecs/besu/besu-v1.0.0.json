@@ -18,7 +18,7 @@
       },
       "docker": {
         "containerVolumePath": "/var/lib/besu",
-        "raw": "-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546 -p 8551:8551",
+        "raw": "-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546 -p 8551:8551 --user 0",
         "forcedRawNodeInput": "--data-path=\"/var/lib/besu\" --engine-jwt-secret=\"/var/lib/besu/jwtsecret\""
       }
     }
