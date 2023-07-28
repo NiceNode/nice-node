@@ -308,6 +308,9 @@ const NodeScreen = () => {
       case 'geth':
         regex = /Geth\/v(\d+\.\d+\.\d+)/;
         break;
+      case 'besu':
+        regex = /besu\/v(\d+\.\d+\.\d+)/;
+        break;
       case 'erigon':
         regex = /(\d+\.\d+\.\d+)-dev/;
         break;
@@ -319,9 +322,18 @@ const NodeScreen = () => {
       case 'lodestar':
         regex = /Lodestar\/v(\d+\.\d+\.\d+)/;
         break;
+      case 'prysm':
+        regex = /prysm\/v(\d+\.\d+\.\d+)/;
+        break;
+      case 'teku':
+        regex = /teku\/v(\d+\.\d+\.\d+)/;
+        break;
+      case 'nimbus':
+        regex = /Nimbus\/v(\d+\.\d+\.\d+)/;
+        break;
       default:
         console.error(`Invalid software name: ${name}`);
-        return '';
+        return version; // At least, return the unformatted version string
     }
 
     const match = version.match(regex);
