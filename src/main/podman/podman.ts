@@ -413,7 +413,7 @@ export const createRunCommand = (node: Node): string => {
   nodeInput += ` ${cliConfigInput}`;
 
   // -q quiets podman logs (pulling new image logs) so we can parse the containerId
-  const podmanCommand = `run -q -d --name ${specId} ${finalPodmanInput} ${imageName} ${nodeInput}`;
+  const podmanCommand = `run -q -d --restart on-failure:3 --name ${specId} ${finalPodmanInput} ${imageName} ${nodeInput}`;
   logger.info(`podman run command ${podmanCommand}`);
   return podmanCommand;
 };
