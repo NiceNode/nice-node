@@ -50,6 +50,15 @@ const ecOptions = [
     title: 'Geth',
     info: 'Execution Client',
   },
+  {
+    iconId: 'reth',
+    value: 'reth',
+    label: 'Reth',
+    title: 'Reth',
+    info: 'Execution Client',
+    minority: true,
+    beta: true,
+  },
   // {
   //   iconId: 'erigon',
   //   value: 'erigon',

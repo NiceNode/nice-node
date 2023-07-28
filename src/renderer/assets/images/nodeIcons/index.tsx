@@ -7,6 +7,7 @@ const geth = require('./Logo-Geth.png');
 const erigon = require('./Logo-Erigon.png');
 const besu = require('./Logo-Besu.png');
 const nethermind = require('./Logo-Nethermind.png');
+const reth = require('./Logo-Reth.png');
 
 // Consensus
 const prysm = require('./Logo-Prysm.png');
@@ -29,6 +30,7 @@ export interface NodeIcons {
   erigon?: string;
   besu?: string;
   nethermind?: string;
+  reth?: string;
   prysm?: string;
   lighthouse?: string;
   teku?: string;
@@ -48,6 +50,7 @@ export const NODE_ICONS: NodeIcons = {
   erigon,
   besu,
   nethermind,
+  reth,
   prysm,
   lighthouse,
   teku,
@@ -68,6 +71,7 @@ export const NODE_COLORS: NodeIcons = {
   erigon: white,
   besu: white,
   nethermind: white,
+  reth: white,
   prysm: white,
   lighthouse: white,
   teku: white,

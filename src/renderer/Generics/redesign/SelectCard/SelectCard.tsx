@@ -36,6 +36,10 @@ export interface SelectCardProps {
    */
   minority?: boolean;
   /**
+   * Is this a beta client?
+   */
+  beta?: boolean;
+  /**
    * Optional click handler
    */
   onClick?: () => void;
@@ -50,6 +54,7 @@ const SelectCard = ({
   info,
   iconId,
   minority = false,
+  beta = false,
   isSelected = false,
 }: SelectCardProps) => {
   const { t } = useTranslation('genericComponents');
@@ -84,6 +89,11 @@ const SelectCard = ({
           <div className={titleStyle}>{title}</div>
           <div className={descriptionStyle}>{info}</div>
         </div>
+        {beta && (
+          <div className={tagStyle}>
+            <Label bold={false} type="pink2" label={t('Beta')} />{' '}
+          </div>
+        )}
         {minority && (
           <div className={tagStyle}>
             <Label bold={false} type="pink2" label={t('MinorityClient')} />{' '}

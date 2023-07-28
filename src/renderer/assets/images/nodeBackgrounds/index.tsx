@@ -3,6 +3,7 @@ const geth = require('./Geth.png');
 const erigon = require('./Erigon.png');
 const besu = require('./Besu.png');
 const nethermind = require('./Nethermind.png');
+const reth = require('./Reth.png');
 
 // Consensus
 const prysm = require('./Prysm.png');
@@ -16,6 +17,7 @@ export interface NodeBackgrounds {
   erigon?: string;
   besu?: string;
   nethermind?: string;
+  reth?: string;
   prysm?: string;
   lighthouse?: string;
   teku?: string;
@@ -29,6 +31,7 @@ export const NODE_BACKGROUNDS: NodeBackgrounds = {
   erigon,
   besu,
   nethermind,
+  reth,
   prysm,
   lighthouse,
   teku,

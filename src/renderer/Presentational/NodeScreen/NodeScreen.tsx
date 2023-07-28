@@ -282,6 +282,9 @@ const NodeScreen = () => {
       case 'geth':
         regex = /Geth\/v(\d+\.\d+\.\d+)/;
         break;
+      // case 'reth':
+      //   regex = /Reth\/v(\d+\.\d+\.\d+)/;
+      //   break;
       case 'erigon':
         regex = /(\d+\.\d+\.\d+)-dev/;
         break;

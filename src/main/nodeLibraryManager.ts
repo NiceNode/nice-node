@@ -1,6 +1,7 @@
 import besuv1 from '../common/NodeSpecs/besu/besu-v1.0.0.json';
 import nethermindv1 from '../common/NodeSpecs/nethermind/nethermind-v1.0.0.json';
 import gethv1 from '../common/NodeSpecs/geth/geth-v1.0.0.json';
+import rethv1 from '../common/NodeSpecs/reth/reth-v1.0.0.json';
 
 import lodestarv1 from '../common/NodeSpecs/lodestar/lodestar-v1.0.0.json';
 import nimbusv1 from '../common/NodeSpecs/nimbus/nimbus-v1.0.0.json';
@@ -23,6 +24,7 @@ export const initialize = async () => {
     besuv1,
     nethermindv1,
     gethv1,
+    rethv1,
     lodestarv1,
     nimbusv1,
     tekuv1,
