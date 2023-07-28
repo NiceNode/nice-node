@@ -9,6 +9,7 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
+        "httpPort": "5052",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "http://host.containers.internal:8551",
@@ -16,8 +17,8 @@
       },
       "docker": {
         "containerVolumePath": "/data",
-        "raw": "-p 4000:4000 -p 13000:13000 -p 12000:12000/udp",
-        "forcedRawNodeInput": "--accept-terms-of-use=true --rpc-host=0.0.0.0 --jwt-secret=/data/jwtsecret"
+        "raw": "-p 5052:5052 -p 13000:13000 -p 12000:12000/udp",
+        "forcedRawNodeInput": "--accept-terms-of-use=true --datadir=/data --rpc-host=0.0.0.0 --jwt-secret=/data/jwtsecret"
       }
     }
   },
@@ -79,7 +80,7 @@
     "httpHostAddress": {
       "displayName": "The host on which the gateway server runs on",
       "cliConfigPrefix": "--grpc-gateway-host=",
-      "defaultValue": "127.0.0.1",
+      "defaultValue": "0.0.0.0",
       "uiControl": {
         "type": "text"
       }
