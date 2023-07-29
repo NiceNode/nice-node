@@ -130,6 +130,7 @@ export const [lightTheme, vars] = createTheme({
     font40: common.color.black40,
     font50: common.color.black50,
     font70: common.color.black70,
+    font85: common.color.black85,
     font90: common.color.black90,
     fontDisabled: common.color.black25,
     background: common.color.white100,
@@ -216,6 +217,7 @@ export const [lightTheme, vars] = createTheme({
     contentHeaderTitle: common.color.black70,
     contentHeaderSubtitle: common.color.black50,
     filterBackground: common.color.white100,
+    progressBarBackground: common.color.purple500,
   },
 });
 
@@ -228,6 +230,7 @@ export const darkTheme = createTheme(vars, {
     font40: common.color.white40,
     font50: common.color.white50,
     font70: common.color.white70,
+    font85: common.color.white85,
     font90: common.color.white90,
     fontDisabled: common.color.white25,
     background: 'rgba(28, 28, 30, 1)',
@@ -314,5 +317,6 @@ export const darkTheme = createTheme(vars, {
     contentHeaderTitle: common.color.white85,
     contentHeaderSubtitle: common.color.white50,
     filterBackground: common.color.osMac,
+    progressBarBackground: common.color.purple600,
   },
 });

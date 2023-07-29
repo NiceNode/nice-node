@@ -6,10 +6,15 @@ import {
   MenuItemConstructorOptions,
   clipboard,
 } from 'electron';
-import { getSetHasSeenSplashscreen } from './state/settings';
+import {
+  getSetHasSeenSplashscreen,
+  getSetHasSeenAlphaModal,
+} from './state/settings';
 
 import { getDebugInfoString, getGithubIssueProblemURL } from './debug';
 import { checkForUpdates } from './updater';
+import uninstallPodman from './podman/uninstall/uninstall';
+import nuclearUninstall from './nuclearUninstall';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -84,6 +89,25 @@ export default class MenuBuilder {
           click: () => {
             app.quit();
           },
+        },
+      ],
+    };
+    // For users to copy and paste with keyboard shortcuts, this is required
+    // to be in the menu on macOS.
+    // https://pracucci.com/atom-electron-enable-copy-and-paste.html
+    const subMenuEdit: DarwinMenuItemConstructorOptions = {
+      label: 'Edit',
+      submenu: [
+        { label: 'Undo', accelerator: 'Command+Z', selector: 'undo:' },
+        { label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:' },
+        { type: 'separator' },
+        { label: 'Cut', accelerator: 'Command+X', selector: 'cut:' },
+        { label: 'Copy', accelerator: 'Command+C', selector: 'copy:' },
+        { label: 'Paste', accelerator: 'Command+V', selector: 'paste:' },
+        {
+          label: 'Select All',
+          accelerator: 'Command+A',
+          selector: 'selectAll:',
         },
       ],
     };
@@ -167,6 +191,26 @@ export default class MenuBuilder {
             getSetHasSeenSplashscreen(false);
           },
         },
+        { type: 'separator' },
+        {
+          label: 'Show Alpha Modal',
+          click() {
+            getSetHasSeenAlphaModal(false);
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Uninstall podman',
+          click() {
+            uninstallPodman();
+          },
+        },
+        {
+          label: 'Nuclear uninstall (unistall podman and delete all NN data)',
+          click() {
+            nuclearUninstall();
+          },
+        },
       ],
     };
 
@@ -176,7 +220,7 @@ export default class MenuBuilder {
         ? subMenuViewDev
         : subMenuViewProd;
 
-    return [subMenuAbout, subMenuView, subMenuWindow, subMenuHelp];
+    return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
   }
 
   buildDefaultTemplate() {
@@ -260,6 +304,18 @@ export default class MenuBuilder {
             label: 'Copy Configuration Details to Clipboard',
             click() {
               clipboard.writeText(getDebugInfoString());
+            },
+          },
+          {
+            label: 'Uninstall podman',
+            click() {
+              uninstallPodman();
+            },
+          },
+          {
+            label: 'Nuclear uninstall (unistall podman and delete all NN data)',
+            click() {
+              nuclearUninstall();
             },
           },
         ],

@@ -20,6 +20,7 @@ export interface LineLabelSettingsProps {
    * Column mode?
    */
   column?: boolean;
+  type?: string;
 }
 
 /**
@@ -29,6 +30,7 @@ const LineLabelSettings = ({
   title,
   items,
   column,
+  type,
 }: LineLabelSettingsProps) => {
   let columnDiv = '';
   let columnContainer = '';
@@ -45,7 +47,7 @@ const LineLabelSettings = ({
             // Settings section ordering does not change during view of modal
             // eslint-disable-next-line react/no-array-index-key
             <div className={columnDiv} key={index}>
-              <LineLabelSettingsItem {...item} />
+              <LineLabelSettingsItem type={type} {...item} />
             </div>
           ))}
       </div>

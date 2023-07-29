@@ -14,13 +14,13 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
 export const PrimarySmall = Template.bind({});
 PrimarySmall.args = {
-  primary: true,
+  type: 'primary',
   label: 'Button',
   size: 'small',
 };
 export const PrimarySmallIcon = Template.bind({});
 PrimarySmallIcon.args = {
-  primary: true,
+  type: 'primary',
   label: 'Button',
   size: 'small',
   iconId: 'settings',
@@ -34,7 +34,7 @@ SecondarySmall.args = {
 
 export const PrimaryMedium = Template.bind({});
 PrimaryMedium.args = {
-  primary: true,
+  type: 'primary',
   size: 'medium',
   label: 'Button',
 };
@@ -58,5 +58,5 @@ SecondaryMediumIcon.args = {
   size: 'small',
   iconId: 'close',
   variant: 'icon',
-  ghost: true
+  type: 'ghost',
 };

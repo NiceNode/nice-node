@@ -1,6 +1,7 @@
+/* eslint-disable consistent-return */
 import { BrowserWindow, dialog } from 'electron';
 
-import { NodeId } from '../common/node';
+import Node, { NodeId } from '../common/node';
 import {
   getNodesDirPath,
   CheckStorageDetails,
@@ -10,6 +11,12 @@ import logger from './logger';
 // eslint-disable-next-line import/no-cycle
 import { getMainWindow } from './main';
 import { getNode, updateNode } from './state/nodes';
+
+export const updateNodeDataDir = async (node: Node, newDataDir: string) => {
+  node.runtime.dataDir = newDataDir;
+  node.config.configValuesMap.dataDir = newDataDir;
+  updateNode(node);
+};
 
 export const openDialogForNodeDataDir = async (nodeId: NodeId) => {
   const node = getNode(nodeId);
@@ -43,12 +50,11 @@ export const openDialogForNodeDataDir = async (nodeId: NodeId) => {
   }
   if (result.filePaths) {
     if (result.filePaths.length > 0) {
-      const newDataDir = result.filePaths[0];
-      node.runtime.dataDir = newDataDir;
-      node.config.configValuesMap.dataDir = newDataDir;
-      updateNode(node);
+      return result.filePaths[0];
     }
   }
+  // eslint-disable-next-line no-useless-return
+  return;
 };
 
 export const openDialogForStorageLocation = async (): Promise<
@@ -75,7 +81,6 @@ export const openDialogForStorageLocation = async (): Promise<
     if (result.filePaths.length > 0) {
       const folderPath = result.filePaths[0];
       const freeStorageGBs = await getSystemFreeDiskSpace(folderPath);
-      // eslint-disable-next-line consistent-return
       return {
         folderPath,
         freeStorageGBs,

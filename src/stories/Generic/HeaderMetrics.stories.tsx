@@ -17,7 +17,7 @@ Primary.args = {
   name: 'besu',
   title: 'Ethereum node',
   info: 'Non-Validating Node — Ethereum mainnet',
-  type: 'altruistic',
+  screenType: 'altruistic',
   status: {
     updating: false,
     initialized: true,
@@ -33,6 +33,6 @@ Primary.args = {
     currentSlot: 90,
     highestSlot: 190,
     cpuLoad: 90,
-    diskUsageGBs: 10000
+    diskUsageGBs: 10000,
   },
 };

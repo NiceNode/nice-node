@@ -16,6 +16,7 @@ const DataRefresher = () => {
   const { i18n } = useTranslation();
   const qSettings = useGetSettingsQuery();
 
+  console.log('qNodeVersion', JSON.stringify(qNodeVersion));
   useEffect(() => {
     const updateNodeDU = async () => {
       // todo: fix warnings for multi-client

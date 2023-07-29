@@ -14,7 +14,7 @@ export const outerDiv = style({
 
 export const innerDiv = style({
   height: 16,
-  backgroundColor: vars.color.primary,
+  backgroundColor: vars.components.progressBarBackground,
 });
 
 export const sectionFont = style({

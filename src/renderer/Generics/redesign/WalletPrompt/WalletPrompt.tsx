@@ -27,7 +27,7 @@ export const WalletPrompt = ({
         tempor eget vitae.
       </div>
       <div className={buttonContainer}>
-        <Button primary label="Set up" onClick={onSetupClick} />
+        <Button type="primary" label="Set up" onClick={onSetupClick} />
         <Button label="Skip for now" onClick={onDismissClick} />
       </div>
     </div>

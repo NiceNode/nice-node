@@ -5,13 +5,13 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "eqlabs/pathfinder:latest",
+    "imageName": "docker.io/eqlabs/pathfinder:latest",
     "input": {
       "defaultConfig": {
-        "eth1ProviderUrl": "http://host.docker.internal:8545"
+        "eth1ProviderUrl": "http://host.containers.internal:8545"
       },
       "docker": {
-        "raw": "-p 9545:9545 -e RUST_LOG=info -e PATHFINDER_ETHEREUM_API_URL=\"http://host.docker.internal:8545\"",
+        "raw": "-p 9545:9545 -e RUST_LOG=info -e PATHFINDER_ETHEREUM_API_URL=\"http://host.containers.internal:8545\"",
         "containerVolumePath": "/usr/share/pathfinder/data"
       }
     },

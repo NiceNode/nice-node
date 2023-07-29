@@ -8,7 +8,7 @@ export const container = style({
   alignItems: 'flex-start',
   padding: '4px 0px',
   gap: 8,
-  borderBottom: '1px solid rgba(0, 0, 2, 0.04)',
+  borderBottom: `1px solid ${vars.color.background96}`,
   flex: 'none',
   order: 2,
   alignSelf: 'stretch',
@@ -25,7 +25,8 @@ export const container = style({
 });
 
 export const timestampStyle = style({
-  width: 133,
+  width: 113,
+  // width: 133,  for including milliseconds
   flex: 'none',
   order: 1,
   flexGrow: 0,

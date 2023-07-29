@@ -1,6 +1,9 @@
 import { app } from 'electron';
 import path from 'path';
 import { format, transports, createLogger } from 'winston';
+import * as Sentry from '@sentry/electron/main';
+import SentryTransport from './util/sentryWinstonTransport';
+
 // import DailyRotateFile from 'winston-daily-rotate-file';
 
 const logsPath = path.join(app.getPath('userData'), 'logs');
@@ -39,6 +42,10 @@ const logger = createLogger({
       level: 'error',
       maxsize: 50000000, // 50 MB
     }),
+    new SentryTransport({
+      sentry: Sentry,
+      level: 'error',
+    }),
   ],
 });
 
@@ -56,6 +63,10 @@ export const autoUpdateLogger = createLogger({
       filename: path.join(app.getPath('logs'), 'auto-updater-error.log'),
       level: 'error',
       maxsize: 10000000, // 50 MB
+    }),
+    new SentryTransport({
+      sentry: Sentry,
+      level: 'error',
     }),
   ],
 });
@@ -83,25 +94,6 @@ export const autoUpdateLogger = createLogger({
 //   );
 // });
 
-export const gethLogger = createLogger({
-  level: 'info',
-  format: defaultFormat,
-  defaultMeta: { service: 'geth-service' },
-  // transports: [gethRotateTransport, gethErrorRotateTransport],
-  transports: [
-    new transports.File({
-      filename: path.join(app.getPath('logs'), 'geth', 'application.log'),
-      level: 'info',
-      maxsize: 20000000, // 50 MB
-    }),
-    new transports.File({
-      filename: path.join(app.getPath('logs'), 'geth', 'error.log'),
-      level: 'error',
-      maxsize: 20000000, // 50 MB
-    }),
-  ],
-});
-
 //
 // If we're not in production then log to the `console` with the format:
 // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
@@ -112,11 +104,6 @@ if (process.env.NODE_ENV !== 'production') {
     })
   );
   autoUpdateLogger.add(
-    new transports.Console({
-      format: defaultFormat,
-    })
-  );
-  gethLogger.add(
     new transports.Console({
       format: defaultFormat,
     })

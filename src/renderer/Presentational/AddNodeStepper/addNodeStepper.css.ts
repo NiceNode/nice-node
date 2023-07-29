@@ -6,12 +6,17 @@ export const container = style({
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
+  selectors: {
+    [`&.modal`]: {
+      width: 560,
+    },
+  },
 });
 
 export const componentContainer = style({
   width: '100%',
   flexGrow: 1,
-  overflow: 'auto',
+  overflow: 'visible',
   boxSizing: 'border-box',
 });
 

@@ -2,12 +2,13 @@
 // Just make sure to always render each child so that children component state isn't cleard
 import { useCallback, useEffect, useState } from 'react';
 
+import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
 import { componentContainer, container } from './addNodeStepper.css';
 import Stepper from '../../Generics/redesign/Stepper/Stepper';
 import AddEthereumNode, {
   AddEthereumNodeValues,
 } from '../AddEthereumNode/AddEthereumNode';
-import DockerInstallation from '../DockerInstallation/DockerInstallation';
+import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import electron from '../../electronGlobal';
 // import { NodeSpecification } from '../../../common/nodeSpec';
@@ -18,17 +19,24 @@ import { mergeSystemRequirements } from './mergeNodeRequirements';
 import { updateSelectedNodeId } from '../../state/node';
 import { useAppDispatch } from '../../state/hooks';
 import { NodeLibrary } from '../../../main/state/nodeLibrary';
+import { reportEvent } from '../../events/reportEvent';
 // import { CheckStorageDetails } from '../../../main/files';
 
+import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
+import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
+import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
+
 export interface AddNodeStepperProps {
+  modal?: boolean;
   onChange: (newValue: 'done' | 'cancel') => void;
 }
 
 const TOTAL_STEPS = 3;
 
-const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
+const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const dispatch = useAppDispatch();
   const [sStep, setStep] = useState<number>(0);
+  const [sDisabledSaveButton, setDisabledSaveButton] = useState<boolean>(true);
   // const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
   //   NodeSpecification[]
   // >([]);
@@ -73,8 +81,12 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
     fetchNodeLibrary();
   }, []);
 
-  const onChangeDockerInstall = useCallback((newValue: string) => {
-    console.log('onChangeDockerInstall newValue ', newValue);
+  const onChangePodmanInstall = useCallback((newValue: string) => {
+    console.log('onChangePodmanInstall newValue ', newValue);
+    setDisabledSaveButton(false);
+    if (newValue === 'done') {
+      setDisabledSaveButton(false);
+    }
   }, []);
 
   const onChangeAddEthereumNode = useCallback(
@@ -85,13 +97,13 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       let ccReqs;
 
       if (newValue?.executionClient) {
-        const ecValue = newValue?.executionClient;
+        const ecValue = newValue?.executionClient.value;
         if (sNodeLibrary) {
           ecReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
         }
       }
       if (newValue?.consensusClient) {
-        const ccValue = newValue?.consensusClient;
+        const ccValue = newValue?.consensusClient.value;
         if (sNodeLibrary) {
           ccReqs = sNodeLibrary?.[`${ccValue}-beacon`]?.systemRequirements;
         }
@@ -125,13 +137,13 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
     if (sEthereumNodeConfig?.executionClient) {
       const ecValue = sEthereumNodeConfig?.executionClient;
       if (sNodeLibrary) {
-        ecNodeSpec = sNodeLibrary?.[ecValue];
+        ecNodeSpec = sNodeLibrary?.[ecValue.value];
       }
     }
     if (sEthereumNodeConfig?.consensusClient) {
       const ccValue = sEthereumNodeConfig?.consensusClient;
       if (sNodeLibrary) {
-        ccNodeSpec = sNodeLibrary?.[`${ccValue}-beacon`];
+        ccNodeSpec = sNodeLibrary?.[`${ccValue.value}-beacon`];
       }
     }
     console.log(
@@ -148,6 +160,8 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       ccNodeSpec,
       { storageLocation: sNodeStorageLocation }
     );
+    reportEvent('AddNode');
+
     // const ecNode = await electron.addNode(ecNodeSpec, sNodeStorageLocation);
     console.log('addNode returned node: ', ecNode);
     // const ccNode = await electron.addNode(ccNodeSpec, sNodeStorageLocation);
@@ -159,7 +173,6 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
     console.log('startCcResult result: ', startCcResult);
 
     // close?
-
     onChange('done');
     setStep(0);
   };
@@ -171,7 +184,7 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
       if (sStep + 1 >= TOTAL_STEPS) {
         // done
         onChange('done');
-        // if DockerInstallDone, add nodes, close modal (loading?)
+        // if PodmanInstallDone, add nodes, close modal (loading?)
         addNodes();
       } else {
         setStep(sStep + 1);
@@ -186,36 +199,72 @@ const AddNodeStepper = ({ onChange }: AddNodeStepperProps) => {
     }
   };
 
-  return (
-    <div className={container}>
-      <div className={componentContainer}>
-        {/* Step 0 */}
-        <div style={{ display: sStep === 0 ? '' : 'none', height: '100%' }}>
+  const getStepScreen = (step: number) => {
+    let stepScreen = null;
+    let stepImage = step1;
+    switch (step) {
+      case 0:
+        stepScreen = (
           <AddEthereumNode
             onChange={onChangeAddEthereumNode}
             // beaconOptions={sBeaconNodeLibrary}
             // executionOptions={sExecutionClientLibrary}
           />
-        </div>
-
-        {/* Step 1 */}
-        <div style={{ display: sStep === 1 ? '' : 'none', height: '100%' }}>
+        );
+        stepImage = step1;
+        break;
+      case 1:
+        stepScreen = (
           <NodeRequirements
             nodeRequirements={sEthereumNodeRequirements}
             systemData={sSystemData}
             nodeStorageLocation={sNodeStorageLocation}
           />
+        );
+        stepImage = step2;
+        break;
+      case 2:
+        stepScreen = (
+          <PodmanInstallation
+            onChange={onChangePodmanInstall}
+            disableSaveButton={setDisabledSaveButton}
+          />
+        );
+        stepImage = step3;
+        break;
+      default:
+    }
+
+    return (
+      <ContentWithSideArt modal={modal} graphic={stepImage}>
+        {stepScreen}
+      </ContentWithSideArt>
+    );
+  };
+
+  return (
+    <div className={container}>
+      <div className={componentContainer}>
+        {/* Step 0 */}
+        <div style={{ display: sStep === 0 ? '' : 'none', height: '100%' }}>
+          {getStepScreen(0)}
         </div>
 
-        {/* Step 2 - If Docker is not installed */}
+        {/* Step 1 */}
+        <div style={{ display: sStep === 1 ? '' : 'none', height: '100%' }}>
+          {getStepScreen(1)}
+        </div>
+
+        {/* Step 2 - If Podman is not installed */}
         <div style={{ display: sStep === 2 ? '' : 'none', height: '100%' }}>
-          <DockerInstallation onChange={onChangeDockerInstall} />
+          {getStepScreen(2)}
         </div>
       </div>
-
-      <div>
-        <Stepper onChange={onStep} />
-      </div>
+      <Stepper
+        step={sStep}
+        onChange={onStep}
+        disabledSaveButton={sDisabledSaveButton}
+      />
     </div>
   );
 };

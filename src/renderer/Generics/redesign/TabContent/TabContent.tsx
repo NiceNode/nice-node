@@ -7,6 +7,7 @@ import {
 } from './tabContent.css';
 import LabelValues from '../LabelValues/LabelValues';
 import { getBreakdown } from './getBreakdown';
+import DiskCapacityBarChart from '../DiskCapacityBarChart/DiskCapacityBarChart';
 
 export interface TabContentProps {
   tabId: string;
@@ -121,7 +122,12 @@ export const TabContent = ({ tabId }: TabContentProps) => {
           <div className={contentHeader}>
             <div className={contentTitle}>Capacity</div>
           </div>
-          <div className="contentCharts">Disk Capacity chart goes here</div>
+          <DiskCapacityBarChart
+            otherSpace={100}
+            clientSpace={200}
+            totalSpace={500}
+            clientType="Besu"
+          />
           <HorizontalLine type="content" />
         </>
       );

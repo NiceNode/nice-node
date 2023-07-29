@@ -3,7 +3,7 @@ import {
   ConfigTranslationMap,
   ConfigValuesMap,
 } from '../../../../common/nodeConfig';
-import { SettingChangeHandler } from '../../../Presentational/NodeSettingsModal/NodeSettingsWrapper';
+import { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
 import LineLabelSettings from '../LabelSetting/LabelSettings';
 import { LabelSettingsSectionProps } from '../LabelSetting/LabelValuesSection';
 import convertConfigToLabelSettings from './convertConfigToLabelSettings';
@@ -17,12 +17,14 @@ export type DynamicSettingsProps = {
   configValuesMap?: ConfigValuesMap;
   isDisabled?: boolean;
   onChange?: SettingChangeHandler;
+  type?: string;
 };
 const DynamicSettings = ({
   categoryConfigs,
   configValuesMap,
   isDisabled,
   onChange,
+  type,
 }: DynamicSettingsProps) => {
   const [sSections, setSections] = useState<LabelSettingsSectionProps>({
     items: [],
@@ -45,7 +47,7 @@ const DynamicSettings = ({
 
   return (
     <>
-      <LineLabelSettings items={[sSections]} />
+      <LineLabelSettings type={type} items={[sSections]} />
     </>
   );
 };

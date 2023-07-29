@@ -10,7 +10,7 @@ export const baseButton = style({
   justifyContent: 'center',
   alignItems: 'center',
   padding: '8px 12px',
-  gap: '10px',
+  gap: 6,
   border: '1px solid',
   borderRadius: 5,
   borderColor: vars.color.font10,

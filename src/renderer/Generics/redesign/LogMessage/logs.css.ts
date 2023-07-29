@@ -8,6 +8,7 @@ export const container = style({
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
+  flex: 1,
 });
 
 export const logsContainer = style({

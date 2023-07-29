@@ -52,6 +52,8 @@ export const captionTextClass = style({
 
 export const successIcon = style({
   color: common.color.green,
+  width: 16,
+  height: 16,
 });
 
 export const warningIcon = style({

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import si from 'systeminformation';
 
 import electron from '../../../electronGlobal';
-import { container } from './systemMonitor.css';
 import { LabelValuesSectionProps } from '../LabelValues/LabelValuesSection';
 import LabelValues from '../LabelValues/LabelValues';
 
@@ -119,9 +118,8 @@ export const SystemMonitor = () => {
     getData();
   }, []);
 
-  return (
-    <div className={container}>
-      <LabelValues title="Computer details" items={sParsedData} />
-    </div>
-  );
+  if (!sData) {
+    return <div>Fetching...</div>; // Get design spec for this case
+  }
+  return <LabelValues title="System specifications" items={sParsedData} />;
 };

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import ExternalLink from '../Link/ExternalLink';
@@ -27,43 +28,43 @@ export interface LabelSettingsSectionProps {
    * The sections label value items
    */
   items: LabelSettingsItem[];
+  type?: string;
 }
 
 const LabelSettingsSection = ({
   sectionTitle,
   items,
+  type,
 }: LabelSettingsSectionProps) => {
   const { t } = useTranslation('genericComponents');
 
   return (
-    <div className={sectionContainer}>
+    <div className={[sectionContainer, type].join(' ')}>
       {sectionTitle && (
         <div className={sectionHeaderContainer}>
           <div className={sectionHeaderText}>{sectionTitle}</div>
         </div>
       )}
       {items &&
-        items.map((item) => (
-          <>
-            <div className={lineContainer}>
-              <div className={labelAndDescriptionContainer}>
-                <div className={lineKeyText}>{item.label}</div>
-                <Caption>
-                  {item.description}{' '}
-                  {item.learnMoreLink && (
-                    <ExternalLink
-                      url={item.learnMoreLink}
-                      text={t('LearnMore')}
-                      inline
-                      hideIcon
-                    />
-                  )}
-                </Caption>
-              </div>
-
-              <div className={lineValueText}>{item.value}</div>
+        items.map((item, index) => (
+          <div className={lineContainer} key={index}>
+            <div className={labelAndDescriptionContainer}>
+              <div className={lineKeyText}>{item.label}</div>
+              <Caption>
+                {item.description}{' '}
+                {item.learnMoreLink && (
+                  <ExternalLink
+                    url={item.learnMoreLink}
+                    text={t('LearnMore')}
+                    inline
+                    hideIcon
+                  />
+                )}
+              </Caption>
             </div>
-          </>
+
+            <div className={lineValueText}>{item.value}</div>
+          </div>
         ))}
     </div>
   );

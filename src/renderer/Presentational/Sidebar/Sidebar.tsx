@@ -1,21 +1,16 @@
-import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
+import { setModalState } from '../../state/modal';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
-import { NodeId, NodeStatus, UserNodes } from '../../../common/node';
+import { NodeId, UserNodes } from '../../../common/node';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
-import {
-  SidebarNodeItem,
-  SidebarNodeStatus,
-} from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
+import { SidebarNodeItemWrapper } from '../SidebarNodeItemWrapper/SidebarNodeItemWrapper';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
 import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
-import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
-import PreferencesWrapper from '../PreferencesModal/PreferencesWrapper';
-import { DockerStoppedBanner } from '../DockerInstallation/StartDockerBanner';
 
 export interface SidebarProps {
   /**
@@ -27,58 +22,49 @@ export interface SidebarProps {
    */
   updateAvailable: boolean;
   /**
-   * Is docker not running?
+   * Is podman not running?
    */
-  dockerStopped: boolean;
+  podmanStopped: boolean;
+  podmanInstalled: boolean;
   sUserNodes?: UserNodes;
   selectedNodeId?: NodeId;
+  notifications: NotificationItemProps[];
+  onClickStartPodman: () => void;
+  onClickInstallPodman: () => void;
 }
-
-const itemListData: { iconId: IconId; label: string; count?: number }[] = [
-  {
-    iconId: 'add',
-    label: 'Add Node',
-  },
-  {
-    iconId: 'preferences',
-    label: 'Preferences',
-  },
-  {
-    iconId: 'health',
-    label: 'System Monitor',
-  },
-];
-
-const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
-  created: 'stopped',
-  initializing: 'updating',
-  [NodeStatus.checkingForUpdates]: 'updating',
-  downloading: 'updating',
-  downloaded: 'stopped',
-  [NodeStatus.errorDownloading]: 'error',
-  extracting: 'updating',
-  [NodeStatus.readyToStart]: 'stopped',
-  starting: 'sync',
-  running: 'healthy',
-  stopping: 'healthy',
-  stopped: 'stopped',
-  [NodeStatus.errorRunning]: 'error',
-  [NodeStatus.errorStarting]: 'error',
-  [NodeStatus.errorStopping]: 'error',
-  unknown: 'error',
-};
 
 const Sidebar = ({
   sUserNodes,
   updateAvailable,
   offline,
-  dockerStopped,
+  podmanStopped,
+  podmanInstalled,
   selectedNodeId,
+  notifications,
+  onClickStartPodman,
+  onClickInstallPodman,
 }: SidebarProps) => {
   const dispatch = useAppDispatch();
-  const [sIsModalOpenAddNode, setIsModalOpenAddNode] = useState<boolean>();
-  const [sIsModalOpenSettings, setIsModalOpenSettings] =
-    useState<boolean>(false);
+
+  const itemListData: { iconId: IconId; label: string; count?: number }[] = [
+    {
+      iconId: 'bell',
+      label: 'Notifications',
+      count: notifications?.length,
+    },
+    {
+      iconId: 'add',
+      label: 'Add Node',
+    },
+    {
+      iconId: 'preferences',
+      label: 'Preferences',
+    },
+    {
+      iconId: 'health',
+      label: 'System Monitor',
+    },
+  ];
 
   // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
   // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
@@ -94,7 +80,19 @@ const Sidebar = ({
   //   }
   // });
 
+  const onClickBanner = () => {
+    if (podmanInstalled) {
+      onClickStartPodman();
+    } else {
+      onClickInstallPodman();
+    }
+  };
+
   const renderBanners = () => {
+    // TODO: integrate this with code below
+    if (podmanStopped || !podmanInstalled) {
+      return <Banner podmanStopped onClick={onClickBanner} />;
+    }
     const bannerProps = {
       updateAvailable,
       offline,
@@ -114,20 +112,10 @@ const Sidebar = ({
       return null;
     });
   };
-
-  const onClickLinkItem = useCallback((linkItemId: string) => {
-    console.log('sidebar link item clicked: ', linkItemId);
-    if (linkItemId === 'add') {
-      // open add node dialog
-      setIsModalOpenAddNode(true);
-    } else if (linkItemId === 'preferences') {
-      setIsModalOpenSettings(true);
-    }
-  }, []);
+  const navigate = useNavigate();
 
   return (
     <div className={container}>
-      {dockerStopped && <DockerStoppedBanner />}
       {renderBanners()}
       <div className={nodeList}>
         <div className={titleItem}>
@@ -147,19 +135,16 @@ const Sidebar = ({
         )} */}
         {sUserNodes?.nodeIds.map((nodeId: NodeId) => {
           const node = sUserNodes.nodes[nodeId];
-          const { spec, status } = node;
-          const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[status];
-          console.log(node, 'sidebarStatus', sidebarStatus);
           return (
-            <SidebarNodeItem
+            <SidebarNodeItemWrapper
               // temp fix
-              key={node.id}
-              iconId={spec.specId.replace('-beacon', '')}
-              title={spec.displayName}
-              info={spec.displayName}
-              status={sidebarStatus}
+              id={node.id}
+              node={node}
               selected={selectedNodeId === node.id}
-              onClick={() => dispatch(updateSelectedNodeId(node.id))}
+              onClick={() => {
+                navigate('/main/node');
+                dispatch(updateSelectedNodeId(node.id));
+              }}
             />
           );
         })}
@@ -172,30 +157,32 @@ const Sidebar = ({
               iconId={item.iconId}
               label={item.label}
               count={item.count}
-              onClick={() => onClickLinkItem(item.iconId)}
+              onClick={() => {
+                console.log('sidebar link item clicked: ', item.iconId);
+                if (item.iconId === 'add') {
+                  dispatch(
+                    setModalState({
+                      isModalOpen: true,
+                      screen: { route: 'addNode', type: 'modal' },
+                    })
+                  );
+                } else if (item.iconId === 'preferences') {
+                  dispatch(
+                    setModalState({
+                      isModalOpen: true,
+                      screen: { route: 'preferences', type: 'modal' },
+                    })
+                  );
+                } else if (item.iconId === 'bell') {
+                  navigate('/main/notification');
+                } else if (item.iconId === 'health') {
+                  navigate('/main/system');
+                }
+              }}
             />
           );
         })}
       </div>
-      <Modal
-        title=""
-        isOpen={sIsModalOpenAddNode}
-        onClickCloseButton={() => setIsModalOpenAddNode(false)}
-        isFullScreen
-      >
-        <AddNodeStepper
-          onChange={(newValue: 'done' | 'cancel') => {
-            console.log(newValue);
-            if (newValue === 'done' || newValue === 'cancel') {
-              setIsModalOpenAddNode(false);
-            }
-          }}
-        />
-      </Modal>
-      <PreferencesWrapper
-        isOpen={sIsModalOpenSettings}
-        onClose={() => setIsModalOpenSettings(false)}
-      />
     </div>
   );
 };

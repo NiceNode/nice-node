@@ -6,6 +6,7 @@ export const container = style({
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: 16,
+  paddingBottom: 20,
 });
 
 export const titleFont = style({
@@ -20,9 +21,14 @@ export const descriptionFont = style({
   fontSize: 13,
   lineHeight: '18px',
   color: vars.color.font70,
+  marginBottom: 8,
 });
 
 export const sectionFont = style({
   fontWeight: 600,
   marginBottom: 0,
+});
+
+export const descriptionContainer = style({
+  marginBottom: 32,
 });

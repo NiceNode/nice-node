@@ -7,6 +7,7 @@ export const container = style({
   gap: 8,
   width: '100%',
   minWidth: 400,
+  height: 52,
 });
 
 export const pathAndChangeContainer = style({

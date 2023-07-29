@@ -1,13 +1,13 @@
 // import { useState, useCallback } from 'react';
 // import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 // import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
+import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
 import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
 import { TabContent } from '../../Generics/redesign/TabContent/TabContent';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
 // import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
-import { container } from './contentSingleClient.css';
 import { NodeAction, NodeOverviewProps } from '../../Generics/redesign/consts';
 
 // TODO: process retrieved client data into this format
@@ -15,8 +15,9 @@ export type SingleNodeContent = {
   nodeId: string;
   name: string; // lowercase for supported node icons
   version?: string;
-  type?: string;
-  nodeType?: 'execution' | 'consensus' | string;
+  screenType?: string;
+  nodeType?: string;
+  rpcTranslation?: NiceNodeRpcTranslation;
   info?: string;
   network?: string;
   iconUrl?: string;
@@ -62,12 +63,16 @@ const ContentSingleClient = (props: SingleNodeContent) => {
   // TODO: retrieve initial data for all pages
 
   return (
-    <div className={container}>
+    <>
       {/* todo: fix temp type casting */}
       <Header {...(nodeOverview as unknown as NodeOverviewProps)} />
-      <HorizontalLine type="content" />
+      <div>
+        <HorizontalLine type="content" />
+      </div>
       <HeaderMetrics {...(nodeOverview as unknown as NodeOverviewProps)} />
-      <HorizontalLine type="above-tab" />
+      <div>
+        <HorizontalLine type="above-tab" />
+      </div>
       <Tabs>
         <div id="Sync">
           <TabContent tabId="Sync" />
@@ -85,7 +90,7 @@ const ContentSingleClient = (props: SingleNodeContent) => {
           <TabContent tabId="Disk" />
         </div>
       </Tabs>
-    </div>
+    </>
   );
 };
 export default ContentSingleClient;
