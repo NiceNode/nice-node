@@ -20,7 +20,16 @@ export const send = (channel: string, ...args: any[]): void => {
 export const CHANNELS = {
   userNodes: 'userNodes',
   nodeLogs: 'nodeLogs',
-  docker: 'docker',
+  podman: 'podman',
+  podmanInstall: 'podmanInstall',
   theme: 'theme',
+  notifications: 'notifications',
 };
-export const CHANNELS_ARRAY = ['userNodes', 'nodeLogs', 'docker', 'theme'];
+export const CHANNELS_ARRAY = [
+  'userNodes',
+  'nodeLogs',
+  'podman',
+  'podmanInstall',
+  'theme',
+  'notifications',
+];

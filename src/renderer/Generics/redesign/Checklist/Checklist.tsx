@@ -14,9 +14,6 @@ export interface ChecklistProps {
   title?: string;
 }
 
-/**
- * Primary UI component for user interaction
- */
 export const Checklist = ({ title, items }: ChecklistProps) => {
   return (
     <div className={container}>

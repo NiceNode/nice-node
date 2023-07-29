@@ -5,7 +5,7 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "thorax/erigon:latest"
+    "imageName": "docker.io/thorax/erigon:latest"
   },
   "category": "L1/ExecutionClient",
   "rpcTranslation": "eth-l1",

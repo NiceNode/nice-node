@@ -28,7 +28,7 @@ export interface NotificationItemProps {
   /**
    * Notification description
    */
-  description?: string;
+  description: string;
   /**
    * What's the status?
    */
@@ -36,7 +36,7 @@ export interface NotificationItemProps {
   /**
    * Timestamp of when the event occurred
    */
-  timestamp?: number;
+  timestamp: number;
   /**
    * Optional click handler
    */

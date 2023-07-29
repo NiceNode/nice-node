@@ -7,7 +7,10 @@ export interface ModalConfig {
   consensusClient?: string;
   storageLocation?: string;
   theme?: ThemeSetting;
+  language?: string;
   isOpenOnStartup?: boolean;
+  isNotificationsEnabled?: boolean;
+  isEventReportingEnabled?: boolean;
   selectedNode?: Node;
   isDeleteStorage?: boolean;
   settingsConfig?: object;
@@ -25,6 +28,8 @@ export const modalRoutes = Object.freeze({
   stopNode: 'stopNode',
   removeNode: 'removeNode',
   updateUnavailable: 'updateUnavailable',
+  failSystemRequirements: 'failSystemRequirements',
+  alphaBuild: 'alphaBuild',
 });
 
 /* Use this to change config settings, saved temporarily in the modal file with backend apis until it's saved by modalOnSaveConfig

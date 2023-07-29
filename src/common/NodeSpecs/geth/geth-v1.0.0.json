@@ -11,16 +11,16 @@
         "http": "Enabled",
         "httpCorsDomains": "http://localhost",
         "webSockets": "Disabled",
-        "httpVirtualHosts": "localhost,host.docker.internal",
-        "authVirtualHosts": "localhost,host.docker.internal"
+        "httpVirtualHosts": "localhost,host.containers.internal",
+        "authVirtualHosts": "localhost,host.containers.internal"
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
         "raw": "-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546 -p 8551:8551",
-        "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret"
+        "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
-    "imageName": "ethereum/client-go:stable",
+    "imageName": "docker.io/ethereum/client-go:stable",
     "binaryDownload": {
       "type": "static",
       "darwin": {
@@ -178,7 +178,7 @@
       "uiControl": {
         "type": "text"
       },
-      "defaultValue": "localhost,host.docker.internal"
+      "defaultValue": "localhost,host.containers.internal"
     },
     "httpAddress": {
       "displayName": "HTTP-RPC server listening interface",
@@ -230,7 +230,7 @@
       "uiControl": {
         "type": "text"
       },
-      "defaultValue": "localhost,host.docker.internal"
+      "defaultValue": "localhost,host.containers.internal"
     }
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"

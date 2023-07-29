@@ -1,20 +1,16 @@
 import { useNavigate } from 'react-router-dom';
+import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import { setModalState } from '../../state/modal';
-import { getNotifications } from '../../../main/notifications';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
-import { NodeId, NodeStatus, UserNodes } from '../../../common/node';
+import { NodeId, UserNodes } from '../../../common/node';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
-import {
-  SidebarNodeItem,
-  SidebarNodeStatus,
-} from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
+import { SidebarNodeItemWrapper } from '../SidebarNodeItemWrapper/SidebarNodeItemWrapper';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
 import { container, nodeList, itemList, titleItem } from './sidebar.css';
 import { IconId } from '../../assets/images/icons';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
-import { DockerStoppedBanner } from '../DockerInstallation/StartDockerBanner';
 
 export interface SidebarProps {
   /**
@@ -26,60 +22,49 @@ export interface SidebarProps {
    */
   updateAvailable: boolean;
   /**
-   * Is docker not running?
+   * Is podman not running?
    */
-  dockerStopped: boolean;
+  podmanStopped: boolean;
+  podmanInstalled: boolean;
   sUserNodes?: UserNodes;
   selectedNodeId?: NodeId;
+  notifications: NotificationItemProps[];
+  onClickStartPodman: () => void;
+  onClickInstallPodman: () => void;
 }
-
-const itemListData: { iconId: IconId; label: string; count?: number }[] = [
-  {
-    iconId: 'bell',
-    label: 'Notifications',
-    count: getNotifications().length, // this needs to be updated based on changes in global state
-  },
-  {
-    iconId: 'add',
-    label: 'Add Node',
-  },
-  {
-    iconId: 'preferences',
-    label: 'Preferences',
-  },
-  {
-    iconId: 'health',
-    label: 'System Monitor',
-  },
-];
-
-const NODE_SIDEBAR_STATUS_MAP: Record<NodeStatus, SidebarNodeStatus> = {
-  created: 'stopped',
-  initializing: 'updating',
-  [NodeStatus.checkingForUpdates]: 'updating',
-  downloading: 'updating',
-  downloaded: 'stopped',
-  [NodeStatus.errorDownloading]: 'error',
-  extracting: 'updating',
-  [NodeStatus.readyToStart]: 'stopped',
-  starting: 'sync',
-  running: 'healthy',
-  stopping: 'healthy',
-  stopped: 'stopped',
-  [NodeStatus.errorRunning]: 'error',
-  [NodeStatus.errorStarting]: 'error',
-  [NodeStatus.errorStopping]: 'error',
-  unknown: 'error',
-};
 
 const Sidebar = ({
   sUserNodes,
   updateAvailable,
   offline,
-  dockerStopped,
+  podmanStopped,
+  podmanInstalled,
   selectedNodeId,
+  notifications,
+  onClickStartPodman,
+  onClickInstallPodman,
 }: SidebarProps) => {
   const dispatch = useAppDispatch();
+
+  const itemListData: { iconId: IconId; label: string; count?: number }[] = [
+    {
+      iconId: 'bell',
+      label: 'Notifications',
+      count: notifications?.length,
+    },
+    {
+      iconId: 'add',
+      label: 'Add Node',
+    },
+    {
+      iconId: 'preferences',
+      label: 'Preferences',
+    },
+    {
+      iconId: 'health',
+      label: 'System Monitor',
+    },
+  ];
 
   // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
   // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
@@ -95,7 +80,19 @@ const Sidebar = ({
   //   }
   // });
 
+  const onClickBanner = () => {
+    if (podmanInstalled) {
+      onClickStartPodman();
+    } else {
+      onClickInstallPodman();
+    }
+  };
+
   const renderBanners = () => {
+    // TODO: integrate this with code below
+    if (podmanStopped || !podmanInstalled) {
+      return <Banner podmanStopped onClick={onClickBanner} />;
+    }
     const bannerProps = {
       updateAvailable,
       offline,
@@ -119,7 +116,6 @@ const Sidebar = ({
 
   return (
     <div className={container}>
-      {dockerStopped && <DockerStoppedBanner />}
       {renderBanners()}
       <div className={nodeList}>
         <div className={titleItem}>
@@ -139,17 +135,11 @@ const Sidebar = ({
         )} */}
         {sUserNodes?.nodeIds.map((nodeId: NodeId) => {
           const node = sUserNodes.nodes[nodeId];
-          const { spec, status } = node;
-          const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[status];
-          console.log(node, 'sidebarStatus', sidebarStatus);
           return (
-            <SidebarNodeItem
+            <SidebarNodeItemWrapper
               // temp fix
-              key={node.id}
-              iconId={spec.specId.replace('-beacon', '')}
-              title={spec.displayName}
-              info={spec.displayName}
-              status={sidebarStatus}
+              id={node.id}
+              node={node}
               selected={selectedNodeId === node.id}
               onClick={() => {
                 navigate('/main/node');

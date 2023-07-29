@@ -35,7 +35,7 @@ Primary.args = {
                 http: 'Enabled',
                 webSockets: 'Enabled',
                 httpCorsDomains: '"http://localhost"',
-                hostAllowList: 'localhost,host.docker.internal',
+                hostAllowList: 'localhost,host.containers.internal',
                 dataDir:
                   '/Library/Application Support/NiceNode/nodes/besu-1667264729',
               },
@@ -289,7 +289,7 @@ Primary.args = {
             http: 'Enabled',
             webSockets: 'Enabled',
             httpCorsDomains: '"http://localhost"',
-            hostAllowList: 'localhost,host.docker.internal',
+            hostAllowList: 'localhost,host.containers.internal',
             dataDir:
               '/Library/Application Support/NiceNode/nodes/besu-1667264729',
             syncMode: 'FULL',
@@ -326,13 +326,13 @@ Primary.args = {
                 http: 'Enabled',
                 httpHostAddress: '0.0.0.0',
                 httpCorsDomains: '"http://localhost"',
-                eth1ProviderUrl: '"ws://host.docker.internal:8546"',
+                eth1ProviderUrl: '"ws://host.containers.internal:8546"',
                 dataDir:
                   '/Library/Application Support/NiceNode/nodes/nimbus-1667264729',
               },
               docker: {
                 containerVolumePath: '/home/user/nimbus-eth2/build/data',
-                raw: '--add-host=host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052',
+                raw: '-p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052',
                 forcedRawNodeInput:
                   '--data-dir=build/data/shared_mainnet_0 --network=mainnet',
               },
@@ -453,7 +453,7 @@ Primary.args = {
             http: 'Enabled',
             httpHostAddress: '0.0.0.0',
             httpCorsDomains: '"http://localhost"',
-            eth1ProviderUrl: '"ws://host.docker.internal:8546"',
+            eth1ProviderUrl: '"ws://host.containers.internal:8546"',
             dataDir:
               '/Library/Application Support/NiceNode/nodes/nimbus-1667264729',
           },

@@ -122,7 +122,7 @@ export const statusStyle = style({
       borderRadius: 7,
     },
     [`&.${smallStyle}.${sync}`]: {
-      left: '23px',
+      left: '24px',
       top: '-2.5px',
       width: '10px',
       height: '8px',

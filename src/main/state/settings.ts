@@ -15,8 +15,11 @@ const OS_COUNTRY_KEY = 'osCountry';
 const OS_IS_DARK_MODE_KEY = 'osIsDarkMode';
 const APP_LANGUAGE_KEY = 'appLanguage';
 const APP_HAS_SEEN_SPLASHSCREEN_KEY = 'appHasSeenSplashscreen';
+const APP_HAS_SEEN_ALPHA_MODAL = 'appHasSeenAlphaModal';
 const APP_THEME_SETTING = 'appThemeSetting';
 const APP_IS_OPEN_ON_STARTUP = 'appIsOpenOnStartup';
+const APP_IS_NOTIFICATIONS_ENABLED = 'appIsNotificationsEnabled';
+const APP_IS_EVENT_REPORTING_ENABLED = 'appIsEventReportingEnabled';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Settings = {
@@ -28,6 +31,8 @@ export type Settings = {
   [OS_IS_DARK_MODE_KEY]?: boolean;
   [APP_THEME_SETTING]?: ThemeSetting;
   [APP_IS_OPEN_ON_STARTUP]?: boolean;
+  [APP_IS_NOTIFICATIONS_ENABLED]?: boolean;
+  [APP_IS_EVENT_REPORTING_ENABLED]?: boolean;
 };
 
 /**
@@ -41,6 +46,8 @@ const initialize = () => {
     // set the default settings if no settings are saved yet
     settings = {
       appThemeSetting: 'auto',
+      appIsNotificationsEnabled: true,
+      appIsEventReportingEnabled: true,
     };
     store.set(SETTINGS_KEY, settings);
   }
@@ -53,6 +60,16 @@ export const getSetHasSeenSplashscreen = (hasSeen?: boolean): boolean => {
   }
   const savedHasSeenValue: boolean = store.get(
     `${SETTINGS_KEY}.${APP_HAS_SEEN_SPLASHSCREEN_KEY}`
+  );
+  return savedHasSeenValue;
+};
+
+export const getSetHasSeenAlphaModal = (hasSeen?: boolean): boolean => {
+  if (hasSeen !== undefined) {
+    store.set(`${SETTINGS_KEY}.${APP_HAS_SEEN_ALPHA_MODAL}`, hasSeen);
+  }
+  const savedHasSeenValue: boolean = store.get(
+    `${SETTINGS_KEY}.${APP_HAS_SEEN_ALPHA_MODAL}`
   );
   return savedHasSeenValue;
 };
@@ -82,9 +99,43 @@ export const setThemeSetting = (theme: ThemeSetting) => {
 
 export const setIsOpenOnStartup = (isOpenOnStartup: boolean) => {
   logger.info(`Setting isOpenOnStartup to ${isOpenOnStartup}`);
+  // electron tells OS to open at login
+  app.setLoginItemSettings({ openAtLogin: isOpenOnStartup });
   store.set(`${SETTINGS_KEY}.${APP_IS_OPEN_ON_STARTUP}`, isOpenOnStartup);
   logger.info(
-    `App isOpenOnStartup is ${store.get(SETTINGS_KEY, APP_IS_OPEN_ON_STARTUP)}`
+    `App isOpenOnStartup is ${store.get(
+      `${SETTINGS_KEY}.${APP_IS_OPEN_ON_STARTUP}`
+    )}`
+  );
+};
+
+export const setIsNotificationsEnabled = (isNotificationsEnabled: boolean) => {
+  logger.info(`Setting isNotificationsEnabled to ${isNotificationsEnabled}`);
+  store.set(
+    `${SETTINGS_KEY}.${APP_IS_NOTIFICATIONS_ENABLED}`,
+    isNotificationsEnabled
+  );
+  logger.info(
+    `App isNotificationsEnabled is ${store.get(
+      SETTINGS_KEY,
+      APP_IS_NOTIFICATIONS_ENABLED
+    )}`
+  );
+};
+
+export const setIsEventReportingEnabled = (
+  isEventReportingEnabled: boolean
+) => {
+  logger.info(`Setting isEventReportingEnabled to ${isEventReportingEnabled}`);
+  store.set(
+    `${SETTINGS_KEY}.${APP_IS_EVENT_REPORTING_ENABLED}`,
+    isEventReportingEnabled
+  );
+  logger.info(
+    `App isEventReportingEnabled is ${store.get(
+      SETTINGS_KEY,
+      APP_IS_EVENT_REPORTING_ENABLED
+    )}`
   );
 };
 

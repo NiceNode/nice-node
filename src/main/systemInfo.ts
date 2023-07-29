@@ -30,12 +30,12 @@ export type SystemData = si.Systeminformation.StaticData & {
 //     return data;
 //   };
 
-// const getOperatingSystemInfo =
-//   async (): Promise<si.Systeminformation.OsData> => {
-//     const data = await si.osInfo();
-//     console.log('osInfo data: ', data);
-//     return data;
-//   };
+export const getOperatingSystemInfo =
+  async (): Promise<si.Systeminformation.OsData> => {
+    const data = await si.osInfo();
+    console.log('osInfo data: ', data);
+    return data;
+  };
 
 // const getCurrentLoadInfo =
 //   async (): Promise<si.Systeminformation.CurrentLoadData> => {
@@ -72,7 +72,7 @@ export const getSystemInfo = async (): Promise<SystemData> => {
     blockDevices,
     fsSize,
   };
-  console.log('systemData data: ', JSON.stringify(systemData, null, 4));
+  // console.log('systemData data: ', JSON.stringify(systemData, null, 4));
 
   return systemData;
   // start monitoring sys_usage?

@@ -5,16 +5,17 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "chainsafe/lodestar:latest",
+    "imageName": "docker.io/chainsafe/lodestar:latest",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
         "httpPort": "5052",
-        "executionEndpoint": "http://host.docker.internal:8551"
+        "executionEndpoint": "http://host.containers.internal:8551",
+        "checkpointSyncUrl": "https://beaconstate-mainnet.chainsafe.io"
       },
       "docker": {
         "containerVolumePath": "/usr/app/data",
-        "raw": "--add-host host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
+        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
         "forcedRawNodeInput": "beacon --network mainnet --rest.address 0.0.0.0 --dataDir /usr/app/data --jwt-secret /usr/app/data/jwtsecret"
       }
     }
@@ -49,6 +50,14 @@
         "type": "filePath"
       },
       "infoDescription": "Lodestar root directory"
+    },
+    "checkpointSyncUrl": {
+      "displayName": "The URL of a trusted checkpoint sync",
+      "cliConfigPrefix": "--checkpointSyncUrl ",
+      "defaultValue": "https://beaconstate-mainnet.chainsafe.io",
+      "uiControl": {
+        "type": "text"
+      }
     },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",

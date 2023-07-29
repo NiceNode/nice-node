@@ -2,14 +2,10 @@ name: Package
 
 on: [pull_request]
 
-# asar is disabled for pm2 & electron build to work
-#   with asar disabled, hard links needs to be disabled
-env:
-  USE_HARD_LINKS: false
-
 jobs:
   package:
     timeout-minutes: 25
+    environment: staging
 
     runs-on: ${{ matrix.os }}
 
@@ -44,6 +40,9 @@ jobs:
       - name: npm package
         env:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          FATHOM_SITE_ID: ${{ secrets.FATHOM_SITE_ID }}
+          FATHOM_SITE_ENV: ${{ vars.FATHOM_SITE_ENV }}
+          NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           npm run package

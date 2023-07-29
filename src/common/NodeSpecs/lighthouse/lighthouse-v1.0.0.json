@@ -11,18 +11,19 @@
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "http://localhost",
         "websockets": "Enabled",
-        "executionEndpoint": "http://host.docker.internal:8551"
+        "executionEndpoint": "http://host.containers.internal:8551",
+        "checkpointSyncUrl": "https://mainnet.checkpoint.sigp.io"
       },
       "docker": {
         "containerVolumePath": "/root/.lighthouse",
-        "raw": "--add-host=host.docker.internal:host-gateway -p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052",
+        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052",
         "forcedRawNodeInput": "lighthouse --network mainnet beacon --execution-jwt /root/.lighthouse/jwtsecret"
       }
     },
     "architectures": {
       "docker": ["amd64", "arm64"]
     },
-    "imageName": "sigp/lighthouse:latest-modern",
+    "imageName": "docker.io/sigp/lighthouse:latest-modern",
     "binaryDownload": {
       "type": "githubReleases",
       "latestVersionUrl": "https://api.github.com/repos/sigp/lighthouse/releases/latest",
@@ -34,21 +35,21 @@
   "rpcTranslation": "eth-l1-beacon",
   "systemRequirements": {
     "documentationUrl": "https://lighthouse-book.sigmaprime.io/system-requirements.html",
-    "cpu" : {
+    "cpu": {
       "cores": 2
     },
     "memory": {
       "minSizeGBs": 8
     },
-    "storage" : {
-      "minSizeGBs" : 128,
+    "storage": {
+      "minSizeGBs": 128,
       "ssdRequired": true
     },
-    "internet" : {
+    "internet": {
       "minDownloadSpeedMbps": 10,
       "minUploadSpeedMbps": 5
     },
-    "docker" : {
+    "docker": {
       "required": true
     }
   },
@@ -61,6 +62,14 @@
       },
       "infoDescription": "Used to specify a custom root data directory for lighthouse keys and databases. Defaults to $HOME/.lighthouse/{network} where network is the value of the `network` flag Note: Users should specify separate custom datadirs for different networks.",
       "documentation": "https://lighthouse-book.sigmaprime.io/advanced-datadir.html?highlight=--datadir#relative-paths"
+    },
+    "checkpointSyncUrl": {
+      "displayName": "The URL of a trusted checkpoint sync",
+      "cliConfigPrefix": "--checkpoint-sync-url ",
+      "defaultValue": "https://mainnet.checkpoint.sigp.io",
+      "uiControl": {
+        "type": "text"
+      }
     },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",
@@ -109,25 +118,15 @@
     "executionEndpoint": {
       "displayName": "The URL of the local execution engine API",
       "cliConfigPrefix": "--execution-endpoint ",
-      "defaultValue": "http://host.docker.internal:8551",
-      "uiControl": {
-        "type": "text"
-      }
-    },
-    "executionEngineEndpoint": {
-      "displayName": "URL of the execution client's Engine JSON-RPC APIs",
-      "cliConfigPrefix": "--execution-endpoints ",
-      "defaultValue": "http://127.0.0.1:8545",
+      "defaultValue": "http://host.containers.internal:8551",
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "One or more comma-delimited server endpoints for HTTP JSON-RPC connection. If multiple endpoints are given the endpoints are used as fallback in the given order. Also enables the --merge flag. If this flag is omitted and the --eth1-endpoints is supplied, those values will be used. Defaults to http://127.0.0.1:8545.",
-      "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#ee-endpoint"
+      "documentation": "https://lighthouse-book.sigmaprime.io/run_a_node.html#step-3-set-up-a-beacon-node-using-lighthouse"
     },
     "maxPeerCount": {
       "displayName": "Max Peer Count (set to low number to use less bandwidth)",
       "cliConfigPrefix": "--target-peers ",
-      "defaultValue": "50",
       "uiControl": {
         "type": "text"
       },

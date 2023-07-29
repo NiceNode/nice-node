@@ -2,7 +2,7 @@ import { TFunction } from 'i18next';
 import { ReactElement } from 'react';
 import {
   CpuRequirements,
-  DockerRequirements,
+  // DockerRequirements,
   InternetRequirements,
   MemoryRequirements,
   StorageRequirements,
@@ -47,7 +47,7 @@ export const makeCheckList = (
     let checkTitle = '';
     let valueText = '';
     let valueComponent: ReactElement = <></>;
-    let captionText = '';
+    const captionText = '';
     let status: ChecklistItemProps['status'] = 'loading';
     if (nodeReqKey === 'cpu') {
       const req = nodeReqValue as CpuRequirements;
@@ -173,40 +173,41 @@ export const makeCheckList = (
         status = 'information';
       }
     }
-    if (nodeReqKey === 'docker') {
-      const req = nodeReqValue as DockerRequirements;
-      if (req.required === true) {
-        captionText = t('dockerCaption');
-        if (req.minVersion) {
-          checkTitle = t('dockerVersionInstalledTitle', {
-            minVersion: req.minVersion,
-          });
-        } else {
-          // case where no specific docker version is required
-          checkTitle = t('dockerInstalledTitle');
-        }
-        if (systemData?.versions.docker) {
-          // !req.minVersion: case where no specific docker version is required
-          if (
-            !req.minVersion ||
-            systemData?.versions.docker >= req.minVersion
-          ) {
-            valueText = t('dockerVersionInstalledDescription', {
-              version: systemData?.versions.docker,
-            });
-            status = 'complete';
-          } else {
-            captionText = t('dockerVersionInstalledNeedsUpdateCaption');
-            status = 'incomplete';
-          }
-        } else {
-          valueText = t('dockerNotInstalledDescription', {
-            version: systemData?.versions.docker,
-          });
-          status = 'incomplete';
-        }
-      }
-    }
+    // Todoo: Don't make user think about Podman?
+    // if (nodeReqKey === 'docker') {
+    //   const req = nodeReqValue as DockerRequirements;
+    //   if (req.required === true) {
+    //     captionText = t('dockerCaption');
+    //     if (req.minVersion) {
+    //       checkTitle = t('dockerVersionInstalledTitle', {
+    //         minVersion: req.minVersion,
+    //       });
+    //     } else {
+    //       // case where no specific docker version is required
+    //       checkTitle = t('dockerInstalledTitle');
+    //     }
+    //     if (systemData?.versions.docker) {
+    //       // !req.minVersion: case where no specific docker version is required
+    //       if (
+    //         !req.minVersion ||
+    //         systemData?.versions.docker >= req.minVersion
+    //       ) {
+    //         valueText = t('dockerVersionInstalledDescription', {
+    //           version: systemData?.versions.docker,
+    //         });
+    //         status = 'complete';
+    //       } else {
+    //         captionText = t('dockerVersionInstalledNeedsUpdateCaption');
+    //         status = 'incomplete';
+    //       }
+    //     } else {
+    //       valueText = t('dockerNotInstalledDescription', {
+    //         version: systemData?.versions.docker,
+    //       });
+    //       status = 'incomplete';
+    //     }
+    //   }
+    // }
 
     const checkListItem: ChecklistItemProps = {
       checkTitle,

@@ -42,6 +42,8 @@ declare global {
       getMainProcessUsage(): any;
       checkSystemHardware(): string[];
       getSystemInfo(): SystemData;
+      getFailSystemRequirements(): Promise<FailSystemRequirementsData>;
+      closeApp(): void;
 
       // Multi-node
       getNodes(): Node[];
@@ -61,6 +63,7 @@ declare global {
       openDialogForNodeDataDir(nodeId: NodeId): string;
       openDialogForStorageLocation(): CheckStorageDetails;
       updateNodeUsedDiskSpace(nodeId: NodeId): void;
+      updateNodeLastSyncedBlock(nodeId: NodeId, block: number): void;
       deleteNodeStorage(nodeId: NodeId): boolean;
       sendNodeLogs(nodeId: NodeId): void;
       stopSendingNodeLogs(nodeId?: NodeId): void;
@@ -71,18 +74,27 @@ declare global {
       // Node library
       getNodeLibrary(): NodeLibrary;
 
-      // Docker
-      getIsDockerInstalled(): boolean;
-      installDocker(): any;
-      getIsDockerRunning(): true;
-      startDocker(): any;
+      // Podman
+      getIsPodmanInstalled(): boolean;
+      installPodman(): any;
+      getIsPodmanRunning(): true;
+      startPodman(): any;
 
       // Settings
       getSetHasSeenSplashscreen(hasSeen?: boolean): boolean;
+      getSetHasSeenAlphaModal(hasSeen?: boolean): boolean;
       getSettings(): Settings;
       setLanguage(languageCode: string): void;
       setThemeSetting(theme: ThemeSetting): void;
       setIsOpenOnStartup(isOpenOnStartup: boolean): void;
+      setIsNotificationsEnabled(isNotificationsEnabled: boolean): void;
+      setIsEventReportingEnabled(isEventReportingEnabled: boolean): void;
+
+      // Notifications
+      getNotifications(): any;
+      addNotification(notification: any): void;
+      removeNotifications(): void;
+      markAllAsRead(): void;
     };
 
     performance: Performance;

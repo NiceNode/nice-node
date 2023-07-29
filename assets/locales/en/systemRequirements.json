@@ -21,5 +21,6 @@
   "dockerCaption": "Docker helps software work on a wide range of computers.",
   "nodeRequirementsDefaultDescription": "Your computer is checked with the recommended requirements for the selected node.",
   "nodeRequirementsUnavailable": "The requirements are unavailable. Please check with the node provider.",
-  "nodeRequirementsLearnMore": "Learn more about the requirements"
+  "nodeRequirementsLearnMore": "Learn more about the requirements",
+  "ThisSystemDoesNotMeetReqs": "This {{systemName}} doesn't meet the NiceNode system requirements."
 }
