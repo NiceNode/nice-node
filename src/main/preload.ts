@@ -29,6 +29,8 @@ contextBridge.exposeInMainWorld('electron', {
   },
   updateNodeUsedDiskSpace: (nodeId: NodeId) =>
     ipcRenderer.invoke('updateNodeUsedDiskSpace', nodeId),
+  updateNodeLastSyncedBlock: (nodeId: NodeId, block: number) =>
+    ipcRenderer.invoke('updateNodeLastSyncedBlock', nodeId, block),
   getSystemFreeDiskSpace: () => ipcRenderer.invoke('getSystemFreeDiskSpace'),
   getDebugInfo: () => ipcRenderer.invoke('getDebugInfo'),
   getStoreValue: (key: string) => ipcRenderer.invoke('getStoreValue', key),
@@ -45,6 +47,9 @@ contextBridge.exposeInMainWorld('electron', {
   },
   checkSystemHardware: () => ipcRenderer.invoke('checkSystemHardware'),
   getSystemInfo: () => ipcRenderer.invoke('getSystemInfo'),
+  getFailSystemRequirements: () =>
+    ipcRenderer.invoke('getFailSystemRequirements'),
+  closeApp: () => ipcRenderer.invoke('closeApp'),
 
   // Multi-node
   getNodes: () => ipcRenderer.invoke('getNodes'),
@@ -99,15 +104,17 @@ contextBridge.exposeInMainWorld('electron', {
   // Node library
   getNodeLibrary: () => ipcRenderer.invoke('getNodeLibrary'),
 
-  // Docker
-  getIsDockerInstalled: () => ipcRenderer.invoke('getIsDockerInstalled'),
-  installDocker: () => ipcRenderer.invoke('installDocker'),
-  getIsDockerRunning: () => ipcRenderer.invoke('getIsDockerRunning'),
-  startDocker: () => ipcRenderer.invoke('startDocker'),
+  // Podman
+  getIsPodmanInstalled: () => ipcRenderer.invoke('getIsPodmanInstalled'),
+  installPodman: () => ipcRenderer.invoke('installPodman'),
+  getIsPodmanRunning: () => ipcRenderer.invoke('getIsPodmanRunning'),
+  startPodman: () => ipcRenderer.invoke('startPodman'),
 
   // Settings
   getSetHasSeenSplashscreen: (hasSeen?: boolean) =>
     ipcRenderer.invoke('getSetHasSeenSplashscreen', hasSeen),
+  getSetHasSeenAlphaModal: (hasSeen?: boolean) =>
+    ipcRenderer.invoke('getSetHasSeenAlphaModal', hasSeen),
   getSettings: () => ipcRenderer.invoke('getSettings'),
   setLanguage: (languageCode: string) => {
     ipcRenderer.invoke('setLanguage', languageCode);
@@ -120,6 +127,9 @@ contextBridge.exposeInMainWorld('electron', {
   },
   setIsNotificationsEnabled: (isNotificationsEnabled: boolean) => {
     ipcRenderer.invoke('setIsNotificationsEnabled', isNotificationsEnabled);
+  },
+  setIsEventReportingEnabled: (isEventReportingEnabled: boolean) => {
+    ipcRenderer.invoke('setIsEventReportingEnabled', isEventReportingEnabled);
   },
 
   // Notifications

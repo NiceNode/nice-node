@@ -21,7 +21,7 @@
       "docker": ["amd64", "arm64"],
       "binary": ["amd64", "arm64"]
     },
-    "imageName": "nethermind/nethermind",
+    "imageName": "docker.io/nethermind/nethermind",
     "binaryDownload": {
       "type": "githubReleases",
       "latestVersionUrl": "https://api.github.com/repos/NethermindEth/nethermind/releases/latest",
@@ -84,7 +84,7 @@
       "displayName": "Enabled HTTP APIs",
       "category": "RPC APIs",
       "cliConfigPrefix": "--JsonRpc.EnabledModules ",
-      "valuesJoinStr": ", ",
+      "valuesJoinStr": ",",
       "uiControl": {
         "type": "select/multiple",
         "controlTranslations": [

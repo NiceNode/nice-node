@@ -21,6 +21,19 @@ export const container = style({
       backgroundColor: 'transparent',
       borderBottom: 'none',
     },
+    [`&.center`]: {
+      justifyContent: 'center',
+    },
+    [`&.manualVisibility`]: {
+      borderTopLeftRadius: 14,
+      borderTopRightRadius: 14,
+      height: 40,
+      opacity: 0,
+      transition: 'opacity 0.1s ease-in-out',
+    },
+    [`&.isVisible`]: {
+      opacity: 1,
+    },
   },
 });
 

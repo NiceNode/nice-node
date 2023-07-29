@@ -16,22 +16,7 @@ export type LogWithMetadata = {
   timestamp?: number;
 };
 
-/**
- * Tries to parse as much log metadata from a raw log string output
- *  from `docker logs -t ...`
- * @param log
- */
-export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
-  // try to parse timestamp from beginning of log
-  // Docker timestampe format with padded zeros giving consistent length
-  // Example: 2014-09-16T06:17:46.000000000Z
-  const message = log.slice(31); // 30+1 to remove a space
-  const nanoTimestampStr = log.substring(0, 30);
-  // returns timestamp in seconds
-  const timestamp = timestampFromString(nanoTimestampStr);
-  // Timestamp library silently fails and returns invalid timestamps
-  // handle errors: todo
-
+const parseLogLevel = (log: string): LogLevel => {
   let level: LogLevel = 'INFO';
   const uppercaseLog = log.toUpperCase();
   if (uppercaseLog.includes('ERROR') || uppercaseLog.includes('ERR')) {
@@ -41,6 +26,70 @@ export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
   } else if (uppercaseLog.includes('DEBUG') || uppercaseLog.includes('DBG')) {
     level = 'DEBUG';
   }
+  return level;
+};
+
+/**
+ * Tries to parse as much log metadata from a raw log string output
+ *  from `docker logs -t ...`
+ * @param log
+ */
+export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
+  // try to parse timestamp from beginning of log
+  // Docker timestampe format with padded zeros giving consistent length
+  // Examples:
+  // docker: 2014-09-16T06:17:46.000000000Z
+  // docker:
+  const TIMESTAMP_LENGTH = 30;
+  const message = log.slice(TIMESTAMP_LENGTH + 1); // 30+1 to remove a space
+
+  const nanoTimestampStr = log.substring(0, TIMESTAMP_LENGTH);
+  // returns timestamp in seconds
+  const timestamp = timestampFromString(nanoTimestampStr);
+  // Timestamp library silently fails and returns invalid timestamps
+  // handle errors: todo
+  const level = parseLogLevel(log);
+
+  return {
+    message,
+    level,
+    timestamp,
+  };
+};
+
+// Last timestamp is used for multi-line logs from a container. This should work in most
+//  use cases because, the last valid log timestamp will be from the first log
+//  in the multi-line log.
+//  This is required because logs are parsed and split on new line chars. A possible fix
+//  for this long-term is to better split logs as they come from Podman.
+let lastTimestamp = -1;
+/**
+ * Tries to parse as much log metadata from a raw log string output
+ *  from `podman logs --follow --timestamps --tail <n> <container>`
+ * For multi-line logs, the timestamp of the first log is used for the remainer lines
+ * @param log
+ */
+export const parsePodmanLogMetadata = (log: string): LogWithMetadata => {
+  // try to parse timestamp from beginning of log
+  // Podman timestamp format with padded zeros giving consistent length
+  // Examples:
+  // podman:  2023-03-09T15:12:17-08:00
+  // podman:
+  const TIMESTAMP_LENGTH = 25;
+  const nanoTimestampStr = log.substring(0, TIMESTAMP_LENGTH);
+  // returns timestamp in seconds
+  let timestamp = timestampFromString(nanoTimestampStr);
+  // If the timestamp is not a timestamp, then the log is missing a timestmap.
+  // Or it is a multi-lined log and in this case we can only return the whole log
+  let message;
+  if (timestamp > 0) {
+    lastTimestamp = timestamp;
+    message = log.slice(TIMESTAMP_LENGTH + 1); // 25+1 to remove a space
+  } else {
+    message = log;
+    timestamp = lastTimestamp;
+  }
+  const level = parseLogLevel(log);
 
   return {
     message,

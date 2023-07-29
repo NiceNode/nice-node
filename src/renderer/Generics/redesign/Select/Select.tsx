@@ -95,6 +95,7 @@ const Select = ({
           }),
           menu: (base) => ({
             ...base,
+            width: 'auto', // makes menu as wide as longest option name
             backgroundColor: vars.color.background,
             marginTop: 0,
             borderTop: 0,

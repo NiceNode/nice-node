@@ -40,6 +40,8 @@ export interface ContentHeaderProps {
    * Is this transparent?
    */
   transparent?: boolean;
+  manualVisibility?: boolean;
+  isVisible?: boolean;
 }
 
 /**
@@ -53,11 +55,23 @@ export const ContentHeader = ({
   rightButtonIconId,
   rightButtonOnClick = () => {},
   transparent,
-  textAlign,
+  textAlign = 'center',
+  manualVisibility = false,
+  isVisible,
 }: ContentHeaderProps) => {
   const transparentStyle = transparent ? 'transparent' : '';
+  const manualVisibilityStyle = manualVisibility ? 'manualVisibility' : '';
+  const visibleStyle = isVisible ? 'isVisible' : '';
   return (
-    <div className={[container, transparentStyle].join(' ')}>
+    <div
+      className={[
+        container,
+        transparentStyle,
+        textAlign,
+        manualVisibilityStyle,
+        visibleStyle,
+      ].join(' ')}
+    >
       {leftButtonIconId && (
         <HeaderButton type={leftButtonIconId} onClick={leftButtonOnClick} />
       )}

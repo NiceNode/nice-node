@@ -13,10 +13,9 @@ import {
   nodeCommandTitle,
   nodeCommandContainer,
   nodeCommand,
+  emptyContainer,
 } from './NodeSettings.css';
 
-export type ThemeSetting = 'light' | 'dark' | 'auto';
-export type Preference = 'theme' | 'isOpenOnStartup';
 export interface NodeSettingsProps {
   categoryConfigs?: CategoryConfig[];
   configValuesMap?: ConfigValuesMap;
@@ -41,7 +40,7 @@ const NodeSettings = ({
   const { t: tNiceNode } = useTranslation();
 
   if (!categoryConfigs || categoryConfigs.length === 0) {
-    return null;
+    return <div className={emptyContainer} />;
   }
 
   const renderTabs = () => {

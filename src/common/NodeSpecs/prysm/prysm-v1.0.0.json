@@ -9,14 +9,16 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
+        "httpPort": "5052",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
-        "executionEndpoint": "http://host.docker.internal:8551"
+        "executionEndpoint": "http://host.containers.internal:8551",
+        "checkpointSyncUrl": "https://beaconstate.ethstaker.cc"
       },
       "docker": {
         "containerVolumePath": "/data",
-        "raw": "-p 4000:4000 -p 13000:13000 -p 12000:12000/udp",
-        "forcedRawNodeInput": "--accept-terms-of-use=true --rpc-host=0.0.0.0 --jwt-secret=/data/jwtsecret"
+        "raw": "-p 5052:5052 -p 13000:13000 -p 12000:12000/udp",
+        "forcedRawNodeInput": "--accept-terms-of-use=true --datadir=/data --rpc-host=0.0.0.0 --jwt-secret=/data/jwtsecret"
       }
     }
   },
@@ -52,6 +54,14 @@
       "infoDescription": "Prysm root directory",
       "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters/"
     },
+    "checkpointSyncUrl": {
+      "displayName": "The URL of a trusted checkpoint sync",
+      "cliConfigPrefix": "--checkpoint-sync-url=",
+      "defaultValue": "https://beaconstate.ethstaker.cc",
+      "uiControl": {
+        "type": "text"
+      }
+    },
     "httpPort": {
       "displayName": "The host on which the gateway server runs on",
       "cliConfigPrefix": "--grpc-gateway-port=",
@@ -70,7 +80,7 @@
     "httpHostAddress": {
       "displayName": "The host on which the gateway server runs on",
       "cliConfigPrefix": "--grpc-gateway-host=",
-      "defaultValue": "127.0.0.1",
+      "defaultValue": "0.0.0.0",
       "uiControl": {
         "type": "text"
       }
@@ -78,7 +88,7 @@
     "executionEndpoint": {
       "displayName": "The URL of the local execution engine API",
       "cliConfigPrefix": "--execution-endpoint=",
-      "defaultValue": "http://host.docker.internal:8551",
+      "defaultValue": "http://host.containers.internal:8551",
       "uiControl": {
         "type": "text"
       },

@@ -1,15 +1,16 @@
+/* eslint-disable no-await-in-loop */
 import { NodeSpecification } from '../common/nodeSpec';
 import {
   getContainerDetails,
-  removeDockerNode,
-  startDockerNode,
-  stopDockerNode,
+  removePodmanNode,
+  startPodmanNode,
+  stopPodmanNode,
   sendLogsToUI as dockerSendLogsToUI,
   initialize as initDocker,
   onExit as onExitDocker,
   stopSendingLogsToUI as dockerStopSendingLogsToUI,
   createRunCommand,
-} from './docker/docker';
+} from './podman/podman';
 import logger from './logger';
 import Node, {
   createNode,
@@ -72,8 +73,8 @@ export const getNodeStartCommand = (nodeId: NodeId): string => {
     if (isDockerNode(node)) {
       const dockerNode = node;
       console.log('creating node start command');
-      // startDockerNode(dockerNode);
-      const startCommand = `docker ${createRunCommand(dockerNode)}`;
+      // startPodmanNode(dockerNode);
+      const startCommand = `podman ${createRunCommand(dockerNode)}`;
       console.log('created node start command', startCommand);
 
       return startCommand;
@@ -96,8 +97,8 @@ export const startNode = async (nodeId: NodeId) => {
   try {
     if (isDockerNode(node)) {
       const dockerNode = node;
-      // startDockerNode(dockerNode);
-      const containerIds = await startDockerNode(dockerNode);
+      // startPodmanNode(dockerNode);
+      const containerIds = await startPodmanNode(dockerNode);
       dockerNode.runtime.processIds = containerIds;
       dockerNode.status = NodeStatus.running;
       nodeStore.updateNode(dockerNode);
@@ -121,14 +122,21 @@ export const stopNode = async (nodeId: NodeId) => {
   node.status = NodeStatus.stopping;
   nodeStore.updateNode(node);
 
-  if (isDockerNode(node)) {
-    const containerIds = await stopDockerNode(node);
-    logger.info(`${containerIds} stopped`);
-    node.status = NodeStatus.stopped;
-    nodeStore.updateNode(node);
-  } else {
-    // assuming binary
-    await stopBinary(node);
+  try {
+    if (isDockerNode(node)) {
+      const containerIds = await stopPodmanNode(node);
+      logger.info(`${containerIds} stopped`);
+      node.status = NodeStatus.stopped;
+      nodeStore.updateNode(node);
+    } else {
+      // assuming binary
+      await stopBinary(node);
+      node.status = NodeStatus.stopped;
+      nodeStore.updateNode(node);
+    }
+  } finally {
+    // don't catch the error, but mark node as stopped
+    // todoo: fix this, but for testing it is useful
     node.status = NodeStatus.stopped;
     nodeStore.updateNode(node);
   }
@@ -163,7 +171,7 @@ export const removeNode = async (
   // if docker, remove container
   if (isDockerNode(node)) {
     try {
-      const isDockerRemoved = await removeDockerNode(node);
+      const isDockerRemoved = await removePodmanNode(node);
       logger.info(`isDockerRemoved ${isDockerRemoved}`);
     } catch (err) {
       logger.error(err);
@@ -203,6 +211,17 @@ export const stopSendingNodeLogs = (nodeId?: NodeId) => {
   }
 };
 
+/**
+ * Removes all nodes and deletes their storage data
+ */
+export const removeAllNodes = async () => {
+  const nodes = nodeStore.getNodes();
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    await removeNode(node.id, { isDeleteStorage: true });
+  }
+};
+
 export const sendNodeLogs = (nodeId: NodeId) => {
   const node = nodeStore.getNode(nodeId);
   if (isDockerNode(node)) {
@@ -231,9 +250,12 @@ export const initialize = async () => {
       const dockerNode = node;
       if (Array.isArray(dockerNode?.runtime?.processIds)) {
         try {
-          // eslint-disable-next-line no-await-in-loop
           const containerDetails = await getContainerDetails(
             dockerNode.runtime.processIds
+          );
+          console.log(
+            'NodeManager.initialize containerDetails: ',
+            containerDetails
           );
           // {..."State": {
           //     "Status": "exited",
@@ -279,7 +301,7 @@ export const initialize = async () => {
           // eslint-disable-next-line no-await-in-loop
           const proc = await getProcess(pid);
           if (proc) {
-            const nodeStatus = getBinaryStatus(proc);
+            const nodeStatus = getBinaryStatus();
             logger.info(
               `NodeStatus for ${binaryNode.spec.specId} is ${nodeStatus}`
             );

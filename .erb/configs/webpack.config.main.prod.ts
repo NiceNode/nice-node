@@ -14,6 +14,7 @@ import deleteSourceMaps from '../scripts/delete-source-maps';
 
 checkNodeEnv('production');
 deleteSourceMaps();
+require('dotenv').config();
 
 const devtoolsConfig =
   process.env.DEBUG_PROD === 'true'
@@ -65,6 +66,9 @@ const configuration: webpack.Configuration = {
       NODE_ENV: 'production',
       DEBUG_PROD: false,
       START_MINIMIZED: false,
+      SENTRY_DSN: undefined,
+      FATHOM_SITE_ENV: undefined,
+      NICENODE_ENV: undefined,
     }),
   ],
 

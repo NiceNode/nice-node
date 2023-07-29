@@ -5,10 +5,10 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "offchainlabs/arb-node:v1.4.0-f4bbe91",
+    "imageName": "docker.io/offchainlabs/arb-node:v1.4.0-f4bbe91",
     "input": {
       "defaultConfig": {
-        "eth1ProviderUrl": "http://host.docker.internal:8545",
+        "eth1ProviderUrl": "http://host.containers.internal:8545",
         "httpCorsDomains": "http://localhost"
       },
       "docker": {
@@ -23,7 +23,7 @@
     "eth1ProviderUrl": {
       "displayName": "This should point to the HTTP RPC endpoint of your Ethereum entry-point (could be infura or other)",
       "cliConfigPrefix": "--l1.url ",
-      "niceNodeDefaultValue": "http://host.docker.internal:8545",
+      "niceNodeDefaultValue": "http://host.containers.internal:8545",
       "uiControl": {
         "type": "text"
       },

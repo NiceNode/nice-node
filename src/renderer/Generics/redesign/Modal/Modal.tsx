@@ -1,20 +1,20 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import Button, { ButtonProps } from '../Button/Button';
 import {
   modalHeaderContainer,
   modalBackdropStyle,
-  modalCloseButton,
   modalChildrenContainer,
   modalContentStyle,
   modalStepperContainer,
   titleFont,
 } from './modal.css';
 import { ModalConfig } from '../../../Presentational/ModalManager/modalUtils';
+import { ContentHeader } from '../ContentHeader/ContentHeader';
 
 type Props = {
-  modalType?: 'alert' | 'modal';
+  modalType?: 'alert' | 'modal' | 'info';
   modalStyle?: string;
-  modalTitle: string;
+  modalTitle?: string;
   backButtonEnabled?: boolean;
   children: React.ReactElement[] | React.ReactElement;
   buttonCancelLabel?: string;
@@ -44,6 +44,9 @@ export const Modal = ({
   modalOnClose,
   modalOnCancel,
 }: Props) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const modalContentRef = useRef<HTMLDivElement>(null);
+
   const escFunction = useCallback(
     (event: { key: string }) => {
       if (event.key === 'Escape') {
@@ -61,25 +64,59 @@ export const Modal = ({
     };
   }, [escFunction]);
 
+  useEffect(() => {
+    if (modalType === 'modal') {
+      let timeoutId: NodeJS.Timeout;
+      const handleScroll = () => {
+        clearTimeout(timeoutId);
+
+        timeoutId = setTimeout(() => {
+          const modalContent = modalContentRef.current;
+          if (modalContent && modalContent.scrollTop > 20) {
+            setIsVisible(true);
+          } else {
+            setIsVisible(false);
+          }
+        }, 100);
+      };
+
+      const modalContent = modalContentRef.current;
+
+      if (modalContent) {
+        modalContent.addEventListener('scroll', handleScroll);
+      }
+
+      return () => {
+        if (modalContent) {
+          modalContent.removeEventListener('scroll', handleScroll);
+        }
+        clearTimeout(timeoutId);
+      };
+    }
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className={modalBackdropStyle}>
       <div className={[modalContentStyle, modalStyle].join(' ')}>
-        {modalType !== 'alert' && (
-          <div className={modalCloseButton}>
-            <Button
-              variant="icon"
-              iconId="close"
-              type="ghost"
-              onClick={modalOnClose}
-            />
-          </div>
+        {modalType === 'modal' && (
+          <ContentHeader
+            title={modalTitle}
+            textAlign="center"
+            isVisible={isVisible}
+            manualVisibility
+          />
         )}
-        <div className={[modalHeaderContainer, modalType].join(' ')}>
-          <span className={[titleFont, modalType].join(' ')}>{modalTitle}</span>
-        </div>
         <div
           className={[modalChildrenContainer, modalStyle, modalType].join(' ')}
+          ref={modalContentRef}
         >
+          <div className={[modalHeaderContainer, modalType].join(' ')}>
+            <span className={[titleFont, modalType, modalStyle].join(' ')}>
+              {modalTitle}
+            </span>
+          </div>
           {children}
         </div>
         <div className={[modalStepperContainer, modalType].join(' ')}>

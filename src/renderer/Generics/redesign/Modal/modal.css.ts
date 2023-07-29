@@ -41,6 +41,9 @@ export const modalContentStyle = style({
     [`&.nodeSettings`]: {
       // maxHeight: 'none',
     },
+    [`&.failSystemRequirements`]: {
+      width: '380px',
+    },
   },
 });
 
@@ -51,10 +54,10 @@ export const modalCloseButton = style({
 });
 
 export const modalHeaderContainer = style({
-  padding: '40px 32px 16px 32px',
+  padding: '0px 0px 16px 0px',
   selectors: {
     [`&.alert`]: {
-      padding: '24px 24px 6px 24px',
+      padding: '24px 0px 6px 0px',
     },
   },
 });
@@ -72,6 +75,14 @@ export const titleFont = style({
       fontWeight: 590,
       paddingBottom: 6,
     },
+    [`&.nodeSettings`]: {
+      paddingLeft: 32,
+    },
+    [`&.failSystemRequirements`]: {
+      fontSize: '20px',
+      lineHeight: '24px',
+      letterSpacing: '-0.4px',
+    },
   },
 });
 
@@ -87,6 +98,10 @@ export const modalStepperContainer = style({
       borderTop: 'none',
       padding: 24,
     },
+    [`&.info`]: {
+      borderTop: 'none',
+      padding: 24,
+    },
   },
 });
 
@@ -99,6 +114,10 @@ export const modalChildrenContainer = style({
       padding: '0px 24px',
       overflow: 'hidden',
     },
+    [`&.info`]: {
+      padding: 0,
+      overflow: 'hidden',
+    },
     [`&.addNode`]: {
       overflowY: 'auto',
       overflowX: 'hidden',
@@ -106,7 +125,6 @@ export const modalChildrenContainer = style({
     [`&.nodeSettings`]: {
       padding: 0,
       overflowX: 'hidden',
-      // minHeight: 559,
     },
   },
 });

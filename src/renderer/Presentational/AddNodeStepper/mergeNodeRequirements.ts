@@ -1,7 +1,7 @@
 import {
   SystemRequirements,
   CpuRequirements,
-  DockerRequirements,
+  // DockerRequirements,
   InternetRequirements,
   MemoryRequirements,
   StorageRequirements,
@@ -109,25 +109,25 @@ export const mergeSystemRequirements = (
           }
         }
       }
-      if (nodeReqKey === 'docker') {
-        const req = nodeReqValue as DockerRequirements;
-        if (!mergedReqs.docker) {
-          mergedReqs.docker = {};
-        }
-        if (req.required === true) {
-          mergedReqs.docker.required = true;
-        }
-        if (req.minVersion !== undefined) {
-          // if a require docker version is higher than other versions,
-          //   the highest(newest) version takes priority.
-          if (
-            !mergedReqs.docker?.minVersion ||
-            mergedReqs?.docker.minVersion < req.minVersion
-          ) {
-            mergedReqs.docker.minVersion = req.minVersion;
-          }
-        }
-      }
+      // if (nodeReqKey === 'docker') {
+      //   const req = nodeReqValue as DockerRequirements;
+      //   if (!mergedReqs.docker) {
+      //     mergedReqs.docker = {};
+      //   }
+      //   if (req.required === true) {
+      //     mergedReqs.docker.required = true;
+      //   }
+      //   if (req.minVersion !== undefined) {
+      //     // if a require docker version is higher than other versions,
+      //     //   the highest(newest) version takes priority.
+      //     if (
+      //       !mergedReqs.docker?.minVersion ||
+      //       mergedReqs?.docker.minVersion < req.minVersion
+      //     ) {
+      //       mergedReqs.docker.minVersion = req.minVersion;
+      //     }
+      //   }
+      // }
       // set a value on mergedReqs todo
     }
   });

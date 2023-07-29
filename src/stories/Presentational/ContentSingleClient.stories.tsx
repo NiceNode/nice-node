@@ -9,15 +9,15 @@ export default {
 } as ComponentMeta<typeof ContentSingleClient>;
 
 const Template: ComponentStory<typeof ContentSingleClient> = (args) => (
-  <ContentSingleClient {...args}/>
+  <ContentSingleClient {...args} />
 );
 
 export const Primary = Template.bind({});
 Primary.args = {
-  nodeId: "1f916ffa-b5e8-421e-a9b2-622efc3e8223",
+  nodeId: '1f916ffa-b5e8-421e-a9b2-622efc3e8223',
   name: 'geth',
   version: 'v10',
-  type: 'client',
+  screenType: 'client',
   nodeType: 'execution',
   status: {
     updating: false,
@@ -41,16 +41,16 @@ Primary.args = {
 
 export const LimitedData = Template.bind({});
 LimitedData.args = {
-    "nodeId": "1f916ffa-b5e8-421e-a9b2-622efc3e8223",
-    "name": "nethermind",
-    "type": 'client',
-    "nodeType": "L1/ExecutionClient",
-    "network": "Ethereum mainnet",
-    "status": {
-        "stopped": true,
-        "error": false
-    },
-    "stats": {
-        "diskUsageGBs": 5.6
-    }
+  nodeId: '1f916ffa-b5e8-421e-a9b2-622efc3e8223',
+  name: 'nethermind',
+  screenType: 'client',
+  nodeType: 'L1/ExecutionClient',
+  network: 'Ethereum mainnet',
+  status: {
+    stopped: true,
+    error: false,
+  },
+  stats: {
+    diskUsageGBs: 5.6,
+  },
 };
