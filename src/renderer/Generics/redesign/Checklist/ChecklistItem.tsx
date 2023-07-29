@@ -15,7 +15,7 @@ import { Icon } from '../Icon/Icon';
 /**
  * checkTitle and status required
  */
-export interface ChecklistItemProps {
+export type ChecklistItemProps = {
   /**
    * Status of the check
    */
@@ -36,7 +36,7 @@ export interface ChecklistItemProps {
    * Additional information as a caption
    */
   captionText?: string;
-}
+};
 
 /**
  * Primary UI component for user interaction

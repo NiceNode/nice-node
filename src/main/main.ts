@@ -11,7 +11,6 @@
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import * as Sentry from '@sentry/electron/main';
-// import { CaptureConsole } from '@sentry/integrations';
 
 import logger from './logger';
 import MenuBuilder from './menu';
@@ -31,18 +30,18 @@ import { setCorsForNiceNode } from './corsMiddleware';
 import * as updater from './updater';
 import * as monitor from './monitor';
 
-require('dotenv').config();
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config();
+}
 
 fixPathEnvVar();
-// debug({ isEnabled: true });
+logger.info(`NICENODE_ENV: ${process.env.NICENODE_ENV}`);
+logger.info(`FATHOM_SITE_ENV: ${process.env.FATHOM_SITE_ENV}`);
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   maxBreadcrumbs: 50,
-  // integrations: [
-  //   new CaptureConsole({
-  //     levels: ['error', 'warn'],
-  //   }),
-  // ],
+  debug: process.env.NODE_ENV === 'development',
+  environment: process.env.NICENODE_ENV || 'development',
 });
 
 let mainWindow: BrowserWindow | null = null;
@@ -93,8 +92,8 @@ const createWindow = async () => {
     show: false,
     minWidth: 980,
     minHeight: 480,
-    width: 1200,
-    height: 820,
+    width: 1068,
+    height: 780,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,

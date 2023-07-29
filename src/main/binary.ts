@@ -5,7 +5,7 @@ import { createWriteStream } from 'fs';
 import { access, chmod } from 'fs/promises';
 import sleep from 'await-sleep';
 
-import { ProcessDescription } from 'pm2';
+// import { ProcessDescription } from 'pm2';
 import { parseFileNameFromPath } from './util/parseFileNameFromPath';
 import * as platform from './platform';
 import * as arch from './arch';
@@ -74,26 +74,27 @@ const getDownloadUrl = (binaryDownload: BinaryDownload) => {
   );
 };
 
-export const getBinaryStatus = (proc: ProcessDescription): NodeStatus => {
-  const procStatus = proc?.pm2_env?.status;
-  if (proc && procStatus) {
-    if (procStatus === 'online') {
-      return NodeStatus.running;
-    }
-    if (procStatus === 'errored') {
-      return NodeStatus.errorRunning;
-    }
-    if (procStatus === 'stopping') {
-      return NodeStatus.stopping;
-    }
-    if (procStatus === 'launching') {
-      return NodeStatus.starting;
-    }
-    if (procStatus === 'stopped') {
-      return NodeStatus.stopped;
-    }
-  }
-  console.log('unkown proc status! proc, procStatus', proc, procStatus);
+// export const getBinaryStatus = (proc: ProcessDescription): NodeStatus => {
+export const getBinaryStatus = (): NodeStatus => {
+  // const procStatus = proc?.pm2_env?.status;
+  // if (proc && procStatus) {
+  //   if (procStatus === 'online') {
+  //     return NodeStatus.running;
+  //   }
+  //   if (procStatus === 'errored') {
+  //     return NodeStatus.errorRunning;
+  //   }
+  //   if (procStatus === 'stopping') {
+  //     return NodeStatus.stopping;
+  //   }
+  //   if (procStatus === 'launching') {
+  //     return NodeStatus.starting;
+  //   }
+  //   if (procStatus === 'stopped') {
+  //     return NodeStatus.stopped;
+  //   }
+  // }
+  // console.log('unkown proc status! proc, procStatus', proc, procStatus);
   return NodeStatus.unknown;
 };
 
@@ -341,14 +342,15 @@ export const stopBinary = async (node: Node) => {
     try {
       const proc = await getProcess(pid);
       if (proc) {
-        const nodeStatus = getBinaryStatus(proc);
-        const proccessUsage = proc.monit;
-        if (proccessUsage) {
-          node.runtime.usage.memoryBytes = proccessUsage.memory ?? undefined;
-          node.runtime.usage.cpuPercent = proccessUsage.cpu ?? undefined;
-        }
-        node.status = nodeStatus;
-        nodeStore.updateNode(node);
+        console.log(proc);
+        // const nodeStatus = getBinaryStatus(proc);
+        // const proccessUsage = proc.monit;
+        // if (proccessUsage) {
+        //   node.runtime.usage.memoryBytes = proccessUsage.memory ?? undefined;
+        //   node.runtime.usage.cpuPercent = proccessUsage.cpu ?? undefined;
+        // }
+        // node.status = nodeStatus;
+        // nodeStore.updateNode(node);
       } else {
         // todo: fix: this happens on computer restart
         logger.error(
@@ -401,16 +403,18 @@ const watchBinaryProcesses = async () => {
           // eslint-disable-next-line no-await-in-loop
           const proc = await getProcess(pid);
           if (proc) {
-            const nodeStatus = getBinaryStatus(proc);
-            const proccessUsage = proc.monit;
-            if (proccessUsage) {
-              node.runtime.usage.memoryBytes =
-                proccessUsage.memory ?? undefined;
-              node.runtime.usage.cpuPercent = proccessUsage.cpu ?? undefined;
-            }
-            // logger.info(`NodeStatus for ${node.spec.specId} is ${nodeStatus}`);
-            node.status = nodeStatus;
-            nodeStore.updateNode(node);
+            console.log(proc);
+
+            // const nodeStatus = getBinaryStatus(proc);
+            // const proccessUsage = proc.monit;
+            // if (proccessUsage) {
+            //   node.runtime.usage.memoryBytes =
+            //     proccessUsage.memory ?? undefined;
+            //   node.runtime.usage.cpuPercent = proccessUsage.cpu ?? undefined;
+            // }
+            // // logger.info(`NodeStatus for ${node.spec.specId} is ${nodeStatus}`);
+            // node.status = nodeStatus;
+            // nodeStore.updateNode(node);
           } else {
             // todo: fix: this happens on computer restart
             logger.error(

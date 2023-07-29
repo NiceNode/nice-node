@@ -18,6 +18,7 @@ import deleteSourceMaps from '../scripts/delete-source-maps';
 
 checkNodeEnv('production');
 deleteSourceMaps();
+require('dotenv').config();
 
 const devtoolsConfig =
   process.env.DEBUG_PROD === 'true'
@@ -145,6 +146,12 @@ const configuration: webpack.Configuration = {
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
       DEBUG_PROD: false,
+      // setting process.env.FATHOM_SITE_ID & FATHOM_SITE_ID overrides this
+      // these are required to be declared here so webpack knows which to replace in code
+      // undefined means webpack with throw an error if not set on process.env
+      FATHOM_SITE_ID: undefined,
+      FATHOM_SITE_ENV: undefined,
+      NICENODE_ENV: undefined,
     }),
 
     new MiniCssExtractPlugin({

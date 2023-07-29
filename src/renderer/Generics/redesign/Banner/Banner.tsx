@@ -18,9 +18,9 @@ export interface BannerProps {
    */
   updateAvailable?: boolean;
   /**
-   * Is docker not running?
+   * Is podman not running?
    */
-  dockerStopped?: boolean;
+  podmanStopped?: boolean;
   onClick?: () => void;
 }
 
@@ -30,7 +30,7 @@ export interface BannerProps {
 export const Banner = ({
   offline,
   updateAvailable,
-  dockerStopped,
+  podmanStopped,
   onClick,
 }: BannerProps) => {
   let iconId: IconId = 'blank';
@@ -48,12 +48,12 @@ export const Banner = ({
     internalOnClick = () => {
       console.log('update nice node!');
     };
-  } else if (dockerStopped) {
+  } else if (podmanStopped) {
     iconId = 'play';
-    title = 'Docker is not running';
-    description = 'Click to start Docker';
+    title = 'Podman is not running';
+    description = 'Click to start Podman';
     internalOnClick = () => {
-      console.log('Start Docker!');
+      console.log('Start Podman!');
     };
   }
   const onClickBanner = () => {

@@ -76,6 +76,20 @@ export const updateNodeUsedDiskSpace = async (nodeId: NodeId) => {
   }
 };
 
+export const updateNodeLastSyncedBlock = async (
+  nodeId: NodeId,
+  block: number
+) => {
+  const node = storeNodes.getNode(nodeId);
+  if (node) {
+    if (block !== undefined) {
+      logger.info(`Synced block ${block} for nodeId ${nodeId}`);
+      node.runtime.usage.syncedBlock = block;
+      storeNodes.updateNode(node);
+    }
+  }
+};
+
 export const initialize = () => {
   checkSystemHardware();
   monitoringInterval = setInterval(

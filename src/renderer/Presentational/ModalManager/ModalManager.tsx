@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useCallback } from 'react';
+
 import { useAppDispatch } from '../../state/hooks';
 import { getModalState, setModalState } from '../../state/modal';
 import { modalRoutes } from './modalUtils';
@@ -7,6 +8,8 @@ import { NodeSettingsModal } from './NodeSettingsModal';
 import { PreferencesModal } from './PreferencesModal';
 import { RemoveNodeModal } from './RemoveNodeModal';
 import { AddNodeModal } from './AddNodeModal';
+import { AlphaBuildModal } from './AlphaBuildModal';
+import FailSystemRequirementsModal from './FailSystemRequirementsModal';
 
 const ModalManager = () => {
   const { isModalOpen, screen } = useSelector(getModalState);
@@ -34,10 +37,16 @@ const ModalManager = () => {
       return <NodeSettingsModal modalOnClose={modalOnClose} />;
     case modalRoutes.preferences:
       return <PreferencesModal modalOnClose={modalOnClose} />;
+    case modalRoutes.failSystemRequirements:
+      return <FailSystemRequirementsModal modalOnClose={modalOnClose} />;
     case modalRoutes.addValidator:
       return null;
     case modalRoutes.clientVersions:
       return null;
+
+    // Info
+    case modalRoutes.alphaBuild:
+      return <AlphaBuildModal modalOnClose={modalOnClose} />;
 
     // Alerts
     case modalRoutes.stopNode:

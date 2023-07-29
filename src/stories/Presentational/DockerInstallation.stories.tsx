@@ -1,16 +1,16 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import DockerInstallation from '../../renderer/Presentational/DockerInstallation/DockerInstallation';
+import PodmanInstallation from '../../renderer/Presentational/PodmanInstallation/PodmanInstallation';
 
 
 export default {
-  title: 'Presentational/DockerInstallation',
-  component: DockerInstallation,
+  title: 'Presentational/PodmanInstallation',
+  component: PodmanInstallation,
   argTypes: {
   },
-} as ComponentMeta<typeof DockerInstallation>;
+} as ComponentMeta<typeof PodmanInstallation>;
 
-const Template: ComponentStory<typeof DockerInstallation> = (args) => <DockerInstallation {...args} />;
+const Template: ComponentStory<typeof PodmanInstallation> = (args) => <PodmanInstallation {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {

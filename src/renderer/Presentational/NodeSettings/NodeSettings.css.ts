@@ -17,3 +17,8 @@ export const nodeCommandContainer = style({
 export const nodeCommand = style({
   fontFamily: 'monospace',
 });
+
+export const emptyContainer = style({
+  minHeight: 1000,
+  minWidth: 624,
+});

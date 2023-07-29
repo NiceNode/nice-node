@@ -25,7 +25,8 @@ export const container = style({
 });
 
 export const timestampStyle = style({
-  width: 133,
+  width: 113,
+  // width: 133,  for including milliseconds
   flex: 'none',
   order: 1,
   flexGrow: 0,

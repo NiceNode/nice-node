@@ -5,20 +5,20 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "hyperledger/besu:latest",
+    "imageName": "docker.io/hyperledger/besu:latest",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
         "webSockets": "Enabled",
         "httpCorsDomains": "\"http://localhost\"",
-        "hostAllowList": "localhost,host.docker.internal",
+        "hostAllowList": "localhost,host.containers.internal",
         "engineRpc" : "Enabled",
-        "engineHostAllowList": "localhost,host.docker.internal"
+        "engineHostAllowList": "localhost,host.containers.internal"
 
       },
       "docker": {
         "containerVolumePath": "/var/lib/besu",
-        "raw": "-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546 -p 8551:8551",
+        "raw": "-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546 -p 8551:8551 --user 0",
         "forcedRawNodeInput": "--data-path=\"/var/lib/besu\" --engine-jwt-secret=\"/var/lib/besu/jwtsecret\""
       }
     }
@@ -233,7 +233,7 @@
         "type": "text"
       },
       "infoDescription": "Example value: medomain.com,meotherdomain.com",
-      "defaultValue": "localhost,host.docker.internal,127.0.0.1"
+      "defaultValue": "localhost,host.containers.internal,127.0.0.1"
     },
     "dataStorageFormat": {
       "displayName": "The data storage format to use",

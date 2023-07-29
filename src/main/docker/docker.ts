@@ -437,7 +437,7 @@ export const isDockerInstalled = async () => {
 
 export const isDockerRunning = async () => {
   let bIsDockerRunning;
-  logger.info('Checking isDockerRunning...');
+  // logger.info('Checking isDockerRunning...');
   try {
     // Docker is running if the info command did not throw error.
     await runCommand('info');
@@ -446,17 +446,17 @@ export const isDockerRunning = async () => {
     // [mac verified] "error cannot connect to the docker dameon"
     logger.error(err);
     bIsDockerRunning = false;
-    logger.info('Docker engine not found.');
+    // logger.info('Docker engine not found.');
   }
   if (!bIsDockerRunning) {
-    logger.info(`isDockerRunning: ${bIsDockerRunning}`);
+    // logger.info(`isDockerRunning: ${bIsDockerRunning}`);
   }
   return bIsDockerRunning;
 };
 
-setTimeout(() => {
-  isDockerRunning();
-}, 5000);
+// setTimeout(() => {
+//   isDockerRunning();
+// }, 5000);
 
 export const onExit = () => {
   monitoring.onExit();
