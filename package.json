@@ -209,7 +209,7 @@
     "@storybook/manager-webpack4": "^6.5.14",
     "@storybook/manager-webpack5": "^6.5.14",
     "@storybook/react": "^6.5.14",
-    "@storybook/testing-library": "^0.0.13",
+    "@storybook/testing-library": "^0.2.0",
     "@svgr/webpack": "^6.5.1",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
     "@testing-library/jest-dom": "^5.16.5",
