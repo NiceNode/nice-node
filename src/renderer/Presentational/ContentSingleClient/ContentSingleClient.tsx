@@ -1,9 +1,11 @@
 // import { useState, useCallback } from 'react';
 // import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 // import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
+import { MetricData } from 'common/node';
 import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
+import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
-import { TabContent } from '../../Generics/redesign/TabContent/TabContent';
+import TabContent from '../../Generics/redesign/TabContent/TabContent';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
@@ -13,7 +15,7 @@ import { NodeAction, NodeOverviewProps } from '../../Generics/redesign/consts';
 // TODO: process retrieved client data into this format
 export type SingleNodeContent = {
   nodeId: string;
-  name: string; // lowercase for supported node icons
+  name: NodeBackgroundId; // lowercase for supported node icons
   version?: string;
   screenType?: string;
   nodeType?: string;
@@ -39,6 +41,13 @@ export type SingleNodeContent = {
     cpuLoad?: number;
     diskUsageGBs?: number; // in MB?
   };
+  tabsData?: {
+    memoryPercent: MetricData[];
+    cpuPercent: MetricData[];
+    diskUsed: MetricData[];
+    diskFree: number;
+    diskTotal: number;
+  };
   onAction?: (action: NodeAction) => void;
 };
 
@@ -62,6 +71,8 @@ const ContentSingleClient = (props: SingleNodeContent) => {
 
   // TODO: retrieve initial data for all pages
 
+  console.log('diskFree', nodeOverview.tabsData?.diskFree);
+
   return (
     <>
       {/* todo: fix temp type casting */}
@@ -74,20 +85,36 @@ const ContentSingleClient = (props: SingleNodeContent) => {
         <HorizontalLine type="above-tab" />
       </div>
       <Tabs>
-        <div id="Sync">
+        {/* <div id="Sync">
           <TabContent tabId="Sync" />
-        </div>
+        </div> */}
         <div id="CPU">
-          <TabContent tabId="CPU" />
+          <TabContent
+            name={nodeOverview.name}
+            tabId="CPU"
+            metricData={nodeOverview.tabsData?.cpuPercent}
+          />
         </div>
         <div id="Memory">
-          <TabContent tabId="Memory" />
+          <TabContent
+            name={nodeOverview.name}
+            tabId="Memory"
+            metricData={nodeOverview.tabsData?.memoryPercent}
+          />
         </div>
-        <div id="Network">
+        {/* <div id="Network">
           <TabContent tabId="Network" />
-        </div>
+        </div> */}
         <div id="Disk">
-          <TabContent tabId="Disk" />
+          <TabContent
+            name={nodeOverview.name}
+            tabId="Disk"
+            metricData={nodeOverview.tabsData?.diskUsed}
+            diskData={{
+              diskFree: nodeOverview.tabsData?.diskFree || 0,
+              diskTotal: nodeOverview.tabsData?.diskTotal || 0,
+            }}
+          />
         </div>
       </Tabs>
     </>

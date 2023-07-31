@@ -33,6 +33,7 @@ declare global {
         removeAllListeners(channel: string): void;
       };
       getSystemFreeDiskSpace(): number;
+      getSystemDiskSize(): number;
       getDebugInfo(): any;
       getStoreValue(key: string): any;
       setStoreValue(key: string, value: any): void;
@@ -62,7 +63,6 @@ declare global {
       updateNodeDataDir(node: Node, newDataDir: string): void;
       openDialogForNodeDataDir(nodeId: NodeId): string;
       openDialogForStorageLocation(): CheckStorageDetails;
-      updateNodeUsedDiskSpace(nodeId: NodeId): void;
       updateNodeLastSyncedBlock(nodeId: NodeId, block: number): void;
       deleteNodeStorage(nodeId: NodeId): boolean;
       sendNodeLogs(nodeId: NodeId): void;

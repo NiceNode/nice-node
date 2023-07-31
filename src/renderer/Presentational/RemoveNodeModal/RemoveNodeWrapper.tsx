@@ -15,7 +15,7 @@ const RemoveNodeWrapper = ({ modalOnChangeConfig }: RemoveNodeWrapperProps) => {
   useEffect(() => {
     console.log(selectedNode);
     if (selectedNode?.runtime?.usage?.diskGBs) {
-      const nodeStorageGBs = selectedNode?.runtime?.usage?.diskGBs;
+      const nodeStorageGBs = selectedNode?.runtime?.usage?.diskGBs[0]?.y;
       setNodeStorageUsedGBs(nodeStorageGBs);
     } else {
       setNodeStorageUsedGBs(undefined);

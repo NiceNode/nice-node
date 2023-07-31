@@ -29,6 +29,7 @@ import {
   titleFont,
   descriptionFont,
 } from './NodeScreen.css';
+import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 
 let alphaModalRendered = false;
 
@@ -41,6 +42,8 @@ const NodeScreen = () => {
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
+  const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>(0);
+  const [sTotalDiskSize, setTotalDiskSize] = useState<number>(0);
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
@@ -72,8 +75,13 @@ const NodeScreen = () => {
   //   pollingInterval: typeof sPeers === 'number' && sPeers === 0 ? 30000 : 0,
   // });
 
-  const diskUsed =
-    selectedNode?.runtime?.usage?.diskGBs?.toPrecision(2) ?? undefined;
+  const diskUsed = selectedNode?.runtime?.usage?.diskGBs?.[0]?.y ?? 0;
+  const cpuPercent = selectedNode?.runtime?.usage?.cpuPercent ?? [
+    { x: 0, y: 0 },
+  ];
+  const memoryPercent = selectedNode?.runtime?.usage?.memoryBytes ?? [
+    { x: 0, y: 0 },
+  ];
   // eslint-disable-next-line eqeqeq
   // const isHttpEnabled =
   //   selectedNode?.config?.configValuesMap?.http &&
@@ -81,6 +89,26 @@ const NodeScreen = () => {
   //     selectedNode?.config?.configValuesMap?.http
   //   );
   // todo: http apis
+
+  const getNodesDefaultStorageLocation = async () => {
+    const defaultNodesStorageDetails =
+      await electron.getNodesDefaultStorageLocation();
+    setFreeStorageGBs(defaultNodesStorageDetails.freeStorageGBs);
+  };
+
+  useEffect(() => {
+    getNodesDefaultStorageLocation();
+    const interval = setInterval(getNodesDefaultStorageLocation, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getSystemSize = async () => {
+    setTotalDiskSize(await electron.getSystemDiskSize());
+  };
+
+  useEffect(() => {
+    getSystemSize();
+  }, []);
 
   useEffect(() => {
     if (!sIsAvailableForPolling) {
@@ -148,7 +176,7 @@ const NodeScreen = () => {
     const slotNumber = qLatestBlock?.data?.header?.message?.slot;
     const rpcTranslation = selectedNode?.spec?.rpcTranslation;
 
-    let latestBlockNum;
+    let latestBlockNum = 0;
     if (
       blockNumber &&
       typeof blockNumber === 'string' &&
@@ -161,8 +189,6 @@ const NodeScreen = () => {
       rpcTranslation === 'eth-l1-beacon'
     ) {
       latestBlockNum = parseFloat(slotNumber);
-    } else {
-      latestBlockNum = 0;
     }
 
     const syncedBlock =
@@ -326,7 +352,7 @@ const NodeScreen = () => {
 
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
-    name: clientName,
+    name: clientName as NodeBackgroundId,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
     version: formatVersion(nodeVersionData, clientName),
@@ -339,7 +365,14 @@ const NodeScreen = () => {
     stats: {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,
-      diskUsageGBs: diskUsed ? parseFloat(diskUsed) : undefined,
+      diskUsageGBs: diskUsed,
+    },
+    tabsData: {
+      cpuPercent,
+      memoryPercent,
+      diskUsed: selectedNode?.runtime?.usage?.diskGBs,
+      diskFree: sFreeStorageGBs,
+      diskTotal: sTotalDiskSize,
     },
     onAction: onNodeAction,
   };

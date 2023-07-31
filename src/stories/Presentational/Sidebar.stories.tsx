@@ -299,9 +299,10 @@ Primary.args = {
           dataDir:
             '/Library/Application Support/NiceNode/nodes/besu-1667264729',
           usage: {
-            diskGBs: 0.0022009760000000003,
-            memoryBytes: 0,
-            cpuPercent: 0,
+            diskGBs: [{ x: 0, y: 0.000263848 }],
+            memoryBytes: [{ x: 0, y: 0 }],
+            cpuPercent: [{ x: 0, y: 0 }],
+            syncedBlock: 0,
           },
           processIds: [
             '63fe38e8f9ef52474e92a3e469e93a056100c9a45e382d1581bd0f2945549eeb',
@@ -462,9 +463,10 @@ Primary.args = {
           dataDir:
             '/Library/Application Support/NiceNode/nodes/nimbus-1667264729',
           usage: {
-            diskGBs: 0.000263848,
-            memoryBytes: 0,
-            cpuPercent: 0,
+            diskGBs: [{ x: 0, y: 0.000263848 }],
+            memoryBytes: [{ x: 0, y: 0 }],
+            cpuPercent: [{ x: 0, y: 0 }],
+            syncedBlock: 0,
           },
           processIds: [
             '62b5b9295aa2ae67d74660f16e58c77f4255b3cd807d2871ec04ca7fe89cb614',

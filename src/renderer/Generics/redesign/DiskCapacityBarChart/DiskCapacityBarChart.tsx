@@ -1,3 +1,4 @@
+import { NodeBackgroundId } from '../../../assets/images/nodeBackgrounds';
 import {
   wrapper,
   container,
@@ -7,37 +8,32 @@ import {
   free,
   legendContainer,
   legend,
-  otherColorBox,
   labelContainer,
   label,
   size,
   colorBox,
-  freeColorBox,
 } from './diskCapacityBarChart.css';
+import { common } from '../theme.css';
 
 export interface DiskCapacityBarChartProps {
-  otherSpace: number;
+  freeSpace: number;
   clientSpace: number;
   totalSpace: number;
-  clientType: string;
+  name: NodeBackgroundId;
 }
 
 const DiskCapacityBarChart = ({
-  otherSpace,
+  freeSpace,
   clientSpace,
   totalSpace,
-  clientType,
+  name,
 }: DiskCapacityBarChartProps) => {
-  const clientColorMap: { [client: string]: string } = {
-    Nimbus: 'red',
-    Besu: 'green',
-    Other: 'blue', // default color for other clients
-  };
-
-  const freeSpace = totalSpace - (otherSpace + clientSpace);
+  const otherSpace = totalSpace - freeSpace;
   const otherPercentage = (otherSpace / totalSpace) * 100;
   const clientPercentage = (clientSpace / totalSpace) * 100;
   const freePercentage = (freeSpace / totalSpace) * 100;
+  const capitalize = (s: string) =>
+    (s && s[0].toUpperCase() + s.slice(1)) || '';
 
   return (
     <div className={wrapper}>
@@ -49,7 +45,7 @@ const DiskCapacityBarChart = ({
         <div
           className={`${section} ${client}`}
           style={{
-            backgroundColor: clientColorMap[clientType],
+            backgroundColor: common.color[name],
             width: `${clientPercentage}%`,
           }}
         />
@@ -61,29 +57,29 @@ const DiskCapacityBarChart = ({
 
       <div className={legendContainer}>
         <div className={legend}>
-          <div className={otherColorBox} />
+          <div className={[colorBox, 'other'].join(' ')} />
           <div className={labelContainer}>
             <div className={label}>Other</div>
-            <div className={size}>{otherSpace} GB</div>
+            <div className={size}>{otherSpace.toFixed(2)} GB</div>
           </div>
         </div>
 
         <div className={legend}>
           <div
             className={colorBox}
-            style={{ backgroundColor: clientColorMap[clientType] }}
+            style={{ backgroundColor: common.color[name] }}
           />
           <div className={labelContainer}>
-            <div className={label}>{clientType} Client</div>
-            <div className={size}>{clientSpace} GB</div>
+            <div className={label}>{capitalize(name)} Client</div>
+            <div className={size}>{clientSpace.toFixed(2)} GB</div>
           </div>
         </div>
 
         <div className={legend}>
-          <div className={freeColorBox} />
+          <div className={[colorBox, 'free'].join(' ')} />
           <div className={labelContainer}>
             <div className={label}>Free Space</div>
-            <div className={size}>{freeSpace} GB</div>
+            <div className={size}>{freeSpace.toFixed(2)} GB</div>
           </div>
         </div>
       </div>

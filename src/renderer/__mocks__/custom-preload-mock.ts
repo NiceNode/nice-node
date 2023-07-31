@@ -9,6 +9,10 @@ export const getSystemFreeDiskSpace = (): number => {
   return 2000;
 };
 
+export const getSystemDiskSize = (): number => {
+  return 3000;
+};
+
 export const getStoreValue = (): any => {
   return true;
 };
@@ -36,7 +40,15 @@ export const getNodes = () => {
 export const getUserNodes = (): UserNodes => {
   const node = createNode({
     spec: gethv1 as NodeSpecification,
-    runtime: { dataDir: 'wherever', usage: {} },
+    runtime: {
+      dataDir: 'wherever',
+      usage: {
+        diskGBs: [],
+        memoryBytes: [],
+        cpuPercent: [],
+        syncedBlock: 0,
+      },
+    },
   });
   return {
     nodeIds: ['a1'],
@@ -48,14 +60,30 @@ export const getUserNodes = (): UserNodes => {
 export const addNode = () => {
   const node = createNode({
     spec: gethv1 as NodeSpecification,
-    runtime: { dataDir: 'wherever', usage: {} },
+    runtime: {
+      dataDir: 'wherever',
+      usage: {
+        diskGBs: [],
+        memoryBytes: [],
+        cpuPercent: [],
+        syncedBlock: 0,
+      },
+    },
   });
   return node;
 };
 export const updateNode = () => {
   const node = createNode({
     spec: gethv1 as NodeSpecification,
-    runtime: { dataDir: 'wherever', usage: {} },
+    runtime: {
+      dataDir: 'wherever',
+      usage: {
+        diskGBs: [],
+        memoryBytes: [],
+        cpuPercent: [],
+        syncedBlock: 0,
+      },
+    },
   });
   return node;
 };
@@ -67,7 +95,6 @@ export const updateNodeDataDir = () => {};
 export const openDialogForNodeDataDir = () => {};
 export const openDialogForStorageLocation = () => {};
 export const getNodesDefaultStorageLocation = () => '/user/storage/nodes/';
-export const updateNodeUsedDiskSpace = () => {};
 export const updateNodeLastSyncedBlock = () => {};
 export const deleteNodeStorage = () => true;
 export const sendNodeLogs = () => {};

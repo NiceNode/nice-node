@@ -9,7 +9,6 @@ import { DockerExecution } from '../../common/nodeSpec';
 import { setDockerNodeStatus } from '../state/nodes';
 import { buildCliConfig } from '../../common/nodeConfig';
 import { send } from '../messenger';
-import * as monitoring from './monitoring';
 import * as dockerCompose from './docker-compose';
 import { killChildProcess } from '../processExit';
 import { parseDockerLogMetadata } from '../util/nodeLogUtils';
@@ -279,7 +278,6 @@ export const initialize = async () => {
   try {
     docker = new Docker(options);
     watchDockerEvents();
-    monitoring.initialize(runCommand);
     dockerCompose.initialize();
 
     // todo: update docker node usages
@@ -459,7 +457,6 @@ export const isDockerRunning = async () => {
 // }, 5000);
 
 export const onExit = () => {
-  monitoring.onExit();
   if (dockerWatchProcess) {
     killChildProcess(dockerWatchProcess);
   }
