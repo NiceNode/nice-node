@@ -222,7 +222,7 @@
     "@types/react-test-renderer": "^18.0.0",
     "@types/terser-webpack-plugin": "^5.0.4",
     "@types/throttle-debounce": "^5.0.0",
-    "@types/uuid": "^9.0.0",
+    "@types/uuid": "^9.0.2",
     "@types/webpack-bundle-analyzer": "^4.6.0",
     "@types/webpack-env": "^1.18.0",
     "@typescript-eslint/eslint-plugin": "^5.45.1",
