@@ -1,7 +1,8 @@
-import 'webpack-dev-server';
+/* eslint-disable import/no-import-module-exports */
 import path from 'path';
 import fs from 'fs';
 import { execSync, spawn } from 'child_process';
+import 'webpack-dev-server';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import chalk from 'chalk';
@@ -23,8 +24,10 @@ if (process.env.NODE_ENV === 'production') {
 const port = process.env.PORT || 1212;
 const manifest = path.resolve(webpackPaths.dllPath, 'renderer.json');
 const requiredByDLLConfig =
-  require.main?.filename.includes('webpack.config.renderer.dev.dll') ||
-  require.main?.filename.includes('webpack.config.eslint');
+  // require.main?.filename.includes('webpack.config.renderer.dev.dll') ||
+  // require.main?.filename.includes('webpack.config.eslint');
+  module.parent?.filename.includes('webpack.config.renderer.dev.dll') ||
+  module.parent?.filename.includes('webpack.config.eslint');
 
 /**
  * Warn if the DLL is not built
@@ -35,8 +38,8 @@ if (
 ) {
   console.log(
     chalk.black.bgYellow.bold(
-      'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"'
-    )
+      'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"',
+    ),
   );
   execSync('npm run postinstall');
 }
