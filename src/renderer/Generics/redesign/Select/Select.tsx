@@ -36,6 +36,12 @@ export interface SelectProps {
   menuPlacement?: MenuPlacement;
 }
 
+const IndicatorsContainer = () => (
+  <div style={{ marginRight: 5 }}>
+    <Icon iconId="popup" />
+  </div>
+);
+
 const Select = ({
   onChange,
   options,
@@ -71,11 +77,7 @@ const Select = ({
         options={options}
         isSearchable={false}
         components={{
-          IndicatorsContainer: () => (
-            <div style={{ marginRight: 5 }}>
-              <Icon iconId="popup" />
-            </div>
-          ),
+          IndicatorsContainer,
         }}
         styles={{
           control: (base) => ({

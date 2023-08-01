@@ -1,5 +1,5 @@
-import { app } from 'electron';
 import path from 'path';
+import { app } from 'electron';
 import { format, transports, createLogger } from 'winston';
 import * as Sentry from '@sentry/electron/main';
 import SentryTransport from './util/sentryWinstonTransport';

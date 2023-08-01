@@ -152,7 +152,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     );
     if (!ecNodeSpec || !ccNodeSpec) {
       throw new Error('ecNodeSpec or ccNodeSpec is undefined');
-      return;
     }
 
     const { ecNode, ccNode } = await electron.addEthereumNode(

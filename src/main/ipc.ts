@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ipcMain, app } from 'electron';
 import getDebugInfo from './debug';
 import {
@@ -79,7 +78,7 @@ export const initialize = () => {
     logger.info(`store.get(key, value): ${key},${value}`);
     return value;
   });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   ipcMain.handle('setStoreValue', (_event, key: string, value: any) => {
     logger.info(`store.set(key, value): ${key},${value}`);
     return store.set(key, value);

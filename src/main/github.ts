@@ -15,7 +15,7 @@ export const getLatestReleaseUrl = async (binaryDownload: BinaryDownload) => {
   const platformLowercase = platform.getPlatform();
   const archLowercase = arch.getArch();
   if (Array.isArray(releaseJson?.assets)) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line
     const matchedAsset = releaseJson?.assets.find((asset: any) => {
       if (typeof asset?.name === 'string') {
         const assetNameLowercase = asset.name.toLowerCase();

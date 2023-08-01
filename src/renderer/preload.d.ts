@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-unused-vars */
 import { NodeSpecification } from '../common/nodeSpec';
-import { Node, NodeId } from '../common/node';
+import Node, { NodeId, UserNodes } from '../common/node';
 import { NodeLibrary } from '../main/state/nodeLibrary';
 import { Settings, ThemeSetting } from '../main/state/settings';
 import { CheckStorageDetails } from '../main/files';
+import { FailSystemRequirementsData } from '../main/minSystemRequirement';
 import { SystemData } from '../main/systemInfo';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,

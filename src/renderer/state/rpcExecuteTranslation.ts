@@ -1,5 +1,5 @@
 /* eslint-disable no-irregular-whitespace */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable no-else-return */
 import { hexToDecimal } from '../utils';
 import { ethers } from '../ethers';
@@ -41,8 +41,7 @@ const callFetch = async (apiRoute: string) => {
   });
   console.log(response);
   if (response) {
-    // eslint-disable-next-line @typescript-eslint/return-await
-    return await response.json();
+    return response.json();
   } else {
     return undefined;
   }

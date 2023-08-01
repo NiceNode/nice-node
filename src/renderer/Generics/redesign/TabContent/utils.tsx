@@ -22,7 +22,7 @@ interface BreakDownObjects {
     sectionTitle: string;
     items: { label: string; value: string | undefined }[];
   }[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   [key: string]: any; // index signature
 }
 

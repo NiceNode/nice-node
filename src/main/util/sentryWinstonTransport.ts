@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable promise/catch-or-return */
 /* eslint-disable promise/always-return */
 /* eslint-disable max-classes-per-file */
@@ -19,6 +18,10 @@ enum SentrySeverity {
   Fatal = 'fatal',
 }
 
+interface SeverityOptions {
+  [key: string]: Sentry.SeverityLevel;
+}
+
 const DEFAULT_LEVELS_MAP: SeverityOptions = {
   silly: SentrySeverity.Debug,
   verbose: SentrySeverity.Debug,
@@ -33,10 +36,6 @@ export interface SentryTransportOptions
   sentry?: Sentry.ElectronMainOptions;
   levelsMap?: SeverityOptions;
   skipSentryInit?: boolean;
-}
-
-interface SeverityOptions {
-  [key: string]: Sentry.SeverityLevel;
 }
 
 class ExtendedError extends Error {

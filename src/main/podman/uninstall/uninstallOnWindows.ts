@@ -1,5 +1,5 @@
-import { app } from 'electron';
 import path from 'node:path';
+import { app } from 'electron';
 import { getNNDirPath } from '../../files';
 import logger from '../../logger';
 import { execAwait } from '../../execHelper';
@@ -62,7 +62,7 @@ const uninstallOnWindows = async (): Promise<boolean | { error: string }> => {
     logger.info(`podman uninstall app ${stdout}, ${stderr}`);
 
     return true;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line
   } catch (err: any) {
     console.log(err);
     logger.error(err);

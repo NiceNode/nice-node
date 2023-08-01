@@ -1,5 +1,4 @@
-/* eslint global-require: off, no-console: off, promise/always-return: off */
-
+/* eslint global-require: off, no-console: off, promise/always-return: off, no-use-before-define: off */
 /**
  * This module executes inside of electron's main process. You can start
  * electron renderer process from here and communicate with the other processes
@@ -153,7 +152,6 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     initialize();
 
     createWindow();

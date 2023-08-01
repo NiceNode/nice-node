@@ -48,6 +48,7 @@ const MultiSelect = ({
       <ReactSelect
         value={sSelectedOptions}
         options={options}
+        // @ts-ignore
         onChange={(
           newValue: SingleValue<SelectOption> | MultiValue<SelectOption>
         ) => {

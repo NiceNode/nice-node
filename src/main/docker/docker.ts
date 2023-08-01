@@ -1,7 +1,7 @@
-import { Docker, Options } from 'docker-cli-js';
 import path from 'node:path';
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
+import { Docker, Options } from 'docker-cli-js';
 
 import logger from '../logger';
 import Node, { NodeStatus } from '../../common/node';
@@ -66,7 +66,6 @@ const watchDockerEvents = async () => {
   dockerWatchProcess = childProcess;
   if (!dockerWatchProcess.stdout) {
     throw new Error('Docker watch events stdout stream is undefined.');
-    return;
   }
   const rl = readline.createInterface({
     input: dockerWatchProcess.stdout,
@@ -201,7 +200,6 @@ export const sendLogsToUI = (node: Node) => {
   //  ex. lighthouse sends logs to stderr
   if (!sendLogsToUIProc.stderr && !sendLogsToUIProc.stdout) {
     throw new Error('Docker watch events stdout stream is undefined.');
-    return;
   }
   let rlStdErr: readline.Interface;
   if (sendLogsToUIProc.stderr) {

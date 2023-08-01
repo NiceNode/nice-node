@@ -1,7 +1,8 @@
-import checkDiskSpace from 'check-disk-space';
-import { app } from 'electron';
 import { access, mkdir, readFile, rm } from 'fs/promises';
 import path from 'path';
+import { app } from 'electron';
+import checkDiskSpace from 'check-disk-space';
+
 // eslint-disable-next-line import/no-cycle
 
 import logger from './logger';

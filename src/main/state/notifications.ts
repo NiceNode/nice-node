@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NotificationProps } from 'main/consts/notifications';
 import { NotificationItemProps } from 'renderer/Generics/redesign/NotificationItem/NotificationItem';
 import { send } from '../messenger';

@@ -63,7 +63,6 @@ const watchPodmanEvents = async () => {
   podmanWatchProcess = childProcess;
   if (!podmanWatchProcess.stdout) {
     throw new Error('Podman watch events stdout stream is undefined.');
-    return;
   }
   const rl = readline.createInterface({
     input: podmanWatchProcess.stdout,
@@ -229,7 +228,6 @@ export const sendLogsToUI = (node: Node) => {
   //  ex. lighthouse sends logs to stderr
   if (!sendLogsToUIProc.stderr && !sendLogsToUIProc.stdout) {
     throw new Error('Podman watch events stdout stream is undefined.');
-    return;
   }
   let rlStdErr: readline.Interface;
   if (sendLogsToUIProc.stderr) {

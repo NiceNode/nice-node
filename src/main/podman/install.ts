@@ -6,7 +6,7 @@ import installOnLinux from './installOnLinux';
 
 export const VERSION = '4.6.0';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 const installPodman = async (): Promise<any> => {
   logger.info(`Starting podman install...`);
 

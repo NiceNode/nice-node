@@ -25,6 +25,6 @@
       "source.fixAll.eslint": true
   },
   "eslint.validate": ["javascript"],
-  "eslint.format.enable": true,
+  "eslint.format.enable": false,
   "prettier.configPath": "package.json"
 }

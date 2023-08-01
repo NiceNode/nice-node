@@ -1,3 +1,4 @@
+import React from 'react';
 import { ReactComponent as Add } from './Add.svg';
 import { ReactComponent as Bell } from './Bell.svg';
 import { ReactComponent as Binoculars } from './Binoculars.svg';

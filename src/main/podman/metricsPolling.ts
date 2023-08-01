@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getUsedDiskSpace } from '../files';
 import logger from '../logger';
 import { MetricData, isDockerNode } from '../../common/node';
@@ -7,7 +6,7 @@ import { getAllContainerMetrics } from './metrics';
 import { ContainerStats } from './types';
 
 const METRICS_POLLING_INTERVAL = 15000; // 15 seconds
-let monitoringInterval: NodeJS.Timer;
+let monitoringInterval: ReturnType<typeof setTimeout>;
 
 const removeOldItems = (data: MetricData[] | []) => {
   if (data.length === 0) {

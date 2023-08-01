@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { send } from '../messenger';
 import Node, {
   isDockerNode,
@@ -153,7 +152,7 @@ export const setDockerNodeStatus = (
 // export const updateNodeProperty = (
 //   nodeId: NodeId,
 //   property: string,
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   // eslint-disable-next-line
 //   value: any
 // ) => {
 //   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${nodeId}.${property}`, value);

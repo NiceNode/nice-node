@@ -1,3 +1,4 @@
+import React from 'react';
 import { container } from './menu.css';
 
 export interface MenuProps {

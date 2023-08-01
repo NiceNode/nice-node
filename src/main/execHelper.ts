@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { exec } from 'node:child_process';
 
 import logger from './logger';

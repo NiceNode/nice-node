@@ -11,7 +11,7 @@ const iconv = require('iconv-lite');
 /**
  * Install WSL, download docker.exe, install docker, start docker
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 const installOnWindows = async (): Promise<any> => {
   logger.info(`Starting docker install...`);
 
@@ -101,7 +101,7 @@ const installOnWindows = async (): Promise<any> => {
     await startOnWindows();
 
     return true;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line
   } catch (err: any) {
     console.log(err);
     logger.error(err);

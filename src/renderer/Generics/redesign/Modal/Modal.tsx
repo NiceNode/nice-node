@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import Button, { ButtonProps } from '../Button/Button';
 import {
   modalHeaderContainer,
@@ -66,7 +66,7 @@ export const Modal = ({
 
   useEffect(() => {
     if (modalType === 'modal') {
-      let timeoutId: NodeJS.Timeout;
+      let timeoutId: ReturnType<typeof setTimeout>;
       const handleScroll = () => {
         clearTimeout(timeoutId);
 

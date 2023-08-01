@@ -9,7 +9,7 @@ type ProviderResponse = {
 
 // Define a service using a base URL and expected endpoints
 // lots of issues in RTKQ github complaining about typescript breaking changes
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 export const RtkqNetwork: any = createApi({
   reducerPath: 'RtkqNetwork',
   baseQuery: fakeBaseQuery<CustomerErrorType>(),

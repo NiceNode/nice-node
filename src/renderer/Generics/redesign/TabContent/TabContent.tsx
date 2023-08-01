@@ -117,7 +117,7 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
     return null;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   const breakdownData: { title: string; items: any[] } = {
     title: 'Period breakdown',
     items: getBreakdown(tabId.toLowerCase(), processPeriodBreakdownData()),

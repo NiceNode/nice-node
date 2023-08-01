@@ -13,7 +13,7 @@ import { startOnMac } from './start';
  * Download podman-arch-verson.pkg, install podman, start podman
  * @param version example: 4.4.3 (without a v prefix)
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 const installOnMac = async (version: string): Promise<any> => {
   logger.info(`Starting podman install...`);
   try {

@@ -51,7 +51,6 @@ function render(
     ...renderOptions
   } = {}
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function Wrapper({ children }: any) {
     return <Provider store={store}>{children}</Provider>;
   }

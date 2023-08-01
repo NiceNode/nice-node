@@ -1,6 +1,6 @@
-import { ThemeSetting } from 'main/state/settings';
 import React from 'react';
 import Node from 'common/node';
+import { ThemeSetting } from 'main/state/settings';
 
 export interface ModalConfig {
   executionClient?: string;
@@ -15,7 +15,7 @@ export interface ModalConfig {
   isDeleteStorage?: boolean;
   settingsConfig?: object;
   newDataDir?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   [key: string]: any;
 }
 
@@ -40,7 +40,7 @@ export const modalOnChangeConfig = async (
   modalConfig: ModalConfig,
   setModalConfig: React.Dispatch<React.SetStateAction<ModalConfig>>,
   save?: boolean,
-  modalOnSaveConfig?: (config: ModalConfig) => Promise<void>
+  modalOnSaveConfig?: (newConfig: ModalConfig) => Promise<void>
 ) => {
   if (!setModalConfig || !modalConfig) {
     throw new Error('modal config is not defined');

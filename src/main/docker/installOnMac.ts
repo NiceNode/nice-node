@@ -9,7 +9,7 @@ import { startOnMac } from './start';
 /**
  * Download docker.dmg, install docker, start docker
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 const installOnMac = async (): Promise<any> => {
   logger.info(`Starting docker install...`);
   try {

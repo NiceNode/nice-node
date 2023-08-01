@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export const callJsonRpc = async (method: string, params: any[]) => {
   const resp = await fetch('http://localhost:9545', {
     method: 'POST',

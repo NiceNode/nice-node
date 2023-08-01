@@ -9,7 +9,7 @@ import { script as ubuntuInstallScript } from './installOnUbuntuScript';
  * Download podman-arch-verson.pkg, install podman, start podman
  * @param version example: 4.4.3 (without a v prefix)
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 const installOnLinux = async (): Promise<any> => {
   logger.info(`Starting podman install on Linux...`);
   const { distro } = await getOperatingSystemInfo();

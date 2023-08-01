@@ -89,7 +89,6 @@ export const sendLogsToUI = (node: Node) => {
   sendLogsToUIProc = childProcess;
   if (!sendLogsToUIProc.stderr) {
     throw new Error('Process stream logs stderr stream is undefined.');
-    return;
   }
   const rl = readline.createInterface({
     input: sendLogsToUIProc.stderr,

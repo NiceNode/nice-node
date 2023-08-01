@@ -126,7 +126,7 @@ export class LibpodDockerode {
   // setup the libpod API
   // eslint-disable-next-line class-methods-use-this
   enhancePrototypeWithLibPod() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line
     const prototypeOfDockerode = Dockerode.prototype as any;
 
     // add createPodmanContainer
@@ -268,7 +268,7 @@ export class LibpodDockerode {
       };
 
       return new Promise((resolve, reject) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line
         this.modem.dial(optsf, (err: any, data: unknown) => {
           if (err) {
             if (err?.statusCode === 409 && err?.json) {

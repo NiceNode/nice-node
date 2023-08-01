@@ -80,7 +80,7 @@ export function getPodmanCli(): string {
  */
 export interface ExecOptions {
   // logger?: Logger;
-  env?: NodeJS.ProcessEnv | undefined;
+  env?: typeof process.env;
   shell?: boolean | string;
 }
 

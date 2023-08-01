@@ -1,5 +1,5 @@
-import { IconId } from 'renderer/assets/images/icons';
 import { useState } from 'react';
+import { IconId } from '../../../assets/images/icons';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { Icon } from '../Icon/Icon';
 import { container, menuItemText, statusDot, selectIcon } from './menuItem.css';

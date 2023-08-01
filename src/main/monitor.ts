@@ -8,7 +8,7 @@ import { addNotification } from './state/notifications';
 import { NOTIFICATIONS } from './consts/notifications';
 
 const watchProcessPollingInterval = 300000;
-let monitoringInterval: NodeJS.Timer;
+let monitoringInterval: ReturnType<typeof setTimeout>;
 const pidusage = require('pidusage');
 
 export const getProcessUsageByPid = async (pid: number) => {

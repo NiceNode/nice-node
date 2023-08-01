@@ -1,8 +1,8 @@
 import path from 'path';
-import rimraf from 'rimraf';
+import { rimrafSync } from 'rimraf';
 import webpackPaths from '../configs/webpack.paths';
 
 export default function deleteSourceMaps() {
-  rimraf.sync(path.join(webpackPaths.distMainPath, '*.js.map'));
-  rimraf.sync(path.join(webpackPaths.distRendererPath, '*.js.map'));
+  rimrafSync(path.join(webpackPaths.distMainPath, '*.js.map'));
+  rimrafSync(path.join(webpackPaths.distRendererPath, '*.js.map'));
 }
