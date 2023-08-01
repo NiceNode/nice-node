@@ -24,21 +24,21 @@
   "rpcTranslation": "eth-l1-beacon",
   "systemRequirements": {
     "documentationUrl": "https://chainsafe.github.io/lodestar/#specifications",
-    "cpu" : {
+    "cpu": {
       "cores": 4
     },
     "memory": {
       "minSizeGBs": 4
     },
-    "storage" : {
-      "minSizeGBs" : 20,
+    "storage": {
+      "minSizeGBs": 20,
       "ssdRequired": true
     },
-    "internet" : {
+    "internet": {
       "minDownloadSpeedMbps": 10,
       "minUploadSpeedMbps": 10
     },
-    "docker" : {
+    "docker": {
       "required": true
     }
   },

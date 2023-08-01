@@ -143,7 +143,7 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
 
 const areEqual = (
   prevProps: Readonly<TabContentProps>,
-  nextProps: Readonly<TabContentProps>
+  nextProps: Readonly<TabContentProps>,
 ): boolean => {
   // this prevents unnecessary rerenders
   if (nextProps.name !== prevProps.name) return false; // render when tab is changed

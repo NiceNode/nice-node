@@ -56,13 +56,13 @@ contextBridge.exposeInMainWorld('electron', {
   addEthereumNode: async (
     ecNodeSpec: NodeSpecification,
     ccNodeSpec: NodeSpecification,
-    settings: { storageLocation?: string }
+    settings: { storageLocation?: string },
   ) => {
     return ipcRenderer.invoke(
       'addEthereumNode',
       ecNodeSpec,
       ccNodeSpec,
-      settings
+      settings,
     );
   },
   addNode: (nodeSpec: NodeSpecification, storageLocation?: string) =>

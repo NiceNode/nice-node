@@ -31,7 +31,7 @@ const installOnMac = async (version: string): Promise<any> => {
     const podmanPkgFilePath = await downloadFile(
       downloadUrl,
       getNNDirPath(),
-      sendMessageOnDownloadProgress
+      sendMessageOnDownloadProgress,
     );
     let stdout;
     let stderr;
@@ -40,7 +40,7 @@ const installOnMac = async (version: string): Promise<any> => {
     try {
       ({ stdout, stderr } = await execAwait(
         `installer -pkg "${podmanPkgFilePath}" -target / -verbose`,
-        { log: true, sudo: true }
+        { log: true, sudo: true },
       ));
       sendMessageOnGrantPermissionToInstallPodman(true);
     } catch (installErr) {

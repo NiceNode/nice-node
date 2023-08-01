@@ -35,10 +35,10 @@ describe('Parsing log string testing', () => {
     const metadataPrysmError1 = parsePodmanLogMetadata(logPrysmError1);
 
     const metadataNethermindMultiLine1 = parsePodmanLogMetadata(
-      logNethermindMultiLine1
+      logNethermindMultiLine1,
     );
     const metadataNethermindMultiLine2 = parsePodmanLogMetadata(
-      logNethermindMultiLine2
+      logNethermindMultiLine2,
     );
 
     expect(metadataBesu1).toEqual({

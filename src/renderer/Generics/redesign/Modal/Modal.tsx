@@ -53,7 +53,7 @@ export const Modal = ({
         modalOnClose();
       }
     },
-    [modalOnClose]
+    [modalOnClose],
   );
 
   useEffect(() => {

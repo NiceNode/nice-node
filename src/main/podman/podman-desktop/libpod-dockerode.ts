@@ -106,7 +106,7 @@ export interface ContainerCreateOptions {
 export interface LibPod {
   createPod(podOptions: PodCreateOptions): Promise<{ Id: string }>;
   createPodmanContainer(
-    containerCreateOptions: ContainerCreateOptions
+    containerCreateOptions: ContainerCreateOptions,
   ): Promise<{ Id: string; Warnings: string[] }>;
   listPods(): Promise<PodInfo[]>;
   prunePods(): Promise<void>;
@@ -131,7 +131,7 @@ export class LibpodDockerode {
 
     // add createPodmanContainer
     prototypeOfDockerode.createPodmanContainer = function (
-      containerCreateOptions: ContainerCreateOptions
+      containerCreateOptions: ContainerCreateOptions,
     ) {
       const optsf = {
         path: '/v4.2.0/libpod/containers/create',

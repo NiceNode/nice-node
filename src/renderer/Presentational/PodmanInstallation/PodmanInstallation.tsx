@@ -106,7 +106,7 @@ const PodmanInstallation = ({
       setTotalSizeBytes(message[0].totalBytes);
       setDownloadedBytes(message[0].downloadedBytes);
       setDownloadProgress(
-        (message[0].downloadedBytes / message[0].totalBytes) * 100
+        (message[0].downloadedBytes / message[0].totalBytes) * 100,
       );
       // if downloaded = total, then complete?
       if (message[0].downloadedBytes === message[0].totalBytes) {
@@ -136,7 +136,7 @@ const PodmanInstallation = ({
     electron.ipcRenderer.on('podman', podmanMessageListener);
     electron.ipcRenderer.on(
       CHANNELS.podmanInstall,
-      podmanInstallMessageListener
+      podmanInstallMessageListener,
     );
   }, []);
 

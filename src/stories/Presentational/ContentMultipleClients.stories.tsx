@@ -40,7 +40,7 @@ Primary.args = {
         highestSlot: highestSlot,
         peers: 20,
         cpuLoad: 20,
-        diskUsageGBs: 0.600,
+        diskUsageGBs: 0.6,
       },
     },
     {
@@ -64,7 +64,7 @@ Primary.args = {
         highestBlock: highestBlock,
         peers: 16,
         cpuLoad: 82,
-        diskUsageGBs: 5.000,
+        diskUsageGBs: 5.0,
       },
     },
   ],

@@ -1,6 +1,6 @@
 export const parseFileNameFromUrl = (
   url: string,
-  excludeExension?: boolean
+  excludeExension?: boolean,
 ) => {
   // ex. 'https://gethstore.blob.core.windows.net/builds/geth-darwin-amd64-1.10.17-25c9b49f.tar.gz'
   let urlEncodedFilename;
@@ -10,7 +10,7 @@ export const parseFileNameFromUrl = (
     const extensionIndex = tarGzIndex > 0 ? tarGzIndex : zipIndex;
     urlEncodedFilename = url.substring(
       url.lastIndexOf('/') + 1,
-      extensionIndex
+      extensionIndex,
     );
   } else {
     urlEncodedFilename = url.substring(url.lastIndexOf('/') + 1);

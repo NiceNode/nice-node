@@ -12,7 +12,7 @@ app.setAppLogsPath(logsPath);
 console.log('get Electron log path: ', app.getPath('logs'));
 console.log(
   'app log path: ',
-  path.join(app.getPath('logs'), 'application-%DATE%.log')
+  path.join(app.getPath('logs'), 'application-%DATE%.log'),
 );
 
 // const combinedTransport: DailyRotateFile = new DailyRotateFile({
@@ -101,12 +101,12 @@ if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new transports.Console({
       format: defaultFormat,
-    })
+    }),
   );
   autoUpdateLogger.add(
     new transports.Console({
       format: defaultFormat,
-    })
+    }),
   );
 }
 

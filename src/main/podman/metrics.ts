@@ -11,7 +11,7 @@ export const getAllContainerMetrics = async (): Promise<ContainerStats[]> => {
   let allContainerStats;
   try {
     allContainerStats = await runCommand(
-      'stats --all --no-stream --no-trunc --format json'
+      'stats --all --no-stream --no-trunc --format json',
     );
     allContainerStats = JSON.parse(allContainerStats);
     const parsedContainerStats: ContainerStats[] = [];

@@ -16,7 +16,7 @@ const RemoveNode = ({
   selectedNode,
 }: RemoveNodeProps) => {
   const [sNodeStorageMessage, setNodeStorageMessage] = useState<string>(
-    'calculating data size...'
+    'calculating data size...',
   );
 
   useEffect(() => {

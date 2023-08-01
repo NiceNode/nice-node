@@ -19,7 +19,7 @@ export const execAwait = (
     cwd: PROCESS_CWD,
     sudo: false,
     env: process.env,
-  }
+  },
 ): Promise<{ stdout: string; stderr: string }> => {
   if (options.log) {
     logger.info(command);
@@ -37,7 +37,7 @@ export const execAwait = (
         (
           err: any,
           stdout: { toString: () => any } | undefined,
-          stderr: { toString: () => any } | undefined
+          stderr: { toString: () => any } | undefined,
         ) => {
           if (err) {
             reject(err);
@@ -46,7 +46,7 @@ export const execAwait = (
           const stoutStr = stdout === undefined ? '' : stdout.toString();
           const stderrStr = stderr === undefined ? '' : stderr.toString();
           resolve({ stdout: stoutStr, stderr: stderrStr });
-        }
+        },
       );
     });
   }

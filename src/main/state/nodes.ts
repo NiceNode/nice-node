@@ -80,7 +80,7 @@ export const addNode = (newNode: Node) => {
 
 export const updateNodeProperties = (
   nodeId: NodeId,
-  propertiesToUpdate: any
+  propertiesToUpdate: any,
 ) => {
   console.log('updateNodeProperties: propertiesToUpdate', propertiesToUpdate);
   const node = getNode(nodeId);
@@ -91,7 +91,7 @@ export const updateNodeProperties = (
   console.log(
     'updateNodeProperties: newNode propertiesToUpdate',
     newNode,
-    propertiesToUpdate
+    propertiesToUpdate,
   );
   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${node.id}`, newNode);
   return getNode(node.id);
@@ -105,7 +105,7 @@ export const updateNodeProperties = (
  */
 export const updateNodeConfig = (
   nodeId: NodeId,
-  newConfig: ConfigValuesMap
+  newConfig: ConfigValuesMap,
 ) => {
   console.log('updateNodeProperties: propertiesToUpdate', newConfig);
   // todo: could add some validation on the config key and values with the
@@ -128,7 +128,7 @@ export const updateNode = (node: Node) => {
  */
 export const setDockerNodeStatus = (
   containerId: string,
-  status: NodeStatus
+  status: NodeStatus,
 ) => {
   // get all nodes
   const nodes = getNodes();

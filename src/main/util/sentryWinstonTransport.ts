@@ -139,7 +139,7 @@ export default class SentryTransport extends TransportStream {
         acc[winstonSeverity] = options[winstonSeverity];
         return acc;
       },
-      {}
+      {},
     );
 
     return {

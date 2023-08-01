@@ -90,11 +90,11 @@ const installOnWindows = async (): Promise<any> => {
     const dockerExeFilePath = await downloadFile(
       downloadUrl,
       getNNDirPath(),
-      sendMessageOnDownloadProgress
+      sendMessageOnDownloadProgress,
     );
     ({ stdout, stderr } = await execAwait(
       `start /w "" "${dockerExeFilePath}" install --quiet --accept-license --backend=wsl-2`,
-      { log: true }
+      { log: true },
     ));
     console.log('docker install stdout, stderr', stdout, stderr);
 

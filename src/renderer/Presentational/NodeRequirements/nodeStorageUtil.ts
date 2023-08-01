@@ -15,7 +15,7 @@ export type SystemStorageLocation = {
  */
 export const findSystemStorageDetailsAtALocation = (
   systemData: SystemData,
-  nodeStorageLocation: string
+  nodeStorageLocation: string,
 ): SystemStorageLocation | undefined => {
   // From blockDevices…If( storageLoc.startsWith(mountPath) && highest Char match)
   // ignore mountPath “/“ case, if no match, assume?
@@ -37,7 +37,7 @@ export const findSystemStorageDetailsAtALocation = (
 
   if (longestMatchBlockDevice === undefined) {
     throw new Error(
-      `No storage device found for location ${nodeStorageLocation}`
+      `No storage device found for location ${nodeStorageLocation}`,
     );
   }
 
@@ -58,7 +58,7 @@ export const findSystemStorageDetailsAtALocation = (
     'Matched Filesystem and BlockDevice',
     matchedFileSystemSizes,
     longestMatchBlockDevice,
-    systemData.diskLayout
+    systemData.diskLayout,
   );
   let matchedDisk: Systeminformation.DiskLayoutData | undefined;
   systemData.diskLayout?.forEach((disk) => {

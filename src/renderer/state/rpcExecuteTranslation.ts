@@ -60,7 +60,7 @@ const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
 type RpcCall = 'sync' | 'peers' | 'latestBlock' | 'clientVersion';
 export const executeTranslation = async (
   rpcCall: RpcCall,
-  rpcTranslation: string
+  rpcTranslation: string,
 ): Promise<any> => {
   if (rpcTranslation === 'eth-l1') {
     // use provider
@@ -125,7 +125,7 @@ export const executeTranslation = async (
       }
     } else if (rpcCall === 'latestBlock') {
       const resp = await callFetch(
-        `${beaconBaseUrl}/eth/v1/beacon/headers/head`
+        `${beaconBaseUrl}/eth/v1/beacon/headers/head`,
       );
       console.log('latestBlock fetch resp ', resp);
       if (resp?.data !== undefined) {

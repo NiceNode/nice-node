@@ -41,7 +41,7 @@ export const getProcesses = async (): Promise<void> => {
 };
 
 export const getProcess = async (
-  pmId: number
+  pmId: number,
   // tmp: ): Promise<ProcessDescription | undefined> => {
 ): Promise<number | undefined> => {
   const proc = pmId; // tmp: await pm2.describe(pmId);
@@ -57,7 +57,7 @@ export const stopSendingLogsToUI = () => {
   // logger.info(`pm2.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
     logger.info(
-      'sendLogsToUI process was running for a node. Killing that process.'
+      'sendLogsToUI process was running for a node. Killing that process.',
     );
     killChildProcess(sendLogsToUIProc);
   }
@@ -84,7 +84,7 @@ export const sendLogsToUI = (node: Node) => {
   const childProcess = spawn(
     `pm2 logs --raw ${processId}`,
     watchInput,
-    spawnOptions
+    spawnOptions,
   );
   sendLogsToUIProc = childProcess;
   if (!sendLogsToUIProc.stderr) {
@@ -160,10 +160,10 @@ export const stopProcess = async (pm_id: number): Promise<number> => {
 export const startProccess = async (
   script: string,
   args: string,
-  name: string
+  name: string,
 ): Promise<number> => {
   logger.info(
-    `pm2Manager startProccess ${name} with ${script} and args ${args}`
+    `pm2Manager startProccess ${name} with ${script} and args ${args}`,
   );
   return 0;
   // try {

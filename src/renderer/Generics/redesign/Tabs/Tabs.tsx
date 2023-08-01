@@ -11,7 +11,7 @@ export interface TabsProps {
 
 export const Tabs = ({ children, id, modal }: TabsProps) => {
   const [activeTab, setActiveTab] = useState(
-    id || (Array.isArray(children) ? children[0].props.id : null)
+    id || (Array.isArray(children) ? children[0].props.id : null),
   );
 
   // if the children change and the current active tab isn't available,

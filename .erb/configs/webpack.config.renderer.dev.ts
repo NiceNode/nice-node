@@ -2,8 +2,8 @@
 import path from 'path';
 import fs from 'fs';
 import { execSync, spawn } from 'child_process';
-import 'webpack-dev-server';
 import webpack from 'webpack';
+import 'webpack-dev-server';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import chalk from 'chalk';
 import { merge } from 'webpack-merge';

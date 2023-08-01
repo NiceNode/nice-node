@@ -9,7 +9,7 @@ import { Settings } from '../main/state/settings';
 const DataRefresher = () => {
   const selectedNode = useAppSelector(selectSelectedNode);
   const qNodeVersion = useGetNodeVersionQuery(
-    selectedNode?.spec.rpcTranslation
+    selectedNode?.spec.rpcTranslation,
   );
   const { i18n } = useTranslation();
   const qSettings = useGetSettingsQuery();
@@ -17,7 +17,7 @@ const DataRefresher = () => {
   console.log('qNodeVersion', JSON.stringify(qNodeVersion));
   useEffect(() => {
     console.log(
-      'DataRefresher: selected node or nodeVersion query changed. Refetching node version.'
+      'DataRefresher: selected node or nodeVersion query changed. Refetching node version.',
     );
     qNodeVersion.refetch();
     // RTKQ does not work as a dependency. Will cause an infinite loop if included.

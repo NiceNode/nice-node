@@ -40,7 +40,7 @@ export const modalOnChangeConfig = async (
   modalConfig: ModalConfig,
   setModalConfig: React.Dispatch<React.SetStateAction<ModalConfig>>,
   save?: boolean,
-  modalOnSaveConfig?: (newConfig: ModalConfig) => Promise<void>
+  modalOnSaveConfig?: (newConfig: ModalConfig) => Promise<void>,
 ) => {
   if (!setModalConfig || !modalConfig) {
     throw new Error('modal config is not defined');

@@ -49,7 +49,7 @@ export const startMachineIfCreated = async (): Promise<boolean> => {
     if (nnMachine) {
       if (!nnMachine.Running && !nnMachine.Starting) {
         logger.info(
-          "Podman machine found, but it isn't running or starting yet. Starting..."
+          "Podman machine found, but it isn't running or starting yet. Starting...",
         );
         await runCommand(`machine start ${NICENODE_MACHINE_NAME}`);
         // todoo: validate machine started properly

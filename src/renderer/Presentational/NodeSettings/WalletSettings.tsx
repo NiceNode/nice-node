@@ -63,13 +63,13 @@ const splitDomainsFromValue = ({
       if (parsedCorsValue.startsWith(wrapChar)) {
         parsedCorsValue = parsedCorsValue.substring(
           wrapChar.length,
-          parsedCorsValue.length
+          parsedCorsValue.length,
         );
       }
       if (parsedCorsValue.endsWith(wrapChar)) {
         parsedCorsValue = parsedCorsValue.substring(
           0,
-          parsedCorsValue.length - wrapChar.length
+          parsedCorsValue.length - wrapChar.length,
         );
       }
     }
@@ -136,7 +136,7 @@ export const WalletSettings = ({
 
   const getOfficialWalletAddressArray = () => {
     return splitCorsDomains.filter(
-      (e) => officialWallets.includes(e) && !defaultAddresses.includes(e)
+      (e) => officialWallets.includes(e) && !defaultAddresses.includes(e),
     );
   };
   // filters splitCorsDomains so it only includes official wallets
@@ -146,7 +146,8 @@ export const WalletSettings = ({
   const getCustomWalletAddressArray = () => {
     const filtered = splitCorsDomains.filter(
       (e) =>
-        !officialWalletAddressArray.includes(e) && !defaultAddresses.includes(e)
+        !officialWalletAddressArray.includes(e) &&
+        !defaultAddresses.includes(e),
     );
     if (filtered[0] === '') {
       return null;
@@ -180,7 +181,7 @@ export const WalletSettings = ({
   ];
 
   const [customWalletAddressArray, setCustomWalletAddressArray] = useState(
-    getCustomWalletAddressArray() || browserSettings
+    getCustomWalletAddressArray() || browserSettings,
   );
 
   const mergeAndSetNewCorsDomains = (walletsAddressArray: string[]) => {
@@ -217,13 +218,13 @@ export const WalletSettings = ({
    * @param updatedArray the updated custom wallet array
    */
   const updateConfig = (
-    updatedArray: { browser: string; extensionId: string }[]
+    updatedArray: { browser: string; extensionId: string }[],
   ) => {
     if (onChange) {
       const customWalletAddressStringsArray = updatedArray.map(
         (arrayItem: { browser: string; extensionId: string }) => {
           return getWalletStringFromObject(arrayItem);
-        }
+        },
       );
       const allWalletsAddressArray = [
         ...officialWalletAddressArray,
@@ -276,7 +277,7 @@ export const WalletSettings = ({
             variant="icon"
             onClick={() => {
               navigator.clipboard.writeText(
-                networkDetails[key as keyof NetworkLabelsProps]
+                networkDetails[key as keyof NetworkLabelsProps],
               );
             }}
           />
@@ -310,7 +311,7 @@ export const WalletSettings = ({
               officialWalletsArray.push(walletAddress);
             } else {
               officialWalletsArray = officialWalletsArray.filter(
-                (e: string) => e !== walletAddress
+                (e: string) => e !== walletAddress,
               );
             }
 
@@ -334,7 +335,7 @@ export const WalletSettings = ({
 
   const renderCustomWalletInput = (
     item: { browser: string; extensionId: string },
-    index: number
+    index: number,
   ) => {
     return (
       <>
@@ -345,7 +346,7 @@ export const WalletSettings = ({
               onChange={(
                 newValue:
                   | SingleValue<{ value: string; label: string }>
-                  | undefined
+                  | undefined,
               ) => {
                 if (newValue) {
                   const { value } = newValue;

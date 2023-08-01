@@ -22,7 +22,7 @@ export const RtkqNotificationsService: any = createApi({
           data = await electron.getNotifications();
           console.log(
             'RtkqNotificationsService getNotifications() returned ',
-            data
+            data,
           );
         } catch (e) {
           const error = { message: 'Unable to getNotifications' };

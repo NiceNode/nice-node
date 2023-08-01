@@ -7,7 +7,9 @@ export default {
   component: SpecialSelect,
 } as ComponentMeta<typeof SpecialSelect>;
 
-const Template: ComponentStory<typeof SpecialSelect> = (args) => <SpecialSelect {...args} />;
+const Template: ComponentStory<typeof SpecialSelect> = (args) => (
+  <SpecialSelect {...args} />
+);
 
 export const Primary = Template.bind({});
 Primary.args = {
@@ -50,5 +52,5 @@ Primary.args = {
       info: 'Consensus Client',
       minority: true,
     },
-  ]
+  ],
 };

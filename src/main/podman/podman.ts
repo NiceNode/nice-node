@@ -44,7 +44,7 @@ const watchPodmanEvents = async () => {
   // podmanWatchProcess is killed if (killed || exitCode === null)
   if (podmanWatchProcess && !podmanWatchProcess.killed) {
     logger.error(
-      'podmanWatchProcess process still running. Wait to stop or stop first.'
+      'podmanWatchProcess process still running. Wait to stop or stop first.',
     );
     return;
   }
@@ -135,7 +135,7 @@ const watchPodmanEvents = async () => {
     logger.info(`podmanWatchProcess::close:: ${code}`);
     if (code !== 0) {
       logger.error(
-        `podmanWatchProcess::close:: with non-zero exit code ${code}`
+        `podmanWatchProcess::close:: with non-zero exit code ${code}`,
       );
       // todo: determine the error and show geth error logs to user.
     }
@@ -174,7 +174,7 @@ export const getRunningContainers = async () => {
 
 export const getContainerDetails = async (containerIds: string[]) => {
   const data = await runCommand(
-    `inspect ${containerIds.join(' ')} --format="{{json .}}"`
+    `inspect ${containerIds.join(' ')} --format="{{json .}}"`,
   );
   // console.log('getContainerDetails containerIds: ', data);
   // let details;
@@ -190,7 +190,7 @@ export const stopSendingLogsToUI = () => {
   // logger.info(`podman.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
     logger.info(
-      'sendLogsToUI process was running for another node. Killing that process.'
+      'sendLogsToUI process was running for another node. Killing that process.',
     );
     killChildProcess(sendLogsToUIProc);
   }
@@ -201,7 +201,7 @@ export const sendLogsToUI = (node: Node) => {
   stopSendingLogsToUI();
   logger.info(
     'sendLogsToUI getPodmanEnvWithPath(): ',
-    getPodmanEnvWithPath().PATH
+    getPodmanEnvWithPath().PATH,
   );
   const spawnOptions: SpawnOptions = {
     stdio: [null, 'pipe', 'pipe'],
@@ -221,7 +221,7 @@ export const sendLogsToUI = (node: Node) => {
   const childProcess = spawn(
     `podman logs --follow --timestamps --tail 100 ${containerId}`,
     watchInput,
-    spawnOptions
+    spawnOptions,
   );
   sendLogsToUIProc = childProcess;
   // todo some containers send to stderr, some send to stdout!
@@ -284,7 +284,7 @@ export const sendLogsToUI = (node: Node) => {
     logger.info(`podman.sendLogsToUI::close:: ${code}`);
     if (code !== 0) {
       logger.error(
-        `podman.sendLogsToUI::close:: with non-zero exit code ${code}`
+        `podman.sendLogsToUI::close:: with non-zero exit code ${code}`,
       );
       // todo: determine the error and show geth error logs to user.
     }
@@ -356,7 +356,7 @@ export const removePodmanNode = async (node: Node) => {
   try {
     await runCommand(`container rm ${node.spec.specId}`);
     logger.info(
-      `removePodmanNode container removed by name ${node.spec.specId}`
+      `removePodmanNode container removed by name ${node.spec.specId}`,
     );
     isRemoved = true;
   } catch (err) {
@@ -453,7 +453,7 @@ export const isPodmanInstalled = async () => {
     console.log('podman infoResult: ', infoResult);
     bIsPodmanInstalled = true;
     logger.info(
-      'Podman is installed. Podman version command did not throw error.'
+      'Podman is installed. Podman version command did not throw error.',
     );
   } catch (err) {
     logger.error(err);

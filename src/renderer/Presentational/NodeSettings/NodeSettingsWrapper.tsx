@@ -16,7 +16,7 @@ import NodeSettings from './NodeSettings';
 
 export type SettingChangeHandler = (
   configKey: string,
-  newValue: ConfigValue
+  newValue: ConfigValue,
 ) => void;
 export interface NodeSettingsWrapperProps {
   modalOnChangeConfig: (config: ModalConfig, save?: true) => void;
@@ -41,7 +41,7 @@ const NodeSettingsWrapper = ({
   const [sNodeStartCommand, setNodeStartCommand] = useState<string>();
   const sSelectedNode = useAppSelector(selectSelectedNode);
   const [selectedNode, setSelectedNode] = useState<Node | undefined>(
-    sSelectedNode
+    sSelectedNode,
   );
   const [initialized, setInitialized] = useState(false);
 
@@ -61,7 +61,7 @@ const NodeSettingsWrapper = ({
 
       Object.keys(sConfigTranslationMap)
         .filter(
-          (key) => !keysToIgnore.includes(key) && !(key in newConfigValuesMap)
+          (key) => !keysToIgnore.includes(key) && !(key in newConfigValuesMap),
         )
         .forEach((key) => {
           newConfigValuesMap[key] =
@@ -178,7 +178,7 @@ const NodeSettingsWrapper = ({
    */
   const onNodeConfigChange: SettingChangeHandler = async (
     configKey: string,
-    newValue: ConfigValue
+    newValue: ConfigValue,
   ) => {
     // updateNode
     console.log('updating node with newValue: ', newValue);
@@ -191,12 +191,12 @@ const NodeSettingsWrapper = ({
         configTranslation[configKey]?.uiControl.type === FilePathControlType
       ) {
         const newDataDir = await electron.openDialogForNodeDataDir(
-          selectedNode.id
+          selectedNode.id,
         );
         console.log(
           'openDialogForNodeDataDir before, and res:',
           currentValue,
-          newDataDir
+          newDataDir,
         );
 
         const newRuntime = {
@@ -258,7 +258,7 @@ const NodeSettingsWrapper = ({
           setModalState({
             isModalOpen: true,
             screen: { route: 'removeNode', type: 'alert' },
-          })
+          }),
         );
       }}
       nodeStartCommand={sNodeStartCommand}

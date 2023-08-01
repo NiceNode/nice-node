@@ -26,7 +26,7 @@ const nameMap = new Map([
 ]);
 
 const darwinToMacOsVersion = (
-  darwinRelease: string
+  darwinRelease: string,
 ): { name: string; version: string } => {
   const release = Number((darwinRelease || os.release()).split('.')[0]);
 

@@ -108,7 +108,7 @@ const Preferences = ({
             selectedStyle.push(selectedThemeContainer);
           }
           const thumbnail = getThemeThumbnail(
-            themeDetails.theme as ThemeSetting
+            themeDetails.theme as ThemeSetting,
           );
           return (
             <div

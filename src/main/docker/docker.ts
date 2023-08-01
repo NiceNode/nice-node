@@ -25,7 +25,7 @@ const options = new Options(
   path.join(__dirname),
   false,
   undefined,
-  undefined
+  undefined,
 );
 let docker: Docker;
 
@@ -48,7 +48,7 @@ const watchDockerEvents = async () => {
   // dockerWatchProcess is killed if (killed || exitCode === null)
   if (dockerWatchProcess && !dockerWatchProcess.killed) {
     logger.error(
-      'dockerWatchProcess process still running. Wait to stop or stop first.'
+      'dockerWatchProcess process still running. Wait to stop or stop first.',
     );
     return;
   }
@@ -113,7 +113,7 @@ const watchDockerEvents = async () => {
     logger.info(`dockerWatchProcess::close:: ${code}`);
     if (code !== 0) {
       logger.error(
-        `dockerWatchProcess::close:: with non-zero exit code ${code}`
+        `dockerWatchProcess::close:: with non-zero exit code ${code}`,
       );
       // todo: determine the error and show geth error logs to user.
     }
@@ -152,7 +152,7 @@ export const getRunningContainers = async () => {
 
 export const getContainerDetails = async (containerIds: string[]) => {
   const data = await runCommand(
-    `inspect ${containerIds.join(' ')} --format="{{json .}}"`
+    `inspect ${containerIds.join(' ')} --format="{{json .}}"`,
   );
   let details;
   if (data?.object) {
@@ -167,7 +167,7 @@ export const stopSendingLogsToUI = () => {
   // logger.info(`docker.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
     logger.info(
-      'sendLogsToUI process was running for another node. Killing that process.'
+      'sendLogsToUI process was running for another node. Killing that process.',
     );
     killChildProcess(sendLogsToUIProc);
   }
@@ -193,7 +193,7 @@ export const sendLogsToUI = (node: Node) => {
   const childProcess = spawn(
     `docker logs --follow --timestamps -n 100 ${containerId}`,
     watchInput,
-    spawnOptions
+    spawnOptions,
   );
   sendLogsToUIProc = childProcess;
   // todo some containers send to stderr, some send to stdout!
@@ -256,7 +256,7 @@ export const sendLogsToUI = (node: Node) => {
     logger.info(`docker.sendLogsToUI::close:: ${code}`);
     if (code !== 0) {
       logger.error(
-        `docker.sendLogsToUI::close:: with non-zero exit code ${code}`
+        `docker.sendLogsToUI::close:: with non-zero exit code ${code}`,
       );
       // todo: determine the error and show geth error logs to user.
     }
@@ -327,7 +327,7 @@ export const removeDockerNode = async (node: Node) => {
   try {
     await runCommand(`container rm ${node.spec.specId}`);
     logger.info(
-      `removeDockerNode container removed by name ${node.spec.specId}`
+      `removeDockerNode container removed by name ${node.spec.specId}`,
     );
     isRemoved = true;
   } catch (err) {
@@ -419,7 +419,7 @@ export const isDockerInstalled = async () => {
     console.log('docker infoResult: ', infoResult);
     bIsDockerInstalled = true;
     logger.info(
-      'Docker is installed. Docker version command did not throw error.'
+      'Docker is installed. Docker version command did not throw error.',
     );
   } catch (err) {
     logger.error(err);

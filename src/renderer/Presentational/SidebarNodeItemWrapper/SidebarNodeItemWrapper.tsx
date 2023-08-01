@@ -67,7 +67,7 @@ export const SidebarNodeItemWrapper = ({
     node.spec.rpcTranslation,
     {
       pollingInterval,
-    }
+    },
   );
 
   useEffect(() => {

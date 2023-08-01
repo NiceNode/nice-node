@@ -64,14 +64,14 @@ export function getAssetsFolder(): string {
     (process as any).resourcesPath,
     'extensions',
     'podman',
-    'assets'
+    'assets',
   );
 }
 
 export function runCliCommand(
   command: string,
   args: string[],
-  options?: RunOptions
+  options?: RunOptions,
 ): Promise<SpawnResult> {
   return new Promise((resolve, reject) => {
     let output = '';

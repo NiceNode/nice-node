@@ -31,7 +31,7 @@ export interface SelectProps {
           value: string;
           label: string;
         }>
-      | undefined
+      | undefined,
   ) => unknown;
   menuPlacement?: MenuPlacement;
 }
@@ -62,7 +62,7 @@ const Select = ({
       setSelectedOption(newOption as SelectOption);
       if (onChange) onChange(newOption);
     },
-    [onChange]
+    [onChange],
   );
 
   return (

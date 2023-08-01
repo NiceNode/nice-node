@@ -49,7 +49,7 @@ export const Chart = ({ tabId, metricData }: ChartProps) => {
           : [{ x: Date.now(), y: 0 }],
         true,
         true,
-        false // changing this to true causes the chart to render incorrectly on the 2nd render
+        false, // changing this to true causes the chart to render incorrectly on the 2nd render
       );
     }
   }, [metricData]);

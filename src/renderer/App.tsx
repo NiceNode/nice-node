@@ -73,7 +73,7 @@ export default function App() {
 
   if (sHasSeenSplashscreen === undefined) {
     console.log(
-      'waiting for splash screen value to return... showing loading screen'
+      'waiting for splash screen value to return... showing loading screen',
     );
     return <></>;
   }

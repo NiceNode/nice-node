@@ -8,14 +8,14 @@ import {
 } from '../../../common/systemRequirements';
 
 export const mergeSystemRequirements = (
-  systemRequirementsArray: SystemRequirements[]
+  systemRequirementsArray: SystemRequirements[],
 ): SystemRequirements => {
   const mergedReqs: SystemRequirements = {};
 
   systemRequirementsArray.forEach((systemRequirements) => {
     // eslint-disable-next-line no-restricted-syntax
     for (const [nodeReqKey, nodeReqValue] of Object.entries(
-      systemRequirements
+      systemRequirements,
     )) {
       console.log(`${nodeReqKey}: ${nodeReqValue}`);
       if (nodeReqKey === 'documentationUrl' || nodeReqKey === 'description') {

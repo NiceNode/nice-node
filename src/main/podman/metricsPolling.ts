@@ -38,7 +38,7 @@ const updateAllNodeMetrics = async () => {
           const matchedContainerMetrics = allContainerMetrics.find(
             (containerMetrics: ContainerStats) => {
               return containerMetrics.ContainerID === containerId;
-            }
+            },
           );
 
           if (matchedContainerMetrics) {
@@ -91,7 +91,7 @@ export const initialize = () => {
   updateAllNodeMetrics();
   monitoringInterval = setInterval(
     updateAllNodeMetrics,
-    METRICS_POLLING_INTERVAL
+    METRICS_POLLING_INTERVAL,
   );
 };
 

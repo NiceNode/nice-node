@@ -49,7 +49,7 @@ function render(
     // }),
     // store: appStore,
     ...renderOptions
-  } = {}
+  } = {},
 ) {
   function Wrapper({ children }: any) {
     return <Provider store={store}>{children}</Provider>;

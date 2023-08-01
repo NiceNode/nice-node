@@ -18,6 +18,6 @@ Single.args = {
       label: 'Auto (Follows computer settings)',
     },
     { value: 'light', label: 'Light mode' },
-    { value: 'dark', label: 'Dark mode' }
-  ]
+    { value: 'dark', label: 'Dark mode' },
+  ],
 };

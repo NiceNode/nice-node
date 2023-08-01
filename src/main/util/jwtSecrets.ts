@@ -13,7 +13,7 @@ import crypto from 'node:crypto';
  * @returns the jwt secret file path
  */
 export const createJwtSecretAtDirs = async (
-  dirPaths: string[]
+  dirPaths: string[],
 ): Promise<boolean> => {
   const jwtSecret = `0x${crypto.randomBytes(32).toString('hex')}`;
   // dirPaths.forEach(async (dirPath) => {

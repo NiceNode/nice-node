@@ -35,15 +35,15 @@ const installOnWindows = async (version: string): Promise<any> => {
     const podmanMsiFilePath = await downloadFile(
       downloadUrl,
       getNNDirPath(),
-      sendMessageOnDownloadProgress
+      sendMessageOnDownloadProgress,
     );
     // eslint-disable-next-line prefer-const
     ({ stdout, stderr } = await execAwait(
       `msiexec /i ${podmanMsiFilePath} /qn /lv ${path.join(
         getNNDirPath(),
-        'podman-install-log.txt'
+        'podman-install-log.txt',
       )}`,
-      { log: true, sudo: true }
+      { log: true, sudo: true },
     ));
     // todo: report logs if fails?
     console.log('podman install stdout, stderr', stdout, stderr);

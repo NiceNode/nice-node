@@ -37,7 +37,7 @@ export const RtkqSettingsService: any = createApi({
           data = await electron.getIsPodmanInstalled();
           console.log(
             'RtkqSettingsService isPodmanInstalled() returned ',
-            data
+            data,
           );
         } catch (e) {
           const error = { message: 'Unable to getIsPodmanInstalled' };
@@ -55,7 +55,7 @@ export const RtkqSettingsService: any = createApi({
           data = await electron.getIsPodmanRunning();
           console.log(
             'RtkqSettingsService getIsPodmanRunning() returned ',
-            data
+            data,
           );
         } catch (e) {
           const error = { message: 'Unable to getIsPodmanRunning' };

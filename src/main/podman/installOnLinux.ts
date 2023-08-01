@@ -33,7 +33,7 @@ const installOnLinux = async (): Promise<any> => {
       console.log(
         'Ubuntu install podman script stdout, stderr',
         stdout,
-        stderr
+        stderr,
       );
       sendMessageOnGrantPermissionToInstallPodman(true);
     } catch (installErr) {

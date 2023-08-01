@@ -37,7 +37,7 @@ const NodeScreen = () => {
   // const { t } = useTranslation();
   const selectedNode = useAppSelector(selectSelectedNode);
   const qNodeVersion = useGetNodeVersionQuery(
-    selectedNode?.spec.rpcTranslation
+    selectedNode?.spec.rpcTranslation,
   );
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
@@ -52,7 +52,7 @@ const NodeScreen = () => {
     selectedNode?.spec.rpcTranslation,
     {
       pollingInterval,
-    }
+    },
   );
   // const isSelectedNode = selectedNode !== undefined;
   // const peersPolling = isSelectedNode ? pollingInterval : 0;
@@ -60,13 +60,13 @@ const NodeScreen = () => {
     selectedNode?.spec.rpcTranslation,
     {
       pollingInterval,
-    }
+    },
   );
   const qLatestBlock = useGetExecutionLatestBlockQuery(
     selectedNode?.spec.rpcTranslation,
     {
       pollingInterval,
-    }
+    },
   );
 
   // use to show if internet is disconnected
@@ -212,7 +212,7 @@ const NodeScreen = () => {
         }
       }
     },
-    [selectedNode]
+    [selectedNode],
   );
 
   useEffect(() => {
@@ -242,7 +242,7 @@ const NodeScreen = () => {
       setModalState({
         isModalOpen: true,
         screen: { route: 'alphaBuild', type: 'info' },
-      })
+      }),
     );
     alphaModalRendered = true;
   }
@@ -268,7 +268,7 @@ const NodeScreen = () => {
                 setModalState({
                   isModalOpen: true,
                   screen: { route: 'addNode', type: 'modal' },
-                })
+                }),
               );
             }}
           />

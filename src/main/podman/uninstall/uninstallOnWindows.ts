@@ -53,7 +53,7 @@ const uninstallOnWindows = async (): Promise<boolean | { error: string }> => {
 
     const uninstallCommand = `msiexec /x ${podmanAppId} /qn /lv ${path.join(
       getNNDirPath(),
-      'podman-uninstall-log.txt'
+      'podman-uninstall-log.txt',
     )}`;
     ({ stdout, stderr } = await execAwait(uninstallCommand, {
       log: true,

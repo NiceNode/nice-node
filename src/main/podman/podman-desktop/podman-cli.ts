@@ -87,7 +87,7 @@ export interface ExecOptions {
 export function execPromise(
   command: string,
   args?: string[],
-  options?: ExecOptions
+  options?: ExecOptions,
 ): Promise<string> {
   let env = { ...process.env }; // clone original env object
 

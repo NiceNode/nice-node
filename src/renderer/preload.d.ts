@@ -29,7 +29,7 @@ declare global {
         once(channel: string, func: (...args: any[]) => void): void;
         removeListener(
           channel: string,
-          listener: (...args: any[]) => void
+          listener: (...args: any[]) => void,
         ): void;
         removeAllListeners(channel: string): void;
       };
@@ -53,7 +53,7 @@ declare global {
       addEthereumNode(
         ecNodeSpec: NodeSpecification,
         ccNodeSpec: NodeSpecification,
-        settings: { storageLocation?: string }
+        settings: { storageLocation?: string },
       ): { ecNode: Node; ccNode: Node };
       addNode(nodeSpec: NodeSpecification, storageLocation?: string): Node;
       updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;

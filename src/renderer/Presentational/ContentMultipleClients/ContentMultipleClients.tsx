@@ -32,7 +32,7 @@ const ContentMultipleClients = (props: {
   const initialSyncMessageDismissedState =
     localStorage.getItem('initialSyncMessageDismissed') === 'true';
   const [walletDismissed, setWalletDismissed] = useState<boolean>(
-    initialWalletDismissedState
+    initialWalletDismissedState,
   );
   const [initialSyncMessageDismissed, setinitialSyncMessageDismissed] =
     useState<boolean>(initialSyncMessageDismissedState);
@@ -151,7 +151,7 @@ const ContentMultipleClients = (props: {
     clientNames.forEach((value) => {
       const clientSearch = (clientString: string) =>
         resourceJson.find(
-          (clientObject: { key: string }) => clientObject.key === clientString
+          (clientObject: { key: string }) => clientObject.key === clientString,
         );
       const found = clientSearch(value);
       if (found) {

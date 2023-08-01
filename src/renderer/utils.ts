@@ -7,7 +7,7 @@ const EXECUTION_CLIENTS = ['Geth', 'Nethermind', 'Besu'];
 
 export const detectExecutionClient = (
   clientName: string | undefined,
-  version: boolean | undefined
+  version: boolean | undefined,
 ) => {
   if (clientName === undefined) {
     return undefined;
@@ -40,7 +40,7 @@ export const bytesToMB = (bytes: number) => {
 };
 
 export const categorizeNodeLibrary = (
-  nodeLibrary: NodeLibrary
+  nodeLibrary: NodeLibrary,
 ): {
   ExecutionClient: NodeSpecification[];
   BeaconNode: NodeSpecification[];

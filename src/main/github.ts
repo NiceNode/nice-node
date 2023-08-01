@@ -39,17 +39,17 @@ export const getLatestReleaseUrl = async (binaryDownload: BinaryDownload) => {
       return false;
     });
     logger.info(
-      `Release matchedAsset ${matchedAsset} found for ${platformLowercase} ${archLowercase}`
+      `Release matchedAsset ${matchedAsset} found for ${platformLowercase} ${archLowercase}`,
     );
     if (matchedAsset?.browser_download_url) {
       logger.info(
-        `Release URL ${matchedAsset?.browser_download_url} found for ${platformLowercase} ${archLowercase}`
+        `Release URL ${matchedAsset?.browser_download_url} found for ${platformLowercase} ${archLowercase}`,
       );
       return matchedAsset?.browser_download_url;
     }
     // if no asset is found, fallback?
     logger.error(
-      `Unable to find a release for ${platformLowercase} ${archLowercase}`
+      `Unable to find a release for ${platformLowercase} ${archLowercase}`,
     );
   }
 
@@ -80,6 +80,6 @@ export const getLatestReleaseUrl = async (binaryDownload: BinaryDownload) => {
   //   }
   // }
   throw new Error(
-    `Platform ${platform.getPlatform()} and arch ${arch.getArch()} is not supported by NiceNode.`
+    `Platform ${platform.getPlatform()} and arch ${arch.getArch()} is not supported by NiceNode.`,
   );
 };

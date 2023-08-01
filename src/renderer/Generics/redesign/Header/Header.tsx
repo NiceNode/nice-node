@@ -146,7 +146,7 @@ export const Header = (props: NodeOverviewProps) => {
                   setModalState({
                     isModalOpen: true,
                     screen: { route: 'nodeSettings', type: 'modal' },
-                  })
+                  }),
                 );
                 // setIsSettingsDisplayed(!isSettingsDisplayed);
               } else {
