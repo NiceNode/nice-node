@@ -1,6 +1,31 @@
 import { NodeBackgroundId } from 'renderer/assets/images/nodeBackgrounds';
 import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
 
+export interface ClientStatusProps {
+  updating?: boolean;
+  initialized?: boolean; // initial initialization is done
+  synchronized?: boolean; // constantly updated from checking current / height slot or block
+  lowPeerCount?: boolean;
+  updateAvailable?: boolean;
+  blocksBehind?: boolean;
+  noConnection?: boolean;
+  stopped?: boolean;
+  error?: boolean;
+}
+
+export interface ClientStatsProps {
+  currentBlock?: number;
+  highestBlock?: number;
+  currentSlot?: number;
+  highestSlot?: number;
+  peers?: number;
+  cpuLoad?: number;
+  diskUsageGBs?: number;
+  rewards?: number;
+  balance?: number;
+  stake?: number;
+}
+
 export interface ClientProps {
   name: NodeBackgroundId;
   version: string;
@@ -20,31 +45,6 @@ export interface NodeOverviewProps {
   status: ClientStatusProps;
   stats: ClientStatsProps;
   onAction?: (action: NodeAction) => void;
-}
-
-export interface ClientStatsProps {
-  currentBlock?: number;
-  highestBlock?: number;
-  currentSlot?: number;
-  highestSlot?: number;
-  peers?: number;
-  cpuLoad?: number;
-  diskUsageGBs?: number;
-  rewards?: number;
-  balance?: number;
-  stake?: number;
-}
-
-export interface ClientStatusProps {
-  updating?: boolean;
-  initialized?: boolean; // initial initialization is done
-  synchronized?: boolean; // constantly updated from checking current / height slot or block
-  lowPeerCount?: boolean;
-  updateAvailable?: boolean;
-  blocksBehind?: boolean;
-  noConnection?: boolean;
-  stopped?: boolean;
-  error?: boolean;
 }
 
 export interface SyncStatusProps {

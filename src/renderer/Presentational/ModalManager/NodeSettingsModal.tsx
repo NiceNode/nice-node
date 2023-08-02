@@ -54,7 +54,7 @@ export const NodeSettingsModal = ({ modalOnClose }: Props) => {
             modalConfig,
             setModalConfig,
             save,
-            modalOnSaveConfig
+            modalOnSaveConfig,
           );
         }}
         disableSaveButton={disableSaveButton}

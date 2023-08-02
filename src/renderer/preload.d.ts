@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-unused-vars */
 import { NodeSpecification } from '../common/nodeSpec';
-import { Node, NodeId } from '../common/node';
+import Node, { NodeId, UserNodes } from '../common/node';
 import { NodeLibrary } from '../main/state/nodeLibrary';
 import { Settings, ThemeSetting } from '../main/state/settings';
 import { CheckStorageDetails } from '../main/files';
+import { FailSystemRequirementsData } from '../main/minSystemRequirement';
 import { SystemData } from '../main/systemInfo';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
@@ -28,7 +29,7 @@ declare global {
         once(channel: string, func: (...args: any[]) => void): void;
         removeListener(
           channel: string,
-          listener: (...args: any[]) => void
+          listener: (...args: any[]) => void,
         ): void;
         removeAllListeners(channel: string): void;
       };
@@ -52,7 +53,7 @@ declare global {
       addEthereumNode(
         ecNodeSpec: NodeSpecification,
         ccNodeSpec: NodeSpecification,
-        settings: { storageLocation?: string }
+        settings: { storageLocation?: string },
       ): { ecNode: Node; ccNode: Node };
       addNode(nodeSpec: NodeSpecification, storageLocation?: string): Node;
       updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;

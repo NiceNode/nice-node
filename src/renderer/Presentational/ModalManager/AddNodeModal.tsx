@@ -72,7 +72,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     const { ecNode, ccNode } = await electron.addEthereumNode(
       ecNodeSpec,
       ccNodeSpec,
-      { storageLocation }
+      { storageLocation },
     );
     reportEvent('AddNode');
     dispatch(updateSelectedNodeId(ecNode.id));
@@ -134,7 +134,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
             modalConfig,
             setModalConfig,
             save,
-            modalOnSaveConfig
+            modalOnSaveConfig,
           );
         }}
         disableSaveButton={disableSaveButton}

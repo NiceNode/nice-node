@@ -22,7 +22,7 @@ interface BreakDownObjects {
     sectionTitle: string;
     items: { label: string; value: string | undefined }[];
   }[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   [key: string]: any; // index signature
 }
 
@@ -55,7 +55,7 @@ export const processMinMaxAverage = (data?: MetricData[]) => {
       lowest: data[0].y,
       highest: data[0].y,
       sum: 0,
-    }
+    },
   );
 
   const average = sum / data.length;
@@ -69,7 +69,7 @@ export const processMinMaxAverage = (data?: MetricData[]) => {
 
 export const getBreakdown = (
   tabId: string,
-  periodBreakdownData: Partial<PeriodBreakdownDataProps>
+  periodBreakdownData: Partial<PeriodBreakdownDataProps>,
 ) => {
   const breakDownObjects: BreakDownObjects = {
     sync: [

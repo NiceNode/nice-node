@@ -37,7 +37,7 @@ export const Alert = ({
         onClickCloseButton();
       }
     },
-    [onClickCloseButton]
+    [onClickCloseButton],
   );
 
   useEffect(() => {

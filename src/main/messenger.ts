@@ -8,7 +8,7 @@ export const setWindow = (inMainWindow: BrowserWindow): void => {
   mainWindow = inMainWindow;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 export const send = (channel: string, ...args: any[]): void => {
   if (!mainWindow) {
     return;

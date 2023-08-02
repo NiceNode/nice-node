@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NotificationProps } from 'main/consts/notifications';
 import { NotificationItemProps } from 'renderer/Generics/redesign/NotificationItem/NotificationItem';
 import { send } from '../messenger';
@@ -49,14 +48,14 @@ export const displayNotification = (notification: NotificationItemProps) => {
 
 const checkIfNotificationCanBeAdded = (
   storedNotifications: NotificationItemProps[],
-  notificationObject: NotificationProps
+  notificationObject: NotificationProps,
 ) => {
   if (storedNotifications.length === 0) return true;
   if (storedNotifications.length === 1000) return false;
   const currentTimestamp = Date.now();
   const existingNotificationIndex = storedNotifications.findIndex(
     (notification: NotificationItemProps) =>
-      notification.title === notificationObject.title
+      notification.title === notificationObject.title,
   );
   if (existingNotificationIndex === -1) return true;
 

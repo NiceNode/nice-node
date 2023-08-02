@@ -5,13 +5,14 @@ import AddEthereumNode from '../../renderer/Presentational/AddEthereumNode/AddEt
 export default {
   title: 'Presentational/AddEthereumNode',
   component: AddEthereumNode,
-  argTypes: {
-  },
+  argTypes: {},
 } as ComponentMeta<typeof AddEthereumNode>;
 
-const Template: ComponentStory<typeof AddEthereumNode> = (args) => <AddEthereumNode {...args} />;
+const Template: ComponentStory<typeof AddEthereumNode> = (args) => (
+  <AddEthereumNode {...args} />
+);
 
 export const Primary = Template.bind({});
 Primary.args = {
-  onChange: (newValue) => console.log(newValue)
+  onChange: (newValue) => console.log(newValue),
 };

@@ -2,7 +2,7 @@ import * as platform from '../platform';
 
 export const parseFileNameFromPath = (
   inPath: string,
-  excludeExension?: boolean
+  excludeExension?: boolean,
 ) => {
   // ex. 'C:\Windows\crazy\inPath'
   // ex. '/root/usr/yay.zip

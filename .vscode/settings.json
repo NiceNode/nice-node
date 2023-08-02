@@ -22,9 +22,9 @@
   },
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+    "source.fixAll.eslint": true
   },
   "eslint.validate": ["javascript"],
-  "eslint.format.enable": true,
+  "eslint.format.enable": false,
   "prettier.configPath": "package.json"
 }

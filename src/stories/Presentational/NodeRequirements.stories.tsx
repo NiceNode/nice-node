@@ -5,28 +5,30 @@ import NodeRequirements from '../../renderer/Presentational/NodeRequirements/Nod
 export default {
   title: 'Presentational/NodeRequirements',
   component: NodeRequirements,
-  argTypes: {
-  },
+  argTypes: {},
 } as ComponentMeta<typeof NodeRequirements>;
 
-const Template: ComponentStory<typeof NodeRequirements> = (args) => <NodeRequirements {...args} />;
+const Template: ComponentStory<typeof NodeRequirements> = (args) => (
+  <NodeRequirements {...args} />
+);
 
 export const Primary = Template.bind({});
 Primary.args = {
   nodeRequirements: {
     documentationUrl: 'https://www.nicenode.xyz/#requirements',
-    description: 'Your system is checked with the recommended requirements for the selected clients. You are able to launch a node with lower specifications but expect some hickups now and then.',
+    description:
+      'Your system is checked with the recommended requirements for the selected clients. You are able to launch a node with lower specifications but expect some hickups now and then.',
     cpu: {
       cores: 4,
-      minSpeedGHz: 2.4
+      minSpeedGHz: 2.4,
     },
     memory: {
-      minSizeGBs: 8000
+      minSizeGBs: 8000,
     },
     storage: {
       minSizeGBs: 1000,
       minWriteSpeedMBps: 400,
-      ssdRequired: true
+      ssdRequired: true,
     },
     internet: {
       minDownloadSpeedMbps: 25,
@@ -35,7 +37,7 @@ Primary.args = {
     docker: {
       required: true,
       minVersion: '20.10',
-    }
+    },
   },
   systemData: {
     blockDevices: [],
@@ -48,13 +50,13 @@ Primary.args = {
       serial: 'ABCDEFGH',
       uuid: '1234567-a1b2c-34gz-345g-453gsfd3',
       sku: '',
-      virtual: false
+      virtual: false,
     },
     bios: {
       vendor: 'Apple Inc.',
       version: '7459.141.1',
       releaseDate: '',
-      revision: ''
+      revision: '',
     },
     baseboard: {
       manufacturer: 'Apple Inc.',
@@ -63,7 +65,7 @@ Primary.args = {
       serial: 'ABCDEFGH',
       assetTag: '',
       memMax: 17179869184,
-      memSlots: 0
+      memSlots: 0,
     },
     chassis: {
       manufacturer: 'Apple Inc.',
@@ -72,7 +74,7 @@ Primary.args = {
       version: '',
       serial: 'ABCDEFGH',
       assetTag: '',
-      sku: ''
+      sku: '',
     },
     os: {
       platform: 'darwin',
@@ -88,7 +90,7 @@ Primary.args = {
       serial: 'A-NICE-SERIAL',
       build: '21G115',
       servicepack: '',
-      uefi: true
+      uefi: true,
     },
     uuid: {
       os: '1234567-a1b2c-34gz-345g-453gsfd3',
@@ -98,8 +100,8 @@ Primary.args = {
         'da:7b:71:78:0a:9e',
         'da:7b:71:78:0a:9f',
         'da:7b:71:78:0a:a0',
-        'ae:e3:61:73:45:97'
-      ]
+        'ae:e3:61:73:45:97',
+      ],
     },
     versions: {
       kernel: '21.6.0',
@@ -131,7 +133,7 @@ Primary.args = {
       java: '',
       gcc: '14.0.0',
       virtualbox: '',
-      dotnet: ''
+      dotnet: '',
     },
     cpu: {
       manufacturer: 'Apple',
@@ -154,69 +156,69 @@ Primary.args = {
       virtualization: false,
       cache: { l1d: 131072, l1i: 65536, l2: 4194304, l3: 0 },
       efficiencyCores: 2,
-      performanceCores: 8
+      performanceCores: 8,
     },
-    graphics:{
+    graphics: {
       controllers: [
-          {
-              "vendor": "Apple",
-              "model": "Apple M1 Pro",
-              "bus": "Built-In",
-              "vramDynamic": true,
-              "vram": null,
-              "deviceId": "",
-              "vendorId": "0x05ac",
-              "external": false,
-              "cores": 16,
-              "metalVersion": "apple7"
-          }
+        {
+          vendor: 'Apple',
+          model: 'Apple M1 Pro',
+          bus: 'Built-In',
+          vramDynamic: true,
+          vram: null,
+          deviceId: '',
+          vendorId: '0x05ac',
+          external: false,
+          cores: 16,
+          metalVersion: 'apple7',
+        },
       ],
       displays: [
-          {
-              "deviceName": "WasntHereApple",
-              "vendor": "Apple",
-              "vendorId": "610",
-              "model": "Color LCD",
-              "productionYear": 0,
-              "serial": "fd626d62",
-              "displayId": "1",
-              "main": true,
-              "builtin": true,
-              "connection": "Internal",
-              "sizeX": null,
-              "sizeY": null,
-              "pixelDepth": null,
-              "resolutionX": 3456,
-              "resolutionY": 2234,
-              "currentResX": 1728,
-              "currentResY": 1117,
-              "positionX": 0,
-              "positionY": 0,
-              "currentRefreshRate": 120
-          },
-          {
-            "deviceName": "WasntHereAsus",
-              "vendor": "Asus",
-              "vendorId": "6b3",
-              "model": "ASUS MB166C",
-              "productionYear": 2022,
-              "serial": "12222",
-              "displayId": "2",
-              "main": false,
-              "builtin": false,
-              "connection": null,
-              "sizeX": null,
-              "sizeY": null,
-              "pixelDepth": null,
-              "resolutionX": 1920,
-              "resolutionY": 1080,
-              "currentResX": 1920,
-              "currentResY": 1080,
-              "positionX": 0,
-              "positionY": 0,
-              "currentRefreshRate": 60
-          }
-      ]
+        {
+          deviceName: 'WasntHereApple',
+          vendor: 'Apple',
+          vendorId: '610',
+          model: 'Color LCD',
+          productionYear: 0,
+          serial: 'fd626d62',
+          displayId: '1',
+          main: true,
+          builtin: true,
+          connection: 'Internal',
+          sizeX: null,
+          sizeY: null,
+          pixelDepth: null,
+          resolutionX: 3456,
+          resolutionY: 2234,
+          currentResX: 1728,
+          currentResY: 1117,
+          positionX: 0,
+          positionY: 0,
+          currentRefreshRate: 120,
+        },
+        {
+          deviceName: 'WasntHereAsus',
+          vendor: 'Asus',
+          vendorId: '6b3',
+          model: 'ASUS MB166C',
+          productionYear: 2022,
+          serial: '12222',
+          displayId: '2',
+          main: false,
+          builtin: false,
+          connection: null,
+          sizeX: null,
+          sizeY: null,
+          pixelDepth: null,
+          resolutionX: 1920,
+          resolutionY: 1080,
+          currentResX: 1920,
+          currentResY: 1080,
+          positionX: 0,
+          positionY: 0,
+          currentRefreshRate: 60,
+        },
+      ],
     },
     net: [
       {
@@ -238,7 +240,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'en6',
@@ -259,7 +261,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'en0',
@@ -280,7 +282,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'en1',
@@ -301,7 +303,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'en2',
@@ -322,7 +324,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'en3',
@@ -343,7 +345,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'awdl0',
@@ -364,7 +366,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'bridge0',
@@ -385,7 +387,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'llw0',
@@ -406,7 +408,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'utun0',
@@ -427,7 +429,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'utun1',
@@ -448,7 +450,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'utun2',
@@ -469,7 +471,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'utun3',
@@ -490,7 +492,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'utun4',
@@ -511,7 +513,7 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
+        carrierChanges: 0,
       },
       {
         iface: 'utun6',
@@ -532,8 +534,8 @@ Primary.args = {
         dnsSuffix: '',
         ieee8021xAuth: '',
         ieee8021xState: '',
-        carrierChanges: 0
-      }
+        carrierChanges: 0,
+      },
     ],
     memLayout: [
       {
@@ -548,8 +550,8 @@ Primary.args = {
         serialNum: '',
         voltageConfigured: null,
         voltageMin: null,
-        voltageMax: null
-      }
+        voltageMax: null,
+      },
     ],
     diskLayout: [
       {
@@ -569,12 +571,11 @@ Primary.args = {
         serialNum: '0ba0168944911e27',
         interfaceType: 'PCIe',
         smartStatus: 'Ok',
-        temperature: null
-      }
-    ]
-  }
+        temperature: null,
+      },
+    ],
+  },
 };
 
 export const NoRequirements = Template.bind({});
-NoRequirements.args = {
-}
+NoRequirements.args = {};

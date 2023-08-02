@@ -3,8 +3,6 @@ import { NodeSpecification } from '../../common/nodeSpec';
 import gethv1 from '../../common/NodeSpecs/geth/geth-v1.0.0.json';
 import { NodeLibrary } from '../../main/state/nodeLibrary';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export const getSystemFreeDiskSpace = (): number => {
   return 2000;
 };

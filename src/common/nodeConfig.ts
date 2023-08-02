@@ -49,7 +49,7 @@ export type ConfigTranslationMap = Record<ConfigKey, ConfigTranslation>;
  */
 const getConfigFromValue = (
   configValue: string | string[],
-  controlTranslations: SelectTranslation[]
+  controlTranslations: SelectTranslation[],
 ) => {
   const matchedControlTranslations = controlTranslations.filter((option) => {
     return (
@@ -95,7 +95,7 @@ export const buildCliConfig = ({
           const joinStr = configTranslation.valuesJoinStr ?? ',';
           const cliConfigs = getConfigFromValue(
             configValue,
-            configTranslation.uiControl.controlTranslations
+            configTranslation.uiControl.controlTranslations,
           );
           let cliConfigJoinedStr = cliConfigs.join(joinStr);
           if (configTranslation.valuesWrapChar) {
@@ -109,13 +109,13 @@ export const buildCliConfig = ({
           if (configTranslation.uiControl.type === 'select/single') {
             const cliConfigs = getConfigFromValue(
               configValue,
-              configTranslation.uiControl.controlTranslations
+              configTranslation.uiControl.controlTranslations,
             );
             if (cliConfigs.length > 0) {
               currCliString += cliConfigs[0];
             } else {
               console.error(
-                `Unable to add config value during buildCliConfig. No configs found for ${configValue}`
+                `Unable to add config value during buildCliConfig. No configs found for ${configValue}`,
               );
             }
           } else if (configTranslation.uiControl.type === 'filePath') {
@@ -126,14 +126,14 @@ export const buildCliConfig = ({
           }
         } else {
           console.error(
-            `Unable to add config value during buildCliConfig. Encountered unknown value type for value ${configValue}`
+            `Unable to add config value during buildCliConfig. Encountered unknown value type for value ${configValue}`,
           );
         }
 
         console.log(
           'cliString, currCliString: ',
           JSON.stringify(cliString),
-          JSON.stringify(currCliString)
+          JSON.stringify(currCliString),
         );
         // join the current config with the previous and a space between
         if (cliString) {
@@ -143,7 +143,7 @@ export const buildCliConfig = ({
       }
       return cliString;
     },
-    ''
+    '',
   );
   return cliConfigArray;
 };

@@ -8,7 +8,7 @@ import { addNotification } from './state/notifications';
 import { NOTIFICATIONS } from './consts/notifications';
 
 const watchProcessPollingInterval = 300000;
-let monitoringInterval: NodeJS.Timer;
+let monitoringInterval: ReturnType<typeof setTimeout>;
 const pidusage = require('pidusage');
 
 export const getProcessUsageByPid = async (pid: number) => {
@@ -35,8 +35,8 @@ export const checkSystemHardware = async () => {
   if (totalMemoryGB < 8) {
     warnings.push(
       `Computer memory is only ${totalMemoryGB.toFixed(
-        2
-      )}GB. The recommended amount is greater than 8GB.`
+        2,
+      )}GB. The recommended amount is greater than 8GB.`,
     );
   } else {
     logger.info(`${totalMemoryGB}GB memory is sufficient.`);
@@ -46,7 +46,7 @@ export const checkSystemHardware = async () => {
   const sizeDiskGB = Math.round(getStorageDetails.freeStorageGBs);
   if (sizeDiskGB < 40) {
     warnings.push(
-      `Computer storage is only ${sizeDiskGB}GB. The recommended amount is greater than 1TB (1000GB).`
+      `Computer storage is only ${sizeDiskGB}GB. The recommended amount is greater than 1TB (1000GB).`,
     );
     addNotification(NOTIFICATIONS.WARNING.LOW_DISK_SPACE);
   } else {
@@ -65,7 +65,7 @@ export const checkSystemHardware = async () => {
 
 export const updateNodeLastSyncedBlock = async (
   nodeId: NodeId,
-  block: number
+  block: number,
 ) => {
   const node = storeNodes.getNode(nodeId);
   if (node) {
@@ -81,7 +81,7 @@ export const initialize = () => {
   checkSystemHardware();
   monitoringInterval = setInterval(
     checkSystemHardware,
-    watchProcessPollingInterval
+    watchProcessPollingInterval,
   );
 };
 

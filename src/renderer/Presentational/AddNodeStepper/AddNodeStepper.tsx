@@ -122,7 +122,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       // save storage location (and other settings)
       setNodeStorageLocation(newValue.storageLocation);
     },
-    [sNodeLibrary]
+    [sNodeLibrary],
   );
 
   // useState when eth node changes, get node spec from value,
@@ -148,17 +148,16 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     }
     console.log(
       'adding nodes with storage location set to: ',
-      sNodeStorageLocation
+      sNodeStorageLocation,
     );
     if (!ecNodeSpec || !ccNodeSpec) {
       throw new Error('ecNodeSpec or ccNodeSpec is undefined');
-      return;
     }
 
     const { ecNode, ccNode } = await electron.addEthereumNode(
       ecNodeSpec,
       ccNodeSpec,
-      { storageLocation: sNodeStorageLocation }
+      { storageLocation: sNodeStorageLocation },
     );
     reportEvent('AddNode');
 

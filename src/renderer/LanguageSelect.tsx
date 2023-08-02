@@ -9,7 +9,7 @@ export interface LanguageSelectProps {
 const LanguageSelect = ({ onChange, language }: LanguageSelectProps) => {
   // always is string, but type can be string | string[] | undefined
   const onChangeLanguage = async (
-    newLang: SingleValue<{ value: string; label: string }> | undefined
+    newLang: SingleValue<{ value: string; label: string }> | undefined,
   ) => {
     console.log('language selected: ', newLang);
     if (newLang && onChange) {

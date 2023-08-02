@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   isPodmanRunning,
   isPodmanStarting,
@@ -72,7 +71,7 @@ export const startOnWindows = async (): Promise<any> => {
       // Can't set podman machine hardware resources on Windows. WSL2 scales automatically.
       // (optionally, we could change a wslconfig file)
       const machineInitOutput = await runPodmanCommand(
-        `machine init --rootful --now ${NICENODE_MACHINE_NAME}`
+        `machine init --rootful --now ${NICENODE_MACHINE_NAME}`,
       );
       logger.info(`Start podman (machine init) output: ${machineInitOutput}`);
     }

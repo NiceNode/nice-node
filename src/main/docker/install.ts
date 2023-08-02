@@ -3,7 +3,7 @@ import * as platform from '../platform';
 import installOnMac from './installOnMac';
 import installOnWindows from './installOnWindows';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 const installDocker = async (): Promise<any> => {
   logger.info(`Starting docker install...`);
 

@@ -31,15 +31,15 @@
     "memory": {
       "minSizeGBs": 4
     },
-    "storage" : {
-      "minSizeGBs" : 200,
+    "storage": {
+      "minSizeGBs": 200,
       "ssdRequired": true
     },
-    "internet" : {
+    "internet": {
       "minDownloadSpeedMbps": 8,
       "minUploadSpeedMbps": 8
     },
-    "docker" : {
+    "docker": {
       "required": true
     }
   },

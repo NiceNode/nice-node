@@ -30,7 +30,7 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
     } catch (err) {
       console.error(err);
       throw new Error(
-        'There was an error removing the node. Try again and please report the error to the NiceNode team in Discord.'
+        'There was an error removing the node. Try again and please report the error to the NiceNode team in Discord.',
       );
     }
     modalOnClose();
@@ -41,7 +41,7 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
       setModalState({
         isModalOpen: true,
         screen: { route: 'nodeSettings', type: 'modal' },
-      })
+      }),
     );
   };
 
@@ -62,7 +62,7 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
             modalConfig,
             setModalConfig,
             save,
-            modalOnSaveConfig
+            modalOnSaveConfig,
           );
         }}
       />

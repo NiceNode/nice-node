@@ -6,7 +6,7 @@ import { executeTranslation } from './rpcExecuteTranslation';
 type CustomerErrorType = {
   message: string;
 };
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 type ProviderResponse = any;
 
 // const provider = new ethers.providers.WebSocketProvider('ws://localhost:8546');
@@ -19,7 +19,7 @@ const provider = new ethers.providers.JsonRpcProvider('http://localhost:8547');
 
 // Define a service using a base URL and expected endpoints
 // lots of issues in RTKQ github complaining about typescript breaking changes
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 export const RtkqExecutionWs: any = createApi({
   reducerPath: 'RtkqExecutionWs',
   baseQuery: fakeBaseQuery<CustomerErrorType>(),

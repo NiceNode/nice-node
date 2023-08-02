@@ -37,6 +37,7 @@ export interface SpecialSelectProps {
   selectedOption: SelectOption;
 }
 
+const emptyComponentPlaceholder = () => <></>;
 /**
  * Used for selecting Ethereum node client
  */
@@ -68,7 +69,7 @@ const SpecialSelect = ({
         components={{
           Option,
           SingleValue,
-          IndicatorsContainer: () => <></>,
+          IndicatorsContainer: emptyComponentPlaceholder,
         }}
         styles={{
           container: (base) => ({

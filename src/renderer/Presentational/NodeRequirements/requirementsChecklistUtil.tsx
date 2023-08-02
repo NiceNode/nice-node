@@ -17,7 +17,7 @@ import { findSystemStorageDetailsAtALocation } from './nodeStorageUtil';
 
 export const makeCheckList = (
   { nodeRequirements, systemData, nodeStorageLocation }: NodeRequirementsProps,
-  t: TFunction
+  t: TFunction,
 ) => {
   const newChecklistItems: ChecklistItemProps[] = [];
   if (!nodeRequirements) {
@@ -28,7 +28,7 @@ export const makeCheckList = (
   if (systemData && nodeStorageLocation) {
     nodeLocationStorageDetails = findSystemStorageDetailsAtALocation(
       systemData,
-      nodeStorageLocation
+      nodeStorageLocation,
     );
   }
   console.log('nodeLocationStorageDetails', nodeLocationStorageDetails);

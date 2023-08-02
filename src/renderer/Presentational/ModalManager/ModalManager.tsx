@@ -20,7 +20,7 @@ const ModalManager = () => {
       setModalState({
         isModalOpen: false,
         screen: { route: undefined, type: undefined },
-      })
+      }),
     );
   }, [dispatch]);
 

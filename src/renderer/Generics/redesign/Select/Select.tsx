@@ -31,10 +31,16 @@ export interface SelectProps {
           value: string;
           label: string;
         }>
-      | undefined
+      | undefined,
   ) => unknown;
   menuPlacement?: MenuPlacement;
 }
+
+const IndicatorsContainer = () => (
+  <div style={{ marginRight: 5 }}>
+    <Icon iconId="popup" />
+  </div>
+);
 
 const Select = ({
   onChange,
@@ -56,7 +62,7 @@ const Select = ({
       setSelectedOption(newOption as SelectOption);
       if (onChange) onChange(newOption);
     },
-    [onChange]
+    [onChange],
   );
 
   return (
@@ -71,11 +77,7 @@ const Select = ({
         options={options}
         isSearchable={false}
         components={{
-          IndicatorsContainer: () => (
-            <div style={{ marginRight: 5 }}>
-              <Icon iconId="popup" />
-            </div>
-          ),
+          IndicatorsContainer,
         }}
         styles={{
           control: (base) => ({

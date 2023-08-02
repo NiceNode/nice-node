@@ -1,3 +1,4 @@
+import React from 'react';
 import { captionTextClass } from './caption.css';
 
 export interface CaptionProps {

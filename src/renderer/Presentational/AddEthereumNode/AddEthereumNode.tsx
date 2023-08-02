@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -117,11 +116,11 @@ export interface AddEthereumNodeProps {
   ethereumNodeConfig?: AddEthereumNodeValues;
   setConsensusClient?: (
     elClient: SelectOption,
-    object: AddEthereumNodeValues
+    object: AddEthereumNodeValues,
   ) => void;
   setExecutionClient?: (
     clClient: SelectOption,
-    object: AddEthereumNodeValues
+    object: AddEthereumNodeValues,
   ) => void;
   modalOnChangeConfig?: (config: ModalConfig) => void;
 }
@@ -146,7 +145,7 @@ AddEthereumNodeProps) => {
   const [sSelectedConsensusClient, setSelectedConsensusClient] =
     useState<SelectOption>(ethereumNodeConfig?.consensusClient || ccOptions[0]);
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>(
-    ethereumNodeConfig?.storageLocation || ''
+    ethereumNodeConfig?.storageLocation || '',
   );
   const [
     sNodeStorageLocationFreeStorageGBs,
@@ -172,7 +171,7 @@ AddEthereumNodeProps) => {
         });
       }
       setNodeStorageLocationFreeStorageGBs(
-        defaultNodesStorageDetails.freeStorageGBs
+        defaultNodesStorageDetails.freeStorageGBs,
       );
     };
     fetchData();
@@ -197,7 +196,7 @@ AddEthereumNodeProps) => {
       sSelectedConsensusClient,
       sNodeStorageLocation,
       setExecutionClient,
-    ]
+    ],
   );
 
   const onChangeCc = useCallback(
@@ -218,7 +217,7 @@ AddEthereumNodeProps) => {
       sSelectedConsensusClient,
       sNodeStorageLocation,
       setConsensusClient,
-    ]
+    ],
   );
 
   useEffect(() => {
@@ -241,7 +240,7 @@ AddEthereumNodeProps) => {
       setModalState({
         isModalOpen: true,
         screen: { route: 'alphaBuild', type: 'info' },
-      })
+      }),
     );
     alphaModalRendered = true;
   }
@@ -331,7 +330,7 @@ AddEthereumNodeProps) => {
               });
             }
             setNodeStorageLocationFreeStorageGBs(
-              storageLocationDetails.freeStorageGBs
+              storageLocationDetails.freeStorageGBs,
             );
           } else {
             // user didn't change the folder path

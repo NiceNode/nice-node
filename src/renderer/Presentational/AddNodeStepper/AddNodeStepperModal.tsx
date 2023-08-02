@@ -78,7 +78,7 @@ const AddNodeStepperModal = ({
 
   const setConsensusClient = (
     clClient: SelectOption,
-    ethereumNodeConfig: AddEthereumNodeValues
+    ethereumNodeConfig: AddEthereumNodeValues,
   ) => {
     const config = { ...ethereumNodeConfig, consensusClient: clClient };
     modalOnChangeConfig({
@@ -89,7 +89,7 @@ const AddNodeStepperModal = ({
 
   const setExecutionClient = (
     elClient: SelectOption,
-    ethereumNodeConfig: AddEthereumNodeValues
+    ethereumNodeConfig: AddEthereumNodeValues,
   ) => {
     const config = { ...ethereumNodeConfig, executionClient: elClient };
     modalOnChangeConfig({

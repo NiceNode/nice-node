@@ -4,6 +4,14 @@ import { getSyncStatus } from '../../Generics/redesign/utils';
 import { useGetExecutionIsSyncingQuery } from '../../state/services';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 
+export type SidebarNodeStatus =
+  | 'healthy'
+  | 'warning'
+  | 'error'
+  | 'sync'
+  | 'stopped'
+  | 'updating';
+
 const NODE_SIDEBAR_STATUS_MAP: Record<string, SidebarNodeStatus> = {
   created: 'stopped',
   initializing: 'sync',
@@ -25,13 +33,6 @@ const NODE_SIDEBAR_STATUS_MAP: Record<string, SidebarNodeStatus> = {
   error: 'error',
 };
 
-export type SidebarNodeStatus =
-  | 'healthy'
-  | 'warning'
-  | 'error'
-  | 'sync'
-  | 'stopped'
-  | 'updating';
 export interface SidebarNodeItemWrapperProps {
   /**
    * Which icon?
@@ -66,7 +67,7 @@ export const SidebarNodeItemWrapper = ({
     node.spec.rpcTranslation,
     {
       pollingInterval,
-    }
+    },
   );
 
   useEffect(() => {

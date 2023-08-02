@@ -117,7 +117,7 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
     return null;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   const breakdownData: { title: string; items: any[] } = {
     title: 'Period breakdown',
     items: getBreakdown(tabId.toLowerCase(), processPeriodBreakdownData()),
@@ -143,7 +143,7 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
 
 const areEqual = (
   prevProps: Readonly<TabContentProps>,
-  nextProps: Readonly<TabContentProps>
+  nextProps: Readonly<TabContentProps>,
 ): boolean => {
   // this prevents unnecessary rerenders
   if (nextProps.name !== prevProps.name) return false; // render when tab is changed

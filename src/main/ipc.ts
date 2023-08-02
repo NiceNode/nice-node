@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ipcMain, app } from 'electron';
 import getDebugInfo from './debug';
 import {
@@ -65,7 +64,7 @@ export const initialize = () => {
     'updateNodeLastSyncedBlock',
     (_event, nodeId: NodeId, block: number) => {
       return updateNodeLastSyncedBlock(nodeId, block);
-    }
+    },
   );
   ipcMain.handle('getSystemFreeDiskSpace', () => {
     return getSystemFreeDiskSpace();
@@ -79,7 +78,7 @@ export const initialize = () => {
     logger.info(`store.get(key, value): ${key},${value}`);
     return value;
   });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   ipcMain.handle('setStoreValue', (_event, key: string, value: any) => {
     logger.info(`store.set(key, value): ${key},${value}`);
     return store.set(key, value);
@@ -101,28 +100,28 @@ export const initialize = () => {
       _event,
       ecNodeSpec: NodeSpecification,
       ccNodeSpec: NodeSpecification,
-      settings: { storageLocation?: string }
+      settings: { storageLocation?: string },
     ): Promise<{ ecNode: Node; ccNode: Node }> => {
       return addEthereumNode(ecNodeSpec, ccNodeSpec, settings);
-    }
+    },
   );
   ipcMain.handle(
     'addNode',
     (_event, nodeSpec: NodeSpecification, storageLocation?: string) => {
       return addNode(nodeSpec, storageLocation);
-    }
+    },
   );
   ipcMain.handle(
     'updateNode',
     (_event, nodeId: NodeId, propertiesToUpdate: any) => {
       return updateNodeProperties(nodeId, propertiesToUpdate);
-    }
+    },
   );
   ipcMain.handle(
     'removeNode',
     (_event, nodeId: NodeId, options: { isDeleteStorage: boolean }) => {
       return removeNode(nodeId, options);
-    }
+    },
   );
   ipcMain.handle('startNode', (_event, nodeId: NodeId) => {
     return startNode(nodeId);
@@ -137,7 +136,7 @@ export const initialize = () => {
     'updateNodeDataDir',
     (_event, node: Node, newDataDir: string) => {
       return updateNodeDataDir(node, newDataDir);
-    }
+    },
   );
   ipcMain.handle('openDialogForNodeDataDir', (_event, nodeId: NodeId) => {
     return openDialogForNodeDataDir(nodeId);
@@ -188,13 +187,13 @@ export const initialize = () => {
     'setIsNotificationsEnabled',
     (_event, isNotificationsEnabled: boolean) => {
       return setIsNotificationsEnabled(isNotificationsEnabled);
-    }
+    },
   );
   ipcMain.handle(
     'setIsEventReportingEnabled',
     (_event, isEventReportingEnabled: boolean) => {
       return setIsEventReportingEnabled(isEventReportingEnabled);
-    }
+    },
   );
 
   // Notifications

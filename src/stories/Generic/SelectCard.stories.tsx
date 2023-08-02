@@ -70,7 +70,7 @@ const clientsCards = [
 const NetworksTemplate: ComponentStory<typeof SelectCard> = () => (
   <>
     {networksCards.map((obj) => {
-      const { iconId, ...rest } = obj
+      const { iconId, ...rest } = obj;
       return <SelectCard iconId={iconId as NodeIconId} {...rest} />;
     })}
   </>
@@ -79,7 +79,7 @@ const NetworksTemplate: ComponentStory<typeof SelectCard> = () => (
 const ClientsTemplate: ComponentStory<typeof SelectCard> = () => (
   <>
     {clientsCards.map((obj) => {
-      const { iconId, ...rest } = obj
+      const { iconId, ...rest } = obj;
       return <SelectCard iconId={iconId as NodeIconId} {...rest} />;
     })}
   </>

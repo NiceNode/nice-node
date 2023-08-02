@@ -12,7 +12,7 @@ const FailSystemRequirementsDetector = () => {
         await electron.getFailSystemRequirements();
       console.log(
         'pref failSystemRequirementsData',
-        failSystemRequirementsData
+        failSystemRequirementsData,
       );
       if (failSystemRequirementsData.failedRequirements.length > 0) {
         // if there is a failed requirement, show the alert
@@ -20,7 +20,7 @@ const FailSystemRequirementsDetector = () => {
           setModalState({
             isModalOpen: true,
             screen: { route: 'failSystemRequirements', type: 'modal' },
-          })
+          }),
         );
       }
     };

@@ -89,7 +89,7 @@ const NodeSettings = ({
             danger
           />
         </div>
-      </div>
+      </div>,
     );
 
     if (isWalletSettingsEnabled) {
@@ -100,7 +100,7 @@ const NodeSettings = ({
             httpCorsConfigTranslation={httpCorsConfigTranslation}
             onChange={onChange}
           />
-        </div>
+        </div>,
       );
     }
     return tabs;

@@ -13,7 +13,7 @@ import { startOnMac } from './start';
  * Download podman-arch-verson.pkg, install podman, start podman
  * @param version example: 4.4.3 (without a v prefix)
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 const installOnMac = async (version: string): Promise<any> => {
   logger.info(`Starting podman install...`);
   try {
@@ -31,7 +31,7 @@ const installOnMac = async (version: string): Promise<any> => {
     const podmanPkgFilePath = await downloadFile(
       downloadUrl,
       getNNDirPath(),
-      sendMessageOnDownloadProgress
+      sendMessageOnDownloadProgress,
     );
     let stdout;
     let stderr;
@@ -40,7 +40,7 @@ const installOnMac = async (version: string): Promise<any> => {
     try {
       ({ stdout, stderr } = await execAwait(
         `installer -pkg "${podmanPkgFilePath}" -target / -verbose`,
-        { log: true, sudo: true }
+        { log: true, sudo: true },
       ));
       sendMessageOnGrantPermissionToInstallPodman(true);
     } catch (installErr) {

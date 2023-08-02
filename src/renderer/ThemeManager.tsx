@@ -20,7 +20,7 @@ const ThemeManager = ({ children }: Props) => {
 
   const handleColorSchemeChange = (colorScheme: ThemeSetting) => {
     const meta = document.querySelector(
-      'meta[name="color-scheme"]'
+      'meta[name="color-scheme"]',
     ) as MetaElement;
     meta.content = colorScheme as ThemeSetting;
   };

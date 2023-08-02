@@ -164,14 +164,14 @@ const Sidebar = ({
                     setModalState({
                       isModalOpen: true,
                       screen: { route: 'addNode', type: 'modal' },
-                    })
+                    }),
                   );
                 } else if (item.iconId === 'preferences') {
                   dispatch(
                     setModalState({
                       isModalOpen: true,
                       screen: { route: 'preferences', type: 'modal' },
-                    })
+                    }),
                   );
                 } else if (item.iconId === 'bell') {
                   navigate('/main/notification');

@@ -59,7 +59,7 @@ export const getSetHasSeenSplashscreen = (hasSeen?: boolean): boolean => {
     store.set(`${SETTINGS_KEY}.${APP_HAS_SEEN_SPLASHSCREEN_KEY}`, hasSeen);
   }
   const savedHasSeenValue: boolean = store.get(
-    `${SETTINGS_KEY}.${APP_HAS_SEEN_SPLASHSCREEN_KEY}`
+    `${SETTINGS_KEY}.${APP_HAS_SEEN_SPLASHSCREEN_KEY}`,
   );
   return savedHasSeenValue;
 };
@@ -69,7 +69,7 @@ export const getSetHasSeenAlphaModal = (hasSeen?: boolean): boolean => {
     store.set(`${SETTINGS_KEY}.${APP_HAS_SEEN_ALPHA_MODAL}`, hasSeen);
   }
   const savedHasSeenValue: boolean = store.get(
-    `${SETTINGS_KEY}.${APP_HAS_SEEN_ALPHA_MODAL}`
+    `${SETTINGS_KEY}.${APP_HAS_SEEN_ALPHA_MODAL}`,
   );
   return savedHasSeenValue;
 };
@@ -104,8 +104,8 @@ export const setIsOpenOnStartup = (isOpenOnStartup: boolean) => {
   store.set(`${SETTINGS_KEY}.${APP_IS_OPEN_ON_STARTUP}`, isOpenOnStartup);
   logger.info(
     `App isOpenOnStartup is ${store.get(
-      `${SETTINGS_KEY}.${APP_IS_OPEN_ON_STARTUP}`
-    )}`
+      `${SETTINGS_KEY}.${APP_IS_OPEN_ON_STARTUP}`,
+    )}`,
   );
 };
 
@@ -113,29 +113,29 @@ export const setIsNotificationsEnabled = (isNotificationsEnabled: boolean) => {
   logger.info(`Setting isNotificationsEnabled to ${isNotificationsEnabled}`);
   store.set(
     `${SETTINGS_KEY}.${APP_IS_NOTIFICATIONS_ENABLED}`,
-    isNotificationsEnabled
+    isNotificationsEnabled,
   );
   logger.info(
     `App isNotificationsEnabled is ${store.get(
       SETTINGS_KEY,
-      APP_IS_NOTIFICATIONS_ENABLED
-    )}`
+      APP_IS_NOTIFICATIONS_ENABLED,
+    )}`,
   );
 };
 
 export const setIsEventReportingEnabled = (
-  isEventReportingEnabled: boolean
+  isEventReportingEnabled: boolean,
 ) => {
   logger.info(`Setting isEventReportingEnabled to ${isEventReportingEnabled}`);
   store.set(
     `${SETTINGS_KEY}.${APP_IS_EVENT_REPORTING_ENABLED}`,
-    isEventReportingEnabled
+    isEventReportingEnabled,
   );
   logger.info(
     `App isEventReportingEnabled is ${store.get(
       SETTINGS_KEY,
-      APP_IS_EVENT_REPORTING_ENABLED
-    )}`
+      APP_IS_EVENT_REPORTING_ENABLED,
+    )}`,
   );
 };
 
@@ -147,7 +147,7 @@ nativeTheme.on('updated', () => {
   console.log(
     'nativeTheme shouldUseDarkColors vs settings.osIsDarkMode',
     nativeTheme.shouldUseDarkColors,
-    settings.osIsDarkMode
+    settings.osIsDarkMode,
   );
   // if the user theme setting is 'auto', notify the front end of the change
   if (settings.appThemeSetting === 'auto') {

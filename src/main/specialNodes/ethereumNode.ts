@@ -14,7 +14,7 @@ import { createJwtSecretAtDirs } from '../util/jwtSecrets';
 export const addEthereumNode = async (
   ecNodeSpec: NodeSpecification,
   ccNodeSpec: NodeSpecification,
-  settings: { storageLocation?: string }
+  settings: { storageLocation?: string },
 ): Promise<{ ecNode: Node; ccNode: Node }> => {
   const ecNode = await addNode(ecNodeSpec, settings.storageLocation);
   const ccNode = await addNode(ccNodeSpec, settings.storageLocation);

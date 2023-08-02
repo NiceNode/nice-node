@@ -26,21 +26,21 @@
   "rpcTranslation": "eth-l1-beacon",
   "systemRequirements": {
     "documentationUrl": "https://docs.teku.consensys.net/en/stable/HowTo/Get-Started/Connect/Connect-To-Mainnet/",
-    "cpu" : {
+    "cpu": {
       "cores": 4
     },
     "memory": {
       "minSizeGBs": 8
     },
-    "storage" : {
-      "minSizeGBs" : 200,
+    "storage": {
+      "minSizeGBs": 200,
       "ssdRequired": true
     },
-    "internet" : {
+    "internet": {
       "minDownloadSpeedMbps": 8,
       "minUploadSpeedMbps": 8
     },
-    "docker" : {
+    "docker": {
       "required": true
     }
   },

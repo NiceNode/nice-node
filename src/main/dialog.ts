@@ -22,14 +22,14 @@ export const openDialogForNodeDataDir = async (nodeId: NodeId) => {
   const node = getNode(nodeId);
   if (!node) {
     logger.error(
-      `Unable to open dialog to select node data dir. No node found for node id ${nodeId}`
+      `Unable to open dialog to select node data dir. No node found for node id ${nodeId}`,
     );
     return;
   }
   const mainWindow: BrowserWindow | null = getMainWindow();
   if (!mainWindow) {
     logger.error(
-      'Unable to open dialog to select node data dir. mainWindow is null.'
+      'Unable to open dialog to select node data dir. mainWindow is null.',
     );
     return;
   }
@@ -63,7 +63,7 @@ export const openDialogForStorageLocation = async (): Promise<
   const mainWindow: BrowserWindow | null = getMainWindow();
   if (!mainWindow) {
     logger.error(
-      'Unable to open dialog to select storage location. mainWindow is null.'
+      'Unable to open dialog to select storage location. mainWindow is null.',
     );
     return;
   }

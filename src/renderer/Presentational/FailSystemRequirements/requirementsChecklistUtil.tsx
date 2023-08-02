@@ -11,7 +11,7 @@ import { bytesToGB } from '../../utils';
 
 export const makeCheckList = (
   t: TFunction,
-  failSystemRequirementsData?: FailSystemRequirementsData
+  failSystemRequirementsData?: FailSystemRequirementsData,
 ) => {
   const newChecklistItems: ChecklistItemProps[] = [];
   if (!failSystemRequirementsData) {
@@ -36,10 +36,10 @@ export const makeCheckList = (
       captionText = `Min. requirement: ${failedRequirement.requirement} or later. Please update your system to a more recent version.`;
     } else if (reqType === 'TotalMemory') {
       checkTitle = `At least ${bytesToGB(
-        failedRequirement.requirement as number
+        failedRequirement.requirement as number,
       )}GB of system memory (RAM)`;
       valueText = `System memory: ${bytesToGB(
-        failedRequirement.value as number
+        failedRequirement.value as number,
       )}GB`;
       captionText = `Increase your RAM to the required amount.`;
     } else if (reqType === 'CpuCores') {

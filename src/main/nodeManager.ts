@@ -27,13 +27,13 @@ import { ConfigValuesMap } from '../common/nodeConfig';
 export const addNode = async (
   nodeSpec: NodeSpecification,
   storageLocation?: string,
-  initialConfigFromUser?: ConfigValuesMap
+  initialConfigFromUser?: ConfigValuesMap,
 ): Promise<Node> => {
   // use a timestamp postfix so the user can add multiple nodes of the same name
   const utcTimestamp = Math.floor(Date.now() / 1000);
   const dataDir = await makeNodeDir(
     `${nodeSpec.specId}-${utcTimestamp}`,
-    storageLocation ?? getNodesDirPath()
+    storageLocation ?? getNodesDirPath(),
   );
   console.log('adding node with dataDir: ', dataDir);
   const nodeRuntime: NodeRuntime = {
@@ -59,7 +59,7 @@ export const getNodeStartCommand = (nodeId: NodeId): string => {
   const node = nodeStore.getNode(nodeId);
   if (!node) {
     throw new Error(
-      `Unable to get node start command ${nodeId}. Node not found.`
+      `Unable to get node start command ${nodeId}. Node not found.`,
     );
   }
 
@@ -138,18 +138,18 @@ export const deleteNodeStorage = async (nodeId: NodeId) => {
 
 export const removeNode = async (
   nodeId: NodeId,
-  options: { isDeleteStorage: boolean }
+  options: { isDeleteStorage: boolean },
 ): Promise<Node> => {
   // todo: check if node can be removed. Is it stopped?
   // todo: stop & remove container
   logger.info(
-    `Remove node ${nodeId} and delete storage? ${options.isDeleteStorage}`
+    `Remove node ${nodeId} and delete storage? ${options.isDeleteStorage}`,
   );
   try {
     await stopNode(nodeId);
   } catch (err) {
     logger.info(
-      'Unable to stop the node before removing. Continuing with removal.'
+      'Unable to stop the node before removing. Continuing with removal.',
     );
   }
   const node = nodeStore.getNode(nodeId);
@@ -221,11 +221,11 @@ export const initialize = async () => {
       if (Array.isArray(dockerNode?.runtime?.processIds)) {
         try {
           const containerDetails = await getContainerDetails(
-            dockerNode.runtime.processIds
+            dockerNode.runtime.processIds,
           );
           console.log(
             'NodeManager.initialize containerDetails: ',
-            containerDetails
+            containerDetails,
           );
           // {..."State": {
           //     "Status": "exited",

@@ -25,7 +25,7 @@ export type FileDownloadProgress = {
 export const downloadFile = async (
   downloadUrl: string,
   directory: string,
-  progressListener?: (progress: FileDownloadProgress) => void
+  progressListener?: (progress: FileDownloadProgress) => void,
 ): Promise<string> => {
   logger.info(`downloading file ${downloadUrl}`);
   // todo: return error if no file in url
@@ -44,11 +44,11 @@ export const downloadFile = async (
       logger.info('http response', response);
       console.log(
         'http response content-length',
-        response.headers['content-length']
+        response.headers['content-length'],
       );
       console.log(
         'http response Content-Length',
-        response.headers['Content-Length']
+        response.headers['Content-Length'],
       );
       let totalBytes = 0;
       if (response.headers['content-length']) {
@@ -82,7 +82,7 @@ export const downloadFile = async (
       //   await streamPipeline(response, fileWriteStream);
       // }
       logger.info(
-        'done piping response to fileWriteStream. closing fileWriteStream.'
+        'done piping response to fileWriteStream. closing fileWriteStream.',
       );
       await fileWriteStream.close();
 

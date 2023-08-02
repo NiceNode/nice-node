@@ -121,7 +121,7 @@ const Notifications = (props: NotificationsType) => {
                       setModalState({
                         isModalOpen: true,
                         screen: { route: 'preferences', type: 'modal' },
-                      })
+                      }),
                     );
                   }}
                 />

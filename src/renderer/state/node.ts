@@ -65,7 +65,7 @@ export const nodeSlice = createSlice({
     },
     updateSelectedNodeId: (
       state,
-      action: PayloadAction<NodeId | undefined>
+      action: PayloadAction<NodeId | undefined>,
     ) => {
       state.selectedNodeId = action.payload;
       setSelectedNode(state);
@@ -73,13 +73,13 @@ export const nodeSlice = createSlice({
     },
     updateNodeNumGethDiskUsedGB: (
       state,
-      action: PayloadAction<number | undefined>
+      action: PayloadAction<number | undefined>,
     ) => {
       state.numGethDiskUsedGB = action.payload;
     },
     updateSystemNumFreeDiskGB: (
       state,
-      action: PayloadAction<number | undefined>
+      action: PayloadAction<number | undefined>,
     ) => {
       state.numFreeDiskGB = action.payload;
     },
@@ -106,7 +106,7 @@ export const selectNumFreeDiskGB = (state: RootState): number | undefined =>
 export const selectNodeStatus = (state: RootState): string | undefined =>
   state.node.status;
 export const selectIsAvailableForPolling = (
-  state: RootState
+  state: RootState,
 ): boolean | undefined => state.node.isAvailableForPolling;
 
 export default nodeSlice.reducer;

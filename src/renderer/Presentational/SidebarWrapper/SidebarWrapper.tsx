@@ -67,7 +67,7 @@ export const SidebarWrapper = () => {
     return () =>
       electron.ipcRenderer.removeListener(
         'notifications',
-        onNotificationChange
+        onNotificationChange,
       );
   }, [onNotificationChange]);
 
