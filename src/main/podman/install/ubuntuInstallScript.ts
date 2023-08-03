@@ -1,3 +1,5 @@
+// Same script as on https://podman.io/docs/installation, except the 'sudo' is removed as
+//  sudo-prompt will not execute a command with sudo
 export const script = `mkdir -p /etc/apt/keyrings
 curl -fsSL https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/xUbuntu_$(lsb_release -rs)/Release.key \
   | gpg --dearmor \

@@ -33,25 +33,20 @@ const installOnLinux = async (): Promise<any> => {
   } else if (lcDistro.includes('manjaro') || lcDistro.includes('arch')) {
     installScript = manjaroInstallScript;
   } else {
-    logger.error(
-      `Installing Podman is not suported on this distro and release: ${distro} & ${release} ...`,
-    );
+    const errorMessage = `Installing Podman is not suported on this distro and release: ${distro} & ${release}`;
+    logger.error(errorMessage);
+    return { error: errorMessage };
   }
   try {
     let stdout;
     let stderr;
-    // todo: wrap
     // eslint-disable-next-line prefer-const
     try {
       ({ stdout, stderr } = await execAwait(installScript, {
         log: true,
         sudo: true,
       }));
-      console.log(
-        'Ubuntu install podman script stdout, stderr',
-        stdout,
-        stderr,
-      );
+      logger.info('Install podman script stdout, stderr', stdout, stderr);
       sendMessageOnGrantPermissionToInstallPodman(true);
     } catch (installErr) {
       console.error(installErr);
@@ -62,8 +57,6 @@ const installOnLinux = async (): Promise<any> => {
         error: `Unable to install Podman. User denied granting NiceNode permission.`,
       };
     }
-    console.log('sudo ubuntu install script stdout, stderr', stdout, stderr);
-
     return true;
   } catch (err) {
     // console.log(err);
