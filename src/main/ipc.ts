@@ -28,7 +28,7 @@ import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import Node, { NodeId } from '../common/node';
 import { NodeSpecification } from '../common/nodeSpec';
 import { isPodmanInstalled, isPodmanRunning } from './podman/podman';
-import installPodman from './podman/install';
+import installPodman from './podman/install/install';
 // eslint-disable-next-line import/no-cycle
 import {
   openDialogForNodeDataDir,

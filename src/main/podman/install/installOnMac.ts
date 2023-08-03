@@ -1,13 +1,13 @@
-import { getNNDirPath } from '../files';
-import * as arch from '../arch';
-import logger from '../logger';
-import { execAwait } from '../execHelper';
-import { downloadFile } from '../downloadFile';
+import { getNNDirPath } from '../../files';
+import * as arch from '../../arch';
+import logger from '../../logger';
+import { execAwait } from '../../execHelper';
+import { downloadFile } from '../../downloadFile';
 import {
   sendMessageOnDownloadProgress,
   sendMessageOnGrantPermissionToInstallPodman,
-} from './messageFrontEnd';
-import { startOnMac } from './start';
+} from '../messageFrontEnd';
+import { startOnMac } from '../start';
 
 /**
  * Download podman-arch-verson.pkg, install podman, start podman

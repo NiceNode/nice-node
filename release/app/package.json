@@ -17,6 +17,6 @@
   "license": "MIT",
   "dependencies": {
     "dockerode": "^3.3.5",
-    "systeminformation": "^5.16.0"
+    "systeminformation": "^5.18.10"
   }
 }
