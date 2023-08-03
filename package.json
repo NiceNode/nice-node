@@ -312,7 +312,7 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.4",
     "react-select": "^5.7.0",
-    "systeminformation": "^5.16.1",
+    "systeminformation": "^5.18.10",
     "throttle-debounce": "^5.0.0",
     "uuid": "^9.0.0",
     "winston": "^3.8.2"

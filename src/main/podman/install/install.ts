@@ -1,5 +1,5 @@
-import logger from '../logger';
-import * as platform from '../platform';
+import logger from '../../logger';
+import * as platform from '../../platform';
 import installOnMac from './installOnMac';
 import installOnWindows from './installOnWindows';
 import installOnLinux from './installOnLinux';

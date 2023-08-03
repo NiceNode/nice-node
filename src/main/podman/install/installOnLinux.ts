@@ -1,8 +1,11 @@
-import logger from '../logger';
-import { execAwait } from '../execHelper';
-import { sendMessageOnGrantPermissionToInstallPodman } from './messageFrontEnd';
-import { getOperatingSystemInfo } from '../systemInfo';
-import { script as ubuntuInstallScript } from './installOnUbuntuScript';
+import logger from '../../logger';
+import { execAwait } from '../../execHelper';
+import { sendMessageOnGrantPermissionToInstallPodman } from '../messageFrontEnd';
+import { getOperatingSystemInfo } from '../../systemInfo';
+import { script as ubuntuInstallScript } from './ubuntuInstallScript';
+import { script as debianInstallScript } from './debianInstallScript';
+import { script as fedoraInstallScript } from './fedoraInstallScript';
+import { script as manjaroInstallScript } from './manjaroInstallScript';
 
 // const UBUNTU_INSTALL_SCRIPT = 'installOnUbuntuScript';
 /**
@@ -12,13 +15,27 @@ import { script as ubuntuInstallScript } from './installOnUbuntuScript';
 // eslint-disable-next-line
 const installOnLinux = async (): Promise<any> => {
   logger.info(`Starting podman install on Linux...`);
-  const { distro } = await getOperatingSystemInfo();
+  const { distro, release } = await getOperatingSystemInfo();
+  logger.info(
+    `Attempting to install Podman on distro and release: ${distro} & ${release} ...`,
+  );
+  const lcDistro = distro.toLowerCase();
 
   let installScript = '';
-  if (distro === 'Ubuntu') {
+  // Run "cat /etc/*-release; cat /usr/lib/os-release; cat /etc/openwrt_release" on a Linux Distro
+  //  or see https://github.com/sebhildebrandt/systeminformation/blob/master/lib/osinfo.js to determine.
+  if (lcDistro.includes('ubuntu')) {
     installScript = ubuntuInstallScript;
+  } else if (lcDistro.includes('debian')) {
+    installScript = debianInstallScript;
+  } else if (lcDistro.includes('fedora')) {
+    installScript = fedoraInstallScript;
+  } else if (lcDistro.includes('manjaro') || lcDistro.includes('arch')) {
+    installScript = manjaroInstallScript;
   } else {
-    logger.error('Only the distro Ubuntu is supported for installing Podman');
+    logger.error(
+      `Installing Podman is not suported on this distro and release: ${distro} & ${release} ...`,
+    );
   }
   try {
     let stdout;

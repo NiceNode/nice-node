@@ -1,11 +1,11 @@
 import path from 'node:path';
-import logger from '../logger';
-import { execAwait } from '../execHelper';
-import * as arch from '../arch';
-import { downloadFile } from '../downloadFile';
-import { getNNDirPath } from '../files';
-import { sendMessageOnDownloadProgress } from './messageFrontEnd';
-import { startOnWindows } from './start';
+import logger from '../../logger';
+import { execAwait } from '../../execHelper';
+import * as arch from '../../arch';
+import { downloadFile } from '../../downloadFile';
+import { getNNDirPath } from '../../files';
+import { sendMessageOnDownloadProgress } from '../messageFrontEnd';
+import { startOnWindows } from '../start';
 
 const iconv = require('iconv-lite');
 
