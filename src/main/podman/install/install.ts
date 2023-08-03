@@ -20,7 +20,7 @@ const installPodman = async (): Promise<any> => {
   } else {
     result = { error: 'Unable to install Podman on this operating system.' };
   }
-  logger.info(`Finished podman install. Result: ${result}`);
+  logger.info(`Finished podman install. Result: ${JSON.stringify(result)}`);
   return result;
 };
 
