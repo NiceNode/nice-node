@@ -47,7 +47,7 @@ const FailSystemRequirementsModal = ({
         electron.closeApp();
       }}
       modalOnClose={modalOnClose}
-      modalOnCancel={() => {}}
+      modalOnCancel={modalOnClose}
     >
       <Checklist items={items} />
     </Modal>

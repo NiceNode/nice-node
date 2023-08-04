@@ -74,5 +74,8 @@ export const getFailSystemRequirements = async (): Promise<
     });
   }
 
+  logger.info(
+    `Failed system requirements: ${JSON.stringify(failedRequirements)}`,
+  );
   return failedRequirements;
 };
