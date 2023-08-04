@@ -50,6 +50,7 @@ const installOnLinux = async (): Promise<any> => {
       sendMessageOnGrantPermissionToInstallPodman(true);
     } catch (installErr) {
       console.error(installErr);
+      logger.error(JSON.stringify(installErr));
       // if user does not enter their password...
       //  installErr = "User did not grant permission"
       sendMessageOnGrantPermissionToInstallPodman(false);

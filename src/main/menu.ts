@@ -15,6 +15,7 @@ import { getDebugInfoString, getGithubIssueProblemURL } from './debug';
 import { checkForUpdates } from './updater';
 import uninstallPodman from './podman/uninstall/uninstall';
 import nuclearUninstall from './nuclearUninstall';
+import { getFailSystemRequirements } from './minSystemRequirement';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -316,6 +317,18 @@ export default class MenuBuilder {
             label: 'Nuclear uninstall (unistall podman and delete all NN data)',
             click() {
               nuclearUninstall();
+            },
+          },
+          {
+            label: 'Log minimum system requirement check',
+            click() {
+              getFailSystemRequirements();
+            },
+          },
+          {
+            label: 'Show Splash Screen On Launch',
+            click() {
+              getSetHasSeenSplashscreen(false);
             },
           },
         ],

@@ -5,6 +5,7 @@ import * as os from 'node:os';
 import { FailSystemRequirements } from '../../minSystemRequirement';
 
 import darwinToMacOsVersion from '../../util/macos-release';
+import logger from '../../logger';
 
 export const getFailSystemRequirements = (): FailSystemRequirements[] => {
   const failedRequirements: FailSystemRequirements[] = [];
@@ -56,5 +57,8 @@ export const getFailSystemRequirements = (): FailSystemRequirements[] => {
   //   requirement: `amd64 or arm64`,
   // });
 
+  logger.info(
+    `Failed system requirements: ${JSON.stringify(failedRequirements)}`,
+  );
   return failedRequirements;
 };
