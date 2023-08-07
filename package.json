@@ -195,7 +195,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.22.9",
+    "@babel/core": "^7.22.10",
     "@electron/notarize": "^2.1.0",
     "@electron/rebuild": "^3.2.13",
     "@mdx-js/react": "^2.1.5",
