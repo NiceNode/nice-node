@@ -22,6 +22,8 @@ export const getFailSystemRequirements = async (): Promise<
     minOsRelease = '37';
   } else if (lcDistro.includes('manjaro')) {
     minOsRelease = '22';
+  } else if (lcDistro.includes('linuxmint') || lcDistro.includes('linux mint')) {
+    minOsRelease = '21'; // v21 is based on ubuntu 22.04
   } else {
     logger.info('No minimum os version known for this distro.');
   }

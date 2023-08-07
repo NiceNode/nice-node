@@ -6,6 +6,7 @@ import { script as ubuntuInstallScript } from './ubuntuInstallScript';
 import { script as debianInstallScript } from './debianInstallScript';
 import { script as fedoraInstallScript } from './fedoraInstallScript';
 import { script as manjaroInstallScript } from './manjaroInstallScript';
+import { script as linuxMintInstallScript } from './linuxMintInstallScript';
 
 // const UBUNTU_INSTALL_SCRIPT = 'installOnUbuntuScript';
 /**
@@ -32,6 +33,8 @@ const installOnLinux = async (): Promise<any> => {
     installScript = fedoraInstallScript;
   } else if (lcDistro.includes('manjaro') || lcDistro.includes('arch')) {
     installScript = manjaroInstallScript;
+  } else if (lcDistro.includes('linuxmint') || lcDistro.includes('linux mint')) {
+    installScript = linuxMintInstallScript;
   } else {
     const errorMessage = `Installing Podman is not suported on this distro and release: ${distro} & ${release}`;
     logger.error(errorMessage);
