@@ -287,7 +287,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
-    "@sentry/electron": "^4.3.0",
+    "@sentry/electron": "^4.9.0",
     "@vanilla-extract/css": "^1.9.3",
     "@vscode/sudo-prompt": "^9.3.1",
     "await-sleep": "0.0.1",
