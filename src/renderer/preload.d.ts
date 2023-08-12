@@ -96,6 +96,9 @@ declare global {
       addNotification(notification: any): void;
       removeNotifications(): void;
       markAllAsRead(): void;
+
+      // Ports
+      checkPorts(ports: number[]): void;
     };
 
     performance: Performance;

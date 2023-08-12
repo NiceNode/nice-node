@@ -6,6 +6,7 @@ import logger from './logger';
 import * as storeNodes from './state/nodes';
 import { addNotification } from './state/notifications';
 import { NOTIFICATIONS } from './consts/notifications';
+import { checkPorts } from './ports';
 
 const watchProcessPollingInterval = 300000;
 let monitoringInterval: ReturnType<typeof setTimeout>;

@@ -138,4 +138,9 @@ contextBridge.exposeInMainWorld('electron', {
   },
   removeNotifications: () => ipcRenderer.invoke('removeNotifications'),
   markAllAsRead: () => ipcRenderer.invoke('markAllAsRead'),
+
+  // Ports
+  checkPorts: (ports: number[]) => {
+    ipcRenderer.invoke('checkPorts', ports);
+  },
 });

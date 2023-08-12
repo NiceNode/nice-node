@@ -57,6 +57,7 @@ import {
   markAllAsRead,
 } from './state/notifications';
 import { getFailSystemRequirements } from './minSystemRequirement';
+import { checkPorts } from './ports';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -203,4 +204,9 @@ export const initialize = () => {
   });
   ipcMain.handle('removeNotifications', removeNotifications);
   ipcMain.handle('markAllAsRead', markAllAsRead);
+
+  // Ports
+  ipcMain.handle('checkPorts', (_event, ports: number[]) => {
+    return checkPorts(ports);
+  });
 };
