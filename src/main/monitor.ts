@@ -32,8 +32,6 @@ export const getSystemTotalMemory = async (): Promise<number> => {
 export const checkSystemHardware = async () => {
   const warnings = [];
   console.log(`getPodmanPorts ${getPodmanPorts()}`);
-  const ports = await checkPorts(getPodmanPorts());
-  console.log('checkPorts', ports);
   // Is total RAM < 8 GB?
   const totalMemoryGB = await getSystemTotalMemory();
   if (totalMemoryGB < 8) {

@@ -395,7 +395,7 @@ const createPodmanPortInput = (
     return '';
   }
   const { p2p, rest, ws, engine } = ports;
-  const { httpPort } = configValuesMap || {};
+  const { httpPort, webSocketsPort } = configValuesMap || {};
   const result = [];
 
   // Handle p2p ports
@@ -416,8 +416,9 @@ const createPodmanPortInput = (
   }
 
   // Handle ws port if it exists
-  if (ws) {
-    result.push(`-p ${ws}:${ws}`);
+  const wsPort = webSocketsPort || ws;
+  if (wsPort) {
+    result.push(`-p ${wsPort}:${wsPort}`);
   }
 
   // Handle engine port if it exists

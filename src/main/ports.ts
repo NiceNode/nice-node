@@ -1,28 +1,36 @@
-import { execSync } from 'child_process';
+import { DockerExecution as PodmanExecution } from '../common/nodeSpec';
 import { httpGet } from './httpReq';
+import { getNodes } from './state/nodes';
 
 export const getPodmanPorts = () => {
-  const output = execSync("podman ps -a --format '{{.Ports}}'", {
-    encoding: 'utf8',
+  // change to retrieve ports from start command
+  const nodes = getNodes();
+  let portsArray = [] as string[];
+
+  nodes.forEach((node) => {
+    const { execution } = node.spec;
+    const { input } = execution as PodmanExecution;
+    if (input?.docker) {
+      const { ports } = input.docker;
+      if (node.config.configValuesMap.httpPort) {
+        ports.rest = node.config.configValuesMap.httpPort;
+      }
+
+      if (node.config.configValuesMap.webSocketsPort) {
+        ports.ws = node.config.configValuesMap.webSocketsPort;
+      }
+
+      Object.keys(ports).forEach((key) => {
+        if (Array.isArray(ports[key as keyof typeof ports])) {
+          portsArray = portsArray.concat(key as keyof typeof ports);
+        } else {
+          portsArray.push(key as keyof typeof ports);
+        }
+      });
+    }
   });
 
-  // Split the output by lines and map through them to extract ports
-  return output
-    .split('\n')
-    .map((line) =>
-      (line.match(/\d+\.\d+\.\d+\.\d+:(\d+-?\d+)?->\d+/g) || []).flatMap(
-        (match) => {
-          const portSegment = match.split('->')[0].split(':')[1];
-          if (portSegment.includes('-')) {
-            const [start, end] = portSegment.split('-').map(Number);
-            return Array.from({ length: end - start + 1 }, (_, i) => i + start);
-          }
-          return [Number(portSegment)];
-        },
-      ),
-    )
-    .reduce((acc, currPorts) => acc.concat(currPorts), [])
-    .filter((port, index, self) => self.indexOf(port) === index); // Filter to get unique ports
+  return portsArray;
 };
 
 /**
