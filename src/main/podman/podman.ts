@@ -1,11 +1,10 @@
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
-
 import logger from '../logger';
 import Node, { NodeStatus } from '../../common/node';
 import { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
 import { setDockerNodeStatus as setPodmanNodeStatus } from '../state/nodes';
-import { buildCliConfig } from '../../common/nodeConfig';
+import { ConfigValuesMap, buildCliConfig } from '../../common/nodeConfig';
 import { send } from '../messenger';
 import * as metricsPolling from './metricsPolling';
 import { killChildProcess } from '../processExit';
@@ -381,24 +380,76 @@ export const removePodmanNode = async (node: Node) => {
   return isRemoved;
 };
 
+const createPodmanPortInput = (
+  ports:
+    | {
+        p2p?: string[] | undefined;
+        rest?: string | undefined;
+        ws?: string | undefined;
+        engine?: string | undefined;
+      }
+    | undefined,
+  configValuesMap?: ConfigValuesMap,
+) => {
+  if (!ports) {
+    return '';
+  }
+  const { p2p, rest, ws, engine } = ports;
+  const { httpPort } = configValuesMap || {};
+  const result = [];
+
+  // Handle p2p ports
+  if (p2p && Array.isArray(p2p)) {
+    if (p2p.length === 1) {
+      result.push(`-p ${p2p[0]}:${p2p[0]}/tcp`);
+      result.push(`-p ${p2p[0]}:${p2p[0]}/udp`);
+    } else if (p2p.length === 2) {
+      result.push(`-p ${p2p[0]}:${p2p[0]}`);
+      result.push(`-p ${p2p[1]}:${p2p[1]}/udp`);
+    }
+  }
+
+  // Handle rest port
+  const restPort = httpPort || rest;
+  if (restPort) {
+    result.push(`-p ${restPort}:${restPort}`);
+  }
+
+  // Handle ws port if it exists
+  if (ws) {
+    result.push(`-p ${ws}:${ws}`);
+  }
+
+  // Handle engine port if it exists
+  if (engine) {
+    result.push(`-p ${engine}:${engine}`);
+  }
+
+  return result.join(' ');
+};
+
 export const createRunCommand = (node: Node): string => {
   const { specId, execution } = node.spec;
   const { imageName, input } = execution as PodmanExecution;
   // try catch? .. podman dameon might need to be restarted if a bad gateway error occurs
 
-  let podmanRawInput = '';
+  let podmanPortInput = '';
   let podmanVolumePath = '';
   let finalPodmanInput = '';
   if (input?.docker) {
-    podmanRawInput = input?.docker.raw ?? '';
+    podmanPortInput = createPodmanPortInput(
+      input.docker.ports,
+      node.config.configValuesMap,
+    );
     podmanVolumePath = input.docker.containerVolumePath;
-    if (podmanRawInput) {
-      finalPodmanInput = podmanRawInput;
-    }
+    finalPodmanInput = podmanPortInput + (input?.docker.raw ?? '');
     if (podmanVolumePath) {
       finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath} ${finalPodmanInput}`;
     }
   }
+  logger.info(
+    `finalPodmanInput ${JSON.stringify(node.config.configValuesMap)}`,
+  );
   let nodeInput = '';
   if (input?.docker?.forcedRawNodeInput) {
     nodeInput = input?.docker?.forcedRawNodeInput;

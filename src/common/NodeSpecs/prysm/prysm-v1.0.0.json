@@ -9,15 +9,19 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpPort": "5052",
+        "httpPort": "5051",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "http://host.containers.internal:8551",
         "checkpointSyncUrl": "https://beaconstate.ethstaker.cc"
       },
       "docker": {
+        "ports": {
+          "p2p": ["13000,12000"],
+          "rest": "5051"
+        },
         "containerVolumePath": "/data",
-        "raw": "-p 5052:5052 -p 13000:13000 -p 12000:12000/udp",
+        "raw": "",
         "forcedRawNodeInput": "--accept-terms-of-use=true --datadir=/data --rpc-host=0.0.0.0 --jwt-secret=/data/jwtsecret"
       }
     }

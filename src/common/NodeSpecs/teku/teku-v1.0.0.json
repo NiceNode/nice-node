@@ -9,7 +9,7 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpPort": "5052",
+        "httpPort": "5051",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "http://host.containers.internal:8551",
@@ -17,7 +17,11 @@
       },
       "docker": {
         "containerVolumePath": "/var/lib/teku",
-        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052 --user 0",
+        "ports": {
+          "p2p": ["9000"],
+          "rest": "5051"
+        },
+        "raw": " --user 0",
         "forcedRawNodeInput": "--data-path=\"/var/lib/teku\" --ee-jwt-secret-file=\"/var/lib/teku/jwtsecret\""
       }
     }
@@ -84,7 +88,7 @@
     "httpPort": {
       "displayName": "Specifies REST API listening port (HTTP).",
       "cliConfigPrefix": "--rest-api-port=",
-      "defaultValue": "5052",
+      "defaultValue": "5051",
       "uiControl": {
         "type": "text"
       },

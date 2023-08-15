@@ -15,7 +15,11 @@
       },
       "docker": {
         "containerVolumePath": "/usr/app/data",
-        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
+        "ports": {
+          "p2p": ["9000"],
+          "rest": "9596"
+        },
+        "raw": "",
         "forcedRawNodeInput": "beacon --network mainnet --rest.address 0.0.0.0 --dataDir /usr/app/data --jwt-secret /usr/app/data/jwtsecret"
       }
     }

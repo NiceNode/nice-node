@@ -16,7 +16,11 @@
       },
       "docker": {
         "containerVolumePath": "/root/.lighthouse",
-        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 127.0.0.1:5052:5052",
+        "ports": {
+          "p2p": ["9000"],
+          "rest": "5052"
+        },
+        "raw": "",
         "forcedRawNodeInput": "lighthouse --network mainnet beacon --execution-jwt /root/.lighthouse/jwtsecret"
       }
     },
