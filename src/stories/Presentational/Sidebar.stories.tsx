@@ -41,7 +41,13 @@ Primary.args = {
               },
               docker: {
                 containerVolumePath: '/var/lib/besu',
-                raw: '-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546',
+                ports: {
+                  p2p: ['30303'],
+                  rest: '8545',
+                  ws: '8546',
+                  engine: '8551',
+                },
+                raw: ' --user 0',
                 forcedRawNodeInput: '--data-path="/var/lib/besu"',
               },
             },
@@ -333,7 +339,11 @@ Primary.args = {
               },
               docker: {
                 containerVolumePath: '/home/user/nimbus-eth2/build/data',
-                raw: '-p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052',
+                ports: {
+                  p2p: ['9000'],
+                  rest: '5052',
+                },
+                raw: ' --user 0',
                 forcedRawNodeInput:
                   '--data-dir=build/data/shared_mainnet_0 --network=mainnet',
               },
