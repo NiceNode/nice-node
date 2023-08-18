@@ -19,6 +19,7 @@ const envEvent: Record<Envs, EventIdRecord> = {
     OpenAddNodeModal: '',
     OpenApp: '',
     UpdatedNiceNode: '',
+    UserCheckForUpdateNN: '',
   },
   staging: {
     AddNode: '5FENDNLE',
@@ -26,6 +27,7 @@ const envEvent: Record<Envs, EventIdRecord> = {
     OpenAddNodeModal: 'EQWPCKQL',
     OpenApp: 'XH4WYO0N',
     UpdatedNiceNode: 'XID0MV8O',
+    UserCheckForUpdateNN: '5IOCU4Q3',
   },
   prod: {
     AddNode: 'ZFJ6BTDG',
@@ -33,6 +35,7 @@ const envEvent: Record<Envs, EventIdRecord> = {
     OpenAddNodeModal: 'J8FOMK6F',
     OpenApp: 'C0PWYWAO',
     UpdatedNiceNode: '4EGVSEAU',
+    UserCheckForUpdateNN: '4TY1HDQG',
   },
 };
 
