@@ -131,6 +131,10 @@ export const buildCliConfig = ({
           );
         }
 
+        if (configTranslation.secondaryCliConfigPrefix) {
+          currCliString += ` ${configTranslation.secondaryCliConfigPrefix}${configValue}`;
+        }
+
         console.log(
           'cliString, currCliString: ',
           JSON.stringify(cliString),
