@@ -2,4 +2,5 @@ export type NNEvent =
   | 'OpenApp'
   | 'AddNode'
   | 'InstalledPodman'
-  | 'OpenAddNodeModal';
+  | 'OpenAddNodeModal'
+  | 'UpdatedNiceNode';
