@@ -1,4 +1,4 @@
-name: Publish
+name: ProductionPublish
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     # if: ${{ github.repository_owner == 'electron-react-boilerplate' }}
 
     # all published versions are considered "staging" until we release a non-alpha version
-    environment: staging
+    environment: prod
 
     runs-on: ${{ matrix.os }}
 
