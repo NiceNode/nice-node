@@ -17,12 +17,6 @@
       },
       "docker": {
         "containerVolumePath": "/var/lib/besu",
-        "ports": {
-          "p2p": ["30303"],
-          "rest": "8545",
-          "ws": "8546",
-          "engine": "8551"
-        },
         "raw": " --user 0",
         "forcedRawNodeInput": "--data-path=\"/var/lib/besu\" --engine-jwt-secret=\"/var/lib/besu/jwtsecret\""
       }
@@ -80,6 +74,16 @@
       "defaultValue": "FAST",
       "documentation": "https://besu.hyperledger.org/en/stable/Concepts/Node-Types/"
     },
+    "p2pPorts": {
+      "displayName": "P2P listening port (UDP and TCP)",
+      "cliConfigPrefix": "--p2p-port=",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 30303",
+      "defaultValue": "30303",
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#p2p-port"
+    },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",
       "category": "RPC APIs",
@@ -116,6 +120,15 @@
       "defaultValue": "Disabled",
       "documentation": "https://besu.hyperledger.org/en/stable/public-networks/reference/cli/options/#engine-rpc-enabled"
     },
+    "enginePort": {
+      "displayName": "The listening port for the Engine API calls (ENGINE, ETH) for JSON-RPC over HTTP and WebSocket.",
+      "cliConfigPrefix": "--engine-rpc-port=",
+      "defaultValue": "8551",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#engine-rpc-port"
+    },
     "webSockets": {
       "displayName": "Enables or disables the WebSocket JSON-RPC service. The default is false.",
       "uiControl": {
@@ -150,6 +163,15 @@
       "uiControl": {
         "type": "text"
       }
+    },
+    "httpPort": {
+      "displayName": "HTTP-RPC server listening port",
+      "cliConfigPrefix": "--rpc-http-port=",
+      "defaultValue": "8545",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-http-port"
     },
     "httpApis": {
       "displayName": "Enabled certain HTTP APIs",

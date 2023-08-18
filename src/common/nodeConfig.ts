@@ -27,6 +27,7 @@ export type ConfigTranslation = {
   uiControl: ConfigTranslationControl;
   category?: string;
   cliConfigPrefix?: string;
+  secondaryCliConfigPrefix?: string;
   valuesJoinStr?: string;
   valuesWrapChar?: string;
   defaultValue?: ConfigValue;

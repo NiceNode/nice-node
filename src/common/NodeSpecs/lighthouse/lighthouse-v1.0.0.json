@@ -16,10 +16,6 @@
       },
       "docker": {
         "containerVolumePath": "/root/.lighthouse",
-        "ports": {
-          "p2p": ["9000"],
-          "rest": "5052"
-        },
         "raw": "",
         "forcedRawNodeInput": "lighthouse --network mainnet beacon --execution-jwt /root/.lighthouse/jwtsecret"
       }
@@ -91,6 +87,16 @@
       },
       "defaultValue": "Disabled",
       "documentation": "https://lighthouse-book.sigmaprime.io/api-bn.html#starting-the-server"
+    },
+    "p2pPorts": {
+      "displayName": "P2P listening port (UDP and TCP)",
+      "cliConfigPrefix": "--port ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 9000",
+      "defaultValue": "9000",
+      "documentation": "https://lighthouse-book.sigmaprime.io/faq.html?highlight=9000#how-to-change-the-tcpudp-port-9000-that-lighthouse-listens-on"
     },
     "httpHostAddress": {
       "displayName": "Listening address of the REST server.",

@@ -9,17 +9,13 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpPort": "5051",
+        "httpPort": "3500",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "http://host.containers.internal:8551",
         "checkpointSyncUrl": "https://beaconstate.ethstaker.cc"
       },
       "docker": {
-        "ports": {
-          "p2p": ["13000,12000"],
-          "rest": "5051"
-        },
         "containerVolumePath": "/data",
         "raw": "",
         "forcedRawNodeInput": "--accept-terms-of-use=true --datadir=/data --rpc-host=0.0.0.0 --jwt-secret=/data/jwtsecret"
@@ -65,6 +61,26 @@
       "uiControl": {
         "type": "text"
       }
+    },
+    "p2pPortsTcp": {
+      "displayName": "P2P listening port (TCP)",
+      "cliConfigPrefix": "--tcp-port=",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 13000",
+      "defaultValue": "13000",
+      "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters"
+    },
+    "p2pPortsUdp": {
+      "displayName": "P2P listening port (UDP)",
+      "cliConfigPrefix": "--udp-port=",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 12000",
+      "defaultValue": "12000",
+      "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters"
     },
     "httpPort": {
       "displayName": "The host on which the gateway server runs on",

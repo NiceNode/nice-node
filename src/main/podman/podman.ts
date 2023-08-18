@@ -4,7 +4,11 @@ import logger from '../logger';
 import Node, { NodeStatus } from '../../common/node';
 import { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
 import { setDockerNodeStatus as setPodmanNodeStatus } from '../state/nodes';
-import { ConfigValuesMap, buildCliConfig } from '../../common/nodeConfig';
+import {
+  ConfigTranslationMap,
+  ConfigValuesMap,
+  buildCliConfig,
+} from '../../common/nodeConfig';
 import { send } from '../messenger';
 import * as metricsPolling from './metricsPolling';
 import { killChildProcess } from '../processExit';
@@ -381,56 +385,73 @@ export const removePodmanNode = async (node: Node) => {
 };
 
 const createPodmanPortInput = (
-  ports:
-    | {
-        p2p?: string[] | undefined;
-        rest?: string | undefined;
-        ws?: string | undefined;
-        engine?: string | undefined;
-      }
-    | undefined,
+  configTranslation: ConfigTranslationMap,
   configValuesMap?: ConfigValuesMap,
 ) => {
-  if (!ports) {
-    return '';
-  }
-  const { p2p, rest, ws, engine } = ports;
-  const { httpPort, webSocketsPort } = configValuesMap || {};
+  const {
+    p2pPorts,
+    p2pPortsUdp,
+    p2pPortsTcp,
+    enginePort,
+    httpPort,
+    webSocketsPort,
+  } = configTranslation;
+  const {
+    p2pPorts: configP2pPorts,
+    p2pPortsUdp: configP2pPortsUdp,
+    p2pPortsTcp: configP2pPortsTcp,
+    enginePort: configEnginePort,
+    httpPort: configHttpPort,
+    webSocketsPort: configWsPort,
+  } = configValuesMap || {};
   const result = [];
 
   // Handle p2p ports
-  if (p2p && Array.isArray(p2p)) {
-    if (p2p.length === 1) {
-      result.push(`-p ${p2p[0]}:${p2p[0]}/tcp`);
-      result.push(`-p ${p2p[0]}:${p2p[0]}/udp`);
-    } else if (p2p.length === 2) {
-      result.push(`-p ${p2p[0]}:${p2p[0]}`);
-      result.push(`-p ${p2p[1]}:${p2p[1]}/udp`);
+  if (configP2pPortsUdp || p2pPortsUdp || configP2pPortsTcp || p2pPortsTcp) {
+    const p2pUdpValue =
+      configP2pPortsUdp || (p2pPortsUdp && p2pPortsUdp.defaultValue);
+    const p2pTcpValue =
+      configP2pPortsTcp || (p2pPortsTcp && p2pPortsTcp.defaultValue);
+
+    if (p2pTcpValue) {
+      result.push(`-p ${p2pTcpValue}:${p2pTcpValue}/tcp`);
+    }
+    if (p2pUdpValue) {
+      result.push(`-p ${p2pUdpValue}:${p2pUdpValue}/udp`);
+    }
+  } else if (configP2pPorts || p2pPorts) {
+    const p2pValue = configP2pPorts || (p2pPorts && p2pPorts.defaultValue);
+    if (p2pValue) {
+      result.push(`-p ${p2pValue}:${p2pValue}/tcp`);
+      result.push(`-p ${p2pValue}:${p2pValue}/udp`);
     }
   }
 
-  // Handle rest port
-  const restPort = httpPort || rest;
-  if (restPort) {
-    result.push(`-p ${restPort}:${restPort}`);
+  // Handle http port
+  const restPortValue = configHttpPort || (httpPort && httpPort.defaultValue);
+  if (restPortValue) {
+    result.push(`-p ${restPortValue}:${restPortValue}`);
   }
 
   // Handle ws port if it exists
-  const wsPort = webSocketsPort || ws;
-  if (wsPort) {
-    result.push(`-p ${wsPort}:${wsPort}`);
+  const wsPortValue =
+    configWsPort || (webSocketsPort && webSocketsPort.defaultValue);
+  if (wsPortValue) {
+    result.push(`-p ${wsPortValue}:${wsPortValue}`);
   }
 
   // Handle engine port if it exists
-  if (engine) {
-    result.push(`-p ${engine}:${engine}`);
+  const enginePortValue =
+    configEnginePort || (enginePort && enginePort.defaultValue);
+  if (enginePortValue) {
+    result.push(`-p ${enginePortValue}:${enginePortValue}`);
   }
 
   return result.join(' ');
 };
 
 export const createRunCommand = (node: Node): string => {
-  const { specId, execution } = node.spec;
+  const { specId, execution, configTranslation } = node.spec;
   const { imageName, input } = execution as PodmanExecution;
   // try catch? .. podman dameon might need to be restarted if a bad gateway error occurs
 
@@ -438,10 +459,12 @@ export const createRunCommand = (node: Node): string => {
   let podmanVolumePath = '';
   let finalPodmanInput = '';
   if (input?.docker) {
-    podmanPortInput = createPodmanPortInput(
-      input.docker.ports,
-      node.config.configValuesMap,
-    );
+    if (configTranslation) {
+      podmanPortInput = createPodmanPortInput(
+        configTranslation,
+        node.config.configValuesMap,
+      );
+    }
     podmanVolumePath = input.docker.containerVolumePath;
     finalPodmanInput = podmanPortInput + (input?.docker.raw ?? '');
     if (podmanVolumePath) {

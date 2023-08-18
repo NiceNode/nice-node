@@ -16,12 +16,6 @@
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
-        "ports": {
-          "p2p": ["30303"],
-          "rest": "8545",
-          "ws": "8546",
-          "engine": "8551"
-        },
         "raw": "",
         "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
@@ -110,6 +104,15 @@
       "defaultValue": "Disabled",
       "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
     },
+    "webSocketsPort": {
+      "displayName": "WS-RPC server listening port",
+      "cliConfigPrefix": "--ws.port ",
+      "defaultValue": "8546",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+    },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
       "cliConfigPrefix": "--http.api ",
@@ -178,6 +181,23 @@
       "defaultValue": "snap",
       "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
     },
+    "p2pPorts": {
+      "displayName": "Use a custom UDP port for P2P discovery",
+      "cliConfigPrefix": "--discovery.port ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 30303",
+      "defaultValue": "30303"
+    },
+    "enginePort": {
+      "displayName": "Listening port for authenticated APIs",
+      "cliConfigPrefix": "--authrpc.port ",
+      "defaultValue": "8551",
+      "uiControl": {
+        "type": "text"
+      }
+    },
     "httpVirtualHosts": {
       "displayName": "Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard. Default value (localhost)",
       "cliConfigPrefix": "--http.vhosts ",
@@ -203,15 +223,6 @@
         "type": "text"
       },
       "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
-    },
-    "webSocketsPort": {
-      "displayName": "WS-RPC server listening port",
-      "cliConfigPrefix": "--ws.port ",
-      "defaultValue": "8546",
-      "uiControl": {
-        "type": "text"
-      },
-      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
     },
     "lightModeMaxPeerCount": {
       "displayName": "Light Mode Max Peer Count (set to low number to use less bandwidth)",

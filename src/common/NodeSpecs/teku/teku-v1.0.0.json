@@ -17,10 +17,6 @@
       },
       "docker": {
         "containerVolumePath": "/var/lib/teku",
-        "ports": {
-          "p2p": ["9000"],
-          "rest": "5051"
-        },
         "raw": " --user 0",
         "forcedRawNodeInput": "--data-path=\"/var/lib/teku\" --ee-jwt-secret-file=\"/var/lib/teku/jwtsecret\""
       }
@@ -65,6 +61,16 @@
       "uiControl": {
         "type": "text"
       }
+    },
+    "p2pPorts": {
+      "displayName": "P2P listening port (UDP and TCP)",
+      "cliConfigPrefix": "--p2p-port=",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 9000",
+      "defaultValue": "9000",
+      "documentation": "https://docs.teku.consensys.net/reference/cli#p2p-port"
     },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",

@@ -15,10 +15,6 @@
       },
       "docker": {
         "containerVolumePath": "/usr/app/data",
-        "ports": {
-          "p2p": ["9000"],
-          "rest": "9596"
-        },
         "raw": "",
         "forcedRawNodeInput": "beacon --network mainnet --rest.address 0.0.0.0 --dataDir /usr/app/data --jwt-secret /usr/app/data/jwtsecret"
       }
@@ -113,6 +109,15 @@
         ]
       }
     },
+    "p2pPorts": {
+      "displayName": "P2P listening port (UDP and TCP)",
+      "cliConfigPrefix": "--port ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 9000",
+      "defaultValue": "9000"
+    },
     "httpHostAddress": {
       "displayName": "Listening address of the REST server.",
       "cliConfigPrefix": "--rest.address ",
@@ -125,7 +130,7 @@
     "httpPort": {
       "displayName": "Set port for HTTP API",
       "cliConfigPrefix": "--rest.port ",
-      "defaultValue": "5052",
+      "defaultValue": "9596",
       "uiControl": {
         "type": "text"
       }
