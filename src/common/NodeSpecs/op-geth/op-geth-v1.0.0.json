@@ -1,0 +1,216 @@
+{
+  "specId": "op-geth",
+  "version": "1.0.0",
+  "displayName": "OP Geth",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "input": {
+      "defaultConfig": {
+        "http": "Enabled",
+        "httpCorsDomains": "http://localhost",
+        "webSockets": "Disabled",
+        "httpVirtualHosts": "localhost,host.containers.internal",
+        "authVirtualHosts": "localhost,host.containers.internal",
+        "rollupSequencerHttpEndpoint": "https://mainnet-sequencer.base.org"
+      },
+      "docker": {
+        "containerVolumePath": "/root/.ethereum",
+        "raw": "-p 8547:8545 -p 8548:8546 -p 8553:8551",
+        "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
+      }
+    },
+    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101106.0"
+  },
+  "category": "L2/ExecutionClient",
+  "rpcTranslation": "eth-l1",
+  "systemRequirements": {
+    "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
+    "cpu": {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 16
+    },
+    "storage": {
+      "minSizeGBs": 1600,
+      "ssdRequired": true
+    },
+    "internet": {
+      "minDownloadSpeedMbps": 25,
+      "minUploadSpeedMbps": 10
+    },
+    "docker": {
+      "required": true
+    }
+  },
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "Node data is stored in this folder",
+      "cliConfigPrefix": "--datadir ",
+      "defaultValue": "~/.ethereum",
+      "uiControl": {
+        "type": "filePath"
+      },
+      "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
+    },
+    "http": {
+      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--http"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://geth.ethereum.org/docs/rpc/server"
+    },
+    "webSockets": {
+      "displayName": "rpc websocket connections (*BeaconNodes may require websocket connections)",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--ws"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+    },
+    "httpApis": {
+      "displayName": "Enabled HTTP APIs",
+      "cliConfigPrefix": "--http.api ",
+      "defaultValue": ["eth", "net", "web3"],
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "eth",
+            "config": "eth"
+          },
+          {
+            "value": "net",
+            "config": "net"
+          },
+          {
+            "value": "web3",
+            "config": "web3"
+          },
+          {
+            "value": "debug",
+            "config": "debug"
+          },
+
+          {
+            "value": "personal",
+            "config": "personal"
+          },
+          {
+            "value": "admin",
+            "config": "admin"
+          }
+        ]
+      }
+    },
+    "httpCorsDomains": {
+      "displayName": "Change where the node accepts http connections (use comma separated urls)",
+      "cliConfigPrefix": "--http.corsdomain ",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "syncMode": {
+      "displayName": "Node synchronization mode",
+      "infoDescription": "Blockchain sync mode (\"snap\", \"full\") (default: snap)",
+      "category": "Syncronization",
+      "cliConfigPrefix": "--syncmode ",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "snap",
+            "config": "snap"
+          },
+          {
+            "value": "full",
+            "config": "full"
+          }
+        ]
+      },
+      "defaultValue": "snap",
+      "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
+    },
+    "httpVirtualHosts": {
+      "displayName": "Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard. Default value (localhost)",
+      "cliConfigPrefix": "--http.vhosts ",
+      "uiControl": {
+        "type": "text"
+      },
+      "defaultValue": "localhost,host.containers.internal"
+    },
+    "httpAddress": {
+      "displayName": "HTTP-RPC server listening interface",
+      "cliConfigPrefix": "--http.addr ",
+      "defaultValue": "localhost",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
+    },
+    "httpPort": {
+      "displayName": "HTTP-RPC server listening port",
+      "cliConfigPrefix": "--http.port ",
+      "defaultValue": "8545",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
+    },
+    "webSocketsPort": {
+      "displayName": "WS-RPC server listening port",
+      "cliConfigPrefix": "--ws.port ",
+      "defaultValue": "8546",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+    },
+    "maxPeerCount": {
+      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--maxpeers ",
+      "defaultValue": "50",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/interface/peer-to-peer#peer-limit"
+    },
+    "authVirtualHosts": {
+      "displayName": "Comma separated list of virtual hostnames from which to accept authentication requests for engine api's (server enforced). Accepts '*' wildcard. Default value (localhost)",
+      "cliConfigPrefix": "--authrpc.vhosts ",
+      "uiControl": {
+        "type": "text"
+      },
+      "defaultValue": "localhost,host.containers.internal"
+    },
+    "rollupSequencerHttpEndpoint": {
+      "displayName": "HTTP endpoint for the sequencer mempool (Ex. for base: https://mainnet-sequencer.base.org)",
+      "cliConfigPrefix": "--rollup.sequencerhttp ",
+      "uiControl": {
+        "type": "text"
+      },
+    }
+  },
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"
+}

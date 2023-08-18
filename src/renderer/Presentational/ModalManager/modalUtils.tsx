@@ -3,6 +3,7 @@ import Node from 'common/node';
 import { ThemeSetting } from 'main/state/settings';
 
 export interface ModalConfig {
+  node?: string;
   executionClient?: string;
   consensusClient?: string;
   storageLocation?: string;
@@ -60,6 +61,12 @@ export const modalOnChangeConfig = async (
       [key]: config[key],
     };
   }
+  console.log(
+    'modalOnChangeConfig: config, modalConfig, updatedConfig',
+    config,
+    modalConfig,
+    updatedConfig,
+  );
   setModalConfig(updatedConfig);
 
   if (save && modalOnSaveConfig) {

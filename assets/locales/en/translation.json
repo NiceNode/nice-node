@@ -1,4 +1,5 @@
 {
+  "AddANode": "Add a node",
   "AddYourFirstNode": "Add your first node",
   "AddYourFirstNodeDescription": "Node requirements and settings come next. Also, you can add more nodes later!",
   "Add Node": "Add Node",
@@ -51,6 +52,7 @@
   "EthereumNode": "Ethereum Node",
   "LaunchAnEthereumNode": "Launch an Ethereum Node",
   "LearnMoreClientDiversity": "Learn more about client diversity",
+  "AddNodeDescription": "Support the health of a network protocol by running a node.",
   "AddEthereumNodeDescription": "Running a full etherum node is a two part story. Choosing minority clients are important for the health of the network.",
   "ChooseYourNetwork": "Choose your network",
   "PodmanInstallation": "Podman installation",

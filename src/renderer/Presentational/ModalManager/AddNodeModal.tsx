@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
@@ -14,6 +15,7 @@ type Props = {
 };
 
 export const AddNodeModal = ({ modalOnClose }: Props) => {
+  const { t } = useTranslation();
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] =
     useState<boolean>(false);
@@ -32,13 +34,16 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   let modalTitle = '';
   switch (step) {
     case 0:
-      modalTitle = 'Launch an Ethereum Node';
+      modalTitle = t('AddYourFirstNode');
       break;
     case 1:
-      modalTitle = 'Node Requirements';
+      modalTitle = t('LaunchAnEthereumNode');
       break;
     case 2:
-      modalTitle = 'Podman Installation';
+      modalTitle = t('NodeRequirements');
+      break;
+    case 3:
+      modalTitle = t('PodmanInstallation');
       break;
     default:
   }
@@ -87,10 +92,8 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const onCancel = () => {
     if (step === 0) {
       modalOnClose();
-    } else if (step === 1) {
-      setStep(0);
     } else {
-      setStep(1);
+      setStep(step - 1);
     }
   };
 

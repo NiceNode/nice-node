@@ -15,14 +15,9 @@ import SpecialSelect, {
   SelectOption,
 } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import electron from '../../electronGlobal';
-// import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
-// import Select from '../../Generics/redesign/Select/Select';
-// import { NodeSpecification } from '../../../common/nodeSpec';
 import FolderInput from '../../Generics/redesign/Input/FolderInput';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { captionText } from '../PodmanInstallation/podmanInstallation.css';
-import { useAppDispatch } from '../../state/hooks';
-import { setModalState } from '../../state/modal';
 
 const ecOptions = [
   {
@@ -99,8 +94,6 @@ const ccOptions = [
   },
 ];
 
-let alphaModalRendered = false;
-
 export type AddEthereumNodeValues = {
   executionClient?: SelectOption;
   consensusClient?: SelectOption;
@@ -151,14 +144,9 @@ AddEthereumNodeProps) => {
     sNodeStorageLocationFreeStorageGBs,
     setNodeStorageLocationFreeStorageGBs,
   ] = useState<number>();
-  const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
-
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
-      const hasSeenAlpha = await electron.getSetHasSeenAlphaModal();
-      setHasSeenAlphaModal(hasSeenAlpha || false);
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
       const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
@@ -235,16 +223,6 @@ AddEthereumNodeProps) => {
     onChange,
   ]);
 
-  if (sHasSeenAlphaModal === false && !alphaModalRendered) {
-    dispatch(
-      setModalState({
-        isModalOpen: true,
-        screen: { route: 'alphaBuild', type: 'info' },
-      }),
-    );
-    alphaModalRendered = true;
-  }
-
   return (
     <div className={container}>
       {!modalOnChangeConfig && (
@@ -259,13 +237,13 @@ AddEthereumNodeProps) => {
           url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
         />
       </div>
-      <p className={sectionFont}>Recommended execution client</p>
+      <p className={sectionFont}>Execution client</p>
       <SpecialSelect
         selectedOption={sSelectedExecutionClient}
         onChange={onChangeEc}
         options={ecOptions}
       />
-      <p className={sectionFont}>Recommended consensus client</p>
+      <p className={sectionFont}>Consensus client</p>
       <SpecialSelect
         selectedOption={sSelectedConsensusClient}
         onChange={onChangeCc}

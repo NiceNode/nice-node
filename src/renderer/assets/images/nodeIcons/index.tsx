@@ -16,7 +16,9 @@ const lodestar = require('./Logo-Lodestar.png');
 const nimbus = require('./Logo-Nimbus.png');
 
 // L2
+const optimism = require('./Logo-OP.png');
 const arbitrum = require('./Logo-Arbitrum.png');
+const base = require('./Logo-Base.png');
 const starknet = require('./Logo-Starknet.png');
 const zkSync = require('./Logo-zkSync.png');
 
@@ -35,11 +37,15 @@ export interface NodeIcons {
   lodestar?: string;
   nimbus?: string;
   ethereum?: string;
+  optimism?: string;
   arbitrum?: string;
+  base?: string;
   starknet?: string;
   zkSync?: string;
   radicle?: string;
   livepeer?: string;
+  ['op-geth']?: string;
+  ['op-node']?: string;
 }
 
 // Define all icons here
@@ -54,11 +60,15 @@ export const NODE_ICONS: NodeIcons = {
   lodestar,
   nimbus,
   ethereum,
+  optimism,
   arbitrum,
+  base,
   starknet,
   zkSync,
   radicle,
   livepeer,
+  'op-geth': optimism,
+  'op-node': optimism,
 };
 
 const white = '#FFFFFF';
@@ -73,6 +83,10 @@ export const NODE_COLORS: NodeIcons = {
   teku: white,
   lodestar: white,
   nimbus: white,
+  optimism: white,
+  'op-geth': white,
+  'op-node': white,
+  base: white,
   ethereum: common.color.ethereum,
   arbitrum: common.color.arbitrum,
   starknet: common.color.starknet,

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
 import { componentContainer, container } from './addNodeStepper.css';
 import Stepper from '../../Generics/redesign/Stepper/Stepper';
+import AddNode, { AddNodeValues } from '../AddNode/AddNode';
 import AddEthereumNode, {
   AddEthereumNodeValues,
 } from '../AddEthereumNode/AddEthereumNode';
@@ -25,26 +26,22 @@ import { reportEvent } from '../../events/reportEvent';
 import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
 import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
+import AddBaseNode from '../AddBaseNode/AddBaseNode';
 
 export interface AddNodeStepperProps {
   modal?: boolean;
   onChange: (newValue: 'done' | 'cancel') => void;
 }
 
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 4;
 
 const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const dispatch = useAppDispatch();
   const [sStep, setStep] = useState<number>(0);
   const [sDisabledSaveButton, setDisabledSaveButton] = useState<boolean>(true);
-  // const [sExecutionClientLibrary, setExecutionClientLibrary] = useState<
-  //   NodeSpecification[]
-  // >([]);
-  // const [sBeaconNodeLibrary, setBeaconNodeLibrary] = useState<
-  //   NodeSpecification[]
-  // >([]);
   const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
-  // <string, NodeSpecification>{}
+
+  const [sNodeConfig, setNodeConfig] = useState<AddNodeValues>();
 
   const [sEthereumNodeConfig, setEthereumNodeConfig] =
     useState<AddEthereumNodeValues>();
@@ -121,6 +118,33 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
 
       // save storage location (and other settings)
       setNodeStorageLocation(newValue.storageLocation);
+    },
+    [sNodeLibrary],
+  );
+
+  const onChangeAddNode = useCallback(
+    (newValue: AddNodeValues) => {
+      console.log('onChangeAddNode newValue ', newValue);
+      setNodeConfig(newValue);
+      let nodeReqs;
+
+      if (newValue?.node) {
+        const ecValue = newValue?.node.value;
+        if (sNodeLibrary) {
+          nodeReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
+        }
+      }
+      try {
+        if (nodeReqs) {
+          setEthereumNodeRequirements(nodeReqs);
+        } else {
+          throw new Error(
+            `Node requirements undefined for ${JSON.stringify(newValue)}`,
+          );
+        }
+      } catch (e) {
+        console.error(e);
+      }
     },
     [sNodeLibrary],
   );
@@ -204,15 +228,41 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     switch (step) {
       case 0:
         stepScreen = (
-          <AddEthereumNode
-            onChange={onChangeAddEthereumNode}
+          <AddNode
+            onChange={onChangeAddNode}
             // beaconOptions={sBeaconNodeLibrary}
             // executionOptions={sExecutionClientLibrary}
           />
         );
         stepImage = step1;
         break;
+      // case 0:
+      //   stepScreen = (
+      //     <AddEthereumNode
+      //       onChange={onChangeAddEthereumNode}
+      //       // beaconOptions={sBeaconNodeLibrary}
+      //       // executionOptions={sExecutionClientLibrary}
+      //     />
+      //   );
+      //   stepImage = step1;
+      //   break;
       case 1:
+        // todo: add if node = ethereum, else if node = base
+        if (sNodeConfig?.node?.value === 'base') {
+          stepScreen = <AddBaseNode onChange={onChangeAddEthereumNode} />;
+        } else {
+          stepScreen = (
+            <AddEthereumNode
+              onChange={onChangeAddEthereumNode}
+              // beaconOptions={sBeaconNodeLibrary}
+              // executionOptions={sExecutionClientLibrary}
+            />
+          );
+        }
+
+        stepImage = step1;
+        break;
+      case 2:
         stepScreen = (
           <NodeRequirements
             nodeRequirements={sEthereumNodeRequirements}
@@ -222,7 +272,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         );
         stepImage = step2;
         break;
-      case 2:
+      case 3:
         stepScreen = (
           <PodmanInstallation
             onChange={onChangePodmanInstall}

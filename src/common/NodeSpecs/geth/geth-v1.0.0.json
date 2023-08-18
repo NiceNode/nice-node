@@ -149,7 +149,7 @@
     },
     "syncMode": {
       "displayName": "Node synchronization mode",
-      "infoDescription": "Blockchain sync mode (\"snap\", \"full\" or \"light\") (default: snap)",
+      "infoDescription": "Blockchain sync mode (\"snap\", \"full\") (default: snap)",
       "category": "Syncronization",
       "cliConfigPrefix": "--syncmode ",
       "uiControl": {
@@ -158,10 +158,6 @@
           {
             "value": "snap",
             "config": "snap"
-          },
-          {
-            "value": "light",
-            "config": "light"
           },
           {
             "value": "full",
@@ -206,14 +202,6 @@
         "type": "text"
       },
       "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
-    },
-    "lightModeMaxPeerCount": {
-      "displayName": "Light Mode Max Peer Count (set to low number to use less bandwidth)",
-      "cliConfigPrefix": "--light.maxpeers ",
-      "defaultValue": "100",
-      "uiControl": {
-        "type": "text"
-      }
     },
     "maxPeerCount": {
       "displayName": "Max Peer Count (set to low number to use less bandwidth)",
