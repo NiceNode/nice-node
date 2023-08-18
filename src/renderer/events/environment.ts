@@ -14,22 +14,25 @@ type EventIdRecord = Record<NNEvent, string>;
 
 const envEvent: Record<Envs, EventIdRecord> = {
   dev: {
-    AddNode: 'UETFB2BF',
-    InstalledPodman: 'EF8NEAIC',
-    OpenAddNodeModal: 'V7S4NG8K',
-    OpenApp: '03ZA5M3X',
+    AddNode: '',
+    InstalledPodman: '',
+    OpenAddNodeModal: '',
+    OpenApp: '',
+    UpdatedNiceNode: '',
   },
   staging: {
-    AddNode: 'T1LEWHGY',
-    InstalledPodman: 'EQGFLK5H',
-    OpenAddNodeModal: 'EJHGTXNC',
-    OpenApp: 'OFXHZEAX',
+    AddNode: '5FENDNLE',
+    InstalledPodman: 'DFMJX8IS',
+    OpenAddNodeModal: 'EQWPCKQL',
+    OpenApp: 'XH4WYO0N',
+    UpdatedNiceNode: 'XID0MV8O',
   },
   prod: {
-    AddNode: 'UTGUO1JU',
-    InstalledPodman: 'UVMEIFSC',
-    OpenAddNodeModal: 'GTW5WHUI',
-    OpenApp: '2BLFQCM7',
+    AddNode: 'ZFJ6BTDG',
+    InstalledPodman: 'ZGDSVCN5',
+    OpenAddNodeModal: 'J8FOMK6F',
+    OpenApp: 'C0PWYWAO',
+    UpdatedNiceNode: '4EGVSEAU',
   },
 };
 
