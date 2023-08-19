@@ -36,12 +36,6 @@ export type DockerExecution = BaseNodeExecution & {
     default?: string[];
     docker?: {
       containerVolumePath: string;
-      ports: {
-        p2p: string[];
-        rest: string;
-        ws?: string;
-        engine?: string;
-      };
       raw?: string;
       forcedRawNodeInput?: string;
     };

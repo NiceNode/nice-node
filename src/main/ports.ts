@@ -1,33 +1,40 @@
-import { DockerExecution as PodmanExecution } from '../common/nodeSpec';
+import { ConfigTranslationMap, ConfigValue } from 'common/nodeConfig';
 import { httpGet } from './httpReq';
 import { getNodes } from './state/nodes';
 
 export const getPodmanPorts = () => {
-  // change to retrieve ports from start command
   const nodes = getNodes();
-  let portsArray = [] as string[];
+  const portsArray = [] as ConfigValue[];
 
   nodes.forEach((node) => {
-    const { execution } = node.spec;
-    const { input } = execution as PodmanExecution;
-    if (input?.docker) {
-      const { ports } = input.docker;
-      if (node.config.configValuesMap.httpPort) {
-        ports.rest = node.config.configValuesMap.httpPort;
-      }
+    const { configTranslation } = node.spec;
+    if (!configTranslation) return;
 
-      if (node.config.configValuesMap.webSocketsPort) {
-        ports.ws = node.config.configValuesMap.webSocketsPort;
-      }
+    // Extract default port values safely with optional chaining
+    const defaultHttpPort = configTranslation.httpPort?.defaultValue;
+    const defaultWebSocketsPort =
+      configTranslation.webSocketsPort?.defaultValue;
+    const defaultP2pPorts = configTranslation.p2pPorts?.defaultValue;
+    const defaultP2pPortsUdp = configTranslation.p2pPortsUdp?.defaultValue;
+    let defaultP2pPortsTcp = configTranslation.p2pPortsTcp?.defaultValue;
+    const defaultEnginePort = configTranslation.enginePort?.defaultValue;
 
-      Object.keys(ports).forEach((key) => {
-        if (Array.isArray(ports[key as keyof typeof ports])) {
-          portsArray = portsArray.concat(key as keyof typeof ports);
-        } else {
-          portsArray.push(key as keyof typeof ports);
-        }
-      });
+    // Check if UDP and TCP ports are the same, if yes, push only one value
+    if (defaultP2pPortsUdp === defaultP2pPortsTcp) {
+      defaultP2pPortsTcp = undefined;
     }
+
+    // Filtering out undefined values and spreading them into the portsArray
+    portsArray.push(
+      ...[
+        defaultHttpPort,
+        defaultWebSocketsPort,
+        defaultP2pPorts,
+        defaultP2pPortsUdp,
+        defaultP2pPortsTcp,
+        defaultEnginePort,
+      ].filter(Boolean),
+    );
   });
 
   return portsArray;
