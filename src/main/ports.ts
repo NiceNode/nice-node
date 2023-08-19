@@ -1,4 +1,4 @@
-import { ConfigTranslationMap, ConfigValue } from 'common/nodeConfig';
+import { ConfigValue } from 'common/nodeConfig';
 import { httpGet } from './httpReq';
 import { getNodes } from './state/nodes';
 
