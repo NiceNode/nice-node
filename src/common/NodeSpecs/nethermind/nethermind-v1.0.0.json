@@ -62,7 +62,7 @@
       }
     },
     "http": {
-      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "displayName": "RPC HTTP connections",
       "category": "RPC APIs",
       "cliConfigPrefix": "--JsonRpc.Enabled ",
       "uiControl": {
@@ -77,7 +77,8 @@
           }
         ]
       },
-      "defaultValue": "Disabled",
+      "infoDescription": "NiceNode requires http connections",
+      "defaultValue": "Enabled",
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/json-rpc"
     },
     "p2pPorts": {
@@ -91,12 +92,13 @@
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/configuration/network"
     },
     "enginePort": {
-      "displayName": "Port for Execution Engine calls. Ensure the firewall is configured when enabling JSON RPC.",
+      "displayName": "Engine JSON-RPC listening port",
       "cliConfigPrefix": "--JsonRpc.EnginePort ",
       "defaultValue": "8551",
       "uiControl": {
         "type": "text"
       },
+      "infoDescription": "Ensure the firewall is configured when enabling JSON RPC.",
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/configuration/jsonrpc"
     },
     "httpPort": {
@@ -193,7 +195,7 @@
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/sync-modes"
     },
     "webSocketsPort": {
-      "displayName": "Port number for JSON RPC web sockets calls",
+      "displayName": "WebSockets JSON-RPC port",
       "cliConfigPrefix": "--JsonRpc.WebSocketsPort ",
       "defaultValue": "8545",
       "niceNodeDefaultValue": "8545",
@@ -204,12 +206,13 @@
       "infoDescription": "Port number for JSON RPC web sockets calls. By default same port is used as regular HTTP JSON RPC. Ensure the firewall is configured when enabling JSON RPC."
     },
     "maxPeerCount": {
-      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "displayName": "Max Peer Count",
       "cliConfigPrefix": "--Network.ActivePeersMaxCount ",
       "defaultValue": "50",
       "uiControl": {
         "type": "text"
       },
+      "infoDescription": "Set to lower number to use less bandwidth",
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/configuration/network"
     }
   },

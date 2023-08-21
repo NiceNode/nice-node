@@ -55,7 +55,7 @@
       "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters/"
     },
     "checkpointSyncUrl": {
-      "displayName": "The URL of a trusted checkpoint sync",
+      "displayName": "Trusted checkpoint sync URL",
       "cliConfigPrefix": "--checkpoint-sync-url=",
       "defaultValue": "https://beaconstate.ethstaker.cc",
       "uiControl": {
@@ -83,7 +83,7 @@
       "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters"
     },
     "httpPort": {
-      "displayName": "The host on which the gateway server runs on",
+      "displayName": "Gateway server listening port",
       "cliConfigPrefix": "--grpc-gateway-port=",
       "defaultValue": "3500",
       "uiControl": {
@@ -91,14 +91,15 @@
       }
     },
     "httpCorsDomains": {
-      "displayName": "Comma separated list of domains from which to accept cross origin requests (browser enforced). This flag has no effect if not used with --grpc-gateway-port.",
+      "displayName": "Gateway CORS domains",
       "cliConfigPrefix": "--grpc-gateway-corsdomain=",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "infoDescription": "Comma separated list of domains from which to accept cross origin requests (browser enforced). This flag has no effect if not used with --grpc-gateway-port."
     },
     "httpHostAddress": {
-      "displayName": "The host on which the gateway server runs on",
+      "displayName": "Gateway host listening address",
       "cliConfigPrefix": "--grpc-gateway-host=",
       "defaultValue": "0.0.0.0",
       "uiControl": {
@@ -106,7 +107,7 @@
       }
     },
     "executionEndpoint": {
-      "displayName": "The URL of the local execution engine API",
+      "displayName": "Local execution Engine RPC-JSON API URL",
       "cliConfigPrefix": "--execution-endpoint=",
       "defaultValue": "http://host.containers.internal:8551",
       "uiControl": {
@@ -115,12 +116,13 @@
       "iconUrl": "https://docs.prylabs.network/docs/execution-node/authentication#configure-beacon-node"
     },
     "maxPeerCount": {
-      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "displayName": "Max Peer Count",
       "cliConfigPrefix": "--p2p-max-peers=",
       "defaultValue": "45",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "infoDescription": "Set to lower number to use less bandwidth"
     }
   },
   "documentation": {

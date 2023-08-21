@@ -55,7 +55,7 @@
       "documentation": "https://nimbus.guide/options.html"
     },
     "checkpointSyncUrl": {
-      "displayName": "The URL of a trusted checkpoint sync",
+      "displayName": "Trusted checkpoint sync URL",
       "cliConfigPrefix": "--trusted-node-url=",
       "defaultValue": "https://beaconstate.ethstaker.cc",
       "uiControl": {
@@ -83,7 +83,7 @@
       "documentation": "https://nimbus.guide/options.html"
     },
     "http": {
-      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "displayName": "RPC HTTP connections",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -96,10 +96,11 @@
           }
         ]
       },
-      "defaultValue": "Disabled"
+      "infoDescription": "NiceNode requires http connections",
+      "defaultValue": "Enabled"
     },
     "httpPort": {
-      "displayName": "Set port for HTTP API",
+      "displayName": "HTTP-RPC server listening port",
       "cliConfigPrefix": "--rest-port=",
       "defaultValue": "5052",
       "uiControl": {
@@ -107,15 +108,15 @@
       }
     },
     "httpCorsDomains": {
-      "displayName": "Change where the node accepts http connections (use comma separated urls)",
+      "displayName": "HTTP-RPC CORS domains",
       "cliConfigPrefix": "--rest-allow-origin=",
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "Limit the access to the REST API to a particular hostname (for CORS-enabled clients such as browsers)."
+      "infoDescription": "Limit the access to the REST API to a particular hostname (for CORS-enabled clients such as browsers) Use comma separated URLs."
     },
     "httpHostAddress": {
-      "displayName": "Listening address of the REST server.",
+      "displayName": "REST server listening address",
       "cliConfigPrefix": "--rest-address=",
       "defaultValue": "127.0.0.1",
       "uiControl": {
@@ -124,22 +125,23 @@
       "infoDescription": "Limit the access to the REST API to a particular hostname (for CORS-enabled clients such as browsers)."
     },
     "executionEndpoint": {
-      "displayName": "One or more execution layer Web3 provider URLs",
+      "displayName": "Local execution Engine RPC-JSON API URL",
       "cliConfigPrefix": "--web3-url=",
       "defaultValue": "\"http://host.containers.internal:8551\"",
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "informs the beacon node how to connect to the execution client - both http:// and ws:// URLs are supported.",
+      "infoDescription": "Informs the beacon node how to connect to the execution client - both http:// and ws:// URLs are supported.",
       "documentation": "https://nimbus.guide/eth1.html#3-pass-the-url-and-jwt-secret-to-nimbus"
     },
     "maxPeerCount": {
-      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "displayName": "Max Peer Count",
       "cliConfigPrefix": "--max-peers=",
       "defaultValue": "160",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "infoDescription": "Set to lower number to use less bandwidth"
     }
   },
   "documentation": {

@@ -55,7 +55,7 @@
       "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#data-base-path-data-path"
     },
     "checkpointSyncUrl": {
-      "displayName": "The URL of a trusted checkpoint sync",
+      "displayName": "Trusted checkpoint sync URL",
       "cliConfigPrefix": "--initial-state=",
       "defaultValue": "https://beaconstate.ethstaker.cc",
       "uiControl": {
@@ -73,7 +73,7 @@
       "documentation": "https://docs.teku.consensys.net/reference/cli#p2p-port"
     },
     "http": {
-      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "displayName": "RPC HTTP connections",
       "cliConfigPrefix": "--rest-api-enabled=",
       "uiControl": {
         "type": "select/single",
@@ -88,11 +88,12 @@
           }
         ]
       },
-      "defaultValue": "Disabled",
+      "defaultValue": "Enabled",
+      "infoDescription": "NiceNode requires http connections",
       "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#rest-api-enabled"
     },
     "httpPort": {
-      "displayName": "Specifies REST API listening port (HTTP).",
+      "displayName": "HTTP server listening port",
       "cliConfigPrefix": "--rest-api-port=",
       "defaultValue": "5051",
       "uiControl": {
@@ -101,7 +102,7 @@
       "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#rest-api-port"
     },
     "httpCorsDomains": {
-      "displayName": "A comma-separated list of hostnames to allow access to the REST API.",
+      "displayName": "HTTP CORS domains",
       "cliConfigPrefix": "--rest-api-cors-origins=",
       "defaultValue": "none",
       "uiControl": {
@@ -112,22 +113,22 @@
       "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#rest-api-host-allowlist"
     },
     "executionEndpoint": {
-      "displayName": "URL of the execution client's Engine JSON-RPC APIs",
+      "displayName": "Local execution Engine RPC-JSON API URL",
       "cliConfigPrefix": "--ee-endpoint=",
       "defaultValue": "http://host.containers.internal:8551",
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "URL of the execution client's Engine JSON-RPC APIs.",
       "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#ee-endpoint"
     },
     "maxPeerCount": {
-      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "displayName": "Max Peer Count",
       "cliConfigPrefix": "--p2p-peer-upper-bound=",
       "defaultValue": "74",
       "uiControl": {
         "type": "text"
       },
+      "infoDescription": "Set to lower number to use less bandwidth",
       "documentation": "https://docs.teku.consensys.net/en/latest/Reference/CLI/CLI-Syntax/#p2p-peer-upper-bound"
     }
   },
