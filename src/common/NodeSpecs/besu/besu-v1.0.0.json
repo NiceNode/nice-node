@@ -99,7 +99,7 @@
           }
         ]
       },
-      "defaultValue": "Disabled",
+      "defaultValue": "Enabled",
       "infoDescription": "NiceNode requires http connections",
       "documentation": "https://besu.hyperledger.org/en/stable/public-networks/reference/cli/options#rpc-http-enabled"
     },
@@ -118,7 +118,7 @@
           }
         ]
       },
-      "defaultValue": "Disabled",
+      "defaultValue": "Enabled",
       "infoDescription": "Syncing requires this to be enabled",
       "documentation": "https://besu.hyperledger.org/en/stable/public-networks/reference/cli/options#engine-rpc-enabled"
     },
@@ -146,7 +146,7 @@
           }
         ]
       },
-      "defaultValue": "Disabled",
+      "defaultValue": "Enabled",
       "infoDescription": "Enables or disables the WebSocket JSON-RPC service. The default is false.",
       "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-ws-enabled"
     },
