@@ -182,7 +182,7 @@
       "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
     },
     "p2pPorts": {
-      "displayName": "Use a custom UDP port for P2P discovery",
+      "displayName": "P2P port (UDP and TCP)",
       "cliConfigPrefix": "--discovery.port ",
       "uiControl": {
         "type": "text"

@@ -73,7 +73,7 @@
       "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters"
     },
     "p2pPortsUdp": {
-      "displayName": "P2P listening port (UDP)",
+      "displayName": "P2P discovery port (UDP)",
       "cliConfigPrefix": "--udp-port=",
       "uiControl": {
         "type": "text"

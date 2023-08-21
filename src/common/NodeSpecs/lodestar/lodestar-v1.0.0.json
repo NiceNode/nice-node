@@ -111,7 +111,7 @@
       }
     },
     "p2pPorts": {
-      "displayName": "P2P listening port (UDP and TCP)",
+      "displayName": "P2P port (UDP and TCP)",
       "cliConfigPrefix": "--port ",
       "uiControl": {
         "type": "text"
