@@ -230,15 +230,6 @@
       },
       "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
     },
-    "lightModeMaxPeerCount": {
-      "displayName": "Light Mode Max Peer Count",
-      "cliConfigPrefix": "--light.maxpeers ",
-      "defaultValue": "100",
-      "uiControl": {
-        "type": "text"
-      },
-      "infoDescription": "Set to lower number to use less bandwidth"
-    },
     "maxPeerCount": {
       "displayName": "Max Peer Count",
       "cliConfigPrefix": "--maxpeers ",
