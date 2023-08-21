@@ -162,7 +162,7 @@
     },
     "syncMode": {
       "displayName": "Node synchronization mode",
-      "infoDescription": "Blockchain sync mode (\"snap\", \"full\" or \"light\") (default: snap)",
+      "infoDescription": "Blockchain sync mode (\"snap\", \"full\") (default: snap)",
       "category": "Syncronization",
       "cliConfigPrefix": "--syncmode ",
       "uiControl": {
@@ -171,10 +171,6 @@
           {
             "value": "snap",
             "config": "snap"
-          },
-          {
-            "value": "light",
-            "config": "light"
           },
           {
             "value": "full",
