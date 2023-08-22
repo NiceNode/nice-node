@@ -51,6 +51,7 @@
   "podmanInstallingMessage": "Installing... (this may take 5 or more minutes). There will be a password prompt on Mac and a pop-up on Windows to give permissions to install Podman.",
   "EthereumNode": "Ethereum Node",
   "LaunchAnEthereumNode": "Launch an Ethereum Node",
+  "LaunchAVarNode": "Launch a {{nodeName}} Node",
   "LearnMoreClientDiversity": "Learn more about client diversity",
   "AddNodeDescription": "Support the health of a network protocol by running a node.",
   "AddEthereumNodeDescription": "Running a full etherum node is a two part story. Choosing minority clients are important for the health of the network.",

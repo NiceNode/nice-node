@@ -25,8 +25,11 @@ import {
   getNodeStartCommand,
 } from './nodeManager';
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
-import Node, { NodeId } from '../common/node';
-import { NodeSpecification } from '../common/nodeSpec';
+import Node, { NodeConfig, NodeId, NodePackage } from '../common/node';
+import {
+  NodePackageSpecification,
+  NodeSpecification,
+} from '../common/nodeSpec';
 import { isPodmanInstalled, isPodmanRunning } from './podman/podman';
 import installPodman from './podman/install/install';
 // eslint-disable-next-line import/no-cycle
@@ -57,6 +60,10 @@ import {
   markAllAsRead,
 } from './state/notifications';
 import { getFailSystemRequirements } from './minSystemRequirement';
+import {
+  AddNodePackageNodeServices,
+  addNodePackage,
+} from './specialNodes/nodePackage';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -103,6 +110,18 @@ export const initialize = () => {
       settings: { storageLocation?: string },
     ): Promise<{ ecNode: Node; ccNode: Node }> => {
       return addEthereumNode(ecNodeSpec, ccNodeSpec, settings);
+    },
+  );
+  ipcMain.handle(
+    'addNodePackage',
+    (
+      _event,
+      spec: NodePackageSpecification,
+      config: NodeConfig,
+      services: AddNodePackageNodeServices,
+      settings: { storageLocation?: string },
+    ): Promise<{ node: NodePackage }> => {
+      return addNodePackage(spec, config, services, settings);
     },
   );
   ipcMain.handle(

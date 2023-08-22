@@ -305,7 +305,7 @@ const NodeScreen = () => {
 
     let regex;
     switch (name) {
-      case 'geth':
+      case 'geth' || 'op-geth' || 'op-node':
         regex = /Geth\/v(\d+\.\d+\.\d+)/;
         break;
       case 'besu':

@@ -1,15 +1,17 @@
 {
-  "specId": "eth-node",
+  "specId": "ethereum",
   "version": "1.0.0",
-  "displayName": "Ethereum Node",
+  "displayName": "Ethereum",
   "execution": {
     "executionTypes": ["nodePackage"],
     "defaultExecutionType": "nodePackage",
     "services" : [{
+      "serviceId": "executionClient",
       "name" : "Execution Client",
       "nodeOptions": ["geth", "besu", "nethermind"],
       "required": true
     }, {
+      "serviceId": "consensusClient",
       "name" : "Consensus Client",
       "nodeOptions": ["nimbus-beacon", "lighthouse-beacon", "teku-beacon", "prysm-beacon", "lodestar-beacon"],
       "required": true
@@ -64,7 +66,7 @@
       },
       "defaultValue": "Disabled",
       "documentation": "https://geth.ethereum.org/docs/rpc/server"
-    },
+    }
   },
   "iconUrl": "https://ethereum.png"
 }

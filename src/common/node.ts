@@ -66,6 +66,21 @@ export type UserNodes = {
   nodes: NodeMap;
   nodeIds: string[];
 };
+export type NodeService = {
+  serviceId: string;
+  node: Node;
+  name?: string;
+};
+export type NodePackage = {
+  id: NodeId;
+  services: NodeService[];
+  spec: NodeSpecification;
+  config: NodeConfig;
+  runtime: NodeRuntime;
+  status: NodeStatus;
+  lastStarted?: string;
+  lastStopped?: string;
+};
 
 export const isDockerNode = (node: Node) => {
   // config takes priority, then default type, then the first option

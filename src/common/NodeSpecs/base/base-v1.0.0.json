@@ -1,15 +1,16 @@
 {
-  "specId": "base-node",
+  "specId": "base",
   "version": "1.0.0",
-  "displayName": "Base Node",
+  "displayName": "Base",
   "execution": {
     "executionTypes": ["nodePackage"],
-    "defaultExecutionType": "nodePackage",
     "services" : [{
+      "serviceId": "executionClient",
       "name" : "Execution Client",
       "nodeOptions": ["op-geth"],
       "required": true
     }, {
+      "serviceId": "consensusClient",
       "name" : "Consensus Client",
       "nodeOptions": ["op-node"],
       "required": true

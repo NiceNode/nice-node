@@ -55,16 +55,13 @@ const AddNodeStepperModal = ({
   }, []);
 
   useEffect(() => {
-    const {
-      nodeLibrary,
-      consensusClient = 'nimbus',
-      executionClient = 'besu',
-      storageLocation,
-    } = modalConfig;
+    const { nodeLibrary, consensusClient, executionClient, storageLocation } =
+      modalConfig;
     if (nodeLibrary && consensusClient && executionClient && storageLocation) {
       const ecReqs = nodeLibrary?.[executionClient]?.systemRequirements;
       const ccReqs =
-        nodeLibrary?.[`${consensusClient}-beacon`]?.systemRequirements;
+        nodeLibrary?.[`${consensusClient}-beacon`]?.systemRequirements ??
+        nodeLibrary?.[consensusClient]?.systemRequirements;
       try {
         if (ecReqs && ccReqs) {
           const mergedReqs = mergeSystemRequirements([ecReqs, ccReqs]);
@@ -94,6 +91,7 @@ const AddNodeStepperModal = ({
     elClient: SelectOption,
     ethereumNodeConfig: AddEthereumNodeValues,
   ) => {
+    console.log('setExecutionClient called', elClient, ethereumNodeConfig);
     const config = { ...ethereumNodeConfig, executionClient: elClient };
     modalOnChangeConfig({
       executionClient: elClient.value,
@@ -138,7 +136,6 @@ const AddNodeStepperModal = ({
         stepImage = step1;
         break;
       case 1:
-        console.log('hiii', sNodeConfig);
         if (sNodeConfig?.node?.value === 'base') {
           stepScreen = (
             <AddBaseNode

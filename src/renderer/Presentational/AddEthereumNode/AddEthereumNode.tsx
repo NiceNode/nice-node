@@ -154,6 +154,8 @@ AddEthereumNodeProps) => {
       setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
       if (modalOnChangeConfig) {
         modalOnChangeConfig({
+          executionClient: sSelectedExecutionClient.value,
+          consensusClient: sSelectedConsensusClient.value,
           storageLocation: defaultNodesStorageDetails.folderPath,
           nodeLibrary,
         });
@@ -163,6 +165,19 @@ AddEthereumNodeProps) => {
       );
     };
     fetchData();
+
+    // Modal Parent needs updated with the default initial value
+    const ethNodeConfig = {
+      executionClient: sSelectedExecutionClient,
+      consensusClient: sSelectedConsensusClient,
+    };
+    if (setExecutionClient) {
+      setExecutionClient(sSelectedExecutionClient, ethNodeConfig);
+    }
+    if (setConsensusClient) {
+      setConsensusClient(sSelectedConsensusClient, ethNodeConfig);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -291,7 +306,7 @@ AddEthereumNodeProps) => {
       <p className={sectionFont}>{tGeneric('DataLocation')}</p>
       <p
         className={captionText}
-      >{`Changing location only supported on Mac and only locations under /Users/<current-user>/ or /Volumes/`}</p>
+      >{`Changing location only supported on Mac & Linux and only locations under /Users/<current-user>/ or /Volumes/`}</p>
       <FolderInput
         // disabled
         placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}

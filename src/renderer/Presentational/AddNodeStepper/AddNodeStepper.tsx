@@ -41,9 +41,9 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const [sDisabledSaveButton, setDisabledSaveButton] = useState<boolean>(true);
   const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
 
-  const [sNodeConfig, setNodeConfig] = useState<AddNodeValues>();
+  const [sNode, setNode] = useState<AddNodeValues>();
 
-  const [sEthereumNodeConfig, setEthereumNodeConfig] =
+  const [sNodeClientsAndSettings, setNodeClientsAndSettings] =
     useState<AddEthereumNodeValues>();
   const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
     useState<SystemRequirements>();
@@ -89,7 +89,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const onChangeAddEthereumNode = useCallback(
     (newValue: AddEthereumNodeValues) => {
       console.log('onChangeAddEthereumNode newValue ', newValue);
-      setEthereumNodeConfig(newValue);
+      setNodeClientsAndSettings(newValue);
       let ecReqs;
       let ccReqs;
 
@@ -122,10 +122,46 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     [sNodeLibrary],
   );
 
+  const onChangeAddBaseNode = useCallback(
+    (newValue: AddEthereumNodeValues) => {
+      console.log('onChangeAddBaseNode newValue ', newValue);
+      setNodeClientsAndSettings(newValue);
+      let ecReqs;
+      let ccReqs;
+
+      if (newValue?.executionClient) {
+        const ecValue = newValue?.executionClient.value;
+        if (sNodeLibrary) {
+          ecReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
+        }
+      }
+      if (newValue?.consensusClient) {
+        const ccValue = newValue?.consensusClient.value;
+        if (sNodeLibrary) {
+          ccReqs = sNodeLibrary?.[ccValue]?.systemRequirements;
+        }
+      }
+      try {
+        if (ecReqs && ccReqs) {
+          const mergedReqs = mergeSystemRequirements([ecReqs, ccReqs]);
+          setEthereumNodeRequirements(mergedReqs);
+        } else {
+          throw new Error('ec or ec node requirements undefined');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      // save storage location (and other settings)
+      setNodeStorageLocation(newValue.storageLocation);
+    },
+    [sNodeLibrary],
+  );
+
   const onChangeAddNode = useCallback(
     (newValue: AddNodeValues) => {
       console.log('onChangeAddNode newValue ', newValue);
-      setNodeConfig(newValue);
+      setNode(newValue);
       let nodeReqs;
 
       if (newValue?.node) {
@@ -158,14 +194,14 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const addNodes = async () => {
     let ecNodeSpec;
     let ccNodeSpec;
-    if (sEthereumNodeConfig?.executionClient) {
-      const ecValue = sEthereumNodeConfig?.executionClient;
+    if (sNodeClientsAndSettings?.executionClient) {
+      const ecValue = sNodeClientsAndSettings?.executionClient;
       if (sNodeLibrary) {
         ecNodeSpec = sNodeLibrary?.[ecValue.value];
       }
     }
-    if (sEthereumNodeConfig?.consensusClient) {
-      const ccValue = sEthereumNodeConfig?.consensusClient;
+    if (sNodeClientsAndSettings?.consensusClient) {
+      const ccValue = sNodeClientsAndSettings?.consensusClient;
       if (sNodeLibrary) {
         ccNodeSpec = sNodeLibrary?.[`${ccValue.value}-beacon`];
       }
@@ -248,8 +284,8 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       //   break;
       case 1:
         // todo: add if node = ethereum, else if node = base
-        if (sNodeConfig?.node?.value === 'base') {
-          stepScreen = <AddBaseNode onChange={onChangeAddEthereumNode} />;
+        if (sNode?.node?.value === 'base') {
+          stepScreen = <AddBaseNode onChange={onChangeAddBaseNode} />;
         } else {
           stepScreen = (
             <AddEthereumNode

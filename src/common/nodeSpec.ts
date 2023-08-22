@@ -13,7 +13,7 @@ export type Architectures = 'amd64' | 'arm64';
 // how can they fallback on default?
 //  provide some values, and optionally use rest of default values (spread operator)
 
-type BaseNodeExecution = {
+export type BaseNodeExecution = {
   executionTypes: ExecutionTypes[];
   defaultExecutionType?: ExecutionTypes;
   dataPath?: string; // defaults to NiceNode app route
@@ -76,7 +76,20 @@ export type BinaryExecution = BaseNodeExecution & {
   // todo: could be file path
 };
 
+type NodePackageNodeServiceSpec = {
+  serviceId: string;
+  name: string;
+  nodeOptions: string[];
+  required: boolean;
+};
+
+export type NodePackageExecution = BaseNodeExecution & {
+  executionTypes: ['nodePackage'];
+  services: NodePackageNodeServiceSpec[];
+};
+
 export type NodeExecution =
+  | NodePackageExecution
   | DockerExecution
   | BinaryExecution
   | BaseNodeExecution;
@@ -89,6 +102,24 @@ export type NodeSpecification = {
   version: string;
   displayName: string;
   execution: NodeExecution;
+  systemRequirements?: SystemRequirements;
+  rpcTranslation?: NiceNodeRpcTranslation;
+  configTranslation?: ConfigTranslationMap;
+  nodeReleasePhase?: 'alpha' | 'beta';
+  // rpcTranslation?: NiceNodeRpcTranslation;
+  // todo: define a standard for translating rpc calls for common node data
+  //  which NiceNode uses to show the state of the node.
+  //  (ex. peers, syncing, latest block num, etc.)
+  iconUrl?: string;
+  category?: string;
+  documentation?: { default?: string; docker?: string; binary?: string };
+};
+
+export type NodePackageSpecification = {
+  specId: string;
+  version: string;
+  displayName: string;
+  execution: NodePackageExecution;
   systemRequirements?: SystemRequirements;
   rpcTranslation?: NiceNodeRpcTranslation;
   configTranslation?: ConfigTranslationMap;

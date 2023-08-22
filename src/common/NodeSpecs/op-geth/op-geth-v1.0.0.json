@@ -209,7 +209,7 @@
       "cliConfigPrefix": "--rollup.sequencerhttp ",
       "uiControl": {
         "type": "text"
-      },
+      }
     }
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"
