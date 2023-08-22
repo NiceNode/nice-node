@@ -8,17 +8,18 @@
       "serviceId": "executionClient",
       "name" : "Execution Client",
       "nodeOptions": ["op-geth"],
-      "required": true
+      "required": true,
+      "requiresCommonJwtSecret": true
     }, {
       "serviceId": "consensusClient",
       "name" : "Consensus Client",
       "nodeOptions": ["op-node"],
-      "required": true
+      "required": true,
+      "requiresCommonJwtSecret": true
     }],
     "dependencies": [{
       "name" : "Ethereum node",
-      "nodeSpecId": "eth-node",
-      "required": true
+      "specId": "ethereum"
     }]
   },
   "category": "Ethereum/L2",

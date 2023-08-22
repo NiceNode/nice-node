@@ -66,10 +66,15 @@ export type UserNodes = {
   nodes: NodeMap;
   nodeIds: string[];
 };
+type NodePackageMap = Record<string, NodePackage>;
+export type UserNodePackages = {
+  nodes: NodePackageMap;
+  nodeIds: string[];
+};
 export type NodeService = {
   serviceId: string;
+  serviceName: string;
   node: Node;
-  name?: string;
 };
 export type NodePackage = {
   id: NodeId;
@@ -134,5 +139,39 @@ export const createNode = (input: {
     status: NodeStatus.created,
   };
   return node;
+};
+export const createNodePackage = (input: {
+  spec: NodeSpecification;
+  runtime: NodeRuntime;
+  initialConfigFromUser?: ConfigValuesMap;
+}): NodePackage => {
+  let initialConfigValues: ConfigValuesMap = {};
+  if (input.spec.execution?.input?.defaultConfig) {
+    initialConfigValues = input.spec.execution?.input?.defaultConfig;
+  }
+
+  // initial config from user overrides default config
+  if (input.initialConfigFromUser) {
+    initialConfigValues = {
+      ...initialConfigValues,
+      ...input.initialConfigFromUser,
+    };
+  }
+
+  // The data directory is default set to the NiceNode nodes directory
+  //  Config in the node spec can override this.
+  if (!initialConfigValues.dataDir) {
+    initialConfigValues.dataDir = input.runtime.dataDir;
+  }
+
+  const nodePackage: NodePackage = {
+    id: uuidv4(),
+    spec: input.spec,
+    services: [],
+    config: { configValuesMap: initialConfigValues },
+    runtime: input.runtime,
+    status: NodeStatus.created,
+  };
+  return nodePackage;
 };
 export default Node;

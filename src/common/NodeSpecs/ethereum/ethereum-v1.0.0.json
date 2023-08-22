@@ -9,12 +9,14 @@
       "serviceId": "executionClient",
       "name" : "Execution Client",
       "nodeOptions": ["geth", "besu", "nethermind"],
-      "required": true
+      "required": true,
+      "requiresCommonJwtSecret": true
     }, {
       "serviceId": "consensusClient",
       "name" : "Consensus Client",
       "nodeOptions": ["nimbus-beacon", "lighthouse-beacon", "teku-beacon", "prysm-beacon", "lodestar-beacon"],
-      "required": true
+      "required": true,
+      "requiresCommonJwtSecret": true
     }]
   },
   "category": "L1",

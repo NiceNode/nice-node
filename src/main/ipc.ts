@@ -114,14 +114,14 @@ export const initialize = () => {
   );
   ipcMain.handle(
     'addNodePackage',
-    (
+    async (
       _event,
-      spec: NodePackageSpecification,
-      config: NodeConfig,
+      nodeSpec: NodePackageSpecification,
       services: AddNodePackageNodeServices,
       settings: { storageLocation?: string },
     ): Promise<{ node: NodePackage }> => {
-      return addNodePackage(spec, config, services, settings);
+      const node = await addNodePackage(nodeSpec, services, settings);
+      return { node };
     },
   );
   ipcMain.handle(

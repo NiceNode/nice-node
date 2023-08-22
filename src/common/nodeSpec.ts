@@ -81,11 +81,13 @@ type NodePackageNodeServiceSpec = {
   name: string;
   nodeOptions: string[];
   required: boolean;
+  requiresCommonJwtSecret?: boolean;
 };
 
 export type NodePackageExecution = BaseNodeExecution & {
   executionTypes: ['nodePackage'];
   services: NodePackageNodeServiceSpec[];
+  dependencies?: { name: string; specId: string }[];
 };
 
 export type NodeExecution =
