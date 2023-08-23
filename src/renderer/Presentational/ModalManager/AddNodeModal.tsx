@@ -9,7 +9,8 @@ import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import { reportEvent } from '../../events/reportEvent';
-import { NodeSpecification } from 'common/nodeSpec';
+import { NodePackageSpecification, NodeSpecification } from 'common/nodeSpec';
+import { AddNodePackageNodeService } from 'main/nodePackageManager';
 
 type Props = {
   modalOnClose: () => void;
@@ -84,7 +85,13 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
 
     console.log('AddNodeModal modalOnSaveConfig(updatedConfig)', updatedConfig);
     // todo: add logic for Node change (ethereum, base, etc.)
-
+    let nodePackageSpec: NodePackageSpecification;
+    if (nodeLibrary && node) {
+      nodePackageSpec = nodeLibrary?.[node];
+    }
+    let services: AddNodePackageNodeService[];
+    // todo: take nodeSpecId and parse out the node spec from the library
+    // use that to create the services array (todo: this should be done from selections screen)
     // Node Selections logic
     let ecNodeSpec;
     let ccNodeSpec;
@@ -101,15 +108,21 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
 
     // eslint-disable-next-line no-case-declarations
     // TODO: call back-end addNode(nodeSpec (eth or base), nodeSelections (ec & cc), nodeSettings (storageLocation, network))
-    const { ecNode, ccNode } = await electron.addEthereumNode(
-      ecNodeSpec,
-      ccNodeSpec,
+    // const { ecNode, ccNode } = await electron.addEthereumNode(
+    //   ecNodeSpec,
+    //   ccNodeSpec,
+    //   { storageLocation },
+    // );
+    const { node: nodePackage } = await electron.addNodePackage(
+      node,
+
       { storageLocation },
     );
+    console.log('nodePackage result: ', nodePackage);
     reportEvent('AddNode');
     dispatch(updateSelectedNodeId(ecNode.id));
-    await electron.startNode(ecNode.id);
-    await electron.startNode(ccNode.id);
+    // await electron.startNode(ecNode.id);
+    // await electron.startNode(ccNode.id);
   };
 
   const disableSaveButton = useCallback((value: boolean) => {

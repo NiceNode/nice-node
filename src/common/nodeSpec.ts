@@ -79,13 +79,14 @@ export type BinaryExecution = BaseNodeExecution & {
 type NodePackageNodeServiceSpec = {
   serviceId: string;
   name: string;
-  nodeOptions: string[];
+  nodeOptions: string[] | NodeSpecification[];
   required: boolean;
   requiresCommonJwtSecret?: boolean;
 };
 
 export type NodePackageExecution = BaseNodeExecution & {
-  executionTypes: ['nodePackage'];
+  // only including "| string[]" to remove linter error when casting spec as NodePackageSpecification
+  executionTypes: ['nodePackage'] | string[];
   services: NodePackageNodeServiceSpec[];
   dependencies?: { name: string; specId: string }[];
 };

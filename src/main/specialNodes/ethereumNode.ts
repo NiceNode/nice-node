@@ -11,17 +11,17 @@ import { createJwtSecretAtDirs } from '../util/jwtSecrets';
  * @param settings { storageLocation?: string }
  * @returns true if successful
  */
-export const addEthereumNode = async (
-  ecNodeSpec: NodeSpecification,
-  ccNodeSpec: NodeSpecification,
-  settings: { storageLocation?: string },
-): Promise<{ ecNode: Node; ccNode: Node }> => {
-  const ecNode = await addNode(ecNodeSpec, settings.storageLocation);
-  const ccNode = await addNode(ccNodeSpec, settings.storageLocation);
+// export const addEthereumNode = async (
+//   ecNodeSpec: NodeSpecification,
+//   ccNodeSpec: NodeSpecification,
+//   settings: { storageLocation?: string },
+// ): Promise<{ ecNode: Node; ccNode: Node }> => {
+//   const ecNode = await addNode(ecNodeSpec, settings.storageLocation);
+//   const ccNode = await addNode(ccNodeSpec, settings.storageLocation);
 
-  // Creates the secret at root dir of the node
-  //    node.runtime.dataDir + 'jwtsecret'
-  await createJwtSecretAtDirs([ecNode.runtime.dataDir, ccNode.runtime.dataDir]);
+//   // Creates the secret at root dir of the node
+//   //    node.runtime.dataDir + 'jwtsecret'
+//   await createJwtSecretAtDirs([ecNode.runtime.dataDir, ccNode.runtime.dataDir]);
 
-  return { ecNode, ccNode };
-};
+//   return { ecNode, ccNode };
+// };

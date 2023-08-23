@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { NodeSpecification } from '../common/nodeSpec';
-import Node, { NodeId, UserNodes } from '../common/node';
+import Node, { NodeId, UserNodePackages, UserNodes } from '../common/node';
 import { NodeLibrary } from '../main/state/nodeLibrary';
 import { Settings, ThemeSetting } from '../main/state/settings';
 import { CheckStorageDetails } from '../main/files';
@@ -50,11 +50,17 @@ declare global {
       // Multi-node
       getNodes(): Node[];
       getUserNodes(): UserNodes;
-      addEthereumNode(
-        ecNodeSpec: NodeSpecification,
-        ccNodeSpec: NodeSpecification,
+      getUserNodePackages(): UserNodePackages;
+      // addEthereumNode(
+      //   ecNodeSpec: NodeSpecification,
+      //   ccNodeSpec: NodeSpecification,
+      //   settings: { storageLocation?: string },
+      // ): { ecNode: Node; ccNode: Node };
+      addNodePackage(
+        nodeSpec: NodePackageSpecification,
+        services: AddNodePackageNodeService[],
         settings: { storageLocation?: string },
-      ): { ecNode: Node; ccNode: Node };
+      ): { node: NodePackage };
       addNode(nodeSpec: NodeSpecification, storageLocation?: string): Node;
       updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;
       removeNode(nodeId: NodeId, options: { isDeleteStorage: boolean }): Node;
@@ -74,6 +80,7 @@ declare global {
 
       // Node library
       getNodeLibrary(): NodeLibrary;
+      getNodePackageLibrary(): getNodePackageLibrary;
 
       // Podman
       getIsPodmanInstalled(): boolean;

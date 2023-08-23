@@ -18,16 +18,22 @@ import opGethv1 from '../common/NodeSpecs/op-geth/op-geth-v1.0.0.json';
 import opNodev1 from '../common/NodeSpecs/op-node/op-node-v1.0.0.json';
 
 import logger from './logger';
-import { NodeLibrary, updateNodeLibrary } from './state/nodeLibrary';
-import { NodeSpecification } from '../common/nodeSpec';
+import {
+  NodeLibrary,
+  NodePackageLibrary,
+  updateNodeLibrary,
+  updateNodePackageLibrary,
+} from './state/nodeLibrary';
+import {
+  NodePackageSpecification,
+  NodeSpecification,
+} from '../common/nodeSpec';
 
 export const initialize = async () => {
   // parse spec json for latest versions
   // update the store with the latest versions
   const nodeSpecBySpecId: NodeLibrary = {};
   const specs = [
-    ethereumv1,
-    basev1,
     besuv1,
     nethermindv1,
     gethv1,
@@ -49,5 +55,18 @@ export const initialize = async () => {
     }
   });
   console.log('nodeSpecBySpecId: ', nodeSpecBySpecId);
-  return updateNodeLibrary(nodeSpecBySpecId);
+  updateNodeLibrary(nodeSpecBySpecId);
+
+  const nodePackageSpecBySpecId: NodePackageLibrary = {};
+  const packageSpecs = [ethereumv1, basev1];
+  packageSpecs.forEach((spec) => {
+    try {
+      nodePackageSpecBySpecId[spec.specId] = spec as NodePackageSpecification;
+    } catch (err) {
+      logger.error(err);
+    }
+  });
+  console.log('nodePackageSpecBySpecId: ', nodePackageSpecBySpecId);
+
+  return updateNodePackageLibrary(nodePackageSpecBySpecId);
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Node, { NodeStatus } from '../../../common/node';
+import { NodeStatus, NodePackage } from '../../../common/node';
 import { getSyncStatus } from '../../Generics/redesign/utils';
 import { useGetExecutionIsSyncingQuery } from '../../state/services';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
@@ -50,7 +50,7 @@ export interface SidebarNodeItemWrapperProps {
    * Is the node selected?
    */
   selected?: boolean;
-  node: Node;
+  node: NodePackage;
 }
 
 export const SidebarNodeItemWrapper = ({

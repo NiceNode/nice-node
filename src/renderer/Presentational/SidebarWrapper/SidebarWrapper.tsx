@@ -4,6 +4,9 @@ import electron from '../../electronGlobal';
 import { useGetNotificationsQuery } from '../../state/notificationsService';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import {
+  selectSelectedNodePackageId,
+  selectUserNodePackages,
+  updateSelectedNodePackageId,
   selectSelectedNodeId,
   selectUserNodes,
   updateSelectedNodeId,
@@ -19,6 +22,8 @@ export interface SidebarWrapperProps {
 }
 
 export const SidebarWrapper = () => {
+  const sSelectedNodePackageId = useAppSelector(selectSelectedNodePackageId);
+  const sUserNodePackages = useAppSelector(selectUserNodePackages);
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const sUserNodes = useAppSelector(selectUserNodes);
   const dispatch = useAppDispatch();
@@ -78,14 +83,14 @@ export const SidebarWrapper = () => {
   // Default selected node to be the first node
   useEffect(() => {
     if (
-      !sSelectedNodeId &&
-      sUserNodes &&
-      Array.isArray(sUserNodes?.nodeIds) &&
-      sUserNodes.nodeIds.length > 0
+      !sSelectedNodePackageId &&
+      sUserNodePackages &&
+      Array.isArray(sUserNodePackages?.nodeIds) &&
+      sUserNodePackages.nodeIds.length > 0
     ) {
-      dispatch(updateSelectedNodeId(sUserNodes.nodeIds[0]));
+      dispatch(updateSelectedNodeId(sUserNodePackages.nodeIds[0]));
     }
-  }, [sSelectedNodeId, sUserNodes, dispatch]);
+  }, [sSelectedNodePackageId, sUserNodePackages, dispatch]);
 
   return (
     <Sidebar
@@ -94,8 +99,8 @@ export const SidebarWrapper = () => {
       updateAvailable={false}
       podmanInstalled={isPodmanInstalled}
       podmanStopped={!isPodmanRunning}
-      sUserNodes={sUserNodes}
-      selectedNodeId={sSelectedNodeId}
+      sUserNodePackages={sUserNodePackages}
+      selectedNodePackageId={sSelectedNodePackageId}
       onClickStartPodman={onClickStartPodman}
       onClickInstallPodman={onClickInstallPodman}
     />
