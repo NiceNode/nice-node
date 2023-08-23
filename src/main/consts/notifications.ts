@@ -4,6 +4,8 @@ export const TIME = Object.freeze({
   HOUR: 3600000,
   DAY: 86400000,
   WEEK: 604800000,
+  MONTH: 2592000000,
+  YEAR: 31536000000,
 });
 
 const enum STATUS {
@@ -64,6 +66,12 @@ export const NOTIFICATIONS = Object.freeze({
       description: 'All nodes affected',
       status: STATUS.WARNING,
       limit: TIME.HOUR,
+    },
+    PORT_CLOSED: {
+      title: 'Closed Ports',
+      description: 'Ports {variable} may not be open on your local network',
+      status: STATUS.WARNING,
+      limit: 0,
     },
   },
 });
