@@ -1,3 +1,4 @@
+import { didPortsChange } from '../ports';
 import { send } from '../messenger';
 import Node, {
   isDockerNode,
@@ -93,6 +94,9 @@ export const updateNodeProperties = (
     newNode,
     propertiesToUpdate,
   );
+  if (didPortsChange(propertiesToUpdate.config, node)) {
+    console.log('PORTS CHANGED');
+  }
   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${node.id}`, newNode);
   return getNode(node.id);
 };

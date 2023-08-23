@@ -1,5 +1,5 @@
 import { ConfigValue } from 'common/nodeConfig';
-import Node from 'common/node';
+import Node, { NodeConfig } from 'common/node';
 import { httpGet } from './httpReq';
 import { getNodes } from './state/nodes';
 
@@ -53,6 +53,48 @@ export const getClosedPorts = (
   openPorts: ConfigValue[],
 ): ConfigValue[] => {
   return configPorts.filter((port) => !openPorts.includes(port));
+};
+
+export const didPortsChange = (
+  objectValuesMap: NodeConfig,
+  node: Node,
+): boolean => {
+  if (!node || !node.spec || !node.spec.configTranslation) return false;
+
+  const baseKeys = ['httpPort', 'enginePort', 'webSocketsPort'];
+  const p2pKeys = ['p2pPortsUdp', 'p2pPortsTcp'];
+
+  const hasBaseKeyChanged = baseKeys.some((key) => {
+    const objectValue = objectValuesMap.configValuesMap[key];
+    const configValue = node.config?.configValuesMap?.[key];
+    const defaultValue = node.spec.configTranslation?.[key]?.defaultValue;
+    return (
+      (configValue && configValue !== objectValue) ||
+      (!configValue && defaultValue !== objectValue)
+    );
+  });
+
+  if (hasBaseKeyChanged) return true;
+
+  const objectP2PPort = objectValuesMap.configValuesMap.p2pPorts;
+  const configP2PPort = node.config?.configValuesMap?.p2pPorts;
+  const defaultP2PPort = node.spec.configTranslation.p2pPorts?.defaultValue;
+
+  if (objectP2PPort) {
+    return (
+      (configP2PPort && configP2PPort !== objectP2PPort) ||
+      (!configP2PPort && defaultP2PPort !== objectP2PPort)
+    );
+  }
+  return p2pKeys.some((key) => {
+    const objectValue = objectValuesMap.configValuesMap[key];
+    const configValue = node.config?.configValuesMap?.[key];
+    const defaultValue = node.spec.configTranslation?.[key]?.defaultValue;
+    return (
+      (configValue && configValue !== objectValue) ||
+      (!configValue && defaultValue !== objectValue)
+    );
+  });
 };
 
 /**
