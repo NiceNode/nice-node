@@ -1,43 +1,58 @@
 import { ConfigValue } from 'common/nodeConfig';
+import Node from 'common/node';
 import { httpGet } from './httpReq';
 import { getNodes } from './state/nodes';
+
+export const getPodmanPortsForNode = (node: Node): ConfigValue[] => {
+  const portsArray = [] as ConfigValue[];
+  const { configTranslation } = node.spec;
+
+  if (!configTranslation) return portsArray;
+
+  // Extract default port values safely with optional chaining
+  const defaultHttpPort = configTranslation.httpPort?.defaultValue;
+  const defaultWebSocketsPort = configTranslation.webSocketsPort?.defaultValue;
+  const defaultP2pPorts = configTranslation.p2pPorts?.defaultValue;
+  const defaultP2pPortsUdp = configTranslation.p2pPortsUdp?.defaultValue;
+  let defaultP2pPortsTcp = configTranslation.p2pPortsTcp?.defaultValue;
+  const defaultEnginePort = configTranslation.enginePort?.defaultValue;
+
+  // Check if UDP and TCP ports are the same, if yes, push only one value
+  if (defaultP2pPortsUdp === defaultP2pPortsTcp) {
+    defaultP2pPortsTcp = undefined;
+  }
+
+  // Filtering out undefined values and spreading them into the portsArray
+  portsArray.push(
+    ...[
+      defaultHttpPort,
+      defaultWebSocketsPort,
+      defaultP2pPorts,
+      defaultP2pPortsUdp,
+      defaultP2pPortsTcp,
+      defaultEnginePort,
+    ].filter(Boolean),
+  );
+
+  return portsArray;
+};
 
 export const getPodmanPorts = () => {
   const nodes = getNodes();
   const portsArray = [] as ConfigValue[];
 
   nodes.forEach((node) => {
-    const { configTranslation } = node.spec;
-    if (!configTranslation) return;
-
-    // Extract default port values safely with optional chaining
-    const defaultHttpPort = configTranslation.httpPort?.defaultValue;
-    const defaultWebSocketsPort =
-      configTranslation.webSocketsPort?.defaultValue;
-    const defaultP2pPorts = configTranslation.p2pPorts?.defaultValue;
-    const defaultP2pPortsUdp = configTranslation.p2pPortsUdp?.defaultValue;
-    let defaultP2pPortsTcp = configTranslation.p2pPortsTcp?.defaultValue;
-    const defaultEnginePort = configTranslation.enginePort?.defaultValue;
-
-    // Check if UDP and TCP ports are the same, if yes, push only one value
-    if (defaultP2pPortsUdp === defaultP2pPortsTcp) {
-      defaultP2pPortsTcp = undefined;
-    }
-
-    // Filtering out undefined values and spreading them into the portsArray
-    portsArray.push(
-      ...[
-        defaultHttpPort,
-        defaultWebSocketsPort,
-        defaultP2pPorts,
-        defaultP2pPortsUdp,
-        defaultP2pPortsTcp,
-        defaultEnginePort,
-      ].filter(Boolean),
-    );
+    portsArray.push(...getPodmanPortsForNode(node));
   });
 
   return portsArray;
+};
+
+export const getClosedPorts = (
+  configPorts: ConfigValue[],
+  openPorts: ConfigValue[],
+): ConfigValue[] => {
+  return configPorts.filter((port) => !openPorts.includes(port));
 };
 
 /**
@@ -45,7 +60,9 @@ export const getPodmanPorts = () => {
  * @param ports
  * @returns path of the downloaded file
  */
-export const checkPorts = async (ports: number[]): Promise<any> => {
+export const checkPorts = async (
+  ports: number[] | ConfigValue[],
+): Promise<any> => {
   const baseUrl = 'https://port-checker.vercel.app/api/checker';
   const url = `${baseUrl}?ports=${ports.join(',')}`;
 
