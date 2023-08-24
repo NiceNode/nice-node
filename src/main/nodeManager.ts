@@ -141,6 +141,21 @@ export const stopNode = async (nodeId: NodeId) => {
   }
 };
 
+export const resetNodeConfig = (nodeId: NodeId) => {
+  // get the existing NodeSpec, and storageLocation which will be passed into addNode
+  const existingNode = nodeStore.getNode(nodeId);
+
+  existingNode.config.configValuesMap = existingNode.spec.execution.input
+    ?.defaultConfig as ConfigValuesMap;
+  existingNode.runtime.usage = {
+    diskGBs: [],
+    memoryBytes: [],
+    cpuPercent: [],
+    syncedBlock: 0,
+  };
+  nodeStore.updateNode(existingNode);
+};
+
 export const deleteNodeStorage = async (nodeId: NodeId) => {
   const node = nodeStore.getNode(nodeId);
   const nodeDataDirPath = node.runtime.dataDir;

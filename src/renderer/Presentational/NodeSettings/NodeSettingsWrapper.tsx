@@ -21,12 +21,14 @@ export type SettingChangeHandler = (
 export interface NodeSettingsWrapperProps {
   modalOnChangeConfig: (config: ModalConfig, save?: true) => void;
   disableSaveButton: (value: boolean) => void;
+  modalOnClose: () => void;
 }
 
 const HTTP_CORS_DOMAINS_KEY = 'httpCorsDomains';
 
 const NodeSettingsWrapper = ({
   modalOnChangeConfig,
+  modalOnClose,
   disableSaveButton,
 }: NodeSettingsWrapperProps) => {
   const [sIsConfigDisabled, setIsConfigDisabled] = useState<boolean>(true);
@@ -260,6 +262,12 @@ const NodeSettingsWrapper = ({
             screen: { route: 'removeNode', type: 'alert' },
           }),
         );
+      }}
+      onClickResetConfig={() => {
+        if (selectedNode) {
+          electron.resetNodeConfig(selectedNode.id);
+          modalOnClose();
+        }
       }}
       nodeStartCommand={sNodeStartCommand}
     />
