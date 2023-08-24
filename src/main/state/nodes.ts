@@ -1,4 +1,4 @@
-import { didPortsChange } from '../ports';
+import { checkNodePortsAndNotify, didPortsChange } from '../ports';
 import { send } from '../messenger';
 import Node, {
   isDockerNode,
@@ -95,7 +95,7 @@ export const updateNodeProperties = (
     propertiesToUpdate,
   );
   if (didPortsChange(propertiesToUpdate.config, node)) {
-    console.log('PORTS CHANGED');
+    // getSetHasPortChanged(true);
   }
   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${node.id}`, newNode);
   return getNode(node.id);
@@ -150,6 +150,17 @@ export const setDockerNodeStatus = (
   // search all contianerIds for matching one
   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${nodeToUpdate.id}.status`, status);
   return getNode(nodeToUpdate.id);
+};
+
+export const getSetHasPortChanged = (hasPortChanged?: boolean) => {
+  // if (hasPortChanged !== undefined) {
+  //   logger.info(`Setting hasPortChanged to ${hasPortChanged}`);
+  //   store.set(`${SETTINGS_KEY}.${APP_HAS_PORT_CHANGED}`, hasPortChanged);
+  // }
+  // const hasPortChangedValue: boolean = store.get(
+  //   `${SETTINGS_KEY}.${APP_HAS_PORT_CHANGED}`,
+  // );
+  // return hasPortChangedValue;
 };
 
 // todo: an optimization

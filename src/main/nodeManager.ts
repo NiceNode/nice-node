@@ -23,9 +23,8 @@ import * as nodeStore from './state/nodes';
 import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
 import { ConfigValuesMap } from '../common/nodeConfig';
-import { checkPorts, getClosedPorts, getPodmanPortsForNode } from './ports';
-import { addNotification } from './state/notifications';
-import { NOTIFICATIONS } from './consts/notifications';
+import { checkNodePortsAndNotify } from './ports';
+import { getSetHasPortChanged } from './state/settings';
 
 export const addNode = async (
   nodeSpec: NodeSpecification,
@@ -58,23 +57,7 @@ export const addNode = async (
   setTimeout(() => {
     const runningNode = nodeStore.getNodeBySpecId(node.spec.specId);
     if (runningNode?.status === NodeStatus.running) {
-      const podmanPorts = getPodmanPortsForNode(runningNode);
-      checkPorts(podmanPorts)
-        .then((openPorts) => {
-          const closedPorts = getClosedPorts(podmanPorts, openPorts);
-          if (closedPorts.length > 0) {
-            addNotification(
-              NOTIFICATIONS.WARNING.PORT_CLOSED,
-              closedPorts.join(', '),
-            );
-          }
-          return null;
-        })
-        .catch((error) => {
-          console.log('Error checking ports:', error.message);
-        });
-    } else {
-      console.log('error starting node');
+      checkNodePortsAndNotify(runningNode);
     }
   }, 600000);
   return node;
@@ -121,6 +104,10 @@ export const startNode = async (nodeId: NodeId) => {
       const containerIds = await startPodmanNode(dockerNode);
       dockerNode.runtime.processIds = containerIds;
       dockerNode.status = NodeStatus.running;
+      // if (getSetHasPortChanged()) {
+      checkNodePortsAndNotify(dockerNode);
+      // getSetHasPortChanged(false);
+      // }
       nodeStore.updateNode(dockerNode);
     }
   } catch (err) {

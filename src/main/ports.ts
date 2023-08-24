@@ -1,7 +1,9 @@
 import { ConfigValue } from 'common/nodeConfig';
-import Node, { NodeConfig } from 'common/node';
+import Node, { NodeConfig } from '../common/node';
 import { httpGet } from './httpReq';
 import { getNodes } from './state/nodes';
+import { addNotification } from './state/notifications';
+import { NOTIFICATIONS } from './consts/notifications';
 
 export const getPodmanPortsForNode = (node: Node): ConfigValue[] => {
   const portsArray = [] as ConfigValue[];
@@ -126,4 +128,22 @@ export const checkPorts = async (
       }
     });
   });
+};
+
+export const checkNodePortsAndNotify = (node: Node) => {
+  const podmanPorts = getPodmanPortsForNode(node);
+  checkPorts(podmanPorts)
+    .then((openPorts) => {
+      const closedPorts = getClosedPorts(podmanPorts, openPorts);
+      if (closedPorts.length > 0) {
+        addNotification(
+          NOTIFICATIONS.WARNING.PORT_CLOSED,
+          closedPorts.join(', '),
+        );
+      }
+      return null;
+    })
+    .catch((error) => {
+      console.log('Error checking ports:', error.message);
+    });
 };

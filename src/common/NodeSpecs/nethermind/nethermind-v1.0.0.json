@@ -9,12 +9,13 @@
       "defaultConfig": {
         "http": "Enabled",
         "syncMode": "snap",
-        "webSocketsPort": "8546"
+        "webSocketsPort": "8546",
+        "enginePort": "8551"
       },
       "docker": {
         "raw": "",
         "containerVolumePath": "/nethermind/data",
-        "forcedRawNodeInput": "--datadir /nethermind/data --JsonRpc.Host 0.0.0.0 --JsonRpc.EngineHost 0.0.0.0 --JsonRpc.EnginePort 8551 --JsonRpc.JwtSecretFile=/nethermind/data/jwtsecret"
+        "forcedRawNodeInput": "--datadir /nethermind/data --JsonRpc.Host 0.0.0.0 --JsonRpc.EngineHost 0.0.0.0 --JsonRpc.JwtSecretFile=/nethermind/data/jwtsecret"
       }
     },
     "architectures": {
