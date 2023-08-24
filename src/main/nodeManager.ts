@@ -22,9 +22,10 @@ import Node, {
 import * as nodeStore from './state/nodes';
 import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
-import { ConfigValuesMap } from '../common/nodeConfig';
+import { ConfigTranslationMap, ConfigValuesMap } from '../common/nodeConfig';
 import { checkNodePortsAndNotify } from './ports';
-import { getSetHasPortChanged } from './state/settings';
+import { getNodeLibrary } from './state/nodeLibrary';
+// import { getSetHasPortChanged } from './state/settings';
 
 export const addNode = async (
   nodeSpec: NodeSpecification,
@@ -142,17 +143,11 @@ export const stopNode = async (nodeId: NodeId) => {
 };
 
 export const resetNodeConfig = (nodeId: NodeId) => {
-  // get the existing NodeSpec, and storageLocation which will be passed into addNode
   const existingNode = nodeStore.getNode(nodeId);
 
   existingNode.config.configValuesMap = existingNode.spec.execution.input
     ?.defaultConfig as ConfigValuesMap;
-  existingNode.runtime.usage = {
-    diskGBs: [],
-    memoryBytes: [],
-    cpuPercent: [],
-    syncedBlock: 0,
-  };
+
   nodeStore.updateNode(existingNode);
 };
 
@@ -231,6 +226,27 @@ export const sendNodeLogs = (nodeId: NodeId) => {
   }
 };
 
+const compareSpecsAndUpdate = (
+  node: Node,
+  nodeLibraryConfigTranslation: ConfigTranslationMap | undefined,
+) => {
+  if (node.spec.configTranslation && nodeLibraryConfigTranslation) {
+    const nodeSpecKeys = Object.keys(node.spec.configTranslation);
+    const nodeLibraryKeys = Object.keys(nodeLibraryConfigTranslation);
+
+    // Compare the two sets of keys
+    const areKeysDifferent =
+      nodeSpecKeys.length !== nodeLibraryKeys.length ||
+      nodeSpecKeys.some((key) => !nodeLibraryKeys.includes(key)) ||
+      nodeLibraryKeys.some((key) => !nodeSpecKeys.includes(key));
+
+    // If the keys are different, overwrite node.spec.configTranslation
+    if (areKeysDifferent) {
+      node.spec.configTranslation = nodeLibraryConfigTranslation;
+    }
+  }
+};
+
 /**
  * Called on app launch.
  * Check's node processes and updates internal NiceNode records.
@@ -238,6 +254,7 @@ export const sendNodeLogs = (nodeId: NodeId) => {
 export const initialize = async () => {
   initDocker();
   initNodeLibrary();
+  const nodeLibrary = getNodeLibrary();
 
   // get all nodes
   const nodes = nodeStore.getNodes();
@@ -278,6 +295,10 @@ export const initialize = async () => {
           if (containerDetails?.State?.FinishedAt) {
             node.lastStopped = containerDetails?.State?.FinishedAt;
           }
+          compareSpecsAndUpdate(
+            node,
+            nodeLibrary[node.spec.specId].configTranslation,
+          );
           nodeStore.updateNode(node);
         } catch (err) {
           logger.error(`Docker found no container for nodeId ${node.id}`);
