@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { setModalState } from '../../state/modal';
 import electron from '../../electronGlobal';
-import { useAppDispatch } from '../../state/hooks';
 import RemoveNodeWrapper from '../RemoveNodeModal/RemoveNodeWrapper';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
@@ -12,7 +10,6 @@ type Props = {
 
 export const RemoveNodeModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
-  const dispatch = useAppDispatch();
   const modalTitle = 'Are you sure you want to remove this node?';
   const buttonSaveLabel = 'Remove node';
   const buttonSaveType = 'danger';
