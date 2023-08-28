@@ -36,15 +36,6 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
     modalOnClose();
   };
 
-  const onCancel = () => {
-    dispatch(
-      setModalState({
-        isModalOpen: true,
-        screen: { route: 'nodeSettings', type: 'modal' },
-      }),
-    );
-  };
-
   return (
     <Modal
       modalTitle={modalTitle}
@@ -53,7 +44,7 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
       buttonSaveType={buttonSaveType}
       modalOnSaveConfig={modalOnSaveConfig}
       modalOnClose={modalOnClose}
-      modalOnCancel={onCancel}
+      modalOnCancel={modalOnClose}
     >
       <RemoveNodeWrapper
         modalOnChangeConfig={(config, save) => {
