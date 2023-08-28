@@ -21,14 +21,12 @@ export type SettingChangeHandler = (
 export interface NodeSettingsWrapperProps {
   modalOnChangeConfig: (config: ModalConfig, save?: true) => void;
   disableSaveButton: (value: boolean) => void;
-  modalOnClose: () => void;
 }
 
 const HTTP_CORS_DOMAINS_KEY = 'httpCorsDomains';
 
 const NodeSettingsWrapper = ({
   modalOnChangeConfig,
-  modalOnClose,
   disableSaveButton,
 }: NodeSettingsWrapperProps) => {
   const [sIsConfigDisabled, setIsConfigDisabled] = useState<boolean>(true);
@@ -255,18 +253,14 @@ const NodeSettingsWrapper = ({
       isWalletSettingsEnabled={sIsWalletSettingsEnabled}
       isDisabled={sIsConfigDisabled}
       onChange={onNodeConfigChange}
-      onClickRemoveNode={() => {
-        dispatch(
-          setModalState({
-            isModalOpen: true,
-            screen: { route: 'removeNode', type: 'alert' },
-          }),
-        );
-      }}
       onClickResetConfig={() => {
         if (selectedNode) {
-          electron.resetNodeConfig(selectedNode.id);
-          modalOnClose();
+          dispatch(
+            setModalState({
+              isModalOpen: true,
+              screen: { route: 'resetConfig', type: 'alert' },
+            }),
+          );
         }
       }}
       nodeStartCommand={sNodeStartCommand}

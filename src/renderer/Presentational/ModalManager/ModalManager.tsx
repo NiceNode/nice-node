@@ -7,6 +7,7 @@ import { modalRoutes } from './modalUtils';
 import { NodeSettingsModal } from './NodeSettingsModal';
 import { PreferencesModal } from './PreferencesModal';
 import { RemoveNodeModal } from './RemoveNodeModal';
+import { ResetConfigModal } from './ResetConfigModal';
 import { AddNodeModal } from './AddNodeModal';
 import { AlphaBuildModal } from './AlphaBuildModal';
 import FailSystemRequirementsModal from './FailSystemRequirementsModal';
@@ -53,6 +54,8 @@ const ModalManager = () => {
       return null;
     case modalRoutes.removeNode:
       return <RemoveNodeModal modalOnClose={modalOnClose} />;
+    case modalRoutes.resetConfig:
+      return <ResetConfigModal modalOnClose={modalOnClose} />;
     case modalRoutes.updateUnavailable:
       return null;
     default:
