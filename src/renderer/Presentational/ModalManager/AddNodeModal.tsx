@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
-import { updateSelectedNodeId } from '../../state/node';
+import { updateSelectedNodePackageId } from '../../state/node';
 import AddNodeStepperModal from '../AddNodeStepper/AddNodeStepperModal';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
@@ -36,11 +36,14 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (modalConfig?.node && modalConfig?.nodeLibrary?.[modalConfig.node]) {
-      setSelectedNodeSpec(modalConfig?.nodeLibrary?.[modalConfig.node]);
+    if (
+      modalConfig?.node &&
+      modalConfig?.nodePackageLibrary?.[modalConfig.node]
+    ) {
+      setSelectedNodeSpec(modalConfig?.nodePackageLibrary?.[modalConfig.node]);
       console.log(
         'Node selected and node spec found: ',
-        modalConfig?.nodeLibrary?.[modalConfig.node],
+        modalConfig?.nodePackageLibrary?.[modalConfig.node],
       );
     }
   }, [modalConfig]);
@@ -81,15 +84,19 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       consensusClient,
       storageLocation,
       nodeLibrary,
+      nodePackageLibrary,
     } = updatedConfig || (modalConfig as ModalConfig);
 
     console.log('AddNodeModal modalOnSaveConfig(updatedConfig)', updatedConfig);
     // todo: add logic for Node change (ethereum, base, etc.)
     let nodePackageSpec: NodePackageSpecification;
-    if (nodeLibrary && node) {
-      nodePackageSpec = nodeLibrary?.[node];
+    if (nodePackageLibrary && node) {
+      nodePackageSpec = nodePackageLibrary?.[node];
+    } else {
+      console.error('nodePackageLibrary, node: ', nodePackageLibrary, node);
+      throw new Error('No Node Package Spec found for the selected node');
     }
-    let services: AddNodePackageNodeService[];
+    let services: AddNodePackageNodeService[] = [];
     // todo: take nodeSpecId and parse out the node spec from the library
     // use that to create the services array (todo: this should be done from selections screen)
     // Node Selections logic
@@ -100,6 +107,18 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       ccNodeSpec =
         nodeLibrary?.[consensusClient] ??
         nodeLibrary?.[`${consensusClient}-beacon`];
+      services = [
+        {
+          serviceId: 'executionClient',
+          serviceName: 'Execution Client',
+          spec: ecNodeSpec,
+        },
+        {
+          serviceId: 'consensusClient',
+          serviceName: 'Consensus Client',
+          spec: ccNodeSpec,
+        },
+      ];
     }
 
     if (!ecNodeSpec || !ccNodeSpec) {
@@ -113,14 +132,15 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     //   ccNodeSpec,
     //   { storageLocation },
     // );
+    // todo: loop over service selections by the user. for now hardcode ec & cc selections
     const { node: nodePackage } = await electron.addNodePackage(
-      node,
-
+      nodePackageSpec,
+      services,
       { storageLocation },
     );
     console.log('nodePackage result: ', nodePackage);
     reportEvent('AddNode');
-    dispatch(updateSelectedNodeId(ecNode.id));
+    dispatch(updateSelectedNodePackageId(nodePackage.id));
     // await electron.startNode(ecNode.id);
     // await electron.startNode(ccNode.id);
   };

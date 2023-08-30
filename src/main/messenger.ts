@@ -19,6 +19,7 @@ export const send = (channel: string, ...args: any[]): void => {
 
 export const CHANNELS = {
   userNodes: 'userNodes',
+  userNodePackages: 'userNodePackages',
   nodeLogs: 'nodeLogs',
   podman: 'podman',
   podmanInstall: 'podmanInstall',
@@ -26,7 +27,7 @@ export const CHANNELS = {
   notifications: 'notifications',
 };
 export const CHANNELS_ARRAY = [
-  'userNodes',
+  'userNodePackages',
   'nodeLogs',
   'podman',
   'podmanInstall',

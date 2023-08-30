@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NodeLibrary } from 'main/state/nodeLibrary';
+import { NodeLibrary, NodePackageLibrary } from 'main/state/nodeLibrary';
 import { ModalConfig } from '../ModalManager/modalUtils';
 import {
   container,
@@ -98,6 +98,8 @@ AddBaseNodeProps) => {
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
       const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
+      const nodePackageLibrary: NodePackageLibrary =
+        await electron.getNodePackageLibrary();
       console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
       setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
       if (modalOnChangeConfig) {
@@ -106,6 +108,7 @@ AddBaseNodeProps) => {
           consensusClient: sSelectedConsensusClient.value,
           storageLocation: defaultNodesStorageDetails.folderPath,
           nodeLibrary,
+          nodePackageLibrary,
         });
       }
       setNodeStorageLocationFreeStorageGBs(

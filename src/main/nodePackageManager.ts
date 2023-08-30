@@ -12,7 +12,7 @@ import Node, {
 } from '../common/node';
 import * as nodePackageStore from './state/nodePackages';
 import { getNodesDirPath, makeNodeDir } from './files';
-import { addNode } from './nodeManager';
+import { addNode, removeAllNodes } from './nodeManager';
 import { createJwtSecretAtDirs } from './util/jwtSecrets';
 
 // Created when adding a node and is used to pair a node spec and config
@@ -89,4 +89,16 @@ export const addNodePackage = async (
   );
 
   return nodePackage;
+};
+
+/**
+ * Removes all node packages, then remove all node services and deletes their storage data
+ */
+export const removeAllNodePackages = async () => {
+  const nodes = nodePackageStore.getNodePackages();
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    await nodePackageStore.removeNodePackage(node.id);
+  }
+  await removeAllNodes();
 };

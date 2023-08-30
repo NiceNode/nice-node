@@ -1,4 +1,4 @@
-import { send } from '../messenger';
+import { CHANNELS, send } from '../messenger';
 import Node, {
   isDockerNode,
   NodeId,
@@ -42,7 +42,7 @@ const initialize = () => {
 
   // Notify the UI when values change
   store.onDidChange(USER_NODE_PACKAGES_KEY, (newValue: UserNodePackages) => {
-    send(USER_NODE_PACKAGES_KEY, newValue);
+    send(CHANNELS.userNodePackages, newValue);
   });
 };
 initialize();
@@ -157,6 +157,7 @@ export const setDockerNodeStatus = (
   return getNodePackage(nodeToUpdate.id);
 };
 
+// todo: remove node services
 export const removeNodePackage = (nodeId: NodeId) => {
   // todo: check if node can be removed. Is it stopped?
   // todo: stop & remove container

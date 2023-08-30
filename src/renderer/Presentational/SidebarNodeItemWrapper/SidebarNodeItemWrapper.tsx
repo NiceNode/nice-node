@@ -101,8 +101,8 @@ export const SidebarNodeItemWrapper = ({
   return (
     <SidebarNodeItem
       // temp fix
-      key={id}
-      iconId={spec.specId.replace('-beacon', '')}
+      key={spec.specId || id}
+      iconId={spec.specId?.replace('-beacon', '')}
       title={spec.displayName}
       info={spec.displayName}
       status={sidebarStatus}

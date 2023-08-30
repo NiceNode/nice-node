@@ -142,7 +142,7 @@ const Sidebar = ({
               node={node}
               selected={selectedNodePackageId === node.id}
               onClick={() => {
-                navigate('/main/node');
+                navigate('/main/nodePackage');
                 dispatch(updateSelectedNodePackageId(node.id));
               }}
             />

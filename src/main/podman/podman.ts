@@ -447,7 +447,7 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
 
 export const isPodmanInstalled = async () => {
   let bIsPodmanInstalled;
-  logger.info('Checking isPodmanInstalled...');
+  // logger.info('Checking isPodmanInstalled...');
   try {
     const infoResult = await runCommand('-v');
     console.log('podman infoResult: ', infoResult);
@@ -461,7 +461,7 @@ export const isPodmanInstalled = async () => {
     // podman not installed?
     logger.info('Podman install not found.');
   }
-  logger.info(`isPodmanInstalled: ${bIsPodmanInstalled}`);
+  // logger.info(`isPodmanInstalled: ${bIsPodmanInstalled}`);
   return bIsPodmanInstalled;
 };
 
@@ -480,7 +480,7 @@ export const isPodmanRunning = async () => {
   if (!bIsPodmanRunning) {
     logger.info(`Podman isn't running`);
   } else {
-    logger.info(`Podman is running`);
+    // logger.info(`Podman is running`);
   }
   return bIsPodmanRunning;
 };

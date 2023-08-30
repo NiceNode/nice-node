@@ -1,7 +1,7 @@
 import React from 'react';
 import Node from 'common/node';
 import { ThemeSetting } from 'main/state/settings';
-import { NodeLibrary } from 'main/state/nodeLibrary';
+import { NodeLibrary, NodePackageLibrary } from 'main/state/nodeLibrary';
 
 export interface ModalConfig {
   node?: string;
@@ -18,6 +18,7 @@ export interface ModalConfig {
   settingsConfig?: object;
   newDataDir?: string;
   nodeLibrary?: NodeLibrary;
+  nodePackageLibrary?: NodePackageLibrary;
   // eslint-disable-next-line
   [key: string]: any;
 }

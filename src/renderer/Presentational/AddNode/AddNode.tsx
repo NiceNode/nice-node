@@ -75,6 +75,15 @@ const AddNode = ({
       }
     };
     fetchData();
+
+    // Modal Parent needs updated with the default initial value
+    const ethNodeConfig = {
+      node: sSelectedNode,
+    };
+    if (setNode) {
+      setNode(sSelectedNode, ethNodeConfig);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -94,6 +103,10 @@ const AddNode = ({
 
   useEffect(() => {
     if (onChange) {
+      console.log(
+        'AddNode.tsx: useEffect[onChange, sSelectedNode]: sSelectedNode is ',
+        sSelectedNode,
+      );
       onChange({
         node: sSelectedNode,
       });

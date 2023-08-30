@@ -33,12 +33,12 @@ export const RtkqSettingsService: any = createApi({
       queryFn: async () => {
         let data;
         try {
-          console.log('RtkqSettingsService isPodmanInstalled() calling..');
+          // console.log('RtkqSettingsService isPodmanInstalled() calling..');
           data = await electron.getIsPodmanInstalled();
-          console.log(
-            'RtkqSettingsService isPodmanInstalled() returned ',
-            data,
-          );
+          // console.log(
+          //   'RtkqSettingsService isPodmanInstalled() returned ',
+          //   data,
+          // );
         } catch (e) {
           const error = { message: 'Unable to getIsPodmanInstalled' };
           console.log(e);
@@ -51,12 +51,12 @@ export const RtkqSettingsService: any = createApi({
       queryFn: async () => {
         let data;
         try {
-          console.log('RtkqSettingsService getIsPodmanRunning() calling..');
+          // console.log('RtkqSettingsService getIsPodmanRunning() calling..');
           data = await electron.getIsPodmanRunning();
-          console.log(
-            'RtkqSettingsService getIsPodmanRunning() returned ',
-            data,
-          );
+          // console.log(
+          //   'RtkqSettingsService getIsPodmanRunning() returned ',
+          //   data,
+          // );
         } catch (e) {
           const error = { message: 'Unable to getIsPodmanRunning' };
           console.log(e);

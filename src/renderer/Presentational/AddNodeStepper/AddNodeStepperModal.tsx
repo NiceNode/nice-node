@@ -104,6 +104,9 @@ const AddNodeStepperModal = ({
     nodeConfig: AddNodeValues,
   ) => {
     const config = { ...nodeConfig, node: nodeSelectOption };
+    console.log('AddNodeStepperModal calling modalOnChangeConfig()', {
+      node: nodeSelectOption.value,
+    });
     modalOnChangeConfig({
       node: nodeSelectOption.value,
     });
