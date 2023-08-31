@@ -1,4 +1,4 @@
-import { checkNodePortsAndNotify, didPortsChange } from '../ports';
+import { didPortsChange } from '../ports';
 import { send } from '../messenger';
 import Node, {
   isDockerNode,
