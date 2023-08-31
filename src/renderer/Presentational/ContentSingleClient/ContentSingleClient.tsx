@@ -51,7 +51,15 @@ export type SingleNodeContent = {
   onAction?: (action: NodeAction) => void;
 };
 
-const ContentSingleClient = (props: SingleNodeContent) => {
+type ContentSingleClientProps = {
+  nodeContent: SingleNodeContent;
+  isPodmanRunning: boolean;
+};
+
+const ContentSingleClient = ({
+  nodeContent,
+  isPodmanRunning,
+}: ContentSingleClientProps) => {
   /* TODO: maybe a "provider" wrapper/manager to fetch data and handle states */
 
   // TODO: refactor this out so that it can be shared with multiple, single, and validator?
@@ -67,20 +75,21 @@ const ContentSingleClient = (props: SingleNodeContent) => {
   //   };
   // };
 
-  const nodeOverview = props;
-
   // TODO: retrieve initial data for all pages
 
-  console.log('diskFree', nodeOverview.tabsData?.diskFree);
+  const { tabsData, name } = nodeContent;
 
   return (
     <>
       {/* todo: fix temp type casting */}
-      <Header {...(nodeOverview as unknown as NodeOverviewProps)} />
+      <Header
+        nodeContent={nodeContent as unknown as NodeOverviewProps}
+        isPodmanRunning={isPodmanRunning}
+      />
       <div>
         <HorizontalLine type="content" />
       </div>
-      <HeaderMetrics {...(nodeOverview as unknown as NodeOverviewProps)} />
+      <HeaderMetrics {...(nodeContent as unknown as NodeOverviewProps)} />
       <div>
         <HorizontalLine type="above-tab" />
       </div>
@@ -90,16 +99,16 @@ const ContentSingleClient = (props: SingleNodeContent) => {
         </div> */}
         <div id="CPU">
           <TabContent
-            name={nodeOverview.name}
+            name={name}
             tabId="CPU"
-            metricData={nodeOverview.tabsData?.cpuPercent}
+            metricData={tabsData?.cpuPercent}
           />
         </div>
         <div id="Memory">
           <TabContent
-            name={nodeOverview.name}
+            name={name}
             tabId="Memory"
-            metricData={nodeOverview.tabsData?.memoryPercent}
+            metricData={tabsData?.memoryPercent}
           />
         </div>
         {/* <div id="Network">
@@ -107,12 +116,12 @@ const ContentSingleClient = (props: SingleNodeContent) => {
         </div> */}
         <div id="Disk">
           <TabContent
-            name={nodeOverview.name}
+            name={name}
             tabId="Disk"
-            metricData={nodeOverview.tabsData?.diskUsed}
+            metricData={tabsData?.diskUsed}
             diskData={{
-              diskFree: nodeOverview.tabsData?.diskFree || 0,
-              diskTotal: nodeOverview.tabsData?.diskTotal || 0,
+              diskFree: tabsData?.diskFree || 0,
+              diskTotal: tabsData?.diskTotal || 0,
             }}
           />
         </div>

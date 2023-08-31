@@ -16,6 +16,7 @@ import {
   useGetExecutionPeersQuery,
   useGetNodeVersionQuery,
 } from '../../state/services';
+import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 // import { useGetNetworkConnectedQuery } from './state/network';
 import ContentSingleClient, {
   SingleNodeContent,
@@ -68,6 +69,14 @@ const NodeScreen = () => {
       pollingInterval,
     },
   );
+
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
+    pollingInterval: 15000,
+  });
+  let isPodmanRunning = true;
+  if (qIsPodmanRunning && !qIsPodmanRunning.fetching) {
+    isPodmanRunning = qIsPodmanRunning.data;
+  }
 
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
@@ -377,7 +386,12 @@ const NodeScreen = () => {
     onAction: onNodeAction,
   };
   console.log('passing content to NodeScreen: ', nodeContent);
-  return <ContentSingleClient {...nodeContent} />;
+  return (
+    <ContentSingleClient
+      nodeContent={nodeContent}
+      isPodmanRunning={isPodmanRunning}
+    />
+  );
 
   // start button disabled logic
   // disabled={

@@ -22,11 +22,16 @@ import {
   menuButtonContainer,
 } from './header.css';
 
+type HeaderProps = {
+  nodeContent: NodeOverviewProps;
+  isPodmanRunning: boolean;
+};
 /**
  * Primary UI component for user interaction
  */
-export const Header = (props: NodeOverviewProps) => {
-  const { name, title, info, screenType, status, version, onAction } = props;
+export const Header = ({ nodeContent, isPodmanRunning }: HeaderProps) => {
+  const { name, title, info, screenType, status, version, onAction } =
+    nodeContent;
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
   const [isSettingsDisplayed, setIsSettingsDisplayed] =
@@ -114,6 +119,7 @@ export const Header = (props: NodeOverviewProps) => {
           {...startStopButtonProps}
           variant="icon-left"
           size="small"
+          disabled={isPodmanRunning === false}
           type={
             startStopButtonProps.iconId === 'play' ? 'primary' : 'secondary'
           }
