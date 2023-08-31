@@ -70,9 +70,7 @@ const NodeScreen = () => {
     },
   );
 
-  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
-    pollingInterval: 15000,
-  });
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery();
   let isPodmanRunning = true;
   if (qIsPodmanRunning && !qIsPodmanRunning.fetching) {
     isPodmanRunning = qIsPodmanRunning.data;

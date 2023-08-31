@@ -25,9 +25,7 @@ export const SidebarWrapper = () => {
   // todo: implement a back-off polling strategy which can be "reset"
   const qIsPodmanInstalled = useGetIsPodmanInstalledQuery();
   const isPodmanInstalled = qIsPodmanInstalled?.data;
-  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
-    pollingInterval: 15000,
-  });
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery();
   // default to docker is running while data is being fetched, so
   //  the user isn't falsely warned
   let isPodmanRunning = true;
