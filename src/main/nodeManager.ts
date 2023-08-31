@@ -253,7 +253,7 @@ export const sendNodeLogs = (nodeId: NodeId) => {
 export const initialize = async () => {
   initDocker();
   initNodeLibrary();
-  const nodeLibrary = getNodeLibrary();
+  // const nodeLibrary = getNodeLibrary();
 
   // get all nodes
   const nodes = nodeStore.getNodes();
