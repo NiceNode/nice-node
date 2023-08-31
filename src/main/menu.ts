@@ -16,6 +16,7 @@ import { checkForUpdates } from './updater';
 import uninstallPodman from './podman/uninstall/uninstall';
 import nuclearUninstall from './nuclearUninstall';
 import { getFailSystemRequirements } from './minSystemRequirement';
+import { checkNodePortsAndNotify } from './ports';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -197,6 +198,13 @@ export default class MenuBuilder {
           label: 'Show Alpha Modal',
           click() {
             getSetHasSeenAlphaModal(false);
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Check Ports',
+          click() {
+            checkNodePortsAndNotify();
           },
         },
         { type: 'separator' },

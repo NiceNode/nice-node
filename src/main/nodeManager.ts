@@ -24,7 +24,7 @@ import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
 import { ConfigValuesMap } from '../common/nodeConfig';
 import { checkNodePortsAndNotify } from './ports';
-import { getSetHasPortChanged } from './state/settings';
+import { getSetPortHasChanged } from './state/nodes';
 
 export const addNode = async (
   nodeSpec: NodeSpecification,
@@ -104,10 +104,9 @@ export const startNode = async (nodeId: NodeId) => {
       const containerIds = await startPodmanNode(dockerNode);
       dockerNode.runtime.processIds = containerIds;
       dockerNode.status = NodeStatus.running;
-      // if (getSetHasPortChanged()) {
-      checkNodePortsAndNotify(dockerNode);
-      // getSetHasPortChanged(false);
-      // }
+      if (getSetPortHasChanged(dockerNode)) {
+        checkNodePortsAndNotify(dockerNode);
+      }
       nodeStore.updateNode(dockerNode);
     }
   } catch (err) {
