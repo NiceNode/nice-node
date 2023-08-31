@@ -9,6 +9,7 @@ import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import {
   selectIsAvailableForPolling,
   selectSelectedNodePackage,
+  updateSelectedNodeId,
 } from '../../state/node';
 import {
   useGetExecutionIsSyncingQuery,
@@ -21,7 +22,7 @@ import ContentSingleClient, {
   SingleNodeContent,
 } from '../ContentSingleClient/ContentSingleClient';
 import { hexToDecimal } from '../../utils';
-import { NodeAction } from '../../Generics/redesign/consts';
+import { ClientProps, NodeAction } from '../../Generics/redesign/consts';
 import Button from '../../Generics/redesign/Button/Button';
 import {
   container,
@@ -30,15 +31,19 @@ import {
   descriptionFont,
 } from './NodePackageScreen.css';
 import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
+import { useNavigate } from 'react-router-dom';
+import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
 
 let alphaModalRendered = false;
 
 const NodePackageScreen = () => {
   // const { t } = useTranslation();
+  const navigate = useNavigate();
   const selectedNodePackage = useAppSelector(selectSelectedNodePackage);
   const qNodeVersion = useGetNodeVersionQuery(
     selectedNodePackage?.spec.rpcTranslation,
   );
+  const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>();
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
@@ -241,6 +246,23 @@ const NodePackageScreen = () => {
   // });
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    // format for presentation
+    const formattedServices: ClientProps[] = [];
+    selectedNodePackage?.services.map((service) => {
+      const serviceProps: ClientProps = {
+        id: service.node.id,
+        name: service.node.spec.displayName as NodeBackgroundId,
+        version: '',
+        nodeType: service.serviceName,
+        status: {},
+        stats: {},
+      };
+      formattedServices.push(serviceProps);
+    });
+    setFormattedServices(formattedServices);
+  }, [selectedNodePackage?.services]);
+
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {
     dispatch(
       setModalState({
@@ -380,14 +402,62 @@ const NodePackageScreen = () => {
     },
     onAction: onNodeAction,
   };
+
+  /**
+   * export interface ClientStatusProps {
+  updating?: boolean;
+  initialized?: boolean; // initial initialization is done
+  synchronized?: boolean; // constantly updated from checking current / height slot or block
+  lowPeerCount?: boolean;
+  updateAvailable?: boolean;
+  blocksBehind?: boolean;
+  noConnection?: boolean;
+  stopped?: boolean;
+  error?: boolean;
+}
+
+export interface ClientStatsProps {
+  currentBlock?: number;
+  highestBlock?: number;
+  currentSlot?: number;
+  highestSlot?: number;
+  peers?: number;
+  cpuLoad?: number;
+  diskUsageGBs?: number;
+  rewards?: number;
+  balance?: number;
+  stake?: number;
+}
+
+export interface ClientProps {
+  name: NodeBackgroundId;
+  version: string;
+  nodeType: string;
+  status: ClientStatusProps;
+  stats: ClientStatsProps;
+}
+   */
   console.log('passing content to NodePackageScreen: ', nodeContent);
+
   // todo: use ContentMultiClient
   // return <ContentSingleClient {...nodeContent} />;
   return (
     <div>
+      <ContentMultipleClients clients={sFormattedServices} />
       <p>{JSON.stringify(nodeContent)}</p>
       {selectedNodePackage.services.map((service) => {
-        return <p>{service.serviceName}</p>;
+        return (
+          <div>
+            <Button
+              label={service.node.spec.displayName}
+              onClick={() => {
+                navigate('/main/node');
+                dispatch(updateSelectedNodeId(service.node.id));
+              }}
+            ></Button>
+            <p>{service.serviceName}</p>
+          </div>
+        );
       })}
     </div>
   );

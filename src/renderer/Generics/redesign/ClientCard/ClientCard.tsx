@@ -1,4 +1,7 @@
-import { NODE_BACKGROUNDS } from '../../../assets/images/nodeBackgrounds';
+import {
+  NODE_BACKGROUNDS,
+  NodeBackgroundId,
+} from '../../../assets/images/nodeBackgrounds';
 import {
   container,
   cardTop,
@@ -51,8 +54,11 @@ const getLabelDetails = (label: string) => {
 /**
  * Primary UI component for user interaction
  */
-export const ClientCard = (props: ClientProps) => {
-  const { status, name, nodeType, stats } = props;
+type Props = ClientProps & {
+  onClick?: () => void;
+};
+export const ClientCard = (props: Props) => {
+  const { status, name, nodeType, stats, onClick } = props;
   const isNotCloseToSynchronized =
     (stats.highestSlot &&
       stats.currentSlot &&
@@ -79,7 +85,12 @@ export const ClientCard = (props: ClientProps) => {
           {/* TODO: modify height of the bar for card */}
           <ProgressBar
             card
-            color={common.color[name]}
+            color={
+              common.color[name as NodeBackgroundId] ??
+              common.color.randomNode[
+                Math.floor(Math.random() * common.color.randomNode.length)
+              ]
+            }
             progress={progress}
             caption={caption}
           />
@@ -113,10 +124,20 @@ export const ClientCard = (props: ClientProps) => {
 
   const stoppedStyle = status.stopped ? 'stopped' : '';
   return (
-    <div className={container}>
+    <div
+      className={container}
+      onClick={() => {
+        console.log('Client clicked');
+        if (onClick) {
+          onClick();
+        }
+      }}
+    >
       <div
         style={{
-          backgroundImage: `url(${NODE_BACKGROUNDS[name]})`,
+          backgroundImage: `url(${
+            NODE_BACKGROUNDS[name as NodeBackgroundId] ?? ''
+          })`,
           height: isNotSynchronizedAndNotStopped ? 166 : 186,
         }}
         className={[cardTop, `${stoppedStyle}`].join(' ')}

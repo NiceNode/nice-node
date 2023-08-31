@@ -115,6 +115,7 @@ export const common = {
     prysm: '#67B2B8',
     erigon: '#AE793C',
     geth: '#18BC9C',
+    randomNode: ['#18BC9C', '#2C56DE', '#D21ED2'],
     green: 'rgba(62, 187, 100, 1)',
     yellow: 'rgba(251, 146, 65, 1)',
     red: 'rgba(235, 83, 76, 1)',

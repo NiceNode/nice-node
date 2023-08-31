@@ -1,11 +1,10 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
-import wallet from '../../../assets/images/artwork/wallet.png';
 
 // required to export even if not using in a component
 export const container = style({
   boxSizing: 'border-box',
-  backgroundImage: `url(${wallet})`,
+  // backgroundImage: `url(${wallet})`,
   backgroundColor: vars.components.walletPromptBackground,
   backgroundSize: '214px 154px',
   backgroundRepeat: 'no-repeat',

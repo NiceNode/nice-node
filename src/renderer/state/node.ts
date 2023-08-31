@@ -95,6 +95,7 @@ export const nodeSlice = createSlice({
       state,
       action: PayloadAction<NodeId | undefined>,
     ) => {
+      console.log('State update updateSelectedNodePackageId: ', state, action);
       state.selectedNodePackageId = action.payload;
       setSelectedNodePackage(state);
       setIsAvailableForPolling(state);
@@ -141,7 +142,7 @@ export const selectUserNodePackages = (
 ): UserNodePackages | undefined => state.node.userNodePackages;
 export const selectSelectedNodePackageId = (
   state: RootState,
-): NodeId | undefined => state.node.selectedNodeId;
+): NodeId | undefined => state.node.selectedNodePackageId;
 export const selectSelectedNodePackage = (
   state: RootState,
 ): NodePackage | undefined => state.node.selectedNodePackage;

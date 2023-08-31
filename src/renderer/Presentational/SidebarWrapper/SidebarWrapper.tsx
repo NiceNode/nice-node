@@ -7,9 +7,6 @@ import {
   selectSelectedNodePackageId,
   selectUserNodePackages,
   updateSelectedNodePackageId,
-  selectSelectedNodeId,
-  selectUserNodes,
-  updateSelectedNodeId,
 } from '../../state/node';
 import {
   useGetIsPodmanRunningQuery,
@@ -88,7 +85,7 @@ export const SidebarWrapper = () => {
       Array.isArray(sUserNodePackages?.nodeIds) &&
       sUserNodePackages.nodeIds.length > 0
     ) {
-      dispatch(updateSelectedNodeId(sUserNodePackages.nodeIds[0]));
+      dispatch(updateSelectedNodePackageId(sUserNodePackages.nodeIds[0]));
     }
   }, [sSelectedNodePackageId, sUserNodePackages, dispatch]);
 

@@ -17,13 +17,21 @@ import {
   clientCardsContainer,
   resourcesContainer,
 } from './contentMultipleClients.css';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from 'renderer/state/hooks';
+import { updateSelectedNodeId } from 'renderer/state/node';
 
 const resourceJson = require('./resources.json');
 
 const ContentMultipleClients = (props: {
-  clients: [ClientProps, ClientProps];
+  clients: ClientProps[] | undefined;
 }) => {
   const { clients } = props;
+  if (!clients || clients.length < 2) {
+    return <>2 or more clients required</>;
+  }
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   // TODO: Come up with a better name for this component..
   /* TODO: maybe a "provider" wrapper/manager to fetch data and handle states */
 
@@ -178,7 +186,16 @@ const ContentMultipleClients = (props: {
       <div className={sectionTitle}>Ethereum Clients</div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
-          return <ClientCard {...client} />;
+          return (
+            <ClientCard
+              {...client}
+              onClick={() => {
+                console.log('ContentMultipleClients client on click!');
+                navigate('/main/node');
+                dispatch(updateSelectedNodeId(client.id));
+              }}
+            />
+          );
         })}
       </div>
       <HorizontalLine type="content" />

@@ -1,5 +1,6 @@
 import { NodeBackgroundId } from 'renderer/assets/images/nodeBackgrounds';
 import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
+import { NodeId } from 'common/node';
 
 export interface ClientStatusProps {
   updating?: boolean;
@@ -27,7 +28,8 @@ export interface ClientStatsProps {
 }
 
 export interface ClientProps {
-  name: NodeBackgroundId;
+  id: NodeId;
+  name: NodeBackgroundId | string;
   version: string;
   nodeType: string;
   status: ClientStatusProps;
