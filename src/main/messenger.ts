@@ -24,6 +24,7 @@ export const CHANNELS = {
   podmanInstall: 'podmanInstall',
   theme: 'theme',
   notifications: 'notifications',
+  reportEvent: 'reportEvent',
 };
 export const CHANNELS_ARRAY = [
   'userNodes',
@@ -32,4 +33,5 @@ export const CHANNELS_ARRAY = [
   'podmanInstall',
   'theme',
   'notifications',
+  'reportEvent',
 ];

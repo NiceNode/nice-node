@@ -1,7 +1,7 @@
 import { ConfigValue } from 'common/nodeConfig';
 import Node, { NodeConfig } from '../common/node';
 import { httpGet } from './httpReq';
-import { getNodes } from './state/nodes';
+import { getNodes, getSetPortHasChanged } from './state/nodes';
 import { addNotification } from './state/notifications';
 import { NOTIFICATIONS } from './consts/notifications';
 
@@ -130,8 +130,8 @@ export const checkPorts = async (
   });
 };
 
-export const checkNodePortsAndNotify = (node: Node) => {
-  const podmanPorts = getPodmanPortsForNode(node);
+export const checkNodePortsAndNotify = (node?: Node) => {
+  const podmanPorts = node ? getPodmanPortsForNode(node) : getPodmanPorts();
   checkPorts(podmanPorts)
     .then((openPorts) => {
       const closedPorts = getClosedPorts(podmanPorts, openPorts);
@@ -140,6 +140,9 @@ export const checkNodePortsAndNotify = (node: Node) => {
           NOTIFICATIONS.WARNING.PORT_CLOSED,
           closedPorts.join(', '),
         );
+      }
+      if (node) {
+        getSetPortHasChanged(node, false);
       }
       return null;
     })
