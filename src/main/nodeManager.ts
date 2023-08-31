@@ -24,7 +24,7 @@ import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
 import { ConfigValuesMap } from '../common/nodeConfig';
 import { checkNodePortsAndNotify } from './ports';
-import { getNodeLibrary } from './state/nodeLibrary';
+// import { getNodeLibrary } from './state/nodeLibrary';
 import { getSetPortHasChanged } from './state/nodes';
 
 export const addNode = async (
