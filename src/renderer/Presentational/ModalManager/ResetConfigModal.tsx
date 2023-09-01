@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { setModalState } from '../../state/modal';
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
@@ -13,8 +14,9 @@ type Props = {
 export const ResetConfigModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const dispatch = useAppDispatch();
-  const modalTitle = 'Are you sure you want to reset config to defaults?';
-  const buttonSaveLabel = 'Reset Config';
+  const { t } = useTranslation();
+  const modalTitle = t('ResetNodeSettingsQuestion');
+  const buttonSaveLabel = t('ResetNodeSettingsModal');
   const buttonSaveType = 'danger';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
