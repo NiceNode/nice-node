@@ -24,7 +24,9 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     reportEvent('OpenAddNodeModal');
   }, []);
 
-  const qIsPodmanRunning = useGetIsPodmanRunningQuery();
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
+    pollingInterval: 15000,
+  });
   const isPodmanRunning = qIsPodmanRunning?.data;
 
   const dispatch = useAppDispatch();
