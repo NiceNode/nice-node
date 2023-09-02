@@ -32,6 +32,7 @@ export const Banner = ({
   offline,
   updateAvailable,
   podmanStopped,
+  podmanInstalled,
   onClick,
 }: BannerProps) => {
   // Use useState to manage description dynamically
@@ -53,16 +54,22 @@ export const Banner = ({
       setIconId('play');
       setTitle('Podman is not running');
       setDescription('Click to start Podman');
+    } else if (!podmanInstalled) {
+      setIconId('play');
+      setTitle('Podman is not installed');
+      setDescription('Click to install Podman');
     }
-  }, [offline, updateAvailable, podmanStopped]);
+  }, [offline, updateAvailable, podmanStopped, podmanInstalled]);
 
   const onClickBanner = () => {
     if (podmanStopped) {
-      console.log('Start Podman!');
       setDescription('Loading...');
       setLoading(true);
     } else if (updateAvailable) {
       console.log('update nice node!');
+    } else if (!podmanInstalled) {
+      setDescription('Installing...');
+      setLoading(true);
     }
 
     if (onClick) {

@@ -91,7 +91,13 @@ const Sidebar = ({
   const renderBanners = () => {
     // TODO: integrate this with code below
     if (podmanStopped || !podmanInstalled) {
-      return <Banner podmanStopped onClick={onClickBanner} />;
+      return (
+        <Banner
+          podmanStopped={podmanStopped}
+          podmanInstalled={podmanInstalled}
+          onClick={onClickBanner}
+        />
+      );
     }
     const bannerProps = {
       updateAvailable,
