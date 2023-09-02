@@ -67,9 +67,16 @@ export const NOTIFICATIONS = Object.freeze({
       status: STATUS.WARNING,
       limit: TIME.HOUR,
     },
-    PORT_CLOSED: {
+    P2P_PORTS_CLOSED: {
       title: 'Closed Ports',
       description: 'Ports {variable} may not be open on your local network',
+      status: STATUS.WARNING,
+      limit: 0,
+    },
+    UNEXPECTED_PORTS_OPEN: {
+      title: 'Unexpected Ports Open',
+      description:
+        'Ports {variable} are open and should be closed on your local network',
       status: STATUS.WARNING,
       limit: 0,
     },

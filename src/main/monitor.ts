@@ -6,7 +6,6 @@ import logger from './logger';
 import * as storeNodes from './state/nodes';
 import { addNotification } from './state/notifications';
 import { NOTIFICATIONS } from './consts/notifications';
-import { getPodmanPorts } from './ports';
 
 const watchProcessPollingInterval = 300000;
 let monitoringInterval: ReturnType<typeof setTimeout>;
@@ -31,7 +30,6 @@ export const getSystemTotalMemory = async (): Promise<number> => {
 // returns a list of warnings
 export const checkSystemHardware = async () => {
   const warnings = [];
-  console.log(`getPodmanPorts ${getPodmanPorts()}`);
   // Is total RAM < 8 GB?
   const totalMemoryGB = await getSystemTotalMemory();
   if (totalMemoryGB < 8) {

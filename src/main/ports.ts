@@ -5,49 +5,61 @@ import { getNodes, getSetPortHasChanged } from './state/nodes';
 import { addNotification } from './state/notifications';
 import { NOTIFICATIONS } from './consts/notifications';
 
-export const getPodmanPortsForNode = (node: Node): ConfigValue[] => {
-  const portsArray = [] as ConfigValue[];
+export const getPodmanPortsForNode = (
+  node: Node,
+): { p2pPorts: ConfigValue[]; otherPorts: ConfigValue[] } => {
   const { configTranslation } = node.spec;
-
-  if (!configTranslation) return portsArray;
+  const { configValuesMap } = node.config;
+  if (!configTranslation) return { p2pPorts: [], otherPorts: [] };
 
   // Extract default port values safely with optional chaining
-  const defaultHttpPort = configTranslation.httpPort?.defaultValue;
-  const defaultWebSocketsPort = configTranslation.webSocketsPort?.defaultValue;
-  const defaultP2pPorts = configTranslation.p2pPorts?.defaultValue;
-  const defaultP2pPortsUdp = configTranslation.p2pPortsUdp?.defaultValue;
-  let defaultP2pPortsTcp = configTranslation.p2pPortsTcp?.defaultValue;
-  const defaultEnginePort = configTranslation.enginePort?.defaultValue;
+  const defaultHttpPort =
+    configValuesMap.httpPort || configTranslation.httpPort?.defaultValue;
+  const defaultWebSocketsPort =
+    configValuesMap.webSocketsPort ||
+    configTranslation.webSocketsPort?.defaultValue;
+  const defaultP2pPorts =
+    configValuesMap.p2pPorts || configTranslation.p2pPorts?.defaultValue;
+  const defaultP2pPortsUdp =
+    configValuesMap.p2pPortsUdp || configTranslation.p2pPortsUdp?.defaultValue;
+  let defaultP2pPortsTcp =
+    configValuesMap.p2pPortsTcp || configTranslation.p2pPortsTcp?.defaultValue;
+  const defaultEnginePort =
+    configValuesMap.enginePort || configTranslation.enginePort?.defaultValue;
 
   // Check if UDP and TCP ports are the same, if yes, push only one value
   if (defaultP2pPortsUdp === defaultP2pPortsTcp) {
     defaultP2pPortsTcp = undefined;
   }
 
-  // Filtering out undefined values and spreading them into the portsArray
-  portsArray.push(
-    ...[
+  return {
+    p2pPorts: [defaultP2pPorts, defaultP2pPortsUdp, defaultP2pPortsTcp].filter(
+      Boolean,
+    ),
+    otherPorts: [
       defaultHttpPort,
       defaultWebSocketsPort,
-      defaultP2pPorts,
-      defaultP2pPortsUdp,
-      defaultP2pPortsTcp,
       defaultEnginePort,
     ].filter(Boolean),
-  );
-
-  return portsArray;
+  };
 };
 
-export const getPodmanPorts = () => {
+export const getPodmanPorts = (): {
+  p2pPorts: ConfigValue[];
+  otherPorts: ConfigValue[];
+} => {
   const nodes = getNodes();
-  const portsArray = [] as ConfigValue[];
+  let p2pPorts = [] as ConfigValue[];
+  let otherPorts = [] as ConfigValue[];
 
   nodes.forEach((node) => {
-    portsArray.push(...getPodmanPortsForNode(node));
+    const { p2pPorts: nodeP2pPorts, otherPorts: nodeOtherPorts } =
+      getPodmanPortsForNode(node);
+    p2pPorts = [...p2pPorts, ...nodeP2pPorts];
+    otherPorts = [...otherPorts, ...nodeOtherPorts];
   });
 
-  return portsArray;
+  return { p2pPorts, otherPorts };
 };
 
 export const getClosedPorts = (
@@ -55,6 +67,14 @@ export const getClosedPorts = (
   openPorts: ConfigValue[],
 ): ConfigValue[] => {
   return configPorts.filter((port) => !openPorts.includes(port));
+};
+
+export const getUnexpectedOpenPorts = (
+  configPorts: ConfigValue[],
+  openPorts: ConfigValue[],
+): ConfigValue[] => {
+  // Find ports that are open but shouldn't be.
+  return configPorts.filter((port) => openPorts.includes(port));
 };
 
 export const didPortsChange = (
@@ -131,16 +151,34 @@ export const checkPorts = async (
 };
 
 export const checkNodePortsAndNotify = (node?: Node) => {
-  const podmanPorts = node ? getPodmanPortsForNode(node) : getPodmanPorts();
-  checkPorts(podmanPorts)
+  const { p2pPorts, otherPorts } = node
+    ? getPodmanPortsForNode(node)
+    : getPodmanPorts();
+  const allPorts = [...p2pPorts, ...otherPorts];
+
+  checkPorts(allPorts)
     .then((openPorts) => {
-      const closedPorts = getClosedPorts(podmanPorts, openPorts);
-      if (closedPorts.length > 0) {
+      // Check if p2p ports are closed
+      const closedP2pPorts = getClosedPorts(p2pPorts, openPorts);
+      if (closedP2pPorts.length > 0) {
         addNotification(
-          NOTIFICATIONS.WARNING.PORT_CLOSED,
-          closedPorts.join(', '),
+          NOTIFICATIONS.WARNING.P2P_PORTS_CLOSED,
+          closedP2pPorts.join(', '),
         );
       }
+
+      // Check if other ports are unexpectedly open
+      const unexpectedOpenOtherPorts = getUnexpectedOpenPorts(
+        otherPorts,
+        openPorts,
+      );
+      if (unexpectedOpenOtherPorts.length > 0) {
+        addNotification(
+          NOTIFICATIONS.WARNING.UNEXPECTED_PORTS_OPEN,
+          unexpectedOpenOtherPorts.join(', '),
+        );
+      }
+
       if (node) {
         getSetPortHasChanged(node, false);
       }
