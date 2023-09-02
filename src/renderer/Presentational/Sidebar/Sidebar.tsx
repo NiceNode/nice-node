@@ -90,7 +90,7 @@ const Sidebar = ({
 
   const renderBanners = () => {
     // TODO: integrate this with code below
-    if (podmanStopped || !podmanInstalled) {
+    if (!podmanInstalled || podmanStopped) {
       return (
         <Banner
           podmanStopped={podmanStopped}

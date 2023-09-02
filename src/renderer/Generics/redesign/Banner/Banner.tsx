@@ -22,6 +22,10 @@ export interface BannerProps {
    * Is podman not running?
    */
   podmanStopped?: boolean;
+  /**
+   * Is podman installed
+   */
+  podmanInstalled?: boolean;
   onClick?: () => void;
 }
 
@@ -46,6 +50,10 @@ export const Banner = ({
       setIconId('boltstrike');
       setTitle('Currently offline');
       setDescription('Please reconnect to the internet');
+    } else if (!podmanInstalled) {
+      setIconId('warningcircle');
+      setTitle('Podman is not installed');
+      setDescription('Click to install Podman');
     } else if (updateAvailable) {
       setIconId('download1');
       setTitle('Update available');
@@ -54,22 +62,18 @@ export const Banner = ({
       setIconId('play');
       setTitle('Podman is not running');
       setDescription('Click to start Podman');
-    } else if (!podmanInstalled) {
-      setIconId('play');
-      setTitle('Podman is not installed');
-      setDescription('Click to install Podman');
     }
   }, [offline, updateAvailable, podmanStopped, podmanInstalled]);
 
   const onClickBanner = () => {
-    if (podmanStopped) {
+    if (!podmanInstalled) {
+      setDescription('Installing...');
+      setLoading(true);
+    } else if (podmanStopped) {
       setDescription('Loading...');
       setLoading(true);
     } else if (updateAvailable) {
       console.log('update nice node!');
-    } else if (!podmanInstalled) {
-      setDescription('Installing...');
-      setLoading(true);
     }
 
     if (onClick) {
