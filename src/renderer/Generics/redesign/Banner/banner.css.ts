@@ -18,6 +18,11 @@ export const innerContainer = style({
   borderRadius: '5px',
   color: vars.color.font70,
   padding: '12px',
+  selectors: {
+    '&.loading': {
+      color: vars.color.font50,
+    },
+  },
 });
 
 export const textContainer = style({});

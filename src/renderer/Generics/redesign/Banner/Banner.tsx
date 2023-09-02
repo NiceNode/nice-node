@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { IconId } from 'renderer/assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import {
@@ -33,31 +34,37 @@ export const Banner = ({
   podmanStopped,
   onClick,
 }: BannerProps) => {
-  let iconId: IconId = 'blank';
-  let title = '';
-  let description = '';
-  let internalOnClick = () => {};
-  if (offline) {
-    iconId = 'boltstrike';
-    title = 'Currently offline';
-    description = 'Please reconnect to the internet';
-  } else if (updateAvailable) {
-    iconId = 'download1';
-    title = 'Update available';
-    description = 'New version ready to install';
-    internalOnClick = () => {
-      console.log('update nice node!');
-    };
-  } else if (podmanStopped) {
-    iconId = 'play';
-    title = 'Podman is not running';
-    description = 'Click to start Podman';
-    internalOnClick = () => {
-      console.log('Start Podman!');
-    };
-  }
+  // Use useState to manage description dynamically
+  const [description, setDescription] = useState<string>('');
+  const [iconId, setIconId] = useState<IconId>('blank');
+  const [title, setTitle] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (offline) {
+      setIconId('boltstrike');
+      setTitle('Currently offline');
+      setDescription('Please reconnect to the internet');
+    } else if (updateAvailable) {
+      setIconId('download1');
+      setTitle('Update available');
+      setDescription('New version ready to install');
+    } else if (podmanStopped) {
+      setIconId('play');
+      setTitle('Podman is not running');
+      setDescription('Click to start Podman');
+    }
+  }, [offline, updateAvailable, podmanStopped]);
+
   const onClickBanner = () => {
-    internalOnClick();
+    if (podmanStopped) {
+      console.log('Start Podman!');
+      setDescription('Loading...');
+      setLoading(true);
+    } else if (updateAvailable) {
+      console.log('update nice node!');
+    }
+
     if (onClick) {
       onClick();
     }
@@ -72,7 +79,7 @@ export const Banner = ({
       role="button"
       tabIndex={0}
     >
-      <div className={innerContainer}>
+      <div className={[innerContainer, loading ? 'loading' : ''].join(' ')}>
         <Icon iconId={iconId} />
         <div className={textContainer}>
           <div className={titleStyle}>{title}</div>
