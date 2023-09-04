@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React, { useEffect, useState, useRef } from 'react';
 import { MemoryRouter, Routes, Route, Outlet } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
 
@@ -18,6 +19,7 @@ import {
   dragWindowContainer,
   homeContainer,
   contentContainer,
+  sidebarDrag,
 } from './app.css';
 import ThemeManager from './ThemeManager';
 import ModalManager from './Presentational/ModalManager/ModalManager';
@@ -39,10 +41,53 @@ const WindowContainer = ({ children }: { children: React.ReactNode }) => {
 };
 
 const Main = () => {
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
+  const [isResizing, setIsResizing] = useState<Boolean>(false);
+  const [lastX, setLastX] = useState<number>(0);
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!isResizing) return;
+      if (sidebarRef.current) {
+        const deltaX = event.clientX - lastX;
+        const newWidth = sidebarRef.current.offsetWidth + deltaX;
+        if (newWidth >= 200 && newWidth <= 300) {
+          sidebarRef.current.style.width = `${newWidth}px`;
+          setLastX(event.clientX);
+        }
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing, lastX]);
+
   return (
     <WindowContainer>
       <div className={homeContainer}>
-        <SidebarWrapper />
+        <SidebarWrapper ref={sidebarRef} />
+        <div
+          role="button"
+          className={sidebarDrag}
+          tabIndex={0}
+          onMouseDown={(e) => {
+            setIsResizing(true);
+            setLastX(e.clientX);
+          }}
+          onKeyDown={() => {}}
+        />
         <Outlet />
         <DataRefresher />
       </div>

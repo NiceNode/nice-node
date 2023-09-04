@@ -6,12 +6,11 @@ export const container = style({
   flexDirection: 'column',
   alignItems: 'flex-start',
   boxSizing: 'border-box',
-  padding: '0px 16px 16px 16px',
+  padding: '0px 11px 16px 16px',
   paddingTop: '52px',
   isolation: 'isolate',
   width: '268px',
   height: '100%',
-  borderRight: vars.components.sidebarBorder,
   backgroundColor: vars.components.sidebarBackground,
   // backdropFilter: 'blur(40px)',
 });

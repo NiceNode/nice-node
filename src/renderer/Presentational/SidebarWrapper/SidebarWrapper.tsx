@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useCallback } from 'react';
+import { ReactElement, useEffect, useCallback, forwardRef } from 'react';
 import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import electron from '../../electronGlobal';
 import { useGetNotificationsQuery } from '../../state/notificationsService';
@@ -18,7 +18,7 @@ export interface SidebarWrapperProps {
   children: ReactElement;
 }
 
-export const SidebarWrapper = () => {
+export const SidebarWrapper = forwardRef((_props, ref) => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const sUserNodes = useAppSelector(selectUserNodes);
   const dispatch = useAppDispatch();
@@ -89,6 +89,7 @@ export const SidebarWrapper = () => {
 
   return (
     <Sidebar
+      ref={ref}
       notifications={notifications}
       offline={false}
       updateAvailable={false}
@@ -100,4 +101,4 @@ export const SidebarWrapper = () => {
       onClickInstallPodman={onClickInstallPodman}
     />
   );
-};
+});

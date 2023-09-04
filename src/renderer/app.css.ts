@@ -1,4 +1,5 @@
 import { style, ComplexStyleRule } from '@vanilla-extract/css';
+import { vars } from './Generics/redesign/theme.css';
 
 export const dragWindowContainer = style({
   WebkitUserSelect: 'none',
@@ -25,4 +26,12 @@ export const contentContainer = style({
   overflow: 'auto',
   display: 'flex',
   flexDirection: 'column',
+});
+
+export const sidebarDrag = style({
+  cursor: 'ew-resize',
+  width: 5,
+  height: '100%',
+  backgroundColor: vars.components.sidebarBackground,
+  borderRight: `1px solid ${vars.components.sidebarBorder}`,
 });
