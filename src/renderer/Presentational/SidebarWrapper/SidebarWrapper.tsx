@@ -14,11 +14,7 @@ import {
 } from '../../state/settingsService';
 import Sidebar from '../Sidebar/Sidebar';
 
-export interface SidebarWrapperProps {
-  children: ReactElement;
-}
-
-export const SidebarWrapper = forwardRef((_props, ref) => {
+export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const sUserNodes = useAppSelector(selectUserNodes);
   const dispatch = useAppDispatch();
