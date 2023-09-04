@@ -30,8 +30,26 @@ export const contentContainer = style({
 
 export const sidebarDrag = style({
   cursor: 'ew-resize',
-  width: 5,
+  width: 7,
   height: '100%',
+  display: 'flex',
+});
+
+export const borderLeft = style({
   backgroundColor: vars.components.sidebarBackground,
-  borderRight: `1px solid ${vars.components.sidebarBorder}`,
+  width: 3,
+  height: '100%',
+});
+
+export const borderCenter = style({
+  flexGrow: 1,
+  maxWidth: 1,
+  backgroundColor: vars.components.sidebarBorder,
+  height: '100%',
+});
+
+export const borderRight = style({
+  backgroundColor: vars.color.background,
+  width: 3,
+  height: '100%',
 });

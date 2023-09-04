@@ -20,6 +20,9 @@ import {
   homeContainer,
   contentContainer,
   sidebarDrag,
+  borderLeft,
+  borderCenter,
+  borderRight,
 } from './app.css';
 import ThemeManager from './ThemeManager';
 import ModalManager from './Presentational/ModalManager/ModalManager';
@@ -87,7 +90,11 @@ const Main = () => {
             setLastX(e.clientX);
           }}
           onKeyDown={() => {}}
-        />
+        >
+          <div className={borderLeft} />
+          <div className={borderCenter} />
+          <div className={borderRight} />
+        </div>
         <Outlet />
         <DataRefresher />
       </div>

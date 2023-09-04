@@ -6,7 +6,7 @@ export const container = style({
   flexDirection: 'column',
   alignItems: 'flex-start',
   boxSizing: 'border-box',
-  padding: '0px 11px 16px 16px',
+  padding: '0px 13px 16px 16px',
   paddingTop: '52px',
   isolation: 'isolate',
   width: '268px',
