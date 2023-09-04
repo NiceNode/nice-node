@@ -20,7 +20,7 @@ export const homeContainer = style({
 });
 
 export const contentContainer = style({
-  padding: '64px 40px',
+  padding: '64px 40px 64px 37px',
   boxSizing: 'border-box',
   flex: 1,
   overflow: 'auto',
