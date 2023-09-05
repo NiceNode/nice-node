@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
@@ -19,6 +20,8 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     useState<boolean>(false);
   const [sIsPodmanRunning, setIsPodmanRunning] = useState<boolean>(false);
   const [step, setStep] = useState(0);
+  const { t } = useTranslation();
+  const { t: tGenerics } = useTranslation('genericComponents');
 
   useEffect(() => {
     reportEvent('OpenAddNodeModal');
@@ -34,21 +37,24 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   let modalTitle = '';
   switch (step) {
     case 0:
-      modalTitle = 'Launch an Ethereum Node';
+      modalTitle = t('LaunchAnEthereumNode');
       break;
     case 1:
-      modalTitle = 'Node Requirements';
+      modalTitle = t('NodeRequirements');
       break;
     case 2:
-      modalTitle = 'Podman Installation';
+      modalTitle = t('PodmanInstallation');
       break;
     default:
   }
 
   const startNode =
     (step === 1 || step === 2) && (isPodmanRunning || sIsPodmanRunning);
-  const buttonSaveLabel = startNode ? 'Start node' : 'Continue';
-  const buttonCancelLabel = step === 0 ? 'Cancel' : 'Back';
+  const buttonSaveLabel = startNode
+    ? tGenerics('StartNode')
+    : tGenerics('Continue');
+  const buttonCancelLabel =
+    step === 0 ? tGenerics('Cancel') : tGenerics('Back');
   const buttonSaveVariant = startNode ? 'icon-left' : 'text';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {

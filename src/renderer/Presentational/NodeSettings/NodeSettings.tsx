@@ -37,7 +37,7 @@ const NodeSettings = ({
   onClickRemoveNode,
   nodeStartCommand,
 }: NodeSettingsProps) => {
-  const { t: tNiceNode } = useTranslation();
+  const { t } = useTranslation();
 
   if (!categoryConfigs || categoryConfigs.length === 0) {
     return <div className={emptyContainer} />;
@@ -46,12 +46,9 @@ const NodeSettings = ({
   const renderTabs = () => {
     const tabs = [];
     tabs.push(
-      <div id="General">
+      <div id={t('General')}>
         {isDisabled && (
-          <Message
-            type="warning"
-            title={tNiceNode('StopeNodeToChangeSettings')}
-          />
+          <Message type="warning" title={t('StopeNodeToChangeSettings')} />
         )}
         {/* todo: tab1 */}
         <DynamicSettings
@@ -84,7 +81,7 @@ const NodeSettings = ({
         {/* Remove Node link */}
         <div style={{ padding: '16px 0px 16px 0px' }}>
           <InternalLink
-            text={tNiceNode('RemoveThisNode')}
+            text={t('RemoveThisNode')}
             onClick={onClickRemoveNode}
             danger
           />
@@ -94,7 +91,7 @@ const NodeSettings = ({
 
     if (isWalletSettingsEnabled) {
       tabs.push(
-        <div id="Wallet Connections">
+        <div id={t('WalletConnections')}>
           <WalletSettings
             configValuesMap={configValuesMap}
             httpCorsConfigTranslation={httpCorsConfigTranslation}

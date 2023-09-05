@@ -122,6 +122,7 @@ export const WalletSettings = ({
     },
   ];
 
+  const { t } = useTranslation();
   const { t: tGeneric } = useTranslation('genericComponents');
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const splitCorsDomains = splitDomainsFromValue({
@@ -421,7 +422,7 @@ export const WalletSettings = ({
         wallets below to allow access to your node. Don’t forget to add a new
         network in your wallet with the configuration below.
       </div>
-      <div className={title}>Wallets</div>
+      <div className={title}>{t('Wallets')}</div>
       <LineLabelSettings
         items={[
           {
@@ -478,7 +479,7 @@ export const WalletSettings = ({
         </div>
       )}
       <div className={walletDetails}>
-        <div className={title}>Details for your new wallet network</div>
+        <div className={title}>{t('DetailsForYourNew')}</div>
         <LineLabelSettings
           items={[
             {

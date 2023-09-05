@@ -24,81 +24,6 @@ import { captionText } from '../PodmanInstallation/podmanInstallation.css';
 import { useAppDispatch } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
 
-const ecOptions = [
-  {
-    iconId: 'besu',
-    value: 'besu',
-    label: 'Besu',
-    title: 'Besu',
-    info: 'Execution Client',
-    minority: true,
-  },
-  {
-    iconId: 'nethermind',
-    value: 'nethermind',
-    label: 'Nethermind',
-    title: 'Nethermind',
-    info: 'Execution Client',
-    minority: true,
-  },
-
-  {
-    iconId: 'geth',
-    value: 'geth',
-    label: 'Geth',
-    title: 'Geth',
-    info: 'Execution Client',
-  },
-  // {
-  //   iconId: 'erigon',
-  //   value: 'erigon',
-  //   label: 'Erigon',
-  //   title: 'Erigon',
-  //   info: 'Execution Client',
-  // },
-];
-
-const ccOptions = [
-  {
-    iconId: 'nimbus',
-    title: 'Nimbus',
-    value: 'nimbus',
-    label: 'Nimbus',
-    info: 'Consensus Client',
-    minority: true,
-  },
-  {
-    iconId: 'teku',
-    title: 'Teku',
-    info: 'Consensus Client',
-    value: 'teku',
-    label: 'Teku',
-    minority: true,
-  },
-  {
-    iconId: 'lighthouse',
-    title: 'Lighthouse',
-    value: 'lighthouse',
-    label: 'Lighthouse',
-    info: 'Consensus Client',
-  },
-  {
-    iconId: 'prysm',
-    title: 'Prysm',
-    info: 'Consensus Client',
-    value: 'prysm',
-    label: 'Prysm',
-  },
-  {
-    iconId: 'lodestar',
-    title: 'Lodestar',
-    value: 'lodestar',
-    label: 'Lodestar',
-    info: 'Consensus Client',
-    minority: true,
-  },
-];
-
 let alphaModalRendered = false;
 
 export type AddEthereumNodeValues = {
@@ -139,6 +64,81 @@ const AddEthereumNode = ({
 AddEthereumNodeProps) => {
   const { t } = useTranslation();
   const { t: tGeneric } = useTranslation('genericComponents');
+
+  const ecOptions = [
+    {
+      iconId: 'besu',
+      value: 'besu',
+      label: 'Besu',
+      title: 'Besu',
+      info: 'Execution Client',
+      minority: true,
+    },
+    {
+      iconId: 'nethermind',
+      value: 'nethermind',
+      label: 'Nethermind',
+      title: 'Nethermind',
+      info: 'Execution Client',
+      minority: true,
+    },
+
+    {
+      iconId: 'geth',
+      value: 'geth',
+      label: 'Geth',
+      title: 'Geth',
+      info: 'Execution Client',
+    },
+    // {
+    //   iconId: 'erigon',
+    //   value: 'erigon',
+    //   label: 'Erigon',
+    //   title: 'Erigon',
+    //   info: 'Execution Client',
+    // },
+  ];
+
+  const ccOptions = [
+    {
+      iconId: 'nimbus',
+      title: 'Nimbus',
+      value: 'nimbus',
+      label: 'Nimbus',
+      info: 'Consensus Client',
+      minority: true,
+    },
+    {
+      iconId: 'teku',
+      title: 'Teku',
+      info: 'Consensus Client',
+      value: 'teku',
+      label: 'Teku',
+      minority: true,
+    },
+    {
+      iconId: 'lighthouse',
+      title: 'Lighthouse',
+      value: 'lighthouse',
+      label: 'Lighthouse',
+      info: 'Consensus Client',
+    },
+    {
+      iconId: 'prysm',
+      title: 'Prysm',
+      info: 'Consensus Client',
+      value: 'prysm',
+      label: 'Prysm',
+    },
+    {
+      iconId: 'lodestar',
+      title: 'Lodestar',
+      value: 'lodestar',
+      label: 'Lodestar',
+      info: 'Consensus Client',
+      minority: true,
+    },
+  ];
   // const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const [sSelectedExecutionClient, setSelectedExecutionClient] =
     useState<SelectOption>(ethereumNodeConfig?.executionClient || ecOptions[0]);
@@ -259,13 +259,13 @@ AddEthereumNodeProps) => {
           url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
         />
       </div>
-      <p className={sectionFont}>Recommended execution client</p>
+      <p className={sectionFont}>{t('RecommendedExecutionClient')}</p>
       <SpecialSelect
         selectedOption={sSelectedExecutionClient}
         onChange={onChangeEc}
         options={ecOptions}
       />
-      <p className={sectionFont}>Recommended consensus client</p>
+      <p className={sectionFont}>{t('RecommendedConsensusClient')}</p>
       <SpecialSelect
         selectedOption={sSelectedConsensusClient}
         onChange={onChangeCc}

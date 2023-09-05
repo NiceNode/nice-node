@@ -21,5 +21,12 @@
   "Previous": "Previous",
   "Show": "Show",
   "ShowAdvancedOptions": "Show advanced options",
-  "ThemeColor": "Theme color"
+  "ThemeColor": "Theme color",
+  "ExecutionClient": "Execution Client",
+  "ConsensusClient": "Consensus Client",
+  "SaveChanges": "Save changes",
+  "StartNode": "Start node",
+  "Continue": "Continue",
+  "Cancel": "Cancel",
+  "Back": "Back"
 }

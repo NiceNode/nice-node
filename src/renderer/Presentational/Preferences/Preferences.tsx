@@ -57,7 +57,8 @@ const Preferences = ({
   language,
   onChange,
 }: PreferencesProps) => {
-  const { t } = useTranslation('genericComponents');
+  const { t } = useTranslation();
+  const { t: tGenerics } = useTranslation('genericComponents');
   const [initialThemeSetting] = useState(themeSetting);
 
   const onClickTheme = (theme: ThemeSetting) => {
@@ -84,20 +85,20 @@ const Preferences = ({
 
   return (
     <div className={preferencesContainer}>
-      <div className={sectionTitle}>{t('Appearance')}</div>
+      <div className={sectionTitle}>{tGenerics('Appearance')}</div>
       <div className={appearanceSection}>
         {[
           {
             theme: 'auto',
-            label: t('AutoFollowsComputerSetting'),
+            label: tGenerics('AutoFollowsComputerSetting'),
           },
           {
             theme: 'light',
-            label: t('LightMode'),
+            label: tGenerics('LightMode'),
           },
           {
             theme: 'dark',
-            label: t('DarkMode'),
+            label: tGenerics('DarkMode'),
           },
         ].map((themeDetails, index) => {
           const isSelected = themeSetting === themeDetails.theme;
@@ -146,7 +147,7 @@ const Preferences = ({
         })}
       </div>
       <div className={preferenceSection}>
-        <div className={sectionTitle}>General</div>
+        <div className={sectionTitle}>{t('General')}</div>
         <HorizontalLine />
         <LineLabelSettings
           items={[
@@ -169,7 +170,7 @@ const Preferences = ({
                   ),
                 },
                 {
-                  label: t('Language'),
+                  label: tGenerics('Language'),
                   value: (
                     <LanguageSelect
                       language={language}
@@ -187,7 +188,7 @@ const Preferences = ({
         />
       </div>
       <div className={preferenceSection}>
-        <div className={sectionTitle}>Notifications</div>
+        <div className={sectionTitle}>{t('Notifications')}</div>
         <HorizontalLine />
         <LineLabelSettings
           items={[
@@ -195,7 +196,7 @@ const Preferences = ({
               sectionTitle: '',
               items: [
                 {
-                  label: 'Desktop notifications',
+                  label: t('DesktopNotifications'),
                   value: (
                     <Toggle
                       onText="Enabled"
@@ -215,7 +216,7 @@ const Preferences = ({
         />
       </div>
       <div className={preferenceSection}>
-        <div className={sectionTitle}>Privacy</div>
+        <div className={sectionTitle}>{t('Privacy')}</div>
         <HorizontalLine />
         <LineLabelSettings
           items={[
@@ -223,8 +224,10 @@ const Preferences = ({
               sectionTitle: '',
               items: [
                 {
-                  label: `Send error reports`,
-                  description: `Enabled by default in alpha releases to fix bugs and improve the app. (${process.env.FATHOM_SITE_ENV} ${process.env.FATHOM_SITE_ID})`,
+                  label: t('SendErrorReports'),
+                  description: `${t('SendErrorReportsDescription')} (${
+                    process.env.FATHOM_SITE_ENV
+                  } ${process.env.FATHOM_SITE_ID})`,
                   value: (
                     <Toggle
                       onText="Enabled"
@@ -244,7 +247,7 @@ const Preferences = ({
         />
       </div>
       <div className={versionContainer}>
-        You are running NiceNode {version} {process.env.NICENODE_ENV}
+        {t('YouAreRunningNiceNode')} {version} {process.env.NICENODE_ENV}
       </div>
     </div>
   );

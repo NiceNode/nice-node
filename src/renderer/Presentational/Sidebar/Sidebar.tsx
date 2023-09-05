@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import { setModalState } from '../../state/modal';
 import { useAppDispatch } from '../../state/hooks';
@@ -50,24 +51,25 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
     ref,
   ) => {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
 
     const itemListData: { iconId: IconId; label: string; count?: number }[] = [
       {
         iconId: 'bell',
-        label: 'Notifications',
+        label: t('Notifications'),
         count: notifications?.length,
       },
       {
         iconId: 'add',
-        label: 'Add Node',
+        label: t('AddNode'),
       },
       {
         iconId: 'preferences',
-        label: 'Preferences',
+        label: t('Preferences'),
       },
       {
         iconId: 'health',
-        label: 'System Monitor',
+        label: t('SystemMonitor'),
       },
     ];
 

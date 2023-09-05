@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { setModalState } from '../../../state/modal';
 import { useAppDispatch } from '../../../state/hooks';
 import Button, { ButtonProps } from '../Button/Button';
@@ -40,20 +41,23 @@ export const Header = ({ nodeContent, isPodmanRunning }: HeaderProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const { t } = useTranslation();
+  const { t: tGenerics } = useTranslation('genericComponents');
+
   const startStopButtonProps: ButtonProps = {
     label: '',
     iconId: undefined,
     onClick: () => {},
   };
   if (!status.stopped) {
-    startStopButtonProps.label = 'Stop';
+    startStopButtonProps.label = tGenerics('Stop');
     startStopButtonProps.iconId = 'stop';
     startStopButtonProps.onClick = () => {
       if (onAction) onAction('stop');
     };
   } else {
     // const text = status.initialized ? 'Resume' : 'Start';
-    startStopButtonProps.label = 'Resume';
+    startStopButtonProps.label = tGenerics('Resume');
     startStopButtonProps.iconId = 'play';
     startStopButtonProps.onClick = () => {
       if (onAction) onAction('start');
@@ -62,7 +66,7 @@ export const Header = ({ nodeContent, isPodmanRunning }: HeaderProps) => {
   let logsButtonProps: ButtonProps | undefined;
   if (screenType !== 'altruistic') {
     logsButtonProps = {
-      label: 'Logs',
+      label: t('Logs'),
       iconId: 'logs',
       onClick: () => {
         if (onAction) onAction('logs');
