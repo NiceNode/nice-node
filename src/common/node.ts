@@ -1,7 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import { v4 as uuidv4 } from 'uuid';
 import { ConfigValuesMap } from './nodeConfig';
-import { ExecutionTypes, NodeSpecification } from './nodeSpec';
+import {
+  ExecutionTypes,
+  NodePackageSpecification,
+  NodeSpecification,
+} from './nodeSpec';
 
 export type NodeId = string;
 
@@ -79,7 +83,7 @@ export type NodeService = {
 export type NodePackage = {
   id: NodeId;
   services: NodeService[];
-  spec: NodeSpecification;
+  spec: NodePackageSpecification;
   config: NodeConfig;
   runtime: NodeRuntime;
   status: NodeStatus;

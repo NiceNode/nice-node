@@ -20,13 +20,15 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'renderer/state/hooks';
 import { updateSelectedNodeId } from 'renderer/state/node';
+import { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
 
 const resourceJson = require('./resources.json');
 
 const ContentMultipleClients = (props: {
   clients: ClientProps[] | undefined;
+  nodeContent: SingleNodeContent | undefined;
 }) => {
-  const { clients } = props;
+  const { clients, nodeContent } = props;
   if (!clients || clients.length < 2) {
     return <>2 or more clients required</>;
   }
@@ -143,7 +145,17 @@ const ContentMultipleClients = (props: {
       return nodeOverview;
     }
     // non-Ethereum node conditions added here
-    return clients[0];
+    if (!nodeContent) return;
+    nodeOverview = {
+      name: nodeContent.name,
+      title: `${nodeContent.displayName} node`,
+      info: nodeContent.info,
+      type: 'altruistic',
+      status: nodeContent.status,
+      stats: nodeContent.stats,
+      description: nodeContent.description,
+    };
+    return nodeOverview;
   };
 
   const getResourceData = () => {
@@ -190,9 +202,12 @@ const ContentMultipleClients = (props: {
             <ClientCard
               {...client}
               onClick={() => {
-                console.log('ContentMultipleClients client on click!');
-                navigate('/main/node');
+                console.log(
+                  'ContentMultipleClients client on click!',
+                  client.id,
+                );
                 dispatch(updateSelectedNodeId(client.id));
+                navigate('/main/node');
               }}
             />
           );
@@ -201,28 +216,7 @@ const ContentMultipleClients = (props: {
       <HorizontalLine type="content" />
       <div className={sectionTitle}>About</div>
       <div className={sectionDescription}>
-        <p>
-          An Ethereum node holds a copy of the Ethereum blockchain and verifies
-          the validity of every block, keeps it up-to-date with new blocks and
-          helps others to download and update their own copies of the chain.
-        </p>
-        <p>
-          In the case of Ethereum a node consists of two parts: the execution
-          client and the consensus client. These two clients work together to
-          verify Ethereum&apos;s state. The execution client listens to new
-          transactions broadcasted in the network, executes them in EVM, and
-          holds the latest state and database of all current Ethereum data. The
-          consensus client runs the Proof-of-Stake consensus algorithm, which
-          enables the network to achieve agreement based on validated data from
-          the execution client.
-        </p>
-        <p>
-          A non-validating node does not get financial rewards but there are
-          many benefits of running a node for any Ethereum user to consider,
-          including privacy, security, reduced reliance on third-party servers,
-          censorship resistance and improved health and decentralization of the
-          network.
-        </p>
+        <p>{nodeContent?.description}</p>
       </div>
       <div className={resourcesContainer}>
         <LabelValues {...resourceData} column />

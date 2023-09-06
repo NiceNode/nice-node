@@ -61,5 +61,9 @@
       "documentation": "https://geth.ethereum.org/docs/rpc/server"
     }
   },
-  "iconUrl": "https://ethereum.png"
+  "iconUrl": "https://ethereum.png",
+  "description": "Base is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
+  "documentation" : {
+    "default": "https://docs.base.org/guides/run-a-base-node/"
+  }
 }

@@ -134,4 +134,5 @@ export type NodePackageSpecification = {
   iconUrl?: string;
   category?: string;
   documentation?: { default?: string; docker?: string; binary?: string };
+  description?: string;
 };

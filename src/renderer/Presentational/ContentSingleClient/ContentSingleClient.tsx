@@ -15,6 +15,7 @@ import { NodeAction, NodeOverviewProps } from '../../Generics/redesign/consts';
 // TODO: process retrieved client data into this format
 export type SingleNodeContent = {
   nodeId: string;
+  displayName: string;
   name: NodeBackgroundId; // lowercase for supported node icons
   version?: string;
   screenType?: string;
@@ -25,7 +26,7 @@ export type SingleNodeContent = {
   iconUrl?: string;
   status?: {
     updating?: boolean;
-    sychronized?: boolean;
+    synchronized?: boolean;
     initialized?: boolean;
     lowPeerCount?: boolean;
     updateAvailable?: boolean;
@@ -49,6 +50,7 @@ export type SingleNodeContent = {
     diskTotal: number;
   };
   onAction?: (action: NodeAction) => void;
+  description?: string;
 };
 
 const ContentSingleClient = (props: SingleNodeContent) => {

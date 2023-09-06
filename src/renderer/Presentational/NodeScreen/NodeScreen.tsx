@@ -352,6 +352,7 @@ const NodeScreen = () => {
 
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
+    displayName: selectedNode.spec.displayName,
     name: clientName as NodeBackgroundId,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
@@ -360,7 +361,7 @@ const NodeScreen = () => {
     status: {
       stopped: status === 'stopped',
       error: status.includes('error'),
-      sychronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+      synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
     },
     stats: {
       peers: sPeers,

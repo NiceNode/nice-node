@@ -31,14 +31,12 @@ import {
   descriptionFont,
 } from './NodePackageScreen.css';
 import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
-import { useNavigate } from 'react-router-dom';
 import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
 
 let alphaModalRendered = false;
 
 const NodePackageScreen = () => {
   // const { t } = useTranslation();
-  const navigate = useNavigate();
   const selectedNodePackage = useAppSelector(selectSelectedNodePackage);
   const qNodeVersion = useGetNodeVersionQuery(
     selectedNodePackage?.spec.rpcTranslation,
@@ -252,7 +250,8 @@ const NodePackageScreen = () => {
     selectedNodePackage?.services.map((service) => {
       const serviceProps: ClientProps = {
         id: service.node.id,
-        name: service.node.spec.displayName as NodeBackgroundId,
+        name: service.node.spec.specId,
+        displayName: service.node.spec.displayName as NodeBackgroundId,
         version: '',
         nodeType: service.serviceName,
         status: {},
@@ -378,6 +377,7 @@ const NodePackageScreen = () => {
 
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNodePackage.id,
+    displayName: spec.displayName,
     name: clientName as NodeBackgroundId,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
@@ -386,7 +386,7 @@ const NodePackageScreen = () => {
     status: {
       stopped: status === 'stopped',
       error: status.includes('error'),
-      sychronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+      synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
     },
     stats: {
       peers: sPeers,
@@ -401,6 +401,7 @@ const NodePackageScreen = () => {
       diskTotal: sTotalDiskSize,
     },
     onAction: onNodeAction,
+    description: spec.description,
   };
 
   /**
@@ -443,22 +444,11 @@ export interface ClientProps {
   // return <ContentSingleClient {...nodeContent} />;
   return (
     <div>
-      <ContentMultipleClients clients={sFormattedServices} />
+      <ContentMultipleClients
+        clients={sFormattedServices}
+        nodeContent={nodeContent}
+      />
       <p>{JSON.stringify(nodeContent)}</p>
-      {selectedNodePackage.services.map((service) => {
-        return (
-          <div>
-            <Button
-              label={service.node.spec.displayName}
-              onClick={() => {
-                navigate('/main/node');
-                dispatch(updateSelectedNodeId(service.node.id));
-              }}
-            ></Button>
-            <p>{service.serviceName}</p>
-          </div>
-        );
-      })}
     </div>
   );
 

@@ -58,7 +58,7 @@ type Props = ClientProps & {
   onClick?: () => void;
 };
 export const ClientCard = (props: Props) => {
-  const { status, name, nodeType, stats, onClick } = props;
+  const { displayName, status, name, nodeType, stats, onClick } = props;
   const isNotCloseToSynchronized =
     (stats.highestSlot &&
       stats.currentSlot &&
@@ -123,6 +123,7 @@ export const ClientCard = (props: Props) => {
     nodeType === 'execution' ? 'Execution Client' : 'Consensus Client';
 
   const stoppedStyle = status.stopped ? 'stopped' : '';
+  console.log('we out here', name);
   return (
     <div
       className={container}
@@ -147,7 +148,7 @@ export const ClientCard = (props: Props) => {
             <div className={clientIcon}>
               <NodeIcon iconId={name} size="medium" />
             </div>
-            <div className={clientTitle}>{name}</div>
+            <div className={clientTitle}>{displayName}</div>
           </div>
         </div>
       </div>

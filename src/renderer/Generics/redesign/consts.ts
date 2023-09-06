@@ -29,6 +29,7 @@ export interface ClientStatsProps {
 
 export interface ClientProps {
   id: NodeId;
+  displayName: string;
   name: NodeBackgroundId | string;
   version: string;
   nodeType: string;
