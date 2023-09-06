@@ -253,13 +253,15 @@ const NodeSettingsWrapper = ({
       isWalletSettingsEnabled={sIsWalletSettingsEnabled}
       isDisabled={sIsConfigDisabled}
       onChange={onNodeConfigChange}
-      onClickRemoveNode={() => {
-        dispatch(
-          setModalState({
-            isModalOpen: true,
-            screen: { route: 'removeNode', type: 'alert' },
-          }),
-        );
+      onClickResetConfig={() => {
+        if (selectedNode) {
+          dispatch(
+            setModalState({
+              isModalOpen: true,
+              screen: { route: 'resetConfig', type: 'alert' },
+            }),
+          );
+        }
       }}
       nodeStartCommand={sNodeStartCommand}
     />
