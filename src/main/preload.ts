@@ -89,6 +89,8 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('openDialogForStorageLocation'),
   deleteNodeStorage: (nodeId: NodeId) =>
     ipcRenderer.invoke('deleteNodeStorage', nodeId),
+  resetNodeConfig: (nodeId: NodeId) =>
+    ipcRenderer.invoke('resetNodeConfig', nodeId),
   sendNodeLogs: (nodeId: NodeId) => {
     ipcRenderer.invoke('sendNodeLogs', nodeId);
   },
