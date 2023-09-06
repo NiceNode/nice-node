@@ -5,6 +5,8 @@ import { Settings } from '../main/state/settings';
 import { darkTheme, lightTheme } from './Generics/redesign/theme.css';
 import { useGetSettingsQuery } from './state/settingsService';
 import { ThemeSetting } from './Presentational/Preferences/Preferences';
+import { reportEvent } from './events/reportEvent';
+import { NNEvent } from './events/events';
 
 type Props = {
   children: React.ReactNode;
@@ -66,6 +68,29 @@ const ThemeManager = ({ children }: Props) => {
   useEffect(() => {
     listenForThemeChanges();
   }, [listenForThemeChanges]);
+
+  // todo: move reportEvent logic to another component or replace on backend
+  // subscribes to a channel which notifies when dark mode settings change
+  const onReportEventMessage = useCallback((event: NNEvent) => {
+    // onChange, retrieve new settings
+    console.log('theme: onReportEventMessage', event);
+    reportEvent(event);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const listenForReportEventMessages = useCallback(async () => {
+    console.log('theme: listenForReportEventMessages');
+    electron.ipcRenderer.on(CHANNELS.reportEvent, onReportEventMessage);
+    return () =>
+      electron.ipcRenderer.removeListener(
+        CHANNELS.reportEvent,
+        onReportEventMessage,
+      );
+  }, [onReportEventMessage]);
+
+  useEffect(() => {
+    listenForReportEventMessages();
+  }, [listenForReportEventMessages]);
 
   return (
     <div

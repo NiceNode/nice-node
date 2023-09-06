@@ -8,7 +8,6 @@ import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
 import { Menu } from '../Menu/Menu';
 import { MenuItem } from '../MenuItem/MenuItem';
-import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
 import {
   container,
   iconContainer,
@@ -142,13 +141,7 @@ export const Header = (props: NodeOverviewProps) => {
             size="small"
             onClick={() => {
               if (screenType === 'client') {
-                dispatch(
-                  setModalState({
-                    isModalOpen: true,
-                    screen: { route: 'nodeSettings', type: 'modal' },
-                  }),
-                );
-                // setIsSettingsDisplayed(!isSettingsDisplayed);
+                setIsSettingsDisplayed(!isSettingsDisplayed);
               } else {
                 console.log('open preferences!');
               }
@@ -160,18 +153,28 @@ export const Header = (props: NodeOverviewProps) => {
             <div className={popupContainer} tabIndex={0}>
               <Menu width={156}>
                 <MenuItem
-                  text="Restart Client"
+                  text="Node Settings"
                   onClick={() => {
-                    console.log('Restart Client');
+                    dispatch(
+                      setModalState({
+                        isModalOpen: true,
+                        screen: { route: 'nodeSettings', type: 'modal' },
+                      }),
+                    );
                   }}
                 />
                 <MenuItem
-                  text="Check for Updates..."
+                  text="Remove Node"
                   onClick={() => {
-                    console.log('Check for Updates...');
+                    dispatch(
+                      setModalState({
+                        isModalOpen: true,
+                        screen: { route: 'removeNode', type: 'alert' },
+                      }),
+                    );
                   }}
                 />
-                <HorizontalLine type="menu" />
+                {/* <HorizontalLine type="menu" />
                 <MenuItem
                   text="Client Versions"
                   onClick={() => {
@@ -185,7 +188,7 @@ export const Header = (props: NodeOverviewProps) => {
                     console.log('Switch Client');
                   }}
                   disabled
-                />
+                /> */}
               </Menu>
             </div>
           )}

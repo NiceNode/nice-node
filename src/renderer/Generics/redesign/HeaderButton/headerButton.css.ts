@@ -1,9 +1,10 @@
-import { style } from '@vanilla-extract/css';
+import { style, ComplexStyleRule } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
 
 export const container = style({
   boxSizing: 'border-box',
   flex: 'none',
+  '-webkit-app-region': 'no-drag',
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
@@ -21,4 +22,4 @@ export const container = style({
   ':active': {
     backgroundColor: vars.components.headerButtonActive,
   },
-});
+} as ComplexStyleRule); // fix for lacking '-webkit-app-region' type

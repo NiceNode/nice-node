@@ -66,6 +66,7 @@ declare global {
       openDialogForStorageLocation(): CheckStorageDetails;
       updateNodeLastSyncedBlock(nodeId: NodeId, block: number): void;
       deleteNodeStorage(nodeId: NodeId): boolean;
+      resetNodeConfig(nodeId: NodeId): boolean;
       sendNodeLogs(nodeId: NodeId): void;
       stopSendingNodeLogs(nodeId?: NodeId): void;
 
@@ -96,6 +97,9 @@ declare global {
       addNotification(notification: any): void;
       removeNotifications(): void;
       markAllAsRead(): void;
+
+      // Ports
+      checkPorts(ports: number[]): void;
     };
 
     performance: Performance;
