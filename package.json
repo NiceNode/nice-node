@@ -264,7 +264,7 @@
     "lint-staged": "^13.1.0",
     "mini-css-extract-plugin": "^2.7.1",
     "opencollective-postinstall": "^2.0.3",
-    "prettier": "^3.0.0",
+    "prettier": "^3.0.3",
     "react-docgen-typescript-plugin": "^1.0.5",
     "react-refresh": "^0.14.0",
     "react-refresh-typescript": "^2.0.7",
