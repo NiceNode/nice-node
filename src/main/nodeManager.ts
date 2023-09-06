@@ -60,7 +60,7 @@ export const addNode = async (
     if (runningNode?.status === NodeStatus.running) {
       checkNodePortsAndNotify(runningNode);
     }
-  }, 600000);
+  }, 600000); // 10 minutes
   return node;
 };
 
