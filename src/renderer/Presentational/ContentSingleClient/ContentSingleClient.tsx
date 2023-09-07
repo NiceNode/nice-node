@@ -1,6 +1,7 @@
 // import { useState, useCallback } from 'react';
 // import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 // import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
+import { useTranslation } from 'react-i18next';
 import { MetricData } from 'common/node';
 import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
 import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
@@ -78,6 +79,7 @@ const ContentSingleClient = ({
   // TODO: retrieve initial data for all pages
 
   const { tabsData, name } = nodeContent;
+  const { t } = useTranslation();
 
   return (
     <>
@@ -97,24 +99,24 @@ const ContentSingleClient = ({
         {/* <div id="Sync">
           <TabContent tabId="Sync" />
         </div> */}
-        <div id="CPU">
+        <div id={t('CPU')}>
           <TabContent
             name={name}
             tabId="CPU"
             metricData={tabsData?.cpuPercent}
           />
         </div>
-        <div id="Memory">
+        <div id={t('Memory')}>
           <TabContent
             name={name}
             tabId="Memory"
             metricData={tabsData?.memoryPercent}
           />
         </div>
-        {/* <div id="Network">
+        {/* <div id={t('Network')}>
           <TabContent tabId="Network" />
         </div> */}
-        <div id="Disk">
+        <div id={t('Disk')}>
           <TabContent
             name={name}
             tabId="Disk"

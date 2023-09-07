@@ -18,9 +18,9 @@ interface MetaElement extends HTMLMetaElement {
 
 export const PreferencesModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
-  const { t: tGenerics } = useTranslation('genericComponents');
-  const modalTitle = tGenerics('Preferences');
-  const buttonSaveLabel = tGenerics('SaveChanges');
+  const { t: g } = useTranslation('genericComponents');
+  const modalTitle = g('Preferences');
+  const buttonSaveLabel = g('SaveChanges');
   const qSettings = useGetSettingsQuery();
 
   const handleColorSchemeChange = (colorScheme: ThemeSetting) => {

@@ -36,7 +36,7 @@ const LabelSettingsSection = ({
   items,
   type,
 }: LabelSettingsSectionProps) => {
-  const { t } = useTranslation('genericComponents');
+  const { t: g } = useTranslation('genericComponents');
 
   return (
     <div className={[sectionContainer, type].join(' ')}>
@@ -55,7 +55,7 @@ const LabelSettingsSection = ({
                 {item.learnMoreLink && (
                   <ExternalLink
                     url={item.learnMoreLink}
-                    text={t('LearnMore')}
+                    text={g('LearnMore')}
                     inline
                     hideIcon
                   />

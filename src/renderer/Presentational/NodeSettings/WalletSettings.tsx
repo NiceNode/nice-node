@@ -123,7 +123,7 @@ export const WalletSettings = ({
   ];
 
   const { t } = useTranslation();
-  const { t: tGeneric } = useTranslation('genericComponents');
+  const { t: g } = useTranslation('genericComponents');
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const splitCorsDomains = splitDomainsFromValue({
     rawCorsValue: configValuesMap?.httpCorsDomains,
@@ -436,9 +436,7 @@ export const WalletSettings = ({
       <div className={advancedOptionsLink}>
         <DropdownLink
           text={`${
-            isOptionsOpen
-              ? tGeneric('HideAdvancedOptions')
-              : tGeneric('ShowAdvancedOptions')
+            isOptionsOpen ? g('HideAdvancedOptions') : g('ShowAdvancedOptions')
           }`}
           onClick={() => setIsOptionsOpen(!isOptionsOpen)}
           isDown={!isOptionsOpen}
@@ -453,7 +451,7 @@ export const WalletSettings = ({
             ID to allow access.{' '}
             <ExternalLink
               url="http://google.com"
-              text={tGeneric('LearnMore')}
+              text={g('LearnMore')}
               inline
               hideIcon
             />

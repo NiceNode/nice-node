@@ -42,7 +42,7 @@ export const Header = ({ nodeContent, isPodmanRunning }: HeaderProps) => {
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
-  const { t: tGenerics } = useTranslation('genericComponents');
+  const { t: g } = useTranslation('genericComponents');
 
   const startStopButtonProps: ButtonProps = {
     label: '',
@@ -50,14 +50,14 @@ export const Header = ({ nodeContent, isPodmanRunning }: HeaderProps) => {
     onClick: () => {},
   };
   if (!status.stopped) {
-    startStopButtonProps.label = tGenerics('Stop');
+    startStopButtonProps.label = g('Stop');
     startStopButtonProps.iconId = 'stop';
     startStopButtonProps.onClick = () => {
       if (onAction) onAction('stop');
     };
   } else {
     // const text = status.initialized ? 'Resume' : 'Start';
-    startStopButtonProps.label = tGenerics('Resume');
+    startStopButtonProps.label = g('Resume');
     startStopButtonProps.iconId = 'play';
     startStopButtonProps.onClick = () => {
       if (onAction) onAction('start');

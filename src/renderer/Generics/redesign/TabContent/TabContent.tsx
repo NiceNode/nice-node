@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { MetricData } from 'common/node';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
 import { container, contentHeader, contentTitle } from './tabContent.css';
@@ -70,16 +71,16 @@ type SectionLabelProps = {
   [key: string]: string;
 };
 
-const contentLabels: SectionLabelProps = {
-  Sync: 'Synchronization',
-  CPU: 'CPU usage',
-  Memory: 'Memory usage',
-  Network: 'Network',
-  Disk: 'Disk',
-};
-
 const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
   // switch statement here to determine which charts and sections to show?
+  const { t } = useTranslation();
+  const contentLabels: SectionLabelProps = {
+    Sync: t('Synchronization'),
+    CPU: t('CPUUsage'),
+    Memory: t('MemoryUsage'),
+    Network: t('NetworkUsage'),
+    Disk: t('DiskUsage'),
+  };
 
   const processPeriodBreakdownData = () => {
     if (tabId === 'CPU' || tabId === 'Memory') {
@@ -102,7 +103,7 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
       return (
         <>
           <div className={contentHeader}>
-            <div className={contentTitle}>Capacity</div>
+            <div className={contentTitle}>{t('Capacity')}</div>
           </div>
           <DiskCapacityBarChart
             freeSpace={diskFree}
@@ -119,7 +120,7 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
 
   // eslint-disable-next-line
   const breakdownData: { title: string; items: any[] } = {
-    title: 'Period breakdown',
+    title: t('PeriodBreakdown'),
     items: getBreakdown(tabId.toLowerCase(), processPeriodBreakdownData()),
   };
 

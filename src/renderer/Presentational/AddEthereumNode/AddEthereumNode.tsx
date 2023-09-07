@@ -63,7 +63,7 @@ const AddEthereumNode = ({
 // beaconOptions,
 AddEthereumNodeProps) => {
   const { t } = useTranslation();
-  const { t: tGeneric } = useTranslation('genericComponents');
+  const { t: g } = useTranslation('genericComponents');
 
   const ecOptions = [
     {
@@ -275,8 +275,8 @@ AddEthereumNodeProps) => {
       {/* <DropdownLink
         text={`${
           sIsOptionsOpen
-            ? tGeneric('HideAdvancedOptions')
-            : tGeneric('ShowAdvancedOptions')
+            ? g('HideAdvancedOptions')
+            : g('ShowAdvancedOptions')
         }`}
         onClick={() => setIsOptionsOpen(!sIsOptionsOpen)}
         isDown={!sIsOptionsOpen}
@@ -290,7 +290,7 @@ AddEthereumNodeProps) => {
             width: '100%',
           }}
         >
-          <span style={{ fontWeight: 600 }}>{tGeneric('Network')}</span>{' '}
+          <span style={{ fontWeight: 600 }}>{g('Network')}</span>{' '}
           <div
             style={{
               width: 300,
@@ -310,13 +310,13 @@ AddEthereumNodeProps) => {
         </div>
       )} */}
       <HorizontalLine />
-      <p className={sectionFont}>{tGeneric('DataLocation')}</p>
+      <p className={sectionFont}>{g('DataLocation')}</p>
       <p
         className={captionText}
       >{`Changing location only supported on Mac and only locations under /Users/<current-user>/ or /Volumes/`}</p>
       <FolderInput
         // disabled
-        placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
+        placeholder={sNodeStorageLocation ?? g('loadingDotDotDot')}
         freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
         onClickChange={async () => {
           const storageLocationDetails =

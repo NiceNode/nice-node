@@ -8,14 +8,14 @@ export interface TimedProgressBarProps extends ProgressBarProps {
 }
 
 const timeRemainingCaption = (
-  t: TFunction,
+  g: TFunction,
   totalTime: number,
   timeElapsed: number,
 ) => {
   if (timeElapsed >= totalTime) {
-    return t('FinishingUp');
+    return g('FinishingUp');
   }
-  return t('AboutSecondsRemaining', {
+  return g('AboutSecondsRemaining', {
     seconds: Math.round(totalTime - timeElapsed),
   });
 };
@@ -24,7 +24,7 @@ const TimedProgressBar = ({
   totalTimeSeconds,
   ...restProps
 }: TimedProgressBarProps) => {
-  const { t } = useTranslation('genericComponents');
+  const { t: g } = useTranslation('genericComponents');
   const [sElapsedSeconds, setElapsedSeconds] = useState<number>(0);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const TimedProgressBar = ({
   return (
     <ProgressBar
       progress={(sElapsedSeconds / totalTimeSeconds) * 100}
-      caption={timeRemainingCaption(t, totalTimeSeconds, sElapsedSeconds)}
+      caption={timeRemainingCaption(g, totalTimeSeconds, sElapsedSeconds)}
       {...restProps}
     />
   );

@@ -21,7 +21,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const [sIsPodmanRunning, setIsPodmanRunning] = useState<boolean>(false);
   const [step, setStep] = useState(0);
   const { t } = useTranslation();
-  const { t: tGenerics } = useTranslation('genericComponents');
+  const { t: g } = useTranslation('genericComponents');
 
   useEffect(() => {
     reportEvent('OpenAddNodeModal');
@@ -50,11 +50,8 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
 
   const startNode =
     (step === 1 || step === 2) && (isPodmanRunning || sIsPodmanRunning);
-  const buttonSaveLabel = startNode
-    ? tGenerics('StartNode')
-    : tGenerics('Continue');
-  const buttonCancelLabel =
-    step === 0 ? tGenerics('Cancel') : tGenerics('Back');
+  const buttonSaveLabel = startNode ? g('StartNode') : g('Continue');
+  const buttonCancelLabel = step === 0 ? g('Cancel') : g('Back');
   const buttonSaveVariant = startNode ? 'icon-left' : 'text';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {

@@ -58,7 +58,7 @@ const Preferences = ({
   onChange,
 }: PreferencesProps) => {
   const { t } = useTranslation();
-  const { t: tGenerics } = useTranslation('genericComponents');
+  const { t: g } = useTranslation('genericComponents');
   const [initialThemeSetting] = useState(themeSetting);
 
   const onClickTheme = (theme: ThemeSetting) => {
@@ -85,20 +85,20 @@ const Preferences = ({
 
   return (
     <div className={preferencesContainer}>
-      <div className={sectionTitle}>{tGenerics('Appearance')}</div>
+      <div className={sectionTitle}>{g('Appearance')}</div>
       <div className={appearanceSection}>
         {[
           {
             theme: 'auto',
-            label: tGenerics('AutoFollowsComputerSetting'),
+            label: g('AutoFollowsComputerSetting'),
           },
           {
             theme: 'light',
-            label: tGenerics('LightMode'),
+            label: g('LightMode'),
           },
           {
             theme: 'dark',
-            label: tGenerics('DarkMode'),
+            label: g('DarkMode'),
           },
         ].map((themeDetails, index) => {
           const isSelected = themeSetting === themeDetails.theme;
@@ -170,7 +170,7 @@ const Preferences = ({
                   ),
                 },
                 {
-                  label: tGenerics('Language'),
+                  label: g('Language'),
                   value: (
                     <LanguageSelect
                       language={language}
