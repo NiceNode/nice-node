@@ -54,14 +54,14 @@ export const NOTIFICATIONS = Object.freeze({
   },
   WARNING: {
     LOW_DISK_SPACE: {
-      title: 'Low disk space',
-      description: 'Disk space is lower than 40GB',
+      title: 'LowDiskSpaceTitle',
+      description: 'LowDiskSpaceDescription',
       status: STATUS.WARNING,
       limit: TIME.DAY,
     },
     CONNECTION_DOWN: {
-      title: 'Internet connection down',
-      description: 'All nodes affected',
+      title: 'InternetConnectionDownTitle',
+      description: 'InternetConnectionDownDescription',
       status: STATUS.WARNING,
       limit: TIME.HOUR,
     },

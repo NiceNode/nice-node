@@ -1,5 +1,6 @@
 import { NotificationProps } from 'main/consts/notifications';
 import { NotificationItemProps } from 'renderer/Generics/redesign/NotificationItem/NotificationItem';
+import i18n from '../i18n';
 import { send } from '../messenger';
 import store from './store';
 
@@ -72,9 +73,12 @@ export const addNotification = (notificationObject: NotificationProps) => {
   const notifications = store.get(NOTIFICATIONS_KEY) || [];
   if (checkIfNotificationCanBeAdded(notifications, notificationObject)) {
     const { title, description, status } = notificationObject;
+    const translatedTitle = i18n.t(`notifications:${title}`);
+    const translatedDescription = i18n.t(`notifications:${description}`);
+
     const newNotification = {
-      title,
-      description,
+      title: translatedTitle,
+      description: translatedDescription,
       unread: true,
       status: status as NotificationItemProps['status'],
       timestamp: Date.now(),
