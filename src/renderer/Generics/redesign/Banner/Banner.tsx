@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IconId } from 'renderer/assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import {
@@ -44,33 +45,34 @@ export const Banner = ({
   const [iconId, setIconId] = useState<IconId>('blank');
   const [title, setTitle] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (offline) {
       setIconId('boltstrike');
-      setTitle('Currently offline');
-      setDescription('Please reconnect to the internet');
+      setTitle(t('CurrentlyOffline'));
+      setDescription(t('PleaseReconnect'));
     } else if (!podmanInstalled) {
       setIconId('warningcircle');
-      setTitle('Podman is not installed');
-      setDescription('Click to install Podman');
+      setTitle(t('PodmanIsNotInstalled'));
+      setDescription(t('ClickToInstallPodman'));
     } else if (updateAvailable) {
       setIconId('download1');
-      setTitle('Update available');
-      setDescription('New version ready to install');
+      setTitle(t('UpdateAvailable'));
+      setDescription(t('NewVersionAvailable'));
     } else if (podmanStopped) {
       setIconId('play');
-      setTitle('Podman is not running');
-      setDescription('Click to start Podman');
+      setTitle(t('PodmanIsNotRunning'));
+      setDescription(t('ClickToStartPodman'));
     }
-  }, [offline, updateAvailable, podmanStopped, podmanInstalled]);
+  }, [offline, updateAvailable, podmanStopped, podmanInstalled, t]);
 
   const onClickBanner = () => {
     if (!podmanInstalled) {
-      setDescription('Installing...');
+      setDescription(t('PodmanInstalling'));
       setLoading(true);
     } else if (podmanStopped) {
-      setDescription('Loading...');
+      setDescription(t('PodmanLoading'));
       setLoading(true);
     } else if (updateAvailable) {
       console.log('update nice node!');
