@@ -69,7 +69,7 @@ export const Alert = ({
         </div>
 
         <div className={actionButtonsContainer}>
-          <Button label={t('Cancel')} onClick={onClickCloseButton} />
+          <Button label={g('Cancel')} onClick={onClickCloseButton} />
           <Button
             label={acceptTextDisplay}
             type={acceptTypeDisplay}

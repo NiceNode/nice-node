@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useCallback, forwardRef } from 'react';
+import { useEffect, useCallback, forwardRef } from 'react';
 import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import electron from '../../electronGlobal';
 import { useGetNotificationsQuery } from '../../state/notificationsService';
