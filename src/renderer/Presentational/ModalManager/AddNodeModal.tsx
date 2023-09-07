@@ -141,6 +141,9 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     console.log('nodePackage result: ', nodePackage);
     reportEvent('AddNode');
     dispatch(updateSelectedNodePackageId(nodePackage.id));
+
+    // todo2: call start node package
+
     // await electron.startNode(ecNode.id);
     // await electron.startNode(ccNode.id);
   };

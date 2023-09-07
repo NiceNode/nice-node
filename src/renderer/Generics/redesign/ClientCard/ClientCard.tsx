@@ -25,6 +25,10 @@ const getLabelDetails = (label: string) => {
     string: '',
   };
   switch (label) {
+    case 'running':
+      labelDetails.color = 'green';
+      labelDetails.string = 'Running';
+      break;
     case 'synchronized':
       labelDetails.color = 'green';
       labelDetails.string = 'Synchronized';
@@ -86,7 +90,7 @@ export const ClientCard = (props: Props) => {
           <ProgressBar
             card
             color={
-              common.color[name as NodeBackgroundId] ??
+              common.color[name.replace('-beacon', '') as NodeBackgroundId] ??
               common.color.randomNode[
                 Math.floor(Math.random() * common.color.randomNode.length)
               ]
@@ -118,12 +122,7 @@ export const ClientCard = (props: Props) => {
     );
   };
 
-  // TODO: refactor this out since it's used in Single client view
-  const clientTypeLabel =
-    nodeType === 'execution' ? 'Execution Client' : 'Consensus Client';
-
   const stoppedStyle = status.stopped ? 'stopped' : '';
-  console.log('we out here', name);
   return (
     <div
       className={container}
@@ -137,7 +136,8 @@ export const ClientCard = (props: Props) => {
       <div
         style={{
           backgroundImage: `url(${
-            NODE_BACKGROUNDS[name as NodeBackgroundId] ?? ''
+            NODE_BACKGROUNDS[name.replace('-beacon', '') as NodeBackgroundId] ??
+            ''
           })`,
           height: isNotSynchronizedAndNotStopped ? 166 : 186,
         }}
@@ -146,14 +146,14 @@ export const ClientCard = (props: Props) => {
         <div className={[clientBackground, `${stoppedStyle}`].join(' ')}>
           <div className={clientDetails}>
             <div className={clientIcon}>
-              <NodeIcon iconId={name} size="medium" />
+              <NodeIcon iconId={name.replace('-beacon', '')} size="medium" />
             </div>
             <div className={clientTitle}>{displayName}</div>
           </div>
         </div>
       </div>
       <div className={cardContent}>
-        <div className={clientType}>{clientTypeLabel}</div>
+        <div className={clientType}>{nodeType}</div>
         {renderContents()}
       </div>
     </div>

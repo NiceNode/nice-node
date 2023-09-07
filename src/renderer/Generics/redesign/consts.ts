@@ -3,6 +3,7 @@ import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
 import { NodeId } from 'common/node';
 
 export interface ClientStatusProps {
+  running?: boolean;
   updating?: boolean;
   initialized?: boolean; // initial initialization is done
   synchronized?: boolean; // constantly updated from checking current / height slot or block

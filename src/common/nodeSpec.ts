@@ -123,6 +123,7 @@ export type NodePackageSpecification = {
   version: string;
   displayName: string;
   execution: NodePackageExecution;
+  displayTagline?: string;
   systemRequirements?: SystemRequirements;
   rpcTranslation?: NiceNodeRpcTranslation;
   configTranslation?: ConfigTranslationMap;

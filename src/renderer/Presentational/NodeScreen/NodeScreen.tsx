@@ -28,13 +28,17 @@ import {
   contentContainer,
   titleFont,
   descriptionFont,
+  backButtonContainer,
 } from './NodeScreen.css';
 import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
+import { HeaderButton } from 'renderer/Generics/redesign/HeaderButton/HeaderButton';
+import { useNavigate } from 'react-router-dom';
 
 let alphaModalRendered = false;
 
 const NodeScreen = () => {
   // const { t } = useTranslation();
+  const navigate = useNavigate();
   const selectedNode = useAppSelector(selectSelectedNode);
   const qNodeVersion = useGetNodeVersionQuery(
     selectedNode?.spec.rpcTranslation,
@@ -378,19 +382,19 @@ const NodeScreen = () => {
     onAction: onNodeAction,
   };
   console.log('passing content to NodeScreen: ', nodeContent);
-  return <ContentSingleClient {...nodeContent} />;
+  return (
+    <div>
+      <div className={backButtonContainer}>
+        <HeaderButton
+          type={'left'}
+          onClick={() => {
+            navigate('/main/nodePackage');
+          }}
+        />
+      </div>
 
-  // start button disabled logic
-  // disabled={
-  //   !(
-  //     status === NodeStatus.created ||
-  //     status === NodeStatus.readyToStart ||
-  //     status === NodeStatus.errorStarting ||
-  //     status === NodeStatus.errorRunning ||
-  //     status === NodeStatus.stopped ||
-  //     status === NodeStatus.errorStopping ||
-  //     status === NodeStatus.unknown
-  // stop button disabled logic
-  //   disabled={status !== NodeStatus.running}
+      <ContentSingleClient {...nodeContent} />
+    </div>
+  );
 };
 export default NodeScreen;

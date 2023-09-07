@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '../../Generics/redesign/theme.css';
 
 export const container = style({
-  margin: '64px 40px',
+  // margin: '64px 40px',
   boxSizing: 'border-box',
 });
 

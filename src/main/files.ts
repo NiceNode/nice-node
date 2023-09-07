@@ -82,7 +82,6 @@ export const getSystemFreeDiskSpace = async (
   diskSpacePath?: string,
 ): Promise<number> => {
   const pathToCheck: string = diskSpacePath || app.getPath('userData');
-  console.log('pathToCheck', pathToCheck);
   const diskSpace = await checkDiskSpace(pathToCheck);
   const freeInGBs = diskSpace.free * 1e-9;
   return freeInGBs;

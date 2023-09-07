@@ -26,11 +26,4 @@ export const CHANNELS = {
   theme: 'theme',
   notifications: 'notifications',
 };
-export const CHANNELS_ARRAY = [
-  'userNodePackages',
-  'nodeLogs',
-  'podman',
-  'podmanInstall',
-  'theme',
-  'notifications',
-];
+export const CHANNELS_ARRAY = Object.keys(CHANNELS);

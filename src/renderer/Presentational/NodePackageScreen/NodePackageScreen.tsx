@@ -9,7 +9,7 @@ import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import {
   selectIsAvailableForPolling,
   selectSelectedNodePackage,
-  updateSelectedNodeId,
+  selectUserNodes,
 } from '../../state/node';
 import {
   useGetExecutionIsSyncingQuery,
@@ -18,9 +18,7 @@ import {
   useGetNodeVersionQuery,
 } from '../../state/services';
 // import { useGetNetworkConnectedQuery } from './state/network';
-import ContentSingleClient, {
-  SingleNodeContent,
-} from '../ContentSingleClient/ContentSingleClient';
+import { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
 import { hexToDecimal } from '../../utils';
 import { ClientProps, NodeAction } from '../../Generics/redesign/consts';
 import Button from '../../Generics/redesign/Button/Button';
@@ -37,7 +35,9 @@ let alphaModalRendered = false;
 
 const NodePackageScreen = () => {
   // const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const selectedNodePackage = useAppSelector(selectSelectedNodePackage);
+  const sUserNodes = useAppSelector(selectUserNodes);
   const qNodeVersion = useGetNodeVersionQuery(
     selectedNodePackage?.spec.rpcTranslation,
   );
@@ -47,6 +47,9 @@ const NodePackageScreen = () => {
   const [sPeers, setPeers] = useState<number>();
   const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>(0);
   const [sTotalDiskSize, setTotalDiskSize] = useState<number>(0);
+  const [sDiskUsed, setDiskUsed] = useState<number>(0);
+  const [sCpuPercentUsed, setCpuPercentUsed] = useState<number>(0);
+  const [sMemoryBytesUsed, setMemoryBytesUsed] = useState<number>(0);
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
@@ -57,8 +60,6 @@ const NodePackageScreen = () => {
       pollingInterval,
     },
   );
-  // const isSelectedNodePackage = selectedNodePackage !== undefined;
-  // const peersPolling = isSelectedNodePackage ? pollingInterval : 0;
   const qExecutionPeers = useGetExecutionPeersQuery(
     selectedNodePackage?.spec.rpcTranslation,
     {
@@ -78,21 +79,35 @@ const NodePackageScreen = () => {
   //   pollingInterval: typeof sPeers === 'number' && sPeers === 0 ? 30000 : 0,
   // });
 
-  const diskUsed = selectedNodePackage?.runtime?.usage?.diskGBs?.[0]?.y ?? 0;
-  const cpuPercent = selectedNodePackage?.runtime?.usage?.cpuPercent ?? [
-    { x: 0, y: 0 },
-  ];
-  const memoryPercent = selectedNodePackage?.runtime?.usage?.memoryBytes ?? [
-    { x: 0, y: 0 },
-  ];
-  // eslint-disable-next-line eqeqeq
-  // const isHttpEnabled =
-  //   selectedNodePackage?.config?.configValuesMap?.http &&
-  //   ['Enabled', 'enabled', 'true', true, 1].includes(
-  //     selectedNodePackage?.config?.configValuesMap?.http
-  //   );
-  // todo: http apis
+  // calc node package resource usage
+  useEffect(() => {
+    // format for presentation
+    let diskUsedGBs = 0,
+      cpuPercent = 0,
+      memoryPercent = 0;
+    selectedNodePackage?.services.map((service) => {
+      // todo2: get the node data from userNodes (or do on backend?)
+      const nodeId = service.node.id;
+      const node = sUserNodes?.nodes[nodeId];
+      console.log('we out here, ', sUserNodes, nodeId, node);
+      diskUsedGBs = diskUsedGBs + (node?.runtime?.usage?.diskGBs?.[0]?.y ?? 0);
+      cpuPercent = cpuPercent + (node?.runtime?.usage?.cpuPercent?.[0]?.y ?? 0);
+      memoryPercent =
+        memoryPercent + (node?.runtime?.usage?.memoryBytes?.[0]?.y ?? 0);
+    });
+    //todo2: set vals
+    setDiskUsed(diskUsedGBs);
+    setCpuPercentUsed(cpuPercent);
+    setMemoryBytesUsed(memoryPercent);
+  }, [selectedNodePackage?.services, sUserNodes]);
 
+  // const diskUsed = selectedNodePackage?.runtime?.usage?.diskGBs?.[0]?.y ?? 0;
+  // const cpuPercent = selectedNodePackage?.runtime?.usage?.cpuPercent ?? [
+  //   { x: 0, y: 0 },
+  // ];
+  // const memoryPercent = selectedNodePackage?.runtime?.usage?.memoryBytes ?? [
+  //   { x: 0, y: 0 },
+  // ];
   const getNodesDefaultStorageLocation = async () => {
     const defaultNodesStorageDetails =
       await electron.getNodesDefaultStorageLocation();
@@ -229,38 +244,33 @@ const NodePackageScreen = () => {
     };
     setAlphaModal();
   }, []);
-  // useEffect(() => {
-  //   qNodeInfo.refetch();
-  // }, [selectedNodePackage]);
-
-  // Will select the Node with the given id, and will only rerender if the given Node data changes
-  // https://redux-toolkit.js.org/rtk-query/usage/queries#selecting-data-from-a-query-result
-  // const { selectedNodePackage } = useGetNodesQuery(undefined, {
-  //   selectFromResult: ({ data }: { data: Node[] }) => {
-  //     return {
-  //       selectedNodePackage: data?.find((node) => node.id === sSelectedNodePackageId),
-  //     };
-  //   },
-  // });
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     // format for presentation
     const formattedServices: ClientProps[] = [];
     selectedNodePackage?.services.map((service) => {
+      // todo2: get the node data from userNodes (or do on backend?)
+      const nodeId = service.node.id;
+      const node = sUserNodes?.nodes[nodeId];
+      console.log('we out here, ', sUserNodes, nodeId, node);
       const serviceProps: ClientProps = {
         id: service.node.id,
         name: service.node.spec.specId,
         displayName: service.node.spec.displayName as NodeBackgroundId,
         version: '',
         nodeType: service.serviceName,
-        status: {},
+        status: {
+          running: node?.status === 'running',
+          stopped: node?.status === 'stopped',
+          error: node?.status.includes('error'),
+          // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+        },
         stats: {},
       };
       formattedServices.push(serviceProps);
     });
     setFormattedServices(formattedServices);
-  }, [selectedNodePackage?.services]);
+  }, [selectedNodePackage?.services, sUserNodes]);
 
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {
     dispatch(
@@ -382,7 +392,7 @@ const NodePackageScreen = () => {
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
     version: formatVersion(nodeVersionData, clientName),
-    info: formatSpec(spec.category),
+    info: formatSpec(spec.displayTagline),
     status: {
       stopped: status === 'stopped',
       error: status.includes('error'),
@@ -391,15 +401,16 @@ const NodePackageScreen = () => {
     stats: {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,
-      diskUsageGBs: diskUsed,
+      diskUsageGBs: sDiskUsed,
+      cpuLoad: sCpuPercentUsed,
     },
-    tabsData: {
-      cpuPercent,
-      memoryPercent,
-      diskUsed: selectedNodePackage?.runtime?.usage?.diskGBs,
-      diskFree: sFreeStorageGBs,
-      diskTotal: sTotalDiskSize,
-    },
+    // tabsData: {
+    //   cpuPercent: sCpuPercentUsed,
+    //   memoryPercent: sMemoryBytesUsed,
+    //   diskUsed: sDiskUsed,
+    //   diskFree: sFreeStorageGBs,
+    //   diskTotal: sTotalDiskSize,
+    // },
     onAction: onNodeAction,
     description: spec.description,
   };
@@ -448,7 +459,6 @@ export interface ClientProps {
         clients={sFormattedServices}
         nodeContent={nodeContent}
       />
-      <p>{JSON.stringify(nodeContent)}</p>
     </div>
   );
 

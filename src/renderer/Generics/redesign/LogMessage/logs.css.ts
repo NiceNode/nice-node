@@ -9,6 +9,7 @@ export const container = style({
   display: 'flex',
   flexDirection: 'column',
   flex: 1,
+  paddingTop: '32px', // needed on mac so close logs btn isnt under drag bar
 });
 
 export const logsContainer = style({

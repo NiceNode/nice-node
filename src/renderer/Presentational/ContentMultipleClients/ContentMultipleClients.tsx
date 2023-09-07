@@ -150,7 +150,7 @@ const ContentMultipleClients = (props: {
       name: nodeContent.name,
       title: `${nodeContent.displayName} node`,
       info: nodeContent.info,
-      type: 'altruistic',
+      screenType: 'altruistic',
       status: nodeContent.status,
       stats: nodeContent.stats,
       description: nodeContent.description,
@@ -188,6 +188,10 @@ const ContentMultipleClients = (props: {
   const nodeOverview = getNodeOverview();
   const resourceData = getResourceData();
 
+  // todo2: call start/stop node package
+
+  // todo2: call remove node package
+
   return (
     <div className={container}>
       <Header {...(nodeOverview as NodeOverviewProps)} />
@@ -195,9 +199,10 @@ const ContentMultipleClients = (props: {
       <HeaderMetrics {...(nodeOverview as NodeOverviewProps)} />
       <HorizontalLine type="content" />
       {renderPrompt()}
-      <div className={sectionTitle}>Ethereum Clients</div>
+      <div className={sectionTitle}>Services</div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
+          console.log('we out here', client);
           return (
             <ClientCard
               {...client}
@@ -207,7 +212,9 @@ const ContentMultipleClients = (props: {
                   client.id,
                 );
                 dispatch(updateSelectedNodeId(client.id));
-                navigate('/main/node');
+                setTimeout(() => {
+                  navigate('/main/node');
+                }, 500);
               }}
             />
           );
