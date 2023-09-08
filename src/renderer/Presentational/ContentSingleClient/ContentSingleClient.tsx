@@ -40,6 +40,7 @@ export type SingleNodeContent = {
     currentBlock?: number;
     highestBlock?: number;
     cpuLoad?: number;
+    memoryUsagePercent?: number;
     diskUsageGBs?: number; // in MB?
   };
   tabsData?: {

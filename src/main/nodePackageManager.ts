@@ -39,10 +39,9 @@ export const addNodePackage = async (
 ): Promise<NodePackage> => {
   // use a timestamp postfix so the user can add multiple nodes of the same name
   const utcTimestamp = Math.floor(Date.now() / 1000);
-  const storageLocation = settings.storageLocation;
   const dataDir = await makeNodeDir(
     `${nodeSpec.specId}-${utcTimestamp}`,
-    storageLocation ?? getNodesDirPath(),
+    settings.storageLocation ?? getNodesDirPath(),
   );
   console.log('adding node package with dataDir: ', dataDir);
   const nodeRuntime: NodeRuntime = {
@@ -63,7 +62,8 @@ export const addNodePackage = async (
   // todo: loop over services and call addNode, at the end add all node ids to the nodepackge.services
   const nodeServices: NodeService[] = [];
   const nodesThatRequireJwtSecret: Node[] = [];
-  for (const service of services) {
+  for (let i = 0; i < services.length; i++) {
+    const service = services[i];
     try {
       const nodePackageServiceSpec = nodeSpec?.execution?.services?.find(
         (serviceSpec) => {
@@ -111,7 +111,8 @@ export const startNodePackage = async (nodeId: NodeId) => {
   nodePackageStore.updateNodePackage(node);
 
   nodePackageStatus = NodeStatus.running;
-  for (const service of node.services) {
+  for (let i = 0; i < node.services.length; i++) {
+    const service = node.services[i];
     try {
       await startNode(service.node.id);
     } catch (e) {
@@ -138,7 +139,8 @@ export const stopNodePackage = async (nodeId: NodeId) => {
   nodePackageStore.updateNodePackage(node);
 
   nodePackageStatus = NodeStatus.stopped;
-  for (const service of node.services) {
+  for (let i = 0; i < node.services.length; i++) {
+    const service = node.services[i];
     try {
       await stopNode(service.node.id);
     } catch (e) {
@@ -171,7 +173,8 @@ export const removeNodePackage = async (
     );
   }
   const node = nodePackageStore.getNodePackage(nodeId);
-  for (const service of node.services) {
+  for (let i = 0; i < node.services.length; i++) {
+    const service = node.services[i];
     try {
       await removeNode(service.node.id, options);
     } catch (e) {

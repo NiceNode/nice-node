@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+
 import { SystemRequirements } from './systemRequirements';
 
 import { ConfigValuesMap, ConfigTranslationMap } from './nodeConfig';
@@ -76,21 +78,6 @@ export type BinaryExecution = BaseNodeExecution & {
   // todo: could be file path
 };
 
-type NodePackageNodeServiceSpec = {
-  serviceId: string;
-  name: string;
-  nodeOptions: string[] | NodeSpecification[];
-  required: boolean;
-  requiresCommonJwtSecret?: boolean;
-};
-
-export type NodePackageExecution = BaseNodeExecution & {
-  // only including "| string[]" to remove linter error when casting spec as NodePackageSpecification
-  executionTypes: ['nodePackage'] | string[];
-  services: NodePackageNodeServiceSpec[];
-  dependencies?: { name: string; specId: string }[];
-};
-
 export type NodeExecution =
   | NodePackageExecution
   | DockerExecution
@@ -116,6 +103,21 @@ export type NodeSpecification = {
   iconUrl?: string;
   category?: string;
   documentation?: { default?: string; docker?: string; binary?: string };
+};
+
+type NodePackageNodeServiceSpec = {
+  serviceId: string;
+  name: string;
+  nodeOptions: string[] | NodeSpecification[];
+  required: boolean;
+  requiresCommonJwtSecret?: boolean;
+};
+
+export type NodePackageExecution = BaseNodeExecution & {
+  // only including "| string[]" to remove linter error when casting spec as NodePackageSpecification
+  executionTypes: ['nodePackage'] | string[];
+  services: NodePackageNodeServiceSpec[];
+  dependencies?: { name: string; specId: string }[];
 };
 
 export type NodePackageSpecification = {

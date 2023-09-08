@@ -26,6 +26,7 @@ export type MetricStats =
   | 'peers'
   | 'cpuLoad'
   | 'diskUsageGBs'
+  | 'memoryUsagePercent'
   | 'balance'
   | 'stake'
   | 'rewards';
@@ -132,6 +133,15 @@ export const MetricTypes = ({
           titleText = `${0}`;
         }
         labelText = 'Peers connected';
+        break;
+      case 'memoryUsagePercent':
+        if (typeof statsValue === 'number') {
+          titleText = `${statsValue.toFixed(2)}%`;
+        } else {
+          titleText = `${statsValue}%`;
+        }
+        iconId = 'bolt';
+        labelText = 'Memory usage';
         break;
       case 'cpuLoad':
         iconId = 'cpu';

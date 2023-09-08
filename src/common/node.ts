@@ -70,11 +70,6 @@ export type UserNodes = {
   nodes: NodeMap;
   nodeIds: string[];
 };
-type NodePackageMap = Record<string, NodePackage>;
-export type UserNodePackages = {
-  nodes: NodePackageMap;
-  nodeIds: string[];
-};
 export type NodeService = {
   serviceId: string;
   serviceName: string;
@@ -89,6 +84,11 @@ export type NodePackage = {
   status: NodeStatus;
   lastStarted?: string;
   lastStopped?: string;
+};
+type NodePackageMap = Record<string, NodePackage>;
+export type UserNodePackages = {
+  nodes: NodePackageMap;
+  nodeIds: string[];
 };
 
 export const isDockerNode = (node: Node) => {
@@ -145,7 +145,7 @@ export const createNode = (input: {
   return node;
 };
 export const createNodePackage = (input: {
-  spec: NodeSpecification;
+  spec: NodePackageSpecification;
   runtime: NodeRuntime;
   initialConfigFromUser?: ConfigValuesMap;
 }): NodePackage => {

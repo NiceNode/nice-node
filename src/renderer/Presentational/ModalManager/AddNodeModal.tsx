@@ -9,8 +9,11 @@ import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import { reportEvent } from '../../events/reportEvent';
-import { NodePackageSpecification, NodeSpecification } from 'common/nodeSpec';
-import { AddNodePackageNodeService } from 'main/nodePackageManager';
+import {
+  NodePackageSpecification,
+  NodeSpecification,
+} from '../../../common/nodeSpec';
+import { AddNodePackageNodeService } from '../../../main/nodePackageManager';
 
 type Props = {
   modalOnClose: () => void;
@@ -198,7 +201,6 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
         modal
         modalConfig={modalConfig}
         modalOnChangeConfig={(config, save) => {
-          debugger;
           modalOnChangeConfig(
             config,
             modalConfig,
@@ -206,7 +208,6 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
             save,
             modalOnSaveConfig,
           );
-          debugger;
         }}
         disableSaveButton={disableSaveButton}
       />

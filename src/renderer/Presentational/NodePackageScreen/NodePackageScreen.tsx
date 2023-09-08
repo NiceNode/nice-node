@@ -45,11 +45,9 @@ const NodePackageScreen = () => {
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
-  const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>(0);
-  const [sTotalDiskSize, setTotalDiskSize] = useState<number>(0);
   const [sDiskUsed, setDiskUsed] = useState<number>(0);
   const [sCpuPercentUsed, setCpuPercentUsed] = useState<number>(0);
-  const [sMemoryBytesUsed, setMemoryBytesUsed] = useState<number>(0);
+  const [sMemoryUsagePercent, setMemoryUsagePercent] = useState<number>(0);
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
@@ -82,50 +80,20 @@ const NodePackageScreen = () => {
   // calc node package resource usage
   useEffect(() => {
     // format for presentation
-    let diskUsedGBs = 0,
-      cpuPercent = 0,
-      memoryPercent = 0;
+    let diskUsedGBs = 0;
+    let cpuPercent = 0;
+    let memoryPercent = 0;
     selectedNodePackage?.services.map((service) => {
-      // todo2: get the node data from userNodes (or do on backend?)
       const nodeId = service.node.id;
       const node = sUserNodes?.nodes[nodeId];
-      diskUsedGBs = diskUsedGBs + (node?.runtime?.usage?.diskGBs?.[0]?.y ?? 0);
-      cpuPercent = cpuPercent + (node?.runtime?.usage?.cpuPercent?.[0]?.y ?? 0);
-      memoryPercent =
-        memoryPercent + (node?.runtime?.usage?.memoryBytes?.[0]?.y ?? 0);
+      diskUsedGBs += node?.runtime?.usage?.diskGBs?.[0]?.y ?? 0;
+      cpuPercent += node?.runtime?.usage?.cpuPercent?.[0]?.y ?? 0;
+      memoryPercent += node?.runtime?.usage?.memoryBytes?.[0]?.y ?? 0;
     });
-    //todo2: set vals
     setDiskUsed(diskUsedGBs);
     setCpuPercentUsed(cpuPercent);
-    setMemoryBytesUsed(memoryPercent);
+    setMemoryUsagePercent(memoryPercent);
   }, [selectedNodePackage?.services, sUserNodes]);
-
-  // const diskUsed = selectedNodePackage?.runtime?.usage?.diskGBs?.[0]?.y ?? 0;
-  // const cpuPercent = selectedNodePackage?.runtime?.usage?.cpuPercent ?? [
-  //   { x: 0, y: 0 },
-  // ];
-  // const memoryPercent = selectedNodePackage?.runtime?.usage?.memoryBytes ?? [
-  //   { x: 0, y: 0 },
-  // ];
-  const getNodesDefaultStorageLocation = async () => {
-    const defaultNodesStorageDetails =
-      await electron.getNodesDefaultStorageLocation();
-    setFreeStorageGBs(defaultNodesStorageDetails.freeStorageGBs);
-  };
-
-  useEffect(() => {
-    getNodesDefaultStorageLocation();
-    const interval = setInterval(getNodesDefaultStorageLocation, 15000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const getSystemSize = async () => {
-    setTotalDiskSize(await electron.getSystemDiskSize());
-  };
-
-  useEffect(() => {
-    getSystemSize();
-  }, []);
 
   useEffect(() => {
     if (!sIsAvailableForPolling) {
@@ -383,7 +351,7 @@ const NodePackageScreen = () => {
   const nodeVersionData =
     typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
 
-  const nodeContent: SingleNodeContent = {
+  const nodePackageContent: SingleNodeContent = {
     nodeId: selectedNodePackage.id,
     displayName: spec.displayName,
     name: clientName as NodeBackgroundId,
@@ -400,6 +368,7 @@ const NodePackageScreen = () => {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,
       diskUsageGBs: sDiskUsed,
+      memoryUsagePercent: sMemoryUsagePercent,
       cpuLoad: sCpuPercentUsed,
     },
     onAction: onNodeAction,
@@ -440,7 +409,7 @@ export interface ClientProps {
   stats: ClientStatsProps;
 }
    */
-  console.log('passing content to NodePackageScreen: ', nodeContent);
+  console.log('passing content to NodePackageScreen: ', nodePackageContent);
 
   // todo: use ContentMultiClient
   // return <ContentSingleClient {...nodeContent} />;
@@ -448,7 +417,7 @@ export interface ClientProps {
     <div>
       <ContentMultipleClients
         clients={sFormattedServices}
-        nodeContent={nodeContent}
+        nodeContent={nodePackageContent}
       />
     </div>
   );

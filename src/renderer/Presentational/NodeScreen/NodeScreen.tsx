@@ -1,10 +1,8 @@
-// import { useTranslation } from 'react-i18next';
-
 import { useCallback, useEffect, useState } from 'react';
-// import { NodeStatus } from '../common/node';
+import { useNavigate } from 'react-router-dom';
+
 import { setModalState } from '../../state/modal';
 import electron from '../../electronGlobal';
-// import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import {
   selectIsAvailableForPolling,
@@ -16,7 +14,6 @@ import {
   useGetExecutionPeersQuery,
   useGetNodeVersionQuery,
 } from '../../state/services';
-// import { useGetNetworkConnectedQuery } from './state/network';
 import ContentSingleClient, {
   SingleNodeContent,
 } from '../ContentSingleClient/ContentSingleClient';
@@ -31,8 +28,7 @@ import {
   backButtonContainer,
 } from './NodeScreen.css';
 import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
-import { HeaderButton } from 'renderer/Generics/redesign/HeaderButton/HeaderButton';
-import { useNavigate } from 'react-router-dom';
+import { HeaderButton } from '../../Generics/redesign/HeaderButton/HeaderButton';
 
 let alphaModalRendered = false;
 
@@ -356,7 +352,6 @@ const NodeScreen = () => {
 
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
-    title: selectedNode.spec.displayName,
     displayName: selectedNode.spec.displayName,
     name: clientName as NodeBackgroundId,
     screenType: 'client',
@@ -387,7 +382,7 @@ const NodeScreen = () => {
     <div>
       <div className={backButtonContainer}>
         <HeaderButton
-          type={'left'}
+          type="left"
           onClick={() => {
             navigate('/main/nodePackage');
           }}

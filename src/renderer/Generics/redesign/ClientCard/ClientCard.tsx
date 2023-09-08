@@ -95,9 +95,7 @@ export const ClientCard = (props: Props) => {
             card
             color={
               common.color[name.replace('-beacon', '') as NodeBackgroundId] ??
-              common.color.randomNode[
-                Math.floor(Math.random() * common.color.randomNode.length)
-              ]
+              common.color.geth
             }
             progress={progress}
             caption={caption}
@@ -132,17 +130,22 @@ export const ClientCard = (props: Props) => {
     <div
       className={container}
       onClick={() => {
-        console.log('Client clicked');
         if (onClick) {
           onClick();
         }
       }}
+      onKeyDown={() => {
+        if (onClick) {
+          onClick();
+        }
+      }}
+      role="presentation"
     >
       <div
         style={{
           backgroundImage: `url(${
             NODE_BACKGROUNDS[name.replace('-beacon', '') as NodeBackgroundId] ??
-            NODE_BACKGROUNDS['nimbus']
+            NODE_BACKGROUNDS.nimbus
           })`,
           height: isNotSynchronizedAndNotStopped ? 166 : 186,
         }}

@@ -70,7 +70,7 @@ export const Header = (props: NodeOverviewProps) => {
     startStopButtonProps = startButtonProps;
   }
   let logsButtonProps: ButtonProps | undefined;
-  if (screenType !== 'altruistic') {
+  if (screenType !== 'nodePackageMetrics') {
     logsButtonProps = {
       label: 'Logs',
       iconId: 'logs',
@@ -133,13 +133,13 @@ export const Header = (props: NodeOverviewProps) => {
               {...startButtonProps}
               variant="icon-left"
               size="small"
-              type={'primary'}
+              type="primary"
             />
             <Button
               {...stopButtonProps}
               variant="icon-left"
               size="small"
-              type={'secondary'}
+              type="secondary"
             />
           </>
         ) : (

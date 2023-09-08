@@ -1,4 +1,9 @@
-import { createNode, UserNodes } from '../../common/node';
+import {
+  createNode,
+  createNodePackage,
+  UserNodePackages,
+  UserNodes,
+} from '../../common/node';
 import {
   NodePackageSpecification,
   NodeSpecification,
@@ -59,6 +64,26 @@ export const getUserNodes = (): UserNodes => {
     },
   };
 };
+export const getUserNodePackages = (): UserNodePackages => {
+  const node = createNodePackage({
+    spec: ethereumv1 as NodePackageSpecification,
+    runtime: {
+      dataDir: 'wherever',
+      usage: {
+        diskGBs: [],
+        memoryBytes: [],
+        cpuPercent: [],
+        syncedBlock: 0,
+      },
+    },
+  });
+  return {
+    nodeIds: ['a1'],
+    nodes: {
+      a1: node,
+    },
+  };
+};
 export const addNode = () => {
   const node = createNode({
     spec: gethv1 as NodeSpecification,
@@ -90,9 +115,12 @@ export const updateNode = () => {
   return node;
 };
 export const removeNode = () => {};
+export const removeNodePackage = () => {};
 export const startNode = () => {};
+export const startNodePackage = () => {};
 export const getNodeStartCommand = () => {};
 export const stopNode = () => {};
+export const stopNodePackage = () => {};
 export const updateNodeDataDir = () => {};
 export const openDialogForNodeDataDir = () => {};
 export const openDialogForStorageLocation = () => {};

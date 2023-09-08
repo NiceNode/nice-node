@@ -1,7 +1,16 @@
 /* eslint-disable no-unused-vars */
-import { NodeSpecification } from '../common/nodeSpec';
-import Node, { NodeId, UserNodePackages, UserNodes } from '../common/node';
-import { NodeLibrary } from '../main/state/nodeLibrary';
+import {
+  NodeSpecification,
+  NodePackageSpecification,
+} from '../common/nodeSpec';
+import Node, {
+  NodeId,
+  UserNodePackages,
+  UserNodes,
+  NodePackage,
+} from '../common/node';
+import { AddNodePackageNodeService } from '../main/nodePackageManager';
+import { NodeLibrary, NodePackageLibrary } from '../main/state/nodeLibrary';
 import { Settings, ThemeSetting } from '../main/state/settings';
 import { CheckStorageDetails } from '../main/files';
 import { FailSystemRequirementsData } from '../main/minSystemRequirement';
@@ -86,7 +95,7 @@ declare global {
 
       // Node library
       getNodeLibrary(): NodeLibrary;
-      getNodePackageLibrary(): getNodePackageLibrary;
+      getNodePackageLibrary(): NodePackageLibrary;
 
       // Podman
       getIsPodmanInstalled(): boolean;

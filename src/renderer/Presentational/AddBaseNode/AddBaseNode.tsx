@@ -116,7 +116,6 @@ AddBaseNodeProps) => {
       );
     };
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
 
     // Modal Parent needs updated with the default initial value
     const ethNodeConfig = {
@@ -129,6 +128,7 @@ AddBaseNodeProps) => {
     if (setConsensusClient) {
       setConsensusClient(sSelectedConsensusClient, ethNodeConfig);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeEc = useCallback(

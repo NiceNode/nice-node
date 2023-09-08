@@ -16,7 +16,6 @@ import { checkForUpdates } from './updater';
 import uninstallPodman from './podman/uninstall/uninstall';
 import nuclearUninstall from './nuclearUninstall';
 import { getFailSystemRequirements } from './minSystemRequirement';
-import { removeAllNodes } from './nodeManager';
 import { removeAllNodePackages } from './nodePackageManager';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
