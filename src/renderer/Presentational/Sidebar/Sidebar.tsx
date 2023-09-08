@@ -132,7 +132,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
         {renderBanners()}
         <div className={nodeList}>
           <div className={titleItem}>
-            <SidebarTitleItem title="Nodes" />
+            <SidebarTitleItem title={t('Nodes')} />
           </div>
           {/* {nodeListObject.nodeService.length === 2 && (
           <SidebarNodeItem

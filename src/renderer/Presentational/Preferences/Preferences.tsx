@@ -158,8 +158,8 @@ const Preferences = ({
                   label: t('LaunchOnStartup'),
                   value: (
                     <Toggle
-                      onText="Enabled"
-                      offText="Disabled"
+                      onText={t('Enabled')}
+                      offText={t('Disabled')}
                       checked={isOpenOnStartup}
                       onChange={(newValue) => {
                         if (onChange) {
@@ -199,8 +199,8 @@ const Preferences = ({
                   label: t('DesktopNotifications'),
                   value: (
                     <Toggle
-                      onText="Enabled"
-                      offText="Disabled"
+                      onText={t('Enabled')}
+                      offText={t('Disabled')}
                       checked={isNotificationsEnabled}
                       onChange={(newValue) => {
                         if (onChange) {
@@ -230,8 +230,8 @@ const Preferences = ({
                   } ${process.env.FATHOM_SITE_ID})`,
                   value: (
                     <Toggle
-                      onText="Enabled"
-                      offText="Disabled"
+                      onText={t('Enabled')}
+                      offText={t('Disabled')}
                       checked={isEventReportingEnabled}
                       onChange={(newValue) => {
                         if (onChange) {

@@ -1,4 +1,4 @@
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
@@ -35,7 +35,7 @@ import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 let alphaModalRendered = false;
 
 const NodeScreen = () => {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   const selectedNode = useAppSelector(selectSelectedNode);
   const qNodeVersion = useGetNodeVersionQuery(
     selectedNode?.spec.rpcTranslation,
@@ -261,14 +261,10 @@ const NodeScreen = () => {
     return (
       <div className={container}>
         <div className={contentContainer}>
-          <div className={titleFont}>No active nodes</div>
-          <div className={descriptionFont}>
-            Add your first node and start verifying the validty of every block
-            of your favourite blockchain. Running a node also helps others to
-            download and update their copies.
-          </div>
+          <div className={titleFont}>{t('NoActiveNodes')}</div>
+          <div className={descriptionFont}>{t('AddFirstNode')}</div>
           <Button
-            label="Add node"
+            label={t('AddNode')}
             variant="icon-left"
             iconId="add"
             type="primary"

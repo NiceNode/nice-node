@@ -311,9 +311,7 @@ AddEthereumNodeProps) => {
       )} */}
       <HorizontalLine />
       <p className={sectionFont}>{g('DataLocation')}</p>
-      <p
-        className={captionText}
-      >{`Changing location only supported on Mac and only locations under /Users/<current-user>/ or /Volumes/`}</p>
+      <p className={captionText}>{g('ChangingLocation')}</p>
       <FolderInput
         // disabled
         placeholder={sNodeStorageLocation ?? g('loadingDotDotDot')}

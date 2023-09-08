@@ -4,6 +4,7 @@
   "AutoFollowsComputerSetting": "Auto (Follows computer setting)",
   "Confirm": "Confirm",
   "DataLocation": "Data location",
+  "ChangingLocation": "Changing location only supported on Mac and only locations under /Users/<current-user>/ or /Volumes/",
   "DarkMode": "Dark mode",
   "FinishingUp": "Finishing up...",
   "Hide": "Hide",

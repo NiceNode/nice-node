@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Linking from '../../Generics/redesign/Link/Linking';
 import {
   container,
@@ -10,6 +11,7 @@ import {
 import alphaBanner from '../../assets/images/artwork/alphaBanner.svg';
 
 const AlphaBuild = () => {
+  const { t } = useTranslation();
   return (
     <div className={container}>
       <div className={topBanner}>
@@ -17,30 +19,17 @@ const AlphaBuild = () => {
       </div>
       <div className={contentContainer}>
         <div className={contentSection}>
-          <span className={contentMajorTitle}>This is an early version</span>
-          <p>
-            There are a couple of things you should know before continuing with
-            this alpha release of NiceNode
-          </p>
+          <span className={contentMajorTitle}>{t('EarlyVersion')}</span>
+          <p>{t('YouShouldKnow')}</p>
         </div>
         <div className={contentSection}>
-          <span className={contentTitle}>Expect hiccups</span>
-          <p>
-            This build is still a Work In Progress, and some features might not
-            work as intended. Please let us know of any issues you might
-            encounter.
-          </p>
-          <Linking url="#" text="Join us on Discord" underline={false} />
+          <span className={contentTitle}>{t('ExpectHiccups')}</span>
+          <p>{t('WorkInProgress')}</p>
+          <Linking url="#" text={t('JoinDiscord')} underline={false} />
         </div>
         <div className={contentSection}>
-          <span className={contentTitle}>Error reporting turned on</span>
-          <p>
-            Reporting errors is essential to improve NiceNode&rsquo;s
-            performance and compatibility with different systems. The collected
-            data is anonymous but includes basic system information and
-            encountered errors. This is an alpha specific measure and will be
-            opt-out by default in a public release.
-          </p>
+          <span className={contentTitle}>{t('ErrorReportingOn')}</span>
+          <p>{t('ReportingErrors')}</p>
         </div>
       </div>
     </div>
