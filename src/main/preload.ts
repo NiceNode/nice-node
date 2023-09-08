@@ -58,6 +58,14 @@ contextBridge.exposeInMainWorld('electron', {
   getNodes: () => ipcRenderer.invoke('getNodes'),
   getUserNodes: () => ipcRenderer.invoke('getUserNodes'),
   getUserNodePackages: () => ipcRenderer.invoke('getUserNodePackages'),
+  startNodePackage: (nodeId: NodeId) => {
+    ipcRenderer.invoke('startNodePackage', nodeId);
+  },
+  stopNodePackage: (nodeId: NodeId) => {
+    ipcRenderer.invoke('stopNodePackage', nodeId);
+  },
+  removeNodePackage: (nodeId: NodeId, options: { isDeleteStorage: boolean }) =>
+    ipcRenderer.invoke('removeNodePackage', nodeId, options),
   // addEthereumNode: async (
   //   ecNodeSpec: NodeSpecification,
   //   ccNodeSpec: NodeSpecification,

@@ -52,7 +52,7 @@ export const getUserNodePackages = (): UserNodePackages => {
   return userNodePackages;
 };
 
-export const getNodePackages = (): Node[] => {
+export const getNodePackages = (): NodePackage[] => {
   const userNodePackages: UserNodePackages = store.get(USER_NODE_PACKAGES_KEY);
   const nodes = userNodePackages.nodeIds.map(
     (nodeId) => userNodePackages.nodes[nodeId],
@@ -60,7 +60,7 @@ export const getNodePackages = (): Node[] => {
   return nodes;
 };
 
-export const getNodePackage = (nodeId: NodeId): Node => {
+export const getNodePackage = (nodeId: NodeId): NodePackage => {
   return store.get(`${USER_NODE_PACKAGES_KEY}.${NODES_KEY}.${nodeId}`);
 };
 

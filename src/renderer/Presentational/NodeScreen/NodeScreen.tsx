@@ -356,6 +356,7 @@ const NodeScreen = () => {
 
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
+    title: selectedNode.spec.displayName,
     displayName: selectedNode.spec.displayName,
     name: clientName as NodeBackgroundId,
     screenType: 'client',

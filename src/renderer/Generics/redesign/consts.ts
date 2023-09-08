@@ -41,6 +41,7 @@ export interface ClientProps {
 export type NodeAction = 'start' | 'stop' | 'logs' | 'settings';
 export interface NodeOverviewProps {
   name: NodeBackgroundId;
+  displayName?: string;
   title: string;
   info: string;
   screenType: 'altruistic' | 'client' | 'validator';

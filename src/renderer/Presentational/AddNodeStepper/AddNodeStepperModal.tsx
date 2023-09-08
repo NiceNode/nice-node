@@ -108,8 +108,11 @@ const AddNodeStepperModal = ({
       node: nodeSelectOption.value,
     });
     modalOnChangeConfig({
+      ...nodeConfig,
       node: nodeSelectOption.value,
     });
+    // clear step 1 (client selections) when user changes node (package)
+    setEthereumNodeConfig(undefined);
     console.log('AddNodeStepperModal setNode: config', config);
     setNodeConfig(config);
   };

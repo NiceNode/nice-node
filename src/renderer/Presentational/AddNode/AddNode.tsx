@@ -73,25 +73,27 @@ const AddNode = ({
           nodeLibrary,
         });
       }
+      // Modal Parent needs updated with the default initial value
+      // Todo: due to a JS closure bug with modalOnChangeConfig, we are setting the selected node here
+      const ethNodeConfig = {
+        node: sSelectedNode,
+      };
+      if (setNode) {
+        setNode(sSelectedNode, ethNodeConfig);
+      }
     };
     fetchData();
-
-    // Modal Parent needs updated with the default initial value
-    const ethNodeConfig = {
-      node: sSelectedNode,
-    };
-    if (setNode) {
-      setNode(sSelectedNode, ethNodeConfig);
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeNode = useCallback(
     (newNode?: SelectOption) => {
       console.log('onChange node selected: ', newNode);
+      // clear any client selections when the node changes
       const nodeConfig = {
         node: sSelectedNode,
+        executionClient: undefined,
+        consensusClient: undefined,
       };
       if (newNode) {
         setSelectedNode(newNode);

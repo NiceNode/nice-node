@@ -139,13 +139,10 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       { storageLocation },
     );
     console.log('nodePackage result: ', nodePackage);
-    reportEvent('AddNode');
+    reportEvent('AddNodePackage');
     dispatch(updateSelectedNodePackageId(nodePackage.id));
 
-    // todo2: call start node package
-
-    // await electron.startNode(ecNode.id);
-    // await electron.startNode(ccNode.id);
+    electron.startNodePackage(nodePackage.id);
   };
 
   const disableSaveButton = useCallback((value: boolean) => {
@@ -201,6 +198,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
         modal
         modalConfig={modalConfig}
         modalOnChangeConfig={(config, save) => {
+          debugger;
           modalOnChangeConfig(
             config,
             modalConfig,
@@ -208,6 +206,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
             save,
             modalOnSaveConfig,
           );
+          debugger;
         }}
         disableSaveButton={disableSaveButton}
       />

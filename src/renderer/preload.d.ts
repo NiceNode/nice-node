@@ -51,6 +51,12 @@ declare global {
       getNodes(): Node[];
       getUserNodes(): UserNodes;
       getUserNodePackages(): UserNodePackages;
+      startNodePackage(nodeId: NodeId): void;
+      stopNodePackage(nodeId: NodeId): void;
+      removeNodePackage(
+        nodeId: NodeId,
+        options: { isDeleteStorage: boolean },
+      ): Node;
       // addEthereumNode(
       //   ecNodeSpec: NodeSpecification,
       //   ccNodeSpec: NodeSpecification,

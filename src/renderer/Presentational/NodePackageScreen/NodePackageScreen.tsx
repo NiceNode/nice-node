@@ -89,7 +89,6 @@ const NodePackageScreen = () => {
       // todo2: get the node data from userNodes (or do on backend?)
       const nodeId = service.node.id;
       const node = sUserNodes?.nodes[nodeId];
-      console.log('we out here, ', sUserNodes, nodeId, node);
       diskUsedGBs = diskUsedGBs + (node?.runtime?.usage?.diskGBs?.[0]?.y ?? 0);
       cpuPercent = cpuPercent + (node?.runtime?.usage?.cpuPercent?.[0]?.y ?? 0);
       memoryPercent =
@@ -252,7 +251,6 @@ const NodePackageScreen = () => {
       // todo2: get the node data from userNodes (or do on backend?)
       const nodeId = service.node.id;
       const node = sUserNodes?.nodes[nodeId];
-      console.log('we out here, ', sUserNodes, nodeId, node);
       const serviceProps: ClientProps = {
         id: service.node.id,
         name: service.node.spec.specId,
@@ -404,13 +402,6 @@ const NodePackageScreen = () => {
       diskUsageGBs: sDiskUsed,
       cpuLoad: sCpuPercentUsed,
     },
-    // tabsData: {
-    //   cpuPercent: sCpuPercentUsed,
-    //   memoryPercent: sMemoryBytesUsed,
-    //   diskUsed: sDiskUsed,
-    //   diskFree: sFreeStorageGBs,
-    //   diskTotal: sTotalDiskSize,
-    // },
     onAction: onNodeAction,
     description: spec.description,
   };
@@ -461,18 +452,5 @@ export interface ClientProps {
       />
     </div>
   );
-
-  // start button disabled logic
-  // disabled={
-  //   !(
-  //     status === NodeStatus.created ||
-  //     status === NodeStatus.readyToStart ||
-  //     status === NodeStatus.errorStarting ||
-  //     status === NodeStatus.errorRunning ||
-  //     status === NodeStatus.stopped ||
-  //     status === NodeStatus.errorStopping ||
-  //     status === NodeStatus.unknown
-  // stop button disabled logic
-  //   disabled={status !== NodeStatus.running}
 };
 export default NodePackageScreen;

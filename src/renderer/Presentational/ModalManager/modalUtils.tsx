@@ -39,6 +39,7 @@ export const modalRoutes = Object.freeze({
 /* Use this to change config settings, saved temporarily in the modal file with backend apis until it's saved by modalOnSaveConfig
 You can also pass in a save flag to update the config immediately with the temporarily saved config settings
 This should always be called in the XXModal.tsx file due to needing access to setModalConfig, and current modalConfig, and passed into appropriate Wrapper file */
+// Todo: I think there is a race condition here
 export const modalOnChangeConfig = async (
   config: ModalConfig,
   modalConfig: ModalConfig,
@@ -51,19 +52,20 @@ export const modalOnChangeConfig = async (
   }
 
   let updatedConfig = {};
-  const keys = Object.keys(config);
-  if (keys.length > 1) {
-    updatedConfig = {
-      ...modalConfig,
-      ...config,
-    };
-  } else {
-    const key = keys[0];
-    updatedConfig = {
-      ...modalConfig,
-      [key]: config[key],
-    };
-  }
+  // const keys = Object.keys(config);
+  // if (keys.length > 1) {
+  updatedConfig = {
+    ...modalConfig,
+    ...config,
+  };
+  // what is this case for?
+  // } else {
+  //   const key = keys[0];
+  //   updatedConfig = {
+  //     ...modalConfig,
+  //     [key]: config[key],
+  //   };
+  // }
   console.log(
     'modalOnChangeConfig: config, modalConfig, updatedConfig',
     config,

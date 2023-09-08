@@ -69,5 +69,21 @@
         "link": "https://ethereum.org"
       }
     ]
+  },
+  {
+    "key": "base",
+    "sectionTitle": "Base Node",
+    "items": [
+      {
+        "label": "Run your own base node",
+        "value": "docs.base.org",
+        "link": "https://docs.base.org/guides/run-a-base-node/"
+      },
+      {
+        "label": "Base's node Github repo",
+        "value": "github.com/base-org",
+        "link": "https://github.com/base-org/node"
+      }
+    ]
   }
 ]

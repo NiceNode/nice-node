@@ -5,7 +5,7 @@ export const container = style({
   position: 'relative',
   maxWidth: '100%',
   width: 'inherit',
-  height: '100%',
+  height: 'auto',
   display: 'flex',
   flexDirection: 'column',
   flex: 1,

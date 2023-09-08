@@ -22,7 +22,7 @@ import { common } from '../theme.css';
 const getLabelDetails = (label: string) => {
   const labelDetails: { color: LabelColor; string: string } = {
     color: 'gray',
-    string: '',
+    string: label,
   };
   switch (label) {
     case 'running':
@@ -48,6 +48,10 @@ const getLabelDetails = (label: string) => {
     case 'updateAvailable':
       labelDetails.color = 'purple';
       labelDetails.string = 'Update Available';
+      break;
+    case 'error':
+      labelDetails.color = 'red';
+      labelDetails.string = 'Error';
       break;
     default:
       break;
@@ -106,6 +110,7 @@ export const ClientCard = (props: Props) => {
       return <Label type="gray" label={label} />;
     }
     const { updating, initialized, ...statusLabels } = status;
+    // Get all node statuses that are true
     const statusKeys = Object.keys(statusLabels).filter((k: string) => {
       const statusKey = k as keyof ClientStatusProps;
       return status[statusKey] === true;
@@ -137,7 +142,7 @@ export const ClientCard = (props: Props) => {
         style={{
           backgroundImage: `url(${
             NODE_BACKGROUNDS[name.replace('-beacon', '') as NodeBackgroundId] ??
-            ''
+            NODE_BACKGROUNDS['nimbus']
           })`,
           height: isNotSynchronizedAndNotStopped ? 166 : 186,
         }}

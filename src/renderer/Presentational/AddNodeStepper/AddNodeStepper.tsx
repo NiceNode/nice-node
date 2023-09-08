@@ -17,9 +17,15 @@ import electron from '../../electronGlobal';
 import { SystemRequirements } from '../../../common/systemRequirements';
 import { SystemData } from '../../../main/systemInfo';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
-import { updateSelectedNodeId } from '../../state/node';
+import {
+  updateSelectedNodeId,
+  updateSelectedNodePackageId,
+} from '../../state/node';
 import { useAppDispatch } from '../../state/hooks';
-import { NodeLibrary } from '../../../main/state/nodeLibrary';
+import {
+  NodeLibrary,
+  NodePackageLibrary,
+} from '../../../main/state/nodeLibrary';
 import { reportEvent } from '../../events/reportEvent';
 // import { CheckStorageDetails } from '../../../main/files';
 
@@ -27,6 +33,8 @@ import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
 import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 import AddBaseNode from '../AddBaseNode/AddBaseNode';
+import { AddNodePackageNodeService } from 'main/nodePackageManager';
+import { NodePackageSpecification } from 'common/nodeSpec';
 
 export interface AddNodeStepperProps {
   modal?: boolean;
@@ -40,6 +48,8 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const [sStep, setStep] = useState<number>(0);
   const [sDisabledSaveButton, setDisabledSaveButton] = useState<boolean>(true);
   const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
+  const [sNodePackageLibrary, setNodePackageLibrary] =
+    useState<NodePackageLibrary>();
 
   const [sNode, setNode] = useState<AddNodeValues>();
 
@@ -69,6 +79,11 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       // const categorized = categorizeNodeLibrary(nodeLibrary);
       // console.log('nodeLibrary categorized', categorized);
       setNodeLibrary(nodeLibrary);
+
+      const nodePackageLibrary: NodePackageLibrary =
+        await electron.getNodePackageLibrary();
+      setNodePackageLibrary(nodePackageLibrary);
+
       // setExecutionClientLibrary(categorized.ExecutionClient);
       // setBeaconNodeLibrary(categorized.BeaconNode);
       // // setLayer2ClientLibrary(categorized.L2);
@@ -192,6 +207,24 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   // "mergeNodeSpecs?"
 
   const addNodes = async () => {
+    console.log('AddNodeStepper addNodes');
+    // todo: add logic for Node change (ethereum, base, etc.)
+    let nodePackageSpec: NodePackageSpecification;
+    sNode?.node?.value;
+    if (sNodePackageLibrary && sNode?.node?.value) {
+      nodePackageSpec = sNodePackageLibrary?.[sNode?.node?.value];
+    } else {
+      console.error(
+        'nodePackageLibrary, node: ',
+        sNodePackageLibrary,
+        sNode?.node?.value,
+      );
+      throw new Error('No Node Package Spec found for the selected node');
+    }
+    let services: AddNodePackageNodeService[] = [];
+    // todo: take nodeSpecId and parse out the node spec from the library
+    // use that to create the services array (todo: this should be done from selections screen)
+    // Node Selections logic
     let ecNodeSpec;
     let ccNodeSpec;
     if (sNodeClientsAndSettings?.executionClient) {
@@ -203,37 +236,95 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     if (sNodeClientsAndSettings?.consensusClient) {
       const ccValue = sNodeClientsAndSettings?.consensusClient;
       if (sNodeLibrary) {
-        ccNodeSpec = sNodeLibrary?.[`${ccValue.value}-beacon`];
+        ccNodeSpec =
+          sNodeLibrary?.[ccValue.value] ??
+          sNodeLibrary?.[`${ccValue.value}-beacon`];
       }
     }
-    console.log(
-      'adding nodes with storage location set to: ',
-      sNodeStorageLocation,
-    );
+
     if (!ecNodeSpec || !ccNodeSpec) {
       throw new Error('ecNodeSpec or ccNodeSpec is undefined');
     }
+    services = [
+      {
+        serviceId: 'executionClient',
+        serviceName: 'Execution Client',
+        spec: ecNodeSpec,
+      },
+      {
+        serviceId: 'consensusClient',
+        serviceName: 'Consensus Client',
+        spec: ccNodeSpec,
+      },
+    ];
 
-    const { ecNode, ccNode } = await electron.addEthereumNode(
-      ecNodeSpec,
-      ccNodeSpec,
+    // eslint-disable-next-line no-case-declarations
+    // TODO: call back-end addNode(nodeSpec (eth or base), nodeSelections (ec & cc), nodeSettings (storageLocation, network))
+    // const { ecNode, ccNode } = await electron.addEthereumNode(
+    //   ecNodeSpec,
+    //   ccNodeSpec,
+    //   { storageLocation },
+    // );
+
+    // todo: loop over service selections by the user. for now hardcode ec & cc selections
+    const { node: nodePackage } = await electron.addNodePackage(
+      nodePackageSpec,
+      services,
       { storageLocation: sNodeStorageLocation },
     );
-    reportEvent('AddNode');
+    console.log('nodePackage result: ', nodePackage);
+    reportEvent('AddNodePackage');
+    dispatch(updateSelectedNodePackageId(nodePackage.id));
 
-    // const ecNode = await electron.addNode(ecNodeSpec, sNodeStorageLocation);
-    console.log('addNode returned node: ', ecNode);
-    // const ccNode = await electron.addNode(ccNodeSpec, sNodeStorageLocation);
-    console.log('addNode returned node: ', ccNode);
-    dispatch(updateSelectedNodeId(ecNode.id));
-    const startEcResult = await electron.startNode(ecNode.id);
-    console.log('startEcResult result: ', startEcResult);
-    const startCcResult = await electron.startNode(ccNode.id);
-    console.log('startCcResult result: ', startCcResult);
+    // start nodepackage
+    electron.startNodePackage(nodePackage.id);
 
-    // close?
+    // close stepper
     onChange('done');
     setStep(0);
+    ////////////////////////////////////////////////////////
+    // let ecNodeSpec;
+    // let ccNodeSpec;
+    // if (sNodeClientsAndSettings?.executionClient) {
+    //   const ecValue = sNodeClientsAndSettings?.executionClient;
+    //   if (sNodeLibrary) {
+    //     ecNodeSpec = sNodeLibrary?.[ecValue.value];
+    //   }
+    // }
+    // if (sNodeClientsAndSettings?.consensusClient) {
+    //   const ccValue = sNodeClientsAndSettings?.consensusClient;
+    //   if (sNodeLibrary) {
+    //     ccNodeSpec = sNodeLibrary?.[`${ccValue.value}-beacon`];
+    //   }
+    // }
+    // console.log(
+    //   'adding nodes with storage location set to: ',
+    //   sNodeStorageLocation,
+    // );
+    // if (!ecNodeSpec || !ccNodeSpec) {
+    //   throw new Error('ecNodeSpec or ccNodeSpec is undefined');
+    // }
+
+    // const { ecNode, ccNode } = await electron.addEthereumNode(
+    //   ecNodeSpec,
+    //   ccNodeSpec,
+    //   { storageLocation: sNodeStorageLocation },
+    // );
+    // reportEvent('AddNode');
+
+    // // const ecNode = await electron.addNode(ecNodeSpec, sNodeStorageLocation);
+    // console.log('addNode returned node: ', ecNode);
+    // // const ccNode = await electron.addNode(ccNodeSpec, sNodeStorageLocation);
+    // console.log('addNode returned node: ', ccNode);
+    // dispatch(updateSelectedNodeId(ecNode.id));
+    // const startEcResult = await electron.startNode(ecNode.id);
+    // console.log('startEcResult result: ', startEcResult);
+    // const startCcResult = await electron.startNode(ccNode.id);
+    // console.log('startCcResult result: ', startCcResult);
+
+    // // close?
+    // onChange('done');
+    // setStep(0);
   };
 
   const onStep = (newValue: string) => {
@@ -330,19 +421,24 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   return (
     <div className={container}>
       <div className={componentContainer}>
-        {/* Step 0 */}
+        {/* Step 0 - select node */}
         <div style={{ display: sStep === 0 ? '' : 'none', height: '100%' }}>
           {getStepScreen(0)}
         </div>
 
-        {/* Step 1 */}
+        {/* Step 1 - select node clients */}
         <div style={{ display: sStep === 1 ? '' : 'none', height: '100%' }}>
           {getStepScreen(1)}
         </div>
 
-        {/* Step 2 - If Podman is not installed */}
+        {/* Step 2 - Node requirements */}
         <div style={{ display: sStep === 2 ? '' : 'none', height: '100%' }}>
           {getStepScreen(2)}
+        </div>
+
+        {/* Step 3 - If Podman is not installed */}
+        <div style={{ display: sStep === 3 ? '' : 'none', height: '100%' }}>
+          {getStepScreen(3)}
         </div>
       </div>
       <Stepper

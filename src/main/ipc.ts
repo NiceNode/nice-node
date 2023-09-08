@@ -25,11 +25,7 @@ import {
   getNodeStartCommand,
 } from './nodeManager';
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
-import {
-  getNodes,
-  getUserNodePackages,
-  updateNodeProperties,
-} from './state/nodePackages';
+import { getUserNodePackages } from './state/nodePackages';
 import Node, { NodeId, NodePackage } from '../common/node';
 import {
   NodePackageSpecification,
@@ -67,6 +63,9 @@ import { getFailSystemRequirements } from './minSystemRequirement';
 import {
   AddNodePackageNodeService,
   addNodePackage,
+  removeNodePackage,
+  startNodePackage,
+  stopNodePackage,
 } from './nodePackageManager';
 // import {
 //   AddNodePackageNodeServices,
@@ -133,6 +132,18 @@ export const initialize = () => {
       return { node };
     },
   );
+  ipcMain.handle(
+    'removeNodePackage',
+    (_event, nodeId: NodeId, options: { isDeleteStorage: boolean }) => {
+      return removeNodePackage(nodeId, options);
+    },
+  );
+  ipcMain.handle('startNodePackage', (_event, nodeId: NodeId) => {
+    return startNodePackage(nodeId);
+  });
+  ipcMain.handle('stopNodePackage', (_event, nodeId: NodeId) => {
+    return stopNodePackage(nodeId);
+  });
   ipcMain.handle(
     'addNode',
     (_event, nodeSpec: NodeSpecification, storageLocation?: string) => {

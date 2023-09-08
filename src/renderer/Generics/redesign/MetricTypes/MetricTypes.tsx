@@ -135,7 +135,11 @@ export const MetricTypes = ({
         break;
       case 'cpuLoad':
         iconId = 'cpu';
-        titleText = `${statsValue}%`;
+        if (typeof statsValue === 'number') {
+          titleText = `${statsValue.toFixed(2)}%`;
+        } else {
+          titleText = `${statsValue}%`;
+        }
         labelText = 'CPU load';
         break;
       case 'diskUsageGBs':

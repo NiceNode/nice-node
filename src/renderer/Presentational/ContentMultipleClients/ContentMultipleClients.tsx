@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'renderer/state/hooks';
 import { updateSelectedNodeId } from 'renderer/state/node';
 import { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
+import electron from '../../electronGlobal';
 
 const resourceJson = require('./resources.json');
 
@@ -100,6 +101,18 @@ const ContentMultipleClients = (props: {
     return null;
   };
 
+  const onAction = useCallback(
+    (action: any) => {
+      // todo: handle nodeContent.nodeId undefined error
+      if (action === 'start') {
+        nodeContent?.nodeId && electron.startNodePackage(nodeContent?.nodeId);
+      } else if (action === 'stop') {
+        nodeContent?.nodeId && electron.stopNodePackage(nodeContent?.nodeId);
+      }
+    },
+    [nodeContent],
+  );
+
   // TODO: refactor this out so that it can be shared with multiple and single
   const getNodeOverview = () => {
     // useEffect, used only in Header and Metrics
@@ -154,6 +167,7 @@ const ContentMultipleClients = (props: {
       status: nodeContent.status,
       stats: nodeContent.stats,
       description: nodeContent.description,
+      onAction,
     };
     return nodeOverview;
   };
@@ -199,10 +213,9 @@ const ContentMultipleClients = (props: {
       <HeaderMetrics {...(nodeOverview as NodeOverviewProps)} />
       <HorizontalLine type="content" />
       {renderPrompt()}
-      <div className={sectionTitle}>Services</div>
+      <div className={sectionTitle}>Clients</div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
-          console.log('we out here', client);
           return (
             <ClientCard
               {...client}

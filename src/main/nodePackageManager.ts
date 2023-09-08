@@ -6,13 +6,22 @@ import {
 import logger from './logger';
 import Node, {
   createNodePackage,
+  NodeId,
   NodePackage,
   NodeRuntime,
   NodeService,
+  NodeStatus,
 } from '../common/node';
 import * as nodePackageStore from './state/nodePackages';
 import { getNodesDirPath, makeNodeDir } from './files';
-import { addNode, removeAllNodes } from './nodeManager';
+import {
+  addNode,
+  deleteNodeStorage,
+  removeAllNodes,
+  removeNode,
+  startNode,
+  stopNode,
+} from './nodeManager';
 import { createJwtSecretAtDirs } from './util/jwtSecrets';
 
 // Created when adding a node and is used to pair a node spec and config
@@ -89,6 +98,96 @@ export const addNodePackage = async (
   );
 
   return nodePackage;
+};
+
+export const startNodePackage = async (nodeId: NodeId) => {
+  const node = nodePackageStore.getNodePackage(nodeId);
+  if (!node) {
+    throw new Error(`Unable to start node package ${nodeId}. Not found.`);
+  }
+  logger.info(`Starting node ${JSON.stringify(node)}`);
+  let nodePackageStatus = NodeStatus.starting;
+  node.status = nodePackageStatus;
+  nodePackageStore.updateNodePackage(node);
+
+  nodePackageStatus = NodeStatus.running;
+  for (const service of node.services) {
+    try {
+      await startNode(service.node.id);
+    } catch (e) {
+      logger.error(`Unable to start node service: ${JSON.stringify(service)}`);
+      nodePackageStatus = NodeStatus.errorStarting;
+      // try to start all services, or stop other services?
+      // todo: set as partially started?
+      // throw e;
+    }
+  }
+  // set node status
+  node.status = nodePackageStatus;
+  nodePackageStore.updateNodePackage(node);
+};
+
+export const stopNodePackage = async (nodeId: NodeId) => {
+  const node = nodePackageStore.getNodePackage(nodeId);
+  if (!node) {
+    throw new Error(`Unable to stop node package ${nodeId}. Not found.`);
+  }
+  logger.info(`Stopping node ${JSON.stringify(node)}`);
+  let nodePackageStatus = NodeStatus.stopping;
+  node.status = nodePackageStatus;
+  nodePackageStore.updateNodePackage(node);
+
+  nodePackageStatus = NodeStatus.stopped;
+  for (const service of node.services) {
+    try {
+      await stopNode(service.node.id);
+    } catch (e) {
+      logger.error(`Unable to stop node service: ${JSON.stringify(service)}`);
+      nodePackageStatus = NodeStatus.errorStopping;
+      // try to start all services, or stop other services?
+      // what to do here?
+      // throw e;
+    }
+  }
+  // set node status
+  node.status = nodePackageStatus;
+  nodePackageStore.updateNodePackage(node);
+};
+
+export const removeNodePackage = async (
+  nodeId: NodeId,
+  options: { isDeleteStorage: boolean },
+): Promise<NodePackage> => {
+  // todo: check if node package can be removed. Is it stopped?
+  // todo: stop & remove container
+  logger.info(
+    `Remove node package ${nodeId} and delete storage? ${options.isDeleteStorage}`,
+  );
+  try {
+    await stopNodePackage(nodeId);
+  } catch (err) {
+    logger.info(
+      'Unable to stop the node package before removing. Continuing with removal.',
+    );
+  }
+  const node = nodePackageStore.getNodePackage(nodeId);
+  for (const service of node.services) {
+    try {
+      await removeNode(service.node.id, options);
+    } catch (e) {
+      logger.error(`Unable to remove node service: ${JSON.stringify(service)}`);
+      // what to do here?
+      // throw e;
+    }
+  }
+
+  if (options?.isDeleteStorage) {
+    await deleteNodeStorage(nodeId);
+  }
+
+  // todo: delete data optional
+  const removedNode = await nodePackageStore.removeNodePackage(node.id);
+  return removedNode;
 };
 
 /**
