@@ -89,6 +89,8 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('openDialogForStorageLocation'),
   deleteNodeStorage: (nodeId: NodeId) =>
     ipcRenderer.invoke('deleteNodeStorage', nodeId),
+  resetNodeConfig: (nodeId: NodeId) =>
+    ipcRenderer.invoke('resetNodeConfig', nodeId),
   sendNodeLogs: (nodeId: NodeId) => {
     ipcRenderer.invoke('sendNodeLogs', nodeId);
   },
@@ -138,4 +140,9 @@ contextBridge.exposeInMainWorld('electron', {
   },
   removeNotifications: () => ipcRenderer.invoke('removeNotifications'),
   markAllAsRead: () => ipcRenderer.invoke('markAllAsRead'),
+
+  // Ports
+  checkPorts: (ports: number[]) => {
+    ipcRenderer.invoke('checkPorts', ports);
+  },
 });

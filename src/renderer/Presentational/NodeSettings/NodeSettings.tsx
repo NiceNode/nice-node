@@ -23,7 +23,7 @@ export interface NodeSettingsProps {
   isWalletSettingsEnabled?: boolean;
   isDisabled?: boolean;
   onChange?: SettingChangeHandler;
-  onClickRemoveNode: () => void;
+  onClickResetConfig: () => void;
   nodeStartCommand?: string;
 }
 
@@ -34,7 +34,7 @@ const NodeSettings = ({
   isWalletSettingsEnabled,
   isDisabled,
   onChange,
-  onClickRemoveNode,
+  onClickResetConfig,
   nodeStartCommand,
 }: NodeSettingsProps) => {
   const { t } = useTranslation();
@@ -78,11 +78,11 @@ const NodeSettings = ({
             </div>
           </>
         )}
-        {/* Remove Node link */}
+        {/* Reset to default config link */}
         <div style={{ padding: '16px 0px 16px 0px' }}>
           <InternalLink
-            text={t('RemoveThisNode')}
-            onClick={onClickRemoveNode}
+            text="Reset to defaults"
+            onClick={onClickResetConfig}
             danger
           />
         </div>

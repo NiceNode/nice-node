@@ -197,5 +197,7 @@
   "WorkInProgress": "This build is still a Work In Progress, and some features might not work as intended. Please let us know of any issues you might encounter.",
   "JoinDiscord": "Join us on Discord",
   "ErrorReportingOn": "Error reporting turned on",
-  "ReportingErrors": "Reporting errors is essential to improve NiceNode performance and compatibility with different systems. The collected data is anonymous but includes basic system information and encountered errors. This is an alpha specific measure and will be opt-out by default in a public release."
+  "ReportingErrors": "Reporting errors is essential to improve NiceNode performance and compatibility with different systems. The collected data is anonymous but includes basic system information and encountered errors. This is an alpha specific measure and will be opt-out by default in a public release.",
+  "ResetNodeSettingsModal": "Reset node settings",
+  "ResetNodeSettingsQuestion": "Are you sure you want to reset all node settings to defaults?"
 }

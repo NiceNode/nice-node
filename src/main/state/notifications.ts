@@ -68,11 +68,28 @@ const checkIfNotificationCanBeAdded = (
   );
 };
 
+const interpolate = (str: string, variable: string) => {
+  // For this example, we're handling a specific format: {variable}
+  if (str.includes('{variable}')) {
+    return str.replace('{variable}', variable);
+  }
+  return str;
+};
+
 // TODO: add variable support for language string keys
-export const addNotification = (notificationObject: NotificationProps) => {
+export const addNotification = (
+  notificationObject: NotificationProps,
+  variable?: string,
+) => {
   const notifications = store.get(NOTIFICATIONS_KEY) || [];
+  // eslint-disable-next-line prefer-const
+  let { title, description, status } = notificationObject;
+
+  if (variable) {
+    description = interpolate(description, variable);
+  }
+
   if (checkIfNotificationCanBeAdded(notifications, notificationObject)) {
-    const { title, description, status } = notificationObject;
     const translatedTitle = i18n.t(`notifications:${title}`);
     const translatedDescription = i18n.t(`notifications:${description}`);
 

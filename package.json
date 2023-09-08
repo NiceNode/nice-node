@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "3.6.3-alpha",
+  "version": "3.7.0-alpha",
   "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./src/main/main.ts",
@@ -195,7 +195,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.22.9",
+    "@babel/core": "^7.22.15",
     "@electron/notarize": "^2.1.0",
     "@electron/rebuild": "^3.2.13",
     "@mdx-js/react": "^2.1.5",
@@ -237,7 +237,7 @@
     "css-loader": "^6.7.2",
     "css-minimizer-webpack-plugin": "^5.0.1",
     "detect-port": "^1.5.1",
-    "electron": "^25.3.2",
+    "electron": "^25.5.0",
     "electron-builder": "^24.6.3",
     "electron-devtools-installer": "^3.2.0",
     "electron-mock-ipc": "^0.3.12",
@@ -264,7 +264,7 @@
     "lint-staged": "^13.1.0",
     "mini-css-extract-plugin": "^2.7.1",
     "opencollective-postinstall": "^2.0.3",
-    "prettier": "^3.0.0",
+    "prettier": "^3.0.3",
     "react-docgen-typescript-plugin": "^1.0.5",
     "react-refresh": "^0.14.0",
     "react-refresh-typescript": "^2.0.7",
@@ -287,7 +287,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
-    "@sentry/electron": "^4.3.0",
+    "@sentry/electron": "^4.10.0",
     "@vanilla-extract/css": "^1.9.3",
     "@vscode/sudo-prompt": "^9.3.1",
     "await-sleep": "0.0.1",
@@ -301,7 +301,7 @@
     "fathom-client": "^3.5.0",
     "highcharts": "^11.0.0",
     "highcharts-react-official": "^3.2.0",
-    "i18next": "^21.10.0",
+    "i18next": "^23.4.9",
     "i18next-browser-languagedetector": "^7.0.1",
     "iconv-lite": "^0.6.3",
     "moment": "^2.29.4",

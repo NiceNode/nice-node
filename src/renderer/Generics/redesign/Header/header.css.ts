@@ -77,11 +77,11 @@ export const buttonContainer = style({
 });
 
 export const menuButtonContainer = style({
-  // position: 'relative',
+  position: 'relative',
 });
 
 export const popupContainer = style({
   position: 'absolute',
-  right: 0,
   top: 32,
+  right: 0,
 });

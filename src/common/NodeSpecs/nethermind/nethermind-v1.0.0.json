@@ -9,12 +9,13 @@
       "defaultConfig": {
         "http": "Enabled",
         "syncMode": "snap",
-        "webSocketsPort": "8546"
+        "webSocketsPort": "8546",
+        "enginePort": "8551"
       },
       "docker": {
-        "raw": " -p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546 -p 8551:8551",
+        "raw": "",
         "containerVolumePath": "/nethermind/data",
-        "forcedRawNodeInput": "--datadir /nethermind/data --JsonRpc.Host 0.0.0.0 --JsonRpc.EngineHost 0.0.0.0 --JsonRpc.EnginePort 8551 --JsonRpc.JwtSecretFile=/nethermind/data/jwtsecret"
+        "forcedRawNodeInput": "--datadir /nethermind/data --JsonRpc.Host 0.0.0.0 --JsonRpc.EngineHost 0.0.0.0 --JsonRpc.JwtSecretFile=/nethermind/data/jwtsecret"
       }
     },
     "architectures": {
@@ -62,7 +63,7 @@
       }
     },
     "http": {
-      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "displayName": "RPC HTTP connections",
       "category": "RPC APIs",
       "cliConfigPrefix": "--JsonRpc.Enabled ",
       "uiControl": {
@@ -77,7 +78,37 @@
           }
         ]
       },
-      "defaultValue": "Disabled",
+      "infoDescription": "NiceNode requires http connections",
+      "defaultValue": "Enabled",
+      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/json-rpc"
+    },
+    "p2pPorts": {
+      "displayName": "P2P port (UDP and TCP)",
+      "cliConfigPrefix": ["--Network.P2PPort ", "--Network.DiscoveryPort "],
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 30303",
+      "defaultValue": "30303",
+      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/configuration/network"
+    },
+    "enginePort": {
+      "displayName": "Engine JSON-RPC listening port",
+      "cliConfigPrefix": "--JsonRpc.EnginePort ",
+      "defaultValue": "8551",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Ensure the firewall is configured when enabling JSON RPC.",
+      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/configuration/jsonrpc"
+    },
+    "httpPort": {
+      "displayName": "HTTP-RPC server listening port",
+      "cliConfigPrefix": "--JsonRpc.Port ",
+      "defaultValue": "8545",
+      "uiControl": {
+        "type": "text"
+      },
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/json-rpc"
     },
     "httpApis": {
@@ -165,10 +196,10 @@
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/sync-modes"
     },
     "webSocketsPort": {
-      "displayName": "Port number for JSON RPC web sockets calls",
+      "displayName": "WebSockets JSON-RPC port",
       "cliConfigPrefix": "--JsonRpc.WebSocketsPort ",
       "defaultValue": "8545",
-      "niceNodeDefaultValue": "8546",
+      "niceNodeDefaultValue": "8545",
       "uiControl": {
         "type": "text"
       },
@@ -176,12 +207,13 @@
       "infoDescription": "Port number for JSON RPC web sockets calls. By default same port is used as regular HTTP JSON RPC. Ensure the firewall is configured when enabling JSON RPC."
     },
     "maxPeerCount": {
-      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "displayName": "Max Peer Count",
       "cliConfigPrefix": "--Network.ActivePeersMaxCount ",
       "defaultValue": "50",
       "uiControl": {
         "type": "text"
       },
+      "infoDescription": "Set to lower number to use less bandwidth",
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/configuration/network"
     }
   },

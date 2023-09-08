@@ -50,7 +50,7 @@ const LabelSettingsSection = ({
           <div className={lineContainer} key={index}>
             <div className={labelAndDescriptionContainer}>
               <div className={lineKeyText}>{item.label}</div>
-              <Caption>
+              <Caption type={type}>
                 {item.description}{' '}
                 {item.learnMoreLink && (
                   <ExternalLink
