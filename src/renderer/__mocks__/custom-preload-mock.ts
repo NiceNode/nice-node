@@ -127,6 +127,7 @@ export const openDialogForStorageLocation = () => {};
 export const getNodesDefaultStorageLocation = () => '/user/storage/nodes/';
 export const updateNodeLastSyncedBlock = () => {};
 export const deleteNodeStorage = () => true;
+export const resetNodeConfig = () => {};
 export const sendNodeLogs = () => {};
 export const stopSendingNodeLogs = () => {};
 

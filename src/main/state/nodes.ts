@@ -1,4 +1,5 @@
 import { CHANNELS, send } from '../messenger';
+import { didPortsChange } from '../ports';
 import Node, {
   isDockerNode,
   NodeId,
@@ -82,6 +83,22 @@ export const addNode = (newNode: Node) => {
   return newNode;
 };
 
+export const getSetPortHasChanged = (
+  node: Node,
+  portHasChanged?: boolean | undefined,
+) => {
+  if (portHasChanged !== undefined) {
+    store.set(
+      `${USER_NODES_KEY}.${NODES_KEY}.${node.id}.portHasChanged`,
+      portHasChanged,
+    );
+  }
+  const portHasChangedValue: boolean = store.get(
+    `${USER_NODES_KEY}.${NODES_KEY}.${node.id}.portHasChanged`,
+  );
+  return portHasChangedValue;
+};
+
 export const updateNodeProperties = (
   nodeId: NodeId,
   propertiesToUpdate: any,
@@ -98,6 +115,9 @@ export const updateNodeProperties = (
     propertiesToUpdate,
   );
   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${node.id}`, newNode);
+  if (didPortsChange(propertiesToUpdate.config, node)) {
+    getSetPortHasChanged(newNode, true);
+  }
   return getNode(node.id);
 };
 

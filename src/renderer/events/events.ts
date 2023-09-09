@@ -3,4 +3,6 @@ export type NNEvent =
   | 'AddNode'
   | 'AddNodePackage'
   | 'InstalledPodman'
-  | 'OpenAddNodeModal';
+  | 'OpenAddNodeModal'
+  | 'UpdatedNiceNode'
+  | 'UserCheckForUpdateNN';

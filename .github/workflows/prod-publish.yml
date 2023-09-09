@@ -1,4 +1,4 @@
-name: Publish
+name: ProductionPublish
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     # if: ${{ github.repository_owner == 'electron-react-boilerplate' }}
 
     # all published versions are considered "staging" until we release a non-alpha version
-    environment: staging
+    environment: prod
 
     runs-on: ${{ matrix.os }}
 
@@ -28,7 +28,7 @@ jobs:
           echo "NICENODE_ENV variable : ${{ vars.NICENODE_ENV }}"
 
       - name: Checkout git repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Node and NPM
         uses: actions/setup-node@v3

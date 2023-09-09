@@ -25,5 +25,6 @@ export const CHANNELS = {
   podmanInstall: 'podmanInstall',
   theme: 'theme',
   notifications: 'notifications',
+  reportEvent: 'reportEvent',
 };
 export const CHANNELS_ARRAY = Object.keys(CHANNELS);

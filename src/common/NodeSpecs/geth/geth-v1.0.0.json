@@ -16,7 +16,7 @@
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
-        "raw": "-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546 -p 8551:8551",
+        "raw": "",
         "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
@@ -71,7 +71,7 @@
       "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
     },
     "http": {
-      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "displayName": "RPC HTTP connections",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -85,10 +85,11 @@
         ]
       },
       "defaultValue": "Disabled",
+      "infoDescription": "NiceNode requires http connections",
       "documentation": "https://geth.ethereum.org/docs/rpc/server"
     },
     "webSockets": {
-      "displayName": "rpc websocket connections (*BeaconNodes may require websocket connections)",
+      "displayName": "WebSocket JSON-RPC connections",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -102,6 +103,17 @@
         ]
       },
       "defaultValue": "Disabled",
+      "infoDescription": "Enables or disables the WebSocket JSON-RPC service. Beacon nodes may require websockets. The default is false.",
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+    },
+    "webSocketsPort": {
+      "displayName": "WebSockets JSON-RPC port",
+      "cliConfigPrefix": "--ws.port ",
+      "defaultValue": "8546",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "The port (TCP) on which WebSocket JSON-RPC listens. The default is 8546. You must expose ports appropriately.",
       "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
     },
     "httpApis": {
@@ -141,11 +153,12 @@
       }
     },
     "httpCorsDomains": {
-      "displayName": "Change where the node accepts http connections (use comma separated urls)",
+      "displayName": "HTTP-RPC CORS domains",
       "cliConfigPrefix": "--http.corsdomain ",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "infoDescription": "Change where the node accepts http connections (use comma separated urls)"
     },
     "syncMode": {
       "displayName": "Node synchronization mode",
@@ -168,12 +181,31 @@
       "defaultValue": "snap",
       "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
     },
+    "p2pPorts": {
+      "displayName": "P2P port (UDP and TCP)",
+      "cliConfigPrefix": "--discovery.port ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 30303",
+      "defaultValue": "30303"
+    },
+    "enginePort": {
+      "displayName": "Engine JSON-RPC listening port",
+      "cliConfigPrefix": "--authrpc.port ",
+      "defaultValue": "8551",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "The listening port for the Engine API calls for JSON-RPC over HTTP and WebSocket."
+    },
     "httpVirtualHosts": {
-      "displayName": "Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard. Default value (localhost)",
+      "displayName": "Virtual hostnames list",
       "cliConfigPrefix": "--http.vhosts ",
       "uiControl": {
         "type": "text"
       },
+      "infoDescription": "Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard. Default value (localhost)",
       "defaultValue": "localhost,host.containers.internal"
     },
     "httpAddress": {
@@ -194,30 +226,23 @@
       },
       "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
     },
-    "webSocketsPort": {
-      "displayName": "WS-RPC server listening port",
-      "cliConfigPrefix": "--ws.port ",
-      "defaultValue": "8546",
-      "uiControl": {
-        "type": "text"
-      },
-      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
-    },
     "maxPeerCount": {
-      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "displayName": "Max Peer Count",
       "cliConfigPrefix": "--maxpeers ",
       "defaultValue": "50",
       "uiControl": {
         "type": "text"
       },
+      "infoDescription": "Set to lower number to use less bandwidth",
       "documentation": "https://geth.ethereum.org/docs/interface/peer-to-peer#peer-limit"
     },
     "authVirtualHosts": {
-      "displayName": "Comma separated list of virtual hostnames from which to accept authentication requests for engine api's (server enforced). Accepts '*' wildcard. Default value (localhost)",
+      "displayName": "Engine RPC virtual hostnames list",
       "cliConfigPrefix": "--authrpc.vhosts ",
       "uiControl": {
         "type": "text"
       },
+      "infoDescription": "Comma separated list of virtual hostnames from which to accept authentication requests for engine api's (server enforced). Accepts '*' wildcard. Default value (localhost)",
       "defaultValue": "localhost,host.containers.internal"
     }
   },

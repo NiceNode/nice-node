@@ -31,6 +31,7 @@ export const modalRoutes = Object.freeze({
   clientVersions: 'clientVersions',
   stopNode: 'stopNode',
   removeNode: 'removeNode',
+  resetConfig: 'resetConfig',
   updateUnavailable: 'updateUnavailable',
   failSystemRequirements: 'failSystemRequirements',
   alphaBuild: 'alphaBuild',

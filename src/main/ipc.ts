@@ -23,6 +23,7 @@ import {
   sendNodeLogs,
   stopSendingNodeLogs,
   getNodeStartCommand,
+  resetNodeConfig,
 } from './nodeManager';
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import { getUserNodePackages } from './state/nodePackages';
@@ -67,10 +68,7 @@ import {
   startNodePackage,
   stopNodePackage,
 } from './nodePackageManager';
-// import {
-//   AddNodePackageNodeServices,
-//   addNodePackage,
-// } from './specialNodes/nodePackage';
+import { checkPorts } from './ports';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -186,6 +184,9 @@ export const initialize = () => {
   ipcMain.handle('deleteNodeStorage', (_event, nodeId: NodeId) => {
     return deleteNodeStorage(nodeId);
   });
+  ipcMain.handle('resetNodeConfig', (_event, nodeId: NodeId) => {
+    return resetNodeConfig(nodeId);
+  });
   ipcMain.handle('sendNodeLogs', (_event, nodeId: NodeId) => {
     return sendNodeLogs(nodeId);
   });
@@ -243,4 +244,9 @@ export const initialize = () => {
   });
   ipcMain.handle('removeNotifications', removeNotifications);
   ipcMain.handle('markAllAsRead', markAllAsRead);
+
+  // Ports
+  ipcMain.handle('checkPorts', (_event, ports: number[]) => {
+    return checkPorts(ports);
+  });
 };

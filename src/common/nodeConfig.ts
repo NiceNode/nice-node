@@ -26,7 +26,7 @@ export type ConfigTranslation = {
   displayName: string;
   uiControl: ConfigTranslationControl;
   category?: string;
-  cliConfigPrefix?: string;
+  cliConfigPrefix?: string | string[];
   valuesJoinStr?: string;
   valuesWrapChar?: string;
   defaultValue?: ConfigValue;
@@ -89,7 +89,12 @@ export const buildCliConfig = ({
       if (configTranslation && configValue) {
         let currCliString = '';
         if (configTranslation.cliConfigPrefix) {
-          currCliString = configTranslation.cliConfigPrefix;
+          if (typeof configTranslation.cliConfigPrefix === 'string') {
+            currCliString = configTranslation.cliConfigPrefix;
+          } else if (Array.isArray(configTranslation.cliConfigPrefix)) {
+            const [firstCliConfigPrefix] = configTranslation.cliConfigPrefix;
+            currCliString = firstCliConfigPrefix;
+          }
         }
         if (configTranslation.uiControl.type === 'select/multiple') {
           const joinStr = configTranslation.valuesJoinStr ?? ',';
@@ -128,6 +133,15 @@ export const buildCliConfig = ({
           console.error(
             `Unable to add config value during buildCliConfig. Encountered unknown value type for value ${configValue}`,
           );
+        }
+
+        if (
+          configTranslation.cliConfigPrefix &&
+          Array.isArray(configTranslation.cliConfigPrefix)
+        ) {
+          for (let i = 1; i < configTranslation.cliConfigPrefix.length; i++) {
+            currCliString += ` ${configTranslation.cliConfigPrefix[i]}${configValue}`;
+          }
         }
 
         console.log(

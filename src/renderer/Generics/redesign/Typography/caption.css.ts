@@ -6,4 +6,9 @@ export const captionTextClass = style({
   fontSize: 11,
   lineHeight: '14px',
   color: vars.color.font70,
+  selectors: {
+    [`&.modal`]: {
+      color: vars.color.font50,
+    },
+  },
 });
