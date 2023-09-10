@@ -48,7 +48,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
       await electron.setIsOpenOnStartup(isOpenOnStartup);
     }
     if (isNotificationsEnabled !== undefined) {
-      await electron.setIsNotificationsEnabled(isNotificationsEnabled);
+      await electron.getSetIsNotificationsEnabled(isNotificationsEnabled);
     }
     if (isEventReportingEnabled !== undefined) {
       await electron.setIsEventReportingEnabled(isEventReportingEnabled);

@@ -3,6 +3,7 @@ import { NotificationItemProps } from 'renderer/Generics/redesign/NotificationIt
 import i18n from '../i18n';
 import { send } from '../messenger';
 import store from './store';
+import { getSetIsNotificationsEnabled } from './settings';
 
 const { Notification } = require('electron');
 
@@ -102,7 +103,7 @@ export const addNotification = (
     };
     notifications.unshift(newNotification);
     store.set(NOTIFICATIONS_KEY, notifications);
-    if (store.get('settings.appIsNotificationsEnabled')) {
+    if (getSetIsNotificationsEnabled()) {
       displayNotification(newNotification);
     }
   }

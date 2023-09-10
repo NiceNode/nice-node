@@ -42,7 +42,7 @@ import {
   getSetHasSeenSplashscreen,
   getSettings,
   setIsOpenOnStartup,
-  setIsNotificationsEnabled,
+  getSetIsNotificationsEnabled,
   setLanguage,
   setThemeSetting,
   ThemeSetting,
@@ -189,9 +189,9 @@ export const initialize = () => {
     return setIsOpenOnStartup(isOpenOnStartup);
   });
   ipcMain.handle(
-    'setIsNotificationsEnabled',
-    (_event, isNotificationsEnabled: boolean) => {
-      return setIsNotificationsEnabled(isNotificationsEnabled);
+    'getSetIsNotificationsEnabled',
+    (_event, isNotificationsEnabled?: boolean) => {
+      return getSetIsNotificationsEnabled(isNotificationsEnabled);
     },
   );
   ipcMain.handle(
