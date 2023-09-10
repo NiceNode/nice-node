@@ -52,6 +52,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
   ) => {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
+    const { t: g } = useTranslation('genericsComponent');
 
     const itemListData: { iconId: IconId; label: string; count?: number }[] = [
       {
@@ -65,7 +66,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       },
       {
         iconId: 'preferences',
-        label: t('Preferences'),
+        label: g('Preferences'),
       },
       {
         iconId: 'health',
