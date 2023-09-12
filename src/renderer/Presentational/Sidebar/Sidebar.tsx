@@ -33,6 +33,7 @@ export interface SidebarProps {
   notifications: NotificationItemProps[];
   onClickStartPodman: () => void;
   onClickInstallPodman: () => void;
+  platform?: string;
 }
 
 const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
@@ -47,6 +48,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       notifications,
       onClickStartPodman,
       onClickInstallPodman,
+      platform,
     }: SidebarProps,
     ref,
   ) => {
@@ -129,7 +131,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
     const navigate = useNavigate();
 
     return (
-      <div ref={ref} className={container}>
+      <div ref={ref} className={[container, platform].join(' ')}>
         {renderBanners()}
         <div className={nodeList}>
           <div className={titleItem}>

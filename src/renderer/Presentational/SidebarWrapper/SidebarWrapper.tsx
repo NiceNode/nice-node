@@ -1,4 +1,4 @@
-import { useEffect, useCallback, forwardRef } from 'react';
+import { useEffect, useCallback, forwardRef, useState } from 'react';
 import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import electron from '../../electronGlobal';
 import { useGetNotificationsQuery } from '../../state/notificationsService';
@@ -24,6 +24,7 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
+  const [platform, setPlatform] = useState<string>('');
   // default to docker is running while data is being fetched, so
   //  the user isn't falsely warned
   let isPodmanRunning = true;
@@ -83,8 +84,17 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
     }
   }, [sSelectedNodeId, sUserNodes, dispatch]);
 
+  useEffect(() => {
+    const asyncData = async () => {
+      const userSettings = await electron.getSettings();
+      setPlatform(userSettings.osPlatform || '');
+    };
+    asyncData();
+  }, []);
+
   return (
     <Sidebar
+      platform={platform}
       ref={ref}
       notifications={notifications}
       offline={false}

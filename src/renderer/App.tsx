@@ -22,6 +22,7 @@ import {
   sidebarDrag,
   borderLeft,
   borderCenter,
+  borderCenterLine,
   borderRight,
 } from './app.css';
 import ThemeManager from './ThemeManager';
@@ -43,10 +44,11 @@ const WindowContainer = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const Main = () => {
+const Main = (props: { platform?: string }) => {
   const sidebarRef = useRef<HTMLDivElement | null>(null);
   const [isResizing, setIsResizing] = useState<Boolean>(false);
   const [lastX, setLastX] = useState<number>(0);
+  const { platform } = props;
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -91,8 +93,10 @@ const Main = () => {
           }}
           onKeyDown={() => {}}
         >
-          <div className={borderLeft} />
-          <div className={borderCenter} />
+          <div className={[borderLeft, platform].join(' ')} />
+          <div className={borderCenter}>
+            <div className={[borderCenterLine, platform].join(' ')} />
+          </div>
           <div className={borderRight} />
         </div>
         <Outlet />
@@ -109,11 +113,14 @@ const System = () => {
 export default function App() {
   const dispatch = useAppDispatch();
   const [sHasSeenSplashscreen, setHasSeenSplashscreen] = useState<boolean>();
+  const [platform, setPlatform] = useState<string>('');
 
   useEffect(() => {
     const callAsync = async () => {
       const hasSeenSplash = await electron.getSetHasSeenSplashscreen();
       setHasSeenSplashscreen(hasSeenSplash ?? false);
+      const userSettings = await electron.getSettings();
+      setPlatform(userSettings.osPlatform || '');
     };
     callAsync();
   }, []);
@@ -152,7 +159,7 @@ export default function App() {
                 </WindowContainer>
               }
             />
-            <Route path="/main" element={<Main />}>
+            <Route path="/main" element={<Main platform={platform} />}>
               <Route
                 path="/main/node"
                 element={

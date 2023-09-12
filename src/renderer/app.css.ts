@@ -26,6 +26,7 @@ export const contentContainer = style({
   overflow: 'auto',
   display: 'flex',
   flexDirection: 'column',
+  background: vars.color.background,
 });
 
 export const sidebarDrag = style({
@@ -39,13 +40,29 @@ export const borderLeft = style({
   backgroundColor: vars.components.sidebarBackground,
   width: 3,
   height: '100%',
+  selectors: {
+    '&.darwin': {
+      backgroundColor: vars.components.sidebarMacBackground,
+    },
+  },
 });
 
 export const borderCenter = style({
   flexGrow: 1,
   maxWidth: 1,
+  backgroundColor: vars.color.background,
+  height: '100%',
+});
+
+export const borderCenterLine = style({
   backgroundColor: vars.components.sidebarBorder,
   height: '100%',
+  width: 1,
+  selectors: {
+    '&.darwin': {
+      backgroundColor: vars.components.sidebarMacBorder,
+    },
+  },
 });
 
 export const borderRight = style({

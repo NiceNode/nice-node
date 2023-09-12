@@ -13,6 +13,12 @@ export const container = style({
   height: '100%',
   backgroundColor: vars.components.sidebarBackground,
   // backdropFilter: 'blur(40px)',
+  selectors: {
+    '&.darwin': {
+      backgroundColor: vars.components.sidebarMacBackground,
+      backdropFilter: 'blur(40px)',
+    },
+  },
 });
 
 export const titleItem = style({
