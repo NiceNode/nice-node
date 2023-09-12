@@ -271,7 +271,7 @@ export const darkTheme = createTheme(vars, {
     sidebarBorder: `${common.color.black90}`,
     sidebarMacBorder: `${common.color.black90}`,
     sidebarBackground: 'rgba(38, 38, 39, 0.8)',
-    sidebarMacBackground: 'rgba(38, 38, 39, 0.6)',
+    sidebarMacBackground: 'rgba(38, 38, 39, 0.7)',
     clientCardBackground: common.color.white4,
     clientCardTopBackground: common.color.black15,
     clientCardTopBackgroundHover: common.color.black8,
