@@ -9,6 +9,7 @@ export const container = style({
   display: 'flex',
   flexDirection: 'column',
   flex: 1,
+  background: vars.color.background,
 });
 
 export const logsContainer = style({
