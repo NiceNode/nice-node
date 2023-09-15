@@ -13,10 +13,9 @@ import Node, {
   NodeStatus,
 } from '../common/node';
 import * as nodePackageStore from './state/nodePackages';
-import { getNodesDirPath, makeNodeDir } from './files';
+import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
 import {
   addNode,
-  deleteNodeStorage,
   removeAllNodes,
   removeNode,
   startNode,
@@ -156,6 +155,14 @@ export const stopNodePackage = async (nodeId: NodeId) => {
   nodePackageStore.updateNodePackage(node);
 };
 
+export const deleteNodePackageStorage = async (nodeId: NodeId) => {
+  const node = nodePackageStore.getNodePackage(nodeId);
+  const nodeDataDirPath = node.runtime.dataDir;
+  const deleteDiskResult = await deleteDisk(nodeDataDirPath);
+  logger.info(`Remove node package deleteDiskResult ${deleteDiskResult}`);
+  return deleteDiskResult;
+};
+
 export const removeNodePackage = async (
   nodeId: NodeId,
   options: { isDeleteStorage: boolean },
@@ -184,8 +191,9 @@ export const removeNodePackage = async (
     }
   }
 
+  // delete the node package dataDir
   if (options?.isDeleteStorage) {
-    await deleteNodeStorage(nodeId);
+    await deleteNodePackageStorage(nodeId);
   }
 
   // todo: delete data optional

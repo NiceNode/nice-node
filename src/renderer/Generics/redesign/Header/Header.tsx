@@ -69,7 +69,7 @@ export const Header = (props: NodeOverviewProps) => {
     startStopButtonProps = startButtonProps;
   }
   let logsButtonProps: ButtonProps | undefined;
-  if (screenType !== 'nodePackageMetrics') {
+  if (screenType !== 'nodePackage') {
     logsButtonProps = {
       label: 'Logs',
       iconId: 'logs',
@@ -174,7 +174,7 @@ export const Header = (props: NodeOverviewProps) => {
             variant="icon"
             size="small"
             onClick={() => {
-              if (screenType === 'client') {
+              if (screenType === 'client' || screenType === 'nodePackage') {
                 setIsSettingsDisplayed(!isSettingsDisplayed);
               } else {
                 console.log('open preferences!');
@@ -186,28 +186,32 @@ export const Header = (props: NodeOverviewProps) => {
             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
             <div className={popupContainer} tabIndex={0}>
               <Menu width={156}>
-                <MenuItem
-                  text="Node Settings"
-                  onClick={() => {
-                    dispatch(
-                      setModalState({
-                        isModalOpen: true,
-                        screen: { route: 'nodeSettings', type: 'modal' },
-                      }),
-                    );
-                  }}
-                />
-                <MenuItem
-                  text="Remove Node"
-                  onClick={() => {
-                    dispatch(
-                      setModalState({
-                        isModalOpen: true,
-                        screen: { route: 'removeNode', type: 'alert' },
-                      }),
-                    );
-                  }}
-                />
+                {screenType === 'client' && (
+                  <MenuItem
+                    text="Node Settings"
+                    onClick={() => {
+                      dispatch(
+                        setModalState({
+                          isModalOpen: true,
+                          screen: { route: 'nodeSettings', type: 'modal' },
+                        }),
+                      );
+                    }}
+                  />
+                )}
+                {screenType === 'nodePackage' && (
+                  <MenuItem
+                    text="Remove Node"
+                    onClick={() => {
+                      dispatch(
+                        setModalState({
+                          isModalOpen: true,
+                          screen: { route: 'removeNode', type: 'alert' },
+                        }),
+                      );
+                    }}
+                  />
+                )}
                 {/* <HorizontalLine type="menu" />
                 <MenuItem
                   text="Client Versions"

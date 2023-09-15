@@ -1,5 +1,5 @@
 import React from 'react';
-import Node from 'common/node';
+import Node, { NodePackage } from 'common/node';
 import { ThemeSetting } from 'main/state/settings';
 import { NodeLibrary, NodePackageLibrary } from 'main/state/nodeLibrary';
 
@@ -14,6 +14,7 @@ export interface ModalConfig {
   isNotificationsEnabled?: boolean;
   isEventReportingEnabled?: boolean;
   selectedNode?: Node;
+  selectedNodePackage?: NodePackage;
   isDeleteStorage?: boolean;
   settingsConfig?: object;
   newDataDir?: string;

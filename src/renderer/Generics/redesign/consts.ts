@@ -45,7 +45,7 @@ export interface NodeOverviewProps {
   displayName?: string;
   title: string;
   info: string;
-  screenType: 'nodePackageMetrics' | 'altruistic' | 'client' | 'validator';
+  screenType: 'nodePackage' | 'altruistic' | 'client' | 'validator';
   rpcTranslation: NiceNodeRpcTranslation;
   version?: string;
   status: ClientStatusProps;
