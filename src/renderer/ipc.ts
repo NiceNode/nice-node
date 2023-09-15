@@ -11,7 +11,6 @@ export const initialize = async (dispatch: any) => {
   console.log('Listening to IPC channel userNodes');
   electron.ipcRenderer.on(CHANNELS.userNodes, (message: UserNodes[]) => {
     const userNodes: UserNodes = message[0];
-    console.log('new userNodes message: ', message);
     dispatch(updateUserNodes(userNodes));
     // qGetNodes.refetch();
   });
@@ -23,6 +22,5 @@ export const initialize = async (dispatch: any) => {
   electron.ipcRenderer.on('userNodePackages', (message: UserNodePackages[]) => {
     const userNodePackages: UserNodePackages = message[0];
     dispatch(updateUserNodePackages(userNodePackages));
-    // qGetNodes.refetch();
   });
 };

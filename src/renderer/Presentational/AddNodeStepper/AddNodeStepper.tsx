@@ -124,7 +124,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
 
   const onChangeAddBaseNode = useCallback(
     (newValue: AddEthereumNodeValues) => {
-      console.log('onChangeAddBaseNode newValue ', newValue);
       setNodeClientsAndSettings(newValue);
       let ecReqs;
       let ccReqs;
@@ -192,8 +191,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   // "mergeNodeSpecs?"
 
   const addNodes = async () => {
-    console.log('AddNodeStepper addNodes');
-    // todo: add logic for Node change (ethereum, base, etc.)
     let nodePackageSpec: NodePackageSpecification;
     if (sNodePackageLibrary && sNode?.node?.value) {
       nodePackageSpec = sNodePackageLibrary?.[sNode?.node?.value];
@@ -285,17 +282,11 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     let stepImage = step1;
     switch (step) {
       case 0:
-        stepScreen = (
-          <AddNode
-            onChange={onChangeAddNode}
-            // beaconOptions={sBeaconNodeLibrary}
-            // executionOptions={sExecutionClientLibrary}
-          />
-        );
+        stepScreen = <AddNode onChange={onChangeAddNode} />;
         stepImage = step1;
         break;
       case 1:
-        // todo: add if node = ethereum, else if node = base
+        // todo: turn these separate components into a Generic component <NodePackageSelections />
         if (sNode?.node?.value === 'base') {
           stepScreen = <AddBaseNode onChange={onChangeAddBaseNode} />;
         } else {

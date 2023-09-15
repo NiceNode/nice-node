@@ -100,8 +100,6 @@ export type AddEthereumNodeValues = {
   storageLocation?: string;
 };
 export interface AddEthereumNodeProps {
-  // executionOptions: NodeSpecification[];
-  // beaconOptions: NodeSpecification[];
   /**
    * Listen to node config changes
    */
@@ -124,12 +122,7 @@ const AddEthereumNode = ({
   setExecutionClient,
   modalOnChangeConfig,
   onChange,
-}: /**
- * Todo: Pass options from the node spec files
- */
-// executionOptions,
-// beaconOptions,
-AddEthereumNodeProps) => {
+}: AddEthereumNodeProps) => {
   const { t } = useTranslation();
   const { t: tGeneric } = useTranslation('genericComponents');
   // const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
@@ -244,7 +237,9 @@ AddEthereumNodeProps) => {
   return (
     <div className={container}>
       {!modalOnChangeConfig && (
-        <div className={titleFont}>{t('LaunchAnEthereumNode')}</div>
+        <div className={titleFont}>
+          {t('LaunchAVarNode', { nodeName: 'Ethereum' })}
+        </div>
       )}
       <div className={descriptionContainer}>
         <div className={descriptionFont}>

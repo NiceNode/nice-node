@@ -225,6 +225,8 @@ const ContentMultipleClients = (props: {
                   client.id,
                 );
                 dispatch(updateSelectedNodeId(client.id));
+                // Added a delay to navigate because NodeScreen can't handle a
+                //  node change properly here after NodeScreen renders
                 setTimeout(() => {
                   navigate('/main/node');
                 }, 500);

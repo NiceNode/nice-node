@@ -2,6 +2,7 @@
   "AddANode": "Add a node",
   "AddYourFirstNode": "Add your first node",
   "AddYourFirstNodeDescription": "Node requirements and settings come next. Also, you can add more nodes later!",
+  "AddBaseNodeDescription": "Base is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
   "Add Node": "Add Node",
   "NodeSettings": "Node settings",
   "StopeNodeToChangeSettings": "The node must be stopped to make changes",

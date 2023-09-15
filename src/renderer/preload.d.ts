@@ -66,11 +66,6 @@ declare global {
         nodeId: NodeId,
         options: { isDeleteStorage: boolean },
       ): Node;
-      // addEthereumNode(
-      //   ecNodeSpec: NodeSpecification,
-      //   ccNodeSpec: NodeSpecification,
-      //   settings: { storageLocation?: string },
-      // ): { ecNode: Node; ccNode: Node };
       addNodePackage(
         nodeSpec: NodePackageSpecification,
         services: AddNodePackageNodeService[],

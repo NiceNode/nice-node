@@ -92,7 +92,7 @@ export const SidebarNodeItemWrapper = ({
   const nodeStatus = {
     stopped: status === 'stopped',
     error: status.includes('error'),
-    snychronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+    synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
   };
 
   const syncStatus = getSyncStatus(nodeStatus);

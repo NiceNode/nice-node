@@ -24,7 +24,6 @@ export const HeaderMetrics = (props: NodeOverviewProps) => {
     validator: ['status', 'stake', 'rewards', 'balance'],
   };
   const assignedMetric = metricTypeArray[screenType];
-  console.log('HeaderMetrics: ', stats, assignedMetric, screenType);
   return (
     <div className={container}>
       {assignedMetric?.map((metric, index) => {

@@ -42,10 +42,6 @@ const initialize = () => {
 
   // Notify the UI when values change
   store.onDidChange(USER_NODES_KEY, (newValue: UserNodes) => {
-    // console.log(
-    //   'Users nodes value changed. sending front-end a message;',
-    //   newValue,
-    // );
     send(CHANNELS.userNodes, newValue);
   });
 };

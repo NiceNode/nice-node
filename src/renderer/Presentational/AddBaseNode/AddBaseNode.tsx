@@ -15,9 +15,6 @@ import SpecialSelect, {
   SelectOption,
 } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import electron from '../../electronGlobal';
-// import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
-// import Select from '../../Generics/redesign/Select/Select';
-// import { NodeSpecification } from '../../../common/nodeSpec';
 import FolderInput from '../../Generics/redesign/Input/FolderInput';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { captionText } from '../PodmanInstallation/podmanInstallation.css';
@@ -48,8 +45,6 @@ export type AddBaseNodeValues = {
   storageLocation?: string;
 };
 export interface AddBaseNodeProps {
-  // executionOptions: NodeSpecification[];
-  // beaconOptions: NodeSpecification[];
   /**
    * Listen to node config changes
    */
@@ -72,15 +67,9 @@ const AddBaseNode = ({
   setExecutionClient,
   modalOnChangeConfig,
   onChange,
-}: /**
- * Todo: Pass options from the node spec files
- */
-// executionOptions,
-// beaconOptions,
-AddBaseNodeProps) => {
+}: AddBaseNodeProps) => {
   const { t } = useTranslation();
   const { t: tGeneric } = useTranslation('genericComponents');
-  // const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const [sSelectedExecutionClient, setSelectedExecutionClient] =
     useState<SelectOption>(ethereumNodeConfig?.executionClient || ecOptions[0]);
   const [sSelectedConsensusClient, setSelectedConsensusClient] =
@@ -198,7 +187,9 @@ AddBaseNodeProps) => {
   return (
     <div className={container}>
       {!modalOnChangeConfig && (
-        <div className={titleFont}>Launch a Base Node</div>
+        <div className={titleFont}>
+          {t('LaunchAVarNode', { nodeName: 'Base' })}
+        </div>
       )}
       <div className={descriptionContainer}>
         <div className={descriptionFont}>
@@ -227,7 +218,6 @@ AddBaseNodeProps) => {
         className={captionText}
       >{`Changing location only supported on Mac & Linux and only locations under /Users/<current-user>/ or /Volumes/`}</p>
       <FolderInput
-        // disabled
         placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
         freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
         onClickChange={async () => {

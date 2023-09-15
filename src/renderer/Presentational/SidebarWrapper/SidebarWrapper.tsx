@@ -21,8 +21,6 @@ export interface SidebarWrapperProps {
 export const SidebarWrapper = () => {
   const sSelectedNodePackageId = useAppSelector(selectSelectedNodePackageId);
   const sUserNodePackages = useAppSelector(selectUserNodePackages);
-  // const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
-  // const sUserNodes = useAppSelector(selectUserNodes);
   const dispatch = useAppDispatch();
   // todo: implement a back-off polling strategy which can be "reset"
   const qIsPodmanInstalled = useGetIsPodmanInstalledQuery();

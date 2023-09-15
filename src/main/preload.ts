@@ -66,18 +66,6 @@ contextBridge.exposeInMainWorld('electron', {
   },
   removeNodePackage: (nodeId: NodeId, options: { isDeleteStorage: boolean }) =>
     ipcRenderer.invoke('removeNodePackage', nodeId, options),
-  // addEthereumNode: async (
-  //   ecNodeSpec: NodeSpecification,
-  //   ccNodeSpec: NodeSpecification,
-  //   settings: { storageLocation?: string },
-  // ) => {
-  //   return ipcRenderer.invoke(
-  //     'addEthereumNode',
-  //     ecNodeSpec,
-  //     ccNodeSpec,
-  //     settings,
-  //   );
-  // },
   addNodePackage: async (
     nodeSpec: NodePackageSpecification,
     services: AddNodePackageNodeService[],
