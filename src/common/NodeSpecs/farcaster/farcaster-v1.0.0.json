@@ -1,0 +1,73 @@
+{
+  "specId": "farcaster",
+  "version": "1.0.0",
+  "displayName": "Farcaster",
+  "displayTagline": "Non-Validating Node - Farcaster mainnet",
+  "execution": {
+    "executionTypes": ["nodePackage"],
+    "defaultExecutionType": "nodePackage",
+    "services" : [{
+      "serviceId": "hub",
+      "name" : "Farcaster Hub",
+      "nodeOptions": ["hubble"],
+      "required": true,
+      "requiresCommonJwtSecret": true
+    }],
+    "dependencies": [{
+      "name" : "Ethereum node",
+      "specId": "ethereum"
+    }, {
+      "name" : "Optimism node",
+      "specId": "optimism"
+    }]
+  },
+  "category": "L1",
+  "rpcTranslation": "farcaster-l1",
+  "systemRequirements": {
+    "documentationUrl": "https://www.thehubble.xyz/intro/install.html#requirements",
+    "cpu": {
+      "cores": 2
+    },
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage": {
+      "minSizeGBs": 20,
+      "ssdRequired": true
+    },
+    "docker": {
+      "required": true
+    }
+  },
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "Node data is stored in this folder",
+      "cliConfigPrefix": "--datadir ",
+      "defaultValue": "~/.farcaster",
+      "uiControl": {
+        "type": "filePath"
+      },
+      "infoDescription": "Data directory for the databases and keystore (default: \"~/.farcaster\")"
+    },
+    "network": {
+      "displayName": "mainnet or a testnet",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "--network mainnet"
+          },
+          {
+            "value": "Testnet",
+            "config": "--network testnet"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://geth.farcaster.org/docs/rpc/server"
+    }
+  },
+  "iconUrl": "https://farcaster.png",
+  "description": "Hubble creates a private instance of the Farcaster network on your machine. It stores a copy of every message from every user and syncs with other hubs to stay up to date. Messages uploaded to Hubble will be broadcast to other Hubs."
+}

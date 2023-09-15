@@ -1,0 +1,71 @@
+{
+  "specId": "hubble",
+  "version": "1.0.0",
+  "displayName": "Geth",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "input": {
+      "defaultConfig": {
+        "http": "Enabled",
+        "httpCorsDomains": "http://localhost",
+        "webSockets": "Disabled",
+        "httpVirtualHosts": "localhost,host.containers.internal",
+        "authVirtualHosts": "localhost,host.containers.internal"
+      },
+      "docker": {
+        "containerVolumePath": "/root/.ethereum",
+        "raw": "",
+        "forcedRawNodeInput": "--ip 0.0.0.0 --gossip-port 2282 --rpc-port 2283 --network 1"
+      }
+    },
+    "imageName": "farcasterxyz/hubble:latest"
+  },
+  "category": "L1/Hub",
+  "rpcTranslation": "farcaster-l1",
+  "systemRequirements": {
+    "documentationUrl": "https://www.thehubble.xyz/intro/install.html#requirements",
+    "cpu": {
+      "cores": 2
+    },
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage": {
+      "minSizeGBs": 20,
+      "ssdRequired": true
+    },
+    "docker": {
+      "required": true
+    }
+  },
+  "configTranslation": {
+    "ethMainnetRpcUrl": {
+      "displayName": "Ethereum mainnet RPC URL (local node or alchemy/infura/etc.)",
+      "cliConfigPrefix": "--eth-mainnet-rpc-url ",
+      "defaultValue": "http://host.internal.containers:8545",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://www.thehubble.xyz/intro/install.html#install-via-docker"
+    },
+    "optimismMainnetRpcUrl": {
+      "displayName": "Optimism mainnet RPC URL (local node or alchemy/infura/etc.)",
+      "cliConfigPrefix": "--l2-rpc-url ",
+      "defaultValue": "http://host.internal.containers:8547",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://www.thehubble.xyz/intro/install.html#install-via-docker"
+    },
+    "hubOperatorFid": {
+      "displayName": "Set this to your Farcaster FID",
+      "cliConfigPrefix": "--hub-operator-fid ",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://www.thehubble.xyz/intro/install.html#install-via-docker"
+    }
+  },
+  "iconUrl": "https://avatars.githubusercontent.com/u/98775309"
+}
