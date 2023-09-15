@@ -16,6 +16,71 @@ export type LogWithMetadata = {
   timestamp?: number;
 };
 
+const trimLogHeader = (log: string, client: string) => {
+  if (client === 'geth') {
+    // Pattern: INFO/WARN/ERROR/ERR/INF [MM-DD|HH:mm:ss.SSS]
+    return log.replace(
+      /(INFO|WARN|ERROR) \[\d{2}-\d{2}\|\d{2}:\d{2}:\d{2}\.\d{3}\] /,
+      '',
+    );
+  }
+  if (client === 'besu') {
+    // Pattern: YYYY-MM-DD HH:mm:ss.SSS±HH:mm | thread-name | INFO/WARN/ERROR  | LoggerName |
+    return log.replace(
+      /\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}\.\d{3}[+-]\d{2}:\d{2} \| [\w\.\-]+ \| (INFO|WARN|ERROR) {2}\| /,
+      '',
+    );
+  }
+  if (client === 'teku-beacon') {
+    // Pattern: HH:mm:ss.SSS INFO/WARN/ERROR  -
+    return log.replace(
+      /\d{2}:\d{2}:\d{2}\.\d{3} (INFO|WARN|ERROR) {1,2}- /,
+      '',
+    );
+  }
+  if (client === 'nimbus-beacon') {
+    // Pattern: INF YYYY-MM-DD HH:mm:ss.SSS±HH:mm
+    return log.replace(
+      /(INF) \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}[+-]\d{2}:\d{2} /,
+      '',
+    );
+  }
+  if (client === 'nethermind') {
+    // Pattern: DD MMM HH:mm:ss | <message>
+    const pattern1 = /\d{2} \w{3} \d{2}:\d{2}:\d{2} \| /;
+    // Pattern: YYYY-MM-DD HH-mm-ss.SSSS|<message>
+    const pattern2 = /\d{4}-\d{2}-\d{2} \d{2}-\d{2}-\d{2}\.\d{4}\|/;
+    if (pattern1.test(log)) {
+      return log.replace(pattern1, '');
+    }
+    if (pattern2.test(log)) {
+      return log.replace(pattern2, '');
+    }
+  }
+  if (client === 'lighthouse-beacon') {
+    return log.replace(
+      /\w{3} \d{2} \d{2}:\d{2}:\d{2}\.\d{3} (INFO|WARN|ERROR) /,
+      '',
+    );
+  }
+  if (client === 'lodestar-beacon') {
+    return (
+      log
+        // eslint-disable-next-line no-control-regex
+        .replace(/\x1b\[[0-9;]*m/g, '')
+        .replace(
+          /\w{3}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}\s*\[.*?\]\s*(info|warn|error|debug|trace)\s*:\s*/,
+          '',
+        )
+    );
+  }
+
+  // Other Ethereum clients could be added here as needed...
+
+  // If the client is not recognized, return the original log
+  return log;
+};
+
 const parseLogLevel = (log: string): LogLevel => {
   let level: LogLevel = 'INFO';
   const uppercaseLog = log.toUpperCase();
@@ -69,7 +134,10 @@ let lastTimestamp = -1;
  * For multi-line logs, the timestamp of the first log is used for the remainer lines
  * @param log
  */
-export const parsePodmanLogMetadata = (log: string): LogWithMetadata => {
+export const parsePodmanLogMetadata = (
+  log: string,
+  client: string,
+): LogWithMetadata => {
   // try to parse timestamp from beginning of log
   // Podman timestamp format with padded zeros giving consistent length
   // Examples:
@@ -84,9 +152,9 @@ export const parsePodmanLogMetadata = (log: string): LogWithMetadata => {
   let message;
   if (timestamp > 0) {
     lastTimestamp = timestamp;
-    message = log.slice(TIMESTAMP_LENGTH + 1); // 25+1 to remove a space
+    message = trimLogHeader(log.slice(TIMESTAMP_LENGTH + 1), client); // 25+1 to remove a space
   } else {
-    message = log;
+    message = trimLogHeader(log, client);
     timestamp = lastTimestamp;
   }
   const level = parseLogLevel(log);
