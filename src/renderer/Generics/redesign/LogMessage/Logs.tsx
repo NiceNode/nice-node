@@ -9,7 +9,7 @@ import {
   typeFilterContainer,
   timeframeFilterContainer,
   filterMenu,
-  logsContainer,
+  logsScroller,
   spacer,
   clearFilters,
 } from './logs.css';
@@ -130,10 +130,8 @@ export const Logs = ({ sLogs }: LogsProps) => {
   };
 
   const [isButtonVisible, setButtonVisible] = useState<boolean>(false);
-  const [hasUserEverScrolledToBottom, setHasUserEverScrolledToBottom] =
-    useState<boolean>(false);
   const [hasUserScrolledToBottom, setUserScrolledToBottom] =
-    useState<boolean>(false);
+    useState<boolean>(true);
   const [newLogsAdded, setNewLogsAdded] = useState<boolean>(false);
   const logEndRef = useRef<HTMLDivElement | null>(null);
   const logContainerRef = useRef<HTMLDivElement | null>(null);
@@ -143,38 +141,25 @@ export const Logs = ({ sLogs }: LogsProps) => {
 
   useEffect(() => {
     setLogs(sLogs);
-    setNewLogsAdded(true);
-    if (
-      logContainerRef.current &&
-      logContainerRef.current.scrollHeight >
-        logContainerRef.current.clientHeight &&
-      !hasUserScrolledToBottom
-    ) {
-      setButtonVisible(true);
+
+    if (sLogs.length > lastKnownLogCount) {
+      if (hasUserScrolledToBottom) {
+        setLastKnownLogCount(sLogs.length);
+      }
+      setNewLogsAdded(true);
+      if (!hasUserScrolledToBottom) {
+        setButtonVisible(true);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sLogs, hasUserScrolledToBottom]);
-
-  useEffect(() => {
-    if (
-      logContainerRef.current &&
-      logContainerRef.current.scrollHeight >
-        logContainerRef.current.clientHeight &&
-      (!hasUserScrolledToBottom || newLogsAdded)
-    ) {
-      setButtonVisible(true);
-    }
-  }, [logs, hasUserScrolledToBottom, newLogsAdded]);
+  }, [sLogs]);
 
   const scrollToBottom = () => {
     logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    setButtonVisible(false);
     setUserScrolledToBottom(true);
+    setButtonVisible(false);
     setNewLogsAdded(false);
     setLastKnownLogCount(sLogs.length);
-    if (!hasUserEverScrolledToBottom) {
-      setHasUserEverScrolledToBottom(true);
-    }
   };
 
   useEffect(() => {
@@ -184,37 +169,27 @@ export const Logs = ({ sLogs }: LogsProps) => {
         current &&
         current.scrollTop + current.clientHeight >= current.scrollHeight
       ) {
-        setButtonVisible(false);
         setUserScrolledToBottom(true);
+        setButtonVisible(false);
         setNewLogsAdded(false);
         setLastKnownLogCount(sLogs.length);
-        if (!hasUserEverScrolledToBottom) {
-          setHasUserEverScrolledToBottom(true);
-        }
-      } else if (!hasUserScrolledToBottom || newLogsAdded) {
-        setButtonVisible(true);
+      } else {
+        setUserScrolledToBottom(false);
       }
     };
 
     current?.addEventListener('scroll', handleScroll);
 
     return () => current?.removeEventListener('scroll', handleScroll);
-  }, [
-    sLogs,
-    hasUserScrolledToBottom,
-    newLogsAdded,
-    hasUserEverScrolledToBottom,
-  ]);
+  }, [sLogs, hasUserScrolledToBottom, newLogsAdded]);
+
+  const floatingButtonLabel =
+    newLogsCount > 0 ? `${newLogsCount} ${t('NewMessages')}` : t('NewMessages');
 
   const typeLabel = typeLabels[typeFilter];
   const timeframeLabel = timeframeLabels[timeframeFilter];
 
   const navigate = useNavigate();
-
-  const floatingButtonLabel =
-    hasUserEverScrolledToBottom && newLogsCount > 0
-      ? `${newLogsCount} ${t('NewMessages')}`
-      : t('NewMessages');
 
   return (
     <>
@@ -414,9 +389,9 @@ export const Logs = ({ sLogs }: LogsProps) => {
             </div>
           )}
         </div>
-        <div ref={logContainerRef} className={logsContainer}>
-          {filteredLogMessages}
+        <div ref={logContainerRef} className={logsScroller}>
           <div ref={logEndRef} />
+          <div>{filteredLogMessages}</div>
         </div>
       </div>
     </>

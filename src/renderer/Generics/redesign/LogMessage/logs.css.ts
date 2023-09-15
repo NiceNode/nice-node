@@ -12,11 +12,13 @@ export const container = style({
   background: vars.color.background,
 });
 
-export const logsContainer = style({
+export const logsScroller = style({
   padding: '7px 17px 0px 17px',
   position: 'relative',
   flexGrow: 1,
   overflow: 'auto',
+  display: 'flex',
+  flexDirection: 'column-reverse',
 });
 
 export const filterContainer = style({
