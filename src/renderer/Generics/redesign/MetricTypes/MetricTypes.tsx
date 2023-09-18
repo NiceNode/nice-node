@@ -140,7 +140,7 @@ export const MetricTypes = ({
         } else {
           titleText = `${statsValue}%`;
         }
-        iconId = 'bolt';
+        iconId = 'lightning';
         labelText = 'Memory usage';
         break;
       case 'cpuLoad':

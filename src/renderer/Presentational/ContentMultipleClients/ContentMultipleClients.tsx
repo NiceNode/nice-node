@@ -14,6 +14,7 @@ import {
   sectionDescription,
   clientCardsContainer,
   resourcesContainer,
+  promptContainer,
 } from './contentMultipleClients.css';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
@@ -120,12 +121,12 @@ const ContentMultipleClients = (props: {
     // useEffect, used only in Header and Metrics
 
     // if (clClient && elClient) {
-    //   // Ethereum Altruistic Node
+    //   // Ethereum Node
     //   nodeOverview = {
     //     name: 'ethereum',
     //     title: 'Ethereum node',
     //     info: 'Non-Validating Node — Ethereum mainnet',
-    //     type: 'altruistic',
+    //     type: 'nodePackage',
     //     status: {
     //       updating: clClient?.status.updating || elClient?.status.updating,
     //       synchronized:
@@ -212,7 +213,7 @@ const ContentMultipleClients = (props: {
       <HorizontalLine type="content" />
       <HeaderMetrics {...(nodeOverview as NodeOverviewProps)} />
       <HorizontalLine type="content" />
-      {renderPrompt()}
+      <div className={promptContainer}>{renderPrompt()}</div>
       <div className={sectionTitle}>Clients</div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
