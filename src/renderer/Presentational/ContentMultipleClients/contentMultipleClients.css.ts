@@ -6,6 +6,10 @@ export const container = style({
   boxSizing: 'border-box',
 });
 
+export const promptContainer = style({
+  marginBottom: 34,
+});
+
 export const sectionTitle = style({
   fontWeight: 590,
   fontSize: '20px',

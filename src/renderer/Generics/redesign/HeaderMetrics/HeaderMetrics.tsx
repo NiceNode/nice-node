@@ -9,12 +9,10 @@ export const HeaderMetrics = (props: NodeOverviewProps) => {
   const { screenType, status, stats, rpcTranslation } = props;
   const metricTypeArray: {
     nodePackage: MetricStats[];
-    altruistic: MetricStats[];
     client: MetricStats[];
     validator: MetricStats[];
   } = {
     nodePackage: ['status', 'memoryUsagePercent', 'cpuLoad', 'diskUsageGBs'],
-    altruistic: ['status', 'currentSlot', 'cpuLoad', 'diskUsageGBs'],
     client: ['status', 'currentBlock', 'peers', 'diskUsageGBs'],
     validator: ['status', 'stake', 'rewards', 'balance'],
   };
