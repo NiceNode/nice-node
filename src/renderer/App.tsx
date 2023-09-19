@@ -13,7 +13,7 @@ import NodeScreen from './Presentational/NodeScreen/NodeScreen';
 import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
 import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
-import LogsWrapper from './Presentational/Logs/LogsWrapper';
+import LogsWrapper from './Presentational/LogsWrapper/LogsWrapper';
 import NodeSetup from './Presentational/NodeSetup/NodeSetup';
 import {
   dragWindowContainer,
