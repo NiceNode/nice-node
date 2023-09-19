@@ -60,9 +60,7 @@ const NodeSettings = ({
         />
         {nodeStartCommand && (
           <>
-            <p className={nodeCommandTitle}>
-              Node start command (must save changes to take effect)
-            </p>
+            <p className={nodeCommandTitle}>{t('NodeStartCommand')}</p>
             <div className={nodeCommandContainer}>
               <p className={nodeCommand}>{nodeStartCommand}</p>
               <Button
@@ -81,7 +79,7 @@ const NodeSettings = ({
         {/* Reset to default config link */}
         <div style={{ padding: '16px 0px 16px 0px' }}>
           <InternalLink
-            text="Reset to defaults"
+            text={t('ResetToDefaults')}
             onClick={onClickResetConfig}
             danger
           />

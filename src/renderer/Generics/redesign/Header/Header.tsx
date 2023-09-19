@@ -95,7 +95,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
             }}
           >
             <Button
-              label="Update Available"
+              label={g('UpdateAvailable')}
               type="primary"
               iconId="down"
               variant="icon-right"
@@ -163,7 +163,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
             <div className={popupContainer} tabIndex={0}>
               <Menu width={156}>
                 <MenuItem
-                  text="Node Settings"
+                  text={g('NodeSetttings')}
                   onClick={() => {
                     dispatch(
                       setModalState({
@@ -174,7 +174,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                   }}
                 />
                 <MenuItem
-                  text="Remove Node"
+                  text={g('RemoveNode')}
                   onClick={() => {
                     dispatch(
                       setModalState({
