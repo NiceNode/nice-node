@@ -35,7 +35,7 @@ const DiskCapacityBarChart = ({
   const freePercentage = (freeSpace / totalSpace) * 100;
   const capitalize = (s: string) =>
     (s && s[0].toUpperCase() + s.slice(1)) || '';
-  const { t } = useTranslation();
+  const { t: g } = useTranslation('genericComponents');
 
   return (
     <div className={wrapper}>
@@ -61,7 +61,7 @@ const DiskCapacityBarChart = ({
         <div className={legend}>
           <div className={[colorBox, 'other'].join(' ')} />
           <div className={labelContainer}>
-            <div className={label}>{t('Other')}</div>
+            <div className={label}>{g('Other')}</div>
             <div className={size}>{otherSpace.toFixed(2)} GB</div>
           </div>
         </div>
@@ -73,7 +73,7 @@ const DiskCapacityBarChart = ({
           />
           <div className={labelContainer}>
             <div className={label}>
-              {capitalize(name)} {t('Client')}
+              {capitalize(name)} {g('Client')}
             </div>
             <div className={size}>{clientSpace.toFixed(2)} GB</div>
           </div>

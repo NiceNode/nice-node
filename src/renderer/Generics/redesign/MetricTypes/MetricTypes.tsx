@@ -59,7 +59,7 @@ export const MetricTypes = ({
   let titleText = '';
   let labelText = '';
 
-  const { t } = useTranslation();
+  const { t: g } = useTranslation('genericComponents');
 
   const processStatus = () => {
     let statusColorStyle;
@@ -67,47 +67,47 @@ export const MetricTypes = ({
     switch (statsValue) {
       case SYNC_STATUS.UPDATING:
         statusColorStyle = updating;
-        titleText = t('Waiting');
-        labelText = t('InstallingUpdate');
+        titleText = g('Waiting');
+        labelText = g('InstallingUpdate');
         icon = <Icon iconId="updating" />;
         break;
       case SYNC_STATUS.SYNCHRONIZED:
         statusColorStyle = green;
-        titleText = t('Online');
-        labelText = t('Synchronized');
+        titleText = g('Online');
+        labelText = g('Synchronized');
         break;
       case SYNC_STATUS.BLOCKS_BEHIND:
       case SYNC_STATUS.LOW_PEER_COUNT:
         statusColorStyle = yellow;
-        titleText = t('Online');
+        titleText = g('Online');
         labelText =
           statsValue === SYNC_STATUS.BLOCKS_BEHIND
-            ? t('BlocksBehind')
-            : t('LowPeerCount');
+            ? g('BlocksBehind')
+            : g('LowPeerCount');
         break;
       case SYNC_STATUS.ERROR:
         statusColorStyle = red;
-        titleText = t('Error');
-        labelText = t('ErrorOcurred');
+        titleText = g('Error');
+        labelText = g('ErrorOcurred');
         break;
       case SYNC_STATUS.NO_NETWORK:
         statusColorStyle = red;
-        titleText = t('Offline');
-        labelText = t('NoNetwork');
+        titleText = g('Offline');
+        labelText = g('NoNetwork');
         break;
       case SYNC_STATUS.CATCHING_UP:
       case SYNC_STATUS.INITIALIZING:
         statusColorStyle = sync;
-        titleText = t('Syncing');
+        titleText = g('Syncing');
         labelText =
           statsValue === SYNC_STATUS.CATCHING_UP
-            ? t('CatchingUp')
-            : t('InProgress');
+            ? g('CatchingUp')
+            : g('InProgress');
         icon = <Icon iconId="syncing" />;
         break;
       case SYNC_STATUS.STOPPED:
         statusColorStyle = stopped;
-        titleText = t('Stopped');
+        titleText = g('Stopped');
         icon = <Icon iconId="stop" />;
         break;
       default:
@@ -124,8 +124,8 @@ export const MetricTypes = ({
       case 'currentBlock':
         iconId = 'slots';
         titleText = `${(statsValue || 0).toLocaleString()}`;
-        labelText = `${t('LastSynced')} ${
-          rpcTranslation === 'eth-l1-beacon' ? t('Slot') : t('Block')
+        labelText = `${g('LastSynced')} ${
+          rpcTranslation === 'eth-l1-beacon' ? g('Slot') : g('Block')
         }`;
         break;
       case 'peers':
@@ -134,12 +134,12 @@ export const MetricTypes = ({
         if (statsValue === undefined) {
           titleText = `${0}`;
         }
-        labelText = t('PeersConnected');
+        labelText = g('PeersConnected');
         break;
       case 'cpuLoad':
         iconId = 'cpu';
         titleText = `${statsValue}%`;
-        labelText = t('CPULoad');
+        labelText = g('CPULoad');
         break;
       case 'diskUsageGBs':
         // if (typeof statsValue === 'number' && statsValue >= 1000000) {
@@ -159,7 +159,7 @@ export const MetricTypes = ({
           titleText = `${statsValue} GB`;
         }
         iconId = 'disks';
-        labelText = t('DiskUsage');
+        labelText = g('DiskUsage');
         break;
       default:
         break;

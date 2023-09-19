@@ -310,11 +310,11 @@ AddEthereumNodeProps) => {
         </div>
       )} */}
       <HorizontalLine />
-      <p className={sectionFont}>{g('DataLocation')}</p>
-      <p className={captionText}>{g('ChangingLocation')}</p>
+      <p className={sectionFont}>{t('DataLocation')}</p>
+      <p className={captionText}>{t('ChangingLocation')}</p>
       <FolderInput
         // disabled
-        placeholder={sNodeStorageLocation ?? g('loadingDotDotDot')}
+        placeholder={sNodeStorageLocation ?? t('loadingDotDotDot')}
         freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
         onClickChange={async () => {
           const storageLocationDetails =

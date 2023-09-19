@@ -46,27 +46,27 @@ export const Banner = ({
   const [title, setTitle] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [isClicked, setIsClicked] = useState<boolean>(false);
-  const { t } = useTranslation();
+  const { t: g } = useTranslation('genericComponents');
 
   useEffect(() => {
     if (offline) {
       setIconId('boltstrike');
-      setTitle(t('CurrentlyOffline'));
-      setDescription(t('PleaseReconnect'));
+      setTitle(g('CurrentlyOffline'));
+      setDescription(g('PleaseReconnect'));
     } else if (!podmanInstalled) {
       setIconId('warningcircle');
-      setTitle(t('PodmanIsNotInstalled'));
-      setDescription(t('ClickToInstallPodman'));
+      setTitle(g('PodmanIsNotInstalled'));
+      setDescription(g('ClickToInstallPodman'));
     } else if (updateAvailable) {
       setIconId('download1');
-      setTitle(t('UpdateAvailable'));
-      setDescription(t('NewVersionAvailable'));
+      setTitle(g('UpdateAvailable'));
+      setDescription(g('NewVersionAvailable'));
     } else if (podmanStopped) {
       setIconId('play');
-      setTitle(t('PodmanIsNotRunning'));
-      setDescription(t('ClickToStartPodman'));
+      setTitle(g('PodmanIsNotRunning'));
+      setDescription(g('ClickToStartPodman'));
     }
-  }, [offline, updateAvailable, podmanStopped, podmanInstalled, t]);
+  }, [offline, updateAvailable, podmanStopped, podmanInstalled, g]);
 
   const onClickBanner = () => {
     if (isClicked) {
@@ -76,10 +76,10 @@ export const Banner = ({
     setIsClicked(true);
 
     if (!podmanInstalled) {
-      setDescription(t('PodmanInstalling'));
+      setDescription(g('PodmanInstalling'));
       setLoading(true);
     } else if (podmanStopped) {
-      setDescription(t('PodmanLoading'));
+      setDescription(g('PodmanLoading'));
       setLoading(true);
     } else if (updateAvailable) {
       console.log('update nice node!');

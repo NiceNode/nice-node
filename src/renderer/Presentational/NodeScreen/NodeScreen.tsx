@@ -303,7 +303,7 @@ const NodeScreen = () => {
 
   const formatVersion = (version: string | undefined, name: string) => {
     if (!version) {
-      return 'Identifying version...';
+      return t('IdentifyingVersion');
     }
     const capitalize = (s: string) =>
       (s && s[0].toUpperCase() + s.slice(1)) || '';

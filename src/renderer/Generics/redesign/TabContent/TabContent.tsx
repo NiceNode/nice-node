@@ -73,13 +73,13 @@ type SectionLabelProps = {
 
 const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
   // switch statement here to determine which charts and sections to show?
-  const { t } = useTranslation();
+  const { t: g } = useTranslation('genericComponents');
   const contentLabels: SectionLabelProps = {
-    Sync: t('Synchronization'),
-    CPU: t('CPUUsage'),
-    Memory: t('MemoryUsage'),
-    Network: t('NetworkUsage'),
-    Disk: t('DiskUsage'),
+    Sync: g('Synchronization'),
+    CPU: g('CPUUsage'),
+    Memory: g('MemoryUsage'),
+    Network: g('NetworkUsage'),
+    Disk: g('DiskUsage'),
   };
 
   const processPeriodBreakdownData = () => {
@@ -103,7 +103,7 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
       return (
         <>
           <div className={contentHeader}>
-            <div className={contentTitle}>{t('Capacity')}</div>
+            <div className={contentTitle}>{g('Capacity')}</div>
           </div>
           <DiskCapacityBarChart
             freeSpace={diskFree}
@@ -120,7 +120,7 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
 
   // eslint-disable-next-line
   const breakdownData: { title: string; items: any[] } = {
-    title: t('PeriodBreakdown'),
+    title: g('PeriodBreakdown'),
     items: getBreakdown(tabId.toLowerCase(), processPeriodBreakdownData()),
   };
 

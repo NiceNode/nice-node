@@ -33,7 +33,7 @@ const FolderInput = ({
   disabled,
   onClickChange,
 }: FolderInputProps) => {
-  const { t } = useTranslation();
+  const { t: g } = useTranslation('genericComponents');
   return (
     <div className={container}>
       <div className={pathAndChangeContainer}>
@@ -42,7 +42,7 @@ const FolderInput = ({
         </div>
         <Button
           size="small"
-          label={t('Change')}
+          label={g('Change')}
           disabled={!onClickChange || disabled}
           onClick={onClickChange}
         />

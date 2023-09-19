@@ -85,20 +85,20 @@ const Preferences = ({
 
   return (
     <div className={preferencesContainer}>
-      <div className={sectionTitle}>{g('Appearance')}</div>
+      <div className={sectionTitle}>{t('Appearance')}</div>
       <div className={appearanceSection}>
         {[
           {
             theme: 'auto',
-            label: g('AutoFollowsComputerSetting'),
+            label: t('AutoFollowsComputerSetting'),
           },
           {
             theme: 'light',
-            label: g('LightMode'),
+            label: t('LightMode'),
           },
           {
             theme: 'dark',
-            label: g('DarkMode'),
+            label: t('DarkMode'),
           },
         ].map((themeDetails, index) => {
           const isSelected = themeSetting === themeDetails.theme;
@@ -170,7 +170,7 @@ const Preferences = ({
                   ),
                 },
                 {
-                  label: g('Language'),
+                  label: t('Language'),
                   value: (
                     <LanguageSelect
                       language={language}

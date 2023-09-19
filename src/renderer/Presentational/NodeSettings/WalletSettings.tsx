@@ -426,7 +426,7 @@ export const WalletSettings = ({
       <div className={advancedOptionsLink}>
         <DropdownLink
           text={`${
-            isOptionsOpen ? g('HideAdvancedOptions') : g('ShowAdvancedOptions')
+            isOptionsOpen ? t('HideAdvancedOptions') : t('ShowAdvancedOptions')
           }`}
           onClick={() => setIsOptionsOpen(!isOptionsOpen)}
           isDown={!isOptionsOpen}
