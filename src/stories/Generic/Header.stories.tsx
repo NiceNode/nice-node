@@ -12,25 +12,28 @@ const Template: ComponentStory<typeof Header> = (args) => <Header {...args} />;
 export const Primary = Template.bind({});
 
 Primary.args = {
-  name: 'besu',
-  title: 'Ethereum node',
-  info: 'Non-Validating Node — Ethereum mainnet',
-  screenType: 'altruistic',
-  status: {
-    updating: false,
-    initialized: true,
-    synchronized: true,
-    lowPeerCount: true,
-    updateAvailable: true,
-    blocksBehind: false,
-    noConnection: false,
-    stopped: false,
-    error: false,
-  },
-  stats: {
-    currentSlot: 90,
-    highestSlot: 190,
-    cpuLoad: 90,
-    diskUsageGBs: 10000,
+  nodeContent: {
+    name: 'besu',
+    title: 'Ethereum node',
+    info: 'Non-Validating Node — Ethereum mainnet',
+    screenType: 'altruistic',
+    rpcTranslation: 'eth-l1',
+    status: {
+      updating: false,
+      initialized: true,
+      synchronized: true,
+      lowPeerCount: true,
+      updateAvailable: true,
+      blocksBehind: false,
+      noConnection: false,
+      stopped: false,
+      error: false,
+    },
+    stats: {
+      currentSlot: 90,
+      highestSlot: 190,
+      cpuLoad: 90,
+      diskUsageGBs: 10000,
+    },
   },
 };

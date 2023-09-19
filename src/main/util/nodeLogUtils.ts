@@ -27,6 +27,7 @@ const trimLogHeader = (log: string, client: string) => {
   if (client === 'besu') {
     // Pattern: YYYY-MM-DD HH:mm:ss.SSS±HH:mm | thread-name | INFO/WARN/ERROR  | LoggerName |
     return log.replace(
+      // eslint-disable-next-line no-useless-escape
       /\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}\.\d{3}[+-]\d{2}:\d{2} \| [\w\.\-]+ \| (INFO|WARN|ERROR) {2}\| /,
       '',
     );

@@ -63,7 +63,6 @@ const AddEthereumNode = ({
 // beaconOptions,
 AddEthereumNodeProps) => {
   const { t } = useTranslation();
-  const { t: g } = useTranslation('genericComponents');
 
   const ecOptions = [
     {

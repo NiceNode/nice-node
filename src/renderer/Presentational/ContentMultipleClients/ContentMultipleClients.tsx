@@ -8,7 +8,7 @@ import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
-import { Header } from '../../Generics/redesign/Header/Header';
+// import { Header } from '../../Generics/redesign/Header/Header';
 import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
 import {
   container,
@@ -170,7 +170,7 @@ const ContentMultipleClients = (props: {
 
   return (
     <div className={container}>
-      <Header {...(nodeOverview as NodeOverviewProps)} />
+      {/* <Header {...(nodeOverview as NodeOverviewProps)} /> */}
       <HorizontalLine type="content" />
       <HeaderMetrics {...(nodeOverview as NodeOverviewProps)} />
       <HorizontalLine type="content" />

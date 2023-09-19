@@ -58,7 +58,6 @@ const Preferences = ({
   onChange,
 }: PreferencesProps) => {
   const { t } = useTranslation();
-  const { t: g } = useTranslation('genericComponents');
   const [initialThemeSetting] = useState(themeSetting);
 
   const onClickTheme = (theme: ThemeSetting) => {
