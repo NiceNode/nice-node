@@ -23,15 +23,15 @@ import {
 } from './header.css';
 
 type HeaderProps = {
-  nodeContent: NodeOverviewProps;
+  nodeOverview: NodeOverviewProps;
   isPodmanRunning: boolean;
 };
 /**
  * Primary UI component for user interaction
  */
-export const Header = ({ nodeContent, isPodmanRunning }: HeaderProps) => {
+export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
   const { name, title, info, screenType, status, version, onAction } =
-    nodeContent;
+    nodeOverview;
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
   const [isSettingsDisplayed, setIsSettingsDisplayed] =

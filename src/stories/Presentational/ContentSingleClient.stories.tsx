@@ -14,7 +14,7 @@ const Template: ComponentStory<typeof ContentSingleClient> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  nodeContent: {
+  nodeOverview: {
     nodeId: '1f916ffa-b5e8-421e-a9b2-622efc3e8223',
     name: 'geth',
     version: 'v10',
@@ -43,7 +43,7 @@ Primary.args = {
 
 export const LimitedData = Template.bind({});
 LimitedData.args = {
-  nodeContent: {
+  nodeOverview: {
     nodeId: '1f916ffa-b5e8-421e-a9b2-622efc3e8223',
     name: 'nethermind',
     screenType: 'client',

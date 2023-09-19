@@ -384,7 +384,7 @@ const NodeScreen = () => {
   console.log('passing content to NodeScreen: ', nodeContent);
   return (
     <ContentSingleClient
-      nodeContent={nodeContent}
+      nodeOverview={nodeContent}
       isPodmanRunning={isPodmanRunning}
     />
   );

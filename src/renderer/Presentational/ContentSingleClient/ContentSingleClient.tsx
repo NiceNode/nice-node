@@ -53,12 +53,12 @@ export type SingleNodeContent = {
 };
 
 type ContentSingleClientProps = {
-  nodeContent: SingleNodeContent;
+  nodeOverview: SingleNodeContent;
   isPodmanRunning: boolean;
 };
 
 const ContentSingleClient = ({
-  nodeContent,
+  nodeOverview,
   isPodmanRunning,
 }: ContentSingleClientProps) => {
   /* TODO: maybe a "provider" wrapper/manager to fetch data and handle states */
@@ -78,20 +78,20 @@ const ContentSingleClient = ({
 
   // TODO: retrieve initial data for all pages
 
-  const { tabsData, name } = nodeContent;
+  const { tabsData, name } = nodeOverview;
   const { t } = useTranslation();
 
   return (
     <>
       {/* todo: fix temp type casting */}
       <Header
-        nodeContent={nodeContent as unknown as NodeOverviewProps}
+        nodeOverview={nodeOverview as unknown as NodeOverviewProps}
         isPodmanRunning={isPodmanRunning}
       />
       <div>
         <HorizontalLine type="content" />
       </div>
-      <HeaderMetrics {...(nodeContent as unknown as NodeOverviewProps)} />
+      <HeaderMetrics {...(nodeOverview as unknown as NodeOverviewProps)} />
       <div>
         <HorizontalLine type="above-tab" />
       </div>
