@@ -27,8 +27,9 @@ const resourceJson = require('./resources.json');
 const ContentMultipleClients = (props: {
   clients: ClientProps[] | undefined;
   nodeContent: SingleNodeContent | undefined;
+  isPodmanRunning: boolean;
 }) => {
-  const { clients, nodeContent } = props;
+  const { clients, nodeContent, isPodmanRunning } = props;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -211,7 +212,7 @@ const ContentMultipleClients = (props: {
     <div className={container}>
       <Header
         nodeOverview={nodeOverview as NodeOverviewProps}
-        isPodmanRunning
+        isPodmanRunning={isPodmanRunning}
       />
       <HorizontalLine type="content" />
       <HeaderMetrics {...(nodeOverview as NodeOverviewProps)} />
