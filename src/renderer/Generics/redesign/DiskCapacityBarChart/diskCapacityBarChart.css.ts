@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { vars } from '../theme.css';
 
 export const wrapper = style({
   width: '100%',
@@ -7,9 +8,7 @@ export const wrapper = style({
 export const container = style({
   width: '100%',
   display: 'flex',
-  marginBottom: '10px',
-  border: '1px solid rgba(0, 0, 2, 0.1)',
-  borderRadius: '4px',
+  marginBottom: 15,
   boxSizing: 'border-box',
 });
 
@@ -19,14 +18,26 @@ export const section = style({
 
 export const other = style({
   backgroundColor: 'lightgray',
+  borderStyle: 'solid',
+  borderWidth: '1px 0 1px 1px' /* top right bottom left */,
+  borderRadius: '4px 0 0 4px',
+  borderColor: vars.color.border,
 });
 
 export const client = style({
   backgroundColor: 'red',
+  borderStyle: 'solid',
+  borderWidth: '1px 0 1px 0px' /* top right bottom left */,
+  borderRadius: '0 0 0 0',
+  borderColor: vars.color.border,
 });
 
 export const free = style({
   backgroundColor: 'transparent',
+  borderStyle: 'solid',
+  borderWidth: '1px 1px 1px 0px' /* top right bottom left */,
+  borderRadius: '0 4px 4px 0',
+  borderColor: vars.color.border,
 });
 
 export const legendContainer = style({
@@ -54,26 +65,26 @@ export const labelContainer = style({
 });
 
 export const label = style({
-  color: 'rgba(0, 0, 2, 0.7)',
+  color: vars.color.font70,
 });
 
 export const size = style({
-  color: 'rgba(0, 0, 2, 0.4)',
+  color: vars.color.font40,
 });
 
 export const colorBox = style({
   width: '15px',
   height: '15px',
   marginBottom: '5px',
-  border: '1px solid rgba(0, 0, 2, 0.08)',
+  border: `1px solid ${vars.color.border}`,
   borderRadius: '4px',
   boxSizing: 'border-box',
-});
-
-export const otherColorBox = style({
-  backgroundColor: 'lightgray',
-});
-
-export const freeColorBox = style({
-  backgroundColor: 'transparent',
+  selectors: {
+    '&.other': {
+      backgroundColor: 'lightgray',
+    },
+    '&.free': {
+      backgroundColor: 'transparent',
+    },
+  },
 });

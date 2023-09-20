@@ -22,6 +22,7 @@ import {
 import ThemeManager from './ThemeManager';
 import ModalManager from './Presentational/ModalManager/ModalManager';
 import { reportEvent } from './events/reportEvent';
+import NodePackageScreen from './Presentational/NodePackageScreen/NodePackageScreen';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,
@@ -73,12 +74,12 @@ export default function App() {
 
   if (sHasSeenSplashscreen === undefined) {
     console.log(
-      'waiting for splash screen value to return... showing loading screen'
+      'waiting for splash screen value to return... showing loading screen',
     );
     return <></>;
   }
 
-  let initialPage = '/main/node';
+  let initialPage = '/main/nodePackage';
   // electron.getSetHasSeenSplashscreen(false);
   if (sHasSeenSplashscreen === false) {
     initialPage = '/setup';
@@ -101,6 +102,14 @@ export default function App() {
               }
             />
             <Route path="/main" element={<Main />}>
+              <Route
+                path="/main/nodePackage"
+                element={
+                  <div className={contentContainer}>
+                    <NodePackageScreen />
+                  </div>
+                }
+              />
               <Route
                 path="/main/node"
                 element={

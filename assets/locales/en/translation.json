@@ -1,6 +1,8 @@
 {
+  "AddANode": "Add a node",
   "AddYourFirstNode": "Add your first node",
   "AddYourFirstNodeDescription": "Node requirements and settings come next. Also, you can add more nodes later!",
+  "AddBaseNodeDescription": "Base is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
   "Add Node": "Add Node",
   "NodeSettings": "Node settings",
   "StopeNodeToChangeSettings": "The node must be stopped to make changes",
@@ -50,7 +52,9 @@
   "podmanInstallingMessage": "Installing... (this may take 5 or more minutes). There will be a password prompt on Mac and a pop-up on Windows to give permissions to install Podman.",
   "EthereumNode": "Ethereum Node",
   "LaunchAnEthereumNode": "Launch an Ethereum Node",
+  "LaunchAVarNode": "Launch a {{nodeName}} Node",
   "LearnMoreClientDiversity": "Learn more about client diversity",
+  "AddNodeDescription": "Support the health of a network protocol by running a node.",
   "AddEthereumNodeDescription": "Running a full etherum node is a two part story. Choosing minority clients are important for the health of the network.",
   "ChooseYourNetwork": "Choose your network",
   "PodmanInstallation": "Podman installation",
@@ -61,5 +65,7 @@
   "GetStarted": "Get started",
   "WelcomeToNiceNode": "Welcome to NiceNode",
   "WelcomeToNiceNodeDescription": "Run a node how you want it — without commands and a terminal. NiceNode shows what the node is doing at a glance. Stats like how many peer nodes are connected and synching progress are built into the app.",
-  "DeleteNodeDataQuestion": "Delete all of the node chain data?"
+  "DeleteNodeDataQuestion": "Delete all of the node chain data?",
+  "ResetNodeSettingsModal": "Reset node settings",
+  "ResetNodeSettingsQuestion": "Are you sure you want to reset all node settings to defaults?"
 }

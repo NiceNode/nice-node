@@ -21,35 +21,32 @@ import Node, {
 } from '../common/node';
 import * as nodeStore from './state/nodes';
 import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
-import {
-  startBinary,
-  stopBinary,
-  initialize as initBinary,
-  onExit as onExitBinary,
-  getBinaryStatus,
-  removeBinaryNode,
-  sendLogsToUI as binarySendLogsToUI,
-  stopSendingLogsToUI as binaryStopSendingLogsToUI,
-  getProcess,
-} from './binary';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
-import { ConfigValuesMap } from '../common/nodeConfig';
+import { ConfigValuesMap, ConfigTranslationMap } from '../common/nodeConfig';
+import { checkNodePortsAndNotify } from './ports';
+import { getNodeLibrary } from './state/nodeLibrary';
+import { getSetPortHasChanged } from './state/nodes';
 
 export const addNode = async (
   nodeSpec: NodeSpecification,
   storageLocation?: string,
-  initialConfigFromUser?: ConfigValuesMap
+  initialConfigFromUser?: ConfigValuesMap,
 ): Promise<Node> => {
   // use a timestamp postfix so the user can add multiple nodes of the same name
   const utcTimestamp = Math.floor(Date.now() / 1000);
   const dataDir = await makeNodeDir(
     `${nodeSpec.specId}-${utcTimestamp}`,
-    storageLocation ?? getNodesDirPath()
+    storageLocation ?? getNodesDirPath(),
   );
   console.log('adding node with dataDir: ', dataDir);
   const nodeRuntime: NodeRuntime = {
     dataDir,
-    usage: {},
+    usage: {
+      diskGBs: [],
+      memoryBytes: [],
+      cpuPercent: [],
+      syncedBlock: 0,
+    },
   };
   const node: Node = createNode({
     spec: nodeSpec,
@@ -57,6 +54,13 @@ export const addNode = async (
     initialConfigFromUser,
   });
   nodeStore.addNode(node);
+
+  setTimeout(() => {
+    const runningNode = nodeStore.getNodeBySpecId(node.spec.specId);
+    if (runningNode?.status === NodeStatus.running) {
+      checkNodePortsAndNotify(runningNode);
+    }
+  }, 600000); // 10 minutes
   return node;
 };
 
@@ -65,7 +69,7 @@ export const getNodeStartCommand = (nodeId: NodeId): string => {
   const node = nodeStore.getNode(nodeId);
   if (!node) {
     throw new Error(
-      `Unable to get node start command ${nodeId}. Node not found.`
+      `Unable to get node start command ${nodeId}. Node not found.`,
     );
   }
 
@@ -101,10 +105,10 @@ export const startNode = async (nodeId: NodeId) => {
       const containerIds = await startPodmanNode(dockerNode);
       dockerNode.runtime.processIds = containerIds;
       dockerNode.status = NodeStatus.running;
+      if (getSetPortHasChanged(dockerNode)) {
+        checkNodePortsAndNotify(dockerNode);
+      }
       nodeStore.updateNode(dockerNode);
-    } else {
-      logger.info('nodeManager starting binary node');
-      await startBinary(node);
     }
   } catch (err) {
     logger.error(err);
@@ -128,11 +132,6 @@ export const stopNode = async (nodeId: NodeId) => {
       logger.info(`${containerIds} stopped`);
       node.status = NodeStatus.stopped;
       nodeStore.updateNode(node);
-    } else {
-      // assuming binary
-      await stopBinary(node);
-      node.status = NodeStatus.stopped;
-      nodeStore.updateNode(node);
     }
   } finally {
     // don't catch the error, but mark node as stopped
@@ -140,6 +139,15 @@ export const stopNode = async (nodeId: NodeId) => {
     node.status = NodeStatus.stopped;
     nodeStore.updateNode(node);
   }
+};
+
+export const resetNodeConfig = (nodeId: NodeId) => {
+  const existingNode = nodeStore.getNode(nodeId);
+
+  existingNode.config.configValuesMap = existingNode.spec.execution.input
+    ?.defaultConfig as ConfigValuesMap;
+
+  nodeStore.updateNode(existingNode);
 };
 
 export const deleteNodeStorage = async (nodeId: NodeId) => {
@@ -152,18 +160,18 @@ export const deleteNodeStorage = async (nodeId: NodeId) => {
 
 export const removeNode = async (
   nodeId: NodeId,
-  options: { isDeleteStorage: boolean }
+  options: { isDeleteStorage: boolean },
 ): Promise<Node> => {
   // todo: check if node can be removed. Is it stopped?
   // todo: stop & remove container
   logger.info(
-    `Remove node ${nodeId} and delete storage? ${options.isDeleteStorage}`
+    `Remove node ${nodeId} and delete storage? ${options.isDeleteStorage}`,
   );
   try {
     await stopNode(nodeId);
   } catch (err) {
     logger.info(
-      'Unable to stop the node before removing. Continuing with removal.'
+      'Unable to stop the node before removing. Continuing with removal.',
     );
   }
   const node = nodeStore.getNode(nodeId);
@@ -176,14 +184,6 @@ export const removeNode = async (
     } catch (err) {
       logger.error(err);
       // todo: try to remove container with same name?
-    }
-  } else {
-    // assuming binary
-    try {
-      const isBinaryNode = await removeBinaryNode(node);
-      logger.info(`isBinaryNode ${isBinaryNode}`);
-    } catch (err) {
-      logger.error(err);
     }
   }
 
@@ -199,15 +199,11 @@ export const removeNode = async (
 export const stopSendingNodeLogs = (nodeId?: NodeId) => {
   if (nodeId === undefined) {
     dockerStopSendingLogsToUI();
-    binaryStopSendingLogsToUI();
     return;
   }
   const node = nodeStore.getNode(nodeId);
   if (isDockerNode(node)) {
     dockerStopSendingLogsToUI();
-  } else {
-    // assume binary
-    binaryStopSendingLogsToUI();
   }
 };
 
@@ -226,9 +222,27 @@ export const sendNodeLogs = (nodeId: NodeId) => {
   const node = nodeStore.getNode(nodeId);
   if (isDockerNode(node)) {
     dockerSendLogsToUI(node);
-  } else {
-    // assume binary
-    binarySendLogsToUI(node);
+  }
+};
+
+const compareSpecsAndUpdate = (
+  node: Node,
+  nodeLibraryConfigTranslation: ConfigTranslationMap | undefined,
+) => {
+  if (node.spec.configTranslation && nodeLibraryConfigTranslation) {
+    const nodeSpecKeys = Object.keys(node.spec.configTranslation);
+    const nodeLibraryKeys = Object.keys(nodeLibraryConfigTranslation);
+
+    // Compare the two sets of keys
+    const areKeysDifferent =
+      nodeSpecKeys.length !== nodeLibraryKeys.length ||
+      nodeSpecKeys.some((key) => !nodeLibraryKeys.includes(key)) ||
+      nodeLibraryKeys.some((key) => !nodeSpecKeys.includes(key));
+
+    // If the keys are different, overwrite node.spec.configTranslation
+    if (areKeysDifferent) {
+      node.spec.configTranslation = nodeLibraryConfigTranslation;
+    }
   }
 };
 
@@ -238,8 +252,8 @@ export const sendNodeLogs = (nodeId: NodeId) => {
  */
 export const initialize = async () => {
   initDocker();
-  initBinary();
   initNodeLibrary();
+  const nodeLibrary = getNodeLibrary();
 
   // get all nodes
   const nodes = nodeStore.getNodes();
@@ -251,11 +265,11 @@ export const initialize = async () => {
       if (Array.isArray(dockerNode?.runtime?.processIds)) {
         try {
           const containerDetails = await getContainerDetails(
-            dockerNode.runtime.processIds
+            dockerNode.runtime.processIds,
           );
           console.log(
             'NodeManager.initialize containerDetails: ',
-            containerDetails
+            containerDetails,
           );
           // {..."State": {
           //     "Status": "exited",
@@ -280,6 +294,10 @@ export const initialize = async () => {
           if (containerDetails?.State?.FinishedAt) {
             node.lastStopped = containerDetails?.State?.FinishedAt;
           }
+          compareSpecsAndUpdate(
+            node,
+            nodeLibrary[node.spec.specId].configTranslation,
+          );
           nodeStore.updateNode(node);
         } catch (err) {
           logger.error(`Docker found no container for nodeId ${node.id}`);
@@ -289,41 +307,11 @@ export const initialize = async () => {
       } else {
         throw new Error(`No containerIds found for nodeId ${node.id}`);
       }
-    } else {
-      // todo: check binary process
-      const binaryNode = node;
-      if (
-        Array.isArray(binaryNode?.runtime?.processIds) &&
-        binaryNode.runtime.processIds.length > 0
-      ) {
-        try {
-          const pid = parseInt(binaryNode.runtime.processIds[0], 10);
-          // eslint-disable-next-line no-await-in-loop
-          const proc = await getProcess(pid);
-          if (proc) {
-            const nodeStatus = getBinaryStatus();
-            logger.info(
-              `NodeStatus for ${binaryNode.spec.specId} is ${nodeStatus}`
-            );
-            node.status = nodeStatus;
-            nodeStore.updateNode(node);
-          }
-        } catch (err) {
-          console.error(err);
-          node.status = NodeStatus.stopped;
-          nodeStore.updateNode(node);
-        }
-      } else {
-        node.status = NodeStatus.errorStopping;
-        nodeStore.updateNode(node);
-        // no process id so node is lost? set as stopped?
-      }
     }
   }
 };
 
 export const onExit = () => {
-  onExitBinary();
   onExitDocker();
 };
 

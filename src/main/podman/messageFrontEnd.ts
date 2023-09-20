@@ -12,13 +12,13 @@ export class MessageGrantPermissionToInstallPodman {
 }
 
 export const sendMessageOnDownloadProgress = (
-  downloadProgress: FileDownloadProgress
+  downloadProgress: FileDownloadProgress,
 ) => {
   send(CHANNELS.podman, downloadProgress);
 };
 
 export const sendMessageOnGrantPermissionToInstallPodman = (
-  isGrantedPermission: boolean
+  isGrantedPermission: boolean,
 ) => {
   const message: MessageGrantPermissionToInstallPodman =
     new MessageGrantPermissionToInstallPodman();

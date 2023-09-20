@@ -1,7 +1,8 @@
-import checkDiskSpace from 'check-disk-space';
-import { app } from 'electron';
 import { access, mkdir, readFile, rm } from 'fs/promises';
 import path from 'path';
+import { app } from 'electron';
+import checkDiskSpace from 'check-disk-space';
+
 // eslint-disable-next-line import/no-cycle
 
 import logger from './logger';
@@ -41,7 +42,7 @@ export const checkAndOrCreateDir = async (dirPath: string) => {
 };
 
 export const doesFileOrDirExist = async (
-  fileOrDirPath: string
+  fileOrDirPath: string,
 ): Promise<boolean> => {
   try {
     await access(fileOrDirPath);
@@ -61,7 +62,7 @@ export const doesFileOrDirExist = async (
  */
 export const makeNodeDir = async (
   nodeDirName: string,
-  storageLocation?: string
+  storageLocation?: string,
 ): Promise<string> => {
   const nodeDir = path.join(storageLocation ?? getNodesDirPath(), nodeDirName);
   await checkAndOrCreateDir(nodeDir);
@@ -78,10 +79,9 @@ export const gethDataDir = (): string => {
  * @returns (GBs) free storage space
  */
 export const getSystemFreeDiskSpace = async (
-  diskSpacePath?: string
+  diskSpacePath?: string,
 ): Promise<number> => {
   const pathToCheck: string = diskSpacePath || app.getPath('userData');
-  console.log('pathToCheck', pathToCheck);
   const diskSpace = await checkDiskSpace(pathToCheck);
   const freeInGBs = diskSpace.free * 1e-9;
   return freeInGBs;
@@ -114,7 +114,7 @@ export const tryCalcDiskSpace = async (dirPath: string) => {
     diskUsedInGBs = (await du(dirPath)) * 1e-9;
   } catch (err) {
     console.info(
-      `Cannot calculate disk usage at ${dirPath}. Could be changing files.`
+      `Cannot calculate disk usage at ${dirPath}. Could be changing files.`,
     );
   }
   return diskUsedInGBs;
@@ -125,7 +125,7 @@ export const tryCalcDiskSpace = async (dirPath: string) => {
  * disk usage.
  */
 export const getUsedDiskSpace = async (
-  dirPath: string
+  dirPath: string,
 ): Promise<number | undefined> => {
   let diskUsedInGBs = await tryCalcDiskSpace(dirPath);
   // geth may cleanup mid calculation
@@ -139,7 +139,7 @@ export const getUsedDiskSpace = async (
 export const getGethLogs = async () => {
   try {
     const gethLogFile = await readFile(
-      path.join(app.getPath('logs'), 'geth', 'application.log')
+      path.join(app.getPath('logs'), 'geth', 'application.log'),
     );
     return gethLogFile.toString().split('\n');
   } catch (err) {
@@ -151,7 +151,7 @@ export const getGethLogs = async () => {
 export const getGethErrorLogs = async () => {
   try {
     const gethLogFile = await readFile(
-      path.join(app.getPath('logs'), 'geth', 'error.log')
+      path.join(app.getPath('logs'), 'geth', 'error.log'),
     );
     return gethLogFile.toString().split('\n');
   } catch (err) {
@@ -168,7 +168,7 @@ export const deleteDisk = async (fileOrDirPath: string) => {
     logger.info(`---------  ${rmResult} ---------------`);
     const diskAfter = await getUsedDiskSpace(fileOrDirPath);
     logger.info(
-      `---------  after: ${diskAfter} before: ${diskBefore}---------------`
+      `---------  after: ${diskAfter} before: ${diskBefore}---------------`,
     );
     return diskAfter === undefined;
   } catch (err) {

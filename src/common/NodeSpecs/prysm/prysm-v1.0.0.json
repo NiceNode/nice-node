@@ -9,6 +9,7 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
+        "httpPort": "3500",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "http://host.containers.internal:8551",
@@ -16,8 +17,8 @@
       },
       "docker": {
         "containerVolumePath": "/data",
-        "raw": "-p 4000:4000 -p 13000:13000 -p 12000:12000/udp",
-        "forcedRawNodeInput": "--accept-terms-of-use=true --rpc-host=0.0.0.0 --jwt-secret=/data/jwtsecret"
+        "raw": "",
+        "forcedRawNodeInput": "--accept-terms-of-use=true --datadir=/data --rpc-host=0.0.0.0 --jwt-secret=/data/jwtsecret"
       }
     }
   },
@@ -25,21 +26,21 @@
   "rpcTranslation": "eth-l1-beacon",
   "systemRequirements": {
     "documentationUrl": "https://docs.prylabs.network/docs/install/install-with-script#step-1-review-prerequisites-and-best-practices",
-    "cpu" : {
+    "cpu": {
       "cores": 4
     },
     "memory": {
       "minSizeGBs": 8
     },
-    "storage" : {
-      "minSizeGBs" : 200,
+    "storage": {
+      "minSizeGBs": 200,
       "ssdRequired": true
     },
-    "internet" : {
+    "internet": {
       "minDownloadSpeedMbps": 8,
       "minUploadSpeedMbps": 8
     },
-    "docker" : {
+    "docker": {
       "required": true
     }
   },
@@ -54,15 +55,35 @@
       "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters/"
     },
     "checkpointSyncUrl": {
-      "displayName": "The URL of a trusted checkpoint sync",
+      "displayName": "Trusted checkpoint sync URL",
       "cliConfigPrefix": "--checkpoint-sync-url=",
       "defaultValue": "https://beaconstate.ethstaker.cc",
       "uiControl": {
         "type": "text"
       }
     },
+    "p2pPortsTcp": {
+      "displayName": "P2P listening port (TCP)",
+      "cliConfigPrefix": "--tcp-port=",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 13000",
+      "defaultValue": "13000",
+      "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters"
+    },
+    "p2pPortsUdp": {
+      "displayName": "P2P discovery port (UDP)",
+      "cliConfigPrefix": "--udp-port=",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 12000",
+      "defaultValue": "12000",
+      "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters"
+    },
     "httpPort": {
-      "displayName": "The host on which the gateway server runs on",
+      "displayName": "Gateway server listening port",
       "cliConfigPrefix": "--grpc-gateway-port=",
       "defaultValue": "3500",
       "uiControl": {
@@ -70,22 +91,23 @@
       }
     },
     "httpCorsDomains": {
-      "displayName": "Comma separated list of domains from which to accept cross origin requests (browser enforced). This flag has no effect if not used with --grpc-gateway-port.",
+      "displayName": "Gateway CORS domains",
       "cliConfigPrefix": "--grpc-gateway-corsdomain=",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "infoDescription": "Comma separated list of domains from which to accept cross origin requests (browser enforced). This flag has no effect if not used with --grpc-gateway-port."
     },
     "httpHostAddress": {
-      "displayName": "The host on which the gateway server runs on",
+      "displayName": "Gateway host listening address",
       "cliConfigPrefix": "--grpc-gateway-host=",
-      "defaultValue": "127.0.0.1",
+      "defaultValue": "0.0.0.0",
       "uiControl": {
         "type": "text"
       }
     },
     "executionEndpoint": {
-      "displayName": "The URL of the local execution engine API",
+      "displayName": "Local execution Engine RPC-JSON API URL",
       "cliConfigPrefix": "--execution-endpoint=",
       "defaultValue": "http://host.containers.internal:8551",
       "uiControl": {
@@ -94,12 +116,13 @@
       "iconUrl": "https://docs.prylabs.network/docs/execution-node/authentication#configure-beacon-node"
     },
     "maxPeerCount": {
-      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "displayName": "Max Peer Count",
       "cliConfigPrefix": "--p2p-max-peers=",
       "defaultValue": "45",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "infoDescription": "Set to lower number to use less bandwidth"
     }
   },
   "documentation": {

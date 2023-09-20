@@ -8,7 +8,7 @@ export const httpGet = (
   options?: {
     headers?: { name: string; value: string }[];
     isHttp?: boolean;
-  }
+  },
 ): Promise<http.IncomingMessage> => {
   return new Promise((resolve, reject) => {
     try {
@@ -36,7 +36,7 @@ export const httpGet = (
       }
       request.setHeader(
         'User-Agent',
-        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.79 Safari/537.36'
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.79 Safari/537.36',
       );
       request.on('error', (err) => {
         logger.error('https request: ', err);
@@ -51,8 +51,8 @@ export const httpGet = (
 
 export const httpGetJson = async (
   url: string,
-  isHttp?: boolean
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isHttp?: boolean,
+  // eslint-disable-next-line
 ): Promise<any> => {
   const response = await httpGet(url, { isHttp });
 

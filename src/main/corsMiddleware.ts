@@ -11,7 +11,7 @@ export const setCorsForNiceNode = (mainWindow: BrowserWindow) => {
     (details, callback) => {
       details.requestHeaders.Origin = `http://localhost`;
       callback({ requestHeaders: details.requestHeaders });
-    }
+    },
   );
   mainWindow.webContents.session.webRequest.onHeadersReceived(
     filter,
@@ -28,7 +28,7 @@ export const setCorsForNiceNode = (mainWindow: BrowserWindow) => {
       delete details.responseHeaders['access-control-allow-origin'];
 
       callback({ responseHeaders: details.responseHeaders });
-    }
+    },
   );
   // [End] modifying Origin header
 };

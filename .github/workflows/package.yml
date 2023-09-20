@@ -1,6 +1,6 @@
 name: Package
 
-on: [pull_request]
+on: [pull_request, workflow_dispatch]
 
 jobs:
   package:
@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Node.js and NPM
         uses: actions/setup-node@v3

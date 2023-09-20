@@ -32,13 +32,13 @@ const MultiSelect = ({
       setSelectedOptions(
         options.filter((option) => {
           return value.includes(option.value);
-        })
+        }),
       );
     } else {
       setSelectedOptions(
         options.filter((option) => {
           return value === option.value;
-        })
+        }),
       );
     }
   }, [value, options]);
@@ -48,8 +48,9 @@ const MultiSelect = ({
       <ReactSelect
         value={sSelectedOptions}
         options={options}
+        // @ts-ignore
         onChange={(
-          newValue: SingleValue<SelectOption> | MultiValue<SelectOption>
+          newValue: SingleValue<SelectOption> | MultiValue<SelectOption>,
         ) => {
           console.log('onChange newValue: ', newValue);
           if (Array.isArray(newValue)) {
@@ -57,7 +58,7 @@ const MultiSelect = ({
             onChange(
               newValue.map((selectOption) => {
                 return selectOption.value;
-              })
+              }),
             );
           } else {
             const singleValue = newValue as SingleValue<SelectOption>;

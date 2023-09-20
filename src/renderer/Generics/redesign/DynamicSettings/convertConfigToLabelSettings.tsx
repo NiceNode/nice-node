@@ -13,7 +13,7 @@ import Setting from './Setting';
 const getConfigValue = (
   configTranslation: ConfigTranslation,
   configKey: string,
-  configValuesMap: ConfigValuesMap
+  configValuesMap: ConfigValuesMap,
 ) => {
   let currentValue: string | string[] = configValuesMap?.[configKey];
   if (currentValue === undefined) {
@@ -51,7 +51,7 @@ const convertConfigToLabelSettings = ({
       if (configTranslationMap) {
         // categorySettingsArr: An array of all the Settings in this category
         const categorySettingsArr: LabelSettingsItem[] = Object.keys(
-          configTranslationMap
+          configTranslationMap,
         ).map((configKey) => {
           const configTranslation: ConfigTranslation =
             configTranslationMap[configKey];
@@ -59,7 +59,7 @@ const convertConfigToLabelSettings = ({
           const currentValue: string | string[] = getConfigValue(
             configTranslation,
             configKey,
-            configValuesMap
+            configValuesMap,
           );
 
           const settingItem: LabelSettingsItem = {
@@ -88,10 +88,10 @@ const convertConfigToLabelSettings = ({
       // config with translation? todo: error
       console.error(
         'category config does not have a configTranslation',
-        categoryConfig
+        categoryConfig,
       );
       return [];
-    }
+    },
   );
   // End of parsing category settings
   // Now flatten them into one category or "section"

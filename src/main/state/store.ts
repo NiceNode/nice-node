@@ -10,9 +10,7 @@ export const getIsStartOnLogin = (): boolean => {
   return store.get('isStartOnLogin');
 };
 
-export const watchIsStartOnLogin = (
-  handler: (isStartOnLogin: boolean) => void
-): void => {
+export const watchIsStartOnLogin = (handler: () => void): void => {
   store.onDidChange('isStartOnLogin', handler);
 };
 

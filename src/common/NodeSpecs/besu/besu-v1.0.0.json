@@ -12,13 +12,12 @@
         "webSockets": "Enabled",
         "httpCorsDomains": "\"http://localhost\"",
         "hostAllowList": "localhost,host.containers.internal",
-        "engineRpc" : "Enabled",
+        "engineRpc": "Enabled",
         "engineHostAllowList": "localhost,host.containers.internal"
-
       },
       "docker": {
         "containerVolumePath": "/var/lib/besu",
-        "raw": "-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546 -p 8551:8551 --user 0",
+        "raw": " --user 0",
         "forcedRawNodeInput": "--data-path=\"/var/lib/besu\" --engine-jwt-secret=\"/var/lib/besu/jwtsecret\""
       }
     }
@@ -27,21 +26,21 @@
   "rpcTranslation": "eth-l1",
   "systemRequirements": {
     "documentationUrl": "https://besu.hyperledger.org/en/stable/public-networks/get-started/system-requirements/",
-    "cpu" : {
+    "cpu": {
       "cores": 4
     },
     "memory": {
       "minSizeGBs": 8
     },
-    "storage" : {
-      "minSizeGBs" : 750,
+    "storage": {
+      "minSizeGBs": 750,
       "ssdRequired": true
     },
-    "internet" : {
+    "internet": {
       "minDownloadSpeedMbps": 10,
       "minUploadSpeedMbps": 10
     },
-    "docker" : {
+    "docker": {
       "required": true
     }
   },
@@ -53,7 +52,7 @@
       "uiControl": {
         "type": "filePath"
       },
-      "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#data-path"
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#data-path"
     },
     "syncMode": {
       "displayName": "Node synchronization mode",
@@ -75,8 +74,18 @@
       "defaultValue": "FAST",
       "documentation": "https://besu.hyperledger.org/en/stable/Concepts/Node-Types/"
     },
+    "p2pPorts": {
+      "displayName": "P2P port (UDP and TCP)",
+      "cliConfigPrefix": "--p2p-port=",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 30303",
+      "defaultValue": "30303",
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#p2p-port"
+    },
     "http": {
-      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "displayName": "RPC HTTP connections",
       "category": "RPC APIs",
       "uiControl": {
         "type": "select/single",
@@ -90,11 +99,12 @@
           }
         ]
       },
-      "defaultValue": "Disabled",
-      "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-http-enabled"
+      "defaultValue": "Enabled",
+      "infoDescription": "NiceNode requires http connections",
+      "documentation": "https://besu.hyperledger.org/en/stable/public-networks/reference/cli/options#rpc-http-enabled"
     },
     "engineRpc": {
-      "displayName": "Engine RPC connections (*Syncing requires this enabled)",
+      "displayName": "Engine JSON-RPC connections",
       "category": "RPC API",
       "uiControl": {
         "type": "select/single",
@@ -108,11 +118,22 @@
           }
         ]
       },
-      "defaultValue": "Disabled",
-      "documentation": "https://besu.hyperledger.org/en/stable/public-networks/reference/cli/options/#engine-rpc-enabled"
+      "defaultValue": "Enabled",
+      "infoDescription": "Syncing requires this to be enabled",
+      "documentation": "https://besu.hyperledger.org/en/stable/public-networks/reference/cli/options#engine-rpc-enabled"
+    },
+    "enginePort": {
+      "displayName": "Engine JSON-RPC listening port",
+      "cliConfigPrefix": "--engine-rpc-port=",
+      "defaultValue": "8551",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "The listening port for the Engine API calls (ENGINE, ETH) for JSON-RPC over HTTP and WebSocket.",
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#engine-rpc-port"
     },
     "webSockets": {
-      "displayName": "Enables or disables the WebSocket JSON-RPC service. The default is false.",
+      "displayName": "WebSocket JSON-RPC connections",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -125,26 +146,37 @@
           }
         ]
       },
-      "defaultValue": "Disabled",
-      "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-ws-enabled"
+      "defaultValue": "Enabled",
+      "infoDescription": "Enables or disables the WebSocket JSON-RPC service. The default is false.",
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-ws-enabled"
     },
     "webSocketsPort": {
-      "displayName": "The port (TCP) on which WebSocket JSON-RPC listens.",
+      "displayName": "WebSockets JSON-RPC port",
       "cliConfigPrefix": "--rpc-ws-port=",
       "defaultValue": "8546",
       "uiControl": {
         "type": "text"
       },
-      "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-ws-port",
-      "infoDescription" : "The port (TCP) on which WebSocket JSON-RPC listens. The default is 8546. You must expose ports appropriately (https://besu.hyperledger.org/en/stable/HowTo/Find-and-Connect/Configuring-Ports/)."
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-ws-port",
+      "infoDescription": "The port (TCP) on which WebSocket JSON-RPC listens. The default is 8546. You must expose ports appropriately (https://besu.hyperledger.org/en/stable/HowTo/Find-and-Connect/Configuring-Ports/)."
     },
     "httpCorsDomains": {
-      "displayName": "Change where the node accepts http connections (use comma separated urls wrapped in double quotes)",
+      "displayName": "HTTP-RPC CORS domains",
       "cliConfigPrefix": "--rpc-http-cors-origins=",
       "valuesJoinStr": ",",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "infoDescription": "Change where the node accepts http connections (use comma separated urls wrapped in double quotes)"
+    },
+    "httpPort": {
+      "displayName": "HTTP-RPC server listening port",
+      "cliConfigPrefix": "--rpc-http-port=",
+      "defaultValue": "8545",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-http-port"
     },
     "httpApis": {
       "displayName": "Enabled certain HTTP APIs",
@@ -213,26 +245,26 @@
         ]
       },
       "defaultValue": ["ETH", "NET", "WEB3"],
-      "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#rpc-http-api"
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-http-api"
     },
     "hostAllowList": {
-      "displayName": "A comma-separated list of hostnames to access the JSON-RPC API and pull Besu metrics. By default, Besu accepts requests from localhost and 127.0.0.1.",
+      "displayName": "JSON-RPC Host Allowlist",
       "category": "RPC APIs",
       "cliConfigPrefix": "--host-allowlist=",
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "Example value: medomain.com,meotherdomain.com",
+      "infoDescription": "A comma-separated list of hostnames to access the JSON-RPC API and pull Besu metrics. By default, Besu accepts requests from localhost and 127.0.0.1. Example value: medomain.com,meotherdomain.com",
       "defaultValue": "localhost,127.0.0.1"
     },
     "engineHostAllowList": {
-      "displayName": "A comma-separated list of hostnames to access the JSON-RPC API and pull Besu metrics. By default, Besu accepts requests from localhost and 127.0.0.1.",
+      "displayName": "Engine JSON-RPC Host Allowlist",
       "category": "RPC APIs",
       "cliConfigPrefix": "--engine-host-allowlist=",
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "Example value: medomain.com,meotherdomain.com",
+      "infoDescription": "A comma-separated list of hostnames to access the JSON-RPC API and pull Besu metrics. By default, Besu accepts requests from localhost and 127.0.0.1. Example value: medomain.com,meotherdomain.com",
       "defaultValue": "localhost,host.containers.internal,127.0.0.1"
     },
     "dataStorageFormat": {
@@ -253,16 +285,17 @@
         ]
       },
       "defaultValue": "FOREST",
-      "documentation": "https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#data-storage-format"
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#data-storage-format"
     },
     "maxPeerCount": {
-      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
-      "cliConfigPrefix": "--max-peers=",
+      "displayName": "Max Peer Count",
+      "cliConfigPrefix": ["--max-peers=", "--Xp2p-peer-lower-bound="],
       "defaultValue": "25",
       "uiControl": {
         "type": "text"
       },
-      "documentation": "https://besu.hyperledger.org/en/stable/HowTo/Find-and-Connect/Managing-Peers/#limit-peers"
+      "infoDescription": "Set to lower number to use less bandwidth",
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#max-peers"
     }
   },
   "documentation": {

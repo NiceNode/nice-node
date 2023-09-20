@@ -8,7 +8,7 @@ export const setWindow = (inMainWindow: BrowserWindow): void => {
   mainWindow = inMainWindow;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 export const send = (channel: string, ...args: any[]): void => {
   if (!mainWindow) {
     return;
@@ -19,17 +19,12 @@ export const send = (channel: string, ...args: any[]): void => {
 
 export const CHANNELS = {
   userNodes: 'userNodes',
+  userNodePackages: 'userNodePackages',
   nodeLogs: 'nodeLogs',
   podman: 'podman',
   podmanInstall: 'podmanInstall',
   theme: 'theme',
   notifications: 'notifications',
+  reportEvent: 'reportEvent',
 };
-export const CHANNELS_ARRAY = [
-  'userNodes',
-  'nodeLogs',
-  'podman',
-  'podmanInstall',
-  'theme',
-  'notifications',
-];
+export const CHANNELS_ARRAY = Object.keys(CHANNELS);

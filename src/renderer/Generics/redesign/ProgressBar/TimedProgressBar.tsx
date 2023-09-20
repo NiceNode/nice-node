@@ -10,7 +10,7 @@ export interface TimedProgressBarProps extends ProgressBarProps {
 const timeRemainingCaption = (
   t: TFunction,
   totalTime: number,
-  timeElapsed: number
+  timeElapsed: number,
 ) => {
   if (timeElapsed >= totalTime) {
     return t('FinishingUp');

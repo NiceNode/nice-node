@@ -57,7 +57,7 @@ export const labelAndDescriptionContainer = style({
   flex: 'none',
   order: 0,
   flexGrow: 0,
-  maxWidth: '100%',
+  maxWidth: '68%',
 });
 
 export const lineKeyText = style({

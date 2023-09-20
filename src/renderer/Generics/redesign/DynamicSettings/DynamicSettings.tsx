@@ -37,7 +37,7 @@ const DynamicSettings = ({
         configValuesMap: configValuesMap ?? {},
         isDisabled,
         onChange,
-      })
+      }),
     );
   }, [categoryConfigs, configValuesMap, isDisabled, onChange]);
 

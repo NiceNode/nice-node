@@ -1,13 +1,16 @@
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
-
 import logger from '../logger';
 import Node, { NodeStatus } from '../../common/node';
 import { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
 import { setDockerNodeStatus as setPodmanNodeStatus } from '../state/nodes';
-import { buildCliConfig } from '../../common/nodeConfig';
+import {
+  ConfigTranslationMap,
+  ConfigValuesMap,
+  buildCliConfig,
+} from '../../common/nodeConfig';
 import { send } from '../messenger';
-import * as monitoring from './monitoring';
+import * as metricsPolling from './metricsPolling';
 import { killChildProcess } from '../processExit';
 import { parsePodmanLogMetadata } from '../util/nodeLogUtils';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
@@ -44,7 +47,7 @@ const watchPodmanEvents = async () => {
   // podmanWatchProcess is killed if (killed || exitCode === null)
   if (podmanWatchProcess && !podmanWatchProcess.killed) {
     logger.error(
-      'podmanWatchProcess process still running. Wait to stop or stop first.'
+      'podmanWatchProcess process still running. Wait to stop or stop first.',
     );
     return;
   }
@@ -63,7 +66,6 @@ const watchPodmanEvents = async () => {
   podmanWatchProcess = childProcess;
   if (!podmanWatchProcess.stdout) {
     throw new Error('Podman watch events stdout stream is undefined.');
-    return;
   }
   const rl = readline.createInterface({
     input: podmanWatchProcess.stdout,
@@ -136,7 +138,7 @@ const watchPodmanEvents = async () => {
     logger.info(`podmanWatchProcess::close:: ${code}`);
     if (code !== 0) {
       logger.error(
-        `podmanWatchProcess::close:: with non-zero exit code ${code}`
+        `podmanWatchProcess::close:: with non-zero exit code ${code}`,
       );
       // todo: determine the error and show geth error logs to user.
     }
@@ -175,7 +177,7 @@ export const getRunningContainers = async () => {
 
 export const getContainerDetails = async (containerIds: string[]) => {
   const data = await runCommand(
-    `inspect ${containerIds.join(' ')} --format="{{json .}}"`
+    `inspect ${containerIds.join(' ')} --format="{{json .}}"`,
   );
   // console.log('getContainerDetails containerIds: ', data);
   // let details;
@@ -191,7 +193,7 @@ export const stopSendingLogsToUI = () => {
   // logger.info(`podman.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
     logger.info(
-      'sendLogsToUI process was running for another node. Killing that process.'
+      'sendLogsToUI process was running for another node. Killing that process.',
     );
     killChildProcess(sendLogsToUIProc);
   }
@@ -202,7 +204,7 @@ export const sendLogsToUI = (node: Node) => {
   stopSendingLogsToUI();
   logger.info(
     'sendLogsToUI getPodmanEnvWithPath(): ',
-    getPodmanEnvWithPath().PATH
+    getPodmanEnvWithPath().PATH,
   );
   const spawnOptions: SpawnOptions = {
     stdio: [null, 'pipe', 'pipe'],
@@ -222,14 +224,13 @@ export const sendLogsToUI = (node: Node) => {
   const childProcess = spawn(
     `podman logs --follow --timestamps --tail 100 ${containerId}`,
     watchInput,
-    spawnOptions
+    spawnOptions,
   );
   sendLogsToUIProc = childProcess;
   // todo some containers send to stderr, some send to stdout!
   //  ex. lighthouse sends logs to stderr
   if (!sendLogsToUIProc.stderr && !sendLogsToUIProc.stdout) {
     throw new Error('Podman watch events stdout stream is undefined.');
-    return;
   }
   let rlStdErr: readline.Interface;
   if (sendLogsToUIProc.stderr) {
@@ -286,7 +287,7 @@ export const sendLogsToUI = (node: Node) => {
     logger.info(`podman.sendLogsToUI::close:: ${code}`);
     if (code !== 0) {
       logger.error(
-        `podman.sendLogsToUI::close:: with non-zero exit code ${code}`
+        `podman.sendLogsToUI::close:: with non-zero exit code ${code}`,
       );
       // todo: determine the error and show geth error logs to user.
     }
@@ -306,7 +307,7 @@ export const initialize = async () => {
   try {
     // podman = new Podman(options);
     watchPodmanEvents();
-    monitoring.initialize(runCommand);
+    metricsPolling.initialize();
     // todo: update podman node usages
     // runCommand('-v');
   } catch (err) {
@@ -358,7 +359,7 @@ export const removePodmanNode = async (node: Node) => {
   try {
     await runCommand(`container rm ${node.spec.specId}`);
     logger.info(
-      `removePodmanNode container removed by name ${node.spec.specId}`
+      `removePodmanNode container removed by name ${node.spec.specId}`,
     );
     isRemoved = true;
   } catch (err) {
@@ -383,24 +384,96 @@ export const removePodmanNode = async (node: Node) => {
   return isRemoved;
 };
 
+const createPodmanPortInput = (
+  configTranslation: ConfigTranslationMap,
+  configValuesMap?: ConfigValuesMap,
+) => {
+  const {
+    p2pPorts,
+    p2pPortsUdp,
+    p2pPortsTcp,
+    enginePort,
+    httpPort,
+    webSocketsPort,
+  } = configTranslation;
+  const {
+    p2pPorts: configP2pPorts,
+    p2pPortsUdp: configP2pPortsUdp,
+    p2pPortsTcp: configP2pPortsTcp,
+    enginePort: configEnginePort,
+    httpPort: configHttpPort,
+    webSocketsPort: configWsPort,
+  } = configValuesMap || {};
+  const result = [];
+
+  // Handle p2p ports
+  if (configP2pPortsUdp || p2pPortsUdp || configP2pPortsTcp || p2pPortsTcp) {
+    const p2pUdpValue =
+      configP2pPortsUdp || (p2pPortsUdp && p2pPortsUdp.defaultValue);
+    const p2pTcpValue =
+      configP2pPortsTcp || (p2pPortsTcp && p2pPortsTcp.defaultValue);
+
+    if (p2pTcpValue) {
+      result.push(`-p ${p2pTcpValue}:${p2pTcpValue}/tcp`);
+    }
+    if (p2pUdpValue) {
+      result.push(`-p ${p2pUdpValue}:${p2pUdpValue}/udp`);
+    }
+  } else if (configP2pPorts || p2pPorts) {
+    const p2pValue = configP2pPorts || (p2pPorts && p2pPorts.defaultValue);
+    if (p2pValue) {
+      result.push(`-p ${p2pValue}:${p2pValue}/tcp`);
+      result.push(`-p ${p2pValue}:${p2pValue}/udp`);
+    }
+  }
+
+  // Handle http port
+  const restPortValue = configHttpPort || (httpPort && httpPort.defaultValue);
+  if (restPortValue) {
+    result.push(`-p ${restPortValue}:${restPortValue}`);
+  }
+
+  // Handle ws port if it exists
+  const wsPortValue =
+    configWsPort || (webSocketsPort && webSocketsPort.defaultValue);
+  if (wsPortValue) {
+    result.push(`-p ${wsPortValue}:${wsPortValue}`);
+  }
+
+  // Handle engine port if it exists
+  const enginePortValue =
+    configEnginePort || (enginePort && enginePort.defaultValue);
+  if (enginePortValue) {
+    result.push(`-p ${enginePortValue}:${enginePortValue}`);
+  }
+
+  return result.join(' ');
+};
+
 export const createRunCommand = (node: Node): string => {
-  const { specId, execution } = node.spec;
+  const { specId, execution, configTranslation } = node.spec;
   const { imageName, input } = execution as PodmanExecution;
   // try catch? .. podman dameon might need to be restarted if a bad gateway error occurs
 
-  let podmanRawInput = '';
+  let podmanPortInput = '';
   let podmanVolumePath = '';
   let finalPodmanInput = '';
   if (input?.docker) {
-    podmanRawInput = input?.docker.raw ?? '';
-    podmanVolumePath = input.docker.containerVolumePath;
-    if (podmanRawInput) {
-      finalPodmanInput = podmanRawInput;
+    if (configTranslation) {
+      podmanPortInput = createPodmanPortInput(
+        configTranslation,
+        node.config.configValuesMap,
+      );
     }
+    podmanVolumePath = input.docker.containerVolumePath;
+    finalPodmanInput = podmanPortInput + (input?.docker.raw ?? '');
     if (podmanVolumePath) {
       finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath} ${finalPodmanInput}`;
     }
   }
+  logger.info(
+    `finalPodmanInput ${JSON.stringify(node.config.configValuesMap)}`,
+  );
   let nodeInput = '';
   if (input?.docker?.forcedRawNodeInput) {
     nodeInput = input?.docker?.forcedRawNodeInput;
@@ -449,13 +522,12 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
 
 export const isPodmanInstalled = async () => {
   let bIsPodmanInstalled;
-  logger.info('Checking isPodmanInstalled...');
   try {
     const infoResult = await runCommand('-v');
     console.log('podman infoResult: ', infoResult);
     bIsPodmanInstalled = true;
     logger.info(
-      'Podman is installed. Podman version command did not throw error.'
+      'Podman is installed. Podman version command did not throw error.',
     );
   } catch (err) {
     logger.error(err);
@@ -463,7 +535,6 @@ export const isPodmanInstalled = async () => {
     // podman not installed?
     logger.info('Podman install not found.');
   }
-  logger.info(`isPodmanInstalled: ${bIsPodmanInstalled}`);
   return bIsPodmanInstalled;
 };
 
@@ -481,8 +552,6 @@ export const isPodmanRunning = async () => {
   const bIsPodmanRunning = nnMachine?.Running === true;
   if (!bIsPodmanRunning) {
     logger.info(`Podman isn't running`);
-  } else {
-    logger.info(`Podman is running`);
   }
   return bIsPodmanRunning;
 };
@@ -504,7 +573,7 @@ export const isPodmanStarting = async () => {
 // }, 5000);
 
 export const onExit = () => {
-  monitoring.onExit();
+  metricsPolling.onExit();
   if (podmanWatchProcess) {
     killChildProcess(podmanWatchProcess);
   }

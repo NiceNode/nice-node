@@ -15,7 +15,7 @@
       },
       "docker": {
         "containerVolumePath": "/usr/app/data",
-        "raw": "-p 9000:9000/tcp -p 9000:9000/udp -p 5052:5052",
+        "raw": "",
         "forcedRawNodeInput": "beacon --network mainnet --rest.address 0.0.0.0 --dataDir /usr/app/data --jwt-secret /usr/app/data/jwtsecret"
       }
     }
@@ -24,21 +24,21 @@
   "rpcTranslation": "eth-l1-beacon",
   "systemRequirements": {
     "documentationUrl": "https://chainsafe.github.io/lodestar/#specifications",
-    "cpu" : {
+    "cpu": {
       "cores": 4
     },
     "memory": {
       "minSizeGBs": 4
     },
-    "storage" : {
-      "minSizeGBs" : 20,
+    "storage": {
+      "minSizeGBs": 20,
       "ssdRequired": true
     },
-    "internet" : {
+    "internet": {
       "minDownloadSpeedMbps": 10,
       "minUploadSpeedMbps": 10
     },
-    "docker" : {
+    "docker": {
       "required": true
     }
   },
@@ -52,7 +52,7 @@
       "infoDescription": "Lodestar root directory"
     },
     "checkpointSyncUrl": {
-      "displayName": "The URL of a trusted checkpoint sync",
+      "displayName": "Trusted checkpoint sync URL",
       "cliConfigPrefix": "--checkpointSyncUrl ",
       "defaultValue": "https://beaconstate-mainnet.chainsafe.io",
       "uiControl": {
@@ -60,7 +60,7 @@
       }
     },
     "http": {
-      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "displayName": "RPC HTTP connections",
       "cliConfigPrefix": "--rest ",
       "uiControl": {
         "type": "select/single",
@@ -75,10 +75,11 @@
           }
         ]
       },
+      "infoDescription": "NiceNode requires http connections",
       "defaultValue": "Disabled"
     },
     "httpApis": {
-      "displayName": "Pick namespaces to expose for HTTP API",
+      "displayName": "Enabled HTTP namespaces",
       "cliConfigPrefix": "--rest.namespace ",
       "defaultValue": ["beacon", "config", "events", "node", "validator"],
       "valuesJoinStr": ",",
@@ -109,8 +110,17 @@
         ]
       }
     },
+    "p2pPorts": {
+      "displayName": "P2P port (UDP and TCP)",
+      "cliConfigPrefix": "--port ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 9000",
+      "defaultValue": "9000"
+    },
     "httpHostAddress": {
-      "displayName": "Listening address of the REST server.",
+      "displayName": "REST server listening address",
       "cliConfigPrefix": "--rest.address ",
       "defaultValue": "0.0.0.0",
       "uiControl": {
@@ -119,23 +129,24 @@
       "infoDescription": "Limit the access to the REST API to a particular hostname (for CORS-enabled clients such as browsers)."
     },
     "httpPort": {
-      "displayName": "Set port for HTTP API",
+      "displayName": "HTTP-RPC server listening port",
       "cliConfigPrefix": "--rest.port ",
-      "defaultValue": "5052",
+      "defaultValue": "9596",
       "uiControl": {
         "type": "text"
       }
     },
     "httpCorsDomains": {
-      "displayName": "Change where the node accepts http connections (use comma separated urls)",
+      "displayName": "HTTP-RPC CORS domains",
       "cliConfigPrefix": "--http.corsdomain ",
       "defaultValue": "*",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "infoDescription": "Change where the node accepts http connections (use comma separated urls)"
     },
     "executionEndpoint": {
-      "displayName": "The URL of the local execution engine API",
+      "displayName": "Local execution Engine RPC-JSON API URL",
       "cliConfigPrefix": "--execution.urls ",
       "defaultValue": "http://localhost:8551",
       "uiControl": {
@@ -143,12 +154,13 @@
       }
     },
     "maxPeerCount": {
-      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
+      "displayName": "Max Peer Count",
       "cliConfigPrefix": "--network.maxPeers ",
       "defaultValue": "55",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "infoDescription": "Set to lower number to use less bandwidth"
     }
   },
   "documentation": {

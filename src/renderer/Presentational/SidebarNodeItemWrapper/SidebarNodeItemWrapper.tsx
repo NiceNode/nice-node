@@ -1,8 +1,16 @@
 import { useEffect, useState } from 'react';
-import Node, { NodeStatus } from '../../../common/node';
+import { NodeStatus, NodePackage } from '../../../common/node';
 import { getSyncStatus } from '../../Generics/redesign/utils';
 import { useGetExecutionIsSyncingQuery } from '../../state/services';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
+
+export type SidebarNodeStatus =
+  | 'healthy'
+  | 'warning'
+  | 'error'
+  | 'sync'
+  | 'stopped'
+  | 'updating';
 
 const NODE_SIDEBAR_STATUS_MAP: Record<string, SidebarNodeStatus> = {
   created: 'stopped',
@@ -25,13 +33,6 @@ const NODE_SIDEBAR_STATUS_MAP: Record<string, SidebarNodeStatus> = {
   error: 'error',
 };
 
-export type SidebarNodeStatus =
-  | 'healthy'
-  | 'warning'
-  | 'error'
-  | 'sync'
-  | 'stopped'
-  | 'updating';
 export interface SidebarNodeItemWrapperProps {
   /**
    * Which icon?
@@ -49,7 +50,7 @@ export interface SidebarNodeItemWrapperProps {
    * Is the node selected?
    */
   selected?: boolean;
-  node: Node;
+  node: NodePackage;
 }
 
 export const SidebarNodeItemWrapper = ({
@@ -66,7 +67,7 @@ export const SidebarNodeItemWrapper = ({
     node.spec.rpcTranslation,
     {
       pollingInterval,
-    }
+    },
   );
 
   useEffect(() => {
@@ -91,7 +92,7 @@ export const SidebarNodeItemWrapper = ({
   const nodeStatus = {
     stopped: status === 'stopped',
     error: status.includes('error'),
-    sychronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+    synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
   };
 
   const syncStatus = getSyncStatus(nodeStatus);
@@ -100,8 +101,8 @@ export const SidebarNodeItemWrapper = ({
   return (
     <SidebarNodeItem
       // temp fix
-      key={id}
-      iconId={spec.specId.replace('-beacon', '')}
+      key={spec.specId || id}
+      iconId={spec.specId?.replace('-beacon', '')}
       title={spec.displayName}
       info={spec.displayName}
       status={sidebarStatus}

@@ -120,7 +120,7 @@ const PreferencesWrapper = ({
         });
       }
     },
-    [modalOnChangeConfig]
+    [modalOnChangeConfig],
   );
 
   if (sThemeSetting === undefined || sOsIsDarkMode === undefined) return null;

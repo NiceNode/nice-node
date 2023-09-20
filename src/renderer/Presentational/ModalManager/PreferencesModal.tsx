@@ -25,7 +25,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
 
   const handleColorSchemeChange = (colorScheme: ThemeSetting) => {
     const meta = document.querySelector(
-      'meta[name="color-scheme"]'
+      'meta[name="color-scheme"]',
     ) as MetaElement;
     const colorValue = colorScheme === 'auto' ? 'light dark' : colorScheme;
     meta.content = colorValue as ThemeSetting;
@@ -76,7 +76,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
             modalConfig,
             setModalConfig,
             save,
-            modalOnSaveConfig
+            modalOnSaveConfig,
           );
         }}
       />

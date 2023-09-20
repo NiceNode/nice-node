@@ -41,11 +41,11 @@ const LogsWrapper = () => {
     if (sSelectedNodeId) {
       electron.sendNodeLogs(sSelectedNodeId);
       console.log(
-        'LogsWrapper: isOpen && sSelectedNodeId truthy. Send selected node logs'
+        'LogsWrapper: isOpen && sSelectedNodeId truthy. Send selected node logs',
       );
     } else {
       console.log(
-        'LogsWrapper: isOpen && sSelectedNodeId falsy. stopSendingNodeLogs'
+        'LogsWrapper: isOpen && sSelectedNodeId falsy. stopSendingNodeLogs',
       );
       electron.stopSendingNodeLogs();
     }

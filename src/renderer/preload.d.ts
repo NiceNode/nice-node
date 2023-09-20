@@ -1,9 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { NodeSpecification } from '../common/nodeSpec';
-import { Node, NodeId } from '../common/node';
-import { NodeLibrary } from '../main/state/nodeLibrary';
+/* eslint-disable no-unused-vars */
+import {
+  NodeSpecification,
+  NodePackageSpecification,
+} from '../common/nodeSpec';
+import Node, {
+  NodeId,
+  UserNodePackages,
+  UserNodes,
+  NodePackage,
+} from '../common/node';
+import { AddNodePackageNodeService } from '../main/nodePackageManager';
+import { NodeLibrary, NodePackageLibrary } from '../main/state/nodeLibrary';
 import { Settings, ThemeSetting } from '../main/state/settings';
 import { CheckStorageDetails } from '../main/files';
+import { FailSystemRequirementsData } from '../main/minSystemRequirement';
 import { SystemData } from '../main/systemInfo';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
@@ -28,11 +38,12 @@ declare global {
         once(channel: string, func: (...args: any[]) => void): void;
         removeListener(
           channel: string,
-          listener: (...args: any[]) => void
+          listener: (...args: any[]) => void,
         ): void;
         removeAllListeners(channel: string): void;
       };
       getSystemFreeDiskSpace(): number;
+      getSystemDiskSize(): number;
       getDebugInfo(): any;
       getStoreValue(key: string): any;
       setStoreValue(key: string, value: any): void;
@@ -48,11 +59,18 @@ declare global {
       // Multi-node
       getNodes(): Node[];
       getUserNodes(): UserNodes;
-      addEthereumNode(
-        ecNodeSpec: NodeSpecification,
-        ccNodeSpec: NodeSpecification,
-        settings: { storageLocation?: string }
-      ): { ecNode: Node; ccNode: Node };
+      getUserNodePackages(): UserNodePackages;
+      startNodePackage(nodeId: NodeId): void;
+      stopNodePackage(nodeId: NodeId): void;
+      removeNodePackage(
+        nodeId: NodeId,
+        options: { isDeleteStorage: boolean },
+      ): Node;
+      addNodePackage(
+        nodeSpec: NodePackageSpecification,
+        services: AddNodePackageNodeService[],
+        settings: { storageLocation?: string },
+      ): { node: NodePackage };
       addNode(nodeSpec: NodeSpecification, storageLocation?: string): Node;
       updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;
       removeNode(nodeId: NodeId, options: { isDeleteStorage: boolean }): Node;
@@ -62,9 +80,9 @@ declare global {
       updateNodeDataDir(node: Node, newDataDir: string): void;
       openDialogForNodeDataDir(nodeId: NodeId): string;
       openDialogForStorageLocation(): CheckStorageDetails;
-      updateNodeUsedDiskSpace(nodeId: NodeId): void;
       updateNodeLastSyncedBlock(nodeId: NodeId, block: number): void;
       deleteNodeStorage(nodeId: NodeId): boolean;
+      resetNodeConfig(nodeId: NodeId): boolean;
       sendNodeLogs(nodeId: NodeId): void;
       stopSendingNodeLogs(nodeId?: NodeId): void;
 
@@ -73,6 +91,7 @@ declare global {
 
       // Node library
       getNodeLibrary(): NodeLibrary;
+      getNodePackageLibrary(): NodePackageLibrary;
 
       // Podman
       getIsPodmanInstalled(): boolean;
@@ -95,6 +114,9 @@ declare global {
       addNotification(notification: any): void;
       removeNotifications(): void;
       markAllAsRead(): void;
+
+      // Ports
+      checkPorts(ports: number[]): void;
     };
 
     performance: Performance;

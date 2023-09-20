@@ -9,7 +9,7 @@ type CustomerErrorType = {
 
 // Define a service using a base URL and expected endpoints
 // lots of issues in RTKQ github complaining about typescript breaking changes
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 export const RtkqNotificationsService: any = createApi({
   reducerPath: 'RtkqNotificationsService',
   baseQuery: fakeBaseQuery<CustomerErrorType>(),
@@ -22,7 +22,7 @@ export const RtkqNotificationsService: any = createApi({
           data = await electron.getNotifications();
           console.log(
             'RtkqNotificationsService getNotifications() returned ',
-            data
+            data,
           );
         } catch (e) {
           const error = { message: 'Unable to getNotifications' };

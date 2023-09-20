@@ -1,7 +1,9 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { ConfigValuesMap } from '../../common/nodeConfig';
 
-import DynamicSettings, { CategoryConfig } from '../../renderer/Generics/redesign/DynamicSettings/DynamicSettings';
+import DynamicSettings, {
+  CategoryConfig,
+} from '../../renderer/Generics/redesign/DynamicSettings/DynamicSettings';
 
 export default {
   title: 'Generic/DynamicSettings',
@@ -25,7 +27,7 @@ const configValuesMap: ConfigValuesMap = {
 
 const categoryConfigs: CategoryConfig[] = [
   {
-    category: "Storage",
+    category: 'Storage',
     configTranslationMap: {
       dataDir: {
         displayName: 'Data location',
@@ -56,10 +58,10 @@ const categoryConfigs: CategoryConfig[] = [
         documentation:
           'https://besu.hyperledger.org/en/stable/Reference/CLI/CLI-Syntax/#data-storage-format',
       },
-    }
+    },
   },
   {
-    category: "Syncronization",
+    category: 'Syncronization',
     configTranslationMap: {
       syncMode: {
         displayName: 'Sync mode',
@@ -80,10 +82,10 @@ const categoryConfigs: CategoryConfig[] = [
         },
         defaultValue: 'FAST',
       },
-    }
+    },
   },
   {
-    category: "RPC APIs",
+    category: 'RPC APIs',
     configTranslationMap: {
       http: {
         displayName: 'RPC http connections',
@@ -205,10 +207,10 @@ const categoryConfigs: CategoryConfig[] = [
           'A comma-separated list of hostnames to access the JSON-RPC API and pull Besu metrics. By default, Besu accepts requests from localhost and 127.0.0.1. Example value: medomain.com,meotherdomain.com',
         defaultValue: 'localhost,127.0.0.1',
       },
-    }
+    },
   },
   {
-    category: "Other",
+    category: 'Other',
     configTranslationMap: {
       httpCorsDomains: {
         displayName: 'Allowed virtual hostnames for inbound requests',
@@ -230,9 +232,9 @@ const categoryConfigs: CategoryConfig[] = [
           type: 'text',
         },
       },
-    }
-  }
-]
+    },
+  },
+];
 
 export const Primary = Template.bind({});
 Primary.args = {

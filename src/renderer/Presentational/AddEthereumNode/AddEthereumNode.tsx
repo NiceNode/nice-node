@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NodeLibrary } from 'main/state/nodeLibrary';
+import { NodeLibrary, NodePackageLibrary } from 'main/state/nodeLibrary';
 import { ModalConfig } from '../ModalManager/modalUtils';
 import {
   container,
@@ -16,14 +15,9 @@ import SpecialSelect, {
   SelectOption,
 } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import electron from '../../electronGlobal';
-// import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
-// import Select from '../../Generics/redesign/Select/Select';
-// import { NodeSpecification } from '../../../common/nodeSpec';
 import FolderInput from '../../Generics/redesign/Input/FolderInput';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { captionText } from '../PodmanInstallation/podmanInstallation.css';
-import { useAppDispatch } from '../../state/hooks';
-import { setModalState } from '../../state/modal';
 
 const ecOptions = [
   {
@@ -109,16 +103,12 @@ const ccOptions = [
   },
 ];
 
-let alphaModalRendered = false;
-
 export type AddEthereumNodeValues = {
   executionClient?: SelectOption;
   consensusClient?: SelectOption;
   storageLocation?: string;
 };
 export interface AddEthereumNodeProps {
-  // executionOptions: NodeSpecification[];
-  // beaconOptions: NodeSpecification[];
   /**
    * Listen to node config changes
    */
@@ -126,11 +116,11 @@ export interface AddEthereumNodeProps {
   ethereumNodeConfig?: AddEthereumNodeValues;
   setConsensusClient?: (
     elClient: SelectOption,
-    object: AddEthereumNodeValues
+    object: AddEthereumNodeValues,
   ) => void;
   setExecutionClient?: (
     clClient: SelectOption,
-    object: AddEthereumNodeValues
+    object: AddEthereumNodeValues,
   ) => void;
   modalOnChangeConfig?: (config: ModalConfig) => void;
 }
@@ -141,12 +131,7 @@ const AddEthereumNode = ({
   setExecutionClient,
   modalOnChangeConfig,
   onChange,
-}: /**
- * Todo: Pass options from the node spec files
- */
-// executionOptions,
-// beaconOptions,
-AddEthereumNodeProps) => {
+}: AddEthereumNodeProps) => {
   const { t } = useTranslation();
   const { t: tGeneric } = useTranslation('genericComponents');
   // const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
@@ -155,36 +140,49 @@ AddEthereumNodeProps) => {
   const [sSelectedConsensusClient, setSelectedConsensusClient] =
     useState<SelectOption>(ethereumNodeConfig?.consensusClient || ccOptions[0]);
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>(
-    ethereumNodeConfig?.storageLocation || ''
+    ethereumNodeConfig?.storageLocation || '',
   );
   const [
     sNodeStorageLocationFreeStorageGBs,
     setNodeStorageLocationFreeStorageGBs,
   ] = useState<number>();
-  const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
-
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
-      const hasSeenAlpha = await electron.getSetHasSeenAlphaModal();
-      setHasSeenAlphaModal(hasSeenAlpha || false);
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
       const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
+      const nodePackageLibrary: NodePackageLibrary =
+        await electron.getNodePackageLibrary();
       console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
       setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
       if (modalOnChangeConfig) {
         modalOnChangeConfig({
+          executionClient: sSelectedExecutionClient.value,
+          consensusClient: sSelectedConsensusClient.value,
           storageLocation: defaultNodesStorageDetails.folderPath,
           nodeLibrary,
+          nodePackageLibrary,
         });
       }
       setNodeStorageLocationFreeStorageGBs(
-        defaultNodesStorageDetails.freeStorageGBs
+        defaultNodesStorageDetails.freeStorageGBs,
       );
     };
     fetchData();
+
+    // Modal Parent needs updated with the default initial value
+    const ethNodeConfig = {
+      executionClient: sSelectedExecutionClient,
+      consensusClient: sSelectedConsensusClient,
+    };
+    if (setExecutionClient) {
+      setExecutionClient(sSelectedExecutionClient, ethNodeConfig);
+    }
+    if (setConsensusClient) {
+      setConsensusClient(sSelectedConsensusClient, ethNodeConfig);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -206,7 +204,7 @@ AddEthereumNodeProps) => {
       sSelectedConsensusClient,
       sNodeStorageLocation,
       setExecutionClient,
-    ]
+    ],
   );
 
   const onChangeCc = useCallback(
@@ -227,7 +225,7 @@ AddEthereumNodeProps) => {
       sSelectedConsensusClient,
       sNodeStorageLocation,
       setConsensusClient,
-    ]
+    ],
   );
 
   useEffect(() => {
@@ -245,20 +243,12 @@ AddEthereumNodeProps) => {
     onChange,
   ]);
 
-  if (sHasSeenAlphaModal === false && !alphaModalRendered) {
-    dispatch(
-      setModalState({
-        isModalOpen: true,
-        screen: { route: 'alphaBuild', type: 'info' },
-      })
-    );
-    alphaModalRendered = true;
-  }
-
   return (
     <div className={container}>
       {!modalOnChangeConfig && (
-        <div className={titleFont}>{t('LaunchAnEthereumNode')}</div>
+        <div className={titleFont}>
+          {t('LaunchAVarNode', { nodeName: 'Ethereum' })}
+        </div>
       )}
       <div className={descriptionContainer}>
         <div className={descriptionFont}>
@@ -269,13 +259,13 @@ AddEthereumNodeProps) => {
           url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
         />
       </div>
-      <p className={sectionFont}>Recommended execution client</p>
+      <p className={sectionFont}>Execution client</p>
       <SpecialSelect
         selectedOption={sSelectedExecutionClient}
         onChange={onChangeEc}
         options={ecOptions}
       />
-      <p className={sectionFont}>Recommended consensus client</p>
+      <p className={sectionFont}>Consensus client</p>
       <SpecialSelect
         selectedOption={sSelectedConsensusClient}
         onChange={onChangeCc}
@@ -323,7 +313,7 @@ AddEthereumNodeProps) => {
       <p className={sectionFont}>{tGeneric('DataLocation')}</p>
       <p
         className={captionText}
-      >{`Changing location only supported on Mac and only locations under /Users/<current-user>/ or /Volumes/`}</p>
+      >{`Changing location only supported on Mac & Linux and only locations under /Users/<current-user>/ or /Volumes/`}</p>
       <FolderInput
         // disabled
         placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
@@ -340,7 +330,7 @@ AddEthereumNodeProps) => {
               });
             }
             setNodeStorageLocationFreeStorageGBs(
-              storageLocationDetails.freeStorageGBs
+              storageLocationDetails.freeStorageGBs,
             );
           } else {
             // user didn't change the folder path

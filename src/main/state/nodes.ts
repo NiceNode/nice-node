@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { send } from '../messenger';
+import { CHANNELS, send } from '../messenger';
+import { didPortsChange } from '../ports';
 import Node, {
   isDockerNode,
   NodeId,
@@ -42,7 +42,7 @@ const initialize = () => {
 
   // Notify the UI when values change
   store.onDidChange(USER_NODES_KEY, (newValue: UserNodes) => {
-    send('userNodes', newValue);
+    send(CHANNELS.userNodes, newValue);
   });
 };
 initialize();
@@ -79,9 +79,25 @@ export const addNode = (newNode: Node) => {
   return newNode;
 };
 
+export const getSetPortHasChanged = (
+  node: Node,
+  portHasChanged?: boolean | undefined,
+) => {
+  if (portHasChanged !== undefined) {
+    store.set(
+      `${USER_NODES_KEY}.${NODES_KEY}.${node.id}.portHasChanged`,
+      portHasChanged,
+    );
+  }
+  const portHasChangedValue: boolean = store.get(
+    `${USER_NODES_KEY}.${NODES_KEY}.${node.id}.portHasChanged`,
+  );
+  return portHasChangedValue;
+};
+
 export const updateNodeProperties = (
   nodeId: NodeId,
-  propertiesToUpdate: any
+  propertiesToUpdate: any,
 ) => {
   console.log('updateNodeProperties: propertiesToUpdate', propertiesToUpdate);
   const node = getNode(nodeId);
@@ -92,9 +108,12 @@ export const updateNodeProperties = (
   console.log(
     'updateNodeProperties: newNode propertiesToUpdate',
     newNode,
-    propertiesToUpdate
+    propertiesToUpdate,
   );
   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${node.id}`, newNode);
+  if (didPortsChange(propertiesToUpdate.config, node)) {
+    getSetPortHasChanged(newNode, true);
+  }
   return getNode(node.id);
 };
 
@@ -106,7 +125,7 @@ export const updateNodeProperties = (
  */
 export const updateNodeConfig = (
   nodeId: NodeId,
-  newConfig: ConfigValuesMap
+  newConfig: ConfigValuesMap,
 ) => {
   console.log('updateNodeProperties: propertiesToUpdate', newConfig);
   // todo: could add some validation on the config key and values with the
@@ -129,7 +148,7 @@ export const updateNode = (node: Node) => {
  */
 export const setDockerNodeStatus = (
   containerId: string,
-  status: NodeStatus
+  status: NodeStatus,
 ) => {
   // get all nodes
   const nodes = getNodes();
@@ -153,7 +172,7 @@ export const setDockerNodeStatus = (
 // export const updateNodeProperty = (
 //   nodeId: NodeId,
 //   property: string,
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   // eslint-disable-next-line
 //   value: any
 // ) => {
 //   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${nodeId}.${property}`, value);

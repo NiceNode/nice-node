@@ -1,10 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from './store';
-import Node, { NodeId, NodeStatus, UserNodes } from '../../common/node';
+import Node, {
+  NodeId,
+  NodePackage,
+  NodeStatus,
+  UserNodePackages,
+  UserNodes,
+} from '../../common/node';
 
 // Define a type for the slice state
 export interface NodeState {
   userNodes?: UserNodes;
+  userNodePackages?: UserNodePackages;
+  selectedNodePackageId?: NodeId;
+  selectedNodePackage?: NodePackage;
   selectedNodeId?: NodeId;
   selectedNode?: Node;
   numGethDiskUsedGB: number | undefined;
@@ -17,6 +26,9 @@ export interface NodeState {
 // Define the initial state using that type
 export const initialState: NodeState = {
   userNodes: undefined,
+  userNodePackages: undefined,
+  selectedNodePackageId: undefined,
+  selectedNodePackage: undefined,
   selectedNodeId: undefined,
   selectedNode: undefined,
   numGethDiskUsedGB: undefined,
@@ -53,11 +65,41 @@ const setSelectedNode = (state: NodeState) => {
   }
 };
 
+const setSelectedNodePackage = (state: NodeState) => {
+  const { selectedNodePackageId, userNodePackages } = state;
+  if (
+    selectedNodePackageId &&
+    userNodePackages &&
+    userNodePackages.nodes[selectedNodePackageId]
+  ) {
+    state.selectedNodePackage = userNodePackages.nodes[selectedNodePackageId];
+  } else {
+    state.selectedNodePackage = undefined;
+  }
+};
+
 export const nodeSlice = createSlice({
   name: 'node',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    updateUserNodePackages: (
+      state,
+      action: PayloadAction<UserNodePackages | undefined>,
+    ) => {
+      state.userNodePackages = action.payload;
+      setSelectedNodePackage(state);
+      setIsAvailableForPolling(state);
+    },
+    updateSelectedNodePackageId: (
+      state,
+      action: PayloadAction<NodeId | undefined>,
+    ) => {
+      console.log('State update updateSelectedNodePackageId: ', state, action);
+      state.selectedNodePackageId = action.payload;
+      setSelectedNodePackage(state);
+      setIsAvailableForPolling(state);
+    },
     updateUserNodes: (state, action: PayloadAction<UserNodes | undefined>) => {
       state.userNodes = action.payload;
       setSelectedNode(state);
@@ -65,7 +107,7 @@ export const nodeSlice = createSlice({
     },
     updateSelectedNodeId: (
       state,
-      action: PayloadAction<NodeId | undefined>
+      action: PayloadAction<NodeId | undefined>,
     ) => {
       state.selectedNodeId = action.payload;
       setSelectedNode(state);
@@ -73,13 +115,13 @@ export const nodeSlice = createSlice({
     },
     updateNodeNumGethDiskUsedGB: (
       state,
-      action: PayloadAction<number | undefined>
+      action: PayloadAction<number | undefined>,
     ) => {
       state.numGethDiskUsedGB = action.payload;
     },
     updateSystemNumFreeDiskGB: (
       state,
-      action: PayloadAction<number | undefined>
+      action: PayloadAction<number | undefined>,
     ) => {
       state.numFreeDiskGB = action.payload;
     },
@@ -87,12 +129,23 @@ export const nodeSlice = createSlice({
 });
 
 export const {
+  updateUserNodePackages,
+  updateSelectedNodePackageId,
   updateUserNodes,
   updateSelectedNodeId,
   updateNodeNumGethDiskUsedGB,
   updateSystemNumFreeDiskGB,
 } = nodeSlice.actions;
 
+export const selectUserNodePackages = (
+  state: RootState,
+): UserNodePackages | undefined => state.node.userNodePackages;
+export const selectSelectedNodePackageId = (
+  state: RootState,
+): NodeId | undefined => state.node.selectedNodePackageId;
+export const selectSelectedNodePackage = (
+  state: RootState,
+): NodePackage | undefined => state.node.selectedNodePackage;
 export const selectUserNodes = (state: RootState): UserNodes | undefined =>
   state.node.userNodes;
 export const selectSelectedNodeId = (state: RootState): NodeId | undefined =>
@@ -106,7 +159,7 @@ export const selectNumFreeDiskGB = (state: RootState): number | undefined =>
 export const selectNodeStatus = (state: RootState): string | undefined =>
   state.node.status;
 export const selectIsAvailableForPolling = (
-  state: RootState
+  state: RootState,
 ): boolean | undefined => state.node.isAvailableForPolling;
 
 export default nodeSlice.reducer;

@@ -1,25 +1,18 @@
 import { NodeBackgroundId } from 'renderer/assets/images/nodeBackgrounds';
 import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
+import { NodeId } from 'common/node';
 
-export interface ClientProps {
-  name: NodeBackgroundId;
-  version: string;
-  nodeType: string;
-  status: ClientStatusProps;
-  stats: ClientStatsProps;
-}
-
-export type NodeAction = 'start' | 'stop' | 'logs' | 'settings';
-export interface NodeOverviewProps {
-  name: NodeBackgroundId;
-  title: string;
-  info: string;
-  screenType: 'altruistic' | 'client' | 'validator';
-  rpcTranslation: NiceNodeRpcTranslation;
-  version?: string;
-  status: ClientStatusProps;
-  stats: ClientStatsProps;
-  onAction?: (action: NodeAction) => void;
+export interface ClientStatusProps {
+  running?: boolean;
+  updating?: boolean;
+  initialized?: boolean; // initial initialization is done
+  synchronized?: boolean; // constantly updated from checking current / height slot or block
+  lowPeerCount?: boolean;
+  updateAvailable?: boolean;
+  blocksBehind?: boolean;
+  noConnection?: boolean;
+  stopped?: boolean;
+  error?: boolean;
 }
 
 export interface ClientStatsProps {
@@ -30,21 +23,35 @@ export interface ClientStatsProps {
   peers?: number;
   cpuLoad?: number;
   diskUsageGBs?: number;
+  memoryUsagePercent?: number;
   rewards?: number;
   balance?: number;
   stake?: number;
 }
 
-export interface ClientStatusProps {
-  updating?: boolean;
-  initialized?: boolean; // initial initialization is done
-  synchronized?: boolean; // constantly updated from checking current / height slot or block
-  lowPeerCount?: boolean;
-  updateAvailable?: boolean;
-  blocksBehind?: boolean;
-  noConnection?: boolean;
-  stopped?: boolean;
-  error?: boolean;
+export interface ClientProps {
+  id: NodeId;
+  displayName: string;
+  name: NodeBackgroundId | string;
+  version: string;
+  nodeType: string;
+  status: ClientStatusProps;
+  stats: ClientStatsProps;
+}
+
+export type NodeAction = 'start' | 'stop' | 'logs' | 'settings';
+export interface NodeOverviewProps {
+  name: NodeBackgroundId;
+  displayName?: string;
+  title: string;
+  info: string;
+  screenType: 'nodePackage' | 'client' | 'validator';
+  rpcTranslation: NiceNodeRpcTranslation;
+  version?: string;
+  status: ClientStatusProps;
+  stats: ClientStatsProps;
+  onAction?: (action: NodeAction) => void;
+  description?: string;
 }
 
 export interface SyncStatusProps {

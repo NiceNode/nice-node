@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ModalConfig } from '../ModalManager/modalUtils';
 import { useAppSelector } from '../../state/hooks';
-import { selectSelectedNode } from '../../state/node';
+import { selectSelectedNodePackage } from '../../state/node';
 import RemoveNode from './RemoveNode';
 
 export interface RemoveNodeWrapperProps {
@@ -9,26 +9,26 @@ export interface RemoveNodeWrapperProps {
 }
 
 const RemoveNodeWrapper = ({ modalOnChangeConfig }: RemoveNodeWrapperProps) => {
-  const selectedNode = useAppSelector(selectSelectedNode);
+  const selectedNodePackage = useAppSelector(selectSelectedNodePackage);
   const [sNodeStorageUsedGBs, setNodeStorageUsedGBs] = useState<number>();
 
   useEffect(() => {
-    console.log(selectedNode);
-    if (selectedNode?.runtime?.usage?.diskGBs) {
-      const nodeStorageGBs = selectedNode?.runtime?.usage?.diskGBs;
+    console.log(selectSelectedNodePackage);
+    if (selectedNodePackage?.runtime?.usage?.diskGBs) {
+      const nodeStorageGBs = selectedNodePackage?.runtime?.usage?.diskGBs[0]?.y;
       setNodeStorageUsedGBs(nodeStorageGBs);
     } else {
       setNodeStorageUsedGBs(undefined);
     }
-    modalOnChangeConfig({ selectedNode });
+    modalOnChangeConfig({ selectedNodePackage });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedNode]);
+  }, [selectedNodePackage]);
 
   return (
     <RemoveNode
       nodeStorageUsedGBs={sNodeStorageUsedGBs}
       modalOnChangeConfig={modalOnChangeConfig}
-      selectedNode={selectedNode}
+      selectedNodePackage={selectedNodePackage}
     />
   );
 };

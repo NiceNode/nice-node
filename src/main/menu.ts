@@ -15,6 +15,10 @@ import { getDebugInfoString, getGithubIssueProblemURL } from './debug';
 import { checkForUpdates } from './updater';
 import uninstallPodman from './podman/uninstall/uninstall';
 import nuclearUninstall from './nuclearUninstall';
+import { getFailSystemRequirements } from './minSystemRequirement';
+import { removeAllNodePackages } from './nodePackageManager';
+import { checkNodePortsAndNotify } from './ports';
+import { CHANNELS, send } from './messenger';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -73,6 +77,7 @@ export default class MenuBuilder {
         {
           label: 'Check for updates...',
           click() {
+            send(CHANNELS.reportEvent, 'UserCheckForUpdateNN');
             checkForUpdates(true);
           },
         },
@@ -200,6 +205,19 @@ export default class MenuBuilder {
         },
         { type: 'separator' },
         {
+          label: 'Check Ports',
+          click() {
+            checkNodePortsAndNotify();
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Remove all nodes and data',
+          click() {
+            removeAllNodePackages();
+          },
+        },
+        {
           label: 'Uninstall podman',
           click() {
             uninstallPodman();
@@ -231,6 +249,7 @@ export default class MenuBuilder {
           {
             label: 'Check for updates...',
             click() {
+              send(CHANNELS.reportEvent, 'UserCheckForUpdateNN');
               checkForUpdates(true);
             },
           },
@@ -254,7 +273,7 @@ export default class MenuBuilder {
                   accelerator: 'F11',
                   click: () => {
                     this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen()
+                      !this.mainWindow.isFullScreen(),
                     );
                   },
                 },
@@ -272,7 +291,7 @@ export default class MenuBuilder {
                   accelerator: 'F11',
                   click: () => {
                     this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen()
+                      !this.mainWindow.isFullScreen(),
                     );
                   },
                 },
@@ -307,6 +326,12 @@ export default class MenuBuilder {
             },
           },
           {
+            label: 'Remove all nodes and data',
+            click() {
+              removeAllNodePackages();
+            },
+          },
+          {
             label: 'Uninstall podman',
             click() {
               uninstallPodman();
@@ -316,6 +341,18 @@ export default class MenuBuilder {
             label: 'Nuclear uninstall (unistall podman and delete all NN data)',
             click() {
               nuclearUninstall();
+            },
+          },
+          {
+            label: 'Log minimum system requirement check',
+            click() {
+              getFailSystemRequirements();
+            },
+          },
+          {
+            label: 'Show Splash Screen On Launch',
+            click() {
+              getSetHasSeenSplashscreen(false);
             },
           },
         ],

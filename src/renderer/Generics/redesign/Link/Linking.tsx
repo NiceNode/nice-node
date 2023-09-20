@@ -74,7 +74,6 @@ const Linking = ({
     href: 'javascript:void(0);',
     target: '',
     rel: '',
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
     onClick: (_e: any) => {},
   };
   if (url) {

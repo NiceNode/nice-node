@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Node from 'common/node';
+import { NodePackage } from 'common/node';
 import { ModalConfig } from '../ModalManager/modalUtils';
 import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
 import { container, removeText } from './removeNode.css';
@@ -7,23 +7,23 @@ import { container, removeText } from './removeNode.css';
 export interface RemoveNodeProps {
   nodeStorageUsedGBs?: number;
   modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
-  selectedNode?: Node;
+  selectedNodePackage?: NodePackage;
 }
 
 const RemoveNode = ({
   nodeStorageUsedGBs,
   modalOnChangeConfig,
-  selectedNode,
+  selectedNodePackage,
 }: RemoveNodeProps) => {
   const [sNodeStorageMessage, setNodeStorageMessage] = useState<string>(
-    'calculating data size...'
+    '(calculating data size...)',
   );
 
   useEffect(() => {
     if (nodeStorageUsedGBs) {
       setNodeStorageMessage(`(${nodeStorageUsedGBs.toFixed(1)}GB)`);
     } else {
-      setNodeStorageMessage('calculating data size...');
+      setNodeStorageMessage('(calculating data size...)');
     }
   }, [nodeStorageUsedGBs]);
 
@@ -39,7 +39,10 @@ const RemoveNode = ({
       <Checkbox
         label={`Keep node related chain data ${sNodeStorageMessage}`}
         onClick={(isChecked: boolean) => {
-          modalOnChangeConfig({ isDeleteStorage: !isChecked, selectedNode });
+          modalOnChangeConfig({
+            isDeleteStorage: !isChecked,
+            selectedNodePackage,
+          });
         }}
       />
     </div>

@@ -31,7 +31,7 @@ export const getFailSystemRequirements = async (): Promise<
   // todo?: set CurrentUICulture to force output in english
   try {
     const res = await execPromise(
-      '(Get-WmiObject -Query "Select * from Win32_OptionalFeature where InstallState = \'1\'").Name | select-string VirtualMachinePlatform'
+      '(Get-WmiObject -Query "Select * from Win32_OptionalFeature where InstallState = \'1\'").Name | select-string VirtualMachinePlatform',
     );
     logger.info(`Get-WmiObject for VirtualMachinePlatform result: ${res}`);
     if (res.indexOf('VirtualMachinePlatform') >= 0) {
@@ -74,5 +74,8 @@ export const getFailSystemRequirements = async (): Promise<
     });
   }
 
+  logger.info(
+    `Failed system requirements: ${JSON.stringify(failedRequirements)}`,
+  );
   return failedRequirements;
 };

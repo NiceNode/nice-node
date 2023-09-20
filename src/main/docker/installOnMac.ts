@@ -9,7 +9,7 @@ import { startOnMac } from './start';
 /**
  * Download docker.dmg, install docker, start docker
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 const installOnMac = async (): Promise<any> => {
   logger.info(`Starting docker install...`);
   try {
@@ -27,19 +27,19 @@ const installOnMac = async (): Promise<any> => {
     const dockerDmgFilePath = await downloadFile(
       downloadUrl,
       getNNDirPath(),
-      sendMessageOnDownloadProgress
+      sendMessageOnDownloadProgress,
     );
     let stdout;
     let stderr;
     // eslint-disable-next-line prefer-const
     ({ stdout, stderr } = await execAwait(
       `hdiutil attach "${dockerDmgFilePath}" && /Volumes/Docker/Docker.app/Contents/MacOS/install --accept-license && hdiutil detach /Volumes/Docker`,
-      { log: true, sudo: true }
+      { log: true, sudo: true },
     ));
     console.log(
       'sudo hdiutil attach, install, detach stdout, stderr',
       stdout,
-      stderr
+      stderr,
     );
     // start docker app
     await startOnMac();

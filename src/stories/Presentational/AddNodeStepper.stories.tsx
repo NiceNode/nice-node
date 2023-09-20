@@ -5,13 +5,14 @@ import AddNodeStepper from '../../renderer/Presentational/AddNodeStepper/AddNode
 export default {
   title: 'Presentational/AddNodeStepper',
   component: AddNodeStepper,
-  argTypes: {
-  },
+  argTypes: {},
 } as ComponentMeta<typeof AddNodeStepper>;
 
-const Template: ComponentStory<typeof AddNodeStepper> = (args) => <AddNodeStepper {...args} />;
+const Template: ComponentStory<typeof AddNodeStepper> = (args) => (
+  <AddNodeStepper {...args} />
+);
 
 export const Primary = Template.bind({});
 Primary.args = {
-  onChange: (newValue: string) => console.log(newValue)
+  onChange: (newValue: string) => console.log(newValue),
 };

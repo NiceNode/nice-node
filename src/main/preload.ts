@@ -1,14 +1,18 @@
 import { contextBridge, ipcRenderer } from 'electron';
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { NodeSpecification } from '../common/nodeSpec';
+
+import {
+  NodePackageSpecification,
+  NodeSpecification,
+} from '../common/nodeSpec';
 import { CHANNELS_ARRAY } from './messenger';
 import { NodeId } from '../common/node';
 import { ThemeSetting } from './state/settings';
+import { AddNodePackageNodeService } from './nodePackageManager';
 
 contextBridge.exposeInMainWorld('electron', {
   SENTRY_DSN: process.env.SENTRY_DSN,
   ipcRenderer: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line
     on(channel: string, func: (...args: any[]) => void) {
       const validChannels = CHANNELS_ARRAY;
       if (validChannels.includes(channel)) {
@@ -27,14 +31,13 @@ contextBridge.exposeInMainWorld('electron', {
       console.log(`Removed all listeners on ${channel} channel.`);
     },
   },
-  updateNodeUsedDiskSpace: (nodeId: NodeId) =>
-    ipcRenderer.invoke('updateNodeUsedDiskSpace', nodeId),
   updateNodeLastSyncedBlock: (nodeId: NodeId, block: number) =>
     ipcRenderer.invoke('updateNodeLastSyncedBlock', nodeId, block),
   getSystemFreeDiskSpace: () => ipcRenderer.invoke('getSystemFreeDiskSpace'),
+  getSystemDiskSize: () => ipcRenderer.invoke('getSystemDiskSize'),
   getDebugInfo: () => ipcRenderer.invoke('getDebugInfo'),
   getStoreValue: (key: string) => ipcRenderer.invoke('getStoreValue', key),
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   setStoreValue: (key: string, value: any) =>
     ipcRenderer.invoke('setStoreValue', key, value),
   getGethLogs: () => ipcRenderer.invoke('getGethLogs'),
@@ -54,17 +57,21 @@ contextBridge.exposeInMainWorld('electron', {
   // Multi-node
   getNodes: () => ipcRenderer.invoke('getNodes'),
   getUserNodes: () => ipcRenderer.invoke('getUserNodes'),
-  addEthereumNode: async (
-    ecNodeSpec: NodeSpecification,
-    ccNodeSpec: NodeSpecification,
-    settings: { storageLocation?: string }
+  getUserNodePackages: () => ipcRenderer.invoke('getUserNodePackages'),
+  startNodePackage: (nodeId: NodeId) => {
+    ipcRenderer.invoke('startNodePackage', nodeId);
+  },
+  stopNodePackage: (nodeId: NodeId) => {
+    ipcRenderer.invoke('stopNodePackage', nodeId);
+  },
+  removeNodePackage: (nodeId: NodeId, options: { isDeleteStorage: boolean }) =>
+    ipcRenderer.invoke('removeNodePackage', nodeId, options),
+  addNodePackage: async (
+    nodeSpec: NodePackageSpecification,
+    services: AddNodePackageNodeService[],
+    settings: { storageLocation?: string },
   ) => {
-    return ipcRenderer.invoke(
-      'addEthereumNode',
-      ecNodeSpec,
-      ccNodeSpec,
-      settings
-    );
+    return ipcRenderer.invoke('addNodePackage', nodeSpec, services, settings);
   },
   addNode: (nodeSpec: NodeSpecification, storageLocation?: string) =>
     ipcRenderer.invoke('addNode', nodeSpec, storageLocation),
@@ -90,6 +97,8 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('openDialogForStorageLocation'),
   deleteNodeStorage: (nodeId: NodeId) =>
     ipcRenderer.invoke('deleteNodeStorage', nodeId),
+  resetNodeConfig: (nodeId: NodeId) =>
+    ipcRenderer.invoke('resetNodeConfig', nodeId),
   sendNodeLogs: (nodeId: NodeId) => {
     ipcRenderer.invoke('sendNodeLogs', nodeId);
   },
@@ -103,6 +112,7 @@ contextBridge.exposeInMainWorld('electron', {
 
   // Node library
   getNodeLibrary: () => ipcRenderer.invoke('getNodeLibrary'),
+  getNodePackageLibrary: () => ipcRenderer.invoke('getNodePackageLibrary'),
 
   // Podman
   getIsPodmanInstalled: () => ipcRenderer.invoke('getIsPodmanInstalled'),
@@ -139,4 +149,9 @@ contextBridge.exposeInMainWorld('electron', {
   },
   removeNotifications: () => ipcRenderer.invoke('removeNotifications'),
   markAllAsRead: () => ipcRenderer.invoke('markAllAsRead'),
+
+  // Ports
+  checkPorts: (ports: number[]) => {
+    ipcRenderer.invoke('checkPorts', ports);
+  },
 });

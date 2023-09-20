@@ -1,7 +1,7 @@
-import { Docker, Options } from 'docker-cli-js';
 import path from 'node:path';
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
+import { Docker, Options } from 'docker-cli-js';
 
 import logger from '../logger';
 import Node, { NodeStatus } from '../../common/node';
@@ -9,7 +9,6 @@ import { DockerExecution } from '../../common/nodeSpec';
 import { setDockerNodeStatus } from '../state/nodes';
 import { buildCliConfig } from '../../common/nodeConfig';
 import { send } from '../messenger';
-import * as monitoring from './monitoring';
 import * as dockerCompose from './docker-compose';
 import { killChildProcess } from '../processExit';
 import { parseDockerLogMetadata } from '../util/nodeLogUtils';
@@ -26,7 +25,7 @@ const options = new Options(
   path.join(__dirname),
   false,
   undefined,
-  undefined
+  undefined,
 );
 let docker: Docker;
 
@@ -49,7 +48,7 @@ const watchDockerEvents = async () => {
   // dockerWatchProcess is killed if (killed || exitCode === null)
   if (dockerWatchProcess && !dockerWatchProcess.killed) {
     logger.error(
-      'dockerWatchProcess process still running. Wait to stop or stop first.'
+      'dockerWatchProcess process still running. Wait to stop or stop first.',
     );
     return;
   }
@@ -67,7 +66,6 @@ const watchDockerEvents = async () => {
   dockerWatchProcess = childProcess;
   if (!dockerWatchProcess.stdout) {
     throw new Error('Docker watch events stdout stream is undefined.');
-    return;
   }
   const rl = readline.createInterface({
     input: dockerWatchProcess.stdout,
@@ -115,7 +113,7 @@ const watchDockerEvents = async () => {
     logger.info(`dockerWatchProcess::close:: ${code}`);
     if (code !== 0) {
       logger.error(
-        `dockerWatchProcess::close:: with non-zero exit code ${code}`
+        `dockerWatchProcess::close:: with non-zero exit code ${code}`,
       );
       // todo: determine the error and show geth error logs to user.
     }
@@ -154,7 +152,7 @@ export const getRunningContainers = async () => {
 
 export const getContainerDetails = async (containerIds: string[]) => {
   const data = await runCommand(
-    `inspect ${containerIds.join(' ')} --format="{{json .}}"`
+    `inspect ${containerIds.join(' ')} --format="{{json .}}"`,
   );
   let details;
   if (data?.object) {
@@ -169,7 +167,7 @@ export const stopSendingLogsToUI = () => {
   // logger.info(`docker.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
     logger.info(
-      'sendLogsToUI process was running for another node. Killing that process.'
+      'sendLogsToUI process was running for another node. Killing that process.',
     );
     killChildProcess(sendLogsToUIProc);
   }
@@ -195,14 +193,13 @@ export const sendLogsToUI = (node: Node) => {
   const childProcess = spawn(
     `docker logs --follow --timestamps -n 100 ${containerId}`,
     watchInput,
-    spawnOptions
+    spawnOptions,
   );
   sendLogsToUIProc = childProcess;
   // todo some containers send to stderr, some send to stdout!
   //  ex. lighthouse sends logs to stderr
   if (!sendLogsToUIProc.stderr && !sendLogsToUIProc.stdout) {
     throw new Error('Docker watch events stdout stream is undefined.');
-    return;
   }
   let rlStdErr: readline.Interface;
   if (sendLogsToUIProc.stderr) {
@@ -259,7 +256,7 @@ export const sendLogsToUI = (node: Node) => {
     logger.info(`docker.sendLogsToUI::close:: ${code}`);
     if (code !== 0) {
       logger.error(
-        `docker.sendLogsToUI::close:: with non-zero exit code ${code}`
+        `docker.sendLogsToUI::close:: with non-zero exit code ${code}`,
       );
       // todo: determine the error and show geth error logs to user.
     }
@@ -279,7 +276,6 @@ export const initialize = async () => {
   try {
     docker = new Docker(options);
     watchDockerEvents();
-    monitoring.initialize(runCommand);
     dockerCompose.initialize();
 
     // todo: update docker node usages
@@ -331,7 +327,7 @@ export const removeDockerNode = async (node: Node) => {
   try {
     await runCommand(`container rm ${node.spec.specId}`);
     logger.info(
-      `removeDockerNode container removed by name ${node.spec.specId}`
+      `removeDockerNode container removed by name ${node.spec.specId}`,
     );
     isRemoved = true;
   } catch (err) {
@@ -423,7 +419,7 @@ export const isDockerInstalled = async () => {
     console.log('docker infoResult: ', infoResult);
     bIsDockerInstalled = true;
     logger.info(
-      'Docker is installed. Docker version command did not throw error.'
+      'Docker is installed. Docker version command did not throw error.',
     );
   } catch (err) {
     logger.error(err);
@@ -459,7 +455,6 @@ export const isDockerRunning = async () => {
 // }, 5000);
 
 export const onExit = () => {
-  monitoring.onExit();
   if (dockerWatchProcess) {
     killChildProcess(dockerWatchProcess);
   }

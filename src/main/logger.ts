@@ -1,5 +1,5 @@
-import { app } from 'electron';
 import path from 'path';
+import { app } from 'electron';
 import { format, transports, createLogger } from 'winston';
 import * as Sentry from '@sentry/electron/main';
 import SentryTransport from './util/sentryWinstonTransport';
@@ -12,7 +12,7 @@ app.setAppLogsPath(logsPath);
 console.log('get Electron log path: ', app.getPath('logs'));
 console.log(
   'app log path: ',
-  path.join(app.getPath('logs'), 'application-%DATE%.log')
+  path.join(app.getPath('logs'), 'application-%DATE%.log'),
 );
 
 // const combinedTransport: DailyRotateFile = new DailyRotateFile({
@@ -42,10 +42,6 @@ const logger = createLogger({
       level: 'error',
       maxsize: 50000000, // 50 MB
     }),
-    new SentryTransport({
-      sentry: Sentry,
-      level: 'error',
-    }),
   ],
 });
 
@@ -63,10 +59,6 @@ export const autoUpdateLogger = createLogger({
       filename: path.join(app.getPath('logs'), 'auto-updater-error.log'),
       level: 'error',
       maxsize: 10000000, // 50 MB
-    }),
-    new SentryTransport({
-      sentry: Sentry,
-      level: 'error',
     }),
   ],
 });
@@ -97,16 +89,34 @@ export const autoUpdateLogger = createLogger({
 //
 // If we're not in production then log to the `console` with the format:
 // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
+if (
+  process.env.NODE_ENV === 'production' ||
+  process.env.NODE_ENV === 'staging'
+) {
+  logger.add(
+    new SentryTransport({
+      sentry: Sentry,
+      level: 'error',
+    }),
+  );
+  autoUpdateLogger.add(
+    new SentryTransport({
+      sentry: Sentry,
+      level: 'error',
+    }),
+  );
+}
+
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new transports.Console({
       format: defaultFormat,
-    })
+    }),
   );
   autoUpdateLogger.add(
     new transports.Console({
       format: defaultFormat,
-    })
+    }),
   );
 }
 

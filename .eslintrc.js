@@ -14,6 +14,27 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
     'no-plusplus': 'off',
+    'react/function-component-definition': 'off',
+    'react/jsx-no-useless-fragment': 'off',
+    // Unfortunately, required due to 'erb' eslint depends on airbnb js config
+    'no-unused-vars': 'off',
+    // also caused by airbnb js config?
+    'no-shadow': 'off',
+    'lines-between-class-members': 'off',
+    'react/jsx-no-script-url': 'off',
+    camelcase: 'off',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
+    'react/jsx-filename-extension': [2, { extensions: ['.jsx', '.tsx'] }],
+    'array-callback-return': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

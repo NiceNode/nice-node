@@ -35,7 +35,7 @@ const Setting = ({
       };
       asyncUpdate();
     },
-    [configKey, onChange]
+    [configKey, onChange],
   );
 
   const configTranslationControl: ConfigTranslationControl =
@@ -64,7 +64,7 @@ const Setting = ({
           options={configTranslationControl.controlTranslations.map(
             ({ value }) => {
               return { value, label: value };
-            }
+            },
           )}
           isDisabled={isDisabled}
         />
@@ -76,7 +76,7 @@ const Setting = ({
           options={configTranslationControl.controlTranslations.map(
             ({ value }) => {
               return { value, label: value };
-            }
+            },
           )}
           isDisabled={isDisabled ?? false}
           isMulti={configTranslationControl?.type === 'select/multiple'}

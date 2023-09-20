@@ -19,7 +19,7 @@ export const setRemoteEventReportingEnabled = (isEnabled: boolean) => {
     console.error(
       `Mismatch between user setting and event reporting service \
       setting. Service isEnabled:${Fathom.isTrackingEnabled()} and \
-      user set isEnabled:${isEnabled}`
+      user set isEnabled:${isEnabled}`,
     );
   }
 };

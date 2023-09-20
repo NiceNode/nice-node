@@ -26,6 +26,7 @@ export type MetricStats =
   | 'peers'
   | 'cpuLoad'
   | 'diskUsageGBs'
+  | 'memoryUsagePercent'
   | 'balance'
   | 'stake'
   | 'rewards';
@@ -120,7 +121,7 @@ export const MetricTypes = ({
     switch (statsType) {
       case 'currentBlock':
         iconId = 'slots';
-        titleText = `${statsValue}`;
+        titleText = `${(statsValue || 0).toLocaleString()}`;
         labelText = `Last synced ${
           rpcTranslation === 'eth-l1-beacon' ? 'slot' : 'block'
         }`;
@@ -133,9 +134,22 @@ export const MetricTypes = ({
         }
         labelText = 'Peers connected';
         break;
+      case 'memoryUsagePercent':
+        if (typeof statsValue === 'number') {
+          titleText = `${statsValue.toFixed(2)}%`;
+        } else {
+          titleText = `${statsValue}%`;
+        }
+        iconId = 'lightning';
+        labelText = 'Memory usage';
+        break;
       case 'cpuLoad':
         iconId = 'cpu';
-        titleText = `${statsValue}%`;
+        if (typeof statsValue === 'number') {
+          titleText = `${statsValue.toFixed(2)}%`;
+        } else {
+          titleText = `${statsValue}%`;
+        }
         labelText = 'CPU load';
         break;
       case 'diskUsageGBs':

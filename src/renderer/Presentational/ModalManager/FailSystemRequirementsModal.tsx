@@ -22,7 +22,7 @@ const FailSystemRequirementsModal = ({
         await electron.getFailSystemRequirements();
       console.log(
         'pref failSystemRequirementsData',
-        failSystemRequirementsData
+        failSystemRequirementsData,
       );
       setFailSystemRequirementsData(failSystemRequirementsData);
     };
@@ -35,7 +35,7 @@ const FailSystemRequirementsModal = ({
 
   const items: ChecklistItemProps[] = makeCheckList(
     t,
-    sFailSystemRequirementsData
+    sFailSystemRequirementsData,
   );
 
   return (
@@ -47,7 +47,7 @@ const FailSystemRequirementsModal = ({
         electron.closeApp();
       }}
       modalOnClose={modalOnClose}
-      modalOnCancel={() => {}}
+      modalOnCancel={modalOnClose}
     >
       <Checklist items={items} />
     </Modal>

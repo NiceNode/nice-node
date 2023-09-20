@@ -1,10 +1,8 @@
-// import { useTranslation } from 'react-i18next';
-
 import { useCallback, useEffect, useState } from 'react';
-// import { NodeStatus } from '../common/node';
+import { useNavigate } from 'react-router-dom';
+
 import { setModalState } from '../../state/modal';
 import electron from '../../electronGlobal';
-// import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import {
   selectIsAvailableForPolling,
@@ -16,7 +14,6 @@ import {
   useGetExecutionPeersQuery,
   useGetNodeVersionQuery,
 } from '../../state/services';
-// import { useGetNetworkConnectedQuery } from './state/network';
 import ContentSingleClient, {
   SingleNodeContent,
 } from '../ContentSingleClient/ContentSingleClient';
@@ -28,19 +25,25 @@ import {
   contentContainer,
   titleFont,
   descriptionFont,
+  backButtonContainer,
 } from './NodeScreen.css';
+import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
+import { HeaderButton } from '../../Generics/redesign/HeaderButton/HeaderButton';
 
 let alphaModalRendered = false;
 
 const NodeScreen = () => {
   // const { t } = useTranslation();
+  const navigate = useNavigate();
   const selectedNode = useAppSelector(selectSelectedNode);
   const qNodeVersion = useGetNodeVersionQuery(
-    selectedNode?.spec.rpcTranslation
+    selectedNode?.spec.rpcTranslation,
   );
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
+  const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>(0);
+  const [sTotalDiskSize, setTotalDiskSize] = useState<number>(0);
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
@@ -49,7 +52,7 @@ const NodeScreen = () => {
     selectedNode?.spec.rpcTranslation,
     {
       pollingInterval,
-    }
+    },
   );
   // const isSelectedNode = selectedNode !== undefined;
   // const peersPolling = isSelectedNode ? pollingInterval : 0;
@@ -57,13 +60,13 @@ const NodeScreen = () => {
     selectedNode?.spec.rpcTranslation,
     {
       pollingInterval,
-    }
+    },
   );
   const qLatestBlock = useGetExecutionLatestBlockQuery(
     selectedNode?.spec.rpcTranslation,
     {
       pollingInterval,
-    }
+    },
   );
 
   // use to show if internet is disconnected
@@ -72,8 +75,13 @@ const NodeScreen = () => {
   //   pollingInterval: typeof sPeers === 'number' && sPeers === 0 ? 30000 : 0,
   // });
 
-  const diskUsed =
-    selectedNode?.runtime?.usage?.diskGBs?.toPrecision(2) ?? undefined;
+  const diskUsed = selectedNode?.runtime?.usage?.diskGBs?.[0]?.y ?? 0;
+  const cpuPercent = selectedNode?.runtime?.usage?.cpuPercent ?? [
+    { x: 0, y: 0 },
+  ];
+  const memoryPercent = selectedNode?.runtime?.usage?.memoryBytes ?? [
+    { x: 0, y: 0 },
+  ];
   // eslint-disable-next-line eqeqeq
   // const isHttpEnabled =
   //   selectedNode?.config?.configValuesMap?.http &&
@@ -81,6 +89,26 @@ const NodeScreen = () => {
   //     selectedNode?.config?.configValuesMap?.http
   //   );
   // todo: http apis
+
+  const getNodesDefaultStorageLocation = async () => {
+    const defaultNodesStorageDetails =
+      await electron.getNodesDefaultStorageLocation();
+    setFreeStorageGBs(defaultNodesStorageDetails.freeStorageGBs);
+  };
+
+  useEffect(() => {
+    getNodesDefaultStorageLocation();
+    const interval = setInterval(getNodesDefaultStorageLocation, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getSystemSize = async () => {
+    setTotalDiskSize(await electron.getSystemDiskSize());
+  };
+
+  useEffect(() => {
+    getSystemSize();
+  }, []);
 
   useEffect(() => {
     if (!sIsAvailableForPolling) {
@@ -148,7 +176,7 @@ const NodeScreen = () => {
     const slotNumber = qLatestBlock?.data?.header?.message?.slot;
     const rpcTranslation = selectedNode?.spec?.rpcTranslation;
 
-    let latestBlockNum;
+    let latestBlockNum = 0;
     if (
       blockNumber &&
       typeof blockNumber === 'string' &&
@@ -161,8 +189,6 @@ const NodeScreen = () => {
       rpcTranslation === 'eth-l1-beacon'
     ) {
       latestBlockNum = parseFloat(slotNumber);
-    } else {
-      latestBlockNum = 0;
     }
 
     const syncedBlock =
@@ -186,7 +212,7 @@ const NodeScreen = () => {
         }
       }
     },
-    [selectedNode]
+    [selectedNode],
   );
 
   useEffect(() => {
@@ -216,7 +242,7 @@ const NodeScreen = () => {
       setModalState({
         isModalOpen: true,
         screen: { route: 'alphaBuild', type: 'info' },
-      })
+      }),
     );
     alphaModalRendered = true;
   }
@@ -242,7 +268,7 @@ const NodeScreen = () => {
                 setModalState({
                   isModalOpen: true,
                   screen: { route: 'addNode', type: 'modal' },
-                })
+                }),
               );
             }}
           />
@@ -279,12 +305,15 @@ const NodeScreen = () => {
 
     let regex;
     switch (name) {
-      case 'geth':
+      case 'geth' || 'op-geth' || 'op-node':
         regex = /Geth\/v(\d+\.\d+\.\d+)/;
         break;
-      // case 'reth':
-      //   regex = /Reth\/v(\d+\.\d+\.\d+)/;
-      //   break;
+      case 'reth':
+        regex = /Reth\/v(\d+\.\d+\.\d+)/;
+        break;
+      case 'besu':
+        regex = /besu\/v(\d+\.\d+\.\d+)/;
+        break;
       case 'erigon':
         regex = /(\d+\.\d+\.\d+)-dev/;
         break;
@@ -296,9 +325,18 @@ const NodeScreen = () => {
       case 'lodestar':
         regex = /Lodestar\/v(\d+\.\d+\.\d+)/;
         break;
+      case 'prysm':
+        regex = /prysm\/v(\d+\.\d+\.\d+)/;
+        break;
+      case 'teku':
+        regex = /teku\/v(\d+\.\d+\.\d+)/;
+        break;
+      case 'nimbus':
+        regex = /Nimbus\/v(\d+\.\d+\.\d+)/;
+        break;
       default:
         console.error(`Invalid software name: ${name}`);
-        return '';
+        return version; // At least, return the unformatted version string
     }
 
     const match = version.match(regex);
@@ -317,7 +355,8 @@ const NodeScreen = () => {
 
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
-    name: clientName,
+    displayName: selectedNode.spec.displayName,
+    name: clientName as NodeBackgroundId,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
     version: formatVersion(nodeVersionData, clientName),
@@ -325,29 +364,36 @@ const NodeScreen = () => {
     status: {
       stopped: status === 'stopped',
       error: status.includes('error'),
-      sychronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+      synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
     },
     stats: {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,
-      diskUsageGBs: diskUsed ? parseFloat(diskUsed) : undefined,
+      diskUsageGBs: diskUsed,
+    },
+    tabsData: {
+      cpuPercent,
+      memoryPercent,
+      diskUsed: selectedNode?.runtime?.usage?.diskGBs,
+      diskFree: sFreeStorageGBs,
+      diskTotal: sTotalDiskSize,
     },
     onAction: onNodeAction,
   };
   console.log('passing content to NodeScreen: ', nodeContent);
-  return <ContentSingleClient {...nodeContent} />;
+  return (
+    <div>
+      <div className={backButtonContainer}>
+        <HeaderButton
+          type="left"
+          onClick={() => {
+            navigate('/main/nodePackage');
+          }}
+        />
+      </div>
 
-  // start button disabled logic
-  // disabled={
-  //   !(
-  //     status === NodeStatus.created ||
-  //     status === NodeStatus.readyToStart ||
-  //     status === NodeStatus.errorStarting ||
-  //     status === NodeStatus.errorRunning ||
-  //     status === NodeStatus.stopped ||
-  //     status === NodeStatus.errorStopping ||
-  //     status === NodeStatus.unknown
-  // stop button disabled logic
-  //   disabled={status !== NodeStatus.running}
+      <ContentSingleClient {...nodeContent} />
+    </div>
+  );
 };
 export default NodeScreen;

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ipcMain, app } from 'electron';
 import getDebugInfo from './debug';
 import {
@@ -6,6 +5,7 @@ import {
   getGethErrorLogs,
   getSystemFreeDiskSpace,
   getNodesDirPathDetails,
+  getSystemDiskSize,
 } from './files';
 import store from './state/store';
 import logger from './logger';
@@ -13,7 +13,6 @@ import {
   checkSystemHardware,
   getMainProcessUsage,
   updateNodeLastSyncedBlock,
-  updateNodeUsedDiskSpace,
 } from './monitor';
 import {
   addNode,
@@ -24,19 +23,24 @@ import {
   sendNodeLogs,
   stopSendingNodeLogs,
   getNodeStartCommand,
+  resetNodeConfig,
 } from './nodeManager';
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
-import Node, { NodeId } from '../common/node';
-import { NodeSpecification } from '../common/nodeSpec';
+import { getUserNodePackages } from './state/nodePackages';
+import Node, { NodeId, NodePackage } from '../common/node';
+import {
+  NodePackageSpecification,
+  NodeSpecification,
+} from '../common/nodeSpec';
 import { isPodmanInstalled, isPodmanRunning } from './podman/podman';
-import installPodman from './podman/install';
+import installPodman from './podman/install/install';
 // eslint-disable-next-line import/no-cycle
 import {
   openDialogForNodeDataDir,
   openDialogForStorageLocation,
   updateNodeDataDir,
 } from './dialog';
-import { getNodeLibrary } from './state/nodeLibrary';
+import { getNodeLibrary, getNodePackageLibrary } from './state/nodeLibrary';
 import {
   getSetHasSeenAlphaModal,
   getSetHasSeenSplashscreen,
@@ -50,7 +54,6 @@ import {
 } from './state/settings';
 import { getSystemInfo } from './systemInfo';
 import startPodman from './podman/start';
-import { addEthereumNode } from './specialNodes/ethereumNode';
 import {
   addNotification,
   getNotifications,
@@ -58,20 +61,28 @@ import {
   markAllAsRead,
 } from './state/notifications';
 import { getFailSystemRequirements } from './minSystemRequirement';
+import {
+  AddNodePackageNodeService,
+  addNodePackage,
+  removeNodePackage,
+  startNodePackage,
+  stopNodePackage,
+} from './nodePackageManager';
+import { checkPorts } from './ports';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
-  ipcMain.handle('updateNodeUsedDiskSpace', (_event, nodeId: NodeId) => {
-    return updateNodeUsedDiskSpace(nodeId);
-  });
   ipcMain.handle(
     'updateNodeLastSyncedBlock',
     (_event, nodeId: NodeId, block: number) => {
       return updateNodeLastSyncedBlock(nodeId, block);
-    }
+    },
   );
   ipcMain.handle('getSystemFreeDiskSpace', () => {
     return getSystemFreeDiskSpace();
+  });
+  ipcMain.handle('getSystemDiskSize', () => {
+    return getSystemDiskSize();
   });
   ipcMain.handle('getDebugInfo', getDebugInfo);
   ipcMain.handle('getStoreValue', (_event, key: string) => {
@@ -79,7 +90,7 @@ export const initialize = () => {
     logger.info(`store.get(key, value): ${key},${value}`);
     return value;
   });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   ipcMain.handle('setStoreValue', (_event, key: string, value: any) => {
     logger.info(`store.set(key, value): ${key},${value}`);
     return store.set(key, value);
@@ -95,34 +106,59 @@ export const initialize = () => {
   // Multi-nodegetUserNodes
   ipcMain.handle('getNodes', getNodes);
   ipcMain.handle('getUserNodes', getUserNodes);
+  ipcMain.handle('getUserNodePackages', getUserNodePackages);
+  // ipcMain.handle(
+  //   'addEthereumNode',
+  //   (
+  //     _event,
+  //     ecNodeSpec: NodeSpecification,
+  //     ccNodeSpec: NodeSpecification,
+  //     settings: { storageLocation?: string },
+  //   ): Promise<{ ecNode: Node; ccNode: Node }> => {
+  //     return addEthereumNode(ecNodeSpec, ccNodeSpec, settings);
+  //   },
+  // );
   ipcMain.handle(
-    'addEthereumNode',
-    (
+    'addNodePackage',
+    async (
       _event,
-      ecNodeSpec: NodeSpecification,
-      ccNodeSpec: NodeSpecification,
-      settings: { storageLocation?: string }
-    ): Promise<{ ecNode: Node; ccNode: Node }> => {
-      return addEthereumNode(ecNodeSpec, ccNodeSpec, settings);
-    }
+      nodeSpec: NodePackageSpecification,
+      services: AddNodePackageNodeService[],
+      settings: { storageLocation?: string },
+    ): Promise<{ node: NodePackage }> => {
+      const node = await addNodePackage(nodeSpec, services, settings);
+      return { node };
+    },
   );
+  ipcMain.handle(
+    'removeNodePackage',
+    (_event, nodeId: NodeId, options: { isDeleteStorage: boolean }) => {
+      return removeNodePackage(nodeId, options);
+    },
+  );
+  ipcMain.handle('startNodePackage', (_event, nodeId: NodeId) => {
+    return startNodePackage(nodeId);
+  });
+  ipcMain.handle('stopNodePackage', (_event, nodeId: NodeId) => {
+    return stopNodePackage(nodeId);
+  });
   ipcMain.handle(
     'addNode',
     (_event, nodeSpec: NodeSpecification, storageLocation?: string) => {
       return addNode(nodeSpec, storageLocation);
-    }
+    },
   );
   ipcMain.handle(
     'updateNode',
     (_event, nodeId: NodeId, propertiesToUpdate: any) => {
       return updateNodeProperties(nodeId, propertiesToUpdate);
-    }
+    },
   );
   ipcMain.handle(
     'removeNode',
     (_event, nodeId: NodeId, options: { isDeleteStorage: boolean }) => {
       return removeNode(nodeId, options);
-    }
+    },
   );
   ipcMain.handle('startNode', (_event, nodeId: NodeId) => {
     return startNode(nodeId);
@@ -137,7 +173,7 @@ export const initialize = () => {
     'updateNodeDataDir',
     (_event, node: Node, newDataDir: string) => {
       return updateNodeDataDir(node, newDataDir);
-    }
+    },
   );
   ipcMain.handle('openDialogForNodeDataDir', (_event, nodeId: NodeId) => {
     return openDialogForNodeDataDir(nodeId);
@@ -147,6 +183,9 @@ export const initialize = () => {
   });
   ipcMain.handle('deleteNodeStorage', (_event, nodeId: NodeId) => {
     return deleteNodeStorage(nodeId);
+  });
+  ipcMain.handle('resetNodeConfig', (_event, nodeId: NodeId) => {
+    return resetNodeConfig(nodeId);
   });
   ipcMain.handle('sendNodeLogs', (_event, nodeId: NodeId) => {
     return sendNodeLogs(nodeId);
@@ -160,6 +199,7 @@ export const initialize = () => {
 
   // Node library
   ipcMain.handle('getNodeLibrary', getNodeLibrary);
+  ipcMain.handle('getNodePackageLibrary', getNodePackageLibrary);
 
   // Podman
   ipcMain.handle('getIsPodmanInstalled', isPodmanInstalled);
@@ -188,13 +228,13 @@ export const initialize = () => {
     'setIsNotificationsEnabled',
     (_event, isNotificationsEnabled: boolean) => {
       return setIsNotificationsEnabled(isNotificationsEnabled);
-    }
+    },
   );
   ipcMain.handle(
     'setIsEventReportingEnabled',
     (_event, isEventReportingEnabled: boolean) => {
       return setIsEventReportingEnabled(isEventReportingEnabled);
-    }
+    },
   );
 
   // Notifications
@@ -204,4 +244,9 @@ export const initialize = () => {
   });
   ipcMain.handle('removeNotifications', removeNotifications);
   ipcMain.handle('markAllAsRead', markAllAsRead);
+
+  // Ports
+  ipcMain.handle('checkPorts', (_event, ports: number[]) => {
+    return checkPorts(ports);
+  });
 };

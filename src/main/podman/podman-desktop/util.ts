@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /** ********************************************************************
  * Copyright (C) 2022 Red Hat, Inc.
@@ -53,27 +51,27 @@ export interface SpawnResult {
 }
 
 export interface RunOptions {
-  env?: NodeJS.ProcessEnv;
+  env?: typeof process.env;
 }
 
 export function getAssetsFolder(): string {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   if (isDev()) {
     return path.resolve(__dirname, '..', 'assets');
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   return path.resolve(
     (process as any).resourcesPath,
     'extensions',
     'podman',
-    'assets'
+    'assets',
   );
 }
 
 export function runCliCommand(
   command: string,
   args: string[],
-  options?: RunOptions
+  options?: RunOptions,
 ): Promise<SpawnResult> {
   return new Promise((resolve, reject) => {
     let output = '';

@@ -1,16 +1,26 @@
+import React from 'react';
+import { MetricData } from 'common/node';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
-import {
-  container,
-  contentHeader,
-  contentTitle,
-  contentPeriod,
-} from './tabContent.css';
+import { container, contentHeader, contentTitle } from './tabContent.css';
 import LabelValues from '../LabelValues/LabelValues';
-import { getBreakdown } from './getBreakdown';
+import {
+  getBreakdown,
+  processMinMaxAverage,
+  roundAndFormatPercentage,
+} from './utils';
+import { Chart } from '../Chart/Chart';
 import DiskCapacityBarChart from '../DiskCapacityBarChart/DiskCapacityBarChart';
+import { NodeBackgroundId } from '../../../assets/images/nodeBackgrounds';
 
+type DiskDataType = {
+  diskFree: number;
+  diskTotal: number;
+};
 export interface TabContentProps {
   tabId: string;
+  metricData?: MetricData[];
+  diskData?: DiskDataType;
+  name: NodeBackgroundId;
 }
 
 export interface PeriodBreakdownDataProps {
@@ -68,65 +78,37 @@ const contentLabels: SectionLabelProps = {
   Disk: 'Disk',
 };
 
-export const TabContent = ({ tabId }: TabContentProps) => {
+const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
   // switch statement here to determine which charts and sections to show?
 
-  // format data passed into TabContent as this?
-  const periodBreakdownData = {
-    sync: {
-      maximumBlocksBehind: '2',
-      minimumBlockTime: '98ms',
-      maximumBlockTime: '98ms',
-      averageBlockTime: '98ms',
-      totalDownTime: '98ms',
-    },
-    cpu: {
-      minimumUsage: '12%',
-      maxUsage: '83%',
-      averageUsage: '50%',
-    },
-    memory: {
-      minimumUsage: '12%',
-      maxUsage: '83%',
-      averageUsage: '50%',
-    },
-    network: {
-      dataReceived: '6.62 GB',
-      dataSent: '358.1 MB',
-      highestPeerCount: '23',
-      lowestPeerCount: '13',
-      averagePeerCount: '18',
-      highestDownloadSpeed: '23.9 MB/s',
-      lowestDownloadSpeed: '25 KB/s',
-      averageDownloadSpeed: '4.2 MB/s',
-      highestUploadSpeed: '2.9 MB/s',
-      lowestUploadSpeed: '0 KB/s',
-      averageUploadSpeed: '126 KB/s',
-    },
-    disk: {
-      dataWritten: '6.62 GB',
-      dataRead: '358.1 MB',
-      highestWriteSpeed: '23',
-      lowestWriteSpeed: '13',
-      averageWriteSpeed: '18',
-      highestReadSpeed: '23.9 MB/s',
-      lowestReadSpeed: '25 KB/s',
-      averageReadSpeed: '4.2 MB/s',
-    },
+  const processPeriodBreakdownData = () => {
+    if (tabId === 'CPU' || tabId === 'Memory') {
+      const results = processMinMaxAverage(metricData);
+      return {
+        [tabId.toLowerCase()]: {
+          minimumUsage: roundAndFormatPercentage(results.lowest),
+          maxUsage: roundAndFormatPercentage(results.highest),
+          averageUsage: roundAndFormatPercentage(results.average),
+        },
+      };
+    }
+    return {};
   };
 
   const renderDiskCapacity = () => {
     if (tabId === 'Disk') {
+      const clientSpace = (metricData && metricData[0]?.y) || 0;
+      const { diskFree, diskTotal } = diskData as DiskDataType;
       return (
         <>
           <div className={contentHeader}>
             <div className={contentTitle}>Capacity</div>
           </div>
           <DiskCapacityBarChart
-            otherSpace={100}
-            clientSpace={200}
-            totalSpace={500}
-            clientType="Besu"
+            freeSpace={diskFree}
+            clientSpace={clientSpace}
+            totalSpace={diskTotal}
+            name={name}
           />
           <HorizontalLine type="content" />
         </>
@@ -135,10 +117,10 @@ export const TabContent = ({ tabId }: TabContentProps) => {
     return null;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   const breakdownData: { title: string; items: any[] } = {
     title: 'Period breakdown',
-    items: getBreakdown(tabId.toLowerCase(), periodBreakdownData),
+    items: getBreakdown(tabId.toLowerCase(), processPeriodBreakdownData()),
   };
 
   return (
@@ -146,13 +128,31 @@ export const TabContent = ({ tabId }: TabContentProps) => {
       {renderDiskCapacity()}
       <div className={contentHeader}>
         <div className={contentTitle}>{contentLabels[tabId]}</div>
-        <div className={contentPeriod}>Dropdown</div>
+        {/* <div className={contentPeriod}>Dropdown</div> */}
       </div>
-      <div className="charts">Charts go here</div>
+      <Chart metricData={metricData} tabId={tabId} />
       <HorizontalLine type="content" />
-      <div className="breakdown">
-        <LabelValues {...breakdownData} />
-      </div>
+      {tabId !== 'Disk' && (
+        <div className="breakdown">
+          <LabelValues {...breakdownData} />
+        </div>
+      )}
     </div>
   );
 };
+
+const areEqual = (
+  prevProps: Readonly<TabContentProps>,
+  nextProps: Readonly<TabContentProps>,
+): boolean => {
+  // this prevents unnecessary rerenders
+  if (nextProps.name !== prevProps.name) return false; // render when tab is changed
+  if (nextProps.metricData === undefined) return true; // don't render when metricData doesn't exist for node yet (initial run)
+  if (prevProps.metricData === undefined && nextProps.metricData !== undefined)
+    // render when metricData is fetched for the node
+    return false;
+  if (!prevProps.metricData || !nextProps.metricData) return false;
+  return prevProps.metricData.length === nextProps.metricData.length; // don't render when metricData length is the same (no new metricData)
+};
+
+export default React.memo(TabContent, areEqual);

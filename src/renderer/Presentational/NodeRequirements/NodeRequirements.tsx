@@ -43,7 +43,7 @@ const NodeRequirements = ({
     console.log(
       'useEffect: nodeRequirements, systemData, t',
       nodeRequirements,
-      systemData
+      systemData,
     );
     const newChecklistItems = makeCheckList(
       {
@@ -51,7 +51,7 @@ const NodeRequirements = ({
         systemData,
         nodeStorageLocation,
       },
-      t
+      t,
     );
     setItems(newChecklistItems);
     // eslint-disable-next-line react-hooks/exhaustive-deps

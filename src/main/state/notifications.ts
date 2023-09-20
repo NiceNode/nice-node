@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NotificationProps } from 'main/consts/notifications';
 import { NotificationItemProps } from 'renderer/Generics/redesign/NotificationItem/NotificationItem';
 import { send } from '../messenger';
@@ -49,14 +48,14 @@ export const displayNotification = (notification: NotificationItemProps) => {
 
 const checkIfNotificationCanBeAdded = (
   storedNotifications: NotificationItemProps[],
-  notificationObject: NotificationProps
+  notificationObject: NotificationProps,
 ) => {
   if (storedNotifications.length === 0) return true;
   if (storedNotifications.length === 1000) return false;
   const currentTimestamp = Date.now();
   const existingNotificationIndex = storedNotifications.findIndex(
     (notification: NotificationItemProps) =>
-      notification.title === notificationObject.title
+      notification.title === notificationObject.title,
   );
   if (existingNotificationIndex === -1) return true;
 
@@ -68,11 +67,28 @@ const checkIfNotificationCanBeAdded = (
   );
 };
 
+const interpolate = (str: string, variable: string) => {
+  // For this example, we're handling a specific format: {variable}
+  if (str.includes('{variable}')) {
+    return str.replace('{variable}', variable);
+  }
+  return str;
+};
+
 // TODO: add variable support for language string keys
-export const addNotification = (notificationObject: NotificationProps) => {
+export const addNotification = (
+  notificationObject: NotificationProps,
+  variable?: string,
+) => {
   const notifications = store.get(NOTIFICATIONS_KEY) || [];
+  // eslint-disable-next-line prefer-const
+  let { title, description, status } = notificationObject;
+
+  if (variable) {
+    description = interpolate(description, variable);
+  }
+
   if (checkIfNotificationCanBeAdded(notifications, notificationObject)) {
-    const { title, description, status } = notificationObject;
     const newNotification = {
       title,
       description,
