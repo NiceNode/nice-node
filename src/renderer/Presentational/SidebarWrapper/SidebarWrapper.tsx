@@ -5,6 +5,7 @@ import {
   useState,
   ReactElement,
 } from 'react';
+import { useGetNetworkConnectedQuery } from '../../state/network';
 import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import electron from '../../electronGlobal';
 import { useGetNotificationsQuery } from '../../state/notificationsService';
@@ -34,6 +35,11 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
+  const qNetwork = useGetNetworkConnectedQuery(null, {
+    // Only polls network connection if there are exactly 0 peers
+    pollingInterval: 30000,
+  });
+  console.log('qNetwork', qNetwork);
   const [platform, setPlatform] = useState<string>('');
   // default to docker is running while data is being fetched, so
   //  the user isn't falsely warned
@@ -107,7 +113,7 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
       platform={platform}
       ref={ref}
       notifications={notifications}
-      offline={false}
+      offline={qNetwork.status === 'rejected'}
       updateAvailable={false}
       podmanInstalled={isPodmanInstalled}
       podmanStopped={!isPodmanRunning}

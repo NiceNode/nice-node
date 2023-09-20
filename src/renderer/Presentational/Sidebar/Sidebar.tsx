@@ -97,41 +97,38 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       }
     };
 
-    const renderBanners = () => {
-      // TODO: integrate this with code below
-      if (!podmanInstalled || podmanStopped) {
-        return (
+    const banners = [];
+    const bannerProps = {
+      updateAvailable,
+      offline,
+    };
+    Object.keys(bannerProps).forEach((key) => {
+      // eslint-disable-next-line react/destructuring-assignment
+      if (bannerProps[key as keyof typeof bannerProps]) {
+        // ^ not sure if this is correct
+        banners.push(
           <Banner
-            podmanStopped={podmanStopped}
-            podmanInstalled={podmanInstalled}
-            onClick={onClickBanner}
-          />
+            offline={false}
+            updateAvailable={false}
+            {...{ [key]: true }}
+          />,
         );
       }
-      const bannerProps = {
-        updateAvailable,
-        offline,
-      };
-      return Object.keys(bannerProps).map((key) => {
-        // eslint-disable-next-line react/destructuring-assignment
-        if (bannerProps[key as keyof typeof bannerProps]) {
-          // ^ not sure if this is correct
-          return (
-            <Banner
-              offline={false}
-              updateAvailable={false}
-              {...{ [key]: true }}
-            />
-          );
-        }
-        return null;
-      });
-    };
+    });
+    if (!podmanInstalled || podmanStopped) {
+      banners.push(
+        <Banner
+          podmanStopped={podmanStopped}
+          podmanInstalled={podmanInstalled}
+          onClick={onClickBanner}
+        />,
+      );
+    }
     const navigate = useNavigate();
 
     return (
       <div ref={ref} className={[container, platform].join(' ')}>
-        {renderBanners()}
+        {banners}
         <div className={nodeList}>
           <div className={titleItem}>
             <SidebarTitleItem title={t('Nodes')} />

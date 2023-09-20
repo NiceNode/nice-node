@@ -69,7 +69,7 @@ export const Banner = ({
   }, [offline, updateAvailable, podmanStopped, podmanInstalled, g]);
 
   const onClickBanner = () => {
-    if (isClicked) {
+    if (isClicked || offline) {
       return;
     }
 
