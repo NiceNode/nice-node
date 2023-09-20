@@ -51,5 +51,6 @@
     }
   },
   "iconUrl": "https://farcaster.png",
+  "addNodeDescription": "Farcaster is a decentralized social network, as an open protocol that can support many clients, just like email. Hubs validate, storage and replicate account messages to other hubs. Running a hub requires a connection to an Ethereum and Optimism mainnet RPC endpoint.",
   "description": "Hubble creates a private instance of the Farcaster network on your machine. It stores a copy of every message from every user and syncs with other hubs to stay up to date. Messages uploaded to Hubble will be broadcast to other Hubs."
 }

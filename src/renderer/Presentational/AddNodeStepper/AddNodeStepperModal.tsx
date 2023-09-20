@@ -6,9 +6,6 @@ import { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelec
 import { ModalConfig } from '../ModalManager/modalUtils';
 import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
 import { componentContainer, container } from './addNodeStepper.css';
-import AddEthereumNode, {
-  AddEthereumNodeValues,
-} from '../AddEthereumNode/AddEthereumNode';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import { SystemData } from '../../../main/systemInfo';
 import { SystemRequirements } from '../../../common/systemRequirements';
@@ -20,7 +17,6 @@ import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
 import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import AddNode, { AddNodeValues } from '../AddNode/AddNode';
-import AddBaseNode from '../AddBaseNode/AddBaseNode';
 import AddNodeConfiguration, {
   AddNodeConfigurationValues,
 } from '../AddNodeConfiguration/AddNodeConfiguration';
@@ -44,8 +40,8 @@ const AddNodeStepperModal = ({
 }: AddNodeStepperModalProps) => {
   const [sNodeConfig, setNodeConfig] = useState<AddNodeValues>();
   const [sEthereumNodeConfig, setEthereumNodeConfig] =
-    useState<AddEthereumNodeValues>();
-  const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
+    useState<AddNodeConfigurationValues>();
+  const [sNodeRequirements, setNodeRequirements] =
     useState<SystemRequirements>();
   const [sSystemData, setSystemData] = useState<SystemData>();
 
@@ -99,35 +95,12 @@ const AddNodeStepperModal = ({
       try {
         const mergedReqs = mergeSystemRequirements(reqs);
         console.log('mergedReqs', mergedReqs);
-        setEthereumNodeRequirements(mergedReqs);
+        setNodeRequirements(mergedReqs);
       } catch (e) {
         console.error(e);
       }
     }
   }, [modalConfig]);
-
-  const setConsensusClient = (
-    clClient: SelectOption,
-    ethereumNodeConfig: AddEthereumNodeValues,
-  ) => {
-    const config = { ...ethereumNodeConfig, consensusClient: clClient };
-    modalOnChangeConfig({
-      consensusClient: clClient.value,
-    });
-    setEthereumNodeConfig(config);
-  };
-
-  const setExecutionClient = (
-    elClient: SelectOption,
-    ethereumNodeConfig: AddEthereumNodeValues,
-  ) => {
-    console.log('setExecutionClient called', elClient, ethereumNodeConfig);
-    const config = { ...ethereumNodeConfig, executionClient: elClient };
-    modalOnChangeConfig({
-      executionClient: elClient.value,
-    });
-    setEthereumNodeConfig(config);
-  };
 
   const setNode = (
     nodeSelectOption: SelectOption,
@@ -172,42 +145,21 @@ const AddNodeStepperModal = ({
         stepImage = step1;
         break;
       case 1:
-        if (sNodeConfig?.node?.value === 'base2') {
-          stepScreen = (
-            <AddBaseNode
-              ethereumNodeConfig={sEthereumNodeConfig}
-              setConsensusClient={setConsensusClient}
-              setExecutionClient={setExecutionClient}
-              modalOnChangeConfig={modalOnChangeConfig}
-            />
-          );
-        } else if (sNodeConfig?.node?.value === 'ethereum2') {
-          stepScreen = (
-            <AddEthereumNode
-              ethereumNodeConfig={sEthereumNodeConfig}
-              setConsensusClient={setConsensusClient}
-              setExecutionClient={setExecutionClient}
-              modalOnChangeConfig={modalOnChangeConfig}
-            />
-          );
-        } else {
-          stepScreen = (
-            <AddNodeConfiguration
-              nodeId={sNodeConfig?.node?.value}
-              nodePackageConfig={sEthereumNodeConfig}
-              onChange={onChangeAddNodeConfiguration}
-              modalOnChangeConfig={modalOnChangeConfig}
-            />
-          );
-        }
-
+        stepScreen = (
+          <AddNodeConfiguration
+            nodeId={sNodeConfig?.node?.value}
+            nodePackageConfig={sEthereumNodeConfig}
+            onChange={onChangeAddNodeConfiguration}
+            modalOnChangeConfig={modalOnChangeConfig}
+          />
+        );
         stepImage = step1;
         break;
       case 2:
         stepScreen = (
           <NodeRequirements
             type="modal"
-            nodeRequirements={sEthereumNodeRequirements}
+            nodeRequirements={sNodeRequirements}
             systemData={sSystemData}
             nodeStorageLocation={modalConfig?.storageLocation}
           />

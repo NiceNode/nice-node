@@ -116,10 +116,10 @@ const ContentMultipleClients = (props: {
     return null;
   };
 
-  // TODO: refactor this out so that it can be shared with multiple and single
   const getNodeOverview = () => {
     // useEffect, used only in Header and Metrics
 
+    // TODO: loop over all node's services/clients for missing statuses in nodeOverview
     // if (clClient && elClient) {
     //   // Ethereum Node
     //   nodeOverview = {

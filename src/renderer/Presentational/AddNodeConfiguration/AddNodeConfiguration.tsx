@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NodeLibrary, NodePackageLibrary } from 'main/state/nodeLibrary';
+import {
+  NodeLibrary,
+  NodePackageLibrary,
+} from '../../../main/state/nodeLibrary';
 import { ModalConfig } from '../ModalManager/modalUtils';
 import {
   container,
   descriptionFont,
   sectionFont,
   titleFont,
-  descriptionContainer,
 } from './addNodeConfiguration.css';
 import SpecialSelect, {
   SelectOption,
@@ -23,12 +25,12 @@ import {
   NodeSpecification,
 } from '../../../common/nodeSpec';
 import { NodeId } from '../../../common/node';
+import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 
 export type ClientSelections = {
   [serviceId: string]: SelectOption;
 };
 
-// Todo: add generic node setting made on this screen
 export type AddNodeConfigurationValues = {
   clientSelections?: ClientSelections;
   storageLocation?: string;
@@ -182,10 +184,19 @@ const AddNodeConfiguration = ({
           {t('LaunchAVarNode', { nodeName: sNodePackageSpec.displayName })}
         </div>
       )}
-      <div className={descriptionContainer}>
+      <div>
         <div className={descriptionFont}>
-          <>{t('AddNodeConfigurationDescription')}</>
+          <>
+            {sNodePackageSpec?.addNodeDescription ??
+              t('AddNodeConfigurationDescription')}
+          </>
         </div>
+        {sNodePackageSpec?.specId === 'ethereum' && (
+          <ExternalLink
+            text={t('LearnMoreClientDiversity')}
+            url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
+          />
+        )}
       </div>
       {sNodePackageServices?.map((service) => {
         const options: SelectOption[] = [];

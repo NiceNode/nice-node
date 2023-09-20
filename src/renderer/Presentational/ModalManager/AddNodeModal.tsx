@@ -90,7 +90,6 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     } = updatedConfig || (modalConfig as ModalConfig);
 
     console.log('AddNodeModal modalOnSaveConfig(updatedConfig)', updatedConfig);
-    // todo: add logic for Node change (ethereum, base, etc.)
     // Mostly duplicate code with AddNodeStepper.addNodes()
     let nodePackageSpec: NodePackageSpecification;
     if (nodePackageLibrary && node) {

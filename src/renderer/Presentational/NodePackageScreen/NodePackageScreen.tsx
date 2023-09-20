@@ -216,7 +216,6 @@ const NodePackageScreen = () => {
     // format for presentation
     const formattedServices: ClientProps[] = [];
     selectedNodePackage?.services.map((service) => {
-      // todo2: get the node data from userNodes (or do on backend?)
       const nodeId = service.node.id;
       const node = sUserNodes?.nodes[nodeId];
       const serviceProps: ClientProps = {

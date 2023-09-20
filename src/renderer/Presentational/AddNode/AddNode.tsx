@@ -19,13 +19,6 @@ import { setModalState } from '../../state/modal';
 
 const nodeOptions = [
   {
-    iconId: 'farcaster',
-    title: 'Farcaster',
-    value: 'farcaster',
-    label: 'Farcaster',
-    info: 'A protocol for decentralized social apps',
-  },
-  {
     iconId: 'ethereum',
     title: 'Ethereum',
     value: 'ethereum',
@@ -45,6 +38,13 @@ const nodeOptions = [
     value: 'optimism',
     label: 'Optimism',
     info: 'Built by the OP Collective!',
+  },
+  {
+    iconId: 'farcaster',
+    title: 'Farcaster',
+    value: 'farcaster',
+    label: 'Farcaster',
+    info: 'A protocol for decentralized social apps',
   },
 ];
 

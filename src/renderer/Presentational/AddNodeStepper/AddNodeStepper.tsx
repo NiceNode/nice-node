@@ -7,9 +7,6 @@ import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/Conte
 import { componentContainer, container } from './addNodeStepper.css';
 import Stepper from '../../Generics/redesign/Stepper/Stepper';
 import AddNode, { AddNodeValues } from '../AddNode/AddNode';
-import AddEthereumNode, {
-  AddEthereumNodeValues,
-} from '../AddEthereumNode/AddEthereumNode';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import { SystemRequirements } from '../../../common/systemRequirements';
@@ -26,7 +23,6 @@ import { reportEvent } from '../../events/reportEvent';
 import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
 import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
-import AddBaseNode from '../AddBaseNode/AddBaseNode';
 import { AddNodePackageNodeService } from '../../../main/nodePackageManager';
 import { NodePackageSpecification } from '../../../common/nodeSpec';
 import AddNodeConfiguration, {
@@ -89,77 +85,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     }
   }, []);
 
-  const onChangeAddEthereumNode = useCallback(
-    (newValue: AddEthereumNodeValues) => {
-      console.log('onChangeAddEthereumNode newValue ', newValue);
-      setNodeClientsAndSettings(newValue);
-      let ecReqs;
-      let ccReqs;
-
-      if (newValue?.executionClient) {
-        const ecValue = newValue?.executionClient.value;
-        if (sNodeLibrary) {
-          ecReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
-        }
-      }
-      if (newValue?.consensusClient) {
-        const ccValue = newValue?.consensusClient.value;
-        if (sNodeLibrary) {
-          ccReqs = sNodeLibrary?.[`${ccValue}-beacon`]?.systemRequirements;
-        }
-      }
-      try {
-        if (ecReqs && ccReqs) {
-          const mergedReqs = mergeSystemRequirements([ecReqs, ccReqs]);
-          setEthereumNodeRequirements(mergedReqs);
-        } else {
-          throw new Error('ec or ec node requirements undefined');
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      // save storage location (and other settings)
-      setNodeStorageLocation(newValue.storageLocation);
-    },
-    [sNodeLibrary],
-  );
-
-  const onChangeAddBaseNode = useCallback(
-    (newValue: AddEthereumNodeValues) => {
-      setNodeClientsAndSettings(newValue);
-      let ecReqs;
-      let ccReqs;
-
-      if (newValue?.executionClient) {
-        const ecValue = newValue?.executionClient.value;
-        if (sNodeLibrary) {
-          ecReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
-        }
-      }
-      if (newValue?.consensusClient) {
-        const ccValue = newValue?.consensusClient.value;
-        if (sNodeLibrary) {
-          ccReqs = sNodeLibrary?.[ccValue]?.systemRequirements;
-        }
-      }
-      try {
-        if (ecReqs && ccReqs) {
-          const mergedReqs = mergeSystemRequirements([ecReqs, ccReqs]);
-          setEthereumNodeRequirements(mergedReqs);
-        } else {
-          throw new Error('ec or ec node requirements undefined');
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      // save storage location (and other settings)
-      setNodeStorageLocation(newValue.storageLocation);
-    },
-    [sNodeLibrary],
-  );
-
   const onChangeAddNode = useCallback(
     (newValue: AddNodeValues) => {
       console.log('onChangeAddNode newValue ', newValue);
@@ -186,12 +111,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     },
     [sNodeLibrary],
   );
-
-  // useState when eth node changes, get node spec from value,
-  //   and call func below
-  // func: takes a NodeSpec & NodeSettings and returns NodeRequirements
-
-  // "mergeNodeSpecs?"
 
   const addNodes = async () => {
     // Mostly duplicate code with AddNodeModal.modalOnSaveConfig()
@@ -328,20 +247,12 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         stepImage = step1;
         break;
       case 1:
-        // todo: turn these separate components into a Generic component <NodePackageSelections />
-        if (sNode?.node?.value === 'base') {
-          stepScreen = <AddBaseNode onChange={onChangeAddBaseNode} />;
-        } else if (sNode?.node?.value === 'ethereum') {
-          stepScreen = <AddEthereumNode onChange={onChangeAddEthereumNode} />;
-        } else {
-          stepScreen = (
-            <AddNodeConfiguration
-              nodeId={sNode?.node?.value}
-              onChange={onChangeAddNodeConfiguration}
-            />
-          );
-        }
-
+        stepScreen = (
+          <AddNodeConfiguration
+            nodeId={sNode?.node?.value}
+            onChange={onChangeAddNodeConfiguration}
+          />
+        );
         stepImage = step1;
         break;
       case 2:

@@ -278,9 +278,6 @@ const NodeScreen = () => {
   }
 
   const { status, spec } = selectedNode;
-  // todo: get node type, single or multi-service
-  // parse node details from selectedNode => SingleNodeContent
-  // todo: add stop/start ability?
 
   // TODO: make this more flexible for other client specs
   const formatSpec = (info: string | undefined) => {
