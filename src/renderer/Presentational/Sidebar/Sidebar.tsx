@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import { setModalState } from '../../state/modal';
 import { useAppDispatch } from '../../state/hooks';
-import { updateSelectedNodeId } from '../../state/node';
-import { NodeId, UserNodes } from '../../../common/node';
+import { updateSelectedNodePackageId } from '../../state/node';
+import { NodeId, UserNodePackages } from '../../../common/node';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
 import { SidebarNodeItemWrapper } from '../SidebarNodeItemWrapper/SidebarNodeItemWrapper';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
@@ -26,20 +26,20 @@ export interface SidebarProps {
    */
   podmanStopped: boolean;
   podmanInstalled: boolean;
-  sUserNodes?: UserNodes;
-  selectedNodeId?: NodeId;
+  sUserNodePackages?: UserNodePackages;
+  selectedNodePackageId?: NodeId;
   notifications: NotificationItemProps[];
   onClickStartPodman: () => void;
   onClickInstallPodman: () => void;
 }
 
 const Sidebar = ({
-  sUserNodes,
+  sUserNodePackages,
   updateAvailable,
   offline,
   podmanStopped,
   podmanInstalled,
-  selectedNodeId,
+  selectedNodePackageId,
   notifications,
   onClickStartPodman,
   onClickInstallPodman,
@@ -133,17 +133,17 @@ const Sidebar = ({
             }}
           />
         )} */}
-        {sUserNodes?.nodeIds.map((nodeId: NodeId) => {
-          const node = sUserNodes.nodes[nodeId];
+        {sUserNodePackages?.nodeIds.map((nodeId: NodeId) => {
+          const node = sUserNodePackages.nodes[nodeId];
           return (
             <SidebarNodeItemWrapper
               // temp fix
               id={node.id}
               node={node}
-              selected={selectedNodeId === node.id}
+              selected={selectedNodePackageId === node.id}
               onClick={() => {
-                navigate('/main/node');
-                dispatch(updateSelectedNodeId(node.id));
+                navigate('/main/nodePackage');
+                dispatch(updateSelectedNodePackageId(node.id));
               }}
             />
           );

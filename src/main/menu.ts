@@ -16,6 +16,7 @@ import { checkForUpdates } from './updater';
 import uninstallPodman from './podman/uninstall/uninstall';
 import nuclearUninstall from './nuclearUninstall';
 import { getFailSystemRequirements } from './minSystemRequirement';
+import { removeAllNodePackages } from './nodePackageManager';
 import { checkNodePortsAndNotify } from './ports';
 import { CHANNELS, send } from './messenger';
 
@@ -211,6 +212,12 @@ export default class MenuBuilder {
         },
         { type: 'separator' },
         {
+          label: 'Remove all nodes and data',
+          click() {
+            removeAllNodePackages();
+          },
+        },
+        {
           label: 'Uninstall podman',
           click() {
             uninstallPodman();
@@ -316,6 +323,12 @@ export default class MenuBuilder {
             label: 'Copy Configuration Details to Clipboard',
             click() {
               clipboard.writeText(getDebugInfoString());
+            },
+          },
+          {
+            label: 'Remove all nodes and data',
+            click() {
+              removeAllNodePackages();
             },
           },
           {

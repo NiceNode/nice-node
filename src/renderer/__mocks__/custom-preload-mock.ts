@@ -1,7 +1,16 @@
-import { createNode, UserNodes } from '../../common/node';
-import { NodeSpecification } from '../../common/nodeSpec';
+import {
+  createNode,
+  createNodePackage,
+  UserNodePackages,
+  UserNodes,
+} from '../../common/node';
+import {
+  NodePackageSpecification,
+  NodeSpecification,
+} from '../../common/nodeSpec';
 import gethv1 from '../../common/NodeSpecs/geth/geth-v1.0.0.json';
-import { NodeLibrary } from '../../main/state/nodeLibrary';
+import ethereumv1 from '../../common/NodeSpecs/ethereum/ethereum-v1.0.0.json';
+import { NodeLibrary, NodePackageLibrary } from '../../main/state/nodeLibrary';
 
 export const getSystemFreeDiskSpace = (): number => {
   return 2000;
@@ -55,6 +64,26 @@ export const getUserNodes = (): UserNodes => {
     },
   };
 };
+export const getUserNodePackages = (): UserNodePackages => {
+  const node = createNodePackage({
+    spec: ethereumv1 as NodePackageSpecification,
+    runtime: {
+      dataDir: 'wherever',
+      usage: {
+        diskGBs: [],
+        memoryBytes: [],
+        cpuPercent: [],
+        syncedBlock: 0,
+      },
+    },
+  });
+  return {
+    nodeIds: ['a1'],
+    nodes: {
+      a1: node,
+    },
+  };
+};
 export const addNode = () => {
   const node = createNode({
     spec: gethv1 as NodeSpecification,
@@ -86,9 +115,12 @@ export const updateNode = () => {
   return node;
 };
 export const removeNode = () => {};
+export const removeNodePackage = () => {};
 export const startNode = () => {};
+export const startNodePackage = () => {};
 export const getNodeStartCommand = () => {};
 export const stopNode = () => {};
+export const stopNodePackage = () => {};
 export const updateNodeDataDir = () => {};
 export const openDialogForNodeDataDir = () => {};
 export const openDialogForStorageLocation = () => {};
@@ -105,7 +137,11 @@ export const getNodeLibrary = (): NodeLibrary => {
     geth: gethv1 as NodeSpecification,
   };
 };
-
+export const getNodePackageLibrary = (): NodePackageLibrary => {
+  return {
+    ethereum: ethereumv1 as NodePackageSpecification,
+  };
+};
 // Settings/Config
 export const getSettings = () => {
   return {

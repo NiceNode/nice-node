@@ -19,6 +19,8 @@ import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
 import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
+import AddNode, { AddNodeValues } from '../AddNode/AddNode';
+import AddBaseNode from '../AddBaseNode/AddBaseNode';
 
 export interface AddNodeStepperModalProps {
   modal?: boolean;
@@ -37,6 +39,7 @@ const AddNodeStepperModal = ({
   disableSaveButton,
   setIsPodmanRunning,
 }: AddNodeStepperModalProps) => {
+  const [sNodeConfig, setNodeConfig] = useState<AddNodeValues>();
   const [sEthereumNodeConfig, setEthereumNodeConfig] =
     useState<AddEthereumNodeValues>();
   const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
@@ -52,16 +55,13 @@ const AddNodeStepperModal = ({
   }, []);
 
   useEffect(() => {
-    const {
-      nodeLibrary,
-      consensusClient = 'nimbus',
-      executionClient = 'besu',
-      storageLocation,
-    } = modalConfig;
+    const { nodeLibrary, consensusClient, executionClient, storageLocation } =
+      modalConfig;
     if (nodeLibrary && consensusClient && executionClient && storageLocation) {
       const ecReqs = nodeLibrary?.[executionClient]?.systemRequirements;
       const ccReqs =
-        nodeLibrary?.[`${consensusClient}-beacon`]?.systemRequirements;
+        nodeLibrary?.[`${consensusClient}-beacon`]?.systemRequirements ??
+        nodeLibrary?.[consensusClient]?.systemRequirements;
       try {
         if (ecReqs && ccReqs) {
           const mergedReqs = mergeSystemRequirements([ecReqs, ccReqs]);
@@ -91,11 +91,30 @@ const AddNodeStepperModal = ({
     elClient: SelectOption,
     ethereumNodeConfig: AddEthereumNodeValues,
   ) => {
+    console.log('setExecutionClient called', elClient, ethereumNodeConfig);
     const config = { ...ethereumNodeConfig, executionClient: elClient };
     modalOnChangeConfig({
       executionClient: elClient.value,
     });
     setEthereumNodeConfig(config);
+  };
+
+  const setNode = (
+    nodeSelectOption: SelectOption,
+    nodeConfig: AddNodeValues,
+  ) => {
+    const config = { ...nodeConfig, node: nodeSelectOption };
+    console.log('AddNodeStepperModal calling modalOnChangeConfig()', {
+      node: nodeSelectOption.value,
+    });
+    modalOnChangeConfig({
+      ...nodeConfig,
+      node: nodeSelectOption.value,
+    });
+    // clear step 1 (client selections) when user changes node (package)
+    setEthereumNodeConfig(undefined);
+    console.log('AddNodeStepperModal setNode: config', config);
+    setNodeConfig(config);
   };
 
   const onChangeDockerInstall = useCallback((newValue: string) => {
@@ -114,16 +133,38 @@ const AddNodeStepperModal = ({
     switch (step) {
       case 0:
         stepScreen = (
-          <AddEthereumNode
-            ethereumNodeConfig={sEthereumNodeConfig}
-            setConsensusClient={setConsensusClient}
-            setExecutionClient={setExecutionClient}
+          <AddNode
+            nodeConfig={sNodeConfig}
+            setNode={setNode}
             modalOnChangeConfig={modalOnChangeConfig}
           />
         );
         stepImage = step1;
         break;
       case 1:
+        if (sNodeConfig?.node?.value === 'base') {
+          stepScreen = (
+            <AddBaseNode
+              ethereumNodeConfig={sEthereumNodeConfig}
+              setConsensusClient={setConsensusClient}
+              setExecutionClient={setExecutionClient}
+              modalOnChangeConfig={modalOnChangeConfig}
+            />
+          );
+        } else {
+          stepScreen = (
+            <AddEthereumNode
+              ethereumNodeConfig={sEthereumNodeConfig}
+              setConsensusClient={setConsensusClient}
+              setExecutionClient={setExecutionClient}
+              modalOnChangeConfig={modalOnChangeConfig}
+            />
+          );
+        }
+
+        stepImage = step1;
+        break;
+      case 2:
         stepScreen = (
           <NodeRequirements
             type="modal"
@@ -134,7 +175,7 @@ const AddNodeStepperModal = ({
         );
         stepImage = step2;
         break;
-      case 2:
+      case 3:
         stepScreen = (
           <PodmanInstallation
             disableSaveButton={disableSaveButton}

@@ -1,8 +1,6 @@
 import { useState, useCallback } from 'react';
-import {
-  ClientProps,
-  NodeOverviewProps,
-} from 'renderer/Generics/redesign/consts';
+import { useNavigate } from 'react-router-dom';
+import { ClientProps, NodeOverviewProps } from '../../Generics/redesign/consts';
 import { Message } from '../../Generics/redesign/Message/Message';
 import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
@@ -16,14 +14,23 @@ import {
   sectionDescription,
   clientCardsContainer,
   resourcesContainer,
+  promptContainer,
 } from './contentMultipleClients.css';
+import { useAppDispatch } from '../../state/hooks';
+import { updateSelectedNodeId } from '../../state/node';
+import { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
+import electron from '../../electronGlobal';
 
 const resourceJson = require('./resources.json');
 
 const ContentMultipleClients = (props: {
-  clients: [ClientProps, ClientProps];
+  clients: ClientProps[] | undefined;
+  nodeContent: SingleNodeContent | undefined;
 }) => {
-  const { clients } = props;
+  const { clients, nodeContent } = props;
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   // TODO: Come up with a better name for this component..
   /* TODO: maybe a "provider" wrapper/manager to fetch data and handle states */
 
@@ -46,6 +53,25 @@ const ContentMultipleClients = (props: {
     // TODO: open wallet screen
     onDismissClick();
   }, [onDismissClick]);
+
+  const onAction = useCallback(
+    (action: any) => {
+      // todo: handle nodeContent.nodeId undefined error
+      if (!nodeContent?.nodeId) {
+        return;
+      }
+      if (action === 'start') {
+        electron.startNodePackage(nodeContent?.nodeId);
+      } else if (action === 'stop') {
+        electron.stopNodePackage(nodeContent?.nodeId);
+      }
+    },
+    [nodeContent],
+  );
+
+  if (!clients || clients.length < 2) {
+    return <>2 or more clients required</>;
+  }
 
   const clClient = clients.find((client) => client.nodeType === 'consensus');
   const elClient = clients.find((client) => client.nodeType === 'execution');
@@ -93,49 +119,62 @@ const ContentMultipleClients = (props: {
   // TODO: refactor this out so that it can be shared with multiple and single
   const getNodeOverview = () => {
     // useEffect, used only in Header and Metrics
-    let nodeOverview = {};
 
-    if (clClient && elClient) {
-      // Ethereum Altruistic Node
-      nodeOverview = {
-        name: 'ethereum',
-        title: 'Ethereum node',
-        info: 'Non-Validating Node — Ethereum mainnet',
-        type: 'altruistic',
-        status: {
-          updating: clClient?.status.updating || elClient?.status.updating,
-          synchronized:
-            clClient?.status.synchronized && elClient?.status.synchronized,
-          initialized:
-            clClient?.status.initialized || elClient?.status.initialized,
-          blocksBehind:
-            clClient?.status.blocksBehind || elClient?.status.blocksBehind,
-          lowPeerCount:
-            clClient?.status.lowPeerCount || elClient?.status.lowPeerCount,
-          updateAvailable:
-            clClient?.status.updateAvailable ||
-            elClient?.status.updateAvailable,
-          noConnection:
-            clClient?.status.noConnection || elClient?.status.noConnection,
-          stopped: clClient?.status.stopped || elClient?.status.stopped, // both should be stopped
-          error: clClient?.status.error || elClient?.status.error,
-        },
-        stats: {
-          currentBlock: elClient?.stats.currentBlock,
-          highestBlock: elClient?.stats.highestBlock,
-          currentSlot: clClient?.stats.currentSlot,
-          highestSlot: clClient?.stats.highestSlot,
-          cpuLoad:
-            (clClient?.stats.cpuLoad || 0) + (elClient?.stats.cpuLoad || 0),
-          diskUsageGBs:
-            (clClient?.stats.diskUsageGBs || 0) +
-            (elClient?.stats.diskUsageGBs || 0),
-        },
-      };
-      return nodeOverview;
-    }
+    // if (clClient && elClient) {
+    //   // Ethereum Node
+    //   nodeOverview = {
+    //     name: 'ethereum',
+    //     title: 'Ethereum node',
+    //     info: 'Non-Validating Node — Ethereum mainnet',
+    //     type: 'nodePackage',
+    //     status: {
+    //       updating: clClient?.status.updating || elClient?.status.updating,
+    //       synchronized:
+    //         clClient?.status.synchronized && elClient?.status.synchronized,
+    //       initialized:
+    //         clClient?.status.initialized || elClient?.status.initialized,
+    //       blocksBehind:
+    //         clClient?.status.blocksBehind || elClient?.status.blocksBehind,
+    //       lowPeerCount:
+    //         clClient?.status.lowPeerCount || elClient?.status.lowPeerCount,
+    //       updateAvailable:
+    //         clClient?.status.updateAvailable ||
+    //         elClient?.status.updateAvailable,
+    //       noConnection:
+    //         clClient?.status.noConnection || elClient?.status.noConnection,
+    //       stopped: clClient?.status.stopped || elClient?.status.stopped, // both should be stopped
+    //       error: clClient?.status.error || elClient?.status.error,
+    //     },
+    //     stats: {
+    //       currentBlock: elClient?.stats.currentBlock,
+    //       highestBlock: elClient?.stats.highestBlock,
+    //       currentSlot: clClient?.stats.currentSlot,
+    //       highestSlot: clClient?.stats.highestSlot,
+    //       cpuLoad:
+    //         (clClient?.stats.cpuLoad || 0) + (elClient?.stats.cpuLoad || 0),
+    //       diskUsageGBs:
+    //         (clClient?.stats.diskUsageGBs || 0) +
+    //         (elClient?.stats.diskUsageGBs || 0),
+    //     },
+    //   };
+    //   return nodeOverview;
+    // }
     // non-Ethereum node conditions added here
-    return clients[0];
+    if (!nodeContent) {
+      return {};
+    }
+    const nodeOverview: NodeOverviewProps = {
+      name: nodeContent.name,
+      title: `${nodeContent.displayName} node`,
+      info: nodeContent.info ?? '',
+      screenType: 'nodePackage',
+      status: nodeContent.status ?? {},
+      stats: nodeContent.stats ?? {},
+      description: nodeContent.description ?? '',
+      onAction,
+      rpcTranslation: 'eth-l1', // todo
+    };
+    return nodeOverview;
   };
 
   const getResourceData = () => {
@@ -174,38 +213,33 @@ const ContentMultipleClients = (props: {
       <HorizontalLine type="content" />
       <HeaderMetrics {...(nodeOverview as NodeOverviewProps)} />
       <HorizontalLine type="content" />
-      {renderPrompt()}
-      <div className={sectionTitle}>Ethereum Clients</div>
+      <div className={promptContainer}>{renderPrompt()}</div>
+      <div className={sectionTitle}>Clients</div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
-          return <ClientCard {...client} />;
+          return (
+            <ClientCard
+              {...client}
+              onClick={() => {
+                console.log(
+                  'ContentMultipleClients client on click!',
+                  client.id,
+                );
+                dispatch(updateSelectedNodeId(client.id));
+                // Added a delay to navigate because NodeScreen can't handle a
+                //  node change properly here after NodeScreen renders
+                setTimeout(() => {
+                  navigate('/main/node');
+                }, 500);
+              }}
+            />
+          );
         })}
       </div>
       <HorizontalLine type="content" />
       <div className={sectionTitle}>About</div>
       <div className={sectionDescription}>
-        <p>
-          An Ethereum node holds a copy of the Ethereum blockchain and verifies
-          the validity of every block, keeps it up-to-date with new blocks and
-          helps others to download and update their own copies of the chain.
-        </p>
-        <p>
-          In the case of Ethereum a node consists of two parts: the execution
-          client and the consensus client. These two clients work together to
-          verify Ethereum&apos;s state. The execution client listens to new
-          transactions broadcasted in the network, executes them in EVM, and
-          holds the latest state and database of all current Ethereum data. The
-          consensus client runs the Proof-of-Stake consensus algorithm, which
-          enables the network to achieve agreement based on validated data from
-          the execution client.
-        </p>
-        <p>
-          A non-validating node does not get financial rewards but there are
-          many benefits of running a node for any Ethereum user to consider,
-          including privacy, security, reduced reliance on third-party servers,
-          censorship resistance and improved health and decentralization of the
-          network.
-        </p>
+        <p>{nodeContent?.description}</p>
       </div>
       <div className={resourcesContainer}>
         <LabelValues {...resourceData} column />
