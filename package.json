@@ -106,6 +106,9 @@
     "extraResources": [
       "./assets/**"
     ],
+    "extraFiles": [
+      "./src/common/NodeSpecs/**"
+    ],
     "publish": [
       {
         "provider": "github",

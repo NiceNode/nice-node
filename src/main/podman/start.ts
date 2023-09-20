@@ -38,8 +38,8 @@ export const startOnMac = async (): Promise<any> => {
     // todo: stop start other machine logic here
 
     if (!isNiceNodeMachineCreated) {
-      // Set disk size to 2TB for now (ok even though system disk is smaller)
-      const diskSize = 2000;
+      // Set disk size to 1.5TB for now (ok even though system disk is smaller)
+      const diskSize = 1500;
       const command = `machine init --rootful -v $HOME:$HOME -v /Volumes:/Volumes -v /private:/private -v /var/folders:/var/folders --cpus ${cpuCount} --memory ${memoryMBs} --disk-size ${diskSize} --now ${NICENODE_MACHINE_NAME}`;
       // On macOS, external drives are mounted to /Volumes by default. Other volumes are Podman defaults.
       logger.info(`Podman startOnMac command: ${command}`);

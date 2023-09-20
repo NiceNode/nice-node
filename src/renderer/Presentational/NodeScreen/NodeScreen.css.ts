@@ -34,3 +34,9 @@ export const descriptionFont = style({
   letterSpacing: '-0.08px',
   marginBottom: 24,
 });
+
+export const backButtonContainer = style({
+  position: 'relative',
+  top: '-20px',
+  left: '-20px',
+});
