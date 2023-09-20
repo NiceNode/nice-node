@@ -70,13 +70,11 @@ export const ClientCard = (props: ClientProps) => {
   const isNotSynchronizedAndNotStopped = status.running && !status.stopped;
 
   const renderContents = () => {
-    console.log('status', status);
     if (isNotSynchronizedAndNotStopped) {
       const caption = !status.initialized
         ? g('InitialSyncInProgress')
         : g('CatchingUp');
       let progress;
-      console.log('stats', stats);
       if (stats.highestSlot && stats.currentSlot) {
         progress = (stats.currentSlot / stats.highestSlot) * 100;
       } else if (stats.highestBlock && stats.currentBlock) {
@@ -92,7 +90,7 @@ export const ClientCard = (props: ClientProps) => {
               common.color.geth
             }
             progress={progress}
-            caption={`${caption} (will be fixed with progress soon)`}
+            caption={`${caption} (progress will be added soon)`}
           />
         </>
       );
