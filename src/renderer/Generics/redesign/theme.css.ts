@@ -1,6 +1,6 @@
 import { createTheme } from '@vanilla-extract/css';
 
-export const common = {
+export const common: { color: { [key: string]: string } } = {
   color: {
     white100: '#FFFFFF',
     white90: 'rgba(255, 255, 255, 0.90)',

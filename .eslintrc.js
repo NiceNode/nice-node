@@ -34,6 +34,7 @@ module.exports = {
       },
     ],
     'react/jsx-filename-extension': [2, { extensions: ['.jsx', '.tsx'] }],
+    'array-callback-return': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

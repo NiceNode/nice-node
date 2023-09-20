@@ -1,10 +1,8 @@
-// import { useTranslation } from 'react-i18next';
-
 import { useCallback, useEffect, useState } from 'react';
-// import { NodeStatus } from '../common/node';
+import { useNavigate } from 'react-router-dom';
+
 import { setModalState } from '../../state/modal';
 import electron from '../../electronGlobal';
-// import { useGetNodesQuery } from './state/nodeService';
 import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import {
   selectIsAvailableForPolling,
@@ -16,7 +14,6 @@ import {
   useGetExecutionPeersQuery,
   useGetNodeVersionQuery,
 } from '../../state/services';
-// import { useGetNetworkConnectedQuery } from './state/network';
 import ContentSingleClient, {
   SingleNodeContent,
 } from '../ContentSingleClient/ContentSingleClient';
@@ -28,13 +25,16 @@ import {
   contentContainer,
   titleFont,
   descriptionFont,
+  backButtonContainer,
 } from './NodeScreen.css';
 import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
+import { HeaderButton } from '../../Generics/redesign/HeaderButton/HeaderButton';
 
 let alphaModalRendered = false;
 
 const NodeScreen = () => {
   // const { t } = useTranslation();
+  const navigate = useNavigate();
   const selectedNode = useAppSelector(selectSelectedNode);
   const qNodeVersion = useGetNodeVersionQuery(
     selectedNode?.spec.rpcTranslation,
@@ -305,7 +305,7 @@ const NodeScreen = () => {
 
     let regex;
     switch (name) {
-      case 'geth':
+      case 'geth' || 'op-geth' || 'op-node':
         regex = /Geth\/v(\d+\.\d+\.\d+)/;
         break;
       case 'besu':
@@ -352,6 +352,7 @@ const NodeScreen = () => {
 
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
+    displayName: selectedNode.spec.displayName,
     name: clientName as NodeBackgroundId,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
@@ -360,7 +361,7 @@ const NodeScreen = () => {
     status: {
       stopped: status === 'stopped',
       error: status.includes('error'),
-      sychronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+      synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
     },
     stats: {
       peers: sPeers,
@@ -377,19 +378,19 @@ const NodeScreen = () => {
     onAction: onNodeAction,
   };
   console.log('passing content to NodeScreen: ', nodeContent);
-  return <ContentSingleClient {...nodeContent} />;
+  return (
+    <div>
+      <div className={backButtonContainer}>
+        <HeaderButton
+          type="left"
+          onClick={() => {
+            navigate('/main/nodePackage');
+          }}
+        />
+      </div>
 
-  // start button disabled logic
-  // disabled={
-  //   !(
-  //     status === NodeStatus.created ||
-  //     status === NodeStatus.readyToStart ||
-  //     status === NodeStatus.errorStarting ||
-  //     status === NodeStatus.errorRunning ||
-  //     status === NodeStatus.stopped ||
-  //     status === NodeStatus.errorStopping ||
-  //     status === NodeStatus.unknown
-  // stop button disabled logic
-  //   disabled={status !== NodeStatus.running}
+      <ContentSingleClient {...nodeContent} />
+    </div>
+  );
 };
 export default NodeScreen;

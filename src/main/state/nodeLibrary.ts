@@ -1,10 +1,16 @@
 import store from './store';
-import { NodeSpecification } from '../../common/nodeSpec';
+import {
+  NodePackageSpecification,
+  NodeSpecification,
+} from '../../common/nodeSpec';
 
 type NodeSpecMap = Record<string, NodeSpecification>;
 export type NodeLibrary = NodeSpecMap;
-
+type NodePackageSpecMap = Record<string, NodePackageSpecification>;
+export type NodePackageLibrary = NodePackageSpecMap;
 export const NODE_LIBRARY_KEY = 'nodeLibrary';
+export const NODE_PACKAGE_LIBRARY_KEY = 'nodePackageLibrary';
+
 /**
  * This format allows for both hash lookup (nodes) and
  * convenient retrevial of all IDs with ordering (nodeIds).
@@ -34,9 +40,21 @@ export const getNodeLibrary = (): NodeLibrary => {
   return nodes;
 };
 
+export const getNodePackageLibrary = (): NodePackageLibrary => {
+  const nodes: NodePackageLibrary = store.get(NODE_PACKAGE_LIBRARY_KEY);
+  return nodes;
+};
+
 export const updateNodeLibrary = (nodes: NodeLibrary): NodeLibrary => {
   store.set(NODE_LIBRARY_KEY, nodes);
   return getNodeLibrary();
+};
+
+export const updateNodePackageLibrary = (
+  nodes: NodePackageLibrary,
+): NodePackageLibrary => {
+  store.set(NODE_PACKAGE_LIBRARY_KEY, nodes);
+  return getNodePackageLibrary();
 };
 
 // export const getNode = (nodeId: NodeId): Node => {
