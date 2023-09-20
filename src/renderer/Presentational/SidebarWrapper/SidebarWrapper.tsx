@@ -1,12 +1,18 @@
-import { useEffect, useCallback, forwardRef, useState } from 'react';
+import {
+  useEffect,
+  useCallback,
+  forwardRef,
+  useState,
+  ReactElement,
+} from 'react';
 import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import electron from '../../electronGlobal';
 import { useGetNotificationsQuery } from '../../state/notificationsService';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import {
-  selectSelectedNodeId,
-  selectUserNodes,
-  updateSelectedNodeId,
+  selectSelectedNodePackageId,
+  selectUserNodePackages,
+  updateSelectedNodePackageId,
 } from '../../state/node';
 import {
   useGetIsPodmanRunningQuery,
@@ -14,9 +20,13 @@ import {
 } from '../../state/settingsService';
 import Sidebar from '../Sidebar/Sidebar';
 
+export interface SidebarWrapperProps {
+  children: ReactElement;
+}
+
 export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
-  const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
-  const sUserNodes = useAppSelector(selectUserNodes);
+  const sSelectedNodePackageId = useAppSelector(selectSelectedNodePackageId);
+  const sUserNodePackages = useAppSelector(selectUserNodePackages);
   const dispatch = useAppDispatch();
   // todo: implement a back-off polling strategy which can be "reset"
   const qIsPodmanInstalled = useGetIsPodmanInstalledQuery();
@@ -75,14 +85,14 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   // Default selected node to be the first node
   useEffect(() => {
     if (
-      !sSelectedNodeId &&
-      sUserNodes &&
-      Array.isArray(sUserNodes?.nodeIds) &&
-      sUserNodes.nodeIds.length > 0
+      !sSelectedNodePackageId &&
+      sUserNodePackages &&
+      Array.isArray(sUserNodePackages?.nodeIds) &&
+      sUserNodePackages.nodeIds.length > 0
     ) {
-      dispatch(updateSelectedNodeId(sUserNodes.nodeIds[0]));
+      dispatch(updateSelectedNodePackageId(sUserNodePackages.nodeIds[0]));
     }
-  }, [sSelectedNodeId, sUserNodes, dispatch]);
+  }, [sSelectedNodePackageId, sUserNodePackages, dispatch]);
 
   useEffect(() => {
     const asyncData = async () => {
@@ -101,8 +111,8 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
       updateAvailable={false}
       podmanInstalled={isPodmanInstalled}
       podmanStopped={!isPodmanRunning}
-      sUserNodes={sUserNodes}
-      selectedNodeId={sSelectedNodeId}
+      sUserNodePackages={sUserNodePackages}
+      selectedNodePackageId={sSelectedNodePackageId}
       onClickStartPodman={onClickStartPodman}
       onClickInstallPodman={onClickInstallPodman}
     />

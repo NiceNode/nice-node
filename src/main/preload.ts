@@ -1,9 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-import { NodeSpecification } from '../common/nodeSpec';
+import {
+  NodePackageSpecification,
+  NodeSpecification,
+} from '../common/nodeSpec';
 import { CHANNELS_ARRAY } from './messenger';
 import { NodeId } from '../common/node';
 import { ThemeSetting } from './state/settings';
+import { AddNodePackageNodeService } from './nodePackageManager';
 
 contextBridge.exposeInMainWorld('electron', {
   SENTRY_DSN: process.env.SENTRY_DSN,
@@ -53,17 +57,21 @@ contextBridge.exposeInMainWorld('electron', {
   // Multi-node
   getNodes: () => ipcRenderer.invoke('getNodes'),
   getUserNodes: () => ipcRenderer.invoke('getUserNodes'),
-  addEthereumNode: async (
-    ecNodeSpec: NodeSpecification,
-    ccNodeSpec: NodeSpecification,
+  getUserNodePackages: () => ipcRenderer.invoke('getUserNodePackages'),
+  startNodePackage: (nodeId: NodeId) => {
+    ipcRenderer.invoke('startNodePackage', nodeId);
+  },
+  stopNodePackage: (nodeId: NodeId) => {
+    ipcRenderer.invoke('stopNodePackage', nodeId);
+  },
+  removeNodePackage: (nodeId: NodeId, options: { isDeleteStorage: boolean }) =>
+    ipcRenderer.invoke('removeNodePackage', nodeId, options),
+  addNodePackage: async (
+    nodeSpec: NodePackageSpecification,
+    services: AddNodePackageNodeService[],
     settings: { storageLocation?: string },
   ) => {
-    return ipcRenderer.invoke(
-      'addEthereumNode',
-      ecNodeSpec,
-      ccNodeSpec,
-      settings,
-    );
+    return ipcRenderer.invoke('addNodePackage', nodeSpec, services, settings);
   },
   addNode: (nodeSpec: NodeSpecification, storageLocation?: string) =>
     ipcRenderer.invoke('addNode', nodeSpec, storageLocation),
@@ -104,6 +112,7 @@ contextBridge.exposeInMainWorld('electron', {
 
   // Node library
   getNodeLibrary: () => ipcRenderer.invoke('getNodeLibrary'),
+  getNodePackageLibrary: () => ipcRenderer.invoke('getNodePackageLibrary'),
 
   // Podman
   getIsPodmanInstalled: () => ipcRenderer.invoke('getIsPodmanInstalled'),

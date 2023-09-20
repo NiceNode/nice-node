@@ -34,3 +34,10 @@ export const descriptionFont = style({
   letterSpacing: '-0.08px',
   marginBottom: 24,
 });
+
+export const backButtonContainer = style({
+  position: 'absolute',
+  left: 10,
+  top: 20,
+  zIndex: 4,
+});

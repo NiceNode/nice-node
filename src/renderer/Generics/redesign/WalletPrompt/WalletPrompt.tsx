@@ -5,6 +5,7 @@ import {
   description,
   buttonContainer,
 } from './walletPrompt.css';
+import walletPng from '../../../assets/images/artwork/wallet.png';
 
 import Button from '../Button/Button';
 
@@ -19,7 +20,12 @@ export const WalletPrompt = ({
 }: WalletPromptProps) => {
   const { t: g } = useTranslation('genericComponents');
   return (
-    <div className={container}>
+    <div
+      className={container} // webpack and vanilla css config was clashing for image imports so it is here
+      style={{
+        backgroundImage: `url(${walletPng})`,
+      }}
+    >
       <div className={title}>{g('WalletPromptTitle')}</div>
       <div className={description}>{g('WalletPromptDescription')}</div>
       <div className={buttonContainer}>

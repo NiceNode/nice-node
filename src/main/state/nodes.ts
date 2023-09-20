@@ -1,5 +1,5 @@
+import { CHANNELS, send } from '../messenger';
 import { didPortsChange } from '../ports';
-import { send } from '../messenger';
 import Node, {
   isDockerNode,
   NodeId,
@@ -42,7 +42,7 @@ const initialize = () => {
 
   // Notify the UI when values change
   store.onDidChange(USER_NODES_KEY, (newValue: UserNodes) => {
-    send('userNodes', newValue);
+    send(CHANNELS.userNodes, newValue);
   });
 };
 initialize();

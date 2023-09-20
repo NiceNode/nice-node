@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NodeLibrary } from 'main/state/nodeLibrary';
+import { NodeLibrary, NodePackageLibrary } from 'main/state/nodeLibrary';
 import { ModalConfig } from '../ModalManager/modalUtils';
 import {
   container,
@@ -15,16 +15,84 @@ import SpecialSelect, {
   SelectOption,
 } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import electron from '../../electronGlobal';
-// import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
-// import Select from '../../Generics/redesign/Select/Select';
-// import { NodeSpecification } from '../../../common/nodeSpec';
 import FolderInput from '../../Generics/redesign/Input/FolderInput';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { captionText } from '../PodmanInstallation/podmanInstallation.css';
-import { useAppDispatch } from '../../state/hooks';
-import { setModalState } from '../../state/modal';
 
-let alphaModalRendered = false;
+const ecOptions = [
+  {
+    iconId: 'besu',
+    value: 'besu',
+    label: 'Besu',
+    title: 'Besu',
+    info: 'Execution Client',
+    minority: true,
+  },
+  {
+    iconId: 'nethermind',
+    value: 'nethermind',
+    label: 'Nethermind',
+    title: 'Nethermind',
+    info: 'Execution Client',
+    minority: true,
+  },
+
+  {
+    iconId: 'geth',
+    value: 'geth',
+    label: 'Geth',
+    title: 'Geth',
+    info: 'Execution Client',
+  },
+  // {
+  //   iconId: 'erigon',
+  //   value: 'erigon',
+  //   label: 'Erigon',
+  //   title: 'Erigon',
+  //   info: 'Execution Client',
+  // },
+];
+
+const ccOptions = [
+  {
+    iconId: 'nimbus',
+    title: 'Nimbus',
+    value: 'nimbus',
+    label: 'Nimbus',
+    info: 'Consensus Client',
+    minority: true,
+  },
+  {
+    iconId: 'teku',
+    title: 'Teku',
+    info: 'Consensus Client',
+    value: 'teku',
+    label: 'Teku',
+    minority: true,
+  },
+  {
+    iconId: 'lighthouse',
+    title: 'Lighthouse',
+    value: 'lighthouse',
+    label: 'Lighthouse',
+    info: 'Consensus Client',
+  },
+  {
+    iconId: 'prysm',
+    title: 'Prysm',
+    info: 'Consensus Client',
+    value: 'prysm',
+    label: 'Prysm',
+  },
+  {
+    iconId: 'lodestar',
+    title: 'Lodestar',
+    value: 'lodestar',
+    label: 'Lodestar',
+    info: 'Consensus Client',
+    minority: true,
+  },
+];
 
 export type AddEthereumNodeValues = {
   executionClient?: SelectOption;
@@ -32,8 +100,6 @@ export type AddEthereumNodeValues = {
   storageLocation?: string;
 };
 export interface AddEthereumNodeProps {
-  // executionOptions: NodeSpecification[];
-  // beaconOptions: NodeSpecification[];
   /**
    * Listen to node config changes
    */
@@ -56,88 +122,9 @@ const AddEthereumNode = ({
   setExecutionClient,
   modalOnChangeConfig,
   onChange,
-}: /**
- * Todo: Pass options from the node spec files
- */
-// executionOptions,
-// beaconOptions,
-AddEthereumNodeProps) => {
+}: AddEthereumNodeProps) => {
   const { t } = useTranslation();
 
-  const ecOptions = [
-    {
-      iconId: 'besu',
-      value: 'besu',
-      label: 'Besu',
-      title: 'Besu',
-      info: 'Execution Client',
-      minority: true,
-    },
-    {
-      iconId: 'nethermind',
-      value: 'nethermind',
-      label: 'Nethermind',
-      title: 'Nethermind',
-      info: 'Execution Client',
-      minority: true,
-    },
-
-    {
-      iconId: 'geth',
-      value: 'geth',
-      label: 'Geth',
-      title: 'Geth',
-      info: 'Execution Client',
-    },
-    // {
-    //   iconId: 'erigon',
-    //   value: 'erigon',
-    //   label: 'Erigon',
-    //   title: 'Erigon',
-    //   info: 'Execution Client',
-    // },
-  ];
-
-  const ccOptions = [
-    {
-      iconId: 'nimbus',
-      title: 'Nimbus',
-      value: 'nimbus',
-      label: 'Nimbus',
-      info: 'Consensus Client',
-      minority: true,
-    },
-    {
-      iconId: 'teku',
-      title: 'Teku',
-      info: 'Consensus Client',
-      value: 'teku',
-      label: 'Teku',
-      minority: true,
-    },
-    {
-      iconId: 'lighthouse',
-      title: 'Lighthouse',
-      value: 'lighthouse',
-      label: 'Lighthouse',
-      info: 'Consensus Client',
-    },
-    {
-      iconId: 'prysm',
-      title: 'Prysm',
-      info: 'Consensus Client',
-      value: 'prysm',
-      label: 'Prysm',
-    },
-    {
-      iconId: 'lodestar',
-      title: 'Lodestar',
-      value: 'lodestar',
-      label: 'Lodestar',
-      info: 'Consensus Client',
-      minority: true,
-    },
-  ];
   // const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const [sSelectedExecutionClient, setSelectedExecutionClient] =
     useState<SelectOption>(ethereumNodeConfig?.executionClient || ecOptions[0]);
@@ -150,23 +137,23 @@ AddEthereumNodeProps) => {
     sNodeStorageLocationFreeStorageGBs,
     setNodeStorageLocationFreeStorageGBs,
   ] = useState<number>();
-  const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
-
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
-      const hasSeenAlpha = await electron.getSetHasSeenAlphaModal();
-      setHasSeenAlphaModal(hasSeenAlpha || false);
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
       const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
+      const nodePackageLibrary: NodePackageLibrary =
+        await electron.getNodePackageLibrary();
       console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
       setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
       if (modalOnChangeConfig) {
         modalOnChangeConfig({
+          executionClient: sSelectedExecutionClient.value,
+          consensusClient: sSelectedConsensusClient.value,
           storageLocation: defaultNodesStorageDetails.folderPath,
           nodeLibrary,
+          nodePackageLibrary,
         });
       }
       setNodeStorageLocationFreeStorageGBs(
@@ -174,6 +161,19 @@ AddEthereumNodeProps) => {
       );
     };
     fetchData();
+
+    // Modal Parent needs updated with the default initial value
+    const ethNodeConfig = {
+      executionClient: sSelectedExecutionClient,
+      consensusClient: sSelectedConsensusClient,
+    };
+    if (setExecutionClient) {
+      setExecutionClient(sSelectedExecutionClient, ethNodeConfig);
+    }
+    if (setConsensusClient) {
+      setConsensusClient(sSelectedConsensusClient, ethNodeConfig);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -234,20 +234,12 @@ AddEthereumNodeProps) => {
     onChange,
   ]);
 
-  if (sHasSeenAlphaModal === false && !alphaModalRendered) {
-    dispatch(
-      setModalState({
-        isModalOpen: true,
-        screen: { route: 'alphaBuild', type: 'info' },
-      }),
-    );
-    alphaModalRendered = true;
-  }
-
   return (
     <div className={container}>
       {!modalOnChangeConfig && (
-        <div className={titleFont}>{t('LaunchAnEthereumNode')}</div>
+        <div className={titleFont}>
+          {t('LaunchAVarNode', { nodeName: 'Ethereum' })}
+        </div>
       )}
       <div className={descriptionContainer}>
         <div className={descriptionFont}>

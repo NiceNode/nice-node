@@ -27,6 +27,7 @@ export const contentContainer = style({
   display: 'flex',
   flexDirection: 'column',
   background: vars.color.background,
+  position: 'relative',
 });
 
 export const sidebarDrag = style({

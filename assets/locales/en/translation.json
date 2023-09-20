@@ -117,7 +117,7 @@
   "Appearance": "Appearance",
   "AutoFollowsComputerSetting": "Auto (Follows computer setting)",
   "DataLocation": "Data location",
-  "ChangingLocation": "Changing location only supported on Mac and only locations under /Users/<current-user>/ or /Volumes/",
+  "ChangingLocation": "Changing location only supported on Mac & Linux and only locations under /Users/<current-user>/ or /Volumes/",
   "DarkMode": "Dark mode",
   "HideAdvancedOptions": "Hide advanced options",
   "Language": "Language",
@@ -128,5 +128,11 @@
   "SaveChanges": "Save changes",
   "Continue": "Continue",
   "Back": "Back",
-  "IdentifyingVersion": "Identifying version..."
+  "IdentifyingVersion": "Identifying version...",
+  "NodeRequirements": "Node Requirements",
+  "NodeStartCommand": "Node start command (must save changes to take effect)",
+  "ResetToDefaults": "Reset to defaults",
+  "AddBaseNodeDescription": "Base is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
+  "LaunchAVarNode": "Launch a {{nodeName}} Node",
+  "AddNodeDescription": "Support the health of a network protocol by running a node."
 }

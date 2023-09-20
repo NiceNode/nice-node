@@ -17,12 +17,13 @@ Primary.args = {
   nodeOverview: {
     nodeId: '1f916ffa-b5e8-421e-a9b2-622efc3e8223',
     name: 'geth',
+    displayName: 'Geth',
     version: 'v10',
     screenType: 'client',
     nodeType: 'execution',
     status: {
       updating: false,
-      sychronized: true,
+      synchronized: true,
       initialized: false,
       lowPeerCount: false,
       updateAvailable: false,
@@ -44,6 +45,7 @@ Primary.args = {
 export const LimitedData = Template.bind({});
 LimitedData.args = {
   nodeOverview: {
+    displayName: 'Nethermind',
     nodeId: '1f916ffa-b5e8-421e-a9b2-622efc3e8223',
     name: 'nethermind',
     screenType: 'client',

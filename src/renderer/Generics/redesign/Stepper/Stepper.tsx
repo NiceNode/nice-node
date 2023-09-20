@@ -13,7 +13,7 @@ export interface StepperProps {
 
 const Stepper = ({ onChange, step, disabledSaveButton }: StepperProps) => {
   const { t: g } = useTranslation('genericComponents');
-  const buttonDisabled = step === 2 && disabledSaveButton;
+  const buttonDisabled = step === 3 && disabledSaveButton;
 
   return (
     <div className={bottomBar}>
