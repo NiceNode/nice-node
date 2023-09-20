@@ -4,6 +4,7 @@ import {
   description,
   buttonContainer,
 } from './walletPrompt.css';
+import walletPng from '../../../assets/images/artwork/wallet.png';
 
 import Button from '../Button/Button';
 
@@ -17,7 +18,12 @@ export const WalletPrompt = ({
   onSetupClick,
 }: WalletPromptProps) => {
   return (
-    <div className={container}>
+    <div
+      className={container} // webpack and vanilla css config was clashing for image imports so it is here
+      style={{
+        backgroundImage: `url(${walletPng})`,
+      }}
+    >
       <div className={title}>
         Point your browser wallet to your local Ethereum node
       </div>
