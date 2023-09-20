@@ -57,7 +57,7 @@ const Main = (props: { platform?: string }) => {
       if (sidebarRef.current) {
         const deltaX = event.clientX - lastX;
         const newWidth = sidebarRef.current.offsetWidth + deltaX;
-        if (newWidth >= 200 && newWidth <= 300) {
+        if (newWidth >= 225 && newWidth <= 300) {
           sidebarRef.current.style.width = `${newWidth}px`;
           setLastX(event.clientX);
         }

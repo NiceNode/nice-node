@@ -3,6 +3,7 @@ import { vars } from '../theme.css';
 
 export const container = style({
   padding: '8px 0px',
+  width: '100%',
 });
 
 export const innerContainer = style({
@@ -10,7 +11,6 @@ export const innerContainer = style({
   flexDirection: 'row',
   alignItems: 'flex-start',
   gap: '12px',
-  width: '236px',
   height: '56px',
   boxSizing: 'border-box',
   background: vars.components.bannerBackground,

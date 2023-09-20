@@ -91,7 +91,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
       setTypeFilter(type);
     }
   };
-  const { t: g } = useTranslation('genericComponents');
+  const { t } = useTranslation();
 
   const onClickSetTimeframeFilter = (timeframe: SetStateAction<number>) => {
     if (timeframeFilter !== 0 && timeframeFilter === timeframe) {
@@ -184,7 +184,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
   }, [sLogs, hasUserScrolledToBottom, newLogsAdded]);
 
   const floatingButtonLabel =
-    newLogsCount > 0 ? `${newLogsCount} ${g('NewMessages')}` : g('NewMessages');
+    newLogsCount > 0 ? `${newLogsCount} ${t('NewMessages')}` : t('NewMessages');
 
   const typeLabel = typeLabels[typeFilter];
   const timeframeLabel = timeframeLabels[timeframeFilter];
@@ -205,7 +205,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
         <div>
           <ContentHeader
             textAlign="left"
-            title={g('Logs')}
+            title={t('Logs')}
             leftButtonIconId="down"
             rightButtonIconId="filter"
             leftButtonOnClick={() => navigate('/main/node')}
@@ -223,7 +223,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                 <Input
                   leftIconId="search"
                   value={textFilter}
-                  placeholder={g('Search')}
+                  placeholder={t('Search')}
                   onChange={(text: string) => {
                     setTextFilter(text);
                   }}
@@ -243,7 +243,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                   iconId="down"
                   size="small"
                   variant="icon-right"
-                  label={g(typeLabel)}
+                  label={t(typeLabel)}
                   onClick={() => {
                     if (isTypeFilterDisplayed) {
                       setIsTypeFilterDisplayed(false);
@@ -259,21 +259,21 @@ export const Logs = ({ sLogs }: LogsProps) => {
                         variant="checkbox"
                         selected={typeFilter === 'INFO'}
                         status="blue"
-                        text={g('Info')}
+                        text={t('Info')}
                         onClick={() => onClickSetTypeFilter('INFO')}
                       />
                       <MenuItem
                         variant="checkbox"
                         selected={typeFilter === 'WARN'}
                         status="orange"
-                        text={g('Warnings')}
+                        text={t('Warnings')}
                         onClick={() => onClickSetTypeFilter('WARN')}
                       />
                       <MenuItem
                         variant="checkbox"
                         selected={typeFilter === 'ERROR'}
                         status="red"
-                        text={g('Errors')}
+                        text={t('Errors')}
                         onClick={() => onClickSetTypeFilter('ERROR')}
                       />
                     </Menu>
@@ -292,7 +292,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                   iconId="down"
                   size="small"
                   variant="icon-right"
-                  label={g(timeframeLabel)}
+                  label={t(timeframeLabel)}
                   onClick={() => {
                     if (isTimeframeFilterDisplayed) {
                       setIsTimeframeFilterDisplayed(false);
@@ -305,7 +305,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                   <div className={filterMenu}>
                     <Menu width={148}>
                       <MenuItem
-                        text={g('Last30Minutes')}
+                        text={t('Last30Minutes')}
                         selectable
                         selected={timeframeFilter === timeframes['30MINUTES']}
                         onClick={() =>
@@ -313,7 +313,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                         }
                       />
                       <MenuItem
-                        text={g('LastHour')}
+                        text={t('LastHour')}
                         selectable
                         selected={timeframeFilter === timeframes['1HOUR']}
                         onClick={() =>
@@ -321,7 +321,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                         }
                       />
                       <MenuItem
-                        text={g('Last6Hours')}
+                        text={t('Last6Hours')}
                         selectable
                         selected={timeframeFilter === timeframes['6HOURS']}
                         onClick={() =>
@@ -329,7 +329,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                         }
                       />
                       <MenuItem
-                        text={g('Last12Hours')}
+                        text={t('Last12Hours')}
                         selectable
                         selected={timeframeFilter === timeframes['12HOURS']}
                         onClick={() =>
@@ -337,7 +337,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                         }
                       />
                       <MenuItem
-                        text={g('LastDay')}
+                        text={t('LastDay')}
                         selectable
                         selected={timeframeFilter === timeframes['1DAY']}
                         onClick={() =>
@@ -345,7 +345,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                         }
                       />
                       <MenuItem
-                        text={g('Last3Days')}
+                        text={t('Last3Days')}
                         selectable
                         selected={timeframeFilter === timeframes['3DAYS']}
                         onClick={() =>
@@ -353,7 +353,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                         }
                       />
                       <MenuItem
-                        text={g('LastWeek')}
+                        text={t('LastWeek')}
                         selectable
                         selected={timeframeFilter === timeframes['1WEEK']}
                         onClick={() =>
@@ -361,7 +361,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                         }
                       />
                       <MenuItem
-                        text={g('LastMonth')}
+                        text={t('LastMonth')}
                         selectable
                         selected={timeframeFilter === timeframes['1MONTH']}
                         onClick={() =>
@@ -382,7 +382,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                     onClick={resetFilters}
                     onKeyDown={resetFilters}
                   >
-                    {g('ClearAllFilters')}
+                    {t('ClearAllFilters')}
                   </div>
                 </>
               )}
