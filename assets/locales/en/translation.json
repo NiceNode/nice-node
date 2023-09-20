@@ -134,5 +134,10 @@
   "ResetToDefaults": "Reset to defaults",
   "AddBaseNodeDescription": "Base is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
   "LaunchAVarNode": "Launch a {{nodeName}} Node",
-  "AddNodeDescription": "Support the health of a network protocol by running a node."
+  "AddNodeDescription": "Support the health of a network protocol by running a node.",
+  "InitialSyncStarted": "Initial sync process started",
+  "InitialSyncDescription": "When adding a node it first needs to catch up on the history of the network. This process downloads all the necessary data and might take a couple of days. After synchronization is complete your node will be online and part of the network.",
+  "MoreResources": "More resources",
+  "Clients": "Clients",
+  "About": "About"
 }

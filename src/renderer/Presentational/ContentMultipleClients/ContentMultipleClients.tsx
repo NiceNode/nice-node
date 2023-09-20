@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ClientProps, NodeOverviewProps } from '../../Generics/redesign/consts';
 import { Message } from '../../Generics/redesign/Message/Message';
 import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
@@ -30,6 +31,7 @@ const ContentMultipleClients = (props: {
   const { clients, nodeContent } = props;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   // TODO: Come up with a better name for this component..
   /* TODO: maybe a "provider" wrapper/manager to fetch data and handle states */
@@ -99,14 +101,11 @@ const ContentMultipleClients = (props: {
       !synchronized &&
       !initialSyncMessageDismissed
     ) {
-      const title = 'Initial sync process started';
-      const description =
-        'When adding a node it first needs to catch up on the history of the network. This process downloads all the necessary data and might take a couple of days. After synchronization is complete your node will be online and part of the network.';
       return (
         <Message
           type="info"
-          title={title}
-          description={description}
+          title={t('InitialSyncStarted')}
+          description={t('InitialSyncDescription')}
           onClick={() => {
             localStorage.setItem('initialSyncMessageDismissed', 'true');
             setinitialSyncMessageDismissed(true);
@@ -181,7 +180,7 @@ const ContentMultipleClients = (props: {
   const getResourceData = () => {
     // eslint-disable-next-line
     const resourceData: { title: string; items: any[] } = {
-      title: 'More resources',
+      title: t('MoreResources'),
       items: [],
     };
     const clientNames = clients.map((client) => {
@@ -218,7 +217,7 @@ const ContentMultipleClients = (props: {
       <HeaderMetrics {...(nodeOverview as NodeOverviewProps)} />
       <HorizontalLine type="content" />
       <div className={promptContainer}>{renderPrompt()}</div>
-      <div className={sectionTitle}>Clients</div>
+      <div className={sectionTitle}>{t('Clients')}</div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
           return (
@@ -241,7 +240,7 @@ const ContentMultipleClients = (props: {
         })}
       </div>
       <HorizontalLine type="content" />
-      <div className={sectionTitle}>About</div>
+      <div className={sectionTitle}>{t('About')}</div>
       <div className={sectionDescription}>
         <p>{nodeContent?.description}</p>
       </div>
