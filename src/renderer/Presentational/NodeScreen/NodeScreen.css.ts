@@ -37,7 +37,7 @@ export const descriptionFont = style({
 
 export const backButtonContainer = style({
   position: 'absolute',
-  left: 10,
-  top: 20,
+  left: 14,
+  top: 12,
   zIndex: 4,
 });
