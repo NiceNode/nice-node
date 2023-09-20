@@ -15,7 +15,7 @@ const NodeSetup = () => {
     <AddNodeStepper
       onChange={(newValue: 'done' | 'cancel') => {
         if (newValue === 'done' || newValue === 'cancel') {
-          navigate('/main/node');
+          navigate('/main/nodePackage');
           electron.getSetHasSeenSplashscreen(true);
         }
       }}

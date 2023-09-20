@@ -15,12 +15,12 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
   const buttonSaveType = 'danger';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
-    const { selectedNode, isDeleteStorage = true } =
+    const { selectedNodePackage, isDeleteStorage = true } =
       updatedConfig || (modalConfig as ModalConfig);
 
     try {
-      if (selectedNode) {
-        await electron.removeNode(selectedNode.id, {
+      if (selectedNodePackage) {
+        await electron.removeNodePackage(selectedNodePackage.id, {
           isDeleteStorage,
         });
       }

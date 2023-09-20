@@ -21,7 +21,7 @@ Primary.args = {
   nodeType: 'execution',
   status: {
     updating: false,
-    sychronized: true,
+    synchronized: true,
     initialized: false,
     lowPeerCount: false,
     updateAvailable: false,

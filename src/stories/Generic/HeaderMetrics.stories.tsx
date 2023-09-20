@@ -17,7 +17,7 @@ Primary.args = {
   name: 'besu',
   title: 'Ethereum node',
   info: 'Non-Validating Node — Ethereum mainnet',
-  screenType: 'altruistic',
+  screenType: 'nodePackage',
   status: {
     updating: false,
     initialized: true,

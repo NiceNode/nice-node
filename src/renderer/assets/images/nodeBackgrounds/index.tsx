@@ -21,6 +21,8 @@ export interface NodeBackgrounds {
   teku?: string;
   lodestar?: string;
   nimbus?: string;
+  'op-geth'?: string;
+  'op-node'?: string;
 }
 
 // Define all icons here
@@ -34,6 +36,8 @@ export const NODE_BACKGROUNDS: NodeBackgrounds = {
   teku,
   lodestar,
   nimbus,
+  'op-geth': geth,
+  'op-node': nimbus,
 };
 
 export type NodeBackgroundId = keyof NodeBackgrounds;
