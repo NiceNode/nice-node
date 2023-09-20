@@ -2,7 +2,7 @@
   "specId": "farcaster",
   "version": "1.0.0",
   "displayName": "Farcaster",
-  "displayTagline": "Non-Validating Node - Farcaster mainnet",
+  "displayTagline": "Sync the entire Farcaster network",
   "execution": {
     "executionTypes": ["nodePackage"],
     "defaultExecutionType": "nodePackage",
@@ -48,24 +48,6 @@
         "type": "filePath"
       },
       "infoDescription": "Data directory for the databases and keystore (default: \"~/.farcaster\")"
-    },
-    "network": {
-      "displayName": "mainnet or a testnet",
-      "uiControl": {
-        "type": "select/single",
-        "controlTranslations": [
-          {
-            "value": "Mainnet",
-            "config": "--network mainnet"
-          },
-          {
-            "value": "Testnet",
-            "config": "--network testnet"
-          }
-        ]
-      },
-      "defaultValue": "Disabled",
-      "documentation": "https://geth.farcaster.org/docs/rpc/server"
     }
   },
   "iconUrl": "https://farcaster.png",

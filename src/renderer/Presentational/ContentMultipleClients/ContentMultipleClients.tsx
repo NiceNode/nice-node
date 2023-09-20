@@ -69,8 +69,8 @@ const ContentMultipleClients = (props: {
     [nodeContent],
   );
 
-  if (!clients || clients.length < 2) {
-    return <>2 or more clients required</>;
+  if (!clients) {
+    return <>No node found</>;
   }
 
   const clClient = clients.find((client) => client.nodeType === 'consensus');

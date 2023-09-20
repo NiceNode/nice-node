@@ -21,6 +21,9 @@ import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import AddNode, { AddNodeValues } from '../AddNode/AddNode';
 import AddBaseNode from '../AddBaseNode/AddBaseNode';
+import AddNodeConfiguration, {
+  AddNodeConfigurationValues,
+} from '../AddNodeConfiguration/AddNodeConfiguration';
 
 export interface AddNodeStepperModalProps {
   modal?: boolean;
@@ -54,22 +57,49 @@ const AddNodeStepperModal = ({
     getData();
   }, []);
 
+  const onChangeAddNodeConfiguration = (
+    newValue: AddNodeConfigurationValues,
+  ) => {
+    console.log(
+      'AddNodeStepperModal onChangeAddNodeConfiguration called. newValue',
+      newValue,
+    );
+    const config = {
+      ...sEthereumNodeConfig,
+      clientSelections: newValue.clientSelections,
+    };
+    modalOnChangeConfig({
+      clientSelections: newValue.clientSelections,
+    });
+    setEthereumNodeConfig(config);
+  };
+
   useEffect(() => {
-    const { nodeLibrary, consensusClient, executionClient, storageLocation } =
-      modalConfig;
-    if (nodeLibrary && consensusClient && executionClient && storageLocation) {
-      const ecReqs = nodeLibrary?.[executionClient]?.systemRequirements;
-      const ccReqs =
-        nodeLibrary?.[`${consensusClient}-beacon`]?.systemRequirements ??
-        nodeLibrary?.[consensusClient]?.systemRequirements;
-      try {
-        if (ecReqs && ccReqs) {
-          const mergedReqs = mergeSystemRequirements([ecReqs, ccReqs]);
-          console.log('mergedReqs', mergedReqs);
-          setEthereumNodeRequirements(mergedReqs);
-        } else {
-          throw new Error('ec or ec node requirements undefined');
+    const { nodeLibrary, clientSelections, storageLocation } = modalConfig;
+    if (nodeLibrary && clientSelections && storageLocation) {
+      const reqs: SystemRequirements[] = [];
+      // eslint-disable-next-line
+      for (const [serviceId, selectOption] of Object.entries(
+        clientSelections,
+      )) {
+        console.log(`${serviceId}: ${selectOption}`);
+        const clientId = selectOption.value;
+        if (nodeLibrary?.[clientId]?.systemRequirements) {
+          reqs.push(
+            nodeLibrary[clientId].systemRequirements as SystemRequirements,
+          );
+        } else if (nodeLibrary?.[`${clientId}-beacon`]?.systemRequirements) {
+          // todo: remove this. Special case for legacy ethereum node
+          reqs.push(
+            nodeLibrary[`${clientId}-beacon`]
+              .systemRequirements as SystemRequirements,
+          );
         }
+      }
+      try {
+        const mergedReqs = mergeSystemRequirements(reqs);
+        console.log('mergedReqs', mergedReqs);
+        setEthereumNodeRequirements(mergedReqs);
       } catch (e) {
         console.error(e);
       }
@@ -142,7 +172,7 @@ const AddNodeStepperModal = ({
         stepImage = step1;
         break;
       case 1:
-        if (sNodeConfig?.node?.value === 'base') {
+        if (sNodeConfig?.node?.value === 'base2') {
           stepScreen = (
             <AddBaseNode
               ethereumNodeConfig={sEthereumNodeConfig}
@@ -151,12 +181,21 @@ const AddNodeStepperModal = ({
               modalOnChangeConfig={modalOnChangeConfig}
             />
           );
-        } else {
+        } else if (sNodeConfig?.node?.value === 'ethereum2') {
           stepScreen = (
             <AddEthereumNode
               ethereumNodeConfig={sEthereumNodeConfig}
               setConsensusClient={setConsensusClient}
               setExecutionClient={setExecutionClient}
+              modalOnChangeConfig={modalOnChangeConfig}
+            />
+          );
+        } else {
+          stepScreen = (
+            <AddNodeConfiguration
+              nodeId={sNodeConfig?.node?.value}
+              nodePackageConfig={sEthereumNodeConfig}
+              onChange={onChangeAddNodeConfiguration}
               modalOnChangeConfig={modalOnChangeConfig}
             />
           );

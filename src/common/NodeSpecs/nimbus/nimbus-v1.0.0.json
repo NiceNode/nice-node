@@ -27,6 +27,7 @@
     }
   },
   "category": "L1/ConsensusClient/BeaconNode",
+  "minorityClient": true,
   "rpcTranslation": "eth-l1-beacon",
   "systemRequirements": {
     "memory": {
