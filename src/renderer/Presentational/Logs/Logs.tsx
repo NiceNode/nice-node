@@ -389,6 +389,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
             </div>
           )}
         </div>
+        {filteredLogMessages.length === 0 && <div>No logs found</div>}
         <div ref={logContainerRef} className={logsScroller}>
           <div ref={logEndRef} />
           <div>{filteredLogMessages}</div>

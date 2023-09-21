@@ -9,32 +9,36 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpCorsDomains": "http://localhost"
+        "httpCorsDomains": "http://localhost",
+        "syncMode": "full",
+        "httpAddress": "0.0.0.0"
       },
       "docker": {
         "containerVolumePath": "/root/.local/share/reth/db",
-        "raw": "-p 30303:30303/tcp -p 30303:30303/udp -p 8545:8545 -p 8546:8546 -p 8551:8551",
-        "forcedRawNodeInput": "node --http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/db/jwtsecret --ipcdisable"
+        "raw": "",
+        "forcedRawNodeInput": "node --color never --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/db/jwtsecret --ipcdisable"
       }
     },
     "imageName": "ghcr.io/paradigmxyz/reth"
   },
   "category": "L1/ExecutionClient",
+  "minorityClient": true,
+  "nodeReleasePhase": "beta",
   "rpcTranslation": "eth-l1",
   "systemRequirements": {
-    "documentationUrl": "https://reth.ethereum.org/docs/interface/hardware",
+    "documentationUrl": "https://paradigmxyz.github.io/reth/installation/installation.html#hardware-requirements",
     "cpu": {
-      "cores": 4
+      "cores": 2
     },
     "memory": {
-      "minSizeGBs": 16
+      "minSizeGBs": 8
     },
     "storage": {
-      "minSizeGBs": 1600,
+      "minSizeGBs": 1000,
       "ssdRequired": true
     },
     "internet": {
-      "minDownloadSpeedMbps": 25,
+      "minDownloadSpeedMbps": 24,
       "minUploadSpeedMbps": 10
     },
     "docker": {
@@ -43,7 +47,7 @@
   },
   "configTranslation": {
     "http": {
-      "displayName": "rpc http connections (*NiceNode requires http connections)",
+      "displayName": "RPC HTTP connections",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -57,10 +61,10 @@
         ]
       },
       "defaultValue": "Enabled",
-      "documentation": "https://reth.ethereum.org/docs/rpc/server"
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
     },
     "webSockets": {
-      "displayName": "rpc websocket connections (*BeaconNodes may require websocket connections)",
+      "displayName": "RPC WebSocket connections",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -74,7 +78,7 @@
         ]
       },
       "defaultValue": "Disabled",
-      "documentation": "https://reth.ethereum.org/docs/rpc/server#websocket-server"
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
     },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
@@ -108,6 +112,26 @@
           {
             "value": "admin",
             "config": "admin"
+          },
+          {
+            "value": "ots",
+            "config": "ots"
+          },
+          {
+            "value": "rpc",
+            "config": "rpc"
+          },
+          {
+            "value": "reth",
+            "config": "reth"
+          },
+          {
+            "value": "trace",
+            "config": "trace"
+          },
+          {
+            "value": "txpool",
+            "config": "txpool"
           }
         ]
       }
@@ -121,37 +145,51 @@
     },
     "syncMode": {
       "displayName": "Node synchronization mode",
-      "infoDescription": "Blockchain sync mode (\"snap\", \"full\" or \"light\") (default: snap)",
+      "infoDescription": "Blockchain sync mode (\"archive\" or \"full\") (default: full). The sync mode that was chosen when first running a node can not be changed after the initial sync. Example: Turning Archive into Pruned, or Pruned into Full is not supported.",
       "category": "Syncronization",
-      "cliConfigPrefix": "--syncmode ",
+      "cliConfigPrefix": "",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
-            "value": "snap",
-            "config": "snap"
-          },
-          {
-            "value": "light",
-            "config": "light"
-          },
-          {
             "value": "full",
-            "config": "full"
+            "config": "--full"
+          },
+          {
+            "value": "archive",
+            "config": ""
           }
         ]
       },
-      "defaultValue": "snap",
-      "documentation": "https://reth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
+      "defaultValue": "full",
+      "documentation": "https://paradigmxyz.github.io/reth/run/pruning.html"
     },
     "httpAddress": {
       "displayName": "HTTP-RPC server listening interface",
       "cliConfigPrefix": "--http.addr ",
-      "defaultValue": "localhost",
+      "defaultValue": "0.0.0.0",
       "uiControl": {
         "type": "text"
       },
-      "documentation": "https://reth.ethereum.org/docs/rpc/server#http-server"
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
+    },
+    "p2pPorts": {
+      "displayName": "P2P port (UDP and TCP)",
+      "cliConfigPrefix": "--discovery.port ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 30303",
+      "defaultValue": "30303"
+    },
+    "enginePort": {
+      "displayName": "Engine JSON-RPC listening port",
+      "cliConfigPrefix": "--authrpc.port ",
+      "defaultValue": "8551",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "The listening port for the Engine API calls for JSON-RPC over HTTP and WebSocket."
     },
     "httpPort": {
       "displayName": "HTTP-RPC server listening port",
@@ -160,7 +198,7 @@
       "uiControl": {
         "type": "text"
       },
-      "documentation": "https://reth.ethereum.org/docs/rpc/server#http-server"
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
     },
     "webSocketsPort": {
       "displayName": "WS-RPC server listening port",
@@ -169,17 +207,28 @@
       "uiControl": {
         "type": "text"
       },
-      "documentation": "https://reth.ethereum.org/docs/rpc/server#websocket-server"
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
     },
-    "maxPeerCount": {
-      "displayName": "Max Peer Count (set to low number to use less bandwidth)",
-      "cliConfigPrefix": "--maxpeers ",
-      "defaultValue": "50",
+    "maxOutboundPeerCount": {
+      "displayName": "Max outbound peer count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--max-outbound-peers ",
+      "defaultValue": "100",
       "uiControl": {
         "type": "text"
       },
-      "documentation": "https://reth.ethereum.org/docs/interface/peer-to-peer#peer-limit"
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
+    },
+    "maxInboundPeerCount": {
+      "displayName": "Max inbound peer count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--max-inbound-peers ",
+      "defaultValue": "30",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
     }
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/reth-logo.png"
+  "documentation" : {
+    "default" : "https://paradigmxyz.github.io/reth"
+  }
 }

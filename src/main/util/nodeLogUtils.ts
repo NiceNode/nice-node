@@ -75,7 +75,15 @@ const trimLogHeader = (log: string, client: string) => {
         )
     );
   }
-
+  if (client === 'reth') {
+    // Example: 2023-09-21T18:30:10.069472Z  INFO or 2023-09-21T18:35:10.070470Z  WARN
+    // Pattern: YYYY-MM-DD HH:mm:ss.SSSSSSZ  INFO/WARN/ERROR
+    return log.replace(
+      // eslint-disable-next-line no-useless-escape
+      /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z\s+(INFO|WARN|ERROR)/,
+      '',
+    );
+  }
   // Other Ethereum clients could be added here as needed...
 
   // If the client is not recognized, return the original log
