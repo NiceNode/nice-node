@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   NODE_BACKGROUNDS,
   NodeBackgroundId,
@@ -19,69 +20,60 @@ import ProgressBar from '../ProgressBar/ProgressBar';
 import { ClientProps, ClientStatusProps } from '../consts';
 import { common } from '../theme.css';
 
-const getLabelDetails = (label: string) => {
-  const labelDetails: { color: LabelColor; string: string } = {
-    color: 'gray',
-    string: label,
-  };
-  switch (label) {
-    case 'running':
-      labelDetails.color = 'green';
-      labelDetails.string = 'Running';
-      break;
-    case 'synchronized':
-      labelDetails.color = 'green';
-      labelDetails.string = 'Synchronized';
-      break;
-    case 'blocksBehind':
-      labelDetails.color = 'orange';
-      labelDetails.string = 'Blocks Behind';
-      break;
-    case 'lowPeerCount':
-      labelDetails.color = 'orange';
-      labelDetails.string = 'Low peer count';
-      break;
-    case 'noConnection':
-      labelDetails.color = 'red';
-      labelDetails.string = 'No connection';
-      break;
-    case 'updateAvailable':
-      labelDetails.color = 'purple';
-      labelDetails.string = 'Update Available';
-      break;
-    case 'error':
-      labelDetails.color = 'red';
-      labelDetails.string = 'Error';
-      break;
-    default:
-      break;
-  }
-  return labelDetails;
-};
-
 /**
  * Primary UI component for user interaction
  */
-type Props = ClientProps & {
-  onClick?: () => void;
-};
-export const ClientCard = (props: Props) => {
+export const ClientCard = (props: ClientProps) => {
   const { displayName, status, name, nodeType, stats, onClick } = props;
-  const isNotCloseToSynchronized =
-    (stats.highestSlot &&
-      stats.currentSlot &&
-      stats.highestSlot - stats.currentSlot > 10) ||
-    (stats.highestBlock &&
-      stats.currentBlock &&
-      stats.highestBlock - stats.currentBlock > 10);
-  const isNotSynchronizedAndNotStopped =
-    isNotCloseToSynchronized && !status.stopped;
+
+  const { t: g } = useTranslation('genericComponents');
+
+  const getLabelDetails = (label: string) => {
+    const labelDetails: { color: LabelColor; string: string } = {
+      color: 'gray',
+      string: '',
+    };
+    switch (label) {
+      case 'synchronized':
+        labelDetails.color = 'green';
+        labelDetails.string = g('Synchronized');
+        break;
+      case 'blocksBehind':
+        labelDetails.color = 'orange';
+        labelDetails.string = g('BlocksBehind');
+        break;
+      case 'lowPeerCount':
+        labelDetails.color = 'orange';
+        labelDetails.string = g('LowPeerCount');
+        break;
+      case 'noConnection':
+        labelDetails.color = 'red';
+        labelDetails.string = g('NoConnection');
+        break;
+      case 'updateAvailable':
+        labelDetails.color = 'purple';
+        labelDetails.string = g('UpdateAvailable');
+        break;
+      default:
+        break;
+    }
+    return labelDetails;
+  };
+
+  // const isNotCloseToSynchronized =
+  //   (stats.highestSlot &&
+  //     stats.currentSlot &&
+  //     stats.highestSlot - stats.currentSlot > 10) ||
+  //   (stats.highestBlock &&
+  //     stats.currentBlock &&
+  //     stats.highestBlock - stats.currentBlock > 10);
+  const isNotSynchronizedAndNotStopped = status.running && !status.stopped;
 
   const renderContents = () => {
     if (isNotSynchronizedAndNotStopped) {
       const caption = !status.initialized
-        ? 'Initial sync in progress.'
-        : 'Catching up';
+        ? g('InitialSyncInProgress')
+        : g('CatchingUp');
       let progress;
       if (stats.highestSlot && stats.currentSlot) {
         progress = (stats.currentSlot / stats.highestSlot) * 100;
@@ -98,13 +90,13 @@ export const ClientCard = (props: Props) => {
               common.color.geth
             }
             progress={progress}
-            caption={caption}
+            caption={`${caption} (progress will be added soon)`}
           />
         </>
       );
     }
     if (status.stopped || status.updating) {
-      const label = status.stopped ? 'Stopped' : 'Updating...';
+      const label = status.stopped ? g('Stopped') : g('Updating');
       return <Label type="gray" label={label} />;
     }
     const { updating, initialized, ...statusLabels } = status;

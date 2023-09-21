@@ -52,7 +52,7 @@ const SelectCard = ({
   minority = false,
   isSelected = false,
 }: SelectCardProps) => {
-  const { t } = useTranslation('genericComponents');
+  const { t: g } = useTranslation('genericComponents');
   const [selected, setSelected] = useState(isSelected);
 
   const onClickAction = () => {
@@ -86,7 +86,7 @@ const SelectCard = ({
         </div>
         {minority && (
           <div className={tagStyle}>
-            <Label bold={false} type="pink2" label={t('MinorityClient')} />{' '}
+            <Label bold={false} type="pink2" label={g('MinorityClient')} />{' '}
           </div>
         )}
       </div>

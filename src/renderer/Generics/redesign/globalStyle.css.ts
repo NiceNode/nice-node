@@ -5,7 +5,6 @@ globalStyle('#onBoarding', {
   fontFamily:
     '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Ubuntu',
   fontSize: 13,
-  background: vars.color.background,
   color: vars.color.font,
 });
 

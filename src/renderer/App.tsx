@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React, { useEffect, useState, useRef } from 'react';
 import { MemoryRouter, Routes, Route, Outlet } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
 
@@ -12,12 +13,17 @@ import NodeScreen from './Presentational/NodeScreen/NodeScreen';
 import DataRefresher from './DataRefresher';
 import electron from './electronGlobal';
 import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
-import LogsWrapper from './Generics/redesign/LogMessage/LogsWrapper';
+import LogsWrapper from './Presentational/LogsWrapper/LogsWrapper';
 import NodeSetup from './Presentational/NodeSetup/NodeSetup';
 import {
   dragWindowContainer,
   homeContainer,
   contentContainer,
+  sidebarDrag,
+  borderLeft,
+  borderCenter,
+  borderCenterLine,
+  borderRight,
 } from './app.css';
 import ThemeManager from './ThemeManager';
 import ModalManager from './Presentational/ModalManager/ModalManager';
@@ -39,11 +45,61 @@ const WindowContainer = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const Main = () => {
+const Main = (props: { platform?: string }) => {
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
+  const [isResizing, setIsResizing] = useState<Boolean>(false);
+  const [lastX, setLastX] = useState<number>(0);
+  const { platform } = props;
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!isResizing) return;
+      if (sidebarRef.current) {
+        const deltaX = event.clientX - lastX;
+        const newWidth = sidebarRef.current.offsetWidth + deltaX;
+        if (newWidth >= 225 && newWidth <= 300) {
+          sidebarRef.current.style.width = `${newWidth}px`;
+          setLastX(event.clientX);
+        }
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing, lastX]);
+
   return (
     <WindowContainer>
       <div className={homeContainer}>
-        <SidebarWrapper />
+        <SidebarWrapper ref={sidebarRef} />
+        <div
+          role="button"
+          className={sidebarDrag}
+          tabIndex={0}
+          onMouseDown={(e) => {
+            setIsResizing(true);
+            setLastX(e.clientX);
+          }}
+          onKeyDown={() => {}}
+        >
+          <div className={[borderLeft, platform].join(' ')} />
+          <div className={borderCenter}>
+            <div className={[borderCenterLine, platform].join(' ')} />
+          </div>
+          <div className={borderRight} />
+        </div>
         <Outlet />
         <DataRefresher />
       </div>
@@ -58,11 +114,14 @@ const System = () => {
 export default function App() {
   const dispatch = useAppDispatch();
   const [sHasSeenSplashscreen, setHasSeenSplashscreen] = useState<boolean>();
+  const [platform, setPlatform] = useState<string>('');
 
   useEffect(() => {
     const callAsync = async () => {
       const hasSeenSplash = await electron.getSetHasSeenSplashscreen();
       setHasSeenSplashscreen(hasSeenSplash ?? false);
+      const userSettings = await electron.getSettings();
+      setPlatform(userSettings.osPlatform || '');
     };
     callAsync();
   }, []);
@@ -101,7 +160,7 @@ export default function App() {
                 </WindowContainer>
               }
             />
-            <Route path="/main" element={<Main />}>
+            <Route path="/main" element={<Main platform={platform} />}>
               <Route
                 path="/main/nodePackage"
                 element={

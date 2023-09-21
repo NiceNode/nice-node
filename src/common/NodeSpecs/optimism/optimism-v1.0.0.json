@@ -1,0 +1,70 @@
+{
+  "specId": "optimism",
+  "version": "1.0.0",
+  "displayName": "Optimism",
+  "execution": {
+    "executionTypes": ["nodePackage"],
+    "services" : [{
+      "serviceId": "executionClient",
+      "name" : "Execution Client",
+      "nodeOptions": ["op-geth"],
+      "required": true,
+      "requiresCommonJwtSecret": true
+    }, {
+      "serviceId": "consensusClient",
+      "name" : "Consensus Client",
+      "nodeOptions": ["op-node"],
+      "required": true,
+      "requiresCommonJwtSecret": true
+    }],
+    "dependencies": [{
+      "name" : "Ethereum node",
+      "specId": "ethereum"
+    }]
+  },
+  "category": "Ethereum/L2",
+  "rpcTranslation": "op-node",
+  "systemRequirements": {
+    "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
+    "cpu": {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 16
+    },
+    "storage": {
+      "minSizeGBs": 200,
+      "ssdRequired": true
+    },
+    "internet": {
+      "minDownloadSpeedMbps": 25,
+      "minUploadSpeedMbps": 10
+    }
+  },
+  "configTranslation": {
+    "network": {
+      "displayName": "mainnet or a testnet",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "--network mainnet"
+          },
+          {
+            "value": "Testnet",
+            "config": "--network testnet"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://geth.ethereum.org/docs/rpc/server"
+    }
+  },
+  "iconUrl": "https://ethereum.png",
+  "addNodeDescription" : "OP Mainnet is a fast, stable, and scalable L2 blockchain built by Ethereum developers, for Ethereum developers. Built as a minimal extension to existing Ethereum software, OP Mainnet's EVM-equivalent architecture scales your Ethereum apps without surprises.",
+  "description": "Optimism is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
+  "documentation" : {
+    "default": "https://docs.optimism.org/guides/run-a-optimism-node/"
+  }
+}

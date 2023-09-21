@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 // Options replaceable component docs:
 // https://react-select.com/components#Option
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Select, { OptionProps, ValueContainerProps } from 'react-select';
 import SelectCard, { SelectCardProps } from '../SelectCard/SelectCard';
 import { vars } from '../theme.css';
@@ -55,6 +55,11 @@ const SpecialSelect = ({
     if (onChange) onChange(newlySelectedOption);
     setSelectedOption(newlySelectedOption);
   };
+
+  // update internal state when prop changes
+  useEffect(() => {
+    setSelectedOption(selectedOption);
+  }, [selectedOption]);
 
   return (
     <>

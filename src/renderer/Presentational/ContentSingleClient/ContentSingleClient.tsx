@@ -1,6 +1,7 @@
 // import { useState, useCallback } from 'react';
 // import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 // import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
+import { useTranslation } from 'react-i18next';
 import { MetricData } from 'common/node';
 import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
 import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
@@ -54,7 +55,15 @@ export type SingleNodeContent = {
   description?: string;
 };
 
-const ContentSingleClient = (props: SingleNodeContent) => {
+type ContentSingleClientProps = {
+  nodeOverview: SingleNodeContent;
+  isPodmanRunning: boolean;
+};
+
+const ContentSingleClient = ({
+  nodeOverview,
+  isPodmanRunning,
+}: ContentSingleClientProps) => {
   /* TODO: maybe a "provider" wrapper/manager to fetch data and handle states */
 
   // TODO: refactor this out so that it can be shared with multiple, single, and validator?
@@ -70,16 +79,18 @@ const ContentSingleClient = (props: SingleNodeContent) => {
   //   };
   // };
 
-  const nodeOverview = props;
-
   // TODO: retrieve initial data for all pages
 
-  console.log('diskFree', nodeOverview.tabsData?.diskFree);
+  const { tabsData, name } = nodeOverview;
+  const { t } = useTranslation();
 
   return (
     <>
       {/* todo: fix temp type casting */}
-      <Header {...(nodeOverview as unknown as NodeOverviewProps)} />
+      <Header
+        nodeOverview={nodeOverview as unknown as NodeOverviewProps}
+        isPodmanRunning={isPodmanRunning}
+      />
       <div>
         <HorizontalLine type="content" />
       </div>
@@ -91,31 +102,31 @@ const ContentSingleClient = (props: SingleNodeContent) => {
         {/* <div id="Sync">
           <TabContent tabId="Sync" />
         </div> */}
-        <div id="CPU">
+        <div id={t('CPU')}>
           <TabContent
-            name={nodeOverview.name}
+            name={name}
             tabId="CPU"
-            metricData={nodeOverview.tabsData?.cpuPercent}
+            metricData={tabsData?.cpuPercent}
           />
         </div>
-        <div id="Memory">
+        <div id={t('Memory')}>
           <TabContent
-            name={nodeOverview.name}
+            name={name}
             tabId="Memory"
-            metricData={nodeOverview.tabsData?.memoryPercent}
+            metricData={tabsData?.memoryPercent}
           />
         </div>
-        {/* <div id="Network">
+        {/* <div id={t('Network')}>
           <TabContent tabId="Network" />
         </div> */}
-        <div id="Disk">
+        <div id={t('Disk')}>
           <TabContent
-            name={nodeOverview.name}
+            name={name}
             tabId="Disk"
-            metricData={nodeOverview.tabsData?.diskUsed}
+            metricData={tabsData?.diskUsed}
             diskData={{
-              diskFree: nodeOverview.tabsData?.diskFree || 0,
-              diskTotal: nodeOverview.tabsData?.diskTotal || 0,
+              diskFree: tabsData?.diskFree || 0,
+              diskTotal: tabsData?.diskTotal || 0,
             }}
           />
         </div>

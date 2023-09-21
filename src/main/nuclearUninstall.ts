@@ -1,4 +1,4 @@
-import { removeAllNodes } from './nodeManager';
+import { removeAllNodePackages } from './nodePackageManager';
 import uninstallPodman from './podman/uninstall/uninstall';
 
 /**
@@ -13,8 +13,8 @@ import uninstallPodman from './podman/uninstall/uninstall';
  * todo: (windows) unregister fedora wsl2 distro?
  */
 const nuclearUninstall = async () => {
-  // remove all nodes
-  await removeAllNodes();
+  // remove all node packages (removes each package's nodes/clients/services too)
+  await removeAllNodePackages();
   // todo: delete nodes dir or other NN data (preferences?)
   await uninstallPodman();
 };

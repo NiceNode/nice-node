@@ -3,6 +3,9 @@ logs
 *.log
 *-audit.json
 
+# Exception for the Presentational/Logs directory
+!./Presentational/Logs/
+
 # Runtime data
 pids
 *.pid
