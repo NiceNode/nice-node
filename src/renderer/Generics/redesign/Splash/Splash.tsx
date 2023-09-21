@@ -29,7 +29,7 @@ const Splash = ({
   getStartedLabel,
   onClickGetStarted,
 }: SplashProps) => {
-  const { t } = useTranslation();
+  const { t: g } = useTranslation('genericComponents');
 
   return (
     <div
@@ -44,7 +44,7 @@ const Splash = ({
         <div className={titleFont}>{title}</div>
         <div className={descriptionFont}>{description}</div>
         <Button
-          label={getStartedLabel ?? t('GetStarted')}
+          label={getStartedLabel ?? g('GetStarted')}
           type="primary"
           onClick={onClickGetStarted}
         />
