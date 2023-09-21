@@ -8,7 +8,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, nativeTheme } from 'electron';
+import { app, BrowserWindow, shell } from 'electron';
 import * as Sentry from '@sentry/electron/main';
 
 import logger from './logger';
