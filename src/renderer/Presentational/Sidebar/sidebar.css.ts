@@ -15,7 +15,7 @@ export const container = style({
   // backdropFilter: 'blur(40px)',
   selectors: {
     '&.darwin': {
-      backgroundColor: vars.components.sidebarMacBackground,
+      backgroundColor: 'transparent',
       backdropFilter: 'blur(40px)',
     },
   },

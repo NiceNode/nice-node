@@ -83,7 +83,6 @@
   "Memory": "Memory",
   "Network": "Network",
   "Disk": "Disk",
-  "ErrorOccured": "Error occured",
   "NoActiveNodes": "No active nodes",
   "AddFirstNode": "Add your first node and start verifying the validty of every block of your favourite blockchain. Running a node also helps others to download and update their copies.",
   "NetworkName": "Network Name",
@@ -154,5 +153,6 @@
   "InitialSyncDescription": "When adding a node it first needs to catch up on the history of the network. This process downloads all the necessary data and might take a couple of days. After synchronization is complete your node will be online and part of the network.",
   "MoreResources": "More resources",
   "Clients": "Clients",
-  "About": "About"
+  "About": "About",
+  "Logs": "Logs"
 }

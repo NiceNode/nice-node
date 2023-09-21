@@ -43,7 +43,7 @@ export const borderLeft = style({
   height: '100%',
   selectors: {
     '&.darwin': {
-      backgroundColor: vars.components.sidebarMacBackground,
+      backgroundColor: 'transparent',
     },
   },
 });

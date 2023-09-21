@@ -89,7 +89,7 @@ export const MetricTypes = ({
       case SYNC_STATUS.ERROR:
         statusColorStyle = red;
         titleText = g('Error');
-        labelText = g('ErrorOcurred');
+        labelText = g('ErrorOccurred');
         break;
       case SYNC_STATUS.NO_NETWORK:
         statusColorStyle = red;

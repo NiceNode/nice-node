@@ -48,7 +48,6 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { t } = useTranslation();
   const { t: g } = useTranslation('genericComponents');
 
   let startStopButtonProps: ButtonProps = {
@@ -79,7 +78,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
   let logsButtonProps: ButtonProps | undefined;
   if (screenType !== 'nodePackage') {
     logsButtonProps = {
-      label: t('Logs'),
+      label: g('Logs'),
       iconId: 'logs',
       onClick: () => {
         if (onAction) onAction('logs');

@@ -86,20 +86,6 @@
   "LowestReadSpeed": "Lowest read speed",
   "AverageReadSpeed": "Average read speed",
   "Change": "Change...",
-  "Search": "Search...",
-  "NewMessages": "New messages",
-  "ClearAllFilters": "Clear all filters",
-  "Last30Minutes": "Last 30 minutes",
-  "LastHour": "Last hour",
-  "Last6Hours": "Last 6 hours",
-  "Last12Hours": "Last 12 hours",
-  "LastDay": "Last day",
-  "Last3Days": "Last 3 days",
-  "LastWeek": "Last week",
-  "LastMonth": "Last month",
-  "Info": "Info",
-  "Warnings": "Warnings",
-  "Errors": "Errors",
   "LearnMore": "Learn more",
   "WalletPromptTitle": "Point your browser wallet to your local Ethereum node",
   "WalletPromptDescription": "Now that your node is fully synced you can use it to lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eget mi vitae augue iaculis tempor eget vitae.",
@@ -112,5 +98,6 @@
   "ViewReleaseNotes": "View release notes",
   "InitialSyncInProgress": "Initial sync in progress...",
   "NodeSettings": "Node Settings...",
-  "RemoveNode": "Remove Node..."
+  "RemoveNode": "Remove Node...",
+  "ErrorOccurred": "Error occurred"
 }

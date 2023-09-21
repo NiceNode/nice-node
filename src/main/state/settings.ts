@@ -94,6 +94,13 @@ export const setThemeSetting = (theme: ThemeSetting) => {
   logger.info(`Setting theme to ${theme}`);
   store.set(`${SETTINGS_KEY}.${APP_THEME_SETTING}`, theme);
   logger.info(`App theme is ${store.get(SETTINGS_KEY, APP_THEME_SETTING)}`);
+  if (theme === 'auto') {
+    nativeTheme.themeSource = 'system';
+  } else if (theme === 'dark') {
+    nativeTheme.themeSource = 'dark';
+  } else if (theme === 'light') {
+    nativeTheme.themeSource = 'light';
+  }
   sendMessageOnThemeChange();
 };
 
