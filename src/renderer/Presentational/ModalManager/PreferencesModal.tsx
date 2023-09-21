@@ -18,9 +18,9 @@ interface MetaElement extends HTMLMetaElement {
 
 export const PreferencesModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
-  const { t } = useTranslation('genericComponents');
+  const { t } = useTranslation();
   const modalTitle = t('Preferences');
-  const buttonSaveLabel = 'Save changes';
+  const buttonSaveLabel = t('SaveChanges');
   const qSettings = useGetSettingsQuery();
 
   const handleColorSchemeChange = (colorScheme: ThemeSetting) => {
@@ -48,7 +48,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
       await electron.setIsOpenOnStartup(isOpenOnStartup);
     }
     if (isNotificationsEnabled !== undefined) {
-      await electron.setIsNotificationsEnabled(isNotificationsEnabled);
+      await electron.getSetIsNotificationsEnabled(isNotificationsEnabled);
     }
     if (isEventReportingEnabled !== undefined) {
       await electron.setIsEventReportingEnabled(isEventReportingEnabled);

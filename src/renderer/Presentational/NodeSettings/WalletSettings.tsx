@@ -122,7 +122,8 @@ export const WalletSettings = ({
     },
   ];
 
-  const { t: tGeneric } = useTranslation('genericComponents');
+  const { t } = useTranslation();
+  const { t: g } = useTranslation('genericComponents');
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const splitCorsDomains = splitDomainsFromValue({
     rawCorsValue: configValuesMap?.httpCorsDomains,
@@ -249,11 +250,11 @@ export const WalletSettings = ({
   };
 
   const networkLabels = {
-    networkName: 'Network Name',
-    rpcUrl: 'New RPC URL',
-    chainId: 'Chain ID',
-    currencySymbol: 'Currency Symbol',
-    blockExplorer: 'Block explorer',
+    networkName: t('NetworkName'),
+    rpcUrl: t('RpcUrl'),
+    chainId: t('ChainId'),
+    currencySymbol: t('CurrencySymbol'),
+    blockExplorer: t('BlockExplorer'),
   };
 
   // fetch this from data layer
@@ -303,8 +304,8 @@ export const WalletSettings = ({
       value: (
         <Toggle
           checked={officialWalletAddressArray.includes(walletAddress)}
-          onText="Allowed"
-          offText="Disabled"
+          onText={t('Allowed')}
+          offText={t('Disabled')}
           onChange={(newValue) => {
             let officialWalletsArray = officialWalletAddressArray;
             if (newValue) {
@@ -369,7 +370,7 @@ export const WalletSettings = ({
           </div>
           <div className={inputContainer}>
             <Input
-              placeholder="Browser extension ID"
+              placeholder={t('BrowserExtensionId')}
               value={item.extensionId}
               onChange={(value) => {
                 const updatedArray = customWalletAddressArray;
@@ -405,23 +406,13 @@ export const WalletSettings = ({
   };
 
   if (!httpCorsConfigTranslation) {
-    return (
-      <>
-        Unable to set wallet connections for this node. This node is missing
-        configuration values for this feature.
-      </>
-    );
+    return <>{t('UnableSetWalletConnections')}</>;
   }
 
   return (
     <>
-      <div className={walletDescription}>
-        Hook up your browser wallet to this node so you can enjoy greater
-        security, privacy, and read speeds. Enable your favourite browser
-        wallets below to allow access to your node. Don’t forget to add a new
-        network in your wallet with the configuration below.
-      </div>
-      <div className={title}>Wallets</div>
+      <div className={walletDescription}>{t('WalletDescription')}</div>
+      <div className={title}>{t('Wallets')}</div>
       <LineLabelSettings
         items={[
           {
@@ -435,9 +426,7 @@ export const WalletSettings = ({
       <div className={advancedOptionsLink}>
         <DropdownLink
           text={`${
-            isOptionsOpen
-              ? tGeneric('HideAdvancedOptions')
-              : tGeneric('ShowAdvancedOptions')
+            isOptionsOpen ? t('HideAdvancedOptions') : t('ShowAdvancedOptions')
           }`}
           onClick={() => setIsOptionsOpen(!isOptionsOpen)}
           isDown={!isOptionsOpen}
@@ -445,14 +434,12 @@ export const WalletSettings = ({
       </div>
       {isOptionsOpen && (
         <div className={advancedOptions}>
-          <div className={title}>Using a lesser known browser wallet?</div>
+          <div className={title}>{t('UsingLesserKnownWallet')}</div>
           <div className={advancedOptionsDescription}>
-            If your wallet of choice is not displayed in the list above you can
-            select the browser used for the extension and provide the extension
-            ID to allow access.{' '}
+            {t('SelectBrowser')}{' '}
             <ExternalLink
               url="http://google.com"
-              text={tGeneric('LearnMore')}
+              text={g('LearnMore')}
               inline
               hideIcon
             />
@@ -464,7 +451,7 @@ export const WalletSettings = ({
           </div>
           <div className={addRow}>
             <Linking
-              text="Add Row"
+              text={t('AddRow')}
               leftIconId="add"
               onClick={() => {
                 const updatedArray = [
@@ -478,7 +465,7 @@ export const WalletSettings = ({
         </div>
       )}
       <div className={walletDetails}>
-        <div className={title}>Details for your new wallet network</div>
+        <div className={title}>{t('DetailsForYourNew')}</div>
         <LineLabelSettings
           items={[
             {
@@ -491,7 +478,7 @@ export const WalletSettings = ({
         />
       </div>
       <ExternalLink
-        text="Learn about adding a network to your wallet"
+        text={t('LearnAboutAddingNetwork')}
         url="https://google.com"
       />
     </>

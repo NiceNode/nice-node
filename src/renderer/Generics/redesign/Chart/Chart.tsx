@@ -3,6 +3,8 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { MetricData } from 'common/node';
 import { vars } from '../theme.css';
+import { container, iconContainer, iconComponent } from './chart.css';
+import { Icon } from '../Icon/Icon';
 
 type ChartStyleProp = {
   linearGradient: string[];
@@ -213,12 +215,20 @@ export const Chart = ({ tabId, metricData }: ChartProps) => {
   };
 
   return (
-    <div className="charts">
-      <HighchartsReact
-        highcharts={Highcharts}
-        options={chartOptions}
-        ref={chartComponent}
-      />
+    <div className={container}>
+      {metricData && metricData.length > 0 ? (
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={chartOptions}
+          ref={chartComponent}
+        />
+      ) : (
+        <div className={iconContainer}>
+          <div className={iconComponent}>
+            <Icon iconId="syncing" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

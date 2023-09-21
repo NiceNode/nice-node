@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import electron from '../../../electronGlobal';
-import { LogWithMetadata } from '../../../../main/util/nodeLogUtils';
-import { useAppSelector } from '../../../state/hooks';
-import { selectSelectedNodeId } from '../../../state/node';
+import { LogWithMetadata } from '../../../main/util/nodeLogUtils';
+import electron from '../../electronGlobal';
+import { useAppSelector } from '../../state/hooks';
+import { selectSelectedNodeId } from '../../state/node';
 
-import { Logs } from './Logs';
+import { Logs } from '../Logs/Logs';
 
 const LogsWrapper = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);

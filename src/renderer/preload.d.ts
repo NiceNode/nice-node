@@ -106,7 +106,7 @@ declare global {
       setLanguage(languageCode: string): void;
       setThemeSetting(theme: ThemeSetting): void;
       setIsOpenOnStartup(isOpenOnStartup: boolean): void;
-      setIsNotificationsEnabled(isNotificationsEnabled: boolean): void;
+      getSetIsNotificationsEnabled(isNotificationsEnabled?: boolean): void;
       setIsEventReportingEnabled(isEventReportingEnabled: boolean): void;
 
       // Notifications
