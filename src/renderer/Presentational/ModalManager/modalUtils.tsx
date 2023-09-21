@@ -2,11 +2,13 @@ import React from 'react';
 import Node, { NodePackage } from 'common/node';
 import { ThemeSetting } from 'main/state/settings';
 import { NodeLibrary, NodePackageLibrary } from 'main/state/nodeLibrary';
+import { ClientSelections } from '../AddNodeConfiguration/AddNodeConfiguration';
 
 export interface ModalConfig {
   node?: string;
   executionClient?: string;
   consensusClient?: string;
+  clientSelections?: ClientSelections;
   storageLocation?: string;
   theme?: ThemeSetting;
   language?: string;

@@ -8,7 +8,10 @@ import {
   modalStepperContainer,
   titleFont,
 } from './modal.css';
-import { ModalConfig } from '../../../Presentational/ModalManager/modalUtils';
+import {
+  ModalConfig,
+  modalRoutes,
+} from '../../../Presentational/ModalManager/modalUtils';
 import { ContentHeader } from '../ContentHeader/ContentHeader';
 
 type Props = {
@@ -23,6 +26,7 @@ type Props = {
   buttonSaveVariant?: ButtonProps['variant'];
   buttonSaveIcon?: ButtonProps['iconId'];
   isSaveButtonDisabled?: boolean;
+  route?: string;
   modalOnSaveConfig: (updatedConfig: ModalConfig | undefined) => void;
   modalOnClose: () => void;
   modalOnCancel: () => void;
@@ -33,6 +37,7 @@ export const Modal = ({
   modalType = 'modal',
   modalStyle = '',
   modalTitle = '',
+  route = '',
   backButtonEnabled = true,
   buttonCancelLabel = 'Cancel',
   buttonSaveLabel = 'Save',
@@ -112,11 +117,13 @@ export const Modal = ({
           className={[modalChildrenContainer, modalStyle, modalType].join(' ')}
           ref={modalContentRef}
         >
-          <div className={[modalHeaderContainer, modalType].join(' ')}>
-            <span className={[titleFont, modalType, modalStyle].join(' ')}>
-              {modalTitle}
-            </span>
-          </div>
+          {route !== modalRoutes.alphaBuild && (
+            <div className={[modalHeaderContainer, modalType].join(' ')}>
+              <span className={[titleFont, modalType, modalStyle].join(' ')}>
+                {modalTitle}
+              </span>
+            </div>
+          )}
           {children}
         </div>
         <div className={[modalStepperContainer, modalType].join(' ')}>

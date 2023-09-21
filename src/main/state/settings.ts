@@ -109,18 +109,20 @@ export const setIsOpenOnStartup = (isOpenOnStartup: boolean) => {
   );
 };
 
-export const setIsNotificationsEnabled = (isNotificationsEnabled: boolean) => {
-  logger.info(`Setting isNotificationsEnabled to ${isNotificationsEnabled}`);
-  store.set(
+export const getSetIsNotificationsEnabled = (
+  isNotificationsEnabled?: boolean,
+) => {
+  if (isNotificationsEnabled !== undefined) {
+    logger.info(`Setting isNotificationsEnabled to ${isNotificationsEnabled}`);
+    store.set(
+      `${SETTINGS_KEY}.${APP_IS_NOTIFICATIONS_ENABLED}`,
+      isNotificationsEnabled,
+    );
+  }
+  const savedIsNotificationsEnable: boolean = store.get(
     `${SETTINGS_KEY}.${APP_IS_NOTIFICATIONS_ENABLED}`,
-    isNotificationsEnabled,
   );
-  logger.info(
-    `App isNotificationsEnabled is ${store.get(
-      SETTINGS_KEY,
-      APP_IS_NOTIFICATIONS_ENABLED,
-    )}`,
-  );
+  return savedIsNotificationsEnable;
 };
 
 export const setIsEventReportingEnabled = (

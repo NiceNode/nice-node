@@ -1,5 +1,6 @@
 import { MetricData } from 'common/node';
 import { PeriodBreakdownDataProps } from './TabContent';
+import i18n from '../../../i18n';
 
 interface BreakDownObjects {
   sync: {
@@ -75,44 +76,44 @@ export const getBreakdown = (
     sync: [
       {
         key: 'synchronization',
-        sectionTitle: 'Synchronization',
+        sectionTitle: i18n.t('genericComponents:Synchronization'),
         items: [
           {
-            label: 'Maximum blocks behind',
+            label: i18n.t('genericComponents:MaximumBlocksBehind'),
             value: periodBreakdownData?.sync?.maximumBlocksBehind,
           },
           {
-            label: 'Minimum block time',
+            label: i18n.t('genericComponents:MinimumBlockTime'),
             value: periodBreakdownData?.sync?.minimumBlockTime,
           },
           {
-            label: 'Maximum block time',
+            label: i18n.t('genericComponents:MaximumBlockTime'),
             value: periodBreakdownData?.sync?.maximumBlockTime,
           },
           {
-            label: 'Average block time',
+            label: i18n.t('genericComponents:AverageBlockTime'),
             value: periodBreakdownData?.sync?.averageBlockTime,
           },
           {
-            label: 'Total downtime',
+            label: i18n.t('genericComponents:TotalDowntime'),
             value: periodBreakdownData?.sync?.maximumBlocksBehind,
           },
         ],
       },
       {
         key: 'peers',
-        sectionTitle: 'Peers',
+        sectionTitle: i18n.t('genericComponents:PeersSection'),
         items: [
           {
-            label: 'Highest peer count',
+            label: i18n.t('genericComponents:HighestPeerCount'),
             value: periodBreakdownData?.network?.highestPeerCount,
           },
           {
-            label: 'Lowest peer count',
+            label: i18n.t('genericComponents:LowestPeerCount'),
             value: periodBreakdownData?.network?.lowestPeerCount,
           },
           {
-            label: 'Average peer count',
+            label: i18n.t('genericComponents:AveragePeerCount'),
             value: periodBreakdownData?.network?.averagePeerCount,
           },
         ],
@@ -123,15 +124,15 @@ export const getBreakdown = (
         key: 'cpu',
         items: [
           {
-            label: 'Minimum usage',
+            label: i18n.t('genericComponents:MinimumUsage'),
             value: periodBreakdownData?.cpu?.minimumUsage,
           },
           {
-            label: 'Max usage',
+            label: i18n.t('genericComponents:MaximumUsage'),
             value: periodBreakdownData?.cpu?.maxUsage,
           },
           {
-            label: 'Average usage',
+            label: i18n.t('genericComponents:AverageUsage'),
             value: periodBreakdownData?.cpu?.averageUsage,
           },
         ],
@@ -142,15 +143,15 @@ export const getBreakdown = (
         key: 'memory',
         items: [
           {
-            label: 'Minimum usage',
+            label: i18n.t('genericComponents:MinimumUsage'),
             value: periodBreakdownData?.memory?.minimumUsage,
           },
           {
-            label: 'Max usage',
+            label: i18n.t('genericComponents:MaximumUsage'),
             value: periodBreakdownData?.memory?.maxUsage,
           },
           {
-            label: 'Average usage',
+            label: i18n.t('genericComponents:AverageUsage'),
             value: periodBreakdownData?.memory?.averageUsage,
           },
         ],
@@ -159,50 +160,50 @@ export const getBreakdown = (
     network: [
       {
         key: 'data',
-        sectionTitle: 'Data',
+        sectionTitle: i18n.t('genericComponents:DataSection'),
         items: [
           {
-            label: 'Data received',
+            label: i18n.t('genericComponents:DataReceived'),
             value: periodBreakdownData?.network?.dataReceived,
           },
           {
-            label: 'Data sent',
+            label: i18n.t('genericComponents:DataSent'),
             value: periodBreakdownData?.network?.dataSent,
           },
         ],
       },
       {
         key: 'peers',
-        sectionTitle: 'Peers',
+        sectionTitle: i18n.t('genericComponents:PeersSection'),
         items: [
           {
-            label: 'Highest peer count',
+            label: i18n.t('genericComponents:HighestPeerCount'),
             value: periodBreakdownData?.network?.highestPeerCount,
           },
           {
-            label: 'Lowest peer count',
+            label: i18n.t('genericComponents:LowestPeerCount'),
             value: periodBreakdownData?.network?.lowestPeerCount,
           },
           {
-            label: 'Average peer count',
+            label: i18n.t('genericComponents:AveragePeerCount'),
             value: periodBreakdownData?.network?.averagePeerCount,
           },
         ],
       },
       {
         key: 'download',
-        sectionTitle: 'Download',
+        sectionTitle: i18n.t('genericComponents:DownloadSection'),
         items: [
           {
-            label: 'Highest download speed',
+            label: i18n.t('genericComponents:HighestDownloadSpeed'),
             value: periodBreakdownData?.network?.highestDownloadSpeed,
           },
           {
-            label: 'Lowest download speed',
+            label: i18n.t('genericComponents:LowestDownloadSpeed'),
             value: periodBreakdownData?.network?.lowestDownloadSpeed,
           },
           {
-            label: 'Average download speed',
+            label: i18n.t('genericComponents:AverageDownloadSpeed'),
             value: periodBreakdownData?.network?.averageDownloadSpeed,
           },
         ],
@@ -211,50 +212,50 @@ export const getBreakdown = (
     disk: [
       {
         key: 'data',
-        sectionTitle: 'Data',
+        sectionTitle: i18n.t('genericComponents:DataSection'),
         items: [
           {
-            label: 'Data written',
+            label: i18n.t('genericComponents:DataWritten'),
             value: periodBreakdownData?.disk?.dataWritten,
           },
           {
-            label: 'Data read',
+            label: i18n.t('genericComponents:DataRead'),
             value: periodBreakdownData?.disk?.dataRead,
           },
         ],
       },
       {
         key: 'write',
-        sectionTitle: 'Write',
+        sectionTitle: i18n.t('genericComponents:WriteSection'),
         items: [
           {
-            label: 'Highest write speed',
+            label: i18n.t('genericComponents:HighestWriteSpeed'),
             value: periodBreakdownData?.disk?.highestWriteSpeed,
           },
           {
-            label: 'Lowest write speed',
+            label: i18n.t('genericComponents:LowestWriteSpeed'),
             value: periodBreakdownData?.disk?.lowestWriteSpeed,
           },
           {
-            label: 'Average write speed',
+            label: i18n.t('genericComponents:AverageWriteSpeed'),
             value: periodBreakdownData?.disk?.averageWriteSpeed,
           },
         ],
       },
       {
         key: 'read',
-        sectionTitle: 'Read',
+        sectionTitle: i18n.t('genericComponents:ReadSection'),
         items: [
           {
-            label: 'Highest read speed',
+            label: i18n.t('genericComponents:HighestReadSpeed'),
             value: periodBreakdownData?.disk?.highestReadSpeed,
           },
           {
-            label: 'Lowest read speed',
+            label: i18n.t('genericComponents:LowestReadSpeed'),
             value: periodBreakdownData?.disk?.lowestReadSpeed,
           },
           {
-            label: 'Average read speed',
+            label: i18n.t('genericComponents:AverageReadSpeed'),
             value: periodBreakdownData?.disk?.averageReadSpeed,
           },
         ],

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
 import { IconId } from '../../../assets/images/icons';
 import { SYNC_STATUS } from '../consts';
@@ -59,53 +60,55 @@ export const MetricTypes = ({
   let titleText = '';
   let labelText = '';
 
+  const { t: g } = useTranslation('genericComponents');
+
   const processStatus = () => {
     let statusColorStyle;
     let icon = null;
     switch (statsValue) {
       case SYNC_STATUS.UPDATING:
         statusColorStyle = updating;
-        titleText = 'Waiting';
-        labelText = 'Installing update...';
+        titleText = g('Waiting');
+        labelText = g('InstallingUpdate');
         icon = <Icon iconId="updating" />;
         break;
       case SYNC_STATUS.SYNCHRONIZED:
         statusColorStyle = green;
-        titleText = 'Online';
-        labelText = 'Synchronized';
+        titleText = g('Online');
+        labelText = g('Synchronized');
         break;
       case SYNC_STATUS.BLOCKS_BEHIND:
       case SYNC_STATUS.LOW_PEER_COUNT:
         statusColorStyle = yellow;
-        titleText = 'Online';
+        titleText = g('Online');
         labelText =
           statsValue === SYNC_STATUS.BLOCKS_BEHIND
-            ? 'Blocks behind'
-            : 'Low Peer Count';
+            ? g('BlocksBehind')
+            : g('LowPeerCount');
         break;
       case SYNC_STATUS.ERROR:
         statusColorStyle = red;
-        titleText = 'Error';
-        labelText = 'Error occured';
+        titleText = g('Error');
+        labelText = g('ErrorOcurred');
         break;
       case SYNC_STATUS.NO_NETWORK:
         statusColorStyle = red;
-        titleText = 'Offline';
-        labelText = 'No Network';
+        titleText = g('Offline');
+        labelText = g('NoNetwork');
         break;
       case SYNC_STATUS.CATCHING_UP:
       case SYNC_STATUS.INITIALIZING:
         statusColorStyle = sync;
-        titleText = 'Syncing';
+        titleText = g('Syncing');
         labelText =
           statsValue === SYNC_STATUS.CATCHING_UP
-            ? 'Catching up...'
-            : 'In progress...';
+            ? g('CatchingUp')
+            : g('InProgress');
         icon = <Icon iconId="syncing" />;
         break;
       case SYNC_STATUS.STOPPED:
         statusColorStyle = stopped;
-        titleText = 'Stopped';
+        titleText = g('Stopped');
         icon = <Icon iconId="stop" />;
         break;
       default:
@@ -122,8 +125,8 @@ export const MetricTypes = ({
       case 'currentBlock':
         iconId = 'slots';
         titleText = `${(statsValue || 0).toLocaleString()}`;
-        labelText = `Last synced ${
-          rpcTranslation === 'eth-l1-beacon' ? 'slot' : 'block'
+        labelText = `${g('LastSynced')} ${
+          rpcTranslation === 'eth-l1-beacon' ? g('Slot') : g('Block')
         }`;
         break;
       case 'peers':
@@ -132,7 +135,7 @@ export const MetricTypes = ({
         if (statsValue === undefined) {
           titleText = `${0}`;
         }
-        labelText = 'Peers connected';
+        labelText = g('PeersConnected');
         break;
       case 'memoryUsagePercent':
         if (typeof statsValue === 'number') {
@@ -150,7 +153,7 @@ export const MetricTypes = ({
         } else {
           titleText = `${statsValue}%`;
         }
-        labelText = 'CPU load';
+        labelText = g('CPULoad');
         break;
       case 'diskUsageGBs':
         // if (typeof statsValue === 'number' && statsValue >= 1000000) {
@@ -170,7 +173,7 @@ export const MetricTypes = ({
           titleText = `${statsValue} GB`;
         }
         iconId = 'disks';
-        labelText = 'Disk usage';
+        labelText = g('DiskUsage');
         break;
       default:
         break;

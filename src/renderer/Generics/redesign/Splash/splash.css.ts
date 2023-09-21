@@ -10,6 +10,7 @@ export const container = style({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  backgroundColor: vars.color.background,
 });
 
 export const contentContainer = style({
