@@ -1,6 +1,7 @@
 import electron from '../../electronGlobal';
 import AlphaBuild from '../AlphaBuild/AlphaBuild';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
+import { modalRoutes } from './modalUtils';
 
 type Props = {
   modalOnClose: () => void;
@@ -17,6 +18,7 @@ export const AlphaBuildModal = ({ modalOnClose }: Props) => {
 
   return (
     <Modal
+      route={modalRoutes.alphaBuild}
       modalType="info"
       backButtonEnabled={false}
       buttonSaveLabel={buttonSaveLabel}

@@ -41,7 +41,7 @@ export interface NodeIconProps {
  * Primary UI component for user interaction
  */
 export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
-  const { t } = useTranslation('genericComponents');
+  const { t: g } = useTranslation('genericComponents');
 
   let sizeStyle = mediumStyle;
   if (size === 'small') {
@@ -95,7 +95,7 @@ export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
       >
         <img
           src={NODE_ICONS[iconId as NodeIconId] || undefined}
-          alt={t('NodeIcon')}
+          alt={g('NodeIcon')}
           className={imageStyle}
         />
       </div>

@@ -28,7 +28,7 @@ export const Alert = ({
   acceptType,
   acceptText,
 }: Props) => {
-  const { t } = useTranslation('genericComponents');
+  const { t: g } = useTranslation('genericComponents');
 
   const escFunction = useCallback(
     (event: { key: string }) => {
@@ -48,7 +48,7 @@ export const Alert = ({
     };
   }, [escFunction]);
 
-  const acceptTextDisplay = acceptText ?? t('Confirm');
+  const acceptTextDisplay = acceptText ?? g('Confirm');
   const acceptTypeDisplay = acceptType ?? 'primary';
 
   return (
@@ -69,7 +69,7 @@ export const Alert = ({
         </div>
 
         <div className={actionButtonsContainer}>
-          <Button label={t('Cancel')} onClick={onClickCloseButton} />
+          <Button label={g('Cancel')} onClick={onClickCloseButton} />
           <Button
             label={acceptTextDisplay}
             type={acceptTypeDisplay}

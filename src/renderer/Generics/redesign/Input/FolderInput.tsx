@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Button from '../Button/Button';
 import {
   container,
@@ -32,6 +33,7 @@ const FolderInput = ({
   disabled,
   onClickChange,
 }: FolderInputProps) => {
+  const { t: g } = useTranslation('genericComponents');
   return (
     <div className={container}>
       <div className={pathAndChangeContainer}>
@@ -40,7 +42,7 @@ const FolderInput = ({
         </div>
         <Button
           size="small"
-          label="Change..."
+          label={g('Change')}
           disabled={!onClickChange || disabled}
           onClick={onClickChange}
         />

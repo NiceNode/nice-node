@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
+import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import { setModalState } from '../../state/modal';
 import electron from '../../electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
@@ -70,6 +71,13 @@ const NodePackageScreen = () => {
       pollingInterval,
     },
   );
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
+    pollingInterval: 15000,
+  });
+  let isPodmanRunning = true;
+  if (qIsPodmanRunning && !qIsPodmanRunning.fetching) {
+    isPodmanRunning = qIsPodmanRunning.data;
+  }
 
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
@@ -413,12 +421,11 @@ export interface ClientProps {
   // todo: use ContentMultiClient
   // return <ContentSingleClient {...nodeContent} />;
   return (
-    <div>
-      <ContentMultipleClients
-        clients={sFormattedServices}
-        nodeContent={nodePackageContent}
-      />
-    </div>
+    <ContentMultipleClients
+      clients={sFormattedServices}
+      nodeContent={nodePackageContent}
+      isPodmanRunning={isPodmanRunning}
+    />
   );
 };
 export default NodePackageScreen;

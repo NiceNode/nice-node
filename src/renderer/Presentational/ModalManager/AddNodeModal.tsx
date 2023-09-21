@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodePackageId } from '../../state/node';
@@ -20,7 +19,6 @@ type Props = {
 };
 
 export const AddNodeModal = ({ modalOnClose }: Props) => {
-  const { t } = useTranslation();
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const [sSelectedNodeSpec, setSelectedNodeSpec] =
     useState<NodeSpecification>();
@@ -28,12 +26,16 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     useState<boolean>(false);
   const [sIsPodmanRunning, setIsPodmanRunning] = useState<boolean>(false);
   const [step, setStep] = useState(0);
+  const { t } = useTranslation();
+  const { t: g } = useTranslation('genericComponents');
 
   useEffect(() => {
     reportEvent('OpenAddNodeModal');
   }, []);
 
-  const qIsPodmanRunning = useGetIsPodmanRunningQuery();
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
+    pollingInterval: 15000,
+  });
   const isPodmanRunning = qIsPodmanRunning?.data;
 
   const dispatch = useAppDispatch();
@@ -76,8 +78,8 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
 
   const startNode =
     (step === 2 || step === 3) && (isPodmanRunning || sIsPodmanRunning);
-  const buttonSaveLabel = startNode ? 'Start node' : 'Continue';
-  const buttonCancelLabel = step === 0 ? 'Cancel' : 'Back';
+  const buttonSaveLabel = startNode ? t('StartNode') : t('Continue');
+  const buttonCancelLabel = step === 0 ? g('Cancel') : t('Back');
   const buttonSaveVariant = startNode ? 'icon-left' : 'text';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {

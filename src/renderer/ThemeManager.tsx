@@ -7,6 +7,7 @@ import { useGetSettingsQuery } from './state/settingsService';
 import { ThemeSetting } from './Presentational/Preferences/Preferences';
 import { reportEvent } from './events/reportEvent';
 import { NNEvent } from './events/events';
+import { background } from './themeManager.css';
 
 type Props = {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ interface MetaElement extends HTMLMetaElement {
 const ThemeManager = ({ children }: Props) => {
   const qSettings = useGetSettingsQuery();
   const [sIsDarkTheme, setIsDarkTheme] = useState<boolean>();
+  const [platform, setPlatform] = useState<string>('');
 
   const handleColorSchemeChange = (colorScheme: ThemeSetting) => {
     const meta = document.querySelector(
@@ -46,6 +48,7 @@ const ThemeManager = ({ children }: Props) => {
         setIsDarkTheme(osIsDarkMode);
         handleColorSchemeChange(osIsDarkMode ? 'dark' : 'light');
       }
+      setPlatform(settingsData.osPlatform || '');
     }
   }, [qSettings.data]);
 
@@ -95,7 +98,11 @@ const ThemeManager = ({ children }: Props) => {
   return (
     <div
       id="onBoarding"
-      className={sIsDarkTheme ? darkTheme : lightTheme}
+      className={[
+        background,
+        platform,
+        sIsDarkTheme ? darkTheme : lightTheme,
+      ].join(' ')}
       style={{
         display: 'flex',
         flexDirection: 'column',
