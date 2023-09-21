@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   container,
   title,
@@ -14,19 +15,22 @@ export interface UpdateCalloutProps {
 }
 
 export const UpdateCallout = ({ onClick }: UpdateCalloutProps) => {
+  const { t: g } = useTranslation('genericComponents');
   const onInstallClick = () => {
     onClick();
     console.log('install action!');
   };
   return (
     <div className={container}>
-      <div className={title}>Update your client</div>
+      <div className={title}>{g('UpdateClientDescription')}</div>
       <div className={description}>
-        Nimbus v22.8.1 has been downloaded and is ready to install.
+        {g('UpdateClientDescription', {
+          client: 'test',
+        })}
       </div>
       <div className={link}>
         <ExternalLink
-          text="View release notes"
+          text={g('ViewReleaseNotes')}
           url="https://docs.docker.com/desktop/#download-and-install"
         />
       </div>
@@ -34,11 +38,11 @@ export const UpdateCallout = ({ onClick }: UpdateCalloutProps) => {
         <Button
           type="primary"
           wide
-          label="Install Update"
+          label={g('InstallUpdate')}
           size="small"
           onClick={onInstallClick}
         />
-        <Button wide label="Skip" size="small" onClick={onClick} />
+        <Button wide label={g('Skip')} size="small" onClick={onClick} />
       </div>
     </div>
   );

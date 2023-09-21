@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodePackageId } from '../../state/node';
@@ -20,7 +19,6 @@ type Props = {
 };
 
 export const AddNodeModal = ({ modalOnClose }: Props) => {
-  const { t } = useTranslation();
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const [sSelectedNodeSpec, setSelectedNodeSpec] =
     useState<NodeSpecification>();
@@ -28,12 +26,16 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     useState<boolean>(false);
   const [sIsPodmanRunning, setIsPodmanRunning] = useState<boolean>(false);
   const [step, setStep] = useState(0);
+  const { t } = useTranslation();
+  const { t: g } = useTranslation('genericComponents');
 
   useEffect(() => {
     reportEvent('OpenAddNodeModal');
   }, []);
 
-  const qIsPodmanRunning = useGetIsPodmanRunningQuery();
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
+    pollingInterval: 15000,
+  });
   const isPodmanRunning = qIsPodmanRunning?.data;
 
   const dispatch = useAppDispatch();
@@ -76,22 +78,21 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
 
   const startNode =
     (step === 2 || step === 3) && (isPodmanRunning || sIsPodmanRunning);
-  const buttonSaveLabel = startNode ? 'Start node' : 'Continue';
-  const buttonCancelLabel = step === 0 ? 'Cancel' : 'Back';
+  const buttonSaveLabel = startNode ? t('StartNode') : t('Continue');
+  const buttonCancelLabel = step === 0 ? g('Cancel') : t('Back');
   const buttonSaveVariant = startNode ? 'icon-left' : 'text';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
     const {
       node,
-      executionClient,
-      consensusClient,
+      clientSelections,
       storageLocation,
       nodeLibrary,
       nodePackageLibrary,
     } = updatedConfig || (modalConfig as ModalConfig);
 
     console.log('AddNodeModal modalOnSaveConfig(updatedConfig)', updatedConfig);
-    // todo: add logic for Node change (ethereum, base, etc.)
+    // Mostly duplicate code with AddNodeStepper.addNodes()
     let nodePackageSpec: NodePackageSpecification;
     if (nodePackageLibrary && node) {
       nodePackageSpec = nodePackageLibrary?.[node];
@@ -99,43 +100,36 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       console.error('nodePackageLibrary, node: ', nodePackageLibrary, node);
       throw new Error('No Node Package Spec found for the selected node');
     }
-    let services: AddNodePackageNodeService[] = [];
-    // todo: take nodeSpecId and parse out the node spec from the library
-    // use that to create the services array (todo: this should be done from selections screen)
-    // Node Selections logic
-    let ecNodeSpec;
-    let ccNodeSpec;
-    if (nodeLibrary && executionClient && consensusClient) {
-      ecNodeSpec = nodeLibrary?.[executionClient];
-      ccNodeSpec =
-        nodeLibrary?.[consensusClient] ??
-        nodeLibrary?.[`${consensusClient}-beacon`];
-      services = [
-        {
-          serviceId: 'executionClient',
-          serviceName: 'Execution Client',
-          spec: ecNodeSpec,
-        },
-        {
-          serviceId: 'consensusClient',
-          serviceName: 'Consensus Client',
-          spec: ccNodeSpec,
-        },
-      ];
+    const services: AddNodePackageNodeService[] = [];
+    if (nodeLibrary && clientSelections) {
+      // eslint-disable-next-line
+      for (const [serviceId, selectOption] of Object.entries(
+        clientSelections,
+      )) {
+        console.log(`${serviceId}: ${selectOption}`);
+        const clientId = selectOption.value;
+        const serviceNodeSpec =
+          nodeLibrary?.[clientId] ?? nodeLibrary?.[`${clientId}-beacon`];
+        if (!serviceNodeSpec) {
+          console.error(
+            'No service node spec found when finishing add node flow.',
+            serviceId,
+            clientId,
+          );
+          throw new Error(
+            'No service node spec found when finishing add node flow.',
+          );
+        }
+        const serviceDefinition = nodePackageSpec.execution.services.find(
+          (service) => service.serviceId === serviceId,
+        );
+        services.push({
+          serviceId,
+          serviceName: serviceDefinition?.name ?? serviceId,
+          spec: serviceNodeSpec,
+        });
+      }
     }
-
-    if (!ecNodeSpec || !ccNodeSpec) {
-      throw new Error('ecNodeSpec or ccNodeSpec is undefined');
-    }
-
-    // eslint-disable-next-line no-case-declarations
-    // TODO: call back-end addNode(nodeSpec (eth or base), nodeSelections (ec & cc), nodeSettings (storageLocation, network))
-    // const { ecNode, ccNode } = await electron.addEthereumNode(
-    //   ecNodeSpec,
-    //   ccNodeSpec,
-    //   { storageLocation },
-    // );
-    // todo: loop over service selections by the user. for now hardcode ec & cc selections
     const { node: nodePackage } = await electron.addNodePackage(
       nodePackageSpec,
       services,

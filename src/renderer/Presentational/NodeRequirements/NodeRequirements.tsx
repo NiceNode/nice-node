@@ -59,7 +59,9 @@ const NodeRequirements = ({
 
   return (
     <div className={container}>
-      {type !== 'modal' && <div className={titleFont}>Node Requirements</div>}
+      {type !== 'modal' && (
+        <div className={titleFont}>{t('NodeRequirements')}</div>
+      )}
       <div className={descriptionFont}>
         {nodeRequirements?.description ? (
           nodeRequirements.description

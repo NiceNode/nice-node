@@ -91,10 +91,12 @@ export type NodeSpecification = {
   specId: string;
   version: string;
   displayName: string;
+  displayTagline?: string;
   execution: NodeExecution;
   systemRequirements?: SystemRequirements;
   rpcTranslation?: NiceNodeRpcTranslation;
   configTranslation?: ConfigTranslationMap;
+  minorityClient?: boolean;
   nodeReleasePhase?: 'alpha' | 'beta';
   // rpcTranslation?: NiceNodeRpcTranslation;
   // todo: define a standard for translating rpc calls for common node data
@@ -105,7 +107,7 @@ export type NodeSpecification = {
   documentation?: { default?: string; docker?: string; binary?: string };
 };
 
-type NodePackageNodeServiceSpec = {
+export type NodePackageNodeServiceSpec = {
   serviceId: string;
   name: string;
   nodeOptions: string[] | NodeSpecification[];
@@ -137,5 +139,6 @@ export type NodePackageSpecification = {
   iconUrl?: string;
   category?: string;
   documentation?: { default?: string; docker?: string; binary?: string };
+  addNodeDescription?: string;
   description?: string;
 };
