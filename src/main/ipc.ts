@@ -107,17 +107,7 @@ export const initialize = () => {
   ipcMain.handle('getNodes', getNodes);
   ipcMain.handle('getUserNodes', getUserNodes);
   ipcMain.handle('getUserNodePackages', getUserNodePackages);
-  // ipcMain.handle(
-  //   'addEthereumNode',
-  //   (
-  //     _event,
-  //     ecNodeSpec: NodeSpecification,
-  //     ccNodeSpec: NodeSpecification,
-  //     settings: { storageLocation?: string },
-  //   ): Promise<{ ecNode: Node; ccNode: Node }> => {
-  //     return addEthereumNode(ecNodeSpec, ccNodeSpec, settings);
-  //   },
-  // );
+
   ipcMain.handle(
     'addNodePackage',
     async (

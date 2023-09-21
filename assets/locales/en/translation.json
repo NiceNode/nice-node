@@ -1,8 +1,9 @@
 {
   "AddYourFirstNode": "Add your first node",
   "AddYourFirstNodeDescription": "Node requirements and settings come next. Also, you can add more nodes later!",
+  "Add Node": "Add Node",
+  "NodeSettings": "Node settings",
   "AddNode": "Add Node",
-  "NodeSettings": "Node Settings",
   "StopeNodeToChangeSettings": "The node must be stopped to make changes",
   "RemoveNode": "Remove node",
   "RemoveThisNode": "Remove this node",

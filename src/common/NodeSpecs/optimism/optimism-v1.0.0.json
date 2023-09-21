@@ -1,7 +1,7 @@
 {
-  "specId": "base",
+  "specId": "optimism",
   "version": "1.0.0",
-  "displayName": "Base",
+  "displayName": "Optimism",
   "execution": {
     "executionTypes": ["nodePackage"],
     "services" : [{
@@ -62,9 +62,9 @@
     }
   },
   "iconUrl": "https://ethereum.png",
-  "addNodeDescription" : "Decentralization and collaboration are critical for the longer-term success of Base and scaling Ethereum. That’s why we are working with OP Labs and the Optimism Collective on a plan to scale Ethereum in a decentralized way.",
-  "description": "Base is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
+  "addNodeDescription" : "OP Mainnet is a fast, stable, and scalable L2 blockchain built by Ethereum developers, for Ethereum developers. Built as a minimal extension to existing Ethereum software, OP Mainnet's EVM-equivalent architecture scales your Ethereum apps without surprises.",
+  "description": "Optimism is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
   "documentation" : {
-    "default": "https://docs.base.org/guides/run-a-base-node/"
+    "default": "https://docs.optimism.org/guides/run-a-optimism-node/"
   }
 }

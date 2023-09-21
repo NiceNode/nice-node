@@ -23,6 +23,7 @@
     }
   },
   "category": "L1/ExecutionClient",
+  "minorityClient": true,
   "rpcTranslation": "eth-l1",
   "systemRequirements": {
     "documentationUrl": "https://besu.hyperledger.org/en/stable/public-networks/get-started/system-requirements/",

@@ -72,9 +72,11 @@ const ContentMultipleClients = (props: {
     [nodeContent],
   );
 
-  if (!clients || clients.length < 2) {
-    // return <>2 or more clients required</>;
-    return <></>; // message above flashes
+  if (!clients) {
+    return <></>;
+  }
+  if (clients.length < 2) {
+    return <>No node found</>;
   }
 
   const clClient = clients.find((client) => client.nodeType === 'consensus');
@@ -117,10 +119,10 @@ const ContentMultipleClients = (props: {
     return null;
   };
 
-  // TODO: refactor this out so that it can be shared with multiple and single
   const getNodeOverview = () => {
     // useEffect, used only in Header and Metrics
 
+    // TODO: loop over all node's services/clients for missing statuses in nodeOverview
     // if (clClient && elClient) {
     //   // Ethereum Node
     //   nodeOverview = {

@@ -118,6 +118,9 @@ export const common: { color: { [key: string]: string } } = {
     green: 'rgba(62, 187, 100, 1)',
     yellow: 'rgba(251, 146, 65, 1)',
     red: 'rgba(235, 83, 76, 1)',
+    farcaster: '#855DCD',
+    base: '#0052FF',
+    optimism: '#FF0420',
   },
 };
 

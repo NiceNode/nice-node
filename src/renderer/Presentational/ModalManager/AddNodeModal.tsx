@@ -85,15 +85,14 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
     const {
       node,
-      executionClient,
-      consensusClient,
+      clientSelections,
       storageLocation,
       nodeLibrary,
       nodePackageLibrary,
     } = updatedConfig || (modalConfig as ModalConfig);
 
     console.log('AddNodeModal modalOnSaveConfig(updatedConfig)', updatedConfig);
-    // todo: add logic for Node change (ethereum, base, etc.)
+    // Mostly duplicate code with AddNodeStepper.addNodes()
     let nodePackageSpec: NodePackageSpecification;
     if (nodePackageLibrary && node) {
       nodePackageSpec = nodePackageLibrary?.[node];
@@ -101,43 +100,36 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       console.error('nodePackageLibrary, node: ', nodePackageLibrary, node);
       throw new Error('No Node Package Spec found for the selected node');
     }
-    let services: AddNodePackageNodeService[] = [];
-    // todo: take nodeSpecId and parse out the node spec from the library
-    // use that to create the services array (todo: this should be done from selections screen)
-    // Node Selections logic
-    let ecNodeSpec;
-    let ccNodeSpec;
-    if (nodeLibrary && executionClient && consensusClient) {
-      ecNodeSpec = nodeLibrary?.[executionClient];
-      ccNodeSpec =
-        nodeLibrary?.[consensusClient] ??
-        nodeLibrary?.[`${consensusClient}-beacon`];
-      services = [
-        {
-          serviceId: 'executionClient',
-          serviceName: 'Execution Client',
-          spec: ecNodeSpec,
-        },
-        {
-          serviceId: 'consensusClient',
-          serviceName: 'Consensus Client',
-          spec: ccNodeSpec,
-        },
-      ];
+    const services: AddNodePackageNodeService[] = [];
+    if (nodeLibrary && clientSelections) {
+      // eslint-disable-next-line
+      for (const [serviceId, selectOption] of Object.entries(
+        clientSelections,
+      )) {
+        console.log(`${serviceId}: ${selectOption}`);
+        const clientId = selectOption.value;
+        const serviceNodeSpec =
+          nodeLibrary?.[clientId] ?? nodeLibrary?.[`${clientId}-beacon`];
+        if (!serviceNodeSpec) {
+          console.error(
+            'No service node spec found when finishing add node flow.',
+            serviceId,
+            clientId,
+          );
+          throw new Error(
+            'No service node spec found when finishing add node flow.',
+          );
+        }
+        const serviceDefinition = nodePackageSpec.execution.services.find(
+          (service) => service.serviceId === serviceId,
+        );
+        services.push({
+          serviceId,
+          serviceName: serviceDefinition?.name ?? serviceId,
+          spec: serviceNodeSpec,
+        });
+      }
     }
-
-    if (!ecNodeSpec || !ccNodeSpec) {
-      throw new Error('ecNodeSpec or ccNodeSpec is undefined');
-    }
-
-    // eslint-disable-next-line no-case-declarations
-    // TODO: call back-end addNode(nodeSpec (eth or base), nodeSelections (ec & cc), nodeSettings (storageLocation, network))
-    // const { ecNode, ccNode } = await electron.addEthereumNode(
-    //   ecNodeSpec,
-    //   ccNodeSpec,
-    //   { storageLocation },
-    // );
-    // todo: loop over service selections by the user. for now hardcode ec & cc selections
     const { node: nodePackage } = await electron.addNodePackage(
       nodePackageSpec,
       services,

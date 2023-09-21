@@ -28,7 +28,3 @@ export const sectionFont = style({
   fontWeight: 600,
   marginBottom: 0,
 });
-
-export const descriptionContainer = style({
-  marginBottom: 32,
-});
