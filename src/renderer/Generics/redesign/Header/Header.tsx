@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { setModalState } from '../../../state/modal';
 import { useAppDispatch } from '../../../state/hooks';
 import Button, { ButtonProps } from '../Button/Button';
@@ -21,10 +22,14 @@ import {
   menuButtonContainer,
 } from './header.css';
 
+type HeaderProps = {
+  nodeOverview: NodeOverviewProps;
+  isPodmanRunning: boolean;
+};
 /**
  * Primary UI component for user interaction
  */
-export const Header = (props: NodeOverviewProps) => {
+export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
   const {
     name,
     displayName,
@@ -34,7 +39,7 @@ export const Header = (props: NodeOverviewProps) => {
     status,
     version,
     onAction,
-  } = props;
+  } = nodeOverview;
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
   const [isSettingsDisplayed, setIsSettingsDisplayed] =
@@ -43,20 +48,23 @@ export const Header = (props: NodeOverviewProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const { t } = useTranslation();
+  const { t: g } = useTranslation('genericComponents');
+
   let startStopButtonProps: ButtonProps = {
     label: '',
     iconId: undefined,
     onClick: () => {},
   };
   const startButtonProps: ButtonProps = {
-    label: 'Resume',
+    label: g('Resume'),
     iconId: 'play',
     onClick: () => {
       if (onAction) onAction('start');
     },
   };
   const stopButtonProps: ButtonProps = {
-    label: 'Stop',
+    label: g('Stop'),
     iconId: 'stop',
     onClick: () => {
       if (onAction) onAction('stop');
@@ -71,7 +79,7 @@ export const Header = (props: NodeOverviewProps) => {
   let logsButtonProps: ButtonProps | undefined;
   if (screenType !== 'nodePackage') {
     logsButtonProps = {
-      label: 'Logs',
+      label: t('Logs'),
       iconId: 'logs',
       onClick: () => {
         if (onAction) onAction('logs');
@@ -101,7 +109,7 @@ export const Header = (props: NodeOverviewProps) => {
             }}
           >
             <Button
-              label="Update Available"
+              label={g('UpdateAvailable')}
               type="primary"
               iconId="down"
               variant="icon-right"
@@ -146,6 +154,7 @@ export const Header = (props: NodeOverviewProps) => {
             {...startStopButtonProps}
             variant="icon-left"
             size="small"
+            disabled={isPodmanRunning === false}
             type={
               startStopButtonProps.iconId === 'play' ? 'primary' : 'secondary'
             }
@@ -188,7 +197,7 @@ export const Header = (props: NodeOverviewProps) => {
               <Menu width={156}>
                 {screenType === 'client' && (
                   <MenuItem
-                    text="Node Settings"
+                    text={g('NodeSettings')}
                     onClick={() => {
                       dispatch(
                         setModalState({
@@ -201,7 +210,7 @@ export const Header = (props: NodeOverviewProps) => {
                 )}
                 {screenType === 'nodePackage' && (
                   <MenuItem
-                    text="Remove Node"
+                    text={g('RemoveNode')}
                     onClick={() => {
                       dispatch(
                         setModalState({

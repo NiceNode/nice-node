@@ -11,6 +11,7 @@ export const container = style({
       width: 560,
     },
   },
+  backgroundColor: vars.color.background,
 });
 
 export const componentContainer = style({

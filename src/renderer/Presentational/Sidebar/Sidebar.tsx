@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import { setModalState } from '../../state/modal';
 import { useAppDispatch } from '../../state/hooks';
@@ -31,97 +33,107 @@ export interface SidebarProps {
   notifications: NotificationItemProps[];
   onClickStartPodman: () => void;
   onClickInstallPodman: () => void;
+  platform?: string;
 }
 
-const Sidebar = ({
-  sUserNodePackages,
-  updateAvailable,
-  offline,
-  podmanStopped,
-  podmanInstalled,
-  selectedNodePackageId,
-  notifications,
-  onClickStartPodman,
-  onClickInstallPodman,
-}: SidebarProps) => {
-  const dispatch = useAppDispatch();
-
-  const itemListData: { iconId: IconId; label: string; count?: number }[] = [
+const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
+  (
     {
-      iconId: 'bell',
-      label: 'Notifications',
-      count: notifications?.length,
-    },
-    {
-      iconId: 'add',
-      label: 'Add Node',
-    },
-    {
-      iconId: 'preferences',
-      label: 'Preferences',
-    },
-    {
-      iconId: 'health',
-      label: 'System Monitor',
-    },
-  ];
+      sUserNodePackages,
+      updateAvailable,
+      offline,
+      podmanStopped,
+      podmanInstalled,
+      selectedNodePackageId,
+      notifications,
+      onClickStartPodman,
+      onClickInstallPodman,
+      platform,
+    }: SidebarProps,
+    ref,
+  ) => {
+    const dispatch = useAppDispatch();
+    const { t } = useTranslation();
 
-  // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
-  // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
-  //   const node = sUserNodes.nodes[nodeId];
-  //   // TODO: add validator logic here eventually
-  //   if (
-  //     node.spec.category === 'L1/ExecutionClient' ||
-  //     node.spec.category === 'L1/ConsensusClient/BeaconNode'
-  //   ) {
-  //     nodeListObject.nodeService.push(node);
-  //   } else {
-  //     nodeListObject.singleClients.push(node);
-  //   }
-  // });
+    const itemListData: { iconId: IconId; label: string; count?: number }[] = [
+      {
+        iconId: 'bell',
+        label: t('Notifications'),
+        count: notifications?.length,
+      },
+      {
+        iconId: 'add',
+        label: t('AddNode'),
+      },
+      {
+        iconId: 'preferences',
+        label: t('Preferences'),
+      },
+      {
+        iconId: 'health',
+        label: t('SystemMonitor'),
+      },
+    ];
 
-  const onClickBanner = () => {
-    if (podmanInstalled) {
-      onClickStartPodman();
-    } else {
-      onClickInstallPodman();
-    }
-  };
+    // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
+    // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
+    //   const node = sUserNodes.nodes[nodeId];
+    //   // TODO: add validator logic here eventually
+    //   if (
+    //     node.spec.category === 'L1/ExecutionClient' ||
+    //     node.spec.category === 'L1/ConsensusClient/BeaconNode'
+    //   ) {
+    //     nodeListObject.nodeService.push(node);
+    //   } else {
+    //     nodeListObject.singleClients.push(node);
+    //   }
+    // });
 
-  const renderBanners = () => {
-    // TODO: integrate this with code below
-    if (podmanStopped || !podmanInstalled) {
-      return <Banner podmanStopped onClick={onClickBanner} />;
-    }
+    const onClickBanner = () => {
+      if (podmanInstalled) {
+        onClickStartPodman();
+      } else {
+        onClickInstallPodman();
+      }
+    };
+
+    const banners = [];
     const bannerProps = {
       updateAvailable,
       offline,
     };
-    return Object.keys(bannerProps).map((key) => {
+    Object.keys(bannerProps).forEach((key) => {
       // eslint-disable-next-line react/destructuring-assignment
       if (bannerProps[key as keyof typeof bannerProps]) {
         // ^ not sure if this is correct
-        return (
+        banners.push(
           <Banner
             offline={false}
             updateAvailable={false}
             {...{ [key]: true }}
-          />
+          />,
         );
       }
-      return null;
     });
-  };
-  const navigate = useNavigate();
+    if (!podmanInstalled || podmanStopped) {
+      banners.push(
+        <Banner
+          podmanStopped={podmanStopped}
+          podmanInstalled={podmanInstalled}
+          onClick={onClickBanner}
+        />,
+      );
+    }
+    const navigate = useNavigate();
 
-  return (
-    <div className={container}>
-      {renderBanners()}
-      <div className={nodeList}>
-        <div className={titleItem}>
-          <SidebarTitleItem title="Nodes" />
-        </div>
-        {/* {nodeListObject.nodeService.length === 2 && (
+    return (
+      <div ref={ref} className={[container, platform].join(' ')}>
+        {banners}
+        <div className={nodeList}>
+          <div className={titleItem}>
+            <SidebarTitleItem title={t('Nodes')} />
+          </div>
+          {/* {nodeListObject.nodeService.length === 2 && (
           <SidebarNodeItem
             iconId="ethereum"
             title="Ethereum node"
@@ -133,57 +145,58 @@ const Sidebar = ({
             }}
           />
         )} */}
-        {sUserNodePackages?.nodeIds.map((nodeId: NodeId) => {
-          const node = sUserNodePackages.nodes[nodeId];
-          return (
-            <SidebarNodeItemWrapper
-              // temp fix
-              id={node.id}
-              node={node}
-              selected={selectedNodePackageId === node.id}
-              onClick={() => {
-                navigate('/main/nodePackage');
-                dispatch(updateSelectedNodePackageId(node.id));
-              }}
-            />
-          );
-        })}
+          {sUserNodePackages?.nodeIds.map((nodeId: NodeId) => {
+            const node = sUserNodePackages.nodes[nodeId];
+            return (
+              <SidebarNodeItemWrapper
+                // temp fix
+                id={node.id}
+                node={node}
+                selected={selectedNodePackageId === node.id}
+                onClick={() => {
+                  navigate('/main/nodePackage');
+                  dispatch(updateSelectedNodePackageId(node.id));
+                }}
+              />
+            );
+          })}
+        </div>
+        <div className={itemList}>
+          {itemListData.map((item) => {
+            return (
+              <SidebarLinkItem
+                key={item.label}
+                iconId={item.iconId}
+                label={item.label}
+                count={item.count}
+                onClick={() => {
+                  console.log('sidebar link item clicked: ', item.iconId);
+                  if (item.iconId === 'add') {
+                    dispatch(
+                      setModalState({
+                        isModalOpen: true,
+                        screen: { route: 'addNode', type: 'modal' },
+                      }),
+                    );
+                  } else if (item.iconId === 'preferences') {
+                    dispatch(
+                      setModalState({
+                        isModalOpen: true,
+                        screen: { route: 'preferences', type: 'modal' },
+                      }),
+                    );
+                  } else if (item.iconId === 'bell') {
+                    navigate('/main/notification');
+                  } else if (item.iconId === 'health') {
+                    navigate('/main/system');
+                  }
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
-      <div className={itemList}>
-        {itemListData.map((item) => {
-          return (
-            <SidebarLinkItem
-              key={item.label}
-              iconId={item.iconId}
-              label={item.label}
-              count={item.count}
-              onClick={() => {
-                console.log('sidebar link item clicked: ', item.iconId);
-                if (item.iconId === 'add') {
-                  dispatch(
-                    setModalState({
-                      isModalOpen: true,
-                      screen: { route: 'addNode', type: 'modal' },
-                    }),
-                  );
-                } else if (item.iconId === 'preferences') {
-                  dispatch(
-                    setModalState({
-                      isModalOpen: true,
-                      screen: { route: 'preferences', type: 'modal' },
-                    }),
-                  );
-                } else if (item.iconId === 'bell') {
-                  navigate('/main/notification');
-                } else if (item.iconId === 'health') {
-                  navigate('/main/system');
-                }
-              }}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-};
+    );
+  },
+);
 export default Sidebar;

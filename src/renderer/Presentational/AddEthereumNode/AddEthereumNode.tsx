@@ -124,7 +124,7 @@ const AddEthereumNode = ({
   onChange,
 }: AddEthereumNodeProps) => {
   const { t } = useTranslation();
-  const { t: tGeneric } = useTranslation('genericComponents');
+
   // const [sIsOptionsOpen, setIsOptionsOpen] = useState<boolean>();
   const [sSelectedExecutionClient, setSelectedExecutionClient] =
     useState<SelectOption>(ethereumNodeConfig?.executionClient || ecOptions[0]);
@@ -250,13 +250,13 @@ const AddEthereumNode = ({
           url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
         />
       </div>
-      <p className={sectionFont}>Execution client</p>
+      <p className={sectionFont}>{t('RecommendedExecutionClient')}</p>
       <SpecialSelect
         selectedOption={sSelectedExecutionClient}
         onChange={onChangeEc}
         options={ecOptions}
       />
-      <p className={sectionFont}>Consensus client</p>
+      <p className={sectionFont}>{t('RecommendedConsensusClient')}</p>
       <SpecialSelect
         selectedOption={sSelectedConsensusClient}
         onChange={onChangeCc}
@@ -266,8 +266,8 @@ const AddEthereumNode = ({
       {/* <DropdownLink
         text={`${
           sIsOptionsOpen
-            ? tGeneric('HideAdvancedOptions')
-            : tGeneric('ShowAdvancedOptions')
+            ? g('HideAdvancedOptions')
+            : g('ShowAdvancedOptions')
         }`}
         onClick={() => setIsOptionsOpen(!sIsOptionsOpen)}
         isDown={!sIsOptionsOpen}
@@ -281,7 +281,7 @@ const AddEthereumNode = ({
             width: '100%',
           }}
         >
-          <span style={{ fontWeight: 600 }}>{tGeneric('Network')}</span>{' '}
+          <span style={{ fontWeight: 600 }}>{g('Network')}</span>{' '}
           <div
             style={{
               width: 300,
@@ -301,13 +301,11 @@ const AddEthereumNode = ({
         </div>
       )} */}
       <HorizontalLine />
-      <p className={sectionFont}>{tGeneric('DataLocation')}</p>
-      <p
-        className={captionText}
-      >{`Changing location only supported on Mac & Linux and only locations under /Users/<current-user>/ or /Volumes/`}</p>
+      <p className={sectionFont}>{t('DataLocation')}</p>
+      <p className={captionText}>{t('ChangingLocation')}</p>
       <FolderInput
         // disabled
-        placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
+        placeholder={sNodeStorageLocation ?? t('loadingDotDotDot')}
         freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
         onClickChange={async () => {
           const storageLocationDetails =

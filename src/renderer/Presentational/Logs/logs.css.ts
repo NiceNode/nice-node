@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars, common } from '../theme.css';
+import { vars, common } from '../../Generics/redesign/theme.css';
 
 export const container = style({
   position: 'relative',
@@ -9,14 +9,16 @@ export const container = style({
   display: 'flex',
   flexDirection: 'column',
   flex: 1,
-  paddingTop: '32px', // needed on mac so close logs btn isnt under drag bar
+  background: vars.color.background,
 });
 
-export const logsContainer = style({
+export const logsScroller = style({
   padding: '7px 17px 0px 17px',
   position: 'relative',
   flexGrow: 1,
   overflow: 'auto',
+  display: 'flex',
+  flexDirection: 'column-reverse',
 });
 
 export const filterContainer = style({

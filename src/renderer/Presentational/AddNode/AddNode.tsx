@@ -128,7 +128,7 @@ const AddNode = ({
 
   return (
     <div className={container}>
-      {!modalOnChangeConfig && <div className={titleFont}>{t('AddANode')}</div>}
+      {!modalOnChangeConfig && <div className={titleFont}>{t('AddNode')}</div>}
       <div className={descriptionContainer}>
         <div className={descriptionFont}>
           <>{t('AddNodeDescription')}</>

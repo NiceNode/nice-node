@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,6 +16,7 @@ import {
   useGetExecutionPeersQuery,
   useGetNodeVersionQuery,
 } from '../../state/services';
+import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import ContentSingleClient, {
   SingleNodeContent,
 } from '../ContentSingleClient/ContentSingleClient';
@@ -33,7 +36,7 @@ import { HeaderButton } from '../../Generics/redesign/HeaderButton/HeaderButton'
 let alphaModalRendered = false;
 
 const NodeScreen = () => {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const selectedNode = useAppSelector(selectSelectedNode);
   const qNodeVersion = useGetNodeVersionQuery(
@@ -68,6 +71,14 @@ const NodeScreen = () => {
       pollingInterval,
     },
   );
+
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
+    pollingInterval: 15000,
+  });
+  let isPodmanRunning = true;
+  if (qIsPodmanRunning && !qIsPodmanRunning.fetching) {
+    isPodmanRunning = qIsPodmanRunning.data;
+  }
 
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
@@ -252,14 +263,10 @@ const NodeScreen = () => {
     return (
       <div className={container}>
         <div className={contentContainer}>
-          <div className={titleFont}>No active nodes</div>
-          <div className={descriptionFont}>
-            Add your first node and start verifying the validty of every block
-            of your favourite blockchain. Running a node also helps others to
-            download and update their copies.
-          </div>
+          <div className={titleFont}>{t('NoActiveNodes')}</div>
+          <div className={descriptionFont}>{t('AddFirstNode')}</div>
           <Button
-            label="Add node"
+            label={t('AddNode')}
             variant="icon-left"
             iconId="add"
             type="primary"
@@ -298,7 +305,7 @@ const NodeScreen = () => {
 
   const formatVersion = (version: string | undefined, name: string) => {
     if (!version) {
-      return '';
+      return t('IdentifyingVersion');
     }
     const capitalize = (s: string) =>
       (s && s[0].toUpperCase() + s.slice(1)) || '';
@@ -379,7 +386,7 @@ const NodeScreen = () => {
   };
   console.log('passing content to NodeScreen: ', nodeContent);
   return (
-    <div>
+    <>
       <div className={backButtonContainer}>
         <HeaderButton
           type="left"
@@ -388,9 +395,11 @@ const NodeScreen = () => {
           }}
         />
       </div>
-
-      <ContentSingleClient {...nodeContent} />
-    </div>
+      <ContentSingleClient
+        nodeOverview={nodeContent}
+        isPodmanRunning={isPodmanRunning}
+      />
+    </>
   );
 };
 export default NodeScreen;

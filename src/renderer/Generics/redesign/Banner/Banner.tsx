@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IconId } from 'renderer/assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import {
@@ -21,6 +23,10 @@ export interface BannerProps {
    * Is podman not running?
    */
   podmanStopped?: boolean;
+  /**
+   * Is podman installed
+   */
+  podmanInstalled?: boolean;
   onClick?: () => void;
 }
 
@@ -31,33 +37,54 @@ export const Banner = ({
   offline,
   updateAvailable,
   podmanStopped,
+  podmanInstalled,
   onClick,
 }: BannerProps) => {
-  let iconId: IconId = 'blank';
-  let title = '';
-  let description = '';
-  let internalOnClick = () => {};
-  if (offline) {
-    iconId = 'boltstrike';
-    title = 'Currently offline';
-    description = 'Please reconnect to the internet';
-  } else if (updateAvailable) {
-    iconId = 'download1';
-    title = 'Update available';
-    description = 'New version ready to install';
-    internalOnClick = () => {
-      console.log('update nice node!');
-    };
-  } else if (podmanStopped) {
-    iconId = 'play';
-    title = 'Podman is not running';
-    description = 'Click to start Podman';
-    internalOnClick = () => {
-      console.log('Start Podman!');
-    };
-  }
+  // Use useState to manage description dynamically
+  const [description, setDescription] = useState<string>('');
+  const [iconId, setIconId] = useState<IconId>('blank');
+  const [title, setTitle] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const { t: g } = useTranslation('genericComponents');
+
+  useEffect(() => {
+    if (offline) {
+      setIconId('boltstrike');
+      setTitle(g('CurrentlyOffline'));
+      setDescription(g('PleaseReconnect'));
+    } else if (!podmanInstalled) {
+      setIconId('warningcircle');
+      setTitle(g('PodmanIsNotInstalled'));
+      setDescription(g('ClickToInstallPodman'));
+    } else if (updateAvailable) {
+      setIconId('download1');
+      setTitle(g('UpdateAvailable'));
+      setDescription(g('NewVersionAvailable'));
+    } else if (podmanStopped) {
+      setIconId('play');
+      setTitle(g('PodmanIsNotRunning'));
+      setDescription(g('ClickToStartPodman'));
+    }
+  }, [offline, updateAvailable, podmanStopped, podmanInstalled, g]);
+
   const onClickBanner = () => {
-    internalOnClick();
+    if (isClicked || offline) {
+      return;
+    }
+
+    setIsClicked(true);
+
+    if (!podmanInstalled) {
+      setDescription(g('PodmanInstalling'));
+      setLoading(true);
+    } else if (podmanStopped) {
+      setDescription(g('PodmanLoading'));
+      setLoading(true);
+    } else if (updateAvailable) {
+      console.log('update nice node!');
+    }
+
     if (onClick) {
       onClick();
     }
@@ -72,7 +99,7 @@ export const Banner = ({
       role="button"
       tabIndex={0}
     >
-      <div className={innerContainer}>
+      <div className={[innerContainer, loading ? 'loading' : ''].join(' ')}>
         <Icon iconId={iconId} />
         <div className={textContainer}>
           <div className={titleStyle}>{title}</div>
