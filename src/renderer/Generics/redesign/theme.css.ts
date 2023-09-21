@@ -115,6 +115,7 @@ export const common: { color: { [key: string]: string } } = {
     prysm: '#67B2B8',
     erigon: '#AE793C',
     geth: '#18BC9C',
+    reth: '#18BC9C',
     green: 'rgba(62, 187, 100, 1)',
     yellow: 'rgba(251, 146, 65, 1)',
     red: 'rgba(235, 83, 76, 1)',

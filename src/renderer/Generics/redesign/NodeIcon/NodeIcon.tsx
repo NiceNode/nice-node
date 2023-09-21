@@ -81,8 +81,6 @@ export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
     }
   }
 
-  console.log(iconId);
-
   return (
     <div className={[containerStyle, sizeStyle].join(' ')}>
       {/* https://stackoverflow.com/questions/6040005/relatively-position-an-element-without-it-taking-up-space-in-document-flow */}

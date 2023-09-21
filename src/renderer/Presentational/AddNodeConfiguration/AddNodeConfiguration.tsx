@@ -50,6 +50,7 @@ const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
     title: nodeSpec.displayName,
     info: nodeSpec.displayTagline ?? '',
     minority: nodeSpec.minorityClient ?? false,
+    releasePhase: nodeSpec.nodeReleasePhase,
   };
 };
 

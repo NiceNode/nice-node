@@ -1,0 +1,234 @@
+{
+  "specId": "reth",
+  "version": "1.0.0",
+  "displayName": "Reth",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "execPath": "reth",
+    "input": {
+      "defaultConfig": {
+        "http": "Enabled",
+        "httpCorsDomains": "http://localhost",
+        "syncMode": "full",
+        "httpAddress": "0.0.0.0"
+      },
+      "docker": {
+        "containerVolumePath": "/root/.local/share/reth/db",
+        "raw": "",
+        "forcedRawNodeInput": "node --color never --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/db/jwtsecret --ipcdisable"
+      }
+    },
+    "imageName": "ghcr.io/paradigmxyz/reth"
+  },
+  "category": "L1/ExecutionClient",
+  "minorityClient": true,
+  "nodeReleasePhase": "beta",
+  "rpcTranslation": "eth-l1",
+  "systemRequirements": {
+    "documentationUrl": "https://paradigmxyz.github.io/reth/installation/installation.html#hardware-requirements",
+    "cpu": {
+      "cores": 2
+    },
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage": {
+      "minSizeGBs": 1000,
+      "ssdRequired": true
+    },
+    "internet": {
+      "minDownloadSpeedMbps": 24,
+      "minUploadSpeedMbps": 10
+    },
+    "docker": {
+      "required": true
+    }
+  },
+  "configTranslation": {
+    "http": {
+      "displayName": "RPC HTTP connections",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--http"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Enabled",
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
+    },
+    "webSockets": {
+      "displayName": "RPC WebSocket connections",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--ws"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
+    },
+    "httpApis": {
+      "displayName": "Enabled HTTP APIs",
+      "cliConfigPrefix": "--http.api ",
+      "defaultValue": ["eth", "net", "web3"],
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "eth",
+            "config": "eth"
+          },
+          {
+            "value": "net",
+            "config": "net"
+          },
+          {
+            "value": "web3",
+            "config": "web3"
+          },
+          {
+            "value": "debug",
+            "config": "debug"
+          },
+
+          {
+            "value": "personal",
+            "config": "personal"
+          },
+          {
+            "value": "admin",
+            "config": "admin"
+          },
+          {
+            "value": "ots",
+            "config": "ots"
+          },
+          {
+            "value": "rpc",
+            "config": "rpc"
+          },
+          {
+            "value": "reth",
+            "config": "reth"
+          },
+          {
+            "value": "trace",
+            "config": "trace"
+          },
+          {
+            "value": "txpool",
+            "config": "txpool"
+          }
+        ]
+      }
+    },
+    "httpCorsDomains": {
+      "displayName": "Change where the node accepts http connections (use comma separated urls)",
+      "cliConfigPrefix": "--http.corsdomain ",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "syncMode": {
+      "displayName": "Node synchronization mode",
+      "infoDescription": "Blockchain sync mode (\"archive\" or \"full\") (default: full). The sync mode that was chosen when first running a node can not be changed after the initial sync. Example: Turning Archive into Pruned, or Pruned into Full is not supported.",
+      "category": "Syncronization",
+      "cliConfigPrefix": "",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "full",
+            "config": "--full"
+          },
+          {
+            "value": "archive",
+            "config": ""
+          }
+        ]
+      },
+      "defaultValue": "full",
+      "documentation": "https://paradigmxyz.github.io/reth/run/pruning.html"
+    },
+    "httpAddress": {
+      "displayName": "HTTP-RPC server listening interface",
+      "cliConfigPrefix": "--http.addr ",
+      "defaultValue": "0.0.0.0",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
+    },
+    "p2pPorts": {
+      "displayName": "P2P port (UDP and TCP)",
+      "cliConfigPrefix": "--discovery.port ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 30303",
+      "defaultValue": "30303"
+    },
+    "enginePort": {
+      "displayName": "Engine JSON-RPC listening port",
+      "cliConfigPrefix": "--authrpc.port ",
+      "defaultValue": "8551",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "The listening port for the Engine API calls for JSON-RPC over HTTP and WebSocket."
+    },
+    "httpPort": {
+      "displayName": "HTTP-RPC server listening port",
+      "cliConfigPrefix": "--http.port ",
+      "defaultValue": "8545",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
+    },
+    "webSocketsPort": {
+      "displayName": "WS-RPC server listening port",
+      "cliConfigPrefix": "--ws.port ",
+      "defaultValue": "8546",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
+    },
+    "maxOutboundPeerCount": {
+      "displayName": "Max outbound peer count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--max-outbound-peers ",
+      "defaultValue": "100",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
+    },
+    "maxInboundPeerCount": {
+      "displayName": "Max inbound peer count (set to low number to use less bandwidth)",
+      "cliConfigPrefix": "--max-inbound-peers ",
+      "defaultValue": "30",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
+    }
+  },
+  "documentation" : {
+    "default" : "https://paradigmxyz.github.io/reth"
+  }
+}

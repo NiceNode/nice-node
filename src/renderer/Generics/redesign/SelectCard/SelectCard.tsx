@@ -36,6 +36,10 @@ export interface SelectCardProps {
    */
   minority?: boolean;
   /**
+   * Is this an alpha or beta client?
+   */
+  releasePhase?: string;
+  /**
    * Optional click handler
    */
   onClick?: () => void;
@@ -50,6 +54,7 @@ const SelectCard = ({
   info,
   iconId,
   minority = false,
+  releasePhase,
   isSelected = false,
 }: SelectCardProps) => {
   const { t: g } = useTranslation('genericComponents');
@@ -66,6 +71,13 @@ const SelectCard = ({
   if (selected) {
     containerStyles.push(selectedContainer);
   }
+  let releaseLabel = releasePhase;
+  if (releasePhase === 'beta') {
+    releaseLabel = g('Beta');
+  } else if (releasePhase === 'alpha') {
+    releaseLabel = g('Alpha');
+  }
+
   return (
     <div
       className={activeContainer}
@@ -84,6 +96,11 @@ const SelectCard = ({
           <div className={titleStyle}>{title}</div>
           <div className={descriptionStyle}>{info}</div>
         </div>
+        {releaseLabel && (
+          <div className={tagStyle}>
+            <Label bold={false} type="pink2" label={releaseLabel} />{' '}
+          </div>
+        )}
         {minority && (
           <div className={tagStyle}>
             <Label bold={false} type="pink2" label={g('MinorityClient')} />{' '}

@@ -312,6 +312,9 @@ const NodeScreen = () => {
       case 'geth' || 'op-geth' || 'op-node':
         regex = /Geth\/v(\d+\.\d+\.\d+)/;
         break;
+      case 'reth':
+        regex = /Reth\/v(\d+\.\d+\.\d+)/;
+        break;
       case 'besu':
         regex = /besu\/v(\d+\.\d+\.\d+)/;
         break;
