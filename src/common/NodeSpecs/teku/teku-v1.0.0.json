@@ -23,6 +23,7 @@
     }
   },
   "category": "L1/ConsensusClient/BeaconNode",
+  "minorityClient": true,
   "rpcTranslation": "eth-l1-beacon",
   "systemRequirements": {
     "documentationUrl": "https://docs.teku.consensys.net/en/stable/HowTo/Get-Started/Connect/Connect-To-Mainnet/",

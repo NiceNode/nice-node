@@ -65,6 +65,7 @@ import { ReactComponent as Updating } from './Spinner.svg';
 import { ReactComponent as UpdatingSmall } from './Spinner-small.svg';
 import { ReactComponent as UpLarge } from './Up-large.svg';
 import { ReactComponent as Up } from './Up.svg';
+import { ReactComponent as WarningCircle } from './Warning-circle.svg';
 import { ReactComponent as WarningCircleFilled } from './Warning-circle-filled.svg';
 
 export interface Icons {
@@ -135,6 +136,7 @@ export interface Icons {
   updatingsmall?: React.ReactNode;
   uplarge?: React.ReactNode;
   up?: React.ReactNode;
+  warningcircle?: React.ReactNode;
   warningcirclefilled?: React.ReactNode;
 }
 
@@ -207,6 +209,7 @@ export const ICONS: Icons = {
   updatingsmall: <UpdatingSmall />,
   uplarge: <UpLarge />,
   up: <Up />,
+  warningcircle: <WarningCircle />,
   warningcirclefilled: <WarningCircleFilled />,
 } as const;
 

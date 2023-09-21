@@ -241,7 +241,7 @@ export const sendLogsToUI = (node: Node) => {
     rlStdErr.on('line', (log: string) => {
       // logger.info(`podman log read for ${node.spec.specId}`);
       try {
-        send('nodeLogs', parsePodmanLogMetadata(log));
+        send('nodeLogs', parsePodmanLogMetadata(log, node.spec.specId));
       } catch (err) {
         logger.error(`Error parsing podman event log ${log}`, err);
       }
@@ -260,7 +260,7 @@ export const sendLogsToUI = (node: Node) => {
       // logger.info('log metadata:', parsePodmanLogMetadata(log));
       try {
         // parse log metadata before sending to the UI
-        send('nodeLogs', parsePodmanLogMetadata(log));
+        send('nodeLogs', parsePodmanLogMetadata(log, node.spec.specId));
         // send('nodeLogs', log);
       } catch (err) {
         logger.error(`Error parsing podman event log ${log}`, err);

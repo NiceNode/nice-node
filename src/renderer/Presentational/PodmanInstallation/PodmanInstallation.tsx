@@ -217,8 +217,8 @@ const PodmanInstallation = ({
               {t('PodmanInstallComplete')}
             </div>
             <div className={installationSteps}>
-              Podman is installed. Proceed by clicking{' '}
-              {!isPodmanRunning ? 'Start Podman' : 'Start Node'}
+              {t('PodmanIsInstalled')}{' '}
+              {!isPodmanRunning ? t('StartPodman') : t('StartNode')}
             </div>
           </div>
         )}
@@ -233,10 +233,7 @@ const PodmanInstallation = ({
           </>
         )}
         {sDidUserGrantPermissionToInstallPodman === false && (
-          <p>
-            Podman is required by NiceNode. You must grant permissions to
-            NiceNode in the popup.
-          </p>
+          <p>{t('PodmanIsRequired')}</p>
         )}
       </div>
     </div>

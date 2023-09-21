@@ -1,15 +1,15 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import AddEthereumNode from '../../renderer/Presentational/AddEthereumNode/AddEthereumNode';
+import AddNodeConfiguration from '../../renderer/Presentational/AddNodeConfiguration/AddNodeConfiguration';
 
 export default {
-  title: 'Presentational/AddEthereumNode',
-  component: AddEthereumNode,
+  title: 'Presentational/AddNodeConfiguration',
+  component: AddNodeConfiguration,
   argTypes: {},
-} as ComponentMeta<typeof AddEthereumNode>;
+} as ComponentMeta<typeof AddNodeConfiguration>;
 
-const Template: ComponentStory<typeof AddEthereumNode> = (args) => (
-  <AddEthereumNode {...args} />
+const Template: ComponentStory<typeof AddNodeConfiguration> = (args) => (
+  <AddNodeConfiguration {...args} />
 );
 
 export const Primary = Template.bind({});

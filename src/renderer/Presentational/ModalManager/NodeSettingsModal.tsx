@@ -12,9 +12,9 @@ type Props = {
 export const NodeSettingsModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
-  const { t } = useTranslation('genericComponents');
+  const { t } = useTranslation();
   const modalTitle = t('NodeSettings');
-  const buttonSaveLabel = 'Save changes';
+  const buttonSaveLabel = t('SaveChanges');
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
     const { settingsConfig, selectedNode, newDataDir } =

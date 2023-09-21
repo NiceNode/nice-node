@@ -62,6 +62,7 @@
     }
   },
   "iconUrl": "https://ethereum.png",
+  "addNodeDescription" : "Decentralization and collaboration are critical for the longer-term success of Base and scaling Ethereum. That’s why we are working with OP Labs and the Optimism Collective on a plan to scale Ethereum in a decentralized way.",
   "description": "Base is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
   "documentation" : {
     "default": "https://docs.base.org/guides/run-a-base-node/"

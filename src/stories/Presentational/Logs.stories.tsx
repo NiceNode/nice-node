@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { Logs } from '../../renderer/Generics/redesign/LogMessage/Logs';
+import { Logs } from '../../renderer/Presentational/Logs/Logs';
 
 export default {
   title: 'Generic/Logs',

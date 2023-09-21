@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Menu } from '../../Generics/redesign/Menu/Menu';
 import { MenuItem } from '../../Generics/redesign/MenuItem/MenuItem';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
@@ -38,6 +39,7 @@ const Notifications = (props: NotificationsType) => {
   const [isSettingsDisplayed, setIsSettingsDisplayed] =
     useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const areAllNotificationsRead = () => {
     return data.every((item) => item.unread === false);
@@ -58,10 +60,8 @@ const Notifications = (props: NotificationsType) => {
     return (
       <div className={emptyContainer}>
         <div className={contentContainer}>
-          <div className={titleFont}>No notifications yet</div>
-          <div className={descriptionFont}>
-            We’ll let you know when something interesting happens!
-          </div>
+          <div className={titleFont}>{t('NoNotificationsYet')}</div>
+          <div className={descriptionFont}>{t('WellLetYouKnow')}</div>
         </div>
       </div>
     );
@@ -70,7 +70,7 @@ const Notifications = (props: NotificationsType) => {
   return (
     <>
       <div className={headerContainer}>
-        <div className={titleStyle}>Notifications</div>
+        <div className={titleStyle}>{t('Notifications')}</div>
         <div className={spacer} />
         <div
           className={menuButtonContainer}
@@ -95,7 +95,7 @@ const Notifications = (props: NotificationsType) => {
               <Menu width={208}>
                 <MenuItem
                   iconId="checkdouble"
-                  text="Mark all as read"
+                  text={t('MarkAllAsRead')}
                   onClick={() => {
                     setIsSettingsDisplayed(false);
                     markAllNotificationsAsRead();
@@ -104,7 +104,7 @@ const Notifications = (props: NotificationsType) => {
                 />
                 <MenuItem
                   iconId="close"
-                  text="Clear notifications"
+                  text={t('ClearNotifications')}
                   onClick={() => {
                     setIsSettingsDisplayed(false);
                     removeNotifications();
@@ -114,7 +114,7 @@ const Notifications = (props: NotificationsType) => {
                 <HorizontalLine type="menu" />
                 <MenuItem
                   iconId="settings"
-                  text="Notification preferences..."
+                  text={t('NotificationPreferences')}
                   onClick={() => {
                     setIsSettingsDisplayed(false);
                     dispatch(
