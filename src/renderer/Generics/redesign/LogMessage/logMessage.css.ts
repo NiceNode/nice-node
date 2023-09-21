@@ -13,6 +13,7 @@ export const container = style({
   order: 2,
   alignSelf: 'stretch',
   flexGrow: 0,
+  transform: 'translateZ(0)',
 
   color: vars.color.font90,
   fontFamily: `'SF Mono', SFMono-Regular, ui-monospace,

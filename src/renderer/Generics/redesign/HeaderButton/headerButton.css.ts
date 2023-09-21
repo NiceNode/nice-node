@@ -22,4 +22,10 @@ export const container = style({
   ':active': {
     backgroundColor: vars.components.headerButtonActive,
   },
+  selectors: {
+    [`&.toggled`]: {
+      color: vars.color.primaryActive,
+      backgroundColor: vars.components.headerButtonHover,
+    },
+  },
 } as ComplexStyleRule); // fix for lacking '-webkit-app-region' type

@@ -1,4 +1,11 @@
-import { ReactElement, useEffect, useCallback } from 'react';
+import {
+  useEffect,
+  useCallback,
+  forwardRef,
+  useState,
+  ReactElement,
+} from 'react';
+import { useGetNetworkConnectedQuery } from '../../state/network';
 import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import electron from '../../electronGlobal';
 import { useGetNotificationsQuery } from '../../state/notificationsService';
@@ -18,7 +25,7 @@ export interface SidebarWrapperProps {
   children: ReactElement;
 }
 
-export const SidebarWrapper = () => {
+export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   const sSelectedNodePackageId = useAppSelector(selectSelectedNodePackageId);
   const sUserNodePackages = useAppSelector(selectUserNodePackages);
   const dispatch = useAppDispatch();
@@ -28,6 +35,12 @@ export const SidebarWrapper = () => {
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
+  const qNetwork = useGetNetworkConnectedQuery(null, {
+    // Only polls network connection if there are exactly 0 peers
+    pollingInterval: 30000,
+  });
+  console.log('qNetwork', qNetwork);
+  const [platform, setPlatform] = useState<string>('');
   // default to docker is running while data is being fetched, so
   //  the user isn't falsely warned
   let isPodmanRunning = true;
@@ -87,10 +100,20 @@ export const SidebarWrapper = () => {
     }
   }, [sSelectedNodePackageId, sUserNodePackages, dispatch]);
 
+  useEffect(() => {
+    const asyncData = async () => {
+      const userSettings = await electron.getSettings();
+      setPlatform(userSettings.osPlatform || '');
+    };
+    asyncData();
+  }, []);
+
   return (
     <Sidebar
+      platform={platform}
+      ref={ref}
       notifications={notifications}
-      offline={false}
+      offline={qNetwork.status === 'rejected'}
       updateAvailable={false}
       podmanInstalled={isPodmanInstalled}
       podmanStopped={!isPodmanRunning}
@@ -100,4 +123,4 @@ export const SidebarWrapper = () => {
       onClickInstallPodman={onClickInstallPodman}
     />
   );
-};
+});

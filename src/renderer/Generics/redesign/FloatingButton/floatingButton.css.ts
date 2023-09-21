@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { common, vars } from '../theme.css';
+import { vars } from '../theme.css';
 
 export const baseButton = style({
   cursor: 'pointer',
@@ -21,7 +21,7 @@ export const baseButton = style({
   fontSize: 13,
   lineHeight: '16px',
   height: '32px',
-  color: common.color.white100,
+  color: vars.color.background,
   boxShadow: vars.color.elevation3boxShadow,
   background: vars.color.font70,
   left: 'calc(50% - 155px/2 - 0.5px)',
