@@ -17,6 +17,7 @@ import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
 
+// Other node types are not ready yet
 const nodeOptions = [
   {
     iconId: 'ethereum',
@@ -25,27 +26,27 @@ const nodeOptions = [
     label: 'Ethereum',
     info: 'The world computer',
   },
-  {
-    iconId: 'base',
-    title: 'Base',
-    value: 'base',
-    label: 'Base',
-    info: 'A secure and low-cost Ethereum Layer 2 built on the OP stack',
-  },
-  {
-    iconId: 'optimism',
-    title: 'Optimism',
-    value: 'optimism',
-    label: 'Optimism',
-    info: 'Built by the OP Collective!',
-  },
-  {
-    iconId: 'farcaster',
-    title: 'Farcaster',
-    value: 'farcaster',
-    label: 'Farcaster',
-    info: 'A protocol for decentralized social apps',
-  },
+  // {
+  //   iconId: 'base',
+  //   title: 'Base',
+  //   value: 'base',
+  //   label: 'Base',
+  //   info: 'A secure and low-cost Ethereum Layer 2 built on the OP stack',
+  // },
+  // {
+  //   iconId: 'optimism',
+  //   title: 'Optimism',
+  //   value: 'optimism',
+  //   label: 'Optimism',
+  //   info: 'Built by the OP Collective!',
+  // },
+  // {
+  //   iconId: 'farcaster',
+  //   title: 'Farcaster',
+  //   value: 'farcaster',
+  //   label: 'Farcaster',
+  //   info: 'A protocol for decentralized social apps',
+  // },
 ];
 
 let alphaModalRendered = false;

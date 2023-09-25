@@ -9,13 +9,13 @@
     "services" : [{
       "serviceId": "executionClient",
       "name" : "Execution Client",
-      "nodeOptions": ["reth", "nethermind", "besu", "geth"],
+      "nodeOptions": ["nethermind", "besu", "geth", "reth"],
       "required": true,
       "requiresCommonJwtSecret": true
     }, {
       "serviceId": "consensusClient",
       "name" : "Consensus Client",
-      "nodeOptions": ["lighthouse-beacon","nimbus-beacon", "lodestar-beacon", "teku-beacon",  "prysm-beacon"],
+      "nodeOptions": ["nimbus-beacon", "lodestar-beacon", "teku-beacon",  "prysm-beacon", "lighthouse-beacon"],
       "required": true,
       "requiresCommonJwtSecret": true
     }]
