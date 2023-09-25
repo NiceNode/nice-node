@@ -36,10 +36,8 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
     pollingInterval: 15000,
   });
   const qNetwork = useGetNetworkConnectedQuery(null, {
-    // Only polls network connection if there are exactly 0 peers
     pollingInterval: 30000,
   });
-  console.log('qNetwork', qNetwork);
   const [platform, setPlatform] = useState<string>('');
   // default to docker is running while data is being fetched, so
   //  the user isn't falsely warned
@@ -75,18 +73,15 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const listenForNotifications = useCallback(async () => {
+  useEffect(() => {
     electron.ipcRenderer.on('notifications', onNotificationChange);
-    return () =>
+    return () => {
       electron.ipcRenderer.removeListener(
         'notifications',
         onNotificationChange,
       );
+    };
   }, [onNotificationChange]);
-
-  useEffect(() => {
-    listenForNotifications();
-  }, [listenForNotifications]);
 
   // Default selected node to be the first node
   useEffect(() => {

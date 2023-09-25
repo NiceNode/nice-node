@@ -148,7 +148,13 @@ const PodmanInstallation = ({
   useEffect(() => {
     console.log('PodmanInstallation.tsx: listenForPodmanInstallUpdates .');
     listenForPodmanInstallUpdates();
-    return () => electron.ipcRenderer.removeAllListeners('podman');
+    return () => {
+      electron.ipcRenderer.removeAllListeners('podman');
+      electron.ipcRenderer.removeListener(
+        CHANNELS.podmanInstall,
+        podmanInstallMessageListener,
+      );
+    };
   }, [listenForPodmanInstallUpdates]);
 
   // useEffect(() => {

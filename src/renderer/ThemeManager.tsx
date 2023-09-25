@@ -41,9 +41,6 @@ const ThemeManager = ({ children }: Props) => {
       } else if (appThemeSetting === 'dark') {
         setIsDarkTheme(true);
         handleColorSchemeChange('dark');
-      } else if (appThemeSetting === 'auto') {
-        setIsDarkTheme(osIsDarkMode);
-        handleColorSchemeChange(osIsDarkMode ? 'dark' : 'light');
       } else {
         setIsDarkTheme(osIsDarkMode);
         handleColorSchemeChange(osIsDarkMode ? 'dark' : 'light');
@@ -61,16 +58,13 @@ const ThemeManager = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const listenForThemeChanges = useCallback(async () => {
+  useEffect(() => {
     console.log('theme: listenForThemeChanges');
     electron.ipcRenderer.on(CHANNELS.theme, onThemeChange);
-    return () =>
+    return () => {
       electron.ipcRenderer.removeListener(CHANNELS.theme, onThemeChange);
+    };
   }, [onThemeChange]);
-
-  useEffect(() => {
-    listenForThemeChanges();
-  }, [listenForThemeChanges]);
 
   // todo: move reportEvent logic to another component or replace on backend
   // subscribes to a channel which notifies when dark mode settings change
