@@ -15,7 +15,7 @@
     }, {
       "serviceId": "consensusClient",
       "name" : "Consensus Client",
-      "nodeOptions": ["nimbus-beacon", "lodestar-beacon", "teku-beacon",  "prysm-beacon", "lighthouse-beacon"],
+      "nodeOptions": ["lodestar-beacon", "teku-beacon",  "prysm-beacon", "lighthouse-beacon", "nimbus-beacon"],
       "required": true,
       "requiresCommonJwtSecret": true
     }]

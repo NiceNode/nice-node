@@ -4,9 +4,7 @@ import installOnMac from './installOnMac';
 import installOnWindows from './installOnWindows';
 import installOnLinux from './installOnLinux';
 
-// Using a release candidate version because it is stable and there
-//  are many fixes in 4.7 that are not in 4.6
-export const VERSION = '4.7.0-rc1';
+export const VERSION = '4.6.0';
 
 // eslint-disable-next-line
 const installPodman = async (): Promise<any> => {
