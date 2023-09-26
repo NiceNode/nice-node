@@ -37,22 +37,22 @@
   },
   "configTranslation": {
     "ethMainnetRpcUrl": {
-      "displayName": "Ethereum mainnet RPC URL (local node or alchemy/infura/etc.)",
+      "displayName": "Ethereum Mainnet RPC Endpoint (local node or provider)",
       "cliConfigPrefix": "--eth-mainnet-rpc-url ",
       "defaultValue": "http://host.internal.containers:8545",
       "uiControl": {
         "type": "text"
       },
-      "documentation": "https://www.thehubble.xyz/intro/install.html#install-via-docker"
+      "addNodeFlow": "required"
     },
     "optimismMainnetRpcUrl": {
-      "displayName": "Optimism mainnet RPC URL (local node or alchemy/infura/etc.)",
+      "displayName": "Optimism Mainnet RPC Endpoint (local node or provider)",
       "cliConfigPrefix": "--l2-rpc-url ",
       "defaultValue": "http://host.internal.containers:8547",
       "uiControl": {
         "type": "text"
       },
-      "documentation": "https://www.thehubble.xyz/intro/install.html#install-via-docker"
+      "addNodeFlow": "required"
     },
     "hubOperatorFid": {
       "displayName": "Set this to your Farcaster FID ",
@@ -60,6 +60,7 @@
       "uiControl": {
         "type": "text"
       },
+      "addNodeFlow": "advanced",
       "documentation": "https://www.thehubble.xyz/intro/install.html#install-via-docker"
     },
     "p2pPorts": {
@@ -96,6 +97,7 @@
       "uiControl": {
         "type": "text"
       },
+      "addNodeFlow": "advanced",
       "infoDescription": "Example value: 1"
     }
   },

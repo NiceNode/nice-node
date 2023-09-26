@@ -40,13 +40,13 @@ const nodeOptions = [
   //   label: 'Optimism',
   //   info: 'Built by the OP Collective!',
   // },
-  // {
-  //   iconId: 'farcaster',
-  //   title: 'Farcaster',
-  //   value: 'farcaster',
-  //   label: 'Farcaster',
-  //   info: 'A protocol for decentralized social apps',
-  // },
+  {
+    iconId: 'farcaster',
+    title: 'Farcaster',
+    value: 'farcaster',
+    label: 'Farcaster',
+    info: 'A protocol for decentralized social apps',
+  },
 ];
 
 let alphaModalRendered = false;

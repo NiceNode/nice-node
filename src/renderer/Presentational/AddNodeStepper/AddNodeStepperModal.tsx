@@ -63,9 +63,11 @@ const AddNodeStepperModal = ({
     const config = {
       ...sEthereumNodeConfig,
       clientSelections: newValue.clientSelections,
+      clientConfigValues: newValue.clientConfigValues,
     };
     modalOnChangeConfig({
       clientSelections: newValue.clientSelections,
+      clientConfigValues: newValue.clientConfigValues,
     });
     setEthereumNodeConfig(config);
   };

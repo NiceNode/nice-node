@@ -22,6 +22,7 @@ import {
   stopNode,
 } from './nodeManager';
 import { createJwtSecretAtDirs } from './util/jwtSecrets';
+import { ConfigValuesMap } from '../common/nodeConfig';
 
 // Created when adding a node and is used to pair a node spec and config
 // for a specific node package service
@@ -29,6 +30,7 @@ export type AddNodePackageNodeService = {
   serviceId: string;
   serviceName: string;
   spec: NodeSpecification;
+  initialConfigValues?: ConfigValuesMap;
 };
 
 export const addNodePackage = async (
@@ -71,7 +73,16 @@ export const addNodePackage = async (
       );
       if (nodePackageServiceSpec) {
         // Only create required nodes right now?
-        const node = await addNode(service.spec, settings.storageLocation);
+        const node = await addNode(
+          service.spec,
+          settings.storageLocation,
+          service.initialConfigValues,
+        );
+        console.log(
+          'nodePackageManager: adding node with initialConfigValues: ',
+          node,
+          service.initialConfigValues,
+        );
         nodeServices.push({
           serviceId: service.serviceId,
           serviceName: service.serviceName,

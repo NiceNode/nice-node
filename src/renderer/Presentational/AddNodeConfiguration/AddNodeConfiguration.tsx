@@ -26,6 +26,9 @@ import {
 } from '../../../common/nodeSpec';
 import { NodeId } from '../../../common/node';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
+import InitialClientConfigs, {
+  ClientConfigValues,
+} from './InitialClientConfigs';
 
 export type ClientSelections = {
   [serviceId: string]: SelectOption;
@@ -33,6 +36,7 @@ export type ClientSelections = {
 
 export type AddNodeConfigurationValues = {
   clientSelections?: ClientSelections;
+  clientConfigValues?: ClientConfigValues;
   storageLocation?: string;
 };
 export interface AddNodeConfigurationProps {
@@ -75,6 +79,11 @@ const AddNodeConfiguration = ({
   const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
   const [sNodePackageLibrary, setNodePackageLibrary] =
     useState<NodePackageLibrary>();
+  const [sClientNodeSpecifications, setClientNodeSpecifications] = useState<
+    NodeSpecification[]
+  >([]);
+  const [sClientConfigValues, setClientConfigValues] =
+    useState<ClientConfigValues>({});
 
   const [
     sNodeStorageLocationFreeStorageGBs,
@@ -123,6 +132,18 @@ const AddNodeConfiguration = ({
   }, [sNodePackageSpec, sNodeLibrary]);
 
   useEffect(() => {
+    const nodeSpecs: NodeSpecification[] = [];
+    Object.keys(sClientSelections).forEach((serviceId) => {
+      const selectOption = sClientSelections[serviceId];
+      const nodeSpec = sNodeLibrary?.[selectOption.value];
+      if (nodeSpec) {
+        nodeSpecs.push(nodeSpec);
+      }
+    });
+    setClientNodeSpecifications(nodeSpecs);
+  }, [sClientSelections, sNodeLibrary]);
+
+  useEffect(() => {
     const fetchData = async () => {
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
@@ -166,12 +187,13 @@ const AddNodeConfiguration = ({
     if (onChange) {
       onChange({
         clientSelections: sClientSelections,
+        clientConfigValues: sClientConfigValues,
         storageLocation: sNodeStorageLocation,
       });
     }
     // todo: try useCallback in parent component
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sClientSelections, sNodeStorageLocation]);
+  }, [sClientSelections, sNodeStorageLocation, sClientConfigValues]);
 
   if (!sNodePackageSpec) {
     console.error(sNodePackageLibrary, nodeId);
@@ -223,6 +245,22 @@ const AddNodeConfiguration = ({
           </React.Fragment>
         );
       })}
+
+      {/* Initial client settings, required and optional */}
+      <InitialClientConfigs
+        clientSpecs={sClientNodeSpecifications}
+        onChange={(newClientConfigValues) => {
+          setClientConfigValues(newClientConfigValues);
+        }}
+      />
+      {/* <DynamicSettings
+        type="modal"
+        categoryConfigs={categoryConfigs}
+        configValuesMap={configValuesMap}
+        isDisabled={false}
+        onChange={onChange}
+      /> */}
+
       <HorizontalLine />
       <p className={sectionFont}>{tGeneric('DataLocation')}</p>
       <p

@@ -86,6 +86,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     const {
       node,
       clientSelections,
+      clientConfigValues,
       storageLocation,
       nodeLibrary,
       nodePackageLibrary,
@@ -127,6 +128,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
           serviceId,
           serviceName: serviceDefinition?.name ?? serviceId,
           spec: serviceNodeSpec,
+          initialConfigValues: clientConfigValues?.[clientId],
         });
       }
     }
