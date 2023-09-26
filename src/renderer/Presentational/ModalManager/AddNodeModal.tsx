@@ -14,6 +14,7 @@ import {
   NodeLibrary,
   NodePackageLibrary,
 } from '../../../main/state/nodeLibrary';
+import { nodeSpecIdLookupNum } from '../../events/environment';
 
 type Props = {
   modalOnClose: () => void;
@@ -149,7 +150,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       { storageLocation },
     );
     console.log('nodePackage result: ', nodePackage);
-    reportEvent('AddNodePackage');
+    reportEvent('AddNodePackage', nodeSpecIdLookupNum(nodePackageSpec.specId));
     dispatch(updateSelectedNodePackageId(nodePackage.id));
 
     electron.startNodePackage(nodePackage.id);

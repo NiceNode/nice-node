@@ -29,10 +29,10 @@ export const setRemoteEventReportingEnabled = (isEnabled: boolean) => {
  * logged or optionally sent to tracking service for core contributors to review.
  * @param event
  */
-export const reportEvent = (event: NNEvent) => {
-  console.log('reportEvent: ', event);
+export const reportEvent = (event: NNEvent, value?: number) => {
+  console.log('reportEvent, value: ', event, value);
   const eventId = eventIdLookup(event);
-  Fathom.trackGoal(eventId, 1);
+  Fathom.trackGoal(eventId, value !== undefined ? value : 0);
 };
 
 export const initialize = () => {

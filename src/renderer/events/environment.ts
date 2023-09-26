@@ -1,4 +1,5 @@
 /* eslint-disable prefer-destructuring */
+import { NodeId } from 'common/node';
 import { NNEvent } from './events';
 
 // declares the type of the injected variable process from webpack plugin
@@ -46,4 +47,17 @@ export const eventIdLookup = (event: NNEvent): string => {
   let eventId = '';
   eventId = envEvent[FATHOM_SITE_ENV][event];
   return eventId;
+};
+
+const nodeNumber: Record<NodeId, number> = {
+  ethereum: 2,
+  farcaster: 3,
+  arbitrum: 4,
+  base: 5,
+  optimism: 6,
+};
+
+export const nodeSpecIdLookupNum = (nodeId: NodeId): number => {
+  const nodeNum = nodeNumber[nodeId] ?? 1;
+  return nodeNum;
 };
