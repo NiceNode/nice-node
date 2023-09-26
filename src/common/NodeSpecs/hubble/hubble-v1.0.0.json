@@ -8,11 +8,16 @@
     "defaultExecutionType": "docker",
     "input": {
       "defaultConfig": {
+        "p2pPorts" : "2282",
+        "gRpcPort" : "2283",
+        "farcasterNetwork" : "1",
+        "boostrapNode": "/dns/nemes.farcaster.xyz/tcp/2282"
       },
       "docker": {
         "containerVolumePath": "/home/node/app/apps/hubble",
-        "raw": "",
-        "forcedRawNodeInput": "node --no-warnings build/cli.js start --ip 0.0.0.0"
+        "raw": " --user 0 -p 2281:2281",
+        "initNodeCommand" : "yarn identity create",
+        "forcedRawNodeInput": "node --no-warnings build/cli.js start --ip 0.0.0.0 "
       }
     },
     "imageName": "docker.io/farcasterxyz/hubble:latest"
@@ -39,7 +44,7 @@
     "ethMainnetRpcUrl": {
       "displayName": "Ethereum Mainnet RPC Endpoint (local node or provider)",
       "cliConfigPrefix": "--eth-mainnet-rpc-url ",
-      "defaultValue": "http://host.internal.containers:8545",
+      "defaultValue": "",
       "uiControl": {
         "type": "text"
       },
@@ -48,7 +53,7 @@
     "optimismMainnetRpcUrl": {
       "displayName": "Optimism Mainnet RPC Endpoint (local node or provider)",
       "cliConfigPrefix": "--l2-rpc-url ",
-      "defaultValue": "http://host.internal.containers:8547",
+      "defaultValue": "",
       "uiControl": {
         "type": "text"
       },
@@ -72,8 +77,8 @@
       "infoDescription": "Example value: 2282",
       "defaultValue": "2282"
     },
-    "httpPort": {
-      "displayName": "HTTP-RPC server listening port",
+    "gRpcPort": {
+      "displayName": "gRPC server listening port",
       "cliConfigPrefix": "--rpc-port ",
       "defaultValue": "2283",
       "uiControl": {

@@ -39,7 +39,6 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
     // Only polls network connection if there are exactly 0 peers
     pollingInterval: 30000,
   });
-  console.log('qNetwork', qNetwork);
   const [platform, setPlatform] = useState<string>('');
   // default to docker is running while data is being fetched, so
   //  the user isn't falsely warned

@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { IconId } from 'renderer/assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import {
@@ -45,9 +45,17 @@ const Input = ({
   disabled,
   onChange = () => {},
 }: InputProps) => {
+  const [sValue, setValue] = useState<string>('');
+
+  useEffect(() => {
+    setValue(value || '');
+  }, [value]);
+
   const onChangeAction = (evt: ChangeEvent<HTMLInputElement>) => {
+    const newValue = evt.target.value;
+    setValue(newValue);
     if (onChange) {
-      onChange(evt.target.value);
+      onChange(newValue);
     }
   };
   const leftIconStyle = leftIconId ? 'leftIcon' : '';
@@ -64,7 +72,7 @@ const Input = ({
           type: 'text',
           className: [inputContainer, leftIconStyle, rightIconStyle].join(' '),
           placeholder,
-          value,
+          value: sValue,
           ...(disabled && { disabled }),
           ...(required && { required }),
           onChange: (evt) => {

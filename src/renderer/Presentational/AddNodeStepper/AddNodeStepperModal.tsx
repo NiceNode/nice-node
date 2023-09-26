@@ -20,6 +20,7 @@ import AddNode, { AddNodeValues } from '../AddNode/AddNode';
 import AddNodeConfiguration, {
   AddNodeConfigurationValues,
 } from '../AddNodeConfiguration/AddNodeConfiguration';
+import { NodeLibrary } from '../../../main/state/nodeLibrary';
 
 export interface AddNodeStepperModalProps {
   modal?: boolean;
@@ -44,13 +45,19 @@ const AddNodeStepperModal = ({
   const [sNodeRequirements, setNodeRequirements] =
     useState<SystemRequirements>();
   const [sSystemData, setSystemData] = useState<SystemData>();
+  const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
 
   const getData = async () => {
     setSystemData(await electron.getSystemInfo());
   };
+  const fetchNodeLibrary = async () => {
+    const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
+    setNodeLibrary(nodeLibrary);
+  };
 
   useEffect(() => {
     getData();
+    fetchNodeLibrary();
   }, []);
 
   const onChangeAddNodeConfiguration = (
@@ -62,18 +69,18 @@ const AddNodeStepperModal = ({
     );
     const config = {
       ...sEthereumNodeConfig,
-      clientSelections: newValue.clientSelections,
-      clientConfigValues: newValue.clientConfigValues,
+      ...newValue,
     };
     modalOnChangeConfig({
-      clientSelections: newValue.clientSelections,
-      clientConfigValues: newValue.clientConfigValues,
+      ...modalConfig,
+      ...newValue,
     });
     setEthereumNodeConfig(config);
   };
 
   useEffect(() => {
-    const { nodeLibrary, clientSelections, storageLocation } = modalConfig;
+    const { clientSelections, storageLocation } = modalConfig;
+    const nodeLibrary = sNodeLibrary;
     if (nodeLibrary && clientSelections && storageLocation) {
       const reqs: SystemRequirements[] = [];
       // eslint-disable-next-line
@@ -102,7 +109,7 @@ const AddNodeStepperModal = ({
         console.error(e);
       }
     }
-  }, [modalConfig]);
+  }, [modalConfig, sNodeLibrary]);
 
   const setNode = (
     nodeSelectOption: SelectOption,
@@ -110,6 +117,7 @@ const AddNodeStepperModal = ({
   ) => {
     const config = { ...nodeConfig, node: nodeSelectOption };
     console.log('AddNodeStepperModal calling modalOnChangeConfig()', {
+      ...modalConfig,
       node: nodeSelectOption.value,
     });
     modalOnChangeConfig({
@@ -138,11 +146,7 @@ const AddNodeStepperModal = ({
     switch (step) {
       case 0:
         stepScreen = (
-          <AddNode
-            nodeConfig={sNodeConfig}
-            setNode={setNode}
-            modalOnChangeConfig={modalOnChangeConfig}
-          />
+          <AddNode nodeConfig={sNodeConfig} setNode={setNode} shouldHideTitle />
         );
         stepImage = step1;
         break;
@@ -152,7 +156,7 @@ const AddNodeStepperModal = ({
             nodeId={sNodeConfig?.node?.value}
             nodePackageConfig={sEthereumNodeConfig}
             onChange={onChangeAddNodeConfiguration}
-            modalOnChangeConfig={modalOnChangeConfig}
+            shouldHideTitle
           />
         );
         stepImage = step1;

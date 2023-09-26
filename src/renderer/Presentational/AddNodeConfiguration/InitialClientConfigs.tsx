@@ -77,6 +77,8 @@ const InitialClientConfigs = ({
 
   return (
     <div>
+      {/* Initial client settings, required and optional */}
+
       {Object.keys(sClientConfigTranslations)?.map((clientId: string) => {
         const singleClientConfigTranslation =
           sClientConfigTranslations[clientId];
@@ -90,7 +92,7 @@ const InitialClientConfigs = ({
           }
         });
         const singleClientConfigValues = sClientConfigValues[clientId];
-
+        console.log('render conifgs: ', singleClientConfigValues);
         return (
           <React.Fragment key={clientId}>
             <DynamicSettings
@@ -108,6 +110,7 @@ const InitialClientConfigs = ({
                   'initial client conifgs onChange: ',
                   configKey,
                   newValue,
+                  sClientConfigValues,
                 );
                 setClientConfigValues({
                   ...sClientConfigValues,
@@ -121,10 +124,6 @@ const InitialClientConfigs = ({
           </React.Fragment>
         );
       })}
-
-      {/* Initial client settings, required and optional */}
-
-      {/* todo: option */}
     </div>
   );
 };
