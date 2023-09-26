@@ -42,7 +42,7 @@ export const NODE_BACKGROUNDS: NodeBackgrounds = {
   nimbus,
   'op-geth': geth,
   'op-node': nimbus,
-  hubble: geth,
+  hubble: lighthouse,
 };
 
 export type NodeBackgroundId = keyof NodeBackgrounds;

@@ -75,9 +75,9 @@ const ContentMultipleClients = (props: {
   if (!clients) {
     return <></>;
   }
-  // if (clients.length < 1) {
-  //   return <>No node found</>;
-  // }
+  if (clients.length < 1) {
+    return <>No node found</>;
+  }
 
   const clClient = clients.find((client) => client.nodeType === 'consensus');
   const elClient = clients.find((client) => client.nodeType === 'execution');
@@ -162,7 +162,6 @@ const ContentMultipleClients = (props: {
     //   };
     //   return nodeOverview;
     // }
-    // non-Ethereum node conditions added here
     if (!nodeContent) {
       return {};
     }

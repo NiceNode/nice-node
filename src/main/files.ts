@@ -1,4 +1,4 @@
-import { access, mkdir, readFile, rm } from 'fs/promises';
+import { access, mkdir, readFile, rm, chmod } from 'fs/promises';
 import path from 'path';
 import { app } from 'electron';
 import checkDiskSpace from 'check-disk-space';
@@ -36,8 +36,14 @@ export const checkAndOrCreateDir = async (dirPath: string) => {
     logger.info(`checkAndOrCreateDir dirPath ${dirPath} exists`);
   } catch {
     logger.info(`checkAndOrCreateDir making dirPath ${dirPath}...`);
-    await mkdir(dirPath, { recursive: true });
-    logger.info(`checkAndOrCreateDir making dirPath ${dirPath}...`);
+    // make dir so any user can read and write
+    await mkdir(dirPath, { recursive: true, mode: 0o777 });
+    // A node (hubble) complains that the dir needs `chmod 777` even though
+    //  mkdir is called with 777 permissions.
+    await chmod(dirPath, 0o777);
+    logger.info(
+      `checkAndOrCreateDir made dirPath with 0o777 permissions ${dirPath}...`,
+    );
   }
 };
 

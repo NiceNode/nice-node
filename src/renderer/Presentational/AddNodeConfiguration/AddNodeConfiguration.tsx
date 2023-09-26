@@ -5,7 +5,6 @@ import {
   NodeLibrary,
   NodePackageLibrary,
 } from '../../../main/state/nodeLibrary';
-import { ModalConfig } from '../ModalManager/modalUtils';
 import {
   container,
   descriptionFont,
@@ -43,7 +42,7 @@ export interface AddNodeConfigurationProps {
   nodeId?: NodeId;
   onChange?: (newValue: AddNodeConfigurationValues) => void;
   nodePackageConfig?: AddNodeConfigurationValues;
-  modalOnChangeConfig?: (config: ModalConfig) => void;
+  shouldHideTitle?: boolean;
 }
 
 const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
@@ -61,7 +60,7 @@ const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
 const AddNodeConfiguration = ({
   nodeId,
   nodePackageConfig,
-  modalOnChangeConfig,
+  shouldHideTitle,
   onChange,
 }: AddNodeConfigurationProps) => {
   const { t } = useTranslation();
@@ -147,17 +146,12 @@ const AddNodeConfiguration = ({
     const fetchData = async () => {
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
-      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
-      const nodePackageLibrary: NodePackageLibrary =
-        await electron.getNodePackageLibrary();
       console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
       setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
-      if (modalOnChangeConfig) {
-        modalOnChangeConfig({
-          selectedClients: sClientSelections,
+      if (onChange) {
+        onChange({
+          clientSelections: sClientSelections,
           storageLocation: defaultNodesStorageDetails.folderPath,
-          nodeLibrary,
-          nodePackageLibrary,
         });
       }
       setNodeStorageLocationFreeStorageGBs(
@@ -166,7 +160,7 @@ const AddNodeConfiguration = ({
     };
     fetchData();
 
-    // Modal Parent needs updated with the default initial value
+    // Parent needs updated with the default initial value
     if (setClientSelections) {
       setClientSelections(sClientSelections);
     }
@@ -202,7 +196,7 @@ const AddNodeConfiguration = ({
 
   return (
     <div className={container}>
-      {!modalOnChangeConfig && (
+      {shouldHideTitle !== true && (
         <div className={titleFont}>
           {t('LaunchAVarNode', { nodeName: sNodePackageSpec.displayName })}
         </div>
@@ -253,13 +247,6 @@ const AddNodeConfiguration = ({
           setClientConfigValues(newClientConfigValues);
         }}
       />
-      {/* <DynamicSettings
-        type="modal"
-        categoryConfigs={categoryConfigs}
-        configValuesMap={configValuesMap}
-        isDisabled={false}
-        onChange={onChange}
-      /> */}
 
       <HorizontalLine />
       <p className={sectionFont}>{tGeneric('DataLocation')}</p>
@@ -275,8 +262,8 @@ const AddNodeConfiguration = ({
           console.log('storageLocationDetails', storageLocationDetails);
           if (storageLocationDetails) {
             setNodeStorageLocation(storageLocationDetails.folderPath);
-            if (modalOnChangeConfig) {
-              modalOnChangeConfig({
+            if (onChange) {
+              onChange({
                 storageLocation: storageLocationDetails.folderPath,
               });
             }
