@@ -39,6 +39,10 @@ export const addNode = async (
     storageLocation ?? getNodesDirPath(),
   );
   console.log('adding node with dataDir: ', dataDir);
+  console.log(
+    'adding node with initialConfigFromUser: ',
+    initialConfigFromUser,
+  );
   const nodeRuntime: NodeRuntime = {
     dataDir,
     usage: {

@@ -131,7 +131,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       );
     }
     const services: AddNodePackageNodeService[] = [];
-    const { clientSelections } = sNodeClientsAndSettings;
+    const { clientSelections, clientConfigValues } = sNodeClientsAndSettings;
     if (sNodeLibrary && clientSelections) {
       // eslint-disable-next-line
       for (const [serviceId, selectOption] of Object.entries(
@@ -158,6 +158,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
           serviceId,
           serviceName: serviceDefinition?.name ?? serviceId,
           spec: serviceNodeSpec,
+          initialConfigValues: clientConfigValues?.[clientId],
         });
       }
     }

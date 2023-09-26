@@ -22,6 +22,8 @@ export type ConfigTranslationControl =
 
 export type ConfigValue = string | string[] | undefined;
 
+export type ConfigTranslationAddNodeFlow = 'required' | 'advanced';
+
 export type ConfigTranslation = {
   displayName: string;
   uiControl: ConfigTranslationControl;
@@ -34,6 +36,7 @@ export type ConfigTranslation = {
   documentation?: string;
   infoDescription?: string;
   warning?: string;
+  addNodeFlow?: ConfigTranslationAddNodeFlow;
 };
 
 export type ConfigKey = string;
