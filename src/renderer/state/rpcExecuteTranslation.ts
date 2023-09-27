@@ -48,9 +48,9 @@ const callFetch = async (apiRoute: string) => {
 };
 
 const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
-// const arbProvider = new ethers.providers.JsonRpcProvider(
-//   'http://localhost:8547'
-// );
+const ethL2Provider = new ethers.providers.JsonRpcProvider(
+  'http://localhost:8547',
+);
 
 // const provider9545 = new ethers.providers.JsonRpcProvider(
 //   'http://localhost:9545'
@@ -94,6 +94,44 @@ export const executeTranslation = async (
       return resp;
     } else if (rpcCall === 'clientVersion') {
       const resp = await provider.send('web3_clientVersion');
+      if (resp) {
+        return resp;
+      } else {
+        return undefined;
+      }
+    }
+  } else if (rpcTranslation === 'eth-l2') {
+    // use ethL2Provider
+    if (rpcCall === 'sync') {
+      const resp = await ethL2Provider.send('eth_syncing');
+      let isSyncing;
+      let syncPercent;
+      if (resp) {
+        if (typeof resp === 'object') {
+          const syncRatio = resp.currentBlock / resp.highestBlock;
+          syncPercent = (syncRatio * 100).toFixed(1);
+          isSyncing = true;
+        } else if (resp === false) {
+          // light client geth, it is done syncing if data is false
+          isSyncing = false;
+        }
+      }
+      return { isSyncing, syncPercent };
+    } else if (rpcCall === 'peers') {
+      const resp = await ethL2Provider.send('net_peerCount');
+      if (resp) {
+        return hexToDecimal(resp);
+      } else {
+        return undefined;
+      }
+    } else if (rpcCall === 'latestBlock') {
+      const resp = await ethL2Provider.send('eth_getBlockByNumber', [
+        'latest',
+        true,
+      ]);
+      return resp;
+    } else if (rpcCall === 'clientVersion') {
+      const resp = await ethL2Provider.send('web3_clientVersion');
       if (resp) {
         return resp;
       } else {
