@@ -45,6 +45,13 @@ const nodeOptions = [
     label: 'Farcaster',
     info: 'A protocol for decentralized social apps',
   },
+  {
+    iconId: 'arbitrum',
+    title: 'Arbitrum One',
+    value: 'arbitrum',
+    label: 'Arbitrum One',
+    info: 'Welcome to the future of Ethereum',
+  },
 ];
 
 let alphaModalRendered = false;
