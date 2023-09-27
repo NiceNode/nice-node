@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NodeSpecification } from '../../../common/nodeSpec';
 import DynamicSettings from '../../Generics/redesign/DynamicSettings/DynamicSettings';
 import {
+  ConfigTranslationAddNodeFlow,
   ConfigTranslationMap,
   ConfigValue,
   ConfigValuesMap,
@@ -19,11 +20,13 @@ export type ClientConfigTranslations = {
 
 export interface InitialClientConfigsProps {
   clientSpecs: NodeSpecification[];
+  addNodeFlowSelection: ConfigTranslationAddNodeFlow;
   onChange?: (newClientConfigValues: ClientConfigValues) => void;
 }
 
 const InitialClientConfigs = ({
   clientSpecs,
+  addNodeFlowSelection,
   onChange,
 }: InitialClientConfigsProps) => {
   const [sClientConfigValues, setClientConfigValues] =
@@ -87,7 +90,7 @@ const InitialClientConfigs = ({
         // Filter out only node config that is required for the add node flow
         Object.keys(singleClientConfigTranslation)?.map((configKey) => {
           const configTranslation = singleClientConfigTranslation[configKey];
-          if (configTranslation.addNodeFlow === 'required') {
+          if (configTranslation.addNodeFlow === addNodeFlowSelection) {
             requiredClientConfigTranslation[configKey] = configTranslation;
           }
         });
