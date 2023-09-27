@@ -4,7 +4,7 @@ import installOnMac from './installOnMac';
 import installOnWindows from './installOnWindows';
 import installOnLinux from './installOnLinux';
 
-export const VERSION = '4.6.0';
+export const VERSION = '4.7.0';
 
 // eslint-disable-next-line
 const installPodman = async (): Promise<any> => {
