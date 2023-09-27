@@ -33,7 +33,7 @@ const ThemeManager = ({ children }: Props) => {
   useEffect(() => {
     const settingsData = qSettings?.data as Settings;
     if (settingsData) {
-      const { osIsDarkMode, appThemeSetting } = settingsData;
+      const { osIsDarkMode, appThemeSetting, osPlatform } = settingsData;
       // check user and os settings
       if (appThemeSetting === 'light') {
         setIsDarkTheme(false);
@@ -45,7 +45,8 @@ const ThemeManager = ({ children }: Props) => {
         setIsDarkTheme(osIsDarkMode);
         handleColorSchemeChange(osIsDarkMode ? 'dark' : 'light');
       }
-      setPlatform(settingsData.osPlatform || '');
+      electron.setNativeThemeSetting(appThemeSetting || 'auto');
+      setPlatform(osPlatform || '');
     }
   }, [qSettings.data]);
 

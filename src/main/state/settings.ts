@@ -90,10 +90,7 @@ export const setLanguage = (languageCode: string) => {
   logger.info(`App language is ${store.get(SETTINGS_KEY, APP_LANGUAGE_KEY)}`);
 };
 
-export const setThemeSetting = (theme: ThemeSetting) => {
-  logger.info(`Setting theme to ${theme}`);
-  store.set(`${SETTINGS_KEY}.${APP_THEME_SETTING}`, theme);
-  logger.info(`App theme is ${store.get(SETTINGS_KEY, APP_THEME_SETTING)}`);
+export const setNativeThemeSetting = (theme: ThemeSetting) => {
   if (theme === 'auto') {
     nativeTheme.themeSource = 'system';
   } else if (theme === 'dark') {
@@ -101,6 +98,13 @@ export const setThemeSetting = (theme: ThemeSetting) => {
   } else if (theme === 'light') {
     nativeTheme.themeSource = 'light';
   }
+};
+
+export const setThemeSetting = (theme: ThemeSetting) => {
+  logger.info(`Setting theme to ${theme}`);
+  store.set(`${SETTINGS_KEY}.${APP_THEME_SETTING}`, theme);
+  logger.info(`App theme is ${store.get(SETTINGS_KEY, APP_THEME_SETTING)}`);
+  setNativeThemeSetting(theme);
   sendMessageOnThemeChange();
 };
 

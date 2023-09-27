@@ -104,6 +104,7 @@ declare global {
       getSetHasSeenAlphaModal(hasSeen?: boolean): boolean;
       getSettings(): Settings;
       setLanguage(languageCode: string): void;
+      setNativeThemeSetting(theme: ThemeSetting): void;
       setThemeSetting(theme: ThemeSetting): void;
       setIsOpenOnStartup(isOpenOnStartup: boolean): void;
       getSetIsNotificationsEnabled(isNotificationsEnabled?: boolean): void;
