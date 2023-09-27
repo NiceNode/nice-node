@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { mergeObjectReducer } from './deepMerge';
 import {
   NodeLibrary,
   NodePackageLibrary,
@@ -10,6 +11,7 @@ import {
   descriptionFont,
   sectionFont,
   titleFont,
+  advancedOptionsLink,
 } from './addNodeConfiguration.css';
 import SpecialSelect, {
   SelectOption,
@@ -28,6 +30,7 @@ import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import InitialClientConfigs, {
   ClientConfigValues,
 } from './InitialClientConfigs';
+import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 
 export type ClientSelections = {
   [serviceId: string]: SelectOption;
@@ -81,13 +84,17 @@ const AddNodeConfiguration = ({
   const [sClientNodeSpecifications, setClientNodeSpecifications] = useState<
     NodeSpecification[]
   >([]);
-  const [sClientConfigValues, setClientConfigValues] =
-    useState<ClientConfigValues>({});
+  const [sClientConfigValues, dispatchClientConfigValues] = useReducer(
+    mergeObjectReducer,
+    {},
+  );
 
   const [
     sNodeStorageLocationFreeStorageGBs,
     setNodeStorageLocationFreeStorageGBs,
   ] = useState<number>();
+  const [sIsAdvancedOptionsOpen, setIsAdvancedOptionsOpen] =
+    useState<boolean>();
 
   useEffect(() => {
     const fetchNodeLibrarys = async () => {
@@ -243,8 +250,9 @@ const AddNodeConfiguration = ({
       {/* Initial client settings, required and optional */}
       <InitialClientConfigs
         clientSpecs={sClientNodeSpecifications}
+        addNodeFlowSelection="required"
         onChange={(newClientConfigValues) => {
-          setClientConfigValues(newClientConfigValues);
+          dispatchClientConfigValues(newClientConfigValues);
         }}
       />
 
@@ -275,6 +283,29 @@ const AddNodeConfiguration = ({
           }
         }}
       />
+
+      <HorizontalLine />
+      {/* Initial client settings, required and optional */}
+      <div className={advancedOptionsLink}>
+        <DropdownLink
+          text={`${
+            sIsAdvancedOptionsOpen
+              ? t('HideAdvancedOptions')
+              : t('ShowAdvancedOptions')
+          }`}
+          onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
+          isDown={!sIsAdvancedOptionsOpen}
+        />
+      </div>
+      {sIsAdvancedOptionsOpen && (
+        <InitialClientConfigs
+          clientSpecs={sClientNodeSpecifications}
+          addNodeFlowSelection="advanced"
+          onChange={(newClientConfigValues) => {
+            dispatchClientConfigValues(newClientConfigValues);
+          }}
+        />
+      )}
     </div>
   );
 };
