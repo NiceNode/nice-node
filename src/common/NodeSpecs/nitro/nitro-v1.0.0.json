@@ -8,15 +8,16 @@
     "imageName": "docker.io/offchainlabs/nitro-node:v2.0.14-2baa834",
     "input": {
       "defaultConfig": {
-        "ethMainnetRpcUrl": "https://mainnet.infura.io/v3/97fa4206f9bd4ea9957f9a82a2b2e4d0",
+        "ethMainnetRpcUrl": "",
         "httpAddress" : "0.0.0.0",
+        "httpPort" : "8547",
         "l2ChainId" : "42161",
         "httpCorsDomains": "http://localhost",
         "httpVirtualHosts": "localhost,host.containers.internal"
       },
       "docker": {
         "containerVolumePath": "/home/user/.arbitrum",
-        "raw": " --user user",
+        "raw": "",
         "forcedRawNodeInput" : "--l1.chain-id=1 --init.url=\"https://snapshot.arbitrum.foundation/arb1/nitro-pruned.tar\" --log-level=5"
       }
     },
@@ -48,7 +49,7 @@
     "ethMainnetRpcUrl": {
       "displayName": "Ethereum Mainnet RPC Endpoint (local node http://host.containers.internal:8545 or provider)",
       "cliConfigPrefix": "--l1.url=",
-      "defaultValue": "https://mainnet.infura.io/v3/97fa4206f9bd4ea9957f9a82a2b2e4d0",
+      "defaultValue": "",
       "uiControl": {
         "type": "text"
       },
