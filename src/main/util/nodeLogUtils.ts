@@ -84,6 +84,15 @@ const trimLogHeader = (log: string, client: string) => {
       '',
     );
   }
+  if (client === 'nitro') {
+    // Example: INFO [09-26|23:52:47.760]
+    // Pattern: INFO/WARN/ERROR [MM-DD|HH:mm:ss.SSS]
+    return log.replace(
+      /(INFO|WARN|ERROR)\s+\[\d{2}-\d{2}\|\d{2}:\d{2}:\d{2}\.\d{3}\] /,
+      '',
+    );
+  }
+
   // Other Ethereum clients could be added here as needed...
 
   // If the client is not recognized, return the original log

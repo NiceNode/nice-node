@@ -248,6 +248,7 @@ export const sendLogsToUI = (node: Node) => {
         send('nodeLogs', parsePodmanLogMetadata(log, node.spec.specId));
       } catch (err) {
         logger.error(`Error parsing podman event log ${log}`, err);
+        send('nodeLogs', { message: log });
       }
     });
   }
@@ -268,6 +269,7 @@ export const sendLogsToUI = (node: Node) => {
         // send('nodeLogs', log);
       } catch (err) {
         logger.error(`Error parsing podman event log ${log}`, err);
+        send('nodeLogs', { message: log });
       }
     });
   }
@@ -497,7 +499,7 @@ export const createRunCommand = (node: Node): string => {
   nodeInput += ` ${cliConfigInput}`;
 
   // -q quiets podman logs (pulling new image logs) so we can parse the containerId
-  const podmanCommand = `run -q -d --restart on-failure:3 --name ${specId} ${finalPodmanInput} ${imageName} ${nodeInput}`;
+  const podmanCommand = `run -q -d --name ${specId} ${finalPodmanInput} ${imageName} ${nodeInput}`;
   logger.info(`podman run command ${podmanCommand}`);
   return podmanCommand;
 };

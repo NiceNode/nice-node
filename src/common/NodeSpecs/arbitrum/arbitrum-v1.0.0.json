@@ -2,97 +2,68 @@
   "specId": "arbitrum",
   "version": "1.0.0",
   "displayName": "Arbitrum One",
+  "displayTagline": "Non-Validating Node",
   "execution": {
-    "executionTypes": ["docker"],
-    "defaultExecutionType": "docker",
-    "imageName": "docker.io/offchainlabs/arb-node:v1.4.0-f4bbe91",
-    "input": {
-      "defaultConfig": {
-        "eth1ProviderUrl": "http://host.containers.internal:8545",
-        "httpCorsDomains": "http://localhost"
-      },
-      "docker": {
-        "containerVolumePath": "/home/user/.arbitrum/mainnet",
-        "raw": "-p 8547:8547 -p 8548:8548 -p 9642:9642"
-      }
-    },
-    "dependencies": ["L1/ExecutionClient"]
+    "executionTypes": ["nodePackage"],
+    "defaultExecutionType": "nodePackage",
+    "services" : [{
+      "serviceId": "executionClient",
+      "name" : "Execution Client",
+      "nodeOptions": ["nitro"],
+      "required": true
+    }]
   },
+  "category": "Ethereum/L2",
   "rpcTranslation": "eth-l1",
-  "configTranslation": {
-    "eth1ProviderUrl": {
-      "displayName": "This should point to the HTTP RPC endpoint of your Ethereum entry-point (could be infura or other)",
-      "cliConfigPrefix": "--l1.url ",
-      "niceNodeDefaultValue": "http://host.containers.internal:8545",
-      "uiControl": {
-        "type": "text"
-      },
-      "infoDescription": "This should point to the HTTP RPC endpoint of your Ethereum entry-point, typically a local Ethereum client or a hosted gateway service such as Infura or Cloudflare. Examples: infura: https://goerli.infura.io/v3/<PROJECT_ID>, local EC (nethermind/besu/geth): http://localhost:8545"
+  "systemRequirements": {
+    "documentationUrl": "https://geth.arbitrum.org/docs/interface/hardware",
+    "cpu": {
+      "cores": 4
     },
-    "websockets": {
-      "displayName": "rpc websocket connections (*BeaconNodes may require websocket connections)",
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage": {
+      "minSizeGBs": 1600,
+      "ssdRequired": true
+    },
+    "internet": {
+      "minDownloadSpeedMbps": 25,
+      "minUploadSpeedMbps": 10
+    },
+    "docker": {
+      "required": true
+    }
+  },
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "Node data is stored in this folder",
+      "cliConfigPrefix": "--datadir ",
+      "defaultValue": "~/.ethereum",
+      "uiControl": {
+        "type": "filePath"
+      },
+      "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
+    },
+    "network": {
+      "displayName": "mainnet or a testnet",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
-            "value": "Enabled",
-            "config": "--ws"
+            "value": "Mainnet",
+            "config": "--network mainnet"
           },
           {
-            "value": "Disabled"
+            "value": "Testnet",
+            "config": "--network testnet"
           }
         ]
       },
-      "defaultValue": "Disabled"
-    },
-    "httpApis": {
-      "displayName": "Enabled HTTP APIs",
-      "cliConfigPrefix": "--http.api ",
-      "defaultValue": "eth,net,web3",
-      "valuesJoinStr": ",",
-      "uiControl": {
-        "type": "select/multiple",
-        "controlTranslations": [
-          {
-            "value": "eth",
-            "config": "Eth"
-          },
-          {
-            "value": "net",
-            "config": "Net"
-          },
-          {
-            "value": "web3",
-            "config": "Web3"
-          },
-          {
-            "value": "debug",
-            "config": "Debug"
-          },
-
-          {
-            "value": "personal",
-            "config": "Personal"
-          },
-          {
-            "value": "admin",
-            "config": "Admin"
-          }
-        ]
-      }
-    },
-    "httpCorsDomains": {
-      "displayName": "Change where the node accepts http connections (use comma separated urls)",
-      "cliConfigPrefix": "--http.corsdomain ",
-      "uiControl": {
-        "type": "text"
-      }
+      "defaultValue": "Disabled",
+      "documentation": "https://geth.ethereum.org/docs/rpc/server"
     }
   },
-  "category": "L2/ArbitrumOne",
-  "documentation": {
-    "default": "https://arbitrum.io/",
-    "docker": "https://developer.offchainlabs.com/docs/running_node"
-  },
-  "iconUrl": "https://arbitrum.io/wp-content/uploads/2021/08/Arbitrum_Symbol-Full-color-White-background-937x1024.png"
+  "addNodeDescription": "Designed with you in mind, Arbitrum is the leading Layer 2 technology that empowers you to explore and build in the largest Layer 1 ecosystem, Ethereum.",
+  "description": "Designed with you in mind, Arbitrum is the leading Layer 2 technology that empowers you to explore and build in the largest Layer 1 ecosystem, Ethereum.  Take it to the next layer with Nitro. Making Ethereum more inclusive and sustainable, Nitro is the most advanced blockchain scaling technology in the industry."
 }
