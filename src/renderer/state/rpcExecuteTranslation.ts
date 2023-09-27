@@ -133,9 +133,22 @@ export const executeTranslation = async (
       }
     } else if (rpcCall === 'clientVersion') {
       const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/version`);
-      console.log('peers fetch resp ', resp);
       if (resp?.data?.version !== undefined) {
         return resp.data.version;
+      }
+    }
+  } else if (rpcTranslation === 'farcaster-l1') {
+    // todo: use the current config httpPort value instead of hardcoding 2281
+    const hubbleBaseUrl = 'http://localhost:2281';
+    if (rpcCall === 'sync') {
+      const resp = await callFetch(`${hubbleBaseUrl}/v1/info`);
+      if (resp?.isSyncing !== undefined) {
+        return { isSyncing: resp.isSyncing };
+      }
+    } else if (rpcCall === 'clientVersion') {
+      const resp = await callFetch(`${hubbleBaseUrl}/v1/info`);
+      if (resp?.version !== undefined) {
+        return `v${resp.version}`;
       }
     }
   } else if (rpcTranslation === 'eth-l2-starknet') {
