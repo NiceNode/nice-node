@@ -95,7 +95,6 @@ const InitialClientConfigs = ({
           }
         });
         const singleClientConfigValues = sClientConfigValues[clientId];
-        console.log('render conifgs: ', singleClientConfigValues);
         return (
           <React.Fragment key={clientId}>
             <DynamicSettings
@@ -109,12 +108,6 @@ const InitialClientConfigs = ({
               configValuesMap={singleClientConfigValues}
               isDisabled={false}
               onChange={(configKey: string, newValue: ConfigValue) => {
-                console.log(
-                  'initial client conifgs onChange: ',
-                  configKey,
-                  newValue,
-                  sClientConfigValues,
-                );
                 setClientConfigValues({
                   ...sClientConfigValues,
                   [clientId]: {
