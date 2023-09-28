@@ -38,8 +38,6 @@ const LabelSettingsSection = ({
 }: LabelSettingsSectionProps) => {
   const { t: g } = useTranslation('genericComponents');
 
-  // console.log('conifgs items', JSON.stringify(items));
-
   return (
     <div className={[sectionContainer, type].join(' ')}>
       {sectionTitle && (

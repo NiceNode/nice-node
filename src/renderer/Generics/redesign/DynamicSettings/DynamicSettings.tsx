@@ -39,7 +39,6 @@ const DynamicSettings = ({
         onChange,
       }),
     );
-    console.log('conifgs dynamic: ', configValuesMap);
   }, [categoryConfigs, configValuesMap, isDisabled, onChange]);
 
   if (!categoryConfigs) {
