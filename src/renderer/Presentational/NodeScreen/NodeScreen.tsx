@@ -287,15 +287,15 @@ const NodeScreen = () => {
   const { status, spec } = selectedNode;
 
   // TODO: make this more flexible for other client specs
-  const formatSpec = (info: string | undefined) => {
+  const formatSpec = (info: string | undefined, network?: string) => {
     if (!info) {
       return '';
     }
     if (info.includes('BeaconNode')) {
-      return 'Consensus Client — Ethereum Mainnet';
+      return `Consensus Client — Ethereum ${network}`;
     }
     if (info.includes('Execution')) {
-      return 'Execution Client — Ethereum Mainnet';
+      return `Execution Client — Ethereum ${network}`;
     }
     return info;
   };
@@ -364,7 +364,10 @@ const NodeScreen = () => {
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
     version: formatVersion(nodeVersionData, clientName),
-    info: formatSpec(spec.category),
+    info: formatSpec(
+      spec.category,
+      selectedNode?.config?.configValuesMap?.network,
+    ),
     status: {
       stopped: status === 'stopped',
       error: status.includes('error'),
