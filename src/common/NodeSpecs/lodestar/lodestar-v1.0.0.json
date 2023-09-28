@@ -11,12 +11,12 @@
         "http": "Enabled",
         "httpPort": "5052",
         "executionEndpoint": "http://host.containers.internal:8551",
-        "checkpointSyncUrl": "https://beaconstate-mainnet.chainsafe.io"
+        "network" : "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/usr/app/data",
         "raw": "",
-        "forcedRawNodeInput": "beacon --network mainnet --rest.address 0.0.0.0 --dataDir /usr/app/data --jwt-secret /usr/app/data/jwtsecret"
+        "forcedRawNodeInput": "beacon --rest.address 0.0.0.0 --dataDir /usr/app/data --jwt-secret /usr/app/data/jwtsecret"
       }
     }
   },
@@ -52,10 +52,36 @@
       },
       "infoDescription": "Lodestar root directory"
     },
+    "network": {
+      "displayName": "Network (Lodestar)",
+      "cliConfigPrefix": "--network ",
+      "defaultValue": "Mainnet",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "mainnet --checkpointSyncUrl https://mainnet.checkpoint.sigp.io"
+          },
+          {
+            "value": "Holesky",
+            "config": "holesky"
+          },
+          {
+            "value": "Goerli",
+            "config": "goerli"
+          },
+          {
+            "value": "Sepolia",
+            "config": "sepolia"
+          }
+        ]
+      },
+      "addNodeFlow": "advanced"
+    },
     "checkpointSyncUrl": {
       "displayName": "Trusted checkpoint sync URL",
       "cliConfigPrefix": "--checkpointSyncUrl ",
-      "defaultValue": "https://beaconstate-mainnet.chainsafe.io",
       "uiControl": {
         "type": "text"
       }
