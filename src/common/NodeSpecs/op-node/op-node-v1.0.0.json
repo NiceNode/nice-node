@@ -79,8 +79,8 @@
       "uiControl": {
         "type": "text"
       },
-      "defaultValue" : "",
-      "addNodeFlow": "required",
+      "defaultValue" : "http://host.containers.internal:8553",
+      "addNodeFlow": "advanced",
       "infoDescription": "engine and eth namespace required",
       "documentation": "https://github.com/jgresham/superhack/blob/main/README.md#op-node-settings"
     },
