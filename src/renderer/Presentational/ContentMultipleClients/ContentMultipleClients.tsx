@@ -219,7 +219,9 @@ const ContentMultipleClients = (props: {
       <HeaderMetrics {...(nodeOverview as NodeOverviewProps)} />
       <HorizontalLine type="content" />
       <div className={promptContainer}>{renderPrompt()}</div>
-      <div className={sectionTitle}>{t('Clients')}</div>
+      <div className={sectionTitle}>
+        {clients.length > 1 ? t('Clients') : t('Client')}
+      </div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
           return (
