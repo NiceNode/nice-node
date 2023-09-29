@@ -1,4 +1,6 @@
 /* eslint-disable no-await-in-loop */
+import path from 'path';
+import { cp } from 'fs/promises';
 import {
   NodePackageSpecification,
   NodeSpecification,
@@ -13,7 +15,12 @@ import Node, {
   NodeStatus,
 } from '../common/node';
 import * as nodePackageStore from './state/nodePackages';
-import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
+import {
+  deleteDisk,
+  getNodeSpecificationsFolder,
+  getNodesDirPath,
+  makeNodeDir,
+} from './files';
 import { addNode, removeNode, startNode, stopNode } from './nodeManager';
 import { createJwtSecretAtDirs } from './util/jwtSecrets';
 import { ConfigValuesMap } from '../common/nodeConfig';
@@ -57,6 +64,7 @@ export const addNodePackage = async (
   // todo: loop over services and call addNode, at the end add all node ids to the nodepackge.services
   const nodeServices: NodeService[] = [];
   const nodesThatRequireJwtSecret: Node[] = [];
+  const nodesThatRequireFiles: Node[] = [];
   for (let i = 0; i < services.length; i++) {
     const service = services[i];
     try {
@@ -85,6 +93,9 @@ export const addNodePackage = async (
         if (nodePackageServiceSpec.requiresCommonJwtSecret) {
           nodesThatRequireJwtSecret.push(node);
         }
+        if (nodePackageServiceSpec.requiresFiles) {
+          nodesThatRequireFiles.push(node);
+        }
       }
     } catch (e) {
       logger.error(`Unable to create node service: ${JSON.stringify(service)}`);
@@ -100,6 +111,20 @@ export const addNodePackage = async (
   await createJwtSecretAtDirs(
     nodesThatRequireJwtSecret.map((node) => node.runtime.dataDir),
   );
+
+  // copy files from the Node Package dir "files" to nodesThatRequireFiles's
+  //  dataDirs root dir
+  if (nodesThatRequireFiles.length > 0) {
+    const nodeSpecsPath = getNodeSpecificationsFolder();
+    logger.info(`nodeSpecsPath: ${nodeSpecsPath}`);
+    const waitProms = nodesThatRequireFiles.map((node) => {
+      const source = path.join(nodeSpecsPath, nodePackage.spec.specId, 'files');
+      const destination = node.runtime.dataDir;
+      logger.info(`cp src dest:: ${source} ${destination}`);
+      return cp(source, destination, { recursive: true });
+    });
+    await Promise.all(waitProms);
+  }
 
   return nodePackage;
 };
