@@ -7,7 +7,7 @@
     "defaultExecutionType": "docker",
     "input": {
       "defaultConfig": {
-        "l1": "https://mainnet.infura.io/v3/97fa4206f9bd4ea9957f9a82a2b2e4d0",
+        "l1": "",
         "l2": "http://host.containers.internal:8553",
         "l1TrustRpc": "Enabled",
         "httpPort" : "8549",
@@ -69,7 +69,7 @@
         "type": "text"
       },
       "addNodeFlow": "required",
-      "defaultValue" : "https://mainnet.infura.io/v3/97fa4206f9bd4ea9957f9a82a2b2e4d0",
+      "defaultValue" : "",
       "infoDescription": "eth namespace required",
       "documentation": "https://github.com/jgresham/superhack/blob/main/README.md#op-node-settings"
     },
@@ -79,7 +79,7 @@
       "uiControl": {
         "type": "text"
       },
-      "defaultValue" : "https://optimism-mainnet.infura.io/v3/97fa4206f9bd4ea9957f9a82a2b2e4d0",
+      "defaultValue" : "",
       "addNodeFlow": "required",
       "infoDescription": "engine and eth namespace required",
       "documentation": "https://github.com/jgresham/superhack/blob/main/README.md#op-node-settings"
