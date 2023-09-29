@@ -182,3 +182,16 @@ export const deleteDisk = async (fileOrDirPath: string) => {
   }
   return false;
 };
+
+// // process.resourcesPath on Mac with npm start: /Users/johns/dev/nice-node/node_modules/electron/dist/Electron.app/Contents/Resources
+// // process.resourcesPath on Mac, packaged: /Applications/NiceNode.app/Contents/Resources
+// // __dirname on Mac with npm start: /Users/johns/dev/nice-node/src
+// // __dirname on Mac, packaged: /Applications/NiceNode.app/Contents/Resources/app.asar/dist
+export const getNodeSpecificationsFolder = (): string => {
+  // eslint-disable-next-line
+  if (process.env.NODE_ENV === 'development') {
+    return path.resolve(__dirname, '..', 'common', 'NodeSpecs');
+  }
+  // eslint-disable-next-line
+  return path.resolve((process as any).resourcesPath, 'NodeSpecs');
+};

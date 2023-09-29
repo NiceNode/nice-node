@@ -104,10 +104,11 @@
       "output": "release/build"
     },
     "extraResources": [
-      "./assets/**"
-    ],
-    "extraFiles": [
-      "./src/common/NodeSpecs/**"
+      "./assets/**",
+      {
+        "from": "src/common/NodeSpecs",
+        "to": "NodeSpecs"
+      }
     ],
     "publish": [
       {

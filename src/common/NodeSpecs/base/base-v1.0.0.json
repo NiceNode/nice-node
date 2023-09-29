@@ -9,13 +9,15 @@
       "name" : "Execution Client",
       "nodeOptions": ["op-geth"],
       "required": true,
-      "requiresCommonJwtSecret": true
+      "requiresCommonJwtSecret": true,
+      "requiresFiles" : true
     }, {
       "serviceId": "consensusClient",
       "name" : "Consensus Client",
       "nodeOptions": ["op-node"],
       "required": true,
-      "requiresCommonJwtSecret": true
+      "requiresCommonJwtSecret": true,
+      "requiresFiles" : true
     }],
     "dependencies": [{
       "name" : "Ethereum node",
