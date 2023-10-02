@@ -95,6 +95,12 @@ const InitialClientConfigs = ({
           }
         });
         const singleClientConfigValues = sClientConfigValues[clientId];
+
+        // If requiredClientConfigTranslation is empty, return null for this iteration.
+        if (Object.keys(requiredClientConfigTranslation).length === 0) {
+          return null;
+        }
+
         return (
           <React.Fragment key={clientId}>
             <DynamicSettings
