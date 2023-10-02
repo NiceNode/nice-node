@@ -67,7 +67,6 @@ const AddNodeConfiguration = ({
   onChange,
 }: AddNodeConfigurationProps) => {
   const { t } = useTranslation();
-  const { t: tGeneric } = useTranslation('genericComponents');
   const [sNodePackageSpec, setNodePackageSpec] =
     useState<NodePackageSpecification>();
   const [sNodePackageServices, setNodePackageServices] =
@@ -257,12 +256,12 @@ const AddNodeConfiguration = ({
       />
 
       <HorizontalLine />
-      <p className={sectionFont}>{tGeneric('DataLocation')}</p>
+      <p className={sectionFont}>{t('DataLocation')}</p>
       <p
         className={captionText}
       >{`Changing location only supported on Mac & Linux and only locations under /Users/<current-user>/ or /Volumes/`}</p>
       <FolderInput
-        placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
+        placeholder={sNodeStorageLocation ?? t('loadingDotDotDot')}
         freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
         onClickChange={async () => {
           const storageLocationDetails =

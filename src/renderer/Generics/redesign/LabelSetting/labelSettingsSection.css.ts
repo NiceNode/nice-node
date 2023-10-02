@@ -73,4 +73,5 @@ export const lineValueText = style({
   flex: 'none',
   order: 1,
   flexGrow: 0,
+  maxWidth: 352,
 });

@@ -22,6 +22,7 @@ import {
   advancedOptionsDescription,
   advancedOptionsListContainer,
   advancedOptionsItemContainer,
+  unableSetWallet,
   networkValue,
   inputContainer,
   selectContainer,
@@ -406,7 +407,9 @@ export const WalletSettings = ({
   };
 
   if (!httpCorsConfigTranslation) {
-    return <>{t('UnableSetWalletConnections')}</>;
+    return (
+      <div className={unableSetWallet}>{t('UnableSetWalletConnections')}</div>
+    );
   }
 
   return (
