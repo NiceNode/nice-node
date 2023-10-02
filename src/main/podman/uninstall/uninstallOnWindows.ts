@@ -17,29 +17,37 @@ const uninstallOnWindows = async (): Promise<boolean | { error: string }> => {
     let stdout;
     let stderr;
 
-    // may need to run wsl -t podman-nicenode-machine and wsl --unregister podman-nicenode-machine
-    const deleteWslPodmanVm = `wsl --unregister podman-${NICENODE_MACHINE_NAME}`;
-    ({ stdout, stderr } = await execAwait(deleteWslPodmanVm, {
-      log: true,
-    }));
-    logger.info(`podman uninstall unregister wsl2 vm ${stdout}, ${stderr}`);
-
-    // Returns C:\Users\<user> (Ex. C:\Users\johns)
-    const userHome = app.getPath('home');
-    const foldersToDelete = [
-      `${userHome}/.local/share/containers/podman`,
-      `${userHome}/.config/containers/podman`,
-      `${userHome}/.ssh/*podman*`,
-      `${userHome}/.ssh/*nicenode*`,
-    ];
-    foldersToDelete.forEach(async (folderPath) => {
-      const rmCommand = `Remove-Item -Path ${folderPath} -Recurse -Force`;
-      ({ stdout, stderr } = await execAwait(rmCommand, {
+    try {
+      // may need to run wsl -t podman-nicenode-machine and wsl --unregister podman-nicenode-machine
+      const deleteWslPodmanVm = `wsl --unregister podman-${NICENODE_MACHINE_NAME}`;
+      ({ stdout, stderr } = await execAwait(deleteWslPodmanVm, {
         log: true,
-        shell: 'powershell.exe',
       }));
-      logger.info(`podman uninstall rm ${folderPath} ${stdout}, ${stderr}`);
-    });
+      logger.info(`podman uninstall unregister wsl2 vm ${stdout}, ${stderr}`);
+    } catch (err) {
+      logger.error(`wsl --unregister podman-nicenode-machine error: ${err}`);
+    }
+
+    try {
+      // Returns C:\Users\<user> (Ex. C:\Users\johns)
+      const userHome = app.getPath('home');
+      const foldersToDelete = [
+        `${userHome}/.local/share/containers/podman`,
+        `${userHome}/.config/containers/podman`,
+        `${userHome}/.ssh/*podman*`,
+        `${userHome}/.ssh/*nicenode*`,
+      ];
+      foldersToDelete.forEach(async (folderPath) => {
+        const rmCommand = `Remove-Item -Path ${folderPath} -Recurse -Force`;
+        ({ stdout, stderr } = await execAwait(rmCommand, {
+          log: true,
+          shell: 'powershell.exe',
+        }));
+        logger.info(`podman uninstall rm ${folderPath} ${stdout}, ${stderr}`);
+      });
+    } catch (err) {
+      logger.error(`remove podman dirs & files error: ${err}`);
+    }
 
     // This uninstall command is equivalent to the user going to Add & Remove programs UI
     // and clicking Uninstall. msi uninstall command requires sudo.
