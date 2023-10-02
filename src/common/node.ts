@@ -48,6 +48,7 @@ export type NodeRuntime = {
   // execPath?: string;
   dataDir: string;
   processIds?: string[];
+  initialized?: boolean;
   usage: {
     diskGBs: MetricData[] | [];
     memoryBytes: MetricData[] | [];

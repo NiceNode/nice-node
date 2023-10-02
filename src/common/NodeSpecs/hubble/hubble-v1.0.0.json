@@ -8,11 +8,16 @@
     "defaultExecutionType": "docker",
     "input": {
       "defaultConfig": {
+        "p2pPorts" : "2282",
+        "httpPort" : "2281",
+        "farcasterNetwork" : "1",
+        "boostrapNode": "/dns/nemes.farcaster.xyz/tcp/2282"
       },
       "docker": {
         "containerVolumePath": "/home/node/app/apps/hubble",
-        "raw": "",
-        "forcedRawNodeInput": "node --no-warnings build/cli.js start --ip 0.0.0.0"
+        "raw": " --user 0",
+        "initNodeCommand" : "yarn identity create",
+        "forcedRawNodeInput": "node --no-warnings build/cli.js start --ip 0.0.0.0 "
       }
     },
     "imageName": "docker.io/farcasterxyz/hubble:latest"
@@ -37,22 +42,22 @@
   },
   "configTranslation": {
     "ethMainnetRpcUrl": {
-      "displayName": "Ethereum mainnet RPC URL (local node or alchemy/infura/etc.)",
+      "displayName": "Ethereum Mainnet RPC Endpoint (local node or provider)",
       "cliConfigPrefix": "--eth-mainnet-rpc-url ",
-      "defaultValue": "http://host.internal.containers:8545",
+      "defaultValue": "",
       "uiControl": {
         "type": "text"
       },
-      "documentation": "https://www.thehubble.xyz/intro/install.html#install-via-docker"
+      "addNodeFlow": "required"
     },
     "optimismMainnetRpcUrl": {
-      "displayName": "Optimism mainnet RPC URL (local node or alchemy/infura/etc.)",
+      "displayName": "Optimism Mainnet RPC Endpoint (local node or provider)",
       "cliConfigPrefix": "--l2-rpc-url ",
-      "defaultValue": "http://host.internal.containers:8547",
+      "defaultValue": "",
       "uiControl": {
         "type": "text"
       },
-      "documentation": "https://www.thehubble.xyz/intro/install.html#install-via-docker"
+      "addNodeFlow": "required"
     },
     "hubOperatorFid": {
       "displayName": "Set this to your Farcaster FID ",
@@ -60,6 +65,7 @@
       "uiControl": {
         "type": "text"
       },
+      "addNodeFlow": "advanced",
       "documentation": "https://www.thehubble.xyz/intro/install.html#install-via-docker"
     },
     "p2pPorts": {
@@ -73,12 +79,12 @@
     },
     "httpPort": {
       "displayName": "HTTP-RPC server listening port",
-      "cliConfigPrefix": "--rpc-port ",
-      "defaultValue": "2283",
+      "cliConfigPrefix": "--http-api-port ",
+      "defaultValue": "2281",
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "Example value: 2283"
+      "infoDescription": "Example value: 2281"
     },
     "boostrapNode": {
       "displayName": "A Farcaster node to boostrap peer discovery",
@@ -96,6 +102,7 @@
       "uiControl": {
         "type": "text"
       },
+      "addNodeFlow": "advanced",
       "infoDescription": "Example value: 1"
     }
   },

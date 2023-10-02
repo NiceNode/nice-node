@@ -46,6 +46,33 @@
     }
   },
   "configTranslation": {
+    "network": {
+      "displayName": "Network (Reth)",
+      "cliConfigPrefix": "--chain ",
+      "defaultValue": "Mainnet",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "mainnet"
+          },
+          {
+            "value": "Holesky",
+            "config": "holesky"
+          },
+          {
+            "value": "Goerli",
+            "config": "goerli"
+          },
+          {
+            "value": "Sepolia",
+            "config": "sepolia"
+          }
+        ]
+      },
+      "addNodeFlow": "advanced"
+    },
     "http": {
       "displayName": "RPC HTTP connections",
       "uiControl": {

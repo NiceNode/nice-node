@@ -20,8 +20,8 @@
     },
     "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.1.3"
   },
-  "category": "L2/ExecutionClient",
-  "rpcTranslation": "eth-l1",
+  "category": "L2/ConsensusClient",
+  "rpcTranslation": "eth-l1-beacon",
   "systemRequirements": {
     "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
     "cpu": {

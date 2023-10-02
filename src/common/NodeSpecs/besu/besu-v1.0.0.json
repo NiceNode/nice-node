@@ -55,6 +55,33 @@
       },
       "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#data-path"
     },
+    "network": {
+      "displayName": "Network (Besu)",
+      "cliConfigPrefix": "--network=",
+      "defaultValue": "Mainnet",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "mainnet"
+          },
+          {
+            "value": "Holesky",
+            "config": "holesky"
+          },
+          {
+            "value": "Goerli",
+            "config": "goerli"
+          },
+          {
+            "value": "Sepolia",
+            "config": "sepolia"
+          }
+        ]
+      },
+      "addNodeFlow": "advanced"
+    },
     "syncMode": {
       "displayName": "Node synchronization mode",
       "category": "Syncronization",

@@ -40,6 +40,8 @@ export type DockerExecution = BaseNodeExecution & {
       containerVolumePath: string;
       raw?: string;
       forcedRawNodeInput?: string;
+      // optional, one time command run after creating a node and before the first run
+      initNodeCommand?: string;
     };
   };
 };

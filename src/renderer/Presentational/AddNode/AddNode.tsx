@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NodeLibrary } from 'main/state/nodeLibrary';
-import { ModalConfig } from '../ModalManager/modalUtils';
 import {
   container,
   descriptionFont,
@@ -40,13 +38,20 @@ const nodeOptions = [
   //   label: 'Optimism',
   //   info: 'Built by the OP Collective!',
   // },
-  // {
-  //   iconId: 'farcaster',
-  //   title: 'Farcaster',
-  //   value: 'farcaster',
-  //   label: 'Farcaster',
-  //   info: 'A protocol for decentralized social apps',
-  // },
+  {
+    iconId: 'farcaster',
+    title: 'Farcaster',
+    value: 'farcaster',
+    label: 'Farcaster',
+    info: 'A protocol for decentralized social apps',
+  },
+  {
+    iconId: 'arbitrum',
+    title: 'Arbitrum One',
+    value: 'arbitrum',
+    label: 'Arbitrum One',
+    info: 'Welcome to the future of Ethereum',
+  },
 ];
 
 let alphaModalRendered = false;
@@ -61,14 +66,14 @@ export interface AddNodeProps {
   onChange?: (newValue: AddNodeValues) => void;
   nodeConfig?: AddNodeValues;
   setNode?: (nodeSelection: SelectOption, object: AddNodeValues) => void;
-  modalOnChangeConfig?: (config: ModalConfig) => void;
+  shouldHideTitle?: boolean;
 }
 
 const AddNode = ({
   nodeConfig,
   setNode,
-  modalOnChangeConfig,
   onChange,
+  shouldHideTitle,
 }: AddNodeProps) => {
   const { t } = useTranslation();
   const [sSelectedNode, setSelectedNode] = useState<SelectOption>(
@@ -82,12 +87,7 @@ const AddNode = ({
     const fetchData = async () => {
       const hasSeenAlpha = await electron.getSetHasSeenAlphaModal();
       setHasSeenAlphaModal(hasSeenAlpha || false);
-      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
-      if (modalOnChangeConfig) {
-        modalOnChangeConfig({
-          nodeLibrary,
-        });
-      }
+
       // Modal Parent needs updated with the default initial value
       // Todo: due to a JS closure bug with modalOnChangeConfig, we are setting the selected node here
       const ethNodeConfig = {
@@ -107,8 +107,6 @@ const AddNode = ({
       // clear any client selections when the node changes
       const nodeConfig = {
         node: sSelectedNode,
-        executionClient: undefined,
-        consensusClient: undefined,
       };
       if (newNode) {
         setSelectedNode(newNode);
@@ -143,7 +141,9 @@ const AddNode = ({
 
   return (
     <div className={container}>
-      {!modalOnChangeConfig && <div className={titleFont}>{t('AddNode')}</div>}
+      {shouldHideTitle !== true && (
+        <div className={titleFont}>{t('AddYourFirstNode')}</div>
+      )}
       <div className={descriptionContainer}>
         <div className={descriptionFont}>
           <>{t('AddNodeDescription')}</>

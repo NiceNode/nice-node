@@ -28,6 +28,7 @@ import { NodePackageSpecification } from '../../../common/nodeSpec';
 import AddNodeConfiguration, {
   AddNodeConfigurationValues,
 } from '../AddNodeConfiguration/AddNodeConfiguration';
+import { nodeSpecIdLookupNum } from '../../events/environment';
 
 export interface AddNodeStepperProps {
   modal?: boolean;
@@ -131,7 +132,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       );
     }
     const services: AddNodePackageNodeService[] = [];
-    const { clientSelections } = sNodeClientsAndSettings;
+    const { clientSelections, clientConfigValues } = sNodeClientsAndSettings;
     if (sNodeLibrary && clientSelections) {
       // eslint-disable-next-line
       for (const [serviceId, selectOption] of Object.entries(
@@ -158,6 +159,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
           serviceId,
           serviceName: serviceDefinition?.name ?? serviceId,
           spec: serviceNodeSpec,
+          initialConfigValues: clientConfigValues?.[clientId],
         });
       }
     }
@@ -168,7 +170,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       { storageLocation: sNodeStorageLocation },
     );
     console.log('nodePackage result: ', nodePackage);
-    reportEvent('AddNodePackage');
+    reportEvent('AddNodePackage', nodeSpecIdLookupNum(nodePackageSpec.specId));
     dispatch(updateSelectedNodePackageId(nodePackage.id));
 
     electron.startNodePackage(nodePackage.id);

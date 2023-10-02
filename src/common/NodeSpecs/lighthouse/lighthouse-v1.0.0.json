@@ -12,12 +12,12 @@
         "httpCorsDomains": "http://localhost",
         "websockets": "Enabled",
         "executionEndpoint": "http://host.containers.internal:8551",
-        "checkpointSyncUrl": "https://mainnet.checkpoint.sigp.io"
+        "network": "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/root/.lighthouse",
         "raw": "",
-        "forcedRawNodeInput": "lighthouse --network mainnet beacon --execution-jwt /root/.lighthouse/jwtsecret"
+        "forcedRawNodeInput": "lighthouse beacon --execution-jwt /root/.lighthouse/jwtsecret"
       }
     },
     "architectures": {
@@ -63,10 +63,36 @@
       "infoDescription": "Used to specify a custom root data directory for lighthouse keys and databases. Defaults to $HOME/.lighthouse/{network} where network is the value of the `network` flag Note: Users should specify separate custom datadirs for different networks.",
       "documentation": "https://lighthouse-book.sigmaprime.io/advanced-datadir.html?highlight=--datadir#relative-paths"
     },
+    "network": {
+      "displayName": "Network (Lighthouse)",
+      "cliConfigPrefix": "--network ",
+      "defaultValue": "Mainnet",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "mainnet --checkpoint-sync-url https://mainnet.checkpoint.sigp.io"
+          },
+          {
+            "value": "Holesky",
+            "config": "holesky"
+          },
+          {
+            "value": "Goerli",
+            "config": "goerli"
+          },
+          {
+            "value": "Sepolia",
+            "config": "sepolia"
+          }
+        ]
+      },
+      "addNodeFlow": "advanced"
+    },
     "checkpointSyncUrl": {
       "displayName": "Trusted checkpoint sync URL",
       "cliConfigPrefix": "--checkpoint-sync-url ",
-      "defaultValue": "https://mainnet.checkpoint.sigp.io",
       "uiControl": {
         "type": "text"
       }

@@ -13,7 +13,7 @@
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "http://host.containers.internal:8551",
-        "checkpointSyncUrl": "https://beaconstate.ethstaker.cc"
+        "network" : "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/data",
@@ -54,10 +54,35 @@
       "infoDescription": "Prysm root directory",
       "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters/"
     },
+    "network": {
+      "displayName": "Network (Prysm)",
+      "defaultValue": "Mainnet",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "--mainnet --checkpoint-sync-url=https://beaconstate.ethstaker.cc"
+          },
+          {
+            "value": "Holesky",
+            "config": "--holesky"
+          },
+          {
+            "value": "Goerli",
+            "config": "--goerli"
+          },
+          {
+            "value": "Sepolia",
+            "config": "--sepolia"
+          }
+        ]
+      },
+      "addNodeFlow": "advanced"
+    },
     "checkpointSyncUrl": {
       "displayName": "Trusted checkpoint sync URL",
       "cliConfigPrefix": "--checkpoint-sync-url=",
-      "defaultValue": "https://beaconstate.ethstaker.cc",
       "uiControl": {
         "type": "text"
       }

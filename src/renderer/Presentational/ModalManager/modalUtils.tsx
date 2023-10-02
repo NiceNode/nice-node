@@ -6,8 +6,6 @@ import { ClientSelections } from '../AddNodeConfiguration/AddNodeConfiguration';
 
 export interface ModalConfig {
   node?: string;
-  executionClient?: string;
-  consensusClient?: string;
   clientSelections?: ClientSelections;
   storageLocation?: string;
   theme?: ThemeSetting;

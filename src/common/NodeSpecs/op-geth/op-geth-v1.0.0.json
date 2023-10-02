@@ -23,7 +23,7 @@
     "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101106.0"
   },
   "category": "L2/ExecutionClient",
-  "rpcTranslation": "eth-l1",
+  "rpcTranslation": "eth-l2",
   "systemRequirements": {
     "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
     "cpu": {

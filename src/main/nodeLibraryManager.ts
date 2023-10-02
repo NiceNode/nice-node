@@ -2,6 +2,7 @@ import ethereumv1 from '../common/NodeSpecs/ethereum/ethereum-v1.0.0.json';
 import optimismv1 from '../common/NodeSpecs/optimism/optimism-v1.0.0.json';
 import basev1 from '../common/NodeSpecs/base/base-v1.0.0.json';
 import farcasterv1 from '../common/NodeSpecs/farcaster/farcaster-v1.0.0.json';
+import arbitrumv1 from '../common/NodeSpecs/arbitrum/arbitrum-v1.0.0.json';
 
 import besuv1 from '../common/NodeSpecs/besu/besu-v1.0.0.json';
 import nethermindv1 from '../common/NodeSpecs/nethermind/nethermind-v1.0.0.json';
@@ -14,13 +15,14 @@ import tekuv1 from '../common/NodeSpecs/teku/teku-v1.0.0.json';
 import lighthousev1 from '../common/NodeSpecs/lighthouse/lighthouse-v1.0.0.json';
 import prysmv1 from '../common/NodeSpecs/prysm/prysm-v1.0.0.json';
 
-import arbitrumv1 from '../common/NodeSpecs/arbitrum/arbitrum-v1.0.0.json';
 import pathfinderv1 from '../common/NodeSpecs/pathfinder/pathfinder-v1.0.0.json';
 
 import opGethv1 from '../common/NodeSpecs/op-geth/op-geth-v1.0.0.json';
 import opNodev1 from '../common/NodeSpecs/op-node/op-node-v1.0.0.json';
 
 import hubblev1 from '../common/NodeSpecs/hubble/hubble-v1.0.0.json';
+
+import nitrov1 from '../common/NodeSpecs/nitro/nitro-v1.0.0.json';
 
 import logger from './logger';
 import {
@@ -49,6 +51,7 @@ export const initialize = async () => {
     lighthousev1,
     prysmv1,
     arbitrumv1,
+    nitrov1,
     pathfinderv1,
     opGethv1,
     opNodev1,
@@ -65,7 +68,13 @@ export const initialize = async () => {
   updateNodeLibrary(nodeSpecBySpecId);
 
   const nodePackageSpecBySpecId: NodePackageLibrary = {};
-  const packageSpecs = [ethereumv1, optimismv1, basev1, farcasterv1];
+  const packageSpecs = [
+    ethereumv1,
+    farcasterv1,
+    arbitrumv1,
+    optimismv1,
+    basev1,
+  ];
   packageSpecs.forEach((spec) => {
     try {
       nodePackageSpecBySpecId[spec.specId] = spec as NodePackageSpecification;

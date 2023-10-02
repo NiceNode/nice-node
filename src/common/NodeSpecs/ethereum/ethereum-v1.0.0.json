@@ -2,7 +2,7 @@
   "specId": "ethereum",
   "version": "1.0.0",
   "displayName": "Ethereum",
-  "displayTagline": "Non-Validating Node - Ethereum mainnet",
+  "displayTagline": "Non-Validating Node - Ethereum",
   "execution": {
     "executionTypes": ["nodePackage"],
     "defaultExecutionType": "nodePackage",

@@ -14,14 +14,9 @@ import Node, {
 } from '../common/node';
 import * as nodePackageStore from './state/nodePackages';
 import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
-import {
-  addNode,
-  removeAllNodes,
-  removeNode,
-  startNode,
-  stopNode,
-} from './nodeManager';
+import { addNode, removeNode, startNode, stopNode } from './nodeManager';
 import { createJwtSecretAtDirs } from './util/jwtSecrets';
+import { ConfigValuesMap } from '../common/nodeConfig';
 
 // Created when adding a node and is used to pair a node spec and config
 // for a specific node package service
@@ -29,6 +24,7 @@ export type AddNodePackageNodeService = {
   serviceId: string;
   serviceName: string;
   spec: NodeSpecification;
+  initialConfigValues?: ConfigValuesMap;
 };
 
 export const addNodePackage = async (
@@ -71,7 +67,16 @@ export const addNodePackage = async (
       );
       if (nodePackageServiceSpec) {
         // Only create required nodes right now?
-        const node = await addNode(service.spec, settings.storageLocation);
+        const node = await addNode(
+          service.spec,
+          settings.storageLocation,
+          service.initialConfigValues,
+        );
+        console.log(
+          'nodePackageManager: adding node with initialConfigValues: ',
+          node,
+          service.initialConfigValues,
+        );
         nodeServices.push({
           serviceId: service.serviceId,
           serviceName: service.serviceName,
@@ -167,8 +172,7 @@ export const removeNodePackage = async (
   nodeId: NodeId,
   options: { isDeleteStorage: boolean },
 ): Promise<NodePackage> => {
-  // todo: check if node package can be removed. Is it stopped?
-  // todo: stop & remove container
+  // Stop package if running (this makes delete files and other things smoother)
   logger.info(
     `Remove node package ${nodeId} and delete storage? ${options.isDeleteStorage}`,
   );
@@ -202,13 +206,12 @@ export const removeNodePackage = async (
 };
 
 /**
- * Removes all node packages, then remove all node services and deletes their storage data
+ * Removes all node packages, which removes all node services and deletes their storage data
  */
 export const removeAllNodePackages = async () => {
   const nodes = nodePackageStore.getNodePackages();
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
-    await nodePackageStore.removeNodePackage(node.id);
+    await removeNodePackage(node.id, { isDeleteStorage: true });
   }
-  await removeAllNodes();
 };

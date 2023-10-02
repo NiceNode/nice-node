@@ -56,6 +56,7 @@ export interface NodeIcons {
   ['op-node']?: string;
   farcaster?: string;
   hubble?: string;
+  nitro?: string;
 }
 
 // Define all icons here
@@ -87,6 +88,7 @@ export const NODE_ICONS: NodeIcons = {
   'op-node': optimism,
   farcaster,
   hubble: farcaster,
+  nitro: arbitrum,
 };
 
 const white = '#FFFFFF';
