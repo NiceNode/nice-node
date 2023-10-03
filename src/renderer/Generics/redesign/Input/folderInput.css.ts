@@ -7,7 +7,6 @@ export const container = style({
   gap: 8,
   width: '100%',
   minWidth: 400,
-  height: 52,
 });
 
 export const pathAndChangeContainer = style({
@@ -16,7 +15,7 @@ export const pathAndChangeContainer = style({
   flexDirection: 'row',
   alignItems: 'flex-start',
   padding: '0px',
-  gap: 20,
+  gap: 5,
 });
 
 export const freeStorageSpaceFontStyle = style({

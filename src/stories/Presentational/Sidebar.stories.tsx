@@ -77,7 +77,7 @@
 //           },
 //           configTranslation: {
 //             dataDir: {
-//               displayName: 'Node data is stored in this folder',
+//               displayName: 'Data location',
 //               cliConfigPrefix: '--datadir ',
 //               defaultValue: '~/.ethereum',
 //               uiControl: {
@@ -189,7 +189,7 @@
 //                 },
 //                 configTranslation: {
 //                   dataDir: {
-//                     displayName: 'Node data is stored in this folder',
+//                     displayName: 'Data location',
 //                     cliConfigPrefix: '--datadir ',
 //                     defaultValue: '~/.ethereum',
 //                     uiControl: {
@@ -455,7 +455,7 @@
 //                 },
 //                 configTranslation: {
 //                   dataDir: {
-//                     displayName: 'Node data is stored in this folder',
+//                     displayName: 'Data location',
 //                     cliConfigPrefix: '--datadir ',
 //                     uiControl: {
 //                       type: 'filePath',
@@ -654,7 +654,7 @@
 //           },
 //           configTranslation: {
 //             dataDir: {
-//               displayName: 'Node data is stored in this folder',
+//               displayName: 'Data location',
 //               cliConfigPrefix: '--datadir ',
 //               defaultValue: '~/.ethereum',
 //               uiControl: {
@@ -744,7 +744,7 @@
 //                 },
 //                 configTranslation: {
 //                   dataDir: {
-//                     displayName: 'Node data is stored in this folder',
+//                     displayName: 'Data location',
 //                     category: 'Storage',
 //                     cliConfigPrefix: '--data-path=',
 //                     uiControl: {
@@ -1265,7 +1265,7 @@
 //           },
 //           configTranslation: {
 //             dataDir: {
-//               displayName: 'Node data is stored in this folder',
+//               displayName: 'Data location',
 //               cliConfigPrefix: '--datadir ',
 //               defaultValue: '~/.ethereum',
 //               uiControl: {
@@ -1355,7 +1355,7 @@
 //                 },
 //                 configTranslation: {
 //                   dataDir: {
-//                     displayName: 'Node data is stored in this folder',
+//                     displayName: 'Data location',
 //                     category: 'Storage',
 //                     cliConfigPrefix: '--data-path=',
 //                     uiControl: {
@@ -1876,7 +1876,7 @@
 //           },
 //           configTranslation: {
 //             dataDir: {
-//               displayName: 'Node data is stored in this folder',
+//               displayName: 'Data location',
 //               cliConfigPrefix: '--datadir ',
 //               defaultValue: '~/.ethereum',
 //               uiControl: {
@@ -1966,7 +1966,7 @@
 //                 },
 //                 configTranslation: {
 //                   dataDir: {
-//                     displayName: 'Node data is stored in this folder',
+//                     displayName: 'Data location',
 //                     category: 'Storage',
 //                     cliConfigPrefix: '--data-path=',
 //                     uiControl: {

@@ -12,6 +12,7 @@ import {
   sectionFont,
   titleFont,
   advancedOptionsLink,
+  dataLocationContainer,
 } from './addNodeConfiguration.css';
 import SpecialSelect, {
   SelectOption,
@@ -246,6 +247,36 @@ const AddNodeConfiguration = ({
         );
       })}
 
+      <HorizontalLine />
+      <div className={dataLocationContainer}>
+        <p className={sectionFont}>{t('DataLocation')}</p>
+        <p className={captionText}>{t('ChangingLocation')}</p>
+        <FolderInput
+          placeholder={sNodeStorageLocation ?? t('loadingDotDotDot')}
+          freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
+          onClickChange={async () => {
+            const storageLocationDetails =
+              await electron.openDialogForStorageLocation();
+            console.log('storageLocationDetails', storageLocationDetails);
+            if (storageLocationDetails) {
+              setNodeStorageLocation(storageLocationDetails.folderPath);
+              if (onChange) {
+                onChange({
+                  storageLocation: storageLocationDetails.folderPath,
+                });
+              }
+              setNodeStorageLocationFreeStorageGBs(
+                storageLocationDetails.freeStorageGBs,
+              );
+            } else {
+              // user didn't change the folder path
+            }
+          }}
+        />
+      </div>
+
+      <HorizontalLine />
+
       {/* Initial client settings, required and optional */}
       <InitialClientConfigs
         clientSpecs={sClientNodeSpecifications}
@@ -254,36 +285,6 @@ const AddNodeConfiguration = ({
           dispatchClientConfigValues(newClientConfigValues);
         }}
       />
-
-      <HorizontalLine />
-      <p className={sectionFont}>{t('DataLocation')}</p>
-      <p
-        className={captionText}
-      >{`Changing location only supported on Mac & Linux and only locations under /Users/<current-user>/ or /Volumes/`}</p>
-      <FolderInput
-        placeholder={sNodeStorageLocation ?? t('loadingDotDotDot')}
-        freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
-        onClickChange={async () => {
-          const storageLocationDetails =
-            await electron.openDialogForStorageLocation();
-          console.log('storageLocationDetails', storageLocationDetails);
-          if (storageLocationDetails) {
-            setNodeStorageLocation(storageLocationDetails.folderPath);
-            if (onChange) {
-              onChange({
-                storageLocation: storageLocationDetails.folderPath,
-              });
-            }
-            setNodeStorageLocationFreeStorageGBs(
-              storageLocationDetails.freeStorageGBs,
-            );
-          } else {
-            // user didn't change the folder path
-          }
-        }}
-      />
-
-      <HorizontalLine />
       {/* Initial client settings, required and optional */}
       <div className={advancedOptionsLink}>
         <DropdownLink

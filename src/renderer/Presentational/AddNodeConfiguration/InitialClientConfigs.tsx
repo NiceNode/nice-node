@@ -7,6 +7,7 @@ import {
   ConfigValue,
   ConfigValuesMap,
 } from '../../../common/nodeConfig';
+import { initialClientConfigContainer } from './addNodeConfiguration.css';
 
 // The core data structure for this component
 export type ClientConfigValues = {
@@ -80,52 +81,54 @@ const InitialClientConfigs = ({
 
   return (
     <>
-      {/* Initial client settings, required and optional */}
+      <div className={initialClientConfigContainer}>
+        {/* Initial client settings, required and optional */}
 
-      {Object.keys(sClientConfigTranslations)?.map((clientId: string) => {
-        const singleClientConfigTranslation =
-          sClientConfigTranslations[clientId];
-        const requiredClientConfigTranslation: ConfigTranslationMap = {};
+        {Object.keys(sClientConfigTranslations)?.map((clientId: string) => {
+          const singleClientConfigTranslation =
+            sClientConfigTranslations[clientId];
+          const requiredClientConfigTranslation: ConfigTranslationMap = {};
 
-        // Filter out only node config that is required for the add node flow
-        Object.keys(singleClientConfigTranslation)?.map((configKey) => {
-          const configTranslation = singleClientConfigTranslation[configKey];
-          if (configTranslation.addNodeFlow === addNodeFlowSelection) {
-            requiredClientConfigTranslation[configKey] = configTranslation;
+          // Filter out only node config that is required for the add node flow
+          Object.keys(singleClientConfigTranslation)?.map((configKey) => {
+            const configTranslation = singleClientConfigTranslation[configKey];
+            if (configTranslation.addNodeFlow === addNodeFlowSelection) {
+              requiredClientConfigTranslation[configKey] = configTranslation;
+            }
+          });
+          const singleClientConfigValues = sClientConfigValues[clientId];
+
+          // If requiredClientConfigTranslation is empty, return null for this iteration.
+          if (Object.keys(requiredClientConfigTranslation).length === 0) {
+            return null;
           }
-        });
-        const singleClientConfigValues = sClientConfigValues[clientId];
 
-        // If requiredClientConfigTranslation is empty, return null for this iteration.
-        if (Object.keys(requiredClientConfigTranslation).length === 0) {
-          return null;
-        }
-
-        return (
-          <React.Fragment key={clientId}>
-            <DynamicSettings
-              type="modal"
-              categoryConfigs={[
-                {
-                  category: '',
-                  configTranslationMap: requiredClientConfigTranslation,
-                },
-              ]}
-              configValuesMap={singleClientConfigValues}
-              isDisabled={false}
-              onChange={(configKey: string, newValue: ConfigValue) => {
-                setClientConfigValues({
-                  ...sClientConfigValues,
-                  [clientId]: {
-                    ...sClientConfigValues[clientId],
-                    [configKey]: newValue as string,
+          return (
+            <React.Fragment key={clientId}>
+              <DynamicSettings
+                type="modal"
+                categoryConfigs={[
+                  {
+                    category: '',
+                    configTranslationMap: requiredClientConfigTranslation,
                   },
-                });
-              }}
-            />
-          </React.Fragment>
-        );
-      })}
+                ]}
+                configValuesMap={singleClientConfigValues}
+                isDisabled={false}
+                onChange={(configKey: string, newValue: ConfigValue) => {
+                  setClientConfigValues({
+                    ...sClientConfigValues,
+                    [clientId]: {
+                      ...sClientConfigValues[clientId],
+                      [configKey]: newValue as string,
+                    },
+                  });
+                }}
+              />
+            </React.Fragment>
+          );
+        })}
+      </div>
     </>
   );
 };

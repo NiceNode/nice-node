@@ -56,7 +56,7 @@
   },
   "configTranslation": {
     "dataDir": {
-      "displayName": "Node data is stored in this folder",
+      "displayName": "Data location",
       "category": "Storage",
       "cliConfigPrefix": "--datadir ",
       "uiControl": {

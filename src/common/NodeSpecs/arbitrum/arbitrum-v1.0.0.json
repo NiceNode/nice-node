@@ -6,12 +6,14 @@
   "execution": {
     "executionTypes": ["nodePackage"],
     "defaultExecutionType": "nodePackage",
-    "services" : [{
-      "serviceId": "executionClient",
-      "name" : "Execution Client",
-      "nodeOptions": ["nitro"],
-      "required": true
-    }]
+    "services": [
+      {
+        "serviceId": "executionClient",
+        "name": "Execution Client",
+        "nodeOptions": ["nitro"],
+        "required": true
+      }
+    ]
   },
   "category": "Ethereum/L2",
   "rpcTranslation": "eth-l1",
@@ -37,7 +39,7 @@
   },
   "configTranslation": {
     "dataDir": {
-      "displayName": "Node data is stored in this folder",
+      "displayName": "Data location",
       "cliConfigPrefix": "--datadir ",
       "defaultValue": "~/.ethereum",
       "uiControl": {

@@ -48,6 +48,12 @@ export const lineContainer = style({
   flexGrow: 0,
   borderBottom: '1px solid',
   borderColor: vars.color.font10,
+  selectors: {
+    [`&.dataDir`]: {
+      alignItems: 'unset',
+      flexDirection: 'column',
+    },
+  },
 });
 
 export const labelAndDescriptionContainer = style({
@@ -74,4 +80,9 @@ export const lineValueText = style({
   order: 1,
   flexGrow: 0,
   maxWidth: 352,
+  selectors: {
+    [`&.dataDir`]: {
+      maxWidth: 'unset',
+    },
+  },
 });

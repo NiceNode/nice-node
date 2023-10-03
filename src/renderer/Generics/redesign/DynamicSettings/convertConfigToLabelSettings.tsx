@@ -63,6 +63,7 @@ const convertConfigToLabelSettings = ({
           );
 
           const settingItem: LabelSettingsItem = {
+            key: configKey,
             label: configTranslation.displayName,
             value: (
               <Setting

@@ -30,7 +30,7 @@ Primary.args = {
       category: 'Storage',
       configTranslationMap: {
         dataDir: {
-          displayName: 'Node data is stored in this folder',
+          displayName: 'Data location',
           category: 'Storage',
           cliConfigPrefix: '--data-path=',
           uiControl: {
