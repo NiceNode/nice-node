@@ -51,6 +51,9 @@ const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
 const ethL2Provider = new ethers.providers.JsonRpcProvider(
   'http://localhost:8547',
 );
+const ethL2ConsensusProvider = new ethers.providers.JsonRpcProvider(
+  'http://localhost:8549',
+);
 
 // const provider9545 = new ethers.providers.JsonRpcProvider(
 //   'http://localhost:9545'
@@ -132,6 +135,54 @@ export const executeTranslation = async (
       return resp;
     } else if (rpcCall === 'clientVersion') {
       const resp = await ethL2Provider.send('web3_clientVersion');
+      if (resp) {
+        return resp;
+      } else {
+        return undefined;
+      }
+    } else if (rpcCall === 'net_version') {
+      // Returns chain Id. Example 1=eth mainnet, 8453=base mainnet
+      // we can use this to confirm that a node is running on the right network
+      const resp = await ethL2Provider.send('net_version');
+      console.log('net_version: ', resp);
+      if (resp) {
+        return resp;
+      } else {
+        return undefined;
+      }
+    }
+  } else if (rpcTranslation === 'eth-l2-consensus') {
+    // use ethL2ConsensusProvider
+    if (rpcCall === 'sync') {
+      const resp = await ethL2ConsensusProvider.send('eth_syncing');
+      let isSyncing;
+      let syncPercent;
+      if (resp) {
+        if (typeof resp === 'object') {
+          const syncRatio = resp.currentBlock / resp.highestBlock;
+          syncPercent = (syncRatio * 100).toFixed(1);
+          isSyncing = true;
+        } else if (resp === false) {
+          // light client geth, it is done syncing if data is false
+          isSyncing = false;
+        }
+      }
+      return { isSyncing, syncPercent };
+    } else if (rpcCall === 'peers') {
+      const resp = await ethL2ConsensusProvider.send('net_peerCount');
+      if (resp) {
+        return hexToDecimal(resp);
+      } else {
+        return undefined;
+      }
+    } else if (rpcCall === 'latestBlock') {
+      const resp = await ethL2ConsensusProvider.send('eth_getBlockByNumber', [
+        'latest',
+        true,
+      ]);
+      return resp;
+    } else if (rpcCall === 'clientVersion') {
+      const resp = await ethL2ConsensusProvider.send('web3_clientVersion');
       if (resp) {
         return resp;
       } else {

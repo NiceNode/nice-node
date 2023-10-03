@@ -8,6 +8,8 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
+        "httpPort" : "8547",
+        "enginePort" : "8553",
         "httpCorsDomains": "http://localhost",
         "webSockets": "Disabled",
         "httpVirtualHosts": "localhost,host.containers.internal",
@@ -16,7 +18,8 @@
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
-        "raw": "-p 8547:8545 -p 8548:8546 -p 8553:8551",
+        "raw": "",
+        "initNodeCommand" : "init /root/.ethereum/genesis-l2.json",
         "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
@@ -172,16 +175,25 @@
     "httpPort": {
       "displayName": "HTTP-RPC server listening port",
       "cliConfigPrefix": "--http.port ",
-      "defaultValue": "8545",
+      "defaultValue": "8547",
       "uiControl": {
         "type": "text"
       },
       "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
     },
+    "enginePort": {
+      "displayName": "Engine JSON-RPC listening port",
+      "cliConfigPrefix": "--authrpc.port ",
+      "defaultValue": "8553",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "The listening port for the Engine API calls for JSON-RPC over HTTP and WebSocket."
+    },
     "webSocketsPort": {
       "displayName": "WS-RPC server listening port",
       "cliConfigPrefix": "--ws.port ",
-      "defaultValue": "8546",
+      "defaultValue": "8548",
       "uiControl": {
         "type": "text"
       },

@@ -24,13 +24,13 @@ const nodeOptions = [
     label: 'Ethereum',
     info: 'The world computer',
   },
-  // {
-  //   iconId: 'base',
-  //   title: 'Base',
-  //   value: 'base',
-  //   label: 'Base',
-  //   info: 'A secure and low-cost Ethereum Layer 2 built on the OP stack',
-  // },
+  {
+    iconId: 'base',
+    title: 'Base',
+    value: 'base',
+    label: 'Base',
+    info: 'A secure and low-cost Ethereum Layer 2 built on the OP stack',
+  },
   // {
   //   iconId: 'optimism',
   //   title: 'Optimism',

@@ -17,7 +17,7 @@ export type LogWithMetadata = {
 };
 
 const trimLogHeader = (log: string, client: string) => {
-  if (client === 'geth') {
+  if (client === 'geth' || client === 'op-geth') {
     // Pattern: INFO/WARN/ERROR/ERR/INF [MM-DD|HH:mm:ss.SSS]
     return log.replace(
       /(INFO|WARN|ERROR) \[\d{2}-\d{2}\|\d{2}:\d{2}:\d{2}\.\d{3}\] /,

@@ -117,6 +117,7 @@ export type NodePackageNodeServiceSpec = {
   nodeOptions: string[] | NodeSpecification[];
   required: boolean;
   requiresCommonJwtSecret?: boolean;
+  requiresFiles?: boolean;
 };
 
 export type NodePackageExecution = BaseNodeExecution & {
