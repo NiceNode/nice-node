@@ -13,7 +13,7 @@
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "http://host.containers.internal:8551",
-        "network" : "Mainnet"
+        "network": "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/data",
@@ -154,5 +154,22 @@
     "default": "https://docs.prylabs.network/docs/getting-started",
     "docker": "https://docs.prylabs.network/docs/install/install-with-docker/"
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/prysm-logo.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/prysm-logo.png",
+  "resources": [
+    {
+      "label": "Twitter",
+      "value": "@prylabs",
+      "link": "https://x.com/prylabs"
+    },
+    {
+      "label": "Discord",
+      "value": "Join",
+      "link": "https://discord.com/invite/prysmaticlabs"
+    },
+    {
+      "label": "Website",
+      "value": "prysmaticlabs.com",
+      "link": "https://prysmaticlabs.com/"
+    }
+  ]
 }

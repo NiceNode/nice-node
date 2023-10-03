@@ -79,7 +79,7 @@ const InitialClientConfigs = ({
   }
 
   return (
-    <div>
+    <>
       {/* Initial client settings, required and optional */}
 
       {Object.keys(sClientConfigTranslations)?.map((clientId: string) => {
@@ -126,7 +126,7 @@ const InitialClientConfigs = ({
           </React.Fragment>
         );
       })}
-    </div>
+    </>
   );
 };
 

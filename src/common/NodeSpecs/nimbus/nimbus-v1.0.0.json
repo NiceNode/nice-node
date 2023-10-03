@@ -13,7 +13,7 @@
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "\"http://host.containers.internal:8551\"",
-        "network" : "Mainnet"
+        "network": "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/home/user/data",
@@ -176,5 +176,22 @@
     "default": "https://nimbus.guide/",
     "docker": "https://nimbus.guide/docker.html"
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/nimbus-logo-text.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/nimbus-logo-text.png",
+  "resources": [
+    {
+      "label": "Twitter",
+      "value": "@ethnimbus",
+      "link": "https://x.com/ethnimbus"
+    },
+    {
+      "label": "Discord",
+      "value": "Join",
+      "link": "https://discord.com/invite/XRxWahP"
+    },
+    {
+      "label": "Website",
+      "value": "nimbus.team",
+      "link": "https://nimbus.team/"
+    }
+  ]
 }

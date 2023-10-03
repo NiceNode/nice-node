@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
 
+import { LabelValuesSectionItemsProps } from '../renderer/Generics/redesign/LabelValues/LabelValuesSection';
 import { SystemRequirements } from './systemRequirements';
 
 import { ConfigValuesMap, ConfigTranslationMap } from './nodeConfig';
@@ -107,6 +108,7 @@ export type NodeSpecification = {
   iconUrl?: string;
   category?: string;
   documentation?: { default?: string; docker?: string; binary?: string };
+  resources?: LabelValuesSectionItemsProps[];
 };
 
 export type NodePackageNodeServiceSpec = {
@@ -143,4 +145,5 @@ export type NodePackageSpecification = {
   documentation?: { default?: string; docker?: string; binary?: string };
   addNodeDescription?: string;
   description?: string;
+  resources?: LabelValuesSectionItemsProps[];
 };

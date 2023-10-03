@@ -37,6 +37,7 @@ export interface ClientProps {
   nodeType: string;
   status: ClientStatusProps;
   stats: ClientStatsProps;
+  resources: any;
   onClick?: () => void;
 }
 

@@ -249,5 +249,22 @@
     "default": "https://docs.nethermind.io/nethermind/",
     "docker": "https://docs.nethermind.io/nethermind/ethereum-client/docker"
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/nethermind-logo.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/nethermind-logo.png",
+  "resources": [
+    {
+      "label": "Twitter",
+      "value": "@NethermindEth",
+      "link": "https://x.com/NethermindEth"
+    },
+    {
+      "label": "Discord",
+      "value": "Join",
+      "link": "https://discord.com/invite/PaCMRFdvWT"
+    },
+    {
+      "label": "Website",
+      "value": "nethermind.io",
+      "link": "https://www.nethermind.io/"
+    }
+  ]
 }

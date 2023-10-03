@@ -9,6 +9,15 @@ import {
   sectionHeaderText,
 } from './labelValuesSection.css';
 
+export interface LabelValuesSectionItemsProps {
+  /**
+   * The sections label value items
+   */
+  label: string;
+  value: string;
+  link?: string;
+}
+
 export interface LabelValuesSectionProps {
   /**
    * Title gets uppercased
@@ -17,7 +26,7 @@ export interface LabelValuesSectionProps {
   /**
    * The sections label value items
    */
-  items: { label: string; value: string; link?: string }[];
+  items: LabelValuesSectionItemsProps[];
 }
 
 const LabelValuesSection = ({
