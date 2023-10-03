@@ -52,7 +52,7 @@ const NodeSettings = ({
         )}
         {/* todo: tab1 */}
         <DynamicSettings
-          type="modal"
+          type="nodeSettings"
           categoryConfigs={categoryConfigs}
           configValuesMap={configValuesMap}
           isDisabled={isDisabled}

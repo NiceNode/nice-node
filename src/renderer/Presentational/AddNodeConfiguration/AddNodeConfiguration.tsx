@@ -30,6 +30,7 @@ import { NodeId } from '../../../common/node';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import InitialClientConfigs, {
   ClientConfigValues,
+  ClientConfigTranslations,
 } from './InitialClientConfigs';
 import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 

@@ -36,10 +36,11 @@ const DynamicSettings = ({
         categoryConfigs: categoryConfigs ?? [],
         configValuesMap: configValuesMap ?? {},
         isDisabled,
+        type,
         onChange,
       }),
     );
-  }, [categoryConfigs, configValuesMap, isDisabled, onChange]);
+  }, [categoryConfigs, type, configValuesMap, isDisabled, onChange]);
 
   if (!categoryConfigs) {
     return <>No node settings found.</>;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { NodeSpecification } from '../../../common/nodeSpec';
 import DynamicSettings from '../../Generics/redesign/DynamicSettings/DynamicSettings';
 import {
-  ConfigTranslationAddNodeFlow,
   ConfigTranslationMap,
   ConfigValue,
   ConfigValuesMap,
@@ -76,7 +75,7 @@ const InitialClientConfigs = ({
           return (
             <React.Fragment key={clientId}>
               <DynamicSettings
-                type="modal"
+                type="addNode"
                 categoryConfigs={[
                   {
                     category: '',

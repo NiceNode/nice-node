@@ -269,6 +269,7 @@ export const WalletSettings = ({
 
   const getNetworkItem = (key: string) => {
     return {
+      key,
       label: networkLabels[key as keyof NetworkLabelsProps],
       value: (
         <div className={networkValue}>
@@ -291,6 +292,7 @@ export const WalletSettings = ({
   const getWalletItem = (wallet: WalletProps) => {
     const { walletId, walletAddress, walletName } = wallet;
     return {
+      key: walletId,
       label: (
         <div className={walletContainer}>
           <div
