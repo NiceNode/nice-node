@@ -1,6 +1,8 @@
 import mixpanel from 'mixpanel-browser';
+
 import { MP_PROJECT_ENV, MP_PROJECT_TOKEN } from './environment';
 import { NNEvent } from './events';
+import electron from '../electronGlobal';
 
 /**
  * Enable or disable remote event reporting service from in the front-end.
@@ -43,7 +45,7 @@ export const reportEvent = (
   mixpanel.track(event, properties);
 };
 
-export const initialize = () => {
+export const initialize = async () => {
   if (MP_PROJECT_ENV === 'dev') {
     return;
   }
@@ -54,7 +56,9 @@ export const initialize = () => {
       track_pageview: true,
       persistence: 'localStorage',
     });
-    mixpanel.identify('johns');
+    const appClientId = await electron.getAppClientId();
+    console.log('event reporting: appClientId: ', appClientId);
+    mixpanel.identify(appClientId);
   } else {
     console.error('MP_PROJECT_TOKEN not found!');
   }
