@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Used variables
         run: |
-          echo "FATHOM_SITE_ENV variable : ${{ vars.FATHOM_SITE_ENV }}"
+          echo "MP_PROJECT_ENV variable : ${{ vars.MP_PROJECT_ENV }}"
           echo "NICENODE_ENV variable : ${{ vars.NICENODE_ENV }}"
 
       - name: Checkout git repo
@@ -64,8 +64,8 @@ jobs:
           # CSC_IDENTITY_AUTO_DISCOVERY: false
           # This is used for app event tracking
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          FATHOM_SITE_ID: ${{ secrets.FATHOM_SITE_ID }}
-          FATHOM_SITE_ENV: ${{ vars.FATHOM_SITE_ENV }}
+          MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+          MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           # This is used for uploading release assets to github
           GH_TOKEN: ${{ secrets.GH_TOKEN }}

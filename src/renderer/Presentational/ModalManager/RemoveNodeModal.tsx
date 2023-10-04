@@ -3,6 +3,7 @@ import electron from '../../electronGlobal';
 import RemoveNodeWrapper from '../RemoveNodeModal/RemoveNodeWrapper';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
+import { reportEvent } from '../../events/reportEvent';
 
 type Props = {
   modalOnClose: () => void;
@@ -10,8 +11,10 @@ type Props = {
 
 export const RemoveNodeModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
+  const [sIsRemoving, setIsRemoving] = useState<boolean>(false);
   const modalTitle = 'Are you sure you want to remove this node?';
   const buttonSaveLabel = 'Remove node';
+  const buttonRemovingLabel = 'Removing node...';
   const buttonSaveType = 'danger';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
@@ -20,8 +23,16 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
 
     try {
       if (selectedNodePackage) {
+        setIsRemoving(true);
         await electron.removeNodePackage(selectedNodePackage.id, {
           isDeleteStorage,
+        });
+        console.log('removeNode package: ', selectedNodePackage);
+        reportEvent('RemoveNodePackage', {
+          nodePackage: selectedNodePackage.spec.specId,
+          clients: selectedNodePackage.services.map(
+            (service) => service.node.spec.specId,
+          ),
         });
       }
     } catch (err) {
@@ -37,8 +48,9 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
     <Modal
       modalTitle={modalTitle}
       modalType="alert"
-      buttonSaveLabel={buttonSaveLabel}
+      buttonSaveLabel={sIsRemoving ? buttonRemovingLabel : buttonSaveLabel}
       buttonSaveType={buttonSaveType}
+      isSaveButtonDisabled={sIsRemoving}
       modalOnSaveConfig={modalOnSaveConfig}
       modalOnClose={modalOnClose}
       modalOnCancel={modalOnClose}

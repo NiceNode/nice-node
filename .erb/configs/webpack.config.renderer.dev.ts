@@ -170,10 +170,10 @@ const configuration: webpack.Configuration = {
      */
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development',
-      // setting process.env.FATHOM_SITE_ID & FATHOM_SITE_ID overrides this
+      // setting process.env.MP_PROJECT_TOKEN & MP_PROJECT_TOKEN overrides this
       // these are required to be declared here so webpack knows which to replace in code
-      FATHOM_SITE_ID: 'UZCNYEDC',
-      FATHOM_SITE_ENV: 'dev',
+      MP_PROJECT_TOKEN: 'FAKE',
+      MP_PROJECT_ENV: 'dev',
       NICENODE_ENV: 'development',
     }),
 
