@@ -69,6 +69,7 @@ import {
   stopNodePackage,
 } from './nodePackageManager';
 import { checkPorts } from './ports';
+import { getAppClientId } from './state/eventReporting';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -205,6 +206,7 @@ export const initialize = () => {
     return getSetHasSeenAlphaModal(hasSeen);
   });
   ipcMain.handle('getSettings', getSettings);
+  ipcMain.handle('getAppClientId', getAppClientId);
   ipcMain.handle('setLanguage', (_event, languageCode: string) => {
     return setLanguage(languageCode);
   });

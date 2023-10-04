@@ -44,6 +44,8 @@ MP_PROJECT_ENV=<...>
 NICENODE_ENV=development
 ```
 
+`SENTRY_DSN` and `MP_PROJECT_TOKEN` should be fake unless testing. Contact Johns, @jgresham, if you want to test new error or event reporting code.
+
 ## Packaging for Production
 
 To package apps for the local platform:
