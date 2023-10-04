@@ -107,6 +107,7 @@ declare global {
       getSetHasSeenSplashscreen(hasSeen?: boolean): boolean;
       getSetHasSeenAlphaModal(hasSeen?: boolean): boolean;
       getSettings(): Settings;
+      getAppClientId(): string;
       setLanguage(languageCode: string): void;
       setThemeSetting(theme: ThemeSetting): void;
       setIsOpenOnStartup(isOpenOnStartup: boolean): void;

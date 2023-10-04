@@ -127,6 +127,7 @@ contextBridge.exposeInMainWorld('electron', {
   getSetHasSeenAlphaModal: (hasSeen?: boolean) =>
     ipcRenderer.invoke('getSetHasSeenAlphaModal', hasSeen),
   getSettings: () => ipcRenderer.invoke('getSettings'),
+  getAppClientId: () => ipcRenderer.invoke('getAppClientId'),
   setLanguage: (languageCode: string) => {
     ipcRenderer.invoke('setLanguage', languageCode);
   },
