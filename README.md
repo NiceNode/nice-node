@@ -39,8 +39,8 @@ To set env vars locally, create a `.env` file at the top level with:
 
 ```
 SENTRY_DSN=<...>
-FATHOM_SITE_ID=<...>
-FATHOM_SITE_ENV=<...>
+MP_PROJECT_TOKEN=<...>
+MP_PROJECT_ENV=<...>
 NICENODE_ENV=development
 ```
 
@@ -50,6 +50,12 @@ To package apps for the local platform:
 
 ```bash
 npm run package
+```
+
+For a specific platform & architecture:
+
+```bash
+npm run package -- --linux --arm64
 ```
 
 ## Running Storybook

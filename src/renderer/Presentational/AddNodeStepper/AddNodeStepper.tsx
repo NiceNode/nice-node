@@ -28,7 +28,6 @@ import { NodePackageSpecification } from '../../../common/nodeSpec';
 import AddNodeConfiguration, {
   AddNodeConfigurationValues,
 } from '../AddNodeConfiguration/AddNodeConfiguration';
-import { nodeSpecIdLookupNum } from '../../events/environment';
 
 export interface AddNodeStepperProps {
   modal?: boolean;
@@ -170,7 +169,10 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       { storageLocation: sNodeStorageLocation },
     );
     console.log('nodePackage result: ', nodePackage);
-    reportEvent('AddNodePackage', nodeSpecIdLookupNum(nodePackageSpec.specId));
+    reportEvent('AddNodePackage', {
+      nodePackage: nodePackageSpec.specId,
+      clients: services.map((service) => service.spec.specId),
+    });
     dispatch(updateSelectedNodePackageId(nodePackage.id));
 
     electron.startNodePackage(nodePackage.id);
