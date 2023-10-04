@@ -225,7 +225,7 @@ const Preferences = ({
                 {
                   label: t('SendErrorReports'),
                   description: `${t('SendErrorReportsDescription')} (${
-                    process.env.FATHOM_SITE_ENV
+                    process.env.MP_PROJECT_ENV
                   })`,
                   value: (
                     <Toggle

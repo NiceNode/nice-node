@@ -31,8 +31,8 @@ jobs:
         env:
           # Required build time src env vars
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          FATHOM_SITE_ID: ${{ secrets.FATHOM_SITE_ID }}
-          FATHOM_SITE_ENV: ${{ vars.FATHOM_SITE_ENV }}
+          MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+          MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
         run: |
           npm run build

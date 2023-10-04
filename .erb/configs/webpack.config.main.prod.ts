@@ -67,7 +67,7 @@ const configuration: webpack.Configuration = {
       DEBUG_PROD: false,
       START_MINIMIZED: false,
       SENTRY_DSN: undefined,
-      FATHOM_SITE_ENV: undefined,
+      MP_PROJECT_ENV: undefined,
       NICENODE_ENV: undefined,
     }),
   ],
