@@ -1,9 +1,4 @@
-import {
-  ConfigKey,
-  ConfigTranslation,
-  ConfigTranslationControl,
-  ConfigValuesMap,
-} from './nodeConfig';
+import { ConfigKey, ConfigValuesMap } from './nodeConfig';
 
 /**
  * "serviceConfigs": {
@@ -35,16 +30,3 @@ export type ServiceConfigs = {
   //   configValues: ConfigValuesMap;
   // }[];
 };
-
-// export type NodePackageControl = ConfigTranslationControl & {
-//   serviceConfigs?: ServiceConfigs;
-// };
-// // modifies only the uiControl property of a normal node ConfigTranslation
-// export type NodePackageConfigTranslation = ConfigTranslation & {
-//   uiControl: NodePackageControl;
-// };
-
-// export type NodePackageConfigTranslationMap = Record<
-//   ConfigKey,
-//   NodePackageConfigTranslation
-// >;

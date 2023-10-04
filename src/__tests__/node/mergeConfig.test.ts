@@ -81,7 +81,7 @@ const nodePackageSpec = {
       displayName: 'Network (Ethereum node)',
       addNodeFlow: 'required',
       defaultValue: 'Mainnet',
-      disallowUserToChange: true,
+      hideFromUserAfterStart: true,
       uiControl: {
         type: 'select/single',
         controlTranslations: [

@@ -56,9 +56,10 @@
       "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#data-base-path-data-path"
     },
     "network": {
-      "displayName": "Network (Teku)",
+      "displayName": "Network",
       "cliConfigPrefix": "--network=",
       "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [

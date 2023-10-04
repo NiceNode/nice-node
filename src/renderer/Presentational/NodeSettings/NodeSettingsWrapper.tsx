@@ -146,7 +146,10 @@ const NodeSettingsWrapper = ({
         if (!categoryMap[category]) {
           categoryMap[category] = {};
         }
-        categoryMap[category][configKey] = configTranslation;
+        // Do not show this config(s) to the user
+        if (!configTranslation.hideFromUserAfterStart) {
+          categoryMap[category][configKey] = configTranslation;
+        }
       });
     }
     setHttpCorsConfigTranslation(httpCorsConfigTranslation);

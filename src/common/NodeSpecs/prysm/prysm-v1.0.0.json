@@ -55,8 +55,9 @@
       "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters/"
     },
     "network": {
-      "displayName": "Network (Prysm)",
+      "displayName": "Network",
       "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [

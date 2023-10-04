@@ -64,9 +64,10 @@
       "documentation": "https://lighthouse-book.sigmaprime.io/advanced-datadir.html?highlight=--datadir#relative-paths"
     },
     "network": {
-      "displayName": "Network (Lighthouse)",
+      "displayName": "Network",
       "cliConfigPrefix": "--network ",
       "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [

@@ -56,9 +56,10 @@
       "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#data-path"
     },
     "network": {
-      "displayName": "Network (Besu)",
+      "displayName": "Network",
       "cliConfigPrefix": "--network=",
       "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [

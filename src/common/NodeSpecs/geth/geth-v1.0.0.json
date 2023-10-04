@@ -71,9 +71,9 @@
       "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
     },
     "network": {
-      "displayName": "Network (Geth)",
+      "displayName": "Network",
       "defaultValue": "Mainnet",
-      "disallowUserToChange": true,
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [

@@ -53,9 +53,10 @@
       "infoDescription": "Lodestar root directory"
     },
     "network": {
-      "displayName": "Network (Lodestar)",
+      "displayName": "Network",
       "cliConfigPrefix": "--network ",
       "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [

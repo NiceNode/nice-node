@@ -49,7 +49,7 @@ export type ConfigTranslation = {
   warning?: string;
   addNodeFlow?: ConfigTranslationAddNodeFlow;
   initCommandConfig?: boolean;
-  disallowUserToChange?: boolean;
+  hideFromUserAfterStart?: boolean;
 };
 
 export type ConfigKey = string;

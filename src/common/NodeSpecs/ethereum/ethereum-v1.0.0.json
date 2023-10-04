@@ -77,7 +77,6 @@
       "displayName": "Network",
       "addNodeFlow": "required",
       "defaultValue": "Mainnet",
-      "disallowUserToChange": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [

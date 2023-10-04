@@ -47,9 +47,10 @@
   },
   "configTranslation": {
     "network": {
-      "displayName": "Network (Reth)",
+      "displayName": "Network",
       "cliConfigPrefix": "--chain ",
       "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
