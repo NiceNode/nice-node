@@ -184,9 +184,13 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       },
     );
     console.log('nodePackage result: ', nodePackage);
+    const packageNetwork =
+      (nodePackageConfigValues?.[nodePackageSpec.specId]?.network as string) ??
+      '';
     reportEvent('AddNodePackage', {
       nodePackage: nodePackageSpec.specId,
       clients: services.map((service) => service.spec.specId),
+      network: packageNetwork,
     });
     dispatch(updateSelectedNodePackageId(nodePackage.id));
 
