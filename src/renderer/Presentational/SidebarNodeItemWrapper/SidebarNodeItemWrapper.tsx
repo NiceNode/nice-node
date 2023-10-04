@@ -98,8 +98,6 @@ export const SidebarNodeItemWrapper = ({
   const syncStatus = getSyncStatus(nodeStatus);
   const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[syncStatus];
 
-  console.log('node: ', node);
-
   return (
     <SidebarNodeItem
       // temp fix

@@ -152,9 +152,7 @@ const InitialClientConfigs = ({
               isDisabled={false}
               onChange={(configKey: string, newValue: ConfigValue) => {
                 dispatchClientConfigValues({
-                  // ...sClientConfigValues,
                   [clientId]: {
-                    // ...sClientConfigValues[clientId],
                     [configKey]: newValue as string,
                   },
                 });
