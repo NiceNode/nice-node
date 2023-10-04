@@ -11,7 +11,7 @@
         "http": "Enabled",
         "httpPort": "5052",
         "executionEndpoint": "http://host.containers.internal:8551",
-        "network" : "Mainnet"
+        "network": "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/usr/app/data",
@@ -53,9 +53,10 @@
       "infoDescription": "Lodestar root directory"
     },
     "network": {
-      "displayName": "Network (Lodestar)",
+      "displayName": "Network",
       "cliConfigPrefix": "--network ",
       "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -76,8 +77,7 @@
             "config": "sepolia"
           }
         ]
-      },
-      "addNodeFlow": "advanced"
+      }
     },
     "checkpointSyncUrl": {
       "displayName": "Trusted checkpoint sync URL",

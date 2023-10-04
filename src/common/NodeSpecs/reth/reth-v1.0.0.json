@@ -47,9 +47,10 @@
   },
   "configTranslation": {
     "network": {
-      "displayName": "Network (Reth)",
+      "displayName": "Network",
       "cliConfigPrefix": "--chain ",
       "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -70,8 +71,7 @@
             "config": "sepolia"
           }
         ]
-      },
-      "addNodeFlow": "advanced"
+      }
     },
     "http": {
       "displayName": "RPC HTTP connections",
@@ -255,7 +255,7 @@
       "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
     }
   },
-  "documentation" : {
-    "default" : "https://paradigmxyz.github.io/reth"
+  "documentation": {
+    "default": "https://paradigmxyz.github.io/reth"
   }
 }

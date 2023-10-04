@@ -13,7 +13,7 @@
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "\"http://host.containers.internal:8551\"",
-        "network" : "Mainnet"
+        "network": "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/home/user/data",
@@ -57,9 +57,10 @@
       "documentation": "https://nimbus.guide/options.html"
     },
     "network": {
-      "displayName": "Network (Nimbus)",
+      "displayName": "Network",
       "cliConfigPrefix": "--network=",
       "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -80,8 +81,7 @@
             "config": "sepolia"
           }
         ]
-      },
-      "addNodeFlow": "advanced"
+      }
     },
     "checkpointSyncUrl": {
       "displayName": "Trusted checkpoint sync URL",

@@ -31,13 +31,13 @@ const nodeOptions = [
     label: 'Base',
     info: 'A secure and low-cost Ethereum Layer 2 built on the OP stack',
   },
-  // {
-  //   iconId: 'optimism',
-  //   title: 'Optimism',
-  //   value: 'optimism',
-  //   label: 'Optimism',
-  //   info: 'Built by the OP Collective!',
-  // },
+  {
+    iconId: 'optimism',
+    title: 'Optimism',
+    value: 'optimism',
+    label: 'Optimism',
+    info: 'Built by the OP Collective!',
+  },
   {
     iconId: 'farcaster',
     title: 'Farcaster',

@@ -14,6 +14,7 @@ import {
   NodeLibrary,
   NodePackageLibrary,
 } from '../../../main/state/nodeLibrary';
+import { mergePackageAndClientConfigValues } from '../AddNodeConfiguration/mergePackageAndClientConfigValues';
 
 type Props = {
   modalOnClose: () => void;
@@ -95,8 +96,13 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const buttonSaveVariant = startNode ? 'icon-left' : 'text';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
-    const { node, clientSelections, clientConfigValues, storageLocation } =
-      updatedConfig || (modalConfig as ModalConfig);
+    const {
+      node,
+      clientSelections,
+      clientConfigValues,
+      storageLocation,
+      nodePackageConfigValues,
+    } = updatedConfig || (modalConfig as ModalConfig);
 
     // uses a state value because they were being overwritten by a bug
     //  in modelConfig and updateModalConfig
@@ -135,18 +141,29 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
         const serviceDefinition = nodePackageSpec.execution.services.find(
           (service) => service.serviceId === serviceId,
         );
+        const mergedPackageAndClientConfigValues =
+          mergePackageAndClientConfigValues({
+            nodePackageSpec,
+            nodePackageConfigValues:
+              nodePackageConfigValues?.[nodePackageSpec.specId],
+            clientConfigValues: clientConfigValues?.[clientId],
+            serviceId,
+          });
         services.push({
           serviceId,
           serviceName: serviceDefinition?.name ?? serviceId,
           spec: serviceNodeSpec,
-          initialConfigValues: clientConfigValues?.[clientId],
+          initialConfigValues: mergedPackageAndClientConfigValues,
         });
       }
     }
     const { node: nodePackage } = await electron.addNodePackage(
       nodePackageSpec,
       services,
-      { storageLocation },
+      {
+        storageLocation,
+        configValues: nodePackageConfigValues?.[nodePackageSpec.specId],
+      },
     );
     console.log('nodePackage result: ', nodePackage);
     reportEvent('AddNodePackage', {

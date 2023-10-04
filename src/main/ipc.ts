@@ -28,6 +28,7 @@ import {
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import { getUserNodePackages } from './state/nodePackages';
 import Node, { NodeId, NodePackage } from '../common/node';
+import { ConfigValuesMap } from '../common/nodeConfig';
 import {
   NodePackageSpecification,
   NodeSpecification,
@@ -115,7 +116,7 @@ export const initialize = () => {
       _event,
       nodeSpec: NodePackageSpecification,
       services: AddNodePackageNodeService[],
-      settings: { storageLocation?: string },
+      settings: { storageLocation?: string; configValues?: ConfigValuesMap },
     ): Promise<{ node: NodePackage }> => {
       const node = await addNodePackage(nodeSpec, services, settings);
       return { node };

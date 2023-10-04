@@ -4,23 +4,30 @@
   "displayName": "Optimism",
   "execution": {
     "executionTypes": ["nodePackage"],
-    "services" : [{
-      "serviceId": "executionClient",
-      "name" : "Execution Client",
-      "nodeOptions": ["op-geth"],
-      "required": true,
-      "requiresCommonJwtSecret": true
-    }, {
-      "serviceId": "consensusClient",
-      "name" : "Consensus Client",
-      "nodeOptions": ["op-node"],
-      "required": true,
-      "requiresCommonJwtSecret": true
-    }],
-    "dependencies": [{
-      "name" : "Ethereum node",
-      "specId": "ethereum"
-    }]
+    "services": [
+      {
+        "serviceId": "executionClient",
+        "name": "Execution Client",
+        "nodeOptions": ["op-geth"],
+        "required": true,
+        "requiresCommonJwtSecret": true,
+        "requiresFiles": true
+      },
+      {
+        "serviceId": "consensusClient",
+        "name": "Consensus Client",
+        "nodeOptions": ["op-node"],
+        "required": true,
+        "requiresCommonJwtSecret": true,
+        "requiresFiles": true
+      }
+    ],
+    "dependencies": [
+      {
+        "name": "Ethereum node",
+        "specId": "ethereum"
+      }
+    ]
   },
   "category": "Ethereum/L2",
   "rpcTranslation": "op-node",
@@ -43,28 +50,62 @@
   },
   "configTranslation": {
     "network": {
-      "displayName": "mainnet or a testnet",
+      "displayName": "Network",
+      "defaultValue": "Mainnet",
+      "addNodeFlow": "required",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
             "value": "Mainnet",
-            "config": "--network mainnet"
+            "config": "unused in nodespec",
+            "serviceConfigs": [
+              {
+                "serviceId": "executionClient",
+                "configValues": {
+                  "genesisFile": "genesis-l2.json",
+                  "rollupSequencerHttpEndpoint": "https://sequencer.optimism.io/"
+                }
+              },
+              {
+                "serviceId": "consensusClient",
+                "configValues": {
+                  "network": "Mainnet"
+                }
+              }
+            ]
           },
           {
-            "value": "Testnet",
-            "config": "--network testnet"
+            "value": "Sepolia",
+            "config": "unused in nodespec",
+            "serviceConfigs": {
+              "services": [
+                {
+                  "serviceId": "executionClient",
+                  "configValues": {
+                    "genesisFile": "sepolia-genesis-l2.json",
+                    "rollupSequencerHttpEndpoint": "https://sepolia-sequencer.optimism.io/"
+                  }
+                },
+                {
+                  "serviceId": "consensusClient",
+                  "configValues": {
+                    "network": "Sepolia"
+                  }
+                }
+              ]
+            }
           }
         ]
       },
-      "defaultValue": "Disabled",
+      "infoDescription": "Work-in-progress! Only Sepolia works right now!",
       "documentation": "https://geth.ethereum.org/docs/rpc/server"
     }
   },
   "iconUrl": "https://ethereum.png",
-  "addNodeDescription" : "OP Mainnet is a fast, stable, and scalable L2 blockchain built by Ethereum developers, for Ethereum developers. Built as a minimal extension to existing Ethereum software, OP Mainnet's EVM-equivalent architecture scales your Ethereum apps without surprises.",
+  "addNodeDescription": "OP Mainnet is a fast, stable, and scalable L2 blockchain built by Ethereum developers, for Ethereum developers. Built as a minimal extension to existing Ethereum software, OP Mainnet's EVM-equivalent architecture scales your Ethereum apps without surprises.",
   "description": "Optimism is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
-  "documentation" : {
+  "documentation": {
     "default": "https://docs.optimism.org/guides/run-a-optimism-node/"
   }
 }

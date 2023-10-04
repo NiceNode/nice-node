@@ -64,9 +64,10 @@
       }
     },
     "network": {
-      "displayName": "Network (Nethermind)",
+      "displayName": "Network",
       "cliConfigPrefix": "--config ",
       "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -87,8 +88,7 @@
             "config": "sepolia"
           }
         ]
-      },
-      "addNodeFlow": "advanced"
+      }
     },
     "http": {
       "displayName": "RPC HTTP connections",

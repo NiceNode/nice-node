@@ -8,6 +8,7 @@ import { CHANNELS_ARRAY } from './messenger';
 import { NodeId } from '../common/node';
 import { ThemeSetting } from './state/settings';
 import { AddNodePackageNodeService } from './nodePackageManager';
+import { ConfigValuesMap } from '../common/nodeConfig';
 
 contextBridge.exposeInMainWorld('electron', {
   SENTRY_DSN: process.env.SENTRY_DSN,
@@ -69,7 +70,7 @@ contextBridge.exposeInMainWorld('electron', {
   addNodePackage: async (
     nodeSpec: NodePackageSpecification,
     services: AddNodePackageNodeService[],
-    settings: { storageLocation?: string },
+    settings: { storageLocation?: string; configValues?: ConfigValuesMap },
   ) => {
     return ipcRenderer.invoke('addNodePackage', nodeSpec, services, settings);
   },

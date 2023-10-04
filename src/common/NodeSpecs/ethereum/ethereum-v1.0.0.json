@@ -6,19 +6,28 @@
   "execution": {
     "executionTypes": ["nodePackage"],
     "defaultExecutionType": "nodePackage",
-    "services" : [{
-      "serviceId": "executionClient",
-      "name" : "Execution Client",
-      "nodeOptions": ["nethermind", "besu", "geth", "reth"],
-      "required": true,
-      "requiresCommonJwtSecret": true
-    }, {
-      "serviceId": "consensusClient",
-      "name" : "Consensus Client",
-      "nodeOptions": ["lodestar-beacon", "teku-beacon",  "prysm-beacon", "lighthouse-beacon", "nimbus-beacon"],
-      "required": true,
-      "requiresCommonJwtSecret": true
-    }]
+    "services": [
+      {
+        "serviceId": "executionClient",
+        "name": "Execution Client",
+        "nodeOptions": ["nethermind", "besu", "geth", "reth"],
+        "required": true,
+        "requiresCommonJwtSecret": true
+      },
+      {
+        "serviceId": "consensusClient",
+        "name": "Consensus Client",
+        "nodeOptions": [
+          "lodestar-beacon",
+          "teku-beacon",
+          "prysm-beacon",
+          "lighthouse-beacon",
+          "nimbus-beacon"
+        ],
+        "required": true,
+        "requiresCommonJwtSecret": true
+      }
+    ]
   },
   "category": "L1",
   "rpcTranslation": "eth-l1",
@@ -48,27 +57,112 @@
       "cliConfigPrefix": "--datadir ",
       "defaultValue": "~/.ethereum",
       "uiControl": {
-        "type": "filePath"
+        "type": "filePath",
+        "serviceConfigs": {
+          "services": [
+            {
+              "serviceId": "executionClient",
+              "configKey": "dataDir"
+            },
+            {
+              "serviceId": "consensusClient",
+              "configKey": "dataDir"
+            }
+          ]
+        }
       },
       "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
     },
     "network": {
-      "displayName": "mainnet or a testnet",
+      "displayName": "Network",
+      "addNodeFlow": "required",
+      "defaultValue": "Mainnet",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
             "value": "Mainnet",
-            "config": "--network mainnet"
+            "config": "unused in nodespec",
+            "serviceConfigs": {
+              "services": [
+                {
+                  "serviceId": "executionClient",
+                  "configValues": {
+                    "network": "Mainnet"
+                  }
+                },
+                {
+                  "serviceId": "consensusClient",
+                  "configValues": {
+                    "network": "Mainnet"
+                  }
+                }
+              ]
+            }
           },
           {
-            "value": "Testnet",
-            "config": "--network testnet"
+            "value": "Sepolia",
+            "config": "unused in nodespec",
+            "serviceConfigs": {
+              "services": [
+                {
+                  "serviceId": "executionClient",
+                  "configValues": {
+                    "network": "Sepolia"
+                  }
+                },
+                {
+                  "serviceId": "consensusClient",
+                  "configValues": {
+                    "network": "Sepolia"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "value": "Holesky",
+            "config": "unused in nodespec",
+            "serviceConfigs": {
+              "services": [
+                {
+                  "serviceId": "executionClient",
+                  "configValues": {
+                    "network": "Holesky"
+                  }
+                },
+                {
+                  "serviceId": "consensusClient",
+                  "configValues": {
+                    "network": "Holesky"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "value": "Goerli",
+            "config": "unused in nodespec",
+            "serviceConfigs": {
+              "services": [
+                {
+                  "serviceId": "executionClient",
+                  "configValues": {
+                    "network": "Goerli"
+                  }
+                },
+                {
+                  "serviceId": "consensusClient",
+                  "configValues": {
+                    "network": "Goerli"
+                  }
+                }
+              ]
+            }
           }
         ]
       },
-      "defaultValue": "Disabled",
-      "documentation": "https://geth.ethereum.org/docs/rpc/server"
+      "documentation": "https://ethereum.org/en/developers/docs/networks/#public-networks"
     }
   },
   "iconUrl": "https://ethereum.png",

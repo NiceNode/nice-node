@@ -491,10 +491,21 @@ export const createRunCommand = (node: Node): string => {
   if (input?.docker?.forcedRawNodeInput) {
     nodeInput = input?.docker?.forcedRawNodeInput;
   }
+
+  // Exclue keys with initCommandConfig=true
+  let initCommandConfigKeys: string[] = [];
+  if (node?.spec?.configTranslation !== undefined) {
+    initCommandConfigKeys = Object.keys(node?.spec?.configTranslation).filter(
+      (configKey) => {
+        const configTranslation = node?.spec?.configTranslation?.[configKey];
+        return configTranslation?.initCommandConfig === true;
+      },
+    );
+  }
   const cliConfigInput = buildCliConfig({
     configValuesMap: node.config.configValuesMap,
     configTranslationMap: node.spec.configTranslation,
-    excludeConfigKeys: ['dataDir'],
+    excludeConfigKeys: ['dataDir', ...initCommandConfigKeys],
   });
   nodeInput += ` ${cliConfigInput}`;
 
@@ -532,19 +543,37 @@ export const createInitCommand = (node: Node): string => {
     }
   }
   logger.info(
-    `finalPodmanInput ${JSON.stringify(node.config.configValuesMap)}`,
+    `createInitCommand: finalPodmanInput ${JSON.stringify(
+      node.config.configValuesMap,
+    )}`,
   );
   let nodeInput = '';
   if (input?.docker?.initNodeCommand) {
     nodeInput = input?.docker?.initNodeCommand;
   }
   // Might need to call buildCliConfig() here once we add more features to initCommand
+  // Exclue keys without initCommandConfig=true
+  let nonInitCommandConfigKeys: string[] = [];
+  if (node?.spec?.configTranslation !== undefined) {
+    nonInitCommandConfigKeys = Object.keys(
+      node?.spec?.configTranslation,
+    ).filter((configKey) => {
+      const configTranslation = node?.spec?.configTranslation?.[configKey];
+      return configTranslation?.initCommandConfig !== true;
+    });
+  }
+  const cliConfigInput = buildCliConfig({
+    configValuesMap: node.config.configValuesMap,
+    configTranslationMap: node.spec.configTranslation,
+    excludeConfigKeys: ['dataDir', ...nonInitCommandConfigKeys],
+  });
+  nodeInput += ` ${cliConfigInput}`;
 
   // -q quiets podman logs (pulling new image logs) so we can parse the containerId
   // -d is not used here as this should be short-lived and we want to be blocked
   //  so that we know when to start the node
   const podmanCommand = `run -q --user 0 --name ${specId} ${finalPodmanInput} ${imageName} ${nodeInput}`;
-  logger.info(`podman run command ${podmanCommand}`);
+  logger.info(`createInitCommand: podman run command ${podmanCommand}`);
   return podmanCommand;
 };
 

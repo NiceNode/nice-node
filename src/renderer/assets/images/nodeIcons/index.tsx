@@ -121,6 +121,7 @@ export const NODE_COLORS: NodeIcons = {
   livepeer: common.color.livepeer,
   farcaster: common.color.farcaster,
   hubble: common.color.farcaster,
+  nitro: common.color.arbitrum,
 };
 
 export type NodeIconId = keyof NodeIcons;
