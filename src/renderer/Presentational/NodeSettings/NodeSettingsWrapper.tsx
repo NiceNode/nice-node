@@ -147,7 +147,10 @@ const NodeSettingsWrapper = ({
           categoryMap[category] = {};
         }
         // Do not show this config(s) to the user
-        if (!configTranslation.hideFromUserAfterStart) {
+        if (
+          !configTranslation.hideFromUserAfterStart &&
+          !configTranslation.initCommandConfig
+        ) {
           categoryMap[category][configKey] = configTranslation;
         }
       });

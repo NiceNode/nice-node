@@ -28,6 +28,7 @@ import {
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import { getUserNodePackages } from './state/nodePackages';
 import Node, { NodeId, NodePackage } from '../common/node';
+import { ConfigValuesMap } from '../common/nodeConfig';
 import {
   NodePackageSpecification,
   NodeSpecification,
@@ -69,7 +70,6 @@ import {
   stopNodePackage,
 } from './nodePackageManager';
 import { checkPorts } from './ports';
-import { ConfigValuesMap } from 'common/nodeConfig';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {

@@ -80,6 +80,12 @@ export const mergePackageAndClientConfigValues = (
           serviceConfigs = configTranslation.uiControl?.serviceConfigs;
         } else {
           // find value in the select options which contains the serviceConfigs
+          if (!configTranslation.uiControl.controlTranslations) {
+            console.error(
+              'configTranslation.uiControl.controlTranslations is undefined: ',
+              configTranslation.uiControl.controlTranslations,
+            );
+          }
           const selectedSelectTranslation =
             configTranslation.uiControl.controlTranslations.find(
               (translation) => translation.value === configValue,
@@ -92,6 +98,12 @@ export const mergePackageAndClientConfigValues = (
           console.log('serviceConfigs: ', serviceConfigs);
           // And for that setting, find the values for the specific service/client
           // if defined, find the client specific configs to set
+          if (!serviceConfigs.services) {
+            console.error(
+              'serviceConfigs.services is undefined: ',
+              serviceConfigs.services,
+            );
+          }
           const serviceConfig = serviceConfigs.services.find(
             (serviceConfig) => serviceConfig.serviceId === serviceId,
           );

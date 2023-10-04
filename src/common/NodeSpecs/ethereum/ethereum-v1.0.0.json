@@ -83,20 +83,22 @@
           {
             "value": "Mainnet",
             "config": "unused in nodespec",
-            "serviceConfigs": [
-              {
-                "serviceId": "executionClient",
-                "configValues": {
-                  "network": "Mainnet"
+            "serviceConfigs": {
+              "services": [
+                {
+                  "serviceId": "executionClient",
+                  "configValues": {
+                    "network": "Mainnet"
+                  }
+                },
+                {
+                  "serviceId": "consensusClient",
+                  "configValues": {
+                    "network": "Mainnet"
+                  }
                 }
-              },
-              {
-                "serviceId": "consensusClient",
-                "configValues": {
-                  "network": "Mainnet"
-                }
-              }
-            ]
+              ]
+            }
           },
           {
             "value": "Sepolia",

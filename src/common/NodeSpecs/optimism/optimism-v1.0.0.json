@@ -10,14 +10,16 @@
         "name": "Execution Client",
         "nodeOptions": ["op-geth"],
         "required": true,
-        "requiresCommonJwtSecret": true
+        "requiresCommonJwtSecret": true,
+        "requiresFiles": true
       },
       {
         "serviceId": "consensusClient",
         "name": "Consensus Client",
         "nodeOptions": ["op-node"],
         "required": true,
-        "requiresCommonJwtSecret": true
+        "requiresCommonJwtSecret": true,
+        "requiresFiles": true
       }
     ],
     "dependencies": [
@@ -48,7 +50,7 @@
   },
   "configTranslation": {
     "network": {
-      "displayName": "Network (Ethereum & Optimism)",
+      "displayName": "Network",
       "defaultValue": "Mainnet",
       "addNodeFlow": "required",
       "uiControl": {
@@ -57,31 +59,21 @@
           {
             "value": "Mainnet",
             "config": "unused in nodespec",
-            "serviceConfigs": {
-              "services": [
-                {
-                  "serviceId": "executionClient",
-                  "configValues": {
-                    "network": "Mainnet",
-                    "genesisFile": ""
-                  }
-                },
-                {
-                  "serviceId": "consensusClient",
-                  "configValues": {
-                    "network": "Mainnet"
-                  }
+            "serviceConfigs": [
+              {
+                "serviceId": "executionClient",
+                "configValues": {
+                  "genesisFile": "genesis-l2.json",
+                  "rollupSequencerHttpEndpoint": "https://sequencer.optimism.io/"
                 }
-              ],
-              "clientExceptionConfigValues": [
-                {
-                  "clientId": "geth",
-                  "configValues": {
-                    "network": "MaInNeT"
-                  }
+              },
+              {
+                "serviceId": "consensusClient",
+                "configValues": {
+                  "network": "Mainnet"
                 }
-              ]
-            }
+              }
+            ]
           },
           {
             "value": "Sepolia",
@@ -91,8 +83,8 @@
                 {
                   "serviceId": "executionClient",
                   "configValues": {
-                    "network": "Sepolia",
-                    "genesisFile": "sepolia-genesis-l2.json"
+                    "genesisFile": "sepolia-genesis-l2.json",
+                    "rollupSequencerHttpEndpoint": "https://sepolia-sequencer.optimism.io/"
                   }
                 },
                 {
@@ -106,6 +98,7 @@
           }
         ]
       },
+      "infoDescription": "Work-in-progress! Only Sepolia works right now!",
       "documentation": "https://geth.ethereum.org/docs/rpc/server"
     }
   },

@@ -6,12 +6,14 @@
   "execution": {
     "executionTypes": ["nodePackage"],
     "defaultExecutionType": "nodePackage",
-    "services" : [{
-      "serviceId": "executionClient",
-      "name" : "Execution Client",
-      "nodeOptions": ["nitro"],
-      "required": true
-    }]
+    "services": [
+      {
+        "serviceId": "executionClient",
+        "name": "Execution Client",
+        "nodeOptions": ["nitro"],
+        "required": true
+      }
+    ]
   },
   "category": "Ethereum/L2",
   "rpcTranslation": "eth-l1",
@@ -46,17 +48,13 @@
       "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
     },
     "network": {
-      "displayName": "mainnet or a testnet",
+      "displayName": "Network",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
             "value": "Mainnet",
             "config": "--network mainnet"
-          },
-          {
-            "value": "Testnet",
-            "config": "--network testnet"
           }
         ]
       },

@@ -309,7 +309,9 @@ const NodeScreen = () => {
 
     let regex;
     switch (name) {
-      case 'geth' || 'op-geth' || 'op-node':
+      case 'geth':
+      case 'op-geth':
+      case 'op-node':
         regex = /Geth\/v(\d+\.\d+\.\d+)/;
         break;
       case 'reth':
@@ -339,7 +341,9 @@ const NodeScreen = () => {
         regex = /Nimbus\/v(\d+\.\d+\.\d+)/;
         break;
       default:
-        console.error(`Invalid software name: ${name}`);
+        console.error(
+          `Can not parse node version string. Node name not found: ${name}`,
+        );
         return version; // At least, return the unformatted version string
     }
 
