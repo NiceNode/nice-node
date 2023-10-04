@@ -87,8 +87,7 @@
             "config": "sepolia"
           }
         ]
-      },
-      "addNodeFlow": "advanced"
+      }
     },
     "checkpointSyncUrl": {
       "displayName": "Trusted checkpoint sync URL",

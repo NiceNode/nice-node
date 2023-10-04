@@ -69,6 +69,7 @@ import {
   stopNodePackage,
 } from './nodePackageManager';
 import { checkPorts } from './ports';
+import { ConfigValuesMap } from 'common/nodeConfig';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -114,7 +115,7 @@ export const initialize = () => {
       _event,
       nodeSpec: NodePackageSpecification,
       services: AddNodePackageNodeService[],
-      settings: { storageLocation?: string },
+      settings: { storageLocation?: string; configValues?: ConfigValuesMap },
     ): Promise<{ node: NodePackage }> => {
       const node = await addNodePackage(nodeSpec, services, settings);
       return { node };

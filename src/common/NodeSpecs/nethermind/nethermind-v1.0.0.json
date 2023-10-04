@@ -87,8 +87,7 @@
             "config": "sepolia"
           }
         ]
-      },
-      "addNodeFlow": "advanced"
+      }
     },
     "http": {
       "displayName": "RPC HTTP connections",

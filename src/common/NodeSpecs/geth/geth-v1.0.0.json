@@ -73,6 +73,7 @@
     "network": {
       "displayName": "Network (Geth)",
       "defaultValue": "Mainnet",
+      "disallowUserToChange": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
@@ -93,8 +94,7 @@
             "config": "--sepolia"
           }
         ]
-      },
-      "addNodeFlow": "advanced"
+      }
     },
     "http": {
       "displayName": "RPC HTTP connections",

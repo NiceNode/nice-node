@@ -79,7 +79,7 @@ const InitialClientConfigs = ({
   }
 
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       {/* Initial client settings, required and optional */}
 
       {Object.keys(sClientConfigTranslations)?.map((clientId: string) => {

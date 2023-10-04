@@ -98,13 +98,15 @@ export const SidebarNodeItemWrapper = ({
   const syncStatus = getSyncStatus(nodeStatus);
   const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[syncStatus];
 
+  console.log('node: ', node);
+
   return (
     <SidebarNodeItem
       // temp fix
       key={spec.specId || id}
       iconId={spec.specId?.replace('-beacon', '')}
       title={spec.displayName}
-      info={spec.displayName}
+      info={node?.config?.configValuesMap?.network ?? 'Mainnet'}
       status={sidebarStatus}
       selected={selected}
       onClick={onClick}

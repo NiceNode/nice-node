@@ -13,7 +13,7 @@
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "http://host.containers.internal:8551",
-        "network" : "Mainnet"
+        "network": "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/data",
@@ -47,7 +47,7 @@
   "configTranslation": {
     "dataDir": {
       "displayName": "The directory where nimbus will store all blockchain data.",
-      "cliConfigPrefix": "--data-dir=",
+      "cliConfigPrefix": "--datadir=",
       "uiControl": {
         "type": "filePath"
       },
@@ -77,8 +77,7 @@
             "config": "--sepolia"
           }
         ]
-      },
-      "addNodeFlow": "advanced"
+      }
     },
     "checkpointSyncUrl": {
       "displayName": "Trusted checkpoint sync URL",

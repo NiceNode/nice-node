@@ -54,6 +54,7 @@
       "defaultValue": "~/.ethereum",
       "uiControl": {
         "type": "filePath"
+
       },
       "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
     },
@@ -223,6 +224,16 @@
         "type": "text"
       }
     }
+  },
+  "genesisFile": {
+    "displayName": "Genesis file",
+    "cliConfigPrefix": "/root/.ethereum/",
+    "defaultValue": "genesis-l2.json",
+    "uiControl": {
+      "type": "text"
+    },
+    "initCommandConfig" : true,
+    "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"
 }

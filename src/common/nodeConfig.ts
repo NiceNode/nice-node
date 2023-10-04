@@ -1,11 +1,22 @@
+import { ServiceConfigs } from './nodePackageConfig';
+
 export const FilePathControlType = 'filePath';
 export type FilePathControl = {
   type: 'filePath';
+  // Should only be used by node packages
+  serviceConfigs?: ServiceConfigs;
 };
 export type TextControl = {
   type: 'text';
+  // Should only be used by node packages
+  serviceConfigs?: ServiceConfigs;
 };
-export type SelectTranslation = { value: string; config?: string };
+export type SelectTranslation = {
+  value: string;
+  config?: string;
+  // Should only be used by node packages
+  serviceConfigs?: ServiceConfigs;
+};
 export type SelectControl = {
   type: 'select/single';
   controlTranslations: SelectTranslation[];
@@ -37,12 +48,13 @@ export type ConfigTranslation = {
   infoDescription?: string;
   warning?: string;
   addNodeFlow?: ConfigTranslationAddNodeFlow;
+  initCommandConfig?: boolean;
+  disallowUserToChange?: boolean;
 };
 
 export type ConfigKey = string;
 export type ConfigValuesMap = Record<ConfigKey, string>;
 export type ConfigTranslationMap = Record<ConfigKey, ConfigTranslation>;
-
 /**
  * Returns cli config for the node config values using the config
  * translations provide in the node spec

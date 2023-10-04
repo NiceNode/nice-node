@@ -70,8 +70,7 @@
             "config": "sepolia"
           }
         ]
-      },
-      "addNodeFlow": "advanced"
+      }
     },
     "http": {
       "displayName": "RPC HTTP connections",
@@ -255,7 +254,7 @@
       "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
     }
   },
-  "documentation" : {
-    "default" : "https://paradigmxyz.github.io/reth"
+  "documentation": {
+    "default": "https://paradigmxyz.github.io/reth"
   }
 }

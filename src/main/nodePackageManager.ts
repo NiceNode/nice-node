@@ -37,7 +37,7 @@ export type AddNodePackageNodeService = {
 export const addNodePackage = async (
   nodeSpec: NodePackageSpecification,
   services: AddNodePackageNodeService[],
-  settings: { storageLocation?: string },
+  settings: { storageLocation?: string; configValues?: ConfigValuesMap },
 ): Promise<NodePackage> => {
   // use a timestamp postfix so the user can add multiple nodes of the same name
   const utcTimestamp = Math.floor(Date.now() / 1000);
@@ -58,6 +58,7 @@ export const addNodePackage = async (
   const nodePackage: NodePackage = createNodePackage({
     spec: nodeSpec,
     runtime: nodeRuntime,
+    initialConfigFromUser: settings.configValues,
   });
   nodePackageStore.addNodePackage(nodePackage);
 

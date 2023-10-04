@@ -4,9 +4,10 @@ import { SystemRequirements } from './systemRequirements';
 
 import { ConfigValuesMap, ConfigTranslationMap } from './nodeConfig';
 import { NiceNodeRpcTranslation } from './rpcTranslation';
+import { NodePackageConfigTranslationMap } from './nodePackageConfig';
 
 /* eslint-disable max-classes-per-file */
-export type ExecutionTypes = 'docker' | 'binary';
+export type ExecutionTypes = 'docker' | 'binary' | 'nodePackage';
 export type Architectures = 'amd64' | 'arm64';
 
 // Create controls which output using translation.
