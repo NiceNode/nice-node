@@ -33,6 +33,7 @@
   "Waiting": "Waiting",
   "InstallingUpdate": "Installing update...",
   "Online": "Online",
+  "Running": "Running",
   "Synchronized": "Synchronized",
   "BlocksBehind": "Blocks behind",
   "LowPeerCount": "Low Peer Count",
