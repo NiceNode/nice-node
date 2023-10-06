@@ -103,8 +103,9 @@
       "base": "core22",
       "confinement": "classic",
       "publish": {
-        "provider": "generic",
-        "url": "https://anydummyurl.com"
+        "provider": "github",
+        "owner": "jgresham",
+        "repo": "nice-node"
       }
     },
     "directories": {
