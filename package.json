@@ -101,7 +101,12 @@
     },
     "snap": {
       "base": "core22",
-      "confinement": "classic"
+      "confinement": "classic",
+      "publish": {
+        "provider": "github",
+        "owner": "jgresham",
+        "repo": "nice-node"
+      }
     },
     "directories": {
       "app": "release/app",
