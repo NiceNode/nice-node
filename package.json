@@ -101,7 +101,11 @@
     },
     "snap": {
       "base": "core22",
-      "confinement": "classic"
+      "confinement": "classic",
+      "publish": {
+        "provider": "generic",
+        "url": "https://anydummyurl.com"
+      }
     },
     "directories": {
       "app": "release/app",
