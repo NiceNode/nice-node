@@ -22,6 +22,10 @@ jobs:
         os: [macos-latest]
 
     steps:
+      - name: Install snapcraft brew package
+        run: |
+          brew install snapcraft
+
       - name: Used variables
         run: |
           echo "MP_PROJECT_ENV variable : ${{ vars.MP_PROJECT_ENV }}"
