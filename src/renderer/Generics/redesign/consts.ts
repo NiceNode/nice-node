@@ -11,6 +11,7 @@ export interface ClientStatusProps {
   updateAvailable?: boolean;
   blocksBehind?: boolean;
   noConnection?: boolean;
+  online?: boolean;
   stopped?: boolean;
   error?: boolean;
 }
@@ -63,6 +64,7 @@ export interface SyncStatusProps {
   LOW_PEER_COUNT: string;
   BLOCKS_BEHIND: string;
   NO_NETWORK: string;
+  ONLINE: string;
   STOPPED: string;
 }
 
@@ -75,5 +77,6 @@ export const SYNC_STATUS = Object.freeze({
   LOW_PEER_COUNT: 'lowPeerCount',
   BLOCKS_BEHIND: 'blocksBehind',
   NO_NETWORK: 'noNetwork',
+  ONLINE: 'online',
   STOPPED: 'stopped',
 });

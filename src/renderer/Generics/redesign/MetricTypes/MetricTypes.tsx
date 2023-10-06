@@ -111,6 +111,11 @@ export const MetricTypes = ({
         titleText = g('Stopped');
         icon = <Icon iconId="stop" />;
         break;
+      case SYNC_STATUS.ONLINE:
+        statusColorStyle = green;
+        titleText = g('Online');
+        labelText = g('Running');
+        break;
       default:
         break;
     }

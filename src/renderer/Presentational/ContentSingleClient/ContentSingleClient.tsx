@@ -33,6 +33,7 @@ export type SingleNodeContent = {
     updateAvailable?: boolean;
     blocksBehind?: boolean;
     noConnection?: boolean;
+    online?: boolean;
     stopped?: boolean;
     error?: boolean;
   };

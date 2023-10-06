@@ -32,6 +32,7 @@ import {
 } from './NodePackageScreen.css';
 import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
+import { NodeStatus } from '../../../common/node';
 
 let alphaModalRendered = false;
 
@@ -44,7 +45,10 @@ const NodePackageScreen = () => {
     selectedNodePackage?.spec.rpcTranslation,
   );
   const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>();
+  // we will bring these vars back in the future
+  // @ts-ignore: no-unused-variable
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
+  // @ts-ignore: no-unused-variable
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sDiskUsed, setDiskUsed] = useState<number>(0);
@@ -127,6 +131,10 @@ const NodePackageScreen = () => {
     if (typeof syncingData === 'object') {
       setSyncPercent(syncingData.syncPercent);
       setIsSyncing(syncingData.isSyncing);
+    } else if (syncingData === false) {
+      // for nodes that do not have sync percent or other sync data
+      setSyncPercent('');
+      setIsSyncing(false);
     } else {
       setSyncPercent('');
       setIsSyncing(undefined);
@@ -231,8 +239,12 @@ const NodePackageScreen = () => {
         version: '',
         nodeType: service.serviceName,
         status: {
-          running: node?.status === 'running',
-          stopped: node?.status === 'stopped',
+          running:
+            node?.status === NodeStatus.running ||
+            node?.status === NodeStatus.starting,
+          stopped:
+            node?.status === NodeStatus.stopped ||
+            node?.status === NodeStatus.stopping,
           error: node?.status.includes('error'),
           // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
         },
@@ -365,7 +377,7 @@ const NodePackageScreen = () => {
     status: {
       stopped: status === 'stopped',
       error: status.includes('error'),
-      synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+      online: status === 'running',
     },
     stats: {
       peers: sPeers,
