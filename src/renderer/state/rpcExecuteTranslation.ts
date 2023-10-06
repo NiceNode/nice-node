@@ -231,7 +231,7 @@ export const executeTranslation = async (
     const hubbleBaseUrl = 'http://localhost:2281';
     if (rpcCall === 'sync') {
       const resp = await callFetch(`${hubbleBaseUrl}/v1/info`);
-      if (resp?.isSyncing !== undefined) {
+      if (resp && resp.isSyncing !== undefined) {
         return { isSyncing: resp.isSyncing };
       }
     } else if (rpcCall === 'clientVersion') {

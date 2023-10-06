@@ -16,6 +16,9 @@ export const getSyncStatus = (status: ClientStatusProps) => {
     case status.noConnection:
       syncStatus = SYNC_STATUS.NO_NETWORK;
       break;
+    case status.online:
+      syncStatus = SYNC_STATUS.ONLINE;
+      break;
     case status.blocksBehind:
       syncStatus = SYNC_STATUS.BLOCKS_BEHIND;
       break;
