@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === 'development') {
 
 fixPathEnvVar();
 logger.info(`NICENODE_ENV: ${process.env.NICENODE_ENV}`);
-logger.info(`FATHOM_SITE_ENV: ${process.env.FATHOM_SITE_ENV}`);
+logger.info(`MP_PROJECT_ENV: ${process.env.MP_PROJECT_ENV}`);
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   maxBreadcrumbs: 50,

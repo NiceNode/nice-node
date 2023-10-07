@@ -1,6 +1,8 @@
-import * as Fathom from 'fathom-client';
-import { eventIdLookup, FATHOM_SITE_ENV, FATHOM_SITE_ID } from './environment';
+import mixpanel from 'mixpanel-browser';
+
+import { MP_PROJECT_ENV, MP_PROJECT_TOKEN } from './environment';
 import { NNEvent } from './events';
+import electron from '../electronGlobal';
 
 /**
  * Enable or disable remote event reporting service from in the front-end.
@@ -8,17 +10,20 @@ import { NNEvent } from './events';
  */
 export const setRemoteEventReportingEnabled = (isEnabled: boolean) => {
   console.log('setIsEventReportingEnabled: ', isEnabled);
-
-  // Todo: Disable the annoying popup this throws
-  if (isEnabled) {
-    Fathom.enableTrackingForMe();
-  } else {
-    Fathom.blockTrackingForMe();
+  if (MP_PROJECT_ENV === 'dev') {
+    console.log('No mp function to call because mixpanel is not initialized.');
+    return;
   }
-  if (Fathom.isTrackingEnabled() !== isEnabled) {
+
+  if (isEnabled) {
+    mixpanel.opt_in_tracking();
+  } else {
+    mixpanel.opt_out_tracking();
+  }
+  if (mixpanel.has_opted_in_tracking() !== isEnabled) {
     console.error(
       `Mismatch between user setting and event reporting service \
-      setting. Service isEnabled:${Fathom.isTrackingEnabled()} and \
+      setting. Service isEnabled:${mixpanel.has_opted_in_tracking()} and \
       user set isEnabled:${isEnabled}`,
     );
   }
@@ -29,20 +34,43 @@ export const setRemoteEventReportingEnabled = (isEnabled: boolean) => {
  * logged or optionally sent to tracking service for core contributors to review.
  * @param event
  */
-export const reportEvent = (event: NNEvent, value?: number) => {
-  console.log('reportEvent, value: ', event, value);
-  const eventId = eventIdLookup(event);
-  Fathom.trackGoal(eventId, value !== undefined ? value : 0);
+export const reportEvent = (
+  event: NNEvent,
+  properties?: { [x: string]: string | number | boolean | string[] },
+) => {
+  console.log('reportEvent, properties: ', event, properties);
+  if (MP_PROJECT_ENV === 'dev') {
+    return;
+  }
+  mixpanel.track(event, properties);
 };
 
-export const initialize = () => {
-  const fathomSiteId = FATHOM_SITE_ID;
-  if (fathomSiteId) {
-    Fathom.load(fathomSiteId);
-  } else {
-    console.error('FATHOM_SITE_ID not found!');
+export const initialize = async () => {
+  if (MP_PROJECT_ENV === 'dev') {
+    return;
   }
-  console.log('process.env.FATHOM_SITE_ENV: ', FATHOM_SITE_ENV);
-  console.log('Fathom track isEnabled?: ', Fathom.isTrackingEnabled());
+  const mpProjectToken = MP_PROJECT_TOKEN;
+  if (mpProjectToken) {
+    mixpanel.init(mpProjectToken, {
+      debug: true,
+      track_pageview: true,
+      persistence: 'localStorage',
+    });
+    const appClientId = await electron.getAppClientId();
+    console.log('event reporting: appClientId: ', appClientId);
+    mixpanel.identify(appClientId);
+  } else {
+    console.error('MP_PROJECT_TOKEN not found!');
+  }
+  console.log('process.env.MP_PROJECT_ENV: ', MP_PROJECT_ENV);
+  // Initially, these are both false
+  console.log(
+    'Mixpanel track has_opted_in_tracking?: ',
+    mixpanel.has_opted_in_tracking(),
+  );
+  console.log(
+    'Mixpanel track has_opted_out_tracking?: ',
+    mixpanel.has_opted_out_tracking(),
+  );
 };
 initialize();

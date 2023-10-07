@@ -8,18 +8,17 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpPort" : "8547",
-        "enginePort" : "8553",
+        "httpPort": "8547",
+        "enginePort": "8553",
         "httpCorsDomains": "http://localhost",
         "webSockets": "Disabled",
         "httpVirtualHosts": "localhost,host.containers.internal",
-        "authVirtualHosts": "localhost,host.containers.internal",
-        "rollupSequencerHttpEndpoint": "https://mainnet-sequencer.base.org"
+        "authVirtualHosts": "localhost,host.containers.internal"
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
         "raw": "",
-        "initNodeCommand" : "init /root/.ethereum/genesis-l2.json",
+        "initNodeCommand": "init",
         "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
@@ -55,6 +54,34 @@
       "uiControl": {
         "type": "filePath"
       },
+      "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
+    },
+    "network": {
+      "displayName": "Network",
+      "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "--mainnet"
+          },
+          {
+            "value": "Sepolia",
+            "config": "--sepolia"
+          }
+        ]
+      }
+    },
+    "genesisFile": {
+      "displayName": "Genesis file",
+      "cliConfigPrefix": "/root/.ethereum/",
+      "defaultValue": "genesis-l2.json",
+      "uiControl": {
+        "type": "text"
+      },
+      "initCommandConfig": true,
       "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
     },
     "http": {

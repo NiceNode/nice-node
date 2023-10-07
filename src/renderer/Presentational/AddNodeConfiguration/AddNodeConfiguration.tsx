@@ -41,6 +41,7 @@ export type AddNodeConfigurationValues = {
   clientSelections?: ClientSelections;
   clientConfigValues?: ClientConfigValues;
   storageLocation?: string;
+  nodePackageConfigValues?: ClientConfigValues;
 };
 export interface AddNodeConfigurationProps {
   nodeId?: NodeId;
@@ -70,6 +71,9 @@ const AddNodeConfiguration = ({
   const { t } = useTranslation();
   const [sNodePackageSpec, setNodePackageSpec] =
     useState<NodePackageSpecification>();
+  const [sNodePackageSpecArr, setNodePackageSpecArr] = useState<
+    NodePackageSpecification[]
+  >([]);
   const [sNodePackageServices, setNodePackageServices] =
     useState<NodePackageNodeServiceSpec[]>();
   const [sClientSelections, setClientSelections] = useState<ClientSelections>(
@@ -88,6 +92,8 @@ const AddNodeConfiguration = ({
     mergeObjectReducer,
     {},
   );
+  const [sNodePackageConfigValues, dispatchNodePackageConfigValues] =
+    useReducer(mergeObjectReducer, {});
 
   const [
     sNodeStorageLocationFreeStorageGBs,
@@ -95,6 +101,14 @@ const AddNodeConfiguration = ({
   ] = useState<number>();
   const [sIsAdvancedOptionsOpen, setIsAdvancedOptionsOpen] =
     useState<boolean>();
+
+  useEffect(() => {
+    if (sNodePackageSpec) {
+      setNodePackageSpecArr([sNodePackageSpec]);
+    } else {
+      setNodePackageSpecArr([]);
+    }
+  }, [sNodePackageSpec]);
 
   useEffect(() => {
     const fetchNodeLibrarys = async () => {
@@ -190,11 +204,17 @@ const AddNodeConfiguration = ({
         clientSelections: sClientSelections,
         clientConfigValues: sClientConfigValues,
         storageLocation: sNodeStorageLocation,
+        nodePackageConfigValues: sNodePackageConfigValues,
       });
     }
     // todo: try useCallback in parent component
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sClientSelections, sNodeStorageLocation, sClientConfigValues]);
+  }, [
+    sClientSelections,
+    sNodeStorageLocation,
+    sClientConfigValues,
+    sNodePackageConfigValues,
+  ]);
 
   if (!sNodePackageSpec) {
     console.error(sNodePackageLibrary, nodeId);
@@ -277,7 +297,15 @@ const AddNodeConfiguration = ({
 
       <HorizontalLine />
 
-      {/* Initial client settings, required and optional */}
+      {/* Initial node package settings, required */}
+      <InitialClientConfigs
+        clientSpecs={sNodePackageSpecArr}
+        addNodeFlowSelection="required"
+        onChange={(newConfigValues) => {
+          dispatchNodePackageConfigValues(newConfigValues);
+        }}
+      />
+      {/* Initial client settings, required */}
       <InitialClientConfigs
         clientSpecs={sClientNodeSpecifications}
         addNodeFlowSelection="required"
@@ -298,13 +326,24 @@ const AddNodeConfiguration = ({
         />
       </div>
       {sIsAdvancedOptionsOpen && (
-        <InitialClientConfigs
-          clientSpecs={sClientNodeSpecifications}
-          addNodeFlowSelection="advanced"
-          onChange={(newClientConfigValues) => {
-            dispatchClientConfigValues(newClientConfigValues);
-          }}
-        />
+        <>
+          {/* Initial node package settings, advanced */}
+          <InitialClientConfigs
+            clientSpecs={sNodePackageSpecArr}
+            addNodeFlowSelection="advanced"
+            onChange={(newConfigValues) => {
+              dispatchNodePackageConfigValues(newConfigValues);
+            }}
+          />
+          {/* Initial client settings, advanced */}
+          <InitialClientConfigs
+            clientSpecs={sClientNodeSpecifications}
+            addNodeFlowSelection="advanced"
+            onChange={(newClientConfigValues) => {
+              dispatchClientConfigValues(newClientConfigValues);
+            }}
+          />
+        </>
       )}
     </div>
   );

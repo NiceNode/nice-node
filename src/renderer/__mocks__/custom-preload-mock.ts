@@ -148,6 +148,9 @@ export const getSettings = () => {
     appThemeSetting: 'auto',
   };
 };
+export const getAppClientId = () => {
+  return 'random-unique-uuidv4';
+};
 export const getSetHasSeenSplashscreen = () => true;
 export const getSetHasSeenAlphaModal = () => true;
 export const getIsPodmanInstalled = () => true;

@@ -25,7 +25,7 @@ import {
   useGetIsPodmanInstalledQuery,
   useGetIsPodmanRunningQuery,
 } from '../../state/settingsService';
-import { reportEvent } from '../../events/reportEvent';
+// import { reportEvent } from '../../events/reportEvent';
 import { CHANNELS } from '../../../main/messenger';
 import { IpcMessage } from '../../../main/podman/messageFrontEnd';
 
@@ -85,7 +85,7 @@ const PodmanInstallation = ({
     qIsPodmanRunning.refetch();
     if (installResult && !installResult.error) {
       setInstallComplete(true);
-      reportEvent('InstalledPodman');
+      // reportEvent('InstalledPodman');
       // notify parent that everything is done
       // todo: confirm/check podman version installed?
     }

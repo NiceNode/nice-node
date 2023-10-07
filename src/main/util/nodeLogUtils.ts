@@ -92,7 +92,13 @@ const trimLogHeader = (log: string, client: string) => {
       '',
     );
   }
-
+  if (client === 'op-node') {
+    // Example: t=2023-10-04T17:36:59+0000 lvl=info msg=".. message text..."
+    return log.replace(
+      /t=\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{4}\s+lvl=(info|warn|error) /,
+      '',
+    );
+  }
   // Other Ethereum clients could be added here as needed...
 
   // If the client is not recognized, return the original log

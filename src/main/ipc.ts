@@ -28,6 +28,7 @@ import {
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import { getUserNodePackages } from './state/nodePackages';
 import Node, { NodeId, NodePackage } from '../common/node';
+import { ConfigValuesMap } from '../common/nodeConfig';
 import {
   NodePackageSpecification,
   NodeSpecification,
@@ -70,6 +71,7 @@ import {
   stopNodePackage,
 } from './nodePackageManager';
 import { checkPorts } from './ports';
+import { getAppClientId } from './state/eventReporting';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -115,7 +117,7 @@ export const initialize = () => {
       _event,
       nodeSpec: NodePackageSpecification,
       services: AddNodePackageNodeService[],
-      settings: { storageLocation?: string },
+      settings: { storageLocation?: string; configValues?: ConfigValuesMap },
     ): Promise<{ node: NodePackage }> => {
       const node = await addNodePackage(nodeSpec, services, settings);
       return { node };
@@ -206,6 +208,7 @@ export const initialize = () => {
     return getSetHasSeenAlphaModal(hasSeen);
   });
   ipcMain.handle('getSettings', getSettings);
+  ipcMain.handle('getAppClientId', getAppClientId);
   ipcMain.handle('setLanguage', (_event, languageCode: string) => {
     return setLanguage(languageCode);
   });

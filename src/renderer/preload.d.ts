@@ -15,6 +15,7 @@ import { Settings, ThemeSetting } from '../main/state/settings';
 import { CheckStorageDetails } from '../main/files';
 import { FailSystemRequirementsData } from '../main/minSystemRequirement';
 import { SystemData } from '../main/systemInfo';
+import { ConfigValuesMap } from '../common/nodeConfig';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
 //  we extend window.performance to include Chrome's memory stats
@@ -69,7 +70,10 @@ declare global {
       addNodePackage(
         nodeSpec: NodePackageSpecification,
         services: AddNodePackageNodeService[],
-        settings: { storageLocation?: string },
+        settings: {
+          storageLocation?: string;
+          configValues?: ConfigValuesMap;
+        },
       ): { node: NodePackage };
       addNode(nodeSpec: NodeSpecification, storageLocation?: string): Node;
       updateNode(nodeId: NodeId, propertiesToUpdate: any): Node;
@@ -103,6 +107,7 @@ declare global {
       getSetHasSeenSplashscreen(hasSeen?: boolean): boolean;
       getSetHasSeenAlphaModal(hasSeen?: boolean): boolean;
       getSettings(): Settings;
+      getAppClientId(): string;
       setLanguage(languageCode: string): void;
       setNativeThemeSetting(theme: ThemeSetting): void;
       setThemeSetting(theme: ThemeSetting): void;
