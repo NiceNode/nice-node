@@ -31,13 +31,11 @@ const convertConfigToLabelSettings = ({
   configValuesMap,
   isDisabled,
   onChange,
-  type,
 }: {
   categoryConfigs: CategoryConfig[];
   configValuesMap: ConfigValuesMap;
   isDisabled?: boolean;
   onChange?: SettingChangeHandler;
-  type?: string;
 }): LabelSettingsSectionProps => {
   // no separate settings sections (Only one for now)
   const section: LabelSettingsSectionProps = {
@@ -64,14 +62,6 @@ const convertConfigToLabelSettings = ({
             configValuesMap,
           );
 
-          const disabledConfigKeysForNodeSettings = ['network'];
-
-          const isSettingDisabled =
-            disabledConfigKeysForNodeSettings.includes(configKey) &&
-            type === 'nodeSettings'
-              ? true
-              : isDisabled;
-
           const settingItem: LabelSettingsItem = {
             key: configKey,
             label: configTranslation.displayName,
@@ -81,7 +71,7 @@ const convertConfigToLabelSettings = ({
                 configKey={configKey}
                 configTranslation={configTranslation}
                 currentValue={currentValue}
-                isDisabled={isSettingDisabled}
+                isDisabled={isDisabled}
                 onChange={onChange}
               />
             ),
