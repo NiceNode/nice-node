@@ -197,40 +197,6 @@ const AddNodeConfiguration = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sClientSelections, sNodeStorageLocation, sClientConfigValues]);
 
-  const [requiredConfigTranslations, setRequiredConfigTranslations] =
-    useState<ClientConfigTranslations>({});
-  const [advancedConfigTranslations, setAdvancedConfigTranslations] =
-    useState<ClientConfigTranslations>({});
-
-  useEffect(() => {
-    const requiredTranslations: ClientConfigTranslations = {};
-    const advancedTranslations: ClientConfigTranslations = {};
-
-    sClientNodeSpecifications.forEach((clientSpec) => {
-      requiredTranslations[clientSpec.specId] = {};
-      advancedTranslations[clientSpec.specId] = {};
-
-      const translations = clientSpec.configTranslation || {};
-      Object.keys(translations).forEach((key) => {
-        if (translations[key].addNodeFlow === 'required') {
-          requiredTranslations[clientSpec.specId][key] = translations[key];
-        } else if (translations[key].addNodeFlow === 'advanced') {
-          advancedTranslations[clientSpec.specId][key] = translations[key];
-        }
-      });
-    });
-
-    setRequiredConfigTranslations(requiredTranslations);
-    setAdvancedConfigTranslations(advancedTranslations);
-  }, [sClientNodeSpecifications]);
-
-  const hasRequiredConfigs = Object.keys(requiredConfigTranslations).some(
-    (clientId) => Object.keys(requiredConfigTranslations[clientId]).length > 0,
-  );
-  const hasAdvancedConfigs = Object.keys(advancedConfigTranslations).some(
-    (clientId) => Object.keys(advancedConfigTranslations[clientId]).length > 0,
-  );
-
   if (!sNodePackageSpec) {
     console.error(sNodePackageLibrary, nodeId);
     return <>No selected Node found</>;
@@ -313,39 +279,33 @@ const AddNodeConfiguration = ({
       <HorizontalLine />
 
       {/* Initial client settings, required and optional */}
-      {hasRequiredConfigs && (
+      <InitialClientConfigs
+        clientSpecs={sClientNodeSpecifications}
+        addNodeFlowSelection="required"
+        onChange={(newClientConfigValues) => {
+          dispatchClientConfigValues(newClientConfigValues);
+        }}
+      />
+      {/* Initial client settings, required and optional */}
+      <div className={advancedOptionsLink}>
+        <DropdownLink
+          text={`${
+            sIsAdvancedOptionsOpen
+              ? t('HideAdvancedOptions')
+              : t('ShowAdvancedOptions')
+          }`}
+          onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
+          isDown={!sIsAdvancedOptionsOpen}
+        />
+      </div>
+      {sIsAdvancedOptionsOpen && (
         <InitialClientConfigs
           clientSpecs={sClientNodeSpecifications}
-          configTranslations={requiredConfigTranslations}
+          addNodeFlowSelection="advanced"
           onChange={(newClientConfigValues) => {
             dispatchClientConfigValues(newClientConfigValues);
           }}
         />
-      )}
-      {/* Initial client settings, required and optional */}
-      {hasAdvancedConfigs && (
-        <>
-          <div className={advancedOptionsLink}>
-            <DropdownLink
-              text={`${
-                sIsAdvancedOptionsOpen
-                  ? t('HideAdvancedOptions')
-                  : t('ShowAdvancedOptions')
-              }`}
-              onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
-              isDown={!sIsAdvancedOptionsOpen}
-            />
-          </div>
-          {sIsAdvancedOptionsOpen && (
-            <InitialClientConfigs
-              clientSpecs={sClientNodeSpecifications}
-              configTranslations={advancedConfigTranslations}
-              onChange={(newClientConfigValues) => {
-                dispatchClientConfigValues(newClientConfigValues);
-              }}
-            />
-          )}
-        </>
       )}
     </div>
   );

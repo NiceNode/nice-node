@@ -20,34 +20,48 @@ export type ClientConfigTranslations = {
 
 export interface InitialClientConfigsProps {
   clientSpecs: NodeSpecification[];
-  configTranslations: ClientConfigTranslations;
+  addNodeFlowSelection: ConfigTranslationAddNodeFlow;
   onChange?: (newClientConfigValues: ClientConfigValues) => void;
 }
 
 const InitialClientConfigs = ({
   clientSpecs,
-  configTranslations,
+  addNodeFlowSelection,
   onChange,
 }: InitialClientConfigsProps) => {
   const [sClientConfigValues, setClientConfigValues] =
     useState<ClientConfigValues>({});
+  const [sClientConfigTranslations, setClientConfigTranslations] =
+    useState<ClientConfigTranslations>({});
 
   useEffect(() => {
     const clientConfigValues: ClientConfigValues = {};
-
-    clientSpecs.forEach((clientSpec: NodeSpecification) => {
-      // if the client configuration exists, keep the current config
-      if (sClientConfigValues[clientSpec.specId]) {
-        clientConfigValues[clientSpec.specId] =
-          sClientConfigValues[clientSpec.specId];
-      } else {
-        // if the user selects a different client, initialize the state values
-        clientConfigValues[clientSpec.specId] = {};
-      }
-    });
-
+    const clientConfigTranslations: ClientConfigTranslations = {};
+    if (clientSpecs) {
+      clientSpecs.forEach((clientSpec: NodeSpecification) => {
+        // if the client is not new, keep the current config
+        // todo: does this cause re-render?
+        if (
+          sClientConfigValues[clientSpec.specId] &&
+          sClientConfigTranslations[clientSpec.specId]
+        ) {
+          clientConfigValues[clientSpec.specId] =
+            sClientConfigValues[clientSpec.specId];
+          clientConfigTranslations[clientSpec.specId] =
+            sClientConfigTranslations[clientSpec.specId];
+        } else {
+          // if the user selectes a different client, initialize the state config translation and values
+          clientConfigValues[clientSpec.specId] = {};
+          clientConfigTranslations[clientSpec.specId] =
+            clientSpec.configTranslation || {};
+        }
+      });
+    }
+    setClientConfigTranslations(clientConfigTranslations);
     setClientConfigValues(clientConfigValues);
 
+    // we only want to update these values when props.clientSpecs changes
+    // adding the other deps would cause a loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clientSpecs]);
 
@@ -69,8 +83,24 @@ const InitialClientConfigs = ({
       <div className={initialClientConfigContainer}>
         {/* Initial client settings, required and optional */}
 
-        {Object.keys(configTranslations).map((clientId: string) => {
-          const clientConfigTranslation = configTranslations[clientId];
+        {Object.keys(sClientConfigTranslations)?.map((clientId: string) => {
+          const singleClientConfigTranslation =
+            sClientConfigTranslations[clientId];
+          const requiredClientConfigTranslation: ConfigTranslationMap = {};
+
+          // Filter out only node config that is required for the add node flow
+          Object.keys(singleClientConfigTranslation)?.map((configKey) => {
+            const configTranslation = singleClientConfigTranslation[configKey];
+            if (configTranslation.addNodeFlow === addNodeFlowSelection) {
+              requiredClientConfigTranslation[configKey] = configTranslation;
+            }
+          });
+          const singleClientConfigValues = sClientConfigValues[clientId];
+
+          // If requiredClientConfigTranslation is empty, return null for this iteration.
+          if (Object.keys(requiredClientConfigTranslation).length === 0) {
+            return null;
+          }
 
           return (
             <React.Fragment key={clientId}>
@@ -79,10 +109,10 @@ const InitialClientConfigs = ({
                 categoryConfigs={[
                   {
                     category: '',
-                    configTranslationMap: clientConfigTranslation,
+                    configTranslationMap: requiredClientConfigTranslation,
                   },
                 ]}
-                configValuesMap={sClientConfigValues[clientId]}
+                configValuesMap={singleClientConfigValues}
                 isDisabled={false}
                 onChange={(configKey: string, newValue: ConfigValue) => {
                   setClientConfigValues({
