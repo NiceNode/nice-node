@@ -124,17 +124,19 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "jgresham",
+        "owner": "NiceNode",
         "repo": "nice-node"
       }
     ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jgresham/nice-node.git"
+    "url": "git+https://github.com/NiceNode/nice-node.git"
   },
   "author": {
-    "name": "jgresham"
+    "name": "Johns Gresham",
+    "email": "johnsgresham@skiff.com",
+    "url": "http://nicenode.xyz"
   },
   "license": "MIT",
   "keywords": [
