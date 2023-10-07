@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { container } from './tabItem.css';
 
 export interface TabItemProps {
@@ -35,4 +36,4 @@ const TabItem = ({ activeTabId, label, onClickTabItem }: TabItemProps) => {
   );
 };
 
-export default TabItem;
+export default memo(TabItem);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   ConfigTranslationMap,
   ConfigValuesMap,
@@ -26,19 +26,13 @@ const DynamicSettings = ({
   onChange,
   type,
 }: DynamicSettingsProps) => {
-  const [sSections, setSections] = useState<LabelSettingsSectionProps>({
-    items: [],
-  });
-
-  useEffect(() => {
-    setSections(
-      convertConfigToLabelSettings({
-        categoryConfigs: categoryConfigs ?? [],
-        configValuesMap: configValuesMap ?? {},
-        isDisabled,
-        onChange,
-      }),
-    );
+  const sSections = useMemo(() => {
+    return convertConfigToLabelSettings({
+      categoryConfigs: categoryConfigs ?? [],
+      configValuesMap: configValuesMap ?? {},
+      isDisabled,
+      onChange,
+    });
   }, [categoryConfigs, configValuesMap, isDisabled, onChange]);
 
   if (!categoryConfigs) {
