@@ -284,7 +284,7 @@ const AddNodeConfiguration = ({
         }}
       />
 
-      <HorizontalLine />
+      {/* <HorizontalLine /> */}
       <p className={sectionFont}>{tGeneric('DataLocation')}</p>
       <p
         className={captionText}

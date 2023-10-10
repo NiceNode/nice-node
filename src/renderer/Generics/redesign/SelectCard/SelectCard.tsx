@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
@@ -58,7 +58,11 @@ const SelectCard = ({
   isSelected = false,
 }: SelectCardProps) => {
   const { t: g } = useTranslation('genericComponents');
-  const [selected, setSelected] = useState(isSelected);
+  const [selected, setSelected] = useState<boolean>();
+
+  useEffect(() => {
+    setSelected(isSelected);
+  }, [isSelected, setSelected]);
 
   const onClickAction = () => {
     setSelected(true);
@@ -83,7 +87,7 @@ const SelectCard = ({
       className={activeContainer}
       onClick={onClickAction}
       onBlur={() => {
-        setSelected(false);
+        // setSelected(false);
       }}
       onKeyDown={onClickAction}
       role="button"

@@ -19,6 +19,7 @@
   "dockerVersionInstalledNeedsUpdateCaption": "Please update Docker from the Docker app",
   "dockerNotInstalledDescription": "Docker can be installed in the next step.",
   "dockerCaption": "Docker helps software work on a wide range of computers.",
+  "NodeRequirements": "Node Requirements",
   "nodeRequirementsDefaultDescription": "Your computer is checked with the recommended requirements for the selected node.",
   "nodeRequirementsUnavailable": "The requirements are unavailable. Please check with the node provider.",
   "nodeRequirementsLearnMore": "Learn more about the requirements",

@@ -8,7 +8,7 @@ export const container = style({
 });
 
 export const graphicsContainer = style({
-  minWidth: 380, // min-width works with flexGrow: 1 on the content
+  minWidth: 250, // min-width works with flexGrow: 1 on the content
   '@media': {
     'screen and (max-width: 980px)': {
       display: 'none',
@@ -18,10 +18,12 @@ export const graphicsContainer = style({
 
 export const contentContainer = style({
   flexGrow: 1,
+  overflow: 'auto',
   padding: '80px 64px',
   selectors: {
     [`&.modal`]: {
       padding: 0,
+      overflow: 'visible',
     },
   },
 });

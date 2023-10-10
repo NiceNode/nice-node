@@ -84,8 +84,17 @@ const NodePackageScreen = () => {
     isPodmanRunning = qIsPodmanRunning.data;
   }
   // temporary until network is set at the node package level
-  const [sNetworkFromClients, setNetworkFromClients] = useState<string>('');
+  const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
 
+  useEffect(() => {
+    if (selectedNodePackage?.config?.configValuesMap?.network) {
+      setNetworkNodePackage(
+        selectedNodePackage?.config?.configValuesMap?.network,
+      );
+    } else {
+      setNetworkNodePackage('');
+    }
+  }, [selectedNodePackage]);
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
   //   // Only polls network connection if there are exactly 0 peers
@@ -227,7 +236,6 @@ const NodePackageScreen = () => {
 
   useEffect(() => {
     // format for presentation
-    let guessNetworkFromClients = '';
     const formattedServices: ClientProps[] = [];
     selectedNodePackage?.services.map((service) => {
       const nodeId = service.node.id;
@@ -251,14 +259,8 @@ const NodePackageScreen = () => {
         stats: {},
       };
       formattedServices.push(serviceProps);
-
-      // temporary network parsing from client configs
-      if (node?.config?.configValuesMap?.network) {
-        guessNetworkFromClients = node?.config?.configValuesMap?.network;
-      }
     });
     setFormattedServices(formattedServices);
-    setNetworkFromClients(guessNetworkFromClients);
   }, [selectedNodePackage?.services, sUserNodes]);
 
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {
@@ -304,10 +306,13 @@ const NodePackageScreen = () => {
 
   // TODO: make this more flexible for other client specs
   const formatSpec = (info: string | undefined) => {
-    if (!info) {
-      return '';
+    let result = '';
+    if (info) {
+      result = `${info} ${sNetworkNodePackage}`;
+    } else if (sNetworkNodePackage !== '') {
+      result = `${sNetworkNodePackage}`;
     }
-    return `${info} ${sNetworkFromClients}`;
+    return result;
   };
 
   const formatVersion = (version: string | undefined, name: string) => {
