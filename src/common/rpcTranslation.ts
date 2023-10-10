@@ -22,7 +22,8 @@ export type NiceNodeRpcTranslation =
   | 'eth-l1'
   | 'eth-l1-beacon'
   | 'eth-l2-starknet'
-  | 'eth-l2-arbitrum';
+  | 'eth-l2-arbitrum'
+  | 'eth-l2-consensus';
 // | {
 //     peerCount?: RpcTranslation;
 //     sync?: RpcTranslation;

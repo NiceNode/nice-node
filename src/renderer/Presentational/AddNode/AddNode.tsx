@@ -8,12 +8,12 @@ import {
   titleFont,
   descriptionContainer,
 } from './addNode.css';
-import SpecialSelect, {
-  SelectOption,
-} from '../../Generics/redesign/SpecialSelect/SpecialSelect';
+import { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
+import SelectCard from '../../Generics/redesign/SelectCard/SelectCard';
+import { NodeIcons } from '../../assets/images/nodeIcons';
 
 // Other node types are not ready yet
 const nodeOptions = [
@@ -36,7 +36,7 @@ const nodeOptions = [
     title: 'Optimism',
     value: 'optimism',
     label: 'Optimism',
-    info: 'Built by the OP Collective!',
+    info: 'Ethereum, scaled. Built by the OP Collective',
   },
   {
     iconId: 'farcaster',
@@ -150,11 +150,26 @@ const AddNode = ({
         </div>
       </div>
       <p className={sectionFont}>Network</p>
-      <SpecialSelect
+      <div style={{ width: '100%' }}>
+        {nodeOptions.map((nodeOption) => {
+          return (
+            <SelectCard
+              key={nodeOption.value}
+              title={nodeOption.title}
+              iconId={nodeOption.iconId as keyof NodeIcons}
+              info={nodeOption.info}
+              onClick={() => onChangeNode(nodeOption)}
+              isSelected={sSelectedNode?.value === nodeOption.value}
+            />
+          );
+        })}
+      </div>
+
+      {/* <SpecialSelect
         selectedOption={sSelectedNode}
         onChange={onChangeNode}
         options={nodeOptions}
-      />
+      /> */}
     </div>
   );
 };
