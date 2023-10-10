@@ -30,8 +30,7 @@ const DiskCapacityBarChart = ({
 }: DiskCapacityBarChartProps) => {
   const otherSpace = totalSpace - freeSpace;
   const otherPercentage = (otherSpace / totalSpace) * 100;
-  // const clientPercentage = (clientSpace / totalSpace) * 100;
-  const clientPercentage = 20;
+  const clientPercentage = (clientSpace / totalSpace) * 100;
 
   const freePercentage = (freeSpace / totalSpace) * 100;
   const capitalize = (s: string) =>
