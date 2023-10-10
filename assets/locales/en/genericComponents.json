@@ -100,5 +100,6 @@
   "InitialSyncInProgress": "Initial sync in progress...",
   "NodeSettings": "Node Settings...",
   "RemoveNode": "Remove Node...",
-  "ErrorOccurred": "Error occurred"
+  "ErrorOccurred": "Error occurred",
+  "DataLocation": "Data location"
 }
