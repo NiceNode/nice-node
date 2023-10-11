@@ -103,6 +103,7 @@ export const modalStepperContainer = style({
       padding: 24,
     },
   },
+  zIndex: 3,
 });
 
 export const modalChildrenContainer = style({
