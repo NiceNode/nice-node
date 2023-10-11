@@ -105,8 +105,28 @@ const trimLogHeader = (log: string, client: string) => {
   return log;
 };
 
-const parseLogLevel = (log: string): LogLevel => {
+export const parseLogLevel = (
+  log: string,
+  client: string,
+  message: string,
+): LogLevel => {
   let level: LogLevel = 'INFO';
+  if (client === 'hubble') {
+    // Hubble uses Pino js logger (50 is error, 30 is info)
+    // https://getpino.io/#/docs/help?id=log-levels-as-labels-instead-of-numbers
+    if (message.charAt(9) === '5') {
+      level = 'ERROR';
+      return level;
+    }
+    if (message.charAt(9) === '4') {
+      level = 'WARN';
+      return level;
+    }
+    if (message.charAt(9) === '3') {
+      level = 'INFO';
+      return level;
+    }
+  }
   const uppercaseLog = log.toUpperCase();
   if (uppercaseLog.includes('ERROR') || uppercaseLog.includes('ERR')) {
     level = 'ERROR';
@@ -137,7 +157,7 @@ export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
   const timestamp = timestampFromString(nanoTimestampStr);
   // Timestamp library silently fails and returns invalid timestamps
   // handle errors: todo
-  const level = parseLogLevel(log);
+  const level = parseLogLevel(log, '', log);
 
   return {
     message,
@@ -181,7 +201,7 @@ export const parsePodmanLogMetadata = (
     message = trimLogHeader(log, client);
     timestamp = lastTimestamp;
   }
-  const level = parseLogLevel(log);
+  const level = parseLogLevel(log, client, message);
 
   return {
     message,

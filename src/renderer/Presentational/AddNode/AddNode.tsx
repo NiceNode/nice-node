@@ -137,7 +137,6 @@ const AddNode = ({
     );
     alphaModalRendered = true;
   }
-  console.log('sSelectedNode is ', sSelectedNode);
 
   return (
     <div className={container}>
