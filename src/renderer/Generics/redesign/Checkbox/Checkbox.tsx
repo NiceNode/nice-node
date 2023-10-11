@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { container, checkbox } from './checkbox.css';
 
 export interface CheckboxProps {
@@ -31,6 +31,10 @@ export const Checkbox = ({
   onClick,
 }: CheckboxProps) => {
   const [sIsChecked, setIsChecked] = useState(checked);
+
+  useEffect(() => {
+    setIsChecked(checked);
+  }, [checked]);
 
   const disabledStyle = disabled ? 'disabled' : '';
   // TODO: implement indeterminate

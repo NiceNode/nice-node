@@ -85,7 +85,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
   const [textFilter, setTextFilter] = useState<string>('');
   const [typeFilter, setTypeFilter] = useState<string>('');
   const onClickSetTypeFilter = (type: string) => {
-    if (typeFilter !== '') {
+    if (typeFilter === type) {
       setTypeFilter('');
     } else {
       setTypeFilter(type);
