@@ -66,6 +66,9 @@ const MultiSelect = ({
       ...styles,
       backgroundColor: vars.color.font8,
       color: vars.color.font85,
+      ':active': {
+        backgroundColor: vars.color.font8,
+      },
     }),
     multiValue: (styles) => ({
       ...styles,
