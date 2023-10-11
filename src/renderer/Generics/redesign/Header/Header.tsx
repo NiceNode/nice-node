@@ -79,7 +79,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
   if (screenType !== 'nodePackage') {
     logsButtonProps = {
       label: g('Logs'),
-      iconId: 'logs',
+      iconId: 'scroll',
       onClick: () => {
         if (onAction) onAction('logs');
       },
