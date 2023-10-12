@@ -1,5 +1,6 @@
 import { Systeminformation } from 'systeminformation';
 import { SystemData } from '../../../main/systemInfo';
+import logger from '../../../main/logger';
 
 export type SystemStorageLocation = {
   type: string;
@@ -50,6 +51,12 @@ export const findSystemStorageDetailsAtALocation = (
   });
 
   if (matchedFileSystemSizes === undefined) {
+    logger.error(
+      `No filesystem found for location ${nodeStorageLocation} ${JSON.stringify(
+        systemData.fsSize,
+      )}`,
+    );
+    return;
     throw new Error(`No filesystem found for location ${nodeStorageLocation}`);
   }
 
