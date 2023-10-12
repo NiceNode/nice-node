@@ -166,6 +166,14 @@ export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
   };
 };
 
+export const isNanoDateTimeWithTimezone = (log: string) => {
+  // Regular expression to match ISO 8601 timestamp with nanoseconds and a mandatory timezone offset
+  const isoTimestampRegex =
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{1,9}-\d{2}:\d{2}/;
+
+  return isoTimestampRegex.test(log);
+};
+
 // Last timestamp is used for multi-line logs from a container. This should work in most
 //  use cases because, the last valid log timestamp will be from the first log
 //  in the multi-line log.
@@ -186,17 +194,23 @@ export const parsePodmanLogMetadata = (
   // Podman timestamp format with padded zeros giving consistent length
   // Examples:
   // podman:  2023-03-09T15:12:17-08:00
-  // podman:
-  const TIMESTAMP_LENGTH = 25;
-  const nanoTimestampStr = log.substring(0, TIMESTAMP_LENGTH);
+  // podman:  2023-10-12T08:40:51.329531000-07:00 (podman on Ubuntu)
+  let timestampLength = 25;
+
+  if (isNanoDateTimeWithTimezone(log)) {
+    timestampLength = 35;
+  }
+  const nanoTimestampStr = log.substring(0, timestampLength);
   // returns timestamp in seconds
   let timestamp = timestampFromString(nanoTimestampStr);
+
   // If the timestamp is not a timestamp, then the log is missing a timestmap.
   // Or it is a multi-lined log and in this case we can only return the whole log
   let message;
   if (timestamp > 0) {
     lastTimestamp = timestamp;
-    message = trimLogHeader(log.slice(TIMESTAMP_LENGTH + 1), client); // 25+1 to remove a space
+    // timestampLength+1 to remove a space
+    message = trimLogHeader(log.slice(timestampLength + 1), client);
   } else {
     message = trimLogHeader(log, client);
     timestamp = lastTimestamp;

@@ -147,7 +147,9 @@
     "local"
   ],
   "jest": {
-    "testURL": "http://localhost/",
+    "testEnvironmentOptions": {
+      "url": "http://localhost/"
+    },
     "projects": [
       {
         "displayName": "renderer tests (react)",
