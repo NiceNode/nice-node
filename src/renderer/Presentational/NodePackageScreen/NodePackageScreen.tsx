@@ -32,6 +32,7 @@ import {
 } from './NodePackageScreen.css';
 import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
+import { NodeStatus } from '../../../common/node';
 
 let alphaModalRendered = false;
 
@@ -44,7 +45,10 @@ const NodePackageScreen = () => {
     selectedNodePackage?.spec.rpcTranslation,
   );
   const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>();
+  // we will bring these vars back in the future
+  // @ts-ignore: no-unused-variable
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
+  // @ts-ignore: no-unused-variable
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sDiskUsed, setDiskUsed] = useState<number>(0);
@@ -80,8 +84,17 @@ const NodePackageScreen = () => {
     isPodmanRunning = qIsPodmanRunning.data;
   }
   // temporary until network is set at the node package level
-  const [sNetworkFromClients, setNetworkFromClients] = useState<string>('');
+  const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
 
+  useEffect(() => {
+    if (selectedNodePackage?.config?.configValuesMap?.network) {
+      setNetworkNodePackage(
+        selectedNodePackage?.config?.configValuesMap?.network,
+      );
+    } else {
+      setNetworkNodePackage('');
+    }
+  }, [selectedNodePackage]);
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
   //   // Only polls network connection if there are exactly 0 peers
@@ -127,6 +140,10 @@ const NodePackageScreen = () => {
     if (typeof syncingData === 'object') {
       setSyncPercent(syncingData.syncPercent);
       setIsSyncing(syncingData.isSyncing);
+    } else if (syncingData === false) {
+      // for nodes that do not have sync percent or other sync data
+      setSyncPercent('');
+      setIsSyncing(false);
     } else {
       setSyncPercent('');
       setIsSyncing(undefined);
@@ -219,7 +236,6 @@ const NodePackageScreen = () => {
 
   useEffect(() => {
     // format for presentation
-    let guessNetworkFromClients = '';
     const formattedServices: ClientProps[] = [];
     selectedNodePackage?.services.map((service) => {
       const nodeId = service.node.id;
@@ -231,8 +247,12 @@ const NodePackageScreen = () => {
         version: '',
         nodeType: service.serviceName,
         status: {
-          running: node?.status === 'running',
-          stopped: node?.status === 'stopped',
+          running:
+            node?.status === NodeStatus.running ||
+            node?.status === NodeStatus.starting,
+          stopped:
+            node?.status === NodeStatus.stopped ||
+            node?.status === NodeStatus.stopping,
           error: node?.status.includes('error'),
           // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
         },
@@ -240,14 +260,8 @@ const NodePackageScreen = () => {
         resources: service.node.spec.resources,
       };
       formattedServices.push(serviceProps);
-
-      // temporary network parsing from client configs
-      if (node?.config?.configValuesMap?.network) {
-        guessNetworkFromClients = node?.config?.configValuesMap?.network;
-      }
     });
     setFormattedServices(formattedServices);
-    setNetworkFromClients(guessNetworkFromClients);
   }, [selectedNodePackage?.services, sUserNodes]);
 
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {
@@ -293,10 +307,13 @@ const NodePackageScreen = () => {
 
   // TODO: make this more flexible for other client specs
   const formatSpec = (info: string | undefined) => {
-    if (!info) {
-      return '';
+    let result = '';
+    if (info) {
+      result = `${info} ${sNetworkNodePackage}`;
+    } else if (sNetworkNodePackage !== '') {
+      result = `${sNetworkNodePackage}`;
     }
-    return `${info} ${sNetworkFromClients}`;
+    return result;
   };
 
   const formatVersion = (version: string | undefined, name: string) => {
@@ -366,7 +383,7 @@ const NodePackageScreen = () => {
     status: {
       stopped: status === 'stopped',
       error: status.includes('error'),
-      synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+      online: status === 'running',
     },
     stats: {
       peers: sPeers,

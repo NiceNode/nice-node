@@ -30,10 +30,10 @@
       "cores": 4
     },
     "memory": {
-      "minSizeGBs": 16
+      "minSizeGBs": 8
     },
     "storage": {
-      "minSizeGBs": 1600,
+      "minSizeGBs": 30,
       "ssdRequired": true
     },
     "internet": {
@@ -89,18 +89,16 @@
       "documentation": "https://github.com/jgresham/superhack/blob/main/README.md#op-node-settings"
     },
     "l1": {
-      "displayName": "Ethereum Mainnet RPC Endpoint (local node or provider)",
+      "displayName": "Ethereum RPC Endpoint  (local node or provider)",
       "cliConfigPrefix": "--l1 ",
       "uiControl": {
         "type": "text"
       },
       "addNodeFlow": "required",
-      "defaultValue": "",
-      "infoDescription": "eth namespace required",
-      "documentation": "https://github.com/jgresham/superhack/blob/main/README.md#op-node-settings"
+      "defaultValue": ""
     },
     "l2": {
-      "displayName": "Optimism Mainnet RPC Endpoint (local node or provider)",
+      "displayName": "Optimism RPC Endpoint (local node or provider)",
       "cliConfigPrefix": "--l2 ",
       "uiControl": {
         "type": "text"
@@ -138,5 +136,17 @@
       "documentation": "https://github.com/jgresham/superhack/blob/main/README.md#op-node-settings"
     }
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png",
+  "resources": [
+    {
+      "label": "OP Stack docs",
+      "value": "optimism.io",
+      "link": "https://stack.optimism.io/"
+    },
+    {
+      "label": "OP Geth Github",
+      "value": "github.com",
+      "link": "https://github.com/ethereum-optimism/op-geth#readme"
+    }
+  ]
 }

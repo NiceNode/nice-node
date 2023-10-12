@@ -111,6 +111,11 @@ export const MetricTypes = ({
         titleText = g('Stopped');
         icon = <Icon iconId="stop" />;
         break;
+      case SYNC_STATUS.ONLINE:
+        statusColorStyle = green;
+        titleText = g('Online');
+        labelText = g('Running');
+        break;
       default:
         break;
     }
@@ -126,7 +131,10 @@ export const MetricTypes = ({
         iconId = 'slots';
         titleText = `${(statsValue || 0).toLocaleString()}`;
         labelText = `${g('LastSynced')} ${
-          rpcTranslation === 'eth-l1-beacon' ? g('Slot') : g('Block')
+          rpcTranslation === 'eth-l1-beacon' ||
+          rpcTranslation === 'eth-l2-consensus'
+            ? g('Slot')
+            : g('Block')
         }`;
         break;
       case 'peers':

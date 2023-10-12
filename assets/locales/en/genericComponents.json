@@ -33,6 +33,7 @@
   "Waiting": "Waiting",
   "InstallingUpdate": "Installing update...",
   "Online": "Online",
+  "Running": "Running",
   "Synchronized": "Synchronized",
   "BlocksBehind": "Blocks behind",
   "LowPeerCount": "Low Peer Count",
@@ -99,5 +100,6 @@
   "InitialSyncInProgress": "Initial sync in progress...",
   "NodeSettings": "Node Settings...",
   "RemoveNode": "Remove Node...",
-  "ErrorOccurred": "Error occurred"
+  "ErrorOccurred": "Error occurred",
+  "DataLocation": "Data location"
 }

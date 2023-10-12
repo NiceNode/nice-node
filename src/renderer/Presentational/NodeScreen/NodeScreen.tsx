@@ -32,6 +32,7 @@ import {
 } from './NodeScreen.css';
 import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import { HeaderButton } from '../../Generics/redesign/HeaderButton/HeaderButton';
+import { NodeStatus } from '../../../common/node';
 
 let alphaModalRendered = false;
 
@@ -43,6 +44,8 @@ const NodeScreen = () => {
     selectedNode?.spec.rpcTranslation,
   );
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
+  // we will bring this var back in the future
+  // @ts-ignore: no-unused-variable
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>(0);
@@ -142,13 +145,11 @@ const NodeScreen = () => {
     if (typeof syncingData === 'object') {
       setSyncPercent(syncingData.syncPercent);
       setIsSyncing(syncingData.isSyncing);
-    }
-    // else if (syncingData === false) {
-    //   // light client geth, it is done syncing if data is false
-    //   setSyncPercent('');
-    //   setIsSyncing(false);
-    // }
-    else {
+    } else if (syncingData === false) {
+      // light client geth, it is done syncing if data is false
+      setSyncPercent('');
+      setIsSyncing(false);
+    } else {
       setSyncPercent('');
       setIsSyncing(undefined);
     }
@@ -287,15 +288,15 @@ const NodeScreen = () => {
   const { status, spec } = selectedNode;
 
   // TODO: make this more flexible for other client specs
-  const formatSpec = (info: string | undefined, network?: string) => {
+  const formatSpec = (info: string | undefined) => {
     if (!info) {
       return '';
     }
-    if (info.includes('BeaconNode')) {
-      return `Consensus Client — Ethereum ${network}`;
+    if (info.includes('Consensus') || info.includes('BeaconNode')) {
+      return `Consensus Client`;
     }
     if (info.includes('Execution')) {
-      return `Execution Client — Ethereum ${network}`;
+      return `Execution Client`;
     }
     return info;
   };
@@ -370,12 +371,15 @@ const NodeScreen = () => {
     version: formatVersion(nodeVersionData, clientName),
     info: formatSpec(
       spec.category,
-      selectedNode?.config?.configValuesMap?.network,
+      // selectedNode?.config?.configValuesMap?.network ?? '',
     ),
     status: {
-      stopped: status === 'stopped',
+      stopped: status === NodeStatus.stopped,
       error: status.includes('error'),
-      synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+      // Until sync percent is calculated accurately, just use the sync status returned from the
+      //  node http api as the source of truth
+      // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+      synchronized: sIsSyncing === false && status === NodeStatus.running,
     },
     stats: {
       peers: sPeers,
@@ -391,7 +395,7 @@ const NodeScreen = () => {
     },
     onAction: onNodeAction,
   };
-  console.log('passing content to NodeScreen: ', nodeContent);
+
   return (
     <>
       <div className={backButtonContainer}>
