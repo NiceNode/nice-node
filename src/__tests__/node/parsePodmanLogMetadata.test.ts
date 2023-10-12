@@ -24,6 +24,10 @@ describe('Parsing log string testing', () => {
     const logNethermindMultiLine2 =
       'Nethermind loves mutli-line logs. I am the 2nd line without a podman timestamp leading';
 
+    // difference here is that podman's datetime string is different on Ubuntu
+    const logHubbleUbuntu =
+      '2023-10-12T08:41:58.962229000-07:00 {"level":30,"time":1697125318962,"pid":1,"hostname":"fa7503bb34e7","component":"Hub","eventId":359080423264256,"fid":21101,"type":"LINK_ADD","hash":"0xf1693d08d2a763f3068aa076ed6a62b142e97129","source":"gossip","msg":"submitMessage success"}';
+
     const metadataBesu1 = parsePodmanLogMetadata(logBesu1, 'besu');
     const metadataTekuInfo1 = parsePodmanLogMetadata(
       logTekuInfo1,
@@ -63,6 +67,8 @@ describe('Parsing log string testing', () => {
       logNethermindMultiLine2,
       'nethermind',
     );
+
+    const metadataRethUbuntu = parsePodmanLogMetadata(logHubbleUbuntu, 'reth');
 
     expect(metadataBesu1).toEqual({
       message:
@@ -121,6 +127,12 @@ describe('Parsing log string testing', () => {
         'Nethermind loves mutli-line logs. I am the 2nd line without a podman timestamp leading',
       level: 'INFO',
       timestamp: 1679291443000,
+    });
+    expect(metadataRethUbuntu).toEqual({
+      message:
+        '{"level":30,"time":1697125318962,"pid":1,"hostname":"fa7503bb34e7","component":"Hub","eventId":359080423264256,"fid":21101,"type":"LINK_ADD","hash":"0xf1693d08d2a763f3068aa076ed6a62b142e97129","source":"gossip","msg":"submitMessage success"}',
+      level: 'INFO',
+      timestamp: 1697125318962,
     });
   });
 });
