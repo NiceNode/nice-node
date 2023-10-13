@@ -1,6 +1,5 @@
 import { Systeminformation } from 'systeminformation';
 import { SystemData } from '../../../main/systemInfo';
-import logger from '../../../main/logger';
 
 export type SystemStorageLocation = {
   type: string;
@@ -51,13 +50,13 @@ export const findSystemStorageDetailsAtALocation = (
   });
 
   if (matchedFileSystemSizes === undefined) {
-    logger.error(
+    console.error(
       `No filesystem found for location ${nodeStorageLocation} ${JSON.stringify(
         systemData.fsSize,
       )}`,
     );
-    return;
-    throw new Error(`No filesystem found for location ${nodeStorageLocation}`);
+    return undefined;
+    // throw new Error(`No filesystem found for location ${nodeStorageLocation}`);
   }
 
   // Use matched file system or blockDevice to retrieve disk name
