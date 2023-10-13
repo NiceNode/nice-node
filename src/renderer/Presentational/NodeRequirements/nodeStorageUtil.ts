@@ -36,9 +36,10 @@ export const findSystemStorageDetailsAtALocation = (
   });
 
   if (longestMatchBlockDevice === undefined) {
-    throw new Error(
+    console.error(
       `No storage device found for location ${nodeStorageLocation}`,
     );
+    return undefined;
   }
 
   // Find free storage
