@@ -65,7 +65,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           # This is used for publishing snap release assets to snapcraft
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
-        uses: pguyot/arm-runner-action@v2
+        uses: pguyot/arm-runner-action@v2.5.2
         id: build_image
         with:
           base_image: raspios_lite_arm64:latest
