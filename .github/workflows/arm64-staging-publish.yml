@@ -69,7 +69,7 @@ jobs:
         id: build_image
         with:
           base_image: raspios_lite_arm64:latest
-          image_additional_mb: 2000
+          image_additional_mb: 4000
           commands: |
             sudo apt-get install --no-install-recommends -y npm nodejs
             npm install
