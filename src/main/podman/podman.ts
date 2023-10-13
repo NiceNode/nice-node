@@ -475,12 +475,19 @@ export const createRunCommand = (node: Node): string => {
     finalPodmanInput = podmanPortInput + (input?.docker.raw ?? '');
 
     if (podmanVolumePath) {
+      let volumePostFix = '';
+      if (isLinux()) {
+        // SELinux fix: ":z" post-fix tells podman to mark the volume as shared
+        // not required for all Linux distros, but for simplicity we include
+        // cannot set this on Mac (and probably windows)
+        volumePostFix = ':z';
+      }
       // We really do not want to have conditionals for specific nodes, however,
       //  this is justified as we iterate quickly for funding and prove NN work
       if (specId === 'hubble') {
-        finalPodmanInput = `-v "${node.runtime.dataDir}/hub":${podmanVolumePath}/.hub -v "${node.runtime.dataDir}/rocks":${podmanVolumePath}/.rocks ${finalPodmanInput}`;
+        finalPodmanInput = `-v "${node.runtime.dataDir}/hub":${podmanVolumePath}/.hub${volumePostFix} -v "${node.runtime.dataDir}/rocks":${podmanVolumePath}/.rocks${volumePostFix} ${finalPodmanInput}`;
       } else {
-        finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath} ${finalPodmanInput}`;
+        finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath}${volumePostFix} ${finalPodmanInput}`;
       }
     }
   }
@@ -533,12 +540,19 @@ export const createInitCommand = (node: Node): string => {
     finalPodmanInput = podmanPortInput + (input?.docker.raw ?? '');
 
     if (podmanVolumePath) {
+      let volumePostFix = '';
+      if (isLinux()) {
+        // SELinux fix: ":z" post-fix tells podman to mark the volume as shared
+        // not required for all Linux distros, but for simplicity we include
+        // cannot set this on Mac (and probably windows)
+        volumePostFix = ':z';
+      }
       // We really do not want to have conditionals for specific nodes, however,
       //  this is justified as we iterate quickly for funding and prove NN works
       if (specId === 'hubble') {
-        finalPodmanInput = `-v "${node.runtime.dataDir}/hub":${podmanVolumePath}/.hub -v "${node.runtime.dataDir}/rocks":${podmanVolumePath}/.rocks ${finalPodmanInput}`;
+        finalPodmanInput = `-v "${node.runtime.dataDir}/hub":${podmanVolumePath}/.hub${volumePostFix} -v "${node.runtime.dataDir}/rocks":${podmanVolumePath}/.rocks${volumePostFix} ${finalPodmanInput}`;
       } else {
-        finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath} ${finalPodmanInput}`;
+        finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath}${volumePostFix} ${finalPodmanInput}`;
       }
     }
   }

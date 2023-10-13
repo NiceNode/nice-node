@@ -25,7 +25,7 @@ jobs:
       - name: Install packages for building
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
-          sudo apt-get install --no-install-recommends rpm libarchive-tools
+            sudo apt-get install --no-install-recommends rpm libarchive-tools
           else
             exit 0
           fi

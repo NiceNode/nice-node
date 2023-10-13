@@ -51,7 +51,8 @@ export const findSystemStorageDetailsAtALocation = (
   });
 
   if (matchedFileSystemSizes === undefined) {
-    throw new Error(`No filesystem found for location ${nodeStorageLocation}`);
+    console.error(`No filesystem found for location ${nodeStorageLocation}`);
+    return undefined;
   }
 
   // Use matched file system or blockDevice to retrieve disk name
