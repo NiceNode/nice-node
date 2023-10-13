@@ -70,7 +70,7 @@ jobs:
         with:
           base_image: raspios_lite_arm64:latest
           commands: |
-            sudo apt-get install --no-install-recommends npm nodejs
+            sudo apt-get install --no-install-recommends -y npm nodejs
             npm install
             npm run postinstall
             npm run build
