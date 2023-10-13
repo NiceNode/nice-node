@@ -68,16 +68,15 @@ jobs:
         uses: pguyot/arm-runner-action@v2
         id: build_image
         with:
-          base_image: raspi_4_bullseye:20230102
+          base_image: raspios_lite_arm64:latest
           commands: |
-            sudo apt-get install --no-install-recommends rpm libarchive-tools
-
             npm install
             npm run postinstall
             npm run build
             npm exec electron-builder -- --publish always --linux
 
       # - name: Publish releases
+      # sudo apt-get install --no-install-recommends rpm libarchive-tools
       #   env:
       #     # These values are used for auto updates signing
       #     APPLE_ID: ${{ secrets.APPLE_ID }}
