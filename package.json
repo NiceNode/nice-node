@@ -95,7 +95,9 @@
       "target": [
         "snap",
         "deb",
-        "AppImage"
+        "AppImage",
+        "rpm",
+        "pacman"
       ],
       "category": "Network",
       "icon": "icons"
