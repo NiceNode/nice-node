@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "4.3.0-alpha",
+  "version": "4.3.2-alpha",
   "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./src/main/main.ts",
@@ -93,11 +93,21 @@
     },
     "linux": {
       "target": [
+        "snap",
         "deb",
         "AppImage"
       ],
       "category": "Network",
       "icon": "icons"
+    },
+    "snap": {
+      "base": "core22",
+      "confinement": "classic",
+      "publish": {
+        "provider": "github",
+        "owner": "jgresham",
+        "repo": "nice-node"
+      }
     },
     "directories": {
       "app": "release/app",
@@ -114,17 +124,19 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "jgresham",
+        "owner": "NiceNode",
         "repo": "nice-node"
       }
     ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jgresham/nice-node.git"
+    "url": "git+https://github.com/NiceNode/nice-node.git"
   },
   "author": {
-    "name": "jgresham"
+    "name": "Johns Gresham",
+    "email": "johnsgresham@skiff.com",
+    "url": "http://nicenode.xyz"
   },
   "license": "MIT",
   "keywords": [
@@ -135,7 +147,9 @@
     "local"
   ],
   "jest": {
-    "testURL": "http://localhost/",
+    "testEnvironmentOptions": {
+      "url": "http://localhost/"
+    },
     "projects": [
       {
         "displayName": "renderer tests (react)",
@@ -303,7 +317,7 @@
     "du": "^1.0.0",
     "electron-debug": "^3.2.0",
     "electron-store": "^8.1.0",
-    "electron-updater": "^6.1.1",
+    "electron-updater": "^6.1.4",
     "highcharts": "^11.0.0",
     "highcharts-react-official": "^3.2.1",
     "i18next": "^23.4.9",

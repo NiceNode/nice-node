@@ -16,15 +16,15 @@ import {
 } from './clientCard.css';
 import { NodeIcon } from '../NodeIcon/NodeIcon';
 import { Label, LabelColor } from '../Label/Label';
-import ProgressBar from '../ProgressBar/ProgressBar';
+// import ProgressBar from '../ProgressBar/ProgressBar';
 import { ClientProps, ClientStatusProps } from '../consts';
-import { common } from '../theme.css';
+// import { common } from '../theme.css';
 
 /**
  * Primary UI component for user interaction
  */
 export const ClientCard = (props: ClientProps) => {
-  const { displayName, status, name, nodeType, stats, onClick } = props;
+  const { displayName, status, name, nodeType, onClick } = props;
 
   const { t: g } = useTranslation('genericComponents');
 
@@ -71,29 +71,31 @@ export const ClientCard = (props: ClientProps) => {
 
   const renderContents = () => {
     if (isNotSynchronizedAndNotStopped) {
-      const caption = !status.initialized
-        ? g('InitialSyncInProgress')
-        : g('CatchingUp');
-      let progress;
-      if (stats.highestSlot && stats.currentSlot) {
-        progress = (stats.currentSlot / stats.highestSlot) * 100;
-      } else if (stats.highestBlock && stats.currentBlock) {
-        progress = (stats.currentBlock / stats.highestBlock) * 100;
-      }
-      return (
-        <>
-          {/* TODO: modify height of the bar for card */}
-          <ProgressBar
-            card
-            color={
-              common.color[name.replace('-beacon', '') as NodeBackgroundId] ??
-              common.color.geth
-            }
-            progress={progress}
-            caption={`${caption} (progress will be added soon)`}
-          />
-        </>
-      );
+      const label = g('Syncing');
+      return <Label type="gray" label={label} />;
+      // const caption = !status.initialized
+      //   ? g('InitialSyncInProgress')
+      //   : g('CatchingUp');
+      // let progress;
+      // if (stats.highestSlot && stats.currentSlot) {
+      //   progress = (stats.currentSlot / stats.highestSlot) * 100;
+      // } else if (stats.highestBlock && stats.currentBlock) {
+      //   progress = (stats.currentBlock / stats.highestBlock) * 100;
+      // }
+      // return (
+      //   <>
+      //     {/* TODO: modify height of the bar for card */}
+      //     <ProgressBar
+      //       card
+      //       color={
+      //         common.color[name.replace('-beacon', '') as NodeBackgroundId] ??
+      //         common.color.geth
+      //       }
+      //       progress={progress}
+      //       caption={`${caption} (progress will be added soon)`}
+      //     />
+      //   </>
+      // );
     }
     if (status.stopped || status.updating) {
       const label = status.stopped ? g('Stopped') : g('Updating');
@@ -139,7 +141,7 @@ export const ClientCard = (props: ClientProps) => {
             NODE_BACKGROUNDS[name.replace('-beacon', '') as NodeBackgroundId] ??
             NODE_BACKGROUNDS.nimbus
           })`,
-          height: isNotSynchronizedAndNotStopped ? 166 : 186,
+          // height: isNotSynchronizedAndNotStopped ? 166 : 186,
         }}
         className={[cardTop, `${stoppedStyle}`].join(' ')}
       >

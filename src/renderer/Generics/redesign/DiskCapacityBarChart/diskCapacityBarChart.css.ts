@@ -17,7 +17,7 @@ export const section = style({
 });
 
 export const other = style({
-  backgroundColor: 'lightgray',
+  backgroundColor: vars.color.background92,
   borderStyle: 'solid',
   borderWidth: '1px 0 1px 1px' /* top right bottom left */,
   borderRadius: '4px 0 0 4px',
@@ -25,7 +25,7 @@ export const other = style({
 });
 
 export const client = style({
-  backgroundColor: 'red',
+  backgroundColor: 'rgba(76, 128, 246, 1)',
   borderStyle: 'solid',
   borderWidth: '1px 0 1px 0px' /* top right bottom left */,
   borderRadius: '0 0 0 0',
@@ -81,7 +81,7 @@ export const colorBox = style({
   boxSizing: 'border-box',
   selectors: {
     '&.other': {
-      backgroundColor: 'lightgray',
+      backgroundColor: vars.color.background92,
     },
     '&.free': {
       backgroundColor: 'transparent',

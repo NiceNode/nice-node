@@ -288,15 +288,15 @@ const NodeScreen = () => {
   const { status, spec } = selectedNode;
 
   // TODO: make this more flexible for other client specs
-  const formatSpec = (info: string | undefined, network?: string) => {
+  const formatSpec = (info: string | undefined) => {
     if (!info) {
       return '';
     }
-    if (info.includes('BeaconNode')) {
-      return `Consensus Client — Ethereum ${network}`;
+    if (info.includes('Consensus') || info.includes('BeaconNode')) {
+      return `Consensus Client`;
     }
     if (info.includes('Execution')) {
-      return `Execution Client — Ethereum ${network}`;
+      return `Execution Client`;
     }
     return info;
   };
@@ -371,7 +371,7 @@ const NodeScreen = () => {
     version: formatVersion(nodeVersionData, clientName),
     info: formatSpec(
       spec.category,
-      selectedNode?.config?.configValuesMap?.network,
+      // selectedNode?.config?.configValuesMap?.network ?? '',
     ),
     status: {
       stopped: status === NodeStatus.stopped,
@@ -395,7 +395,7 @@ const NodeScreen = () => {
     },
     onAction: onNodeAction,
   };
-  console.log('passing content to NodeScreen: ', nodeContent);
+
   return (
     <>
       <div className={backButtonContainer}>

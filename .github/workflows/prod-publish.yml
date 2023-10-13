@@ -22,6 +22,10 @@ jobs:
         os: [macos-latest]
 
     steps:
+      - name: Install snapcraft brew package
+        run: |
+          brew install snapcraft
+
       - name: Used variables
         run: |
           echo "MP_PROJECT_ENV variable : ${{ vars.MP_PROJECT_ENV }}"
@@ -69,6 +73,8 @@ jobs:
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           # This is used for uploading release assets to github
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          # This is used for publishing snap release assets to snapcraft
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
         run: |
           npm run postinstall
           npm run build
