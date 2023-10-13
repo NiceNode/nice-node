@@ -24,10 +24,11 @@ const FloatingButton = ({
   label,
   ...props
 }: FloatingButtonProps) => {
+  const addBaseButton = iconId !== 'copy';
   return (
     <button
       type="button"
-      className={[baseButton, variant].join(' ')}
+      className={[addBaseButton ? baseButton : '', variant].join(' ')}
       {...props}
     >
       {variant !== 'icon' && (

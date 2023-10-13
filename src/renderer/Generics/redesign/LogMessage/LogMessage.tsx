@@ -5,6 +5,7 @@ import {
   levelStyle,
   messageStyle,
 } from './logMessage.css';
+import FloatingButton from '../FloatingButton/FloatingButton';
 
 export interface LogMessageProps {
   /**
@@ -31,6 +32,7 @@ export const LogMessage = ({ timestamp, level, message }: LogMessageProps) => {
       </div>
       <div className={[levelStyle, `${level}`].join(' ')}>{level}</div>
       <div className={messageStyle}>{message}</div>
+      <FloatingButton variant="icon" iconId="copy" />
     </div>
   );
 };
