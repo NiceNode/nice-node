@@ -6,7 +6,7 @@ import { ConfigValuesMap, ConfigTranslationMap } from './nodeConfig';
 import { NiceNodeRpcTranslation } from './rpcTranslation';
 
 /* eslint-disable max-classes-per-file */
-export type ExecutionTypes = 'docker' | 'binary';
+export type ExecutionTypes = 'docker' | 'binary' | 'nodePackage';
 export type Architectures = 'amd64' | 'arm64';
 
 // Create controls which output using translation.
@@ -40,6 +40,8 @@ export type DockerExecution = BaseNodeExecution & {
       containerVolumePath: string;
       raw?: string;
       forcedRawNodeInput?: string;
+      // optional, one time command run after creating a node and before the first run
+      initNodeCommand?: string;
     };
   };
 };
@@ -113,6 +115,7 @@ export type NodePackageNodeServiceSpec = {
   nodeOptions: string[] | NodeSpecification[];
   required: boolean;
   requiresCommonJwtSecret?: boolean;
+  requiresFiles?: boolean;
 };
 
 export type NodePackageExecution = BaseNodeExecution & {

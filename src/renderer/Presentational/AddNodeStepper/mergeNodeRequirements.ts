@@ -17,7 +17,7 @@ export const mergeSystemRequirements = (
     for (const [nodeReqKey, nodeReqValue] of Object.entries(
       systemRequirements,
     )) {
-      console.log(`${nodeReqKey}: ${nodeReqValue}`);
+      // console.log(`${nodeReqKey}: ${nodeReqValue}`);
       if (nodeReqKey === 'documentationUrl' || nodeReqKey === 'description') {
         // eslint-disable-next-line no-continue
         continue;

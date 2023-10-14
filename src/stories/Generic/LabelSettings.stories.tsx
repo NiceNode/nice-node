@@ -4,6 +4,7 @@ import LabelSettings from '../../renderer/Generics/redesign/LabelSetting/LabelSe
 import ExternalLink from '../../renderer/Generics/redesign/Link/ExternalLink';
 import Select from '../../renderer/Generics/redesign/Select/Select';
 import { Toggle } from '../../renderer/Generics/redesign/Toggle/Toggle';
+import Input from '../../renderer/Generics/redesign/Input/Input';
 
 export default {
   title: 'Generic/LabelSettings',
@@ -22,6 +23,11 @@ About.args = {
     {
       sectionTitle: 'Preferences',
       items: [
+        {
+          label: 'Ethereum RPC Endpoint',
+          value: <Input value={'http://localhost:8545'} disabled={false} />,
+          learnMoreLink: 'https://nicenode.xyz',
+        },
         {
           label: 'Launch on startup',
           value: <Toggle checked={true} />,

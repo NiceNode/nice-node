@@ -63,6 +63,33 @@
         "type": "filePath"
       }
     },
+    "network": {
+      "displayName": "Network",
+      "cliConfigPrefix": "--config ",
+      "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "mainnet"
+          },
+          {
+            "value": "Holesky",
+            "config": "holesky"
+          },
+          {
+            "value": "Goerli",
+            "config": "goerli"
+          },
+          {
+            "value": "Sepolia",
+            "config": "sepolia"
+          }
+        ]
+      }
+    },
     "http": {
       "displayName": "RPC HTTP connections",
       "category": "RPC APIs",

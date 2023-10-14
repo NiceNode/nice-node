@@ -36,7 +36,7 @@ export const modalContentStyle = style({
   // a: { color: 'inherit' },
   selectors: {
     [`&.addNode`]: {
-      // maxHeight: 'none',
+      height: '100%',
     },
     [`&.nodeSettings`]: {
       // maxHeight: 'none',

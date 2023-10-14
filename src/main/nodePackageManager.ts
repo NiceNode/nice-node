@@ -1,4 +1,6 @@
 /* eslint-disable no-await-in-loop */
+import path from 'path';
+import { cp } from 'fs/promises';
 import {
   NodePackageSpecification,
   NodeSpecification,
@@ -13,15 +15,15 @@ import Node, {
   NodeStatus,
 } from '../common/node';
 import * as nodePackageStore from './state/nodePackages';
-import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
 import {
-  addNode,
-  removeAllNodes,
-  removeNode,
-  startNode,
-  stopNode,
-} from './nodeManager';
+  deleteDisk,
+  getNodeSpecificationsFolder,
+  getNodesDirPath,
+  makeNodeDir,
+} from './files';
+import { addNode, removeNode, startNode, stopNode } from './nodeManager';
 import { createJwtSecretAtDirs } from './util/jwtSecrets';
+import { ConfigValuesMap } from '../common/nodeConfig';
 
 // Created when adding a node and is used to pair a node spec and config
 // for a specific node package service
@@ -29,12 +31,13 @@ export type AddNodePackageNodeService = {
   serviceId: string;
   serviceName: string;
   spec: NodeSpecification;
+  initialConfigValues?: ConfigValuesMap;
 };
 
 export const addNodePackage = async (
   nodeSpec: NodePackageSpecification,
   services: AddNodePackageNodeService[],
-  settings: { storageLocation?: string },
+  settings: { storageLocation?: string; configValues?: ConfigValuesMap },
 ): Promise<NodePackage> => {
   // use a timestamp postfix so the user can add multiple nodes of the same name
   const utcTimestamp = Math.floor(Date.now() / 1000);
@@ -55,12 +58,14 @@ export const addNodePackage = async (
   const nodePackage: NodePackage = createNodePackage({
     spec: nodeSpec,
     runtime: nodeRuntime,
+    initialConfigFromUser: settings.configValues,
   });
   nodePackageStore.addNodePackage(nodePackage);
 
   // todo: loop over services and call addNode, at the end add all node ids to the nodepackge.services
   const nodeServices: NodeService[] = [];
   const nodesThatRequireJwtSecret: Node[] = [];
+  const nodesThatRequireFiles: Node[] = [];
   for (let i = 0; i < services.length; i++) {
     const service = services[i];
     try {
@@ -71,7 +76,16 @@ export const addNodePackage = async (
       );
       if (nodePackageServiceSpec) {
         // Only create required nodes right now?
-        const node = await addNode(service.spec, settings.storageLocation);
+        const node = await addNode(
+          service.spec,
+          settings.storageLocation,
+          service.initialConfigValues,
+        );
+        console.log(
+          'nodePackageManager: adding node with initialConfigValues: ',
+          node,
+          service.initialConfigValues,
+        );
         nodeServices.push({
           serviceId: service.serviceId,
           serviceName: service.serviceName,
@@ -79,6 +93,9 @@ export const addNodePackage = async (
         });
         if (nodePackageServiceSpec.requiresCommonJwtSecret) {
           nodesThatRequireJwtSecret.push(node);
+        }
+        if (nodePackageServiceSpec.requiresFiles) {
+          nodesThatRequireFiles.push(node);
         }
       }
     } catch (e) {
@@ -95,6 +112,20 @@ export const addNodePackage = async (
   await createJwtSecretAtDirs(
     nodesThatRequireJwtSecret.map((node) => node.runtime.dataDir),
   );
+
+  // copy files from the Node Package dir "files" to nodesThatRequireFiles's
+  //  dataDirs root dir
+  if (nodesThatRequireFiles.length > 0) {
+    const nodeSpecsPath = getNodeSpecificationsFolder();
+    logger.info(`nodeSpecsPath: ${nodeSpecsPath}`);
+    const waitProms = nodesThatRequireFiles.map((node) => {
+      const source = path.join(nodeSpecsPath, nodePackage.spec.specId, 'files');
+      const destination = node.runtime.dataDir;
+      logger.info(`cp src dest:: ${source} ${destination}`);
+      return cp(source, destination, { recursive: true });
+    });
+    await Promise.all(waitProms);
+  }
 
   return nodePackage;
 };
@@ -167,8 +198,7 @@ export const removeNodePackage = async (
   nodeId: NodeId,
   options: { isDeleteStorage: boolean },
 ): Promise<NodePackage> => {
-  // todo: check if node package can be removed. Is it stopped?
-  // todo: stop & remove container
+  // Stop package if running (this makes delete files and other things smoother)
   logger.info(
     `Remove node package ${nodeId} and delete storage? ${options.isDeleteStorage}`,
   );
@@ -202,13 +232,12 @@ export const removeNodePackage = async (
 };
 
 /**
- * Removes all node packages, then remove all node services and deletes their storage data
+ * Removes all node packages, which removes all node services and deletes their storage data
  */
 export const removeAllNodePackages = async () => {
   const nodes = nodePackageStore.getNodePackages();
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
-    await nodePackageStore.removeNodePackage(node.id);
+    await removeNodePackage(node.id, { isDeleteStorage: true });
   }
-  await removeAllNodes();
 };

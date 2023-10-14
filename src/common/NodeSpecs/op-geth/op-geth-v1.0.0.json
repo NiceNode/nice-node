@@ -2,43 +2,42 @@
   "specId": "op-geth",
   "version": "1.0.0",
   "displayName": "OP Geth",
+  "displayTaglin": "Execution Client - OP Chains",
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
+        "httpPort": "8547",
+        "enginePort": "8553",
         "httpCorsDomains": "http://localhost",
         "webSockets": "Disabled",
         "httpVirtualHosts": "localhost,host.containers.internal",
-        "authVirtualHosts": "localhost,host.containers.internal",
-        "rollupSequencerHttpEndpoint": "https://mainnet-sequencer.base.org"
+        "authVirtualHosts": "localhost,host.containers.internal"
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
-        "raw": "-p 8547:8545 -p 8548:8546 -p 8553:8551",
+        "raw": "",
+        "initNodeCommand": "init",
         "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
     "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101106.0"
   },
   "category": "L2/ExecutionClient",
-  "rpcTranslation": "eth-l1",
+  "rpcTranslation": "eth-l2",
   "systemRequirements": {
     "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
     "cpu": {
       "cores": 4
     },
     "memory": {
-      "minSizeGBs": 16
+      "minSizeGBs": 8
     },
     "storage": {
-      "minSizeGBs": 1600,
+      "minSizeGBs": 30,
       "ssdRequired": true
-    },
-    "internet": {
-      "minDownloadSpeedMbps": 25,
-      "minUploadSpeedMbps": 10
     },
     "docker": {
       "required": true
@@ -52,6 +51,34 @@
       "uiControl": {
         "type": "filePath"
       },
+      "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
+    },
+    "network": {
+      "displayName": "Network",
+      "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "--mainnet"
+          },
+          {
+            "value": "Sepolia",
+            "config": "--sepolia"
+          }
+        ]
+      }
+    },
+    "genesisFile": {
+      "displayName": "Genesis file",
+      "cliConfigPrefix": "/root/.ethereum/",
+      "defaultValue": "genesis-l2.json",
+      "uiControl": {
+        "type": "text"
+      },
+      "initCommandConfig": true,
       "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
     },
     "http": {
@@ -172,16 +199,25 @@
     "httpPort": {
       "displayName": "HTTP-RPC server listening port",
       "cliConfigPrefix": "--http.port ",
-      "defaultValue": "8545",
+      "defaultValue": "8547",
       "uiControl": {
         "type": "text"
       },
       "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
     },
+    "enginePort": {
+      "displayName": "Engine JSON-RPC listening port",
+      "cliConfigPrefix": "--authrpc.port ",
+      "defaultValue": "8553",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "The listening port for the Engine API calls for JSON-RPC over HTTP and WebSocket."
+    },
     "webSocketsPort": {
       "displayName": "WS-RPC server listening port",
       "cliConfigPrefix": "--ws.port ",
-      "defaultValue": "8546",
+      "defaultValue": "8548",
       "uiControl": {
         "type": "text"
       },

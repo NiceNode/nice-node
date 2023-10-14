@@ -12,12 +12,13 @@
         "httpPort": "5052",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
-        "executionEndpoint": "\"http://host.containers.internal:8551\""
+        "executionEndpoint": "\"http://host.containers.internal:8551\"",
+        "network": "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/home/user/data",
         "raw": " --user 0",
-        "forcedRawNodeInput": "--data-dir=/home/user/data/beacon_node/mainnet_0 --network=mainnet --web3-url=http://host.containers.internal:8551 --jwt-secret=/home/user/data/jwtsecret"
+        "forcedRawNodeInput": "--data-dir=/home/user/data --web3-url=http://host.containers.internal:8551 --jwt-secret=/home/user/data/jwtsecret"
       }
     },
     "binaryDownload": {
@@ -55,10 +56,36 @@
       "infoDescription": "Nimbus root directory",
       "documentation": "https://nimbus.guide/options.html"
     },
+    "network": {
+      "displayName": "Network",
+      "cliConfigPrefix": "--network=",
+      "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "mainnet --trusted-node-url=https://beaconstate.ethstaker.cc"
+          },
+          {
+            "value": "Holesky",
+            "config": "holesky"
+          },
+          {
+            "value": "Goerli",
+            "config": "goerli"
+          },
+          {
+            "value": "Sepolia",
+            "config": "sepolia"
+          }
+        ]
+      }
+    },
     "checkpointSyncUrl": {
       "displayName": "Trusted checkpoint sync URL",
       "cliConfigPrefix": "--trusted-node-url=",
-      "defaultValue": "https://beaconstate.ethstaker.cc",
       "uiControl": {
         "type": "text"
       }

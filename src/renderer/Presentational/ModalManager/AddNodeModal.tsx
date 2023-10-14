@@ -8,11 +8,13 @@ import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import { reportEvent } from '../../events/reportEvent';
-import {
-  NodePackageSpecification,
-  NodeSpecification,
-} from '../../../common/nodeSpec';
+import { NodePackageSpecification } from '../../../common/nodeSpec';
 import { AddNodePackageNodeService } from '../../../main/nodePackageManager';
+import {
+  NodeLibrary,
+  NodePackageLibrary,
+} from '../../../main/state/nodeLibrary';
+import { mergePackageAndClientConfigValues } from '../AddNodeConfiguration/mergePackageAndClientConfigValues';
 
 type Props = {
   modalOnClose: () => void;
@@ -20,17 +22,30 @@ type Props = {
 
 export const AddNodeModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
-  const [sSelectedNodeSpec, setSelectedNodeSpec] =
-    useState<NodeSpecification>();
+  const [sSelectedNodePackageSpec, setSelectedNodePackageSpec] =
+    useState<NodePackageSpecification>();
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] =
     useState<boolean>(false);
   const [sIsPodmanRunning, setIsPodmanRunning] = useState<boolean>(false);
   const [step, setStep] = useState(0);
+  const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
+  const [sNodePackageLibrary, setNodePackageLibrary] =
+    useState<NodePackageLibrary>();
   const { t } = useTranslation();
   const { t: g } = useTranslation('genericComponents');
 
+  useEffect(() => {}, []);
+
   useEffect(() => {
     reportEvent('OpenAddNodeModal');
+    const fetchNodeLibrarys = async () => {
+      const nodePackageLibrary: NodePackageLibrary =
+        await electron.getNodePackageLibrary();
+      setNodePackageLibrary(nodePackageLibrary);
+      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
+      setNodeLibrary(nodeLibrary);
+    };
+    fetchNodeLibrarys();
   }, []);
 
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
@@ -41,17 +56,15 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (
-      modalConfig?.node &&
-      modalConfig?.nodePackageLibrary?.[modalConfig.node]
-    ) {
-      setSelectedNodeSpec(modalConfig?.nodePackageLibrary?.[modalConfig.node]);
+    if (modalConfig?.node && sNodePackageLibrary?.[modalConfig.node]) {
+      setSelectedNodePackageSpec(sNodePackageLibrary?.[modalConfig.node]);
       console.log(
         'Node selected and node spec found: ',
-        modalConfig?.nodePackageLibrary?.[modalConfig.node],
+        sNodePackageLibrary?.[modalConfig.node],
       );
     }
-  }, [modalConfig]);
+    console.log('modalConfig useEffect. node', modalConfig.node);
+  }, [modalConfig, sNodePackageLibrary]);
 
   let modalTitle = '';
   switch (step) {
@@ -59,9 +72,9 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       modalTitle = t('AddYourFirstNode');
       break;
     case 1:
-      if (sSelectedNodeSpec) {
+      if (sSelectedNodePackageSpec) {
         modalTitle = t('LaunchAVarNode', {
-          nodeName: sSelectedNodeSpec.displayName,
+          nodeName: sSelectedNodePackageSpec.displayName,
         });
       } else {
         modalTitle = t('LaunchAnEthereumNode');
@@ -86,10 +99,15 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     const {
       node,
       clientSelections,
+      clientConfigValues,
       storageLocation,
-      nodeLibrary,
-      nodePackageLibrary,
+      nodePackageConfigValues,
     } = updatedConfig || (modalConfig as ModalConfig);
+
+    // uses a state value because they were being overwritten by a bug
+    //  in modelConfig and updateModalConfig
+    const nodePackageLibrary = sNodePackageLibrary;
+    const nodeLibrary = sNodeLibrary;
 
     console.log('AddNodeModal modalOnSaveConfig(updatedConfig)', updatedConfig);
     // Mostly duplicate code with AddNodeStepper.addNodes()
@@ -123,20 +141,39 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
         const serviceDefinition = nodePackageSpec.execution.services.find(
           (service) => service.serviceId === serviceId,
         );
+        const mergedPackageAndClientConfigValues =
+          mergePackageAndClientConfigValues({
+            nodePackageSpec,
+            nodePackageConfigValues:
+              nodePackageConfigValues?.[nodePackageSpec.specId],
+            clientConfigValues: clientConfigValues?.[clientId],
+            serviceId,
+          });
         services.push({
           serviceId,
           serviceName: serviceDefinition?.name ?? serviceId,
           spec: serviceNodeSpec,
+          initialConfigValues: mergedPackageAndClientConfigValues,
         });
       }
     }
     const { node: nodePackage } = await electron.addNodePackage(
       nodePackageSpec,
       services,
-      { storageLocation },
+      {
+        storageLocation,
+        configValues: nodePackageConfigValues?.[nodePackageSpec.specId],
+      },
     );
     console.log('nodePackage result: ', nodePackage);
-    reportEvent('AddNodePackage');
+    const packageNetwork =
+      (nodePackageConfigValues?.[nodePackageSpec.specId]?.network as string) ??
+      '';
+    reportEvent('AddNodePackage', {
+      nodePackage: nodePackageSpec.specId,
+      clients: services.map((service) => service.spec.specId),
+      network: packageNetwork,
+    });
     dispatch(updateSelectedNodePackageId(nodePackage.id));
 
     electron.startNodePackage(nodePackage.id);

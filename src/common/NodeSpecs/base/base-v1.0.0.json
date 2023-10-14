@@ -4,23 +4,30 @@
   "displayName": "Base",
   "execution": {
     "executionTypes": ["nodePackage"],
-    "services" : [{
-      "serviceId": "executionClient",
-      "name" : "Execution Client",
-      "nodeOptions": ["op-geth"],
-      "required": true,
-      "requiresCommonJwtSecret": true
-    }, {
-      "serviceId": "consensusClient",
-      "name" : "Consensus Client",
-      "nodeOptions": ["op-node"],
-      "required": true,
-      "requiresCommonJwtSecret": true
-    }],
-    "dependencies": [{
-      "name" : "Ethereum node",
-      "specId": "ethereum"
-    }]
+    "services": [
+      {
+        "serviceId": "executionClient",
+        "name": "Execution Client",
+        "nodeOptions": ["op-geth"],
+        "required": true,
+        "requiresCommonJwtSecret": true,
+        "requiresFiles": true
+      },
+      {
+        "serviceId": "consensusClient",
+        "name": "Consensus Client",
+        "nodeOptions": ["op-node"],
+        "required": true,
+        "requiresCommonJwtSecret": true,
+        "requiresFiles": true
+      }
+    ],
+    "dependencies": [
+      {
+        "name": "Ethereum node",
+        "specId": "ethereum"
+      }
+    ]
   },
   "category": "Ethereum/L2",
   "rpcTranslation": "op-node",
@@ -43,28 +50,63 @@
   },
   "configTranslation": {
     "network": {
-      "displayName": "mainnet or a testnet",
+      "displayName": "Network",
+      "defaultValue": "Mainnet",
+      "addNodeFlow": "required",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
             "value": "Mainnet",
-            "config": "--network mainnet"
+            "config": "unused in nodespec",
+            "serviceConfigs": {
+              "services": [
+                {
+                  "serviceId": "executionClient",
+                  "configValues": {
+                    "genesisFile": "genesis-l2.json",
+                    "rollupSequencerHttpEndpoint": "https://mainnet-sequencer.base.org"
+                  }
+                },
+                {
+                  "serviceId": "consensusClient",
+                  "configValues": {
+                    "rollupConfigFile": "rollup.json"
+                  }
+                }
+              ]
+            }
           },
           {
-            "value": "Testnet",
-            "config": "--network testnet"
+            "value": "Sepolia",
+            "config": "unused in nodespec",
+            "serviceConfigs": {
+              "services": [
+                {
+                  "serviceId": "executionClient",
+                  "configValues": {
+                    "rollupConfigFile": "sepolia-genesis-l2.json",
+                    "rollupSequencerHttpEndpoint": "https://sepolia-sequencer.base.org/"
+                  }
+                },
+                {
+                  "serviceId": "consensusClient",
+                  "configValues": {
+                    "rollupConfigFile": "sepolia-rollup.json"
+                  }
+                }
+              ]
+            }
           }
         ]
       },
-      "defaultValue": "Disabled",
-      "documentation": "https://geth.ethereum.org/docs/rpc/server"
+      "documentation": "https://docs.base.org/network-information/"
     }
   },
   "iconUrl": "https://ethereum.png",
-  "addNodeDescription" : "Decentralization and collaboration are critical for the longer-term success of Base and scaling Ethereum. That’s why we are working with OP Labs and the Optimism Collective on a plan to scale Ethereum in a decentralized way.",
+  "addNodeDescription": "Decentralization and collaboration are critical for the longer-term success of Base and scaling Ethereum. That’s why we are working with OP Labs and the Optimism Collective on a plan to scale Ethereum in a decentralized way.",
   "description": "Base is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
-  "documentation" : {
+  "documentation": {
     "default": "https://docs.base.org/guides/run-a-base-node/"
   }
 }

@@ -3,7 +3,11 @@ import * as readline from 'node:readline';
 import logger from '../logger';
 import Node, { NodeStatus } from '../../common/node';
 import { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
-import { setDockerNodeStatus as setPodmanNodeStatus } from '../state/nodes';
+import {
+  setDockerNodeStatus as setPodmanNodeStatus,
+  updateNode as storeUpdateNode,
+} from '../state/nodes';
+
 import {
   ConfigTranslationMap,
   ConfigValuesMap,
@@ -244,6 +248,7 @@ export const sendLogsToUI = (node: Node) => {
         send('nodeLogs', parsePodmanLogMetadata(log, node.spec.specId));
       } catch (err) {
         logger.error(`Error parsing podman event log ${log}`, err);
+        send('nodeLogs', { message: log });
       }
     });
   }
@@ -264,6 +269,7 @@ export const sendLogsToUI = (node: Node) => {
         // send('nodeLogs', log);
       } catch (err) {
         logger.error(`Error parsing podman event log ${log}`, err);
+        send('nodeLogs', { message: log });
       }
     });
   }
@@ -467,8 +473,22 @@ export const createRunCommand = (node: Node): string => {
     }
     podmanVolumePath = input.docker.containerVolumePath;
     finalPodmanInput = podmanPortInput + (input?.docker.raw ?? '');
+
     if (podmanVolumePath) {
-      finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath} ${finalPodmanInput}`;
+      let volumePostFix = '';
+      if (isLinux()) {
+        // SELinux fix: ":z" post-fix tells podman to mark the volume as shared
+        // not required for all Linux distros, but for simplicity we include
+        // cannot set this on Mac (and probably windows)
+        volumePostFix = ':z';
+      }
+      // We really do not want to have conditionals for specific nodes, however,
+      //  this is justified as we iterate quickly for funding and prove NN work
+      if (specId === 'hubble') {
+        finalPodmanInput = `-v "${node.runtime.dataDir}/hub":${podmanVolumePath}/.hub${volumePostFix} -v "${node.runtime.dataDir}/rocks":${podmanVolumePath}/.rocks${volumePostFix} ${finalPodmanInput}`;
+      } else {
+        finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath}${volumePostFix} ${finalPodmanInput}`;
+      }
     }
   }
   logger.info(
@@ -478,23 +498,103 @@ export const createRunCommand = (node: Node): string => {
   if (input?.docker?.forcedRawNodeInput) {
     nodeInput = input?.docker?.forcedRawNodeInput;
   }
+
+  // Exclue keys with initCommandConfig=true
+  let initCommandConfigKeys: string[] = [];
+  if (node?.spec?.configTranslation !== undefined) {
+    initCommandConfigKeys = Object.keys(node?.spec?.configTranslation).filter(
+      (configKey) => {
+        const configTranslation = node?.spec?.configTranslation?.[configKey];
+        return configTranslation?.initCommandConfig === true;
+      },
+    );
+  }
   const cliConfigInput = buildCliConfig({
     configValuesMap: node.config.configValuesMap,
     configTranslationMap: node.spec.configTranslation,
-    excludeConfigKeys: ['dataDir'],
+    excludeConfigKeys: ['dataDir', ...initCommandConfigKeys],
   });
   nodeInput += ` ${cliConfigInput}`;
 
   // -q quiets podman logs (pulling new image logs) so we can parse the containerId
-  const podmanCommand = `run -q -d --restart on-failure:3 --name ${specId} ${finalPodmanInput} ${imageName} ${nodeInput}`;
+  const podmanCommand = `run -q -d --name ${specId} ${finalPodmanInput} ${imageName} ${nodeInput}`;
   logger.info(`podman run command ${podmanCommand}`);
+  return podmanCommand;
+};
+
+export const createInitCommand = (node: Node): string => {
+  const { specId, execution, configTranslation } = node.spec;
+  const { imageName, input } = execution as PodmanExecution;
+
+  let podmanPortInput = '';
+  let podmanVolumePath = '';
+  let finalPodmanInput = '';
+  if (input?.docker) {
+    if (configTranslation) {
+      podmanPortInput = createPodmanPortInput(
+        configTranslation,
+        node.config.configValuesMap,
+      );
+    }
+    podmanVolumePath = input.docker.containerVolumePath;
+    finalPodmanInput = podmanPortInput + (input?.docker.raw ?? '');
+
+    if (podmanVolumePath) {
+      let volumePostFix = '';
+      if (isLinux()) {
+        // SELinux fix: ":z" post-fix tells podman to mark the volume as shared
+        // not required for all Linux distros, but for simplicity we include
+        // cannot set this on Mac (and probably windows)
+        volumePostFix = ':z';
+      }
+      // We really do not want to have conditionals for specific nodes, however,
+      //  this is justified as we iterate quickly for funding and prove NN works
+      if (specId === 'hubble') {
+        finalPodmanInput = `-v "${node.runtime.dataDir}/hub":${podmanVolumePath}/.hub${volumePostFix} -v "${node.runtime.dataDir}/rocks":${podmanVolumePath}/.rocks${volumePostFix} ${finalPodmanInput}`;
+      } else {
+        finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath}${volumePostFix} ${finalPodmanInput}`;
+      }
+    }
+  }
+  logger.info(
+    `createInitCommand: finalPodmanInput ${JSON.stringify(
+      node.config.configValuesMap,
+    )}`,
+  );
+  let nodeInput = '';
+  if (input?.docker?.initNodeCommand) {
+    nodeInput = input?.docker?.initNodeCommand;
+  }
+  // Might need to call buildCliConfig() here once we add more features to initCommand
+  // Exclue keys without initCommandConfig=true
+  let nonInitCommandConfigKeys: string[] = [];
+  if (node?.spec?.configTranslation !== undefined) {
+    nonInitCommandConfigKeys = Object.keys(
+      node?.spec?.configTranslation,
+    ).filter((configKey) => {
+      const configTranslation = node?.spec?.configTranslation?.[configKey];
+      return configTranslation?.initCommandConfig !== true;
+    });
+  }
+  const cliConfigInput = buildCliConfig({
+    configValuesMap: node.config.configValuesMap,
+    configTranslationMap: node.spec.configTranslation,
+    excludeConfigKeys: ['dataDir', ...nonInitCommandConfigKeys],
+  });
+  nodeInput += ` ${cliConfigInput}`;
+
+  // -q quiets podman logs (pulling new image logs) so we can parse the containerId
+  // -d is not used here as this should be short-lived and we want to be blocked
+  //  so that we know when to start the node
+  const podmanCommand = `run -q --user 0 --name ${specId} ${finalPodmanInput} ${imageName} ${nodeInput}`;
+  logger.info(`createInitCommand: podman run command ${podmanCommand}`);
   return podmanCommand;
 };
 
 export const startPodmanNode = async (node: Node): Promise<string[]> => {
   // pull image
   const { execution } = node.spec;
-  const { imageName } = execution as PodmanExecution;
+  const { imageName, input } = execution as PodmanExecution;
 
   // Ensure a podman machine is running (Mac and Win)
   await startPodman();
@@ -510,6 +610,28 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
     await removePodmanNode(node);
   } catch (err) {
     logger.info('Continuing start node.');
+  }
+
+  // Run a one time initialization command
+  if (input?.docker?.initNodeCommand && node.runtime?.initialized !== true) {
+    // The node has been created, but not run at all
+    try {
+      const podmanCommand = createInitCommand(node);
+      // todo: test if input is empty string
+      const initData = await runCommand(podmanCommand);
+      logger.info(`Init node command results: ${initData}`);
+      node.runtime.initialized = true;
+      storeUpdateNode(node);
+    } catch (err) {
+      logger.error(`Error: Init node command error: ${err}`);
+    }
+    logger.info(`Removing container used for init node command`);
+    // (stop &) remove possible previous podman container for this node
+    try {
+      await removePodmanNode(node);
+    } catch (err) {
+      logger.info('Continuing start node.');
+    }
   }
 
   const podmanCommand = createRunCommand(node);

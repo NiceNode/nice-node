@@ -28,6 +28,7 @@ import { NodePackageSpecification } from '../../../common/nodeSpec';
 import AddNodeConfiguration, {
   AddNodeConfigurationValues,
 } from '../AddNodeConfiguration/AddNodeConfiguration';
+import { mergePackageAndClientConfigValues } from '../AddNodeConfiguration/mergePackageAndClientConfigValues';
 
 export interface AddNodeStepperProps {
   modal?: boolean;
@@ -130,8 +131,11 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         'No Node client selections or settings found for the selected node',
       );
     }
+
+    // todo: set client initial values from packageInitialValues
     const services: AddNodePackageNodeService[] = [];
-    const { clientSelections } = sNodeClientsAndSettings;
+    const { clientSelections, clientConfigValues, nodePackageConfigValues } =
+      sNodeClientsAndSettings;
     if (sNodeLibrary && clientSelections) {
       // eslint-disable-next-line
       for (const [serviceId, selectOption] of Object.entries(
@@ -154,10 +158,19 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         const serviceDefinition = nodePackageSpec.execution.services.find(
           (service) => service.serviceId === serviceId,
         );
+        const mergedPackageAndClientConfigValues =
+          mergePackageAndClientConfigValues({
+            nodePackageSpec,
+            nodePackageConfigValues:
+              nodePackageConfigValues?.[nodePackageSpec.specId],
+            clientConfigValues: clientConfigValues?.[clientId],
+            serviceId,
+          });
         services.push({
           serviceId,
           serviceName: serviceDefinition?.name ?? serviceId,
           spec: serviceNodeSpec,
+          initialConfigValues: mergedPackageAndClientConfigValues,
         });
       }
     }
@@ -165,10 +178,20 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     const { node: nodePackage } = await electron.addNodePackage(
       nodePackageSpec,
       services,
-      { storageLocation: sNodeStorageLocation },
+      {
+        storageLocation: sNodeStorageLocation,
+        configValues: nodePackageConfigValues?.[nodePackageSpec.specId],
+      },
     );
     console.log('nodePackage result: ', nodePackage);
-    reportEvent('AddNodePackage');
+    const packageNetwork =
+      (nodePackageConfigValues?.[nodePackageSpec.specId]?.network as string) ??
+      '';
+    reportEvent('AddNodePackage', {
+      nodePackage: nodePackageSpec.specId,
+      clients: services.map((service) => service.spec.specId),
+      network: packageNetwork,
+    });
     dispatch(updateSelectedNodePackageId(nodePackage.id));
 
     electron.startNodePackage(nodePackage.id);

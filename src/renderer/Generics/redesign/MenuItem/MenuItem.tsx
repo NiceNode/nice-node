@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IconId } from '../../../assets/images/icons';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { Icon } from '../Icon/Icon';
@@ -55,7 +55,16 @@ export const MenuItem = ({
   const [isChecked, setChecked] = useState(selected);
   const disabledStyle = disabled ? 'disabled' : '';
 
-  const onClickAction = () => {
+  useEffect(() => {
+    setChecked(selected);
+  }, [selected]);
+
+  const onClickAction = (event: { preventDefault?: () => void }) => {
+    // This prevents html from firing this handler multiple times on click due to event "bubbling"
+    if (event.preventDefault) {
+      event.preventDefault();
+    }
+
     if (!disabled && onClick) {
       onClick();
       if (selectable) {

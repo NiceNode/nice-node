@@ -75,7 +75,7 @@ const ContentMultipleClients = (props: {
   if (!clients) {
     return <></>;
   }
-  if (clients.length < 2) {
+  if (clients.length < 1) {
     return <>No node found</>;
   }
 
@@ -162,7 +162,6 @@ const ContentMultipleClients = (props: {
     //   };
     //   return nodeOverview;
     // }
-    // non-Ethereum node conditions added here
     if (!nodeContent) {
       return {};
     }

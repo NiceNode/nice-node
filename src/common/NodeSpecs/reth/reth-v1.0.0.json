@@ -14,9 +14,9 @@
         "httpAddress": "0.0.0.0"
       },
       "docker": {
-        "containerVolumePath": "/root/.local/share/reth/db",
+        "containerVolumePath": "/root/.local/share/reth/mainnet/db",
         "raw": "",
-        "forcedRawNodeInput": "node --color never --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/db/jwtsecret --ipcdisable"
+        "forcedRawNodeInput": "node --color never --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/mainnet/db/jwtsecret --ipcdisable"
       }
     },
     "imageName": "ghcr.io/paradigmxyz/reth"
@@ -46,6 +46,33 @@
     }
   },
   "configTranslation": {
+    "network": {
+      "displayName": "Network",
+      "cliConfigPrefix": "--chain ",
+      "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "mainnet"
+          },
+          {
+            "value": "Holesky",
+            "config": "holesky"
+          },
+          {
+            "value": "Goerli",
+            "config": "goerli"
+          },
+          {
+            "value": "Sepolia",
+            "config": "sepolia"
+          }
+        ]
+      }
+    },
     "http": {
       "displayName": "RPC HTTP connections",
       "uiControl": {
@@ -228,7 +255,7 @@
       "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
     }
   },
-  "documentation" : {
-    "default" : "https://paradigmxyz.github.io/reth"
+  "documentation": {
+    "default": "https://paradigmxyz.github.io/reth"
   }
 }

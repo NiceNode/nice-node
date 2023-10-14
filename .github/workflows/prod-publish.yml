@@ -19,12 +19,20 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, ubuntu-latest]
 
     steps:
+      - name: Install packages for building
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt-get install rpm
+          else
+            exit 0
+          fi
+
       - name: Used variables
         run: |
-          echo "FATHOM_SITE_ENV variable : ${{ vars.FATHOM_SITE_ENV }}"
+          echo "MP_PROJECT_ENV variable : ${{ vars.MP_PROJECT_ENV }}"
           echo "NICENODE_ENV variable : ${{ vars.NICENODE_ENV }}"
 
       - name: Checkout git repo
@@ -64,12 +72,18 @@ jobs:
           # CSC_IDENTITY_AUTO_DISCOVERY: false
           # This is used for app event tracking
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          FATHOM_SITE_ID: ${{ secrets.FATHOM_SITE_ID }}
-          FATHOM_SITE_ENV: ${{ vars.FATHOM_SITE_ENV }}
+          MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+          MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           # This is used for uploading release assets to github
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          # This is used for publishing snap release assets to snapcraft
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
         run: |
           npm run postinstall
           npm run build
-          npm exec electron-builder -- --publish always --win --mac --linux
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            npm exec electron-builder -- --publish always --win --mac
+          else
+            npm exec electron-builder -- --publish always --linux
+          fi

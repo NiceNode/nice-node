@@ -70,6 +70,32 @@
       },
       "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
     },
+    "network": {
+      "displayName": "Network",
+      "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "--mainnet"
+          },
+          {
+            "value": "Holesky",
+            "config": "--holesky"
+          },
+          {
+            "value": "Goerli",
+            "config": "--goerli"
+          },
+          {
+            "value": "Sepolia",
+            "config": "--sepolia"
+          }
+        ]
+      }
+    },
     "http": {
       "displayName": "RPC HTTP connections",
       "uiControl": {

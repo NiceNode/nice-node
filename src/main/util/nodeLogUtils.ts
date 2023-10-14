@@ -17,7 +17,7 @@ export type LogWithMetadata = {
 };
 
 const trimLogHeader = (log: string, client: string) => {
-  if (client === 'geth') {
+  if (client === 'geth' || client === 'op-geth') {
     // Pattern: INFO/WARN/ERROR/ERR/INF [MM-DD|HH:mm:ss.SSS]
     return log.replace(
       /(INFO|WARN|ERROR) \[\d{2}-\d{2}\|\d{2}:\d{2}:\d{2}\.\d{3}\] /,
@@ -84,14 +84,49 @@ const trimLogHeader = (log: string, client: string) => {
       '',
     );
   }
+  if (client === 'nitro') {
+    // Example: INFO [09-26|23:52:47.760]
+    // Pattern: INFO/WARN/ERROR [MM-DD|HH:mm:ss.SSS]
+    return log.replace(
+      /(INFO|WARN|ERROR)\s+\[\d{2}-\d{2}\|\d{2}:\d{2}:\d{2}\.\d{3}\] /,
+      '',
+    );
+  }
+  if (client === 'op-node') {
+    // Example: t=2023-10-04T17:36:59+0000 lvl=info msg=".. message text..."
+    return log.replace(
+      /t=\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{4}\s+lvl=(info|warn|error) /,
+      '',
+    );
+  }
   // Other Ethereum clients could be added here as needed...
 
   // If the client is not recognized, return the original log
   return log;
 };
 
-const parseLogLevel = (log: string): LogLevel => {
+export const parseLogLevel = (
+  log: string,
+  client: string,
+  message: string,
+): LogLevel => {
   let level: LogLevel = 'INFO';
+  if (client === 'hubble') {
+    // Hubble uses Pino js logger (50 is error, 30 is info)
+    // https://getpino.io/#/docs/help?id=log-levels-as-labels-instead-of-numbers
+    if (message.charAt(9) === '5') {
+      level = 'ERROR';
+      return level;
+    }
+    if (message.charAt(9) === '4') {
+      level = 'WARN';
+      return level;
+    }
+    if (message.charAt(9) === '3') {
+      level = 'INFO';
+      return level;
+    }
+  }
   const uppercaseLog = log.toUpperCase();
   if (uppercaseLog.includes('ERROR') || uppercaseLog.includes('ERR')) {
     level = 'ERROR';
@@ -122,13 +157,21 @@ export const parseDockerLogMetadata = (log: string): LogWithMetadata => {
   const timestamp = timestampFromString(nanoTimestampStr);
   // Timestamp library silently fails and returns invalid timestamps
   // handle errors: todo
-  const level = parseLogLevel(log);
+  const level = parseLogLevel(log, '', log);
 
   return {
     message,
     level,
     timestamp,
   };
+};
+
+export const isNanoDateTimeWithTimezone = (log: string) => {
+  // Regular expression to match ISO 8601 timestamp with nanoseconds and a mandatory timezone offset
+  const isoTimestampRegex =
+    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{1,9}-\d{2}:\d{2}/;
+
+  return isoTimestampRegex.test(log);
 };
 
 // Last timestamp is used for multi-line logs from a container. This should work in most
@@ -151,22 +194,28 @@ export const parsePodmanLogMetadata = (
   // Podman timestamp format with padded zeros giving consistent length
   // Examples:
   // podman:  2023-03-09T15:12:17-08:00
-  // podman:
-  const TIMESTAMP_LENGTH = 25;
-  const nanoTimestampStr = log.substring(0, TIMESTAMP_LENGTH);
+  // podman:  2023-10-12T08:40:51.329531000-07:00 (podman on Ubuntu)
+  let timestampLength = 25;
+
+  if (isNanoDateTimeWithTimezone(log)) {
+    timestampLength = 35;
+  }
+  const nanoTimestampStr = log.substring(0, timestampLength);
   // returns timestamp in seconds
   let timestamp = timestampFromString(nanoTimestampStr);
+
   // If the timestamp is not a timestamp, then the log is missing a timestmap.
   // Or it is a multi-lined log and in this case we can only return the whole log
   let message;
   if (timestamp > 0) {
     lastTimestamp = timestamp;
-    message = trimLogHeader(log.slice(TIMESTAMP_LENGTH + 1), client); // 25+1 to remove a space
+    // timestampLength+1 to remove a space
+    message = trimLogHeader(log.slice(timestampLength + 1), client);
   } else {
     message = trimLogHeader(log, client);
     timestamp = lastTimestamp;
   }
-  const level = parseLogLevel(log);
+  const level = parseLogLevel(log, client, message);
 
   return {
     message,

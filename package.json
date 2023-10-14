@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "4.0.0-alpha",
+  "version": "4.4.0-alpha",
   "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./src/main/main.ts",
@@ -52,6 +52,7 @@
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {
+      "notarize": "false",
       "target": {
         "target": "default",
         "arch": [
@@ -92,11 +93,23 @@
     },
     "linux": {
       "target": [
+        "snap",
         "deb",
-        "AppImage"
+        "AppImage",
+        "rpm",
+        "pacman"
       ],
       "category": "Network",
       "icon": "icons"
+    },
+    "snap": {
+      "base": "core22",
+      "confinement": "classic",
+      "publish": {
+        "provider": "github",
+        "owner": "jgresham",
+        "repo": "nice-node"
+      }
     },
     "directories": {
       "app": "release/app",
@@ -104,25 +117,28 @@
       "output": "release/build"
     },
     "extraResources": [
-      "./assets/**"
-    ],
-    "extraFiles": [
-      "./src/common/NodeSpecs/**"
+      "./assets/**",
+      {
+        "from": "src/common/NodeSpecs",
+        "to": "NodeSpecs"
+      }
     ],
     "publish": [
       {
         "provider": "github",
-        "owner": "jgresham",
+        "owner": "NiceNode",
         "repo": "nice-node"
       }
     ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jgresham/nice-node.git"
+    "url": "git+https://github.com/NiceNode/nice-node.git"
   },
   "author": {
-    "name": "jgresham"
+    "name": "Johns Gresham",
+    "email": "johnsgresham@skiff.com",
+    "url": "http://nicenode.xyz"
   },
   "license": "MIT",
   "keywords": [
@@ -133,7 +149,9 @@
     "local"
   ],
   "jest": {
-    "testURL": "http://localhost/",
+    "testEnvironmentOptions": {
+      "url": "http://localhost/"
+    },
     "projects": [
       {
         "displayName": "renderer tests (react)",
@@ -217,6 +235,7 @@
     "@testing-library/react": "^14.0.0",
     "@types/dockerode": "^3.3.15",
     "@types/jest": "^29.2.4",
+    "@types/mixpanel-browser": "^2.47.3",
     "@types/node": "20.4.5",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
@@ -225,7 +244,7 @@
     "@types/throttle-debounce": "^5.0.0",
     "@types/uuid": "^9.0.3",
     "@types/webpack-bundle-analyzer": "^4.6.0",
-    "@types/webpack-env": "^1.18.0",
+    "@types/webpack-env": "^1.18.2",
     "@typescript-eslint/eslint-plugin": "^5.45.1",
     "@typescript-eslint/parser": "^5.45.1",
     "@vanilla-extract/babel-plugin": "^1.2.0",
@@ -234,14 +253,14 @@
     "babel-loader": "^9.1.0",
     "browserslist-config-erb": "^0.0.3",
     "chalk": "^4.1.2",
-    "concurrently": "^8.2.0",
+    "concurrently": "^8.2.1",
     "core-js": "^3.30.2",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.2",
     "css-minimizer-webpack-plugin": "^5.0.1",
     "detect-port": "^1.5.1",
-    "electron": "^26.2.1",
-    "electron-builder": "^24.6.4",
+    "electron": "^25.8.4",
+    "electron-builder": "^24.7.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-mock-ipc": "^0.3.12",
     "electronmon": "^2.0.2",
@@ -252,7 +271,7 @@
     "eslint-import-resolver-webpack": "^0.13.2",
     "eslint-plugin-compat": "^4.0.2",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^27.1.6",
+    "eslint-plugin-jest": "^27.4.2",
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-promise": "^6.1.1",
@@ -264,7 +283,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.6.4",
-    "lint-staged": "^13.1.0",
+    "lint-staged": "^14.0.1",
     "mini-css-extract-plugin": "^2.7.1",
     "opencollective-postinstall": "^2.0.3",
     "prettier": "^3.0.3",
@@ -300,13 +319,13 @@
     "du": "^1.0.0",
     "electron-debug": "^3.2.0",
     "electron-store": "^8.1.0",
-    "electron-updater": "^6.1.1",
-    "fathom-client": "^3.5.0",
+    "electron-updater": "^6.1.5",
     "highcharts": "^11.0.0",
     "highcharts-react-official": "^3.2.1",
     "i18next": "^23.4.9",
     "i18next-browser-languagedetector": "^7.0.1",
     "iconv-lite": "^0.6.3",
+    "mixpanel-browser": "^2.47.0",
     "moment": "^2.29.4",
     "pidusage": "^3.0.2",
     "react": "^18.2.0",

@@ -13,7 +13,7 @@
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "http://host.containers.internal:8551",
-        "checkpointSyncUrl": "https://beaconstate.ethstaker.cc"
+        "network": "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/data",
@@ -47,17 +47,42 @@
   "configTranslation": {
     "dataDir": {
       "displayName": "The directory where nimbus will store all blockchain data.",
-      "cliConfigPrefix": "--data-dir=",
+      "cliConfigPrefix": "--datadir=",
       "uiControl": {
         "type": "filePath"
       },
       "infoDescription": "Prysm root directory",
       "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters/"
     },
+    "network": {
+      "displayName": "Network",
+      "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "--mainnet --checkpoint-sync-url=https://beaconstate.ethstaker.cc"
+          },
+          {
+            "value": "Holesky",
+            "config": "--holesky"
+          },
+          {
+            "value": "Goerli",
+            "config": "--goerli"
+          },
+          {
+            "value": "Sepolia",
+            "config": "--sepolia"
+          }
+        ]
+      }
+    },
     "checkpointSyncUrl": {
       "displayName": "Trusted checkpoint sync URL",
       "cliConfigPrefix": "--checkpoint-sync-url=",
-      "defaultValue": "https://beaconstate.ethstaker.cc",
       "uiControl": {
         "type": "text"
       }

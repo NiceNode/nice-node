@@ -38,7 +38,17 @@ export const addNode = async (
     `${nodeSpec.specId}-${utcTimestamp}`,
     storageLocation ?? getNodesDirPath(),
   );
+  // We really do not want to have conditionals for specific nodes, however,
+  //  this is justified as we iterate quickly for funding and prove NN works
+  if (nodeSpec.specId === 'hubble') {
+    await makeNodeDir('hub', dataDir);
+    await makeNodeDir('rocks', dataDir);
+  }
   console.log('adding node with dataDir: ', dataDir);
+  console.log(
+    'adding node with initialConfigFromUser: ',
+    initialConfigFromUser,
+  );
   const nodeRuntime: NodeRuntime = {
     dataDir,
     usage: {

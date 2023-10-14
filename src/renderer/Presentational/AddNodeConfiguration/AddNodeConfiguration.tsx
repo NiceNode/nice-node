@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { mergeObjectReducer } from './deepMerge';
 import {
   NodeLibrary,
   NodePackageLibrary,
 } from '../../../main/state/nodeLibrary';
-import { ModalConfig } from '../ModalManager/modalUtils';
 import {
   container,
   descriptionFont,
   sectionFont,
   titleFont,
+  advancedOptionsLink,
 } from './addNodeConfiguration.css';
 import SpecialSelect, {
   SelectOption,
@@ -26,6 +27,10 @@ import {
 } from '../../../common/nodeSpec';
 import { NodeId } from '../../../common/node';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
+import InitialClientConfigs, {
+  ClientConfigValues,
+} from './InitialClientConfigs';
+import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 
 export type ClientSelections = {
   [serviceId: string]: SelectOption;
@@ -33,13 +38,15 @@ export type ClientSelections = {
 
 export type AddNodeConfigurationValues = {
   clientSelections?: ClientSelections;
+  clientConfigValues?: ClientConfigValues;
   storageLocation?: string;
+  nodePackageConfigValues?: ClientConfigValues;
 };
 export interface AddNodeConfigurationProps {
   nodeId?: NodeId;
   onChange?: (newValue: AddNodeConfigurationValues) => void;
   nodePackageConfig?: AddNodeConfigurationValues;
-  modalOnChangeConfig?: (config: ModalConfig) => void;
+  shouldHideTitle?: boolean;
 }
 
 const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
@@ -57,13 +64,16 @@ const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
 const AddNodeConfiguration = ({
   nodeId,
   nodePackageConfig,
-  modalOnChangeConfig,
+  shouldHideTitle,
   onChange,
 }: AddNodeConfigurationProps) => {
   const { t } = useTranslation();
   const { t: tGeneric } = useTranslation('genericComponents');
   const [sNodePackageSpec, setNodePackageSpec] =
     useState<NodePackageSpecification>();
+  const [sNodePackageSpecArr, setNodePackageSpecArr] = useState<
+    NodePackageSpecification[]
+  >([]);
   const [sNodePackageServices, setNodePackageServices] =
     useState<NodePackageNodeServiceSpec[]>();
   const [sClientSelections, setClientSelections] = useState<ClientSelections>(
@@ -75,11 +85,30 @@ const AddNodeConfiguration = ({
   const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
   const [sNodePackageLibrary, setNodePackageLibrary] =
     useState<NodePackageLibrary>();
+  const [sClientNodeSpecifications, setClientNodeSpecifications] = useState<
+    NodeSpecification[]
+  >([]);
+  const [sClientConfigValues, dispatchClientConfigValues] = useReducer(
+    mergeObjectReducer,
+    {},
+  );
+  const [sNodePackageConfigValues, dispatchNodePackageConfigValues] =
+    useReducer(mergeObjectReducer, {});
 
   const [
     sNodeStorageLocationFreeStorageGBs,
     setNodeStorageLocationFreeStorageGBs,
   ] = useState<number>();
+  const [sIsAdvancedOptionsOpen, setIsAdvancedOptionsOpen] =
+    useState<boolean>();
+
+  useEffect(() => {
+    if (sNodePackageSpec) {
+      setNodePackageSpecArr([sNodePackageSpec]);
+    } else {
+      setNodePackageSpecArr([]);
+    }
+  }, [sNodePackageSpec]);
 
   useEffect(() => {
     const fetchNodeLibrarys = async () => {
@@ -123,20 +152,27 @@ const AddNodeConfiguration = ({
   }, [sNodePackageSpec, sNodeLibrary]);
 
   useEffect(() => {
+    const nodeSpecs: NodeSpecification[] = [];
+    Object.keys(sClientSelections).forEach((serviceId) => {
+      const selectOption = sClientSelections[serviceId];
+      const nodeSpec = sNodeLibrary?.[selectOption.value];
+      if (nodeSpec) {
+        nodeSpecs.push(nodeSpec);
+      }
+    });
+    setClientNodeSpecifications(nodeSpecs);
+  }, [sClientSelections, sNodeLibrary]);
+
+  useEffect(() => {
     const fetchData = async () => {
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
-      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
-      const nodePackageLibrary: NodePackageLibrary =
-        await electron.getNodePackageLibrary();
       console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
       setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
-      if (modalOnChangeConfig) {
-        modalOnChangeConfig({
-          selectedClients: sClientSelections,
+      if (onChange) {
+        onChange({
+          clientSelections: sClientSelections,
           storageLocation: defaultNodesStorageDetails.folderPath,
-          nodeLibrary,
-          nodePackageLibrary,
         });
       }
       setNodeStorageLocationFreeStorageGBs(
@@ -145,7 +181,7 @@ const AddNodeConfiguration = ({
     };
     fetchData();
 
-    // Modal Parent needs updated with the default initial value
+    // Parent needs updated with the default initial value
     if (setClientSelections) {
       setClientSelections(sClientSelections);
     }
@@ -166,12 +202,19 @@ const AddNodeConfiguration = ({
     if (onChange) {
       onChange({
         clientSelections: sClientSelections,
+        clientConfigValues: sClientConfigValues,
         storageLocation: sNodeStorageLocation,
+        nodePackageConfigValues: sNodePackageConfigValues,
       });
     }
     // todo: try useCallback in parent component
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sClientSelections, sNodeStorageLocation]);
+  }, [
+    sClientSelections,
+    sNodeStorageLocation,
+    sClientConfigValues,
+    sNodePackageConfigValues,
+  ]);
 
   if (!sNodePackageSpec) {
     console.error(sNodePackageLibrary, nodeId);
@@ -180,7 +223,7 @@ const AddNodeConfiguration = ({
 
   return (
     <div className={container}>
-      {!modalOnChangeConfig && (
+      {shouldHideTitle !== true && (
         <div className={titleFont}>
           {t('LaunchAVarNode', { nodeName: sNodePackageSpec.displayName })}
         </div>
@@ -223,7 +266,25 @@ const AddNodeConfiguration = ({
           </React.Fragment>
         );
       })}
-      <HorizontalLine />
+
+      {/* Initial node package settings, required */}
+      <InitialClientConfigs
+        clientSpecs={sNodePackageSpecArr}
+        addNodeFlowSelection="required"
+        onChange={(newConfigValues) => {
+          dispatchNodePackageConfigValues(newConfigValues);
+        }}
+      />
+      {/* Initial client settings, required */}
+      <InitialClientConfigs
+        clientSpecs={sClientNodeSpecifications}
+        addNodeFlowSelection="required"
+        onChange={(newClientConfigValues) => {
+          dispatchClientConfigValues(newClientConfigValues);
+        }}
+      />
+
+      {/* <HorizontalLine /> */}
       <p className={sectionFont}>{tGeneric('DataLocation')}</p>
       <p
         className={captionText}
@@ -237,8 +298,8 @@ const AddNodeConfiguration = ({
           console.log('storageLocationDetails', storageLocationDetails);
           if (storageLocationDetails) {
             setNodeStorageLocation(storageLocationDetails.folderPath);
-            if (modalOnChangeConfig) {
-              modalOnChangeConfig({
+            if (onChange) {
+              onChange({
                 storageLocation: storageLocationDetails.folderPath,
               });
             }
@@ -250,6 +311,39 @@ const AddNodeConfiguration = ({
           }
         }}
       />
+
+      <HorizontalLine />
+      <div className={advancedOptionsLink}>
+        <DropdownLink
+          text={`${
+            sIsAdvancedOptionsOpen
+              ? t('HideAdvancedOptions')
+              : t('ShowAdvancedOptions')
+          }`}
+          onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
+          isDown={!sIsAdvancedOptionsOpen}
+        />
+      </div>
+      {sIsAdvancedOptionsOpen && (
+        <>
+          {/* Initial node package settings, advanced */}
+          <InitialClientConfigs
+            clientSpecs={sNodePackageSpecArr}
+            addNodeFlowSelection="advanced"
+            onChange={(newConfigValues) => {
+              dispatchNodePackageConfigValues(newConfigValues);
+            }}
+          />
+          {/* Initial client settings, advanced */}
+          <InitialClientConfigs
+            clientSpecs={sClientNodeSpecifications}
+            addNodeFlowSelection="advanced"
+            onChange={(newClientConfigValues) => {
+              dispatchClientConfigValues(newClientConfigValues);
+            }}
+          />
+        </>
+      )}
     </div>
   );
 };

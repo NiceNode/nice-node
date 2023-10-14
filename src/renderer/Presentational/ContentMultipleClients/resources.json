@@ -16,6 +16,43 @@
     ]
   },
   {
+    "key": "op-geth",
+    "sectionTitle": "Optimism",
+    "items": [
+      {
+        "label": "Website",
+        "value": "optimism.io",
+        "link": "https://optimism.io/"
+      },
+      {
+        "label": "Block explorer",
+        "value": "etherscan.io",
+        "link": "https://optimistic.etherscan.io/"
+      },
+      {
+        "label": "X (Twitter)",
+        "value": "x.com",
+        "link": "https://x.com/optimismFND"
+      }
+    ]
+  },
+  {
+    "key": "op-node",
+    "sectionTitle": "OP Stack",
+    "items": [
+      {
+        "label": "OP Stack docs",
+        "value": "optimism.io",
+        "link": "https://stack.optimism.io/"
+      },
+      {
+        "label": "OP Geth Github",
+        "value": "github.com",
+        "link": "https://github.com/ethereum-optimism/op-geth#readme"
+      }
+    ]
+  },
+  {
     "key": "nethermind",
     "sectionTitle": "Nethermind",
     "items": [

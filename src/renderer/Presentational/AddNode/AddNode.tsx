@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { NodeLibrary } from 'main/state/nodeLibrary';
-import { ModalConfig } from '../ModalManager/modalUtils';
 import {
   container,
   descriptionFont,
@@ -10,12 +8,12 @@ import {
   titleFont,
   descriptionContainer,
 } from './addNode.css';
-import SpecialSelect, {
-  SelectOption,
-} from '../../Generics/redesign/SpecialSelect/SpecialSelect';
+import { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
+import SelectCard from '../../Generics/redesign/SelectCard/SelectCard';
+import { NodeIcons } from '../../assets/images/nodeIcons';
 
 // Other node types are not ready yet
 const nodeOptions = [
@@ -26,27 +24,34 @@ const nodeOptions = [
     label: 'Ethereum',
     info: 'The world computer',
   },
-  // {
-  //   iconId: 'base',
-  //   title: 'Base',
-  //   value: 'base',
-  //   label: 'Base',
-  //   info: 'A secure and low-cost Ethereum Layer 2 built on the OP stack',
-  // },
-  // {
-  //   iconId: 'optimism',
-  //   title: 'Optimism',
-  //   value: 'optimism',
-  //   label: 'Optimism',
-  //   info: 'Built by the OP Collective!',
-  // },
-  // {
-  //   iconId: 'farcaster',
-  //   title: 'Farcaster',
-  //   value: 'farcaster',
-  //   label: 'Farcaster',
-  //   info: 'A protocol for decentralized social apps',
-  // },
+  {
+    iconId: 'base',
+    title: 'Base',
+    value: 'base',
+    label: 'Base',
+    info: 'A secure and low-cost Ethereum Layer 2 built on the OP stack',
+  },
+  {
+    iconId: 'optimism',
+    title: 'Optimism',
+    value: 'optimism',
+    label: 'Optimism',
+    info: 'Ethereum, scaled. Built by the OP Collective',
+  },
+  {
+    iconId: 'farcaster',
+    title: 'Farcaster',
+    value: 'farcaster',
+    label: 'Farcaster',
+    info: 'A protocol for decentralized social apps',
+  },
+  {
+    iconId: 'arbitrum',
+    title: 'Arbitrum One',
+    value: 'arbitrum',
+    label: 'Arbitrum One',
+    info: 'Welcome to the future of Ethereum',
+  },
 ];
 
 let alphaModalRendered = false;
@@ -61,14 +66,14 @@ export interface AddNodeProps {
   onChange?: (newValue: AddNodeValues) => void;
   nodeConfig?: AddNodeValues;
   setNode?: (nodeSelection: SelectOption, object: AddNodeValues) => void;
-  modalOnChangeConfig?: (config: ModalConfig) => void;
+  shouldHideTitle?: boolean;
 }
 
 const AddNode = ({
   nodeConfig,
   setNode,
-  modalOnChangeConfig,
   onChange,
+  shouldHideTitle,
 }: AddNodeProps) => {
   const { t } = useTranslation();
   const [sSelectedNode, setSelectedNode] = useState<SelectOption>(
@@ -82,12 +87,7 @@ const AddNode = ({
     const fetchData = async () => {
       const hasSeenAlpha = await electron.getSetHasSeenAlphaModal();
       setHasSeenAlphaModal(hasSeenAlpha || false);
-      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
-      if (modalOnChangeConfig) {
-        modalOnChangeConfig({
-          nodeLibrary,
-        });
-      }
+
       // Modal Parent needs updated with the default initial value
       // Todo: due to a JS closure bug with modalOnChangeConfig, we are setting the selected node here
       const ethNodeConfig = {
@@ -107,8 +107,6 @@ const AddNode = ({
       // clear any client selections when the node changes
       const nodeConfig = {
         node: sSelectedNode,
-        executionClient: undefined,
-        consensusClient: undefined,
       };
       if (newNode) {
         setSelectedNode(newNode);
@@ -139,22 +137,38 @@ const AddNode = ({
     );
     alphaModalRendered = true;
   }
-  console.log('sSelectedNode is ', sSelectedNode);
 
   return (
     <div className={container}>
-      {!modalOnChangeConfig && <div className={titleFont}>{t('AddNode')}</div>}
+      {shouldHideTitle !== true && (
+        <div className={titleFont}>{t('AddYourFirstNode')}</div>
+      )}
       <div className={descriptionContainer}>
         <div className={descriptionFont}>
           <>{t('AddNodeDescription')}</>
         </div>
       </div>
       <p className={sectionFont}>Network</p>
-      <SpecialSelect
+      <div style={{ width: '100%' }}>
+        {nodeOptions.map((nodeOption) => {
+          return (
+            <SelectCard
+              key={nodeOption.value}
+              title={nodeOption.title}
+              iconId={nodeOption.iconId as keyof NodeIcons}
+              info={nodeOption.info}
+              onClick={() => onChangeNode(nodeOption)}
+              isSelected={sSelectedNode?.value === nodeOption.value}
+            />
+          );
+        })}
+      </div>
+
+      {/* <SpecialSelect
         selectedOption={sSelectedNode}
         onChange={onChangeNode}
         options={nodeOptions}
-      />
+      /> */}
     </div>
   );
 };

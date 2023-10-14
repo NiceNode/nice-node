@@ -9,11 +9,11 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpPort": "5051",
+        "httpPort": "5052",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "http://host.containers.internal:8551",
-        "checkpointSyncUrl": "https://beaconstate.ethstaker.cc"
+        "network": "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/var/lib/teku",
@@ -55,10 +55,36 @@
       "infoDescription": "Teku root directory",
       "documentation": "https://docs.teku.consensys.net/en/stable/Reference/CLI/CLI-Syntax/#data-base-path-data-path"
     },
+    "network": {
+      "displayName": "Network",
+      "cliConfigPrefix": "--network=",
+      "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "mainnet --initial-state=https://beaconstate.ethstaker.cc"
+          },
+          {
+            "value": "Holesky",
+            "config": "holesky"
+          },
+          {
+            "value": "Goerli",
+            "config": "goerli"
+          },
+          {
+            "value": "Sepolia",
+            "config": "sepolia"
+          }
+        ]
+      }
+    },
     "checkpointSyncUrl": {
       "displayName": "Trusted checkpoint sync URL",
       "cliConfigPrefix": "--initial-state=",
-      "defaultValue": "https://beaconstate.ethstaker.cc",
       "uiControl": {
         "type": "text"
       }
@@ -96,7 +122,7 @@
     "httpPort": {
       "displayName": "HTTP server listening port",
       "cliConfigPrefix": "--rest-api-port=",
-      "defaultValue": "5051",
+      "defaultValue": "5052",
       "uiControl": {
         "type": "text"
       },
