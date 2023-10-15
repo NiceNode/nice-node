@@ -4,6 +4,7 @@ import { vars, common } from '../theme.css';
 export const container = style({
   boxSizing: 'border-box',
   display: 'flex',
+  position: 'relative',
   flexDirection: 'row',
   alignItems: 'flex-start',
   padding: '4px 0px',
@@ -56,4 +57,15 @@ export const messageStyle = style({
   order: 3,
   flexGrow: 1,
   overflowWrap: 'anywhere',
+});
+
+export const copyStyle = style({
+  display: 'none',
+  position: 'absolute',
+  selectors: {
+    [`${container}:hover &`]: {
+      display: 'block',
+      right: 0,
+    },
+  },
 });

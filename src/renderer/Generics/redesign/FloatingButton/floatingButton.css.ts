@@ -40,3 +40,10 @@ export const iconStyle = style({
   width: 16,
   height: 16,
 });
+
+export const copyIcon = style({
+  bottom: 0,
+  width: 4,
+  height: 4,
+  top: 2,
+});

@@ -1,6 +1,11 @@
 import { IconId } from 'renderer/assets/images/icons';
 import { Icon } from '../Icon/Icon';
-import { baseButton, iconLeft, iconStyle } from './floatingButton.css';
+import {
+  baseButton,
+  copyIcon,
+  iconLeft,
+  iconStyle,
+} from './floatingButton.css';
 
 export interface FloatingButtonProps {
   /**
@@ -24,11 +29,11 @@ const FloatingButton = ({
   label,
   ...props
 }: FloatingButtonProps) => {
-  const addBaseButton = iconId !== 'copy';
+  const additionalClass = iconId === 'copy' ? copyIcon : '';
   return (
     <button
       type="button"
-      className={[addBaseButton ? baseButton : '', variant].join(' ')}
+      className={[baseButton, variant, additionalClass].join(' ')}
       {...props}
     >
       {variant !== 'icon' && (
