@@ -190,7 +190,7 @@
     "httpAddress": {
       "displayName": "HTTP-RPC server listening interface",
       "cliConfigPrefix": "--http.addr ",
-      "defaultValue": "localhost",
+      "defaultValue": "0.0.0.0",
       "uiControl": {
         "type": "text"
       },

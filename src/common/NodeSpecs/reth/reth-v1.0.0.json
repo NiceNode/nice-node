@@ -14,9 +14,9 @@
         "httpAddress": "0.0.0.0"
       },
       "docker": {
-        "containerVolumePath": "/root/.local/share/reth/db",
+        "containerVolumePath": "/root/.local/share/reth/mainnet/db",
         "raw": "",
-        "forcedRawNodeInput": "node --color never --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/db/jwtsecret --ipcdisable"
+        "forcedRawNodeInput": "node --color never --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/mainnet/db/jwtsecret --ipcdisable"
       }
     },
     "imageName": "ghcr.io/paradigmxyz/reth"

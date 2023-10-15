@@ -12,12 +12,13 @@
         "httpCorsDomains": "http://localhost",
         "webSockets": "Disabled",
         "httpVirtualHosts": "localhost,host.containers.internal",
-        "authVirtualHosts": "localhost,host.containers.internal"
+        "authVirtualHosts": "localhost,host.containers.internal",
+        "httpAddress": "0.0.0.0"
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
         "raw": "",
-        "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
+        "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
     "imageName": "docker.io/ethereum/client-go:stable",
@@ -237,7 +238,7 @@
     "httpAddress": {
       "displayName": "HTTP-RPC server listening interface",
       "cliConfigPrefix": "--http.addr ",
-      "defaultValue": "localhost",
+      "defaultValue": "0.0.0.0",
       "uiControl": {
         "type": "text"
       },

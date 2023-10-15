@@ -1,0 +1,142 @@
+name: StagingPublish
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+
+jobs:
+  publish:
+    # To enable auto publishing to github, update your electron publisher
+    # config in package.json > "build" and remove the conditional below
+    # if: ${{ github.repository_owner == 'electron-react-boilerplate' }}
+
+    # all published versions are considered "staging" until we release a non-alpha version
+    environment: staging
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Install packages for building
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt-get install --no-install-recommends rpm libarchive-tools
+          else
+            exit 0
+          fi
+
+      - name: Used variables
+        run: |
+          echo "MP_PROJECT_ENV variable : ${{ vars.MP_PROJECT_ENV }}"
+          echo "NICENODE_ENV variable : ${{ vars.NICENODE_ENV }}"
+
+      - name: Checkout git repo
+        uses: actions/checkout@v4
+
+      - name: Install Node and NPM
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm
+
+      - name: Build and publish releases
+        env:
+          # These values are used for auto updates signing
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          WIN_CSC_LINK: ${{ secrets.WIN_CSC_BASE64 }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD_2 }}
+          # CSC_IDENTITY_AUTO_DISCOVERY: false
+          # This is used for app event tracking
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+          MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
+          NICENODE_ENV: ${{ vars.NICENODE_ENV }}
+          # This is used for uploading release assets to github
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          # This is used for publishing snap release assets to snapcraft
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+        uses: pguyot/arm-runner-action@v2
+        id: build_image
+        with:
+          base_image: raspi_4_bullseye:20230102
+          commands: |
+            sudo apt-get install --no-install-recommends rpm libarchive-tools
+
+            npm install
+            npm run postinstall
+            npm run build
+            npm exec electron-builder -- --publish always --linux
+
+      # - name: Publish releases
+      #   env:
+      #     # These values are used for auto updates signing
+      #     APPLE_ID: ${{ secrets.APPLE_ID }}
+      #     APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      #     APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      #     CSC_LINK: ${{ secrets.CSC_LINK }}
+      #     CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+      #     WIN_CSC_LINK: ${{ secrets.WIN_CSC_BASE64 }}
+      #     WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD_2 }}
+      #     # CSC_IDENTITY_AUTO_DISCOVERY: false
+      #     # This is used for app event tracking
+      #     SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      #     MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+      #     MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
+      #     NICENODE_ENV: ${{ vars.NICENODE_ENV }}
+      #     # This is used for uploading release assets to github
+      #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      #     # This is used for publishing snap release assets to snapcraft
+      #     SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+      #   run: |
+      #     npm run postinstall
+      #     npm run build
+      #     if [ "$RUNNER_OS" == "macOS" ]; then
+      #       npm exec electron-builder -- --publish always --win --mac
+      #     else
+      #       npm exec electron-builder -- --publish always --linux
+      #     fi
+
+      # - name: Publish arm64 releases
+      #   env:
+      #     # These values are used for auto updates signing
+      #     APPLE_ID: ${{ secrets.APPLE_ID }}
+      #     APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      #     APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      #     CSC_LINK: ${{ secrets.CSC_LINK }}
+      #     CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+      #     WIN_CSC_LINK: ${{ secrets.WIN_CSC_BASE64 }}
+      #     WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD_2 }}
+      #     # CSC_IDENTITY_AUTO_DISCOVERY: false
+      #     # This is used for app event tracking
+      #     SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      #     MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+      #     MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
+      #     NICENODE_ENV: ${{ vars.NICENODE_ENV }}
+      #     # This is used for uploading release assets to github
+      #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      #     # This is used for publishing snap release assets to snapcraft
+      #     SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+      #   uses: pguyot/arm-runner-action@v2
+      #   with:
+      #     base_image: raspi_4_bullseye:20230102
+      #     commands: |
+      #       npm install
+      #       npm run postinstall
+      #       npm run build
+      #       if [ "$RUNNER_OS" == "Linux" ]; then
+      #         npm exec electron-builder -- --publish always --linux
+      #       else
+      #         exit 0
+      #       fi

@@ -105,38 +105,6 @@
       "infoDescription": "NiceNode requires http connections",
       "defaultValue": "Disabled"
     },
-    "httpApis": {
-      "displayName": "Enabled HTTP namespaces",
-      "cliConfigPrefix": "--rest.namespace ",
-      "defaultValue": ["beacon", "config", "events", "node", "validator"],
-      "valuesJoinStr": ",",
-      "uiControl": {
-        "type": "select/multiple",
-        "controlTranslations": [
-          {
-            "value": "beacon",
-            "config": "beacon"
-          },
-          {
-            "value": "config",
-            "config": "config"
-          },
-          {
-            "value": "events",
-            "config": "events"
-          },
-          {
-            "value": "node",
-            "config": "node"
-          },
-
-          {
-            "value": "validator",
-            "config": "validator"
-          }
-        ]
-      }
-    },
     "p2pPorts": {
       "displayName": "P2P port (UDP and TCP)",
       "cliConfigPrefix": "--port ",
@@ -165,7 +133,7 @@
     },
     "httpCorsDomains": {
       "displayName": "HTTP-RPC CORS domains",
-      "cliConfigPrefix": "--http.corsdomain ",
+      "cliConfigPrefix": "--rest.corsdomain ",
       "defaultValue": "*",
       "uiControl": {
         "type": "text"
