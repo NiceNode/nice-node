@@ -57,7 +57,7 @@ const checkIfNotificationCanBeAdded = (
   const currentTimestamp = Date.now();
   const existingNotificationIndex = storedNotifications.findIndex(
     (notification: NotificationItemProps) =>
-      notification.title === notificationObject.title,
+      notification.key === notificationObject.title,
   );
   if (existingNotificationIndex === -1) return true;
 
@@ -95,6 +95,7 @@ export const addNotification = (
     const translatedDescription = i18n.t(`notifications:${description}`);
 
     const newNotification = {
+      key: title,
       title: translatedTitle,
       description: translatedDescription,
       unread: true,
