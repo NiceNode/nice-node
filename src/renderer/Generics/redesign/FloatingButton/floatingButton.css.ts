@@ -43,7 +43,16 @@ export const iconStyle = style({
 
 export const copyIcon = style({
   bottom: 0,
-  width: 4,
-  height: 4,
-  top: 2,
+  width: 3,
+  height: 3,
+  top: -5,
+  color: vars.color.font70,
+  background: 'transparent',
+  selectors: {
+    '&:hover:enabled': {
+      background: vars.color.background92,
+    },
+  },
+  borderRadius: 5,
+  padding: '10px 12px',
 });
