@@ -18,7 +18,7 @@ import nuclearUninstall from './nuclearUninstall';
 import { getFailSystemRequirements } from './minSystemRequirement';
 import { removeAllNodePackages } from './nodePackageManager';
 import { checkNodePortsAndNotify } from './ports';
-import { CHANNELS, send } from './messenger';
+import { reportEvent } from './events';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -77,7 +77,7 @@ export default class MenuBuilder {
         {
           label: 'Check for updates...',
           click() {
-            send(CHANNELS.reportEvent, 'UserCheckForUpdateNN');
+            reportEvent('UserCheckForUpdateNN');
             checkForUpdates(true);
           },
         },
@@ -249,7 +249,7 @@ export default class MenuBuilder {
           {
             label: 'Check for updates...',
             click() {
-              send(CHANNELS.reportEvent, 'UserCheckForUpdateNN');
+              reportEvent('UserCheckForUpdateNN');
               checkForUpdates(true);
             },
           },

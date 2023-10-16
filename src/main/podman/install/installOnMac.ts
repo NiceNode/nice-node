@@ -8,6 +8,7 @@ import {
   sendMessageOnGrantPermissionToInstallPodman,
 } from '../messageFrontEnd';
 import { startOnMac } from '../start';
+import { reportEvent } from '../../events';
 
 /**
  * Download podman-arch-verson.pkg, install podman, start podman
@@ -62,10 +63,14 @@ const installOnMac = async (version: string): Promise<any> => {
     console.log('rm pkg file stdout, stderr', stdout, stderr);
 
     return true;
-  } catch (err) {
+  } catch (err: any) {
     // console.log(err);
     logger.error(err);
     logger.info('Unable to install podman.');
+    reportEvent('ErrorInstallPodman', {
+      error: err.toString(),
+      podmanVersion: version,
+    });
     return { error: `Unable to install Podman. ${err}` };
   }
 };

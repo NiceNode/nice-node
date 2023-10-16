@@ -4,6 +4,14 @@ import { MP_PROJECT_ENV, MP_PROJECT_TOKEN } from './environment';
 import { NNEvent } from './events';
 import electron from '../electronGlobal';
 
+let debugInfo: any;
+const getDebugInfo = async (): Promise<any> => {
+  if (debugInfo) return debugInfo;
+  debugInfo = await electron.getDebugInfo();
+  return debugInfo;
+};
+getDebugInfo();
+
 /**
  * Enable or disable remote event reporting service from in the front-end.
  * NiceNode may still log events locally for future debugging purposes.
@@ -29,20 +37,24 @@ export const setRemoteEventReportingEnabled = (isEnabled: boolean) => {
   }
 };
 
+export type ReportEventData = {
+  [x: string]: string | number | boolean | string[];
+};
 /**
  * Components should use this to report significant events. Events will be
  * logged or optionally sent to tracking service for core contributors to review.
  * @param event
  */
-export const reportEvent = (
+export const reportEvent = async (
   event: NNEvent,
-  properties?: { [x: string]: string | number | boolean | string[] },
+  properties?: ReportEventData,
 ) => {
   console.log('reportEvent, properties: ', event, properties);
   if (MP_PROJECT_ENV === 'dev') {
     return;
   }
-  mixpanel.track(event, properties);
+  const defaultProperties = await getDebugInfo();
+  mixpanel.track(event, { properties, ...defaultProperties });
 };
 
 export const initialize = async () => {

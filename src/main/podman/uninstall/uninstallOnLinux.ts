@@ -1,6 +1,7 @@
 // import { app } from 'electron';
 import logger from '../../logger';
 import { execAwait } from '../../execHelper';
+import { reportEvent } from '../../events';
 
 /**
  * Uninstall podman by removing binaries and various configuration files
@@ -35,9 +36,12 @@ const uninstallOnLinux = async (): Promise<boolean | { error: string }> => {
     });
     logger.info(`${rmCommand}  stdout, stderr ${stdout} ${stderr}`);
     return true;
-  } catch (err) {
+  } catch (err: any) {
     logger.error(err);
     logger.info('Unable to uninstall podman.');
+    reportEvent('ErrorUninstallPodman', {
+      error: err.toString(),
+    });
     return { error: `Unable to uninstall Podman. ${err}` };
   }
 };
