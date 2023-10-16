@@ -1,4 +1,3 @@
-import path from 'node:path';
 import logger from '../../logger';
 import { execAwait } from '../../execHelper';
 import * as arch from '../../arch';
@@ -6,8 +5,7 @@ import { downloadFile } from '../../downloadFile';
 import { getNNDirPath } from '../../files';
 import { sendMessageOnDownloadProgress } from '../messageFrontEnd';
 import { startOnWindows } from '../start';
-
-const iconv = require('iconv-lite');
+import { reportEvent } from '../../events';
 
 /**
  * Download podman.msi, install podman, handle reboot, and start podman
@@ -24,7 +22,8 @@ const installOnWindows = async (version: string): Promise<any> => {
     // download and install podman
     let downloadUrl;
     if (arch.isX86And64bit()) {
-      downloadUrl = `https://github.com/containers/podman/releases/download/v${version}/podman-v${version}.msi`;
+      // ex: https://github.com/containers/podman/releases/download/v4.7.1/podman-4.7.1-setup.exe
+      downloadUrl = `https://github.com/containers/podman/releases/download/v${version}/podman-${version}-setup.exe`;
     } else {
       return {
         error:
@@ -32,23 +31,40 @@ const installOnWindows = async (version: string): Promise<any> => {
       };
     }
     logger.info(`Downloading Podman from url ${downloadUrl}`);
-    const podmanMsiFilePath = await downloadFile(
+    const podmanExeFilePath = await downloadFile(
       downloadUrl,
       getNNDirPath(),
       sendMessageOnDownloadProgress,
     );
+    // const logFilePath = path.join(
+    //   getNNDirPath(),
+    //   'podman-install-log.txt',
+    // );
+    // don't delete the exe as it is used in the uninstall process here
     // eslint-disable-next-line prefer-const
     ({ stdout, stderr } = await execAwait(
-      `msiexec /i ${podmanMsiFilePath} /qn /lv ${path.join(
-        getNNDirPath(),
-        'podman-install-log.txt',
-      )}`,
-      { log: true, sudo: true },
+      `Start-Process -FilePath '${podmanExeFilePath}' -ArgumentList "-Silent -Quiet" -Wait -NoNewWindow -PassThru`,
+      { log: true, shell: 'powershell.exe' },
     ));
-    // todo: report logs if fails?
-    console.log('podman install stdout, stderr', stdout, stderr);
 
-    await startOnWindows();
+    // todo: find a way to see if the user gave the podman.exe permission to install
+    // no way of knowing right now. nothing in stdout or stderr
+    console.log(
+      'podman install stdout, stderr ================ ',
+      stdout,
+      stderr,
+    );
+
+    const startResult = await startOnWindows();
+
+    // could be from the user denying podman.exe permissions to install
+    if (startResult?.error) {
+      throw startResult?.error;
+    } else {
+      reportEvent('InstallPodmanSuccess', {
+        podmanVersion: version,
+      });
+    }
 
     return true;
     // eslint-disable-next-line
@@ -56,11 +72,14 @@ const installOnWindows = async (version: string): Promise<any> => {
     console.log(err);
     logger.error(err);
     logger.info('Unable to install podman.');
-    const errStr = iconv.decode(Buffer.from(err.toString()), 'ucs2');
-    if (errStr.includes('system reboot is required')) {
+    reportEvent('ErrorInstallPodman', {
+      error: err.toString(),
+      podmanVersion: version,
+    });
+    if (err.includes('system reboot is required')) {
       return { error: `Please reboot your computer.` };
     }
-    return { error: `Unable to install Docker. ${errStr}` };
+    return { error: `Unable to install Podman. ${err}` };
   }
 };
 

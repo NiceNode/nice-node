@@ -3,7 +3,7 @@ import { autoUpdater, UpdateInfo } from 'electron-updater';
 import sleep from 'await-sleep';
 
 import logger, { autoUpdateLogger } from './logger';
-import { CHANNELS, send } from './messenger';
+import { reportEvent } from './events';
 
 let notifyUserIfNoUpdateAvailable: boolean;
 
@@ -64,7 +64,7 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
   autoUpdater.on('update-downloaded', () => {
     logger.info('autoUpdater:::::::::update-downloaded');
     logger.info('Calling autoUpdater.quitAndInstall()');
-    send(CHANNELS.reportEvent, 'UpdatedNiceNode');
+    reportEvent('UpdatedNiceNode');
     try {
       autoUpdater.quitAndInstall();
     } catch (err) {
@@ -75,7 +75,7 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
         'Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download',
       );
       // todo: send error details
-      send(CHANNELS.reportEvent, 'ErrorUpdatingNiceNode');
+      reportEvent('ErrorUpdatingNiceNode');
     }
   });
 };

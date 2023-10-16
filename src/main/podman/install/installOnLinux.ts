@@ -7,6 +7,7 @@ import { script as debianInstallScript } from './debianInstallScript';
 import { script as fedoraInstallScript } from './fedoraInstallScript';
 import { script as manjaroInstallScript } from './manjaroInstallScript';
 import { script as linuxMintInstallScript } from './linuxMintInstallScript';
+import { reportEvent } from '../../events';
 
 // const UBUNTU_INSTALL_SCRIPT = 'installOnUbuntuScript';
 /**
@@ -61,11 +62,15 @@ const installOnLinux = async (): Promise<any> => {
         error: `Unable to install Podman. User denied granting NiceNode permission.`,
       };
     }
+
     return true;
-  } catch (err) {
+  } catch (err: any) {
     // console.log(err);
     logger.error(err);
     logger.info('Unable to install podman.');
+    reportEvent('ErrorInstallPodman', {
+      error: err.toString(),
+    });
     return { error: `Unable to install Podman. ${err}` };
   }
 };

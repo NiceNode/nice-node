@@ -11,6 +11,7 @@ export default function getDebugInfo() {
     niceNodeVersion = `Dev-${niceNodeVersion}`;
   }
 
+  // todo: make human readable (version)
   return {
     platform: getPlatform(),
     platformRelease: os.release(),
@@ -18,8 +19,6 @@ export default function getDebugInfo() {
     freeMemory: os.freemem(),
     totalMemory: os.totalmem(),
     niceNodeVersion,
-    niceNodeAppUsageMetrics: app.getAppMetrics(),
-    // ethereumNodeVersion: gethBuildNameForPlatformAndArch(),
   };
 }
 
