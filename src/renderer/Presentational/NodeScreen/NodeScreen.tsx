@@ -74,7 +74,6 @@ const NodeScreen = () => {
       pollingInterval,
     },
   );
-
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
@@ -201,6 +200,8 @@ const NodeScreen = () => {
       rpcTranslation === 'eth-l1-beacon'
     ) {
       latestBlockNum = parseFloat(slotNumber);
+    } else if (rpcTranslation === 'farcaster-l1') {
+      latestBlockNum = qLatestBlock.data;
     }
 
     const syncedBlock =
