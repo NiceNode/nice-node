@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "4.4.1-alpha",
+  "version": "4.4.2-alpha",
   "description": "Run a node, just press start",
   "productName": "NiceNode",
   "main": "./src/main/main.ts",
