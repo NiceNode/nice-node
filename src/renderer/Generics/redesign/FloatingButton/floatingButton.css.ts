@@ -46,11 +46,17 @@ export const copyIcon = style({
   width: 3,
   height: 3,
   top: -5,
+  left: '-20px',
   color: vars.color.font70,
-  background: 'transparent',
+  // no opacity desired here, so using background with alpha=1
+  background: vars.color.background,
   selectors: {
+    // follows secondary button
     '&:hover:enabled': {
-      background: vars.color.background92,
+      background: vars.color.backgroundHoverGradient,
+    },
+    '&:active:enabled': {
+      background: vars.color.backgroundActiveGradient,
     },
   },
   borderRadius: 5,
