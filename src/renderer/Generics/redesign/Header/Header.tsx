@@ -96,6 +96,10 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
           {version && <div className={versionContainer}>{version}</div>}
         </div>
         <div className={infoStyle}>{info}</div>
+        {/* Temporary */}
+        {name === 'prysm' && (
+          <p>Prysm does not allow HTTP APIs. No node data can be retrieved.</p>
+        )}
       </div>
       <div className={buttonContainer}>
         {status.updateAvailable && (

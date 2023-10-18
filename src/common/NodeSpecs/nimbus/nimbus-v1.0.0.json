@@ -18,7 +18,7 @@
       "docker": {
         "containerVolumePath": "/home/user/data",
         "raw": " --user 0",
-        "forcedRawNodeInput": "--data-dir=/home/user/data --web3-url=http://host.containers.internal:8551 --jwt-secret=/home/user/data/jwtsecret"
+        "forcedRawNodeInput": "--data-dir=/home/user/data --jwt-secret=/home/user/data/jwtsecret"
       }
     },
     "binaryDownload": {
@@ -66,7 +66,7 @@
         "controlTranslations": [
           {
             "value": "Mainnet",
-            "config": "mainnet --trusted-node-url=https://beaconstate.ethstaker.cc"
+            "config": "mainnet"
           },
           {
             "value": "Holesky",
@@ -81,13 +81,6 @@
             "config": "sepolia"
           }
         ]
-      }
-    },
-    "checkpointSyncUrl": {
-      "displayName": "Trusted checkpoint sync URL",
-      "cliConfigPrefix": "--trusted-node-url=",
-      "uiControl": {
-        "type": "text"
       }
     },
     "p2pPortsTcp": {
