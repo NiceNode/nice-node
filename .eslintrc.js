@@ -35,6 +35,18 @@ module.exports = {
     ],
     'react/jsx-filename-extension': [2, { extensions: ['.jsx', '.tsx'] }],
     'array-callback-return': 'off',
+    'prefer-destructuring': [
+      'error',
+      {
+        // This is unnatural: [ someVar ] = array; someVar = array[0] is much more readable
+        VariableDeclarator: {
+          array: false,
+        },
+        AssignmentExpression: {
+          array: false,
+        },
+      },
+    ],
   },
   parserOptions: {
     ecmaVersion: 2020,
