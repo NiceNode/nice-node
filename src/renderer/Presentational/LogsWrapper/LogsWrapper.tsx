@@ -5,6 +5,7 @@ import { useAppSelector } from '../../state/hooks';
 import { selectSelectedNodeId } from '../../state/node';
 
 import { Logs } from '../Logs/Logs';
+import { CHANNELS } from '../../../main/messenger';
 
 const LogsWrapper = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
@@ -20,7 +21,7 @@ const LogsWrapper = () => {
   };
 
   const listenForNodeLogs = useCallback(async () => {
-    electron.ipcRenderer.on('nodeLogs', nodeLogsListener);
+    electron.ipcRenderer.on(CHANNELS.nodeLogs, nodeLogsListener);
   }, []);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const LogsWrapper = () => {
     listenForNodeLogs();
     return () => {
       setLogs([]);
-      electron.ipcRenderer.removeAllListeners('nodeLogs');
+      electron.ipcRenderer.removeAllListeners(CHANNELS.nodeLogs);
     };
   }, [listenForNodeLogs]);
 
