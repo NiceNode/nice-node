@@ -20,10 +20,13 @@ For the latest information, visit https://nicenode.xyz
 
 ## Install
 
+Install git, nodejs 18+, and npm.
+
 Clone the repo and install dependencies:
 
 ```bash
-git clone <nice node repo url>
+git clone https://github.com/NiceNode/nice-node.git
+cd nice-node
 npm install
 ```
 
@@ -34,13 +37,14 @@ Start the app in the `dev` environment:
 ```bash
 npm start
 ```
+A window should pop open with NiceNode and a chrome devtools inspector running.
 
-To set env vars locally, create a `.env` file at the top level with:
+You may need to set environment variables locally. To do so, create a `.env` file at the top level with:
 
 ```
-SENTRY_DSN=<...>
-MP_PROJECT_TOKEN=<...>
-MP_PROJECT_ENV=<...>
+SENTRY_DSN=fake-token
+MP_PROJECT_TOKEN=fake-token
+MP_PROJECT_ENV=dev
 NICENODE_ENV=development
 ```
 
