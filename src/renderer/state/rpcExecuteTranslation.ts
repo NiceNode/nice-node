@@ -77,13 +77,13 @@ export const executeTranslation = async (
       const resp = await provider.send('eth_syncing');
       let isSyncing;
       let syncPercent;
-      if (resp) {
+      if (resp !== undefined) {
         if (typeof resp === 'object') {
           const syncRatio = resp.currentBlock / resp.highestBlock;
           syncPercent = (syncRatio * 100).toFixed(1);
           isSyncing = true;
         } else if (resp === false) {
-          // light client geth, it is done syncing if data is false
+          // reth, light client geth, it is done syncing if data is false
           isSyncing = false;
         }
       }
