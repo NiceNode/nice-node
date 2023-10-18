@@ -20,6 +20,7 @@ import {
   useGetIsPodmanInstalledQuery,
 } from '../../state/settingsService';
 import Sidebar from '../Sidebar/Sidebar';
+import { CHANNELS } from '../../../main/messenger';
 
 export interface SidebarWrapperProps {
   children: ReactElement;
@@ -75,10 +76,10 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   }, []);
 
   const listenForNotifications = useCallback(async () => {
-    electron.ipcRenderer.on('notifications', onNotificationChange);
+    electron.ipcRenderer.on(CHANNELS.notifications, onNotificationChange);
     return () =>
       electron.ipcRenderer.removeListener(
-        'notifications',
+        CHANNELS.notifications,
         onNotificationChange,
       );
   }, [onNotificationChange]);
