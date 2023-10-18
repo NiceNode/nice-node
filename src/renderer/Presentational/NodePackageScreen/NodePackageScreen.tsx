@@ -315,56 +315,11 @@ const NodePackageScreen = () => {
     return result;
   };
 
-  const formatVersion = (version: string | undefined, name: string) => {
+  const formatVersion = (version: string | undefined) => {
     if (!version) {
       return '';
     }
-    const capitalize = (s: string) =>
-      (s && s[0].toUpperCase() + s.slice(1)) || '';
-
-    let regex;
-    switch (name) {
-      case 'geth':
-      case 'op-geth':
-      case 'op-node':
-        regex = /Geth\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'besu':
-        regex = /besu\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'erigon':
-        regex = /(\d+\.\d+\.\d+)-dev/;
-        break;
-      case 'nethermind':
-      case 'lighthouse':
-        // eslint-disable-next-line no-useless-escape
-        regex = new RegExp(`${capitalize(name)}\/v(\\d+\\.\\d+\\.\\d+)`);
-        break;
-      case 'lodestar':
-        regex = /Lodestar\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'prysm':
-        regex = /prysm\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'teku':
-        regex = /teku\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'nimbus':
-        regex = /Nimbus\/v(\d+\.\d+\.\d+)/;
-        break;
-      default:
-        console.log(`Version parsing not found for node name: ${name}`);
-        return version; // At least, return the unformatted version string
-    }
-
-    const match = version.match(regex);
-
-    if (match) {
-      const versionString = `v${match[1]}`;
-      return versionString;
-    }
-    console.error(`No version number found for ${name}`);
-    return '';
+    return version;
   };
 
   const clientName = spec.specId.replace('-beacon', '');
@@ -377,7 +332,7 @@ const NodePackageScreen = () => {
     name: clientName as NodeBackgroundId,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
-    version: formatVersion(nodeVersionData, clientName),
+    version: formatVersion(nodeVersionData), // todo: remove
     info: formatSpec(spec.displayTagline),
     status: {
       stopped: status === 'stopped',
