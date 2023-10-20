@@ -77,6 +77,7 @@ export type NodeService = {
   node: Node;
 };
 export type NodePackage = {
+  nodes: Node[];
   id: NodeId;
   services: NodeService[];
   spec: NodePackageSpecification;
@@ -170,6 +171,7 @@ export const createNodePackage = (input: {
   }
 
   const nodePackage: NodePackage = {
+    nodes: [],
     id: uuidv4(),
     spec: input.spec,
     services: [],

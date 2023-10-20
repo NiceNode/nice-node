@@ -10,12 +10,15 @@
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import * as Sentry from '@sentry/electron/main';
+import Store from 'electron-store';
 
 import logger from './logger';
 import MenuBuilder from './menu';
+import cron from 'cron';
 import { resolveHtmlPath } from './util';
 import { fixPathEnvVar } from './util/fixPathEnvVar';
 import { setWindow } from './messenger';
+import { getUserNodePackagesWithNodes } from './state/nodePackages';
 import {
   initialize as initNodeManager,
   onExit as onExitNodeManager,
@@ -136,7 +139,22 @@ const createWindow = async () => {
 
   // Intercepts web requests from the UI an internet and sets origins
   setCorsForNiceNode(mainWindow);
+
+  const dailyReportJob = new cron.CronJob('0 0 * * *', () => {
+    const store = new Store();
+    const lastDailyReportTimestamp = store.get('lastDailyReportTimestamp') as number;
+    const oneDayAgo = Date.now() - 23 * 60 * 60 * 1000 - 59 * 60 * 1000; // 23 hours and 59 minutes ago
+    if (lastDailyReportTimestamp < oneDayAgo) {
+     // It's been more than a day, proceed with the report
+     getUserNodePackagesWithNodes();
+    }
+  });
+
+  // Start the cron job
+  dailyReportJob.start();
 };
+
+
 
 /**
  * Add event listeners...
