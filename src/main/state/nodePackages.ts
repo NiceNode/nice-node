@@ -48,6 +48,10 @@ const initialize = () => {
 };
 initialize();
 
+export const clear = () => {
+  store.set(USER_NODE_PACKAGES_KEY, { [NODES_KEY]: {}, [NODE_IDS_KEY]: [] });
+};
+
 export const getUserNodePackages = (): UserNodePackages => {
   const userNodePackages: UserNodePackages = store.get(USER_NODE_PACKAGES_KEY);
   return userNodePackages;
