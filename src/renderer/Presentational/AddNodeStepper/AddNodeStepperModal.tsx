@@ -43,19 +43,14 @@ const AddNodeStepperModal = ({
     useState<AddNodeConfigurationValues>();
   const [sNodeRequirements, setNodeRequirements] =
     useState<SystemRequirements>();
-  const [sSystemData, setSystemData] = useState<SystemData>();
   const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
 
-  const getData = async () => {
-    setSystemData(await electron.getSystemInfo());
-  };
   const fetchNodeLibrary = async () => {
     const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
     setNodeLibrary(nodeLibrary);
   };
 
   useEffect(() => {
-    getData();
     fetchNodeLibrary();
   }, []);
 
@@ -163,7 +158,6 @@ const AddNodeStepperModal = ({
           <NodeRequirements
             type="modal"
             nodeRequirements={sNodeRequirements}
-            systemData={sSystemData}
             nodeStorageLocation={modalConfig?.storageLocation}
           />
         );

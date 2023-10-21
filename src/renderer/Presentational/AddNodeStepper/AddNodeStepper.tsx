@@ -53,17 +53,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     useState<SystemRequirements>();
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
 
-  const [sSystemData, setSystemData] = useState<SystemData>();
-
-  const getData = async () => {
-    setSystemData(await electron.getSystemInfo());
-  };
-
-  useEffect(() => {
-    // on load, refresh the static data
-    getData();
-  }, []);
-
   // Load ALL node spec's when AddNodeStepper is created
   //  This can later be optimized to only retrieve NodeSpecs as needed
   useEffect(() => {
@@ -282,7 +271,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         stepScreen = (
           <NodeRequirements
             nodeRequirements={sEthereumNodeRequirements}
-            systemData={sSystemData}
             nodeStorageLocation={sNodeStorageLocation}
           />
         );
