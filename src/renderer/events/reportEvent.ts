@@ -3,7 +3,6 @@ import mixpanel from 'mixpanel-browser';
 import { MP_PROJECT_ENV, MP_PROJECT_TOKEN } from './environment';
 import { NNEvent } from './events';
 import electron from '../electronGlobal';
-import { NodePackageMap } from 'common/node';
 
 let debugInfo: any;
 const getDebugInfo = async (): Promise<any> => {
@@ -39,7 +38,7 @@ export const setRemoteEventReportingEnabled = (isEnabled: boolean) => {
 };
 
 export type ReportEventData = {
-  [x: string]: string | number | boolean | string[] | NodePackageMap;
+  [x: string]: string | number | boolean | string[] | any;
 };
 /**
  * Components should use this to report significant events. Events will be
