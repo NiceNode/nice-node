@@ -45,6 +45,7 @@ export type AddNodeConfigurationValues = {
 };
 export interface AddNodeConfigurationProps {
   nodeId?: NodeId;
+  nodeLibrary?: NodeLibrary;
   onChange?: (newValue: AddNodeConfigurationValues) => void;
   nodePackageConfig?: AddNodeConfigurationValues;
   shouldHideTitle?: boolean;
@@ -65,6 +66,7 @@ const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
 const AddNodeConfiguration = ({
   nodeId,
   nodePackageConfig,
+  nodeLibrary,
   shouldHideTitle,
   onChange,
 }: AddNodeConfigurationProps) => {
@@ -82,7 +84,6 @@ const AddNodeConfiguration = ({
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>(
     nodePackageConfig?.storageLocation || '',
   );
-  const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
   const [sNodePackageLibrary, setNodePackageLibrary] =
     useState<NodePackageLibrary>();
   const [sClientNodeSpecifications, setClientNodeSpecifications] = useState<
@@ -115,8 +116,6 @@ const AddNodeConfiguration = ({
       const nodePackageLibrary: NodePackageLibrary =
         await electron.getNodePackageLibrary();
       setNodePackageLibrary(nodePackageLibrary);
-      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
-      setNodeLibrary(nodeLibrary);
     };
     fetchNodeLibrarys();
   }, []);
@@ -139,7 +138,7 @@ const AddNodeConfiguration = ({
           // Set the pre-selected client as the first for each service
           const option = service.nodeOptions[0];
           const nodeSpec =
-            typeof option === 'string' ? sNodeLibrary?.[option] : option;
+            typeof option === 'string' ? nodeLibrary?.[option] : option;
           if (nodeSpec) {
             clientSelections[service.serviceId] =
               nodeSpecToSelectOption(nodeSpec);
@@ -149,19 +148,19 @@ const AddNodeConfiguration = ({
     }
     setNodePackageServices(clients);
     setClientSelections(clientSelections);
-  }, [sNodePackageSpec, sNodeLibrary]);
+  }, [sNodePackageSpec, nodeLibrary]);
 
   useEffect(() => {
     const nodeSpecs: NodeSpecification[] = [];
     Object.keys(sClientSelections).forEach((serviceId) => {
       const selectOption = sClientSelections[serviceId];
-      const nodeSpec = sNodeLibrary?.[selectOption.value];
+      const nodeSpec = nodeLibrary?.[selectOption.value];
       if (nodeSpec) {
         nodeSpecs.push(nodeSpec);
       }
     });
     setClientNodeSpecifications(nodeSpecs);
-  }, [sClientSelections, sNodeLibrary]);
+  }, [sClientSelections, nodeLibrary]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -246,7 +245,7 @@ const AddNodeConfiguration = ({
         for (let i = 0; i < service.nodeOptions.length; i++) {
           const option = service.nodeOptions[i];
           const nodeSpec =
-            typeof option === 'string' ? sNodeLibrary?.[option] : option;
+            typeof option === 'string' ? nodeLibrary?.[option] : option;
           if (nodeSpec) {
             options.push(nodeSpecToSelectOption(nodeSpec));
           }

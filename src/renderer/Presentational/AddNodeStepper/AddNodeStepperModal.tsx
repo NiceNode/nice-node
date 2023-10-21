@@ -6,14 +6,9 @@ import { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelec
 import { ModalConfig } from '../ModalManager/modalUtils';
 import { componentContainer, container } from './addNodeStepper.css';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
-import { SystemData } from '../../../main/systemInfo';
 import { SystemRequirements } from '../../../common/systemRequirements';
 import electron from '../../electronGlobal';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
-
-import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
-import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
-import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import AddNode, { AddNodeValues } from '../AddNode/AddNode';
 import AddNodeConfiguration, {
@@ -25,6 +20,7 @@ export interface AddNodeStepperModalProps {
   modal?: boolean;
   modalConfig: ModalConfig;
   modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
+  nodeLibrary: NodeLibrary;
   step: number;
   disableSaveButton: (value: boolean) => void;
   setIsPodmanRunning: (value: boolean) => void;
@@ -34,6 +30,7 @@ const AddNodeStepperModal = ({
   modal = false,
   modalConfig,
   modalOnChangeConfig,
+  nodeLibrary,
   step,
   disableSaveButton,
   setIsPodmanRunning,
@@ -43,16 +40,6 @@ const AddNodeStepperModal = ({
     useState<AddNodeConfigurationValues>();
   const [sNodeRequirements, setNodeRequirements] =
     useState<SystemRequirements>();
-  const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
-
-  const fetchNodeLibrary = async () => {
-    const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
-    setNodeLibrary(nodeLibrary);
-  };
-
-  useEffect(() => {
-    fetchNodeLibrary();
-  }, []);
 
   const onChangeAddNodeConfiguration = (
     newValue: AddNodeConfigurationValues,
@@ -74,7 +61,6 @@ const AddNodeStepperModal = ({
 
   useEffect(() => {
     const { clientSelections, storageLocation } = modalConfig;
-    const nodeLibrary = sNodeLibrary;
     if (nodeLibrary && clientSelections && storageLocation) {
       const reqs: SystemRequirements[] = [];
       // eslint-disable-next-line
@@ -103,7 +89,7 @@ const AddNodeStepperModal = ({
         console.error(e);
       }
     }
-  }, [modalConfig, sNodeLibrary]);
+  }, [modalConfig, nodeLibrary]);
 
   const setNode = useCallback(
     (nodeSelectOption: SelectOption, nodeConfig: AddNodeValues) => {
@@ -147,6 +133,7 @@ const AddNodeStepperModal = ({
         stepScreen = (
           <AddNodeConfiguration
             nodeId={sNodeConfig?.node?.value}
+            nodeLibrary={nodeLibrary}
             nodePackageConfig={sEthereumNodeConfig}
             onChange={onChangeAddNodeConfiguration}
             shouldHideTitle

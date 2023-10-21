@@ -38,11 +38,14 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
 
   useEffect(() => {
     reportEvent('OpenAddNodeModal');
-    const nodePackageLibrary: NodePackageLibrary =
-      electron.getNodePackageLibrary();
-    setNodePackageLibrary(nodePackageLibrary);
-    const nodeLibrary: NodeLibrary = electron.getNodeLibrary();
-    setNodeLibrary(nodeLibrary);
+    const fetchNodeLibrarys = async () => {
+      const nodePackageLibrary: NodePackageLibrary =
+        await electron.getNodePackageLibrary();
+      setNodePackageLibrary(nodePackageLibrary);
+      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
+      setNodeLibrary(nodeLibrary);
+    };
+    fetchNodeLibrarys();
   }, []);
 
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
@@ -229,6 +232,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     >
       <AddNodeStepperModal
         step={step}
+        nodeLibrary={sNodeLibrary}
         setIsPodmanRunning={setIsPodmanRunning}
         modal
         modalConfig={modalConfig}

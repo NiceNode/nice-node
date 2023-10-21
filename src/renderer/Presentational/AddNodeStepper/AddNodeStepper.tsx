@@ -10,7 +10,6 @@ import AddNode, { AddNodeValues } from '../AddNode/AddNode';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import { SystemRequirements } from '../../../common/systemRequirements';
-import { SystemData } from '../../../main/systemInfo';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
 import { updateSelectedNodePackageId } from '../../state/node';
 import { useAppDispatch } from '../../state/hooks';
@@ -261,6 +260,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       case 1:
         stepScreen = (
           <AddNodeConfiguration
+            nodeLibrary={sNodeLibrary}
             nodeId={sNode?.node?.value}
             onChange={onChangeAddNodeConfiguration}
           />
