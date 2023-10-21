@@ -34,18 +34,15 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const { t } = useTranslation();
   const { t: g } = useTranslation('genericComponents');
 
-  useEffect(() => {}, []);
+  // useEffect(() => {}, []);
 
   useEffect(() => {
     reportEvent('OpenAddNodeModal');
-    const fetchNodeLibrarys = async () => {
-      const nodePackageLibrary: NodePackageLibrary =
-        await electron.getNodePackageLibrary();
-      setNodePackageLibrary(nodePackageLibrary);
-      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
-      setNodeLibrary(nodeLibrary);
-    };
-    fetchNodeLibrarys();
+    const nodePackageLibrary: NodePackageLibrary =
+      electron.getNodePackageLibrary();
+    setNodePackageLibrary(nodePackageLibrary);
+    const nodeLibrary: NodeLibrary = electron.getNodeLibrary();
+    setNodeLibrary(nodeLibrary);
   }, []);
 
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {

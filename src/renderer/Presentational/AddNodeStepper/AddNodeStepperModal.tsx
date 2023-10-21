@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import { ModalConfig } from '../ModalManager/modalUtils';
-import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
 import { componentContainer, container } from './addNodeStepper.css';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import { SystemData } from '../../../main/systemInfo';
@@ -111,24 +110,25 @@ const AddNodeStepperModal = ({
     }
   }, [modalConfig, sNodeLibrary]);
 
-  const setNode = (
-    nodeSelectOption: SelectOption,
-    nodeConfig: AddNodeValues,
-  ) => {
-    const config = { ...nodeConfig, node: nodeSelectOption };
-    console.log('AddNodeStepperModal calling modalOnChangeConfig()', {
-      ...modalConfig,
-      node: nodeSelectOption.value,
-    });
-    modalOnChangeConfig({
-      ...nodeConfig,
-      node: nodeSelectOption.value,
-    });
-    // clear step 1 (client selections) when user changes node (package)
-    setEthereumNodeConfig(undefined);
-    console.log('AddNodeStepperModal setNode: config', config);
-    setNodeConfig(config);
-  };
+  const setNode = useCallback(
+    (nodeSelectOption: SelectOption, nodeConfig: AddNodeValues) => {
+      const config = { ...nodeConfig, node: nodeSelectOption };
+      console.log('AddNodeStepperModal calling modalOnChangeConfig()', {
+        ...modalConfig,
+        node: nodeSelectOption.value,
+      });
+      modalOnChangeConfig({
+        ...nodeConfig,
+        node: nodeSelectOption.value,
+      });
+      // clear step 1 (client selections) when user changes node (package)
+      setEthereumNodeConfig(undefined);
+      console.log('AddNodeStepperModal setNode: config', config);
+      setNodeConfig(config);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   const onChangeDockerInstall = useCallback((newValue: string) => {
     console.log('onChangeDockerInstall newValue ', newValue);
@@ -142,13 +142,11 @@ const AddNodeStepperModal = ({
 
   const getStepScreen = () => {
     let stepScreen = null;
-    let stepImage = step1;
     switch (step) {
       case 0:
         stepScreen = (
           <AddNode nodeConfig={sNodeConfig} setNode={setNode} shouldHideTitle />
         );
-        stepImage = step1;
         break;
       case 1:
         stepScreen = (
@@ -159,7 +157,6 @@ const AddNodeStepperModal = ({
             shouldHideTitle
           />
         );
-        stepImage = step1;
         break;
       case 2:
         stepScreen = (
@@ -170,7 +167,6 @@ const AddNodeStepperModal = ({
             nodeStorageLocation={modalConfig?.storageLocation}
           />
         );
-        stepImage = step2;
         break;
       case 3:
         stepScreen = (
@@ -180,18 +176,11 @@ const AddNodeStepperModal = ({
             type="modal"
           />
         );
-        stepImage = step3;
         break;
       default:
     }
 
-    return (
-      <div style={{ height: '100%' }}>
-        <ContentWithSideArt modal={modal} graphic={stepImage}>
-          {stepScreen}
-        </ContentWithSideArt>
-      </div>
-    );
+    return <div style={{ height: '100%' }}>{stepScreen}</div>;
   };
 
   const modalStyle = modal ? 'modal' : '';

@@ -5,7 +5,7 @@ import { setModalState } from '../../../state/modal';
 import { useAppDispatch } from '../../../state/hooks';
 import Button, { ButtonProps } from '../Button/Button';
 import { NodeOverviewProps } from '../consts';
-import { NodeIcon } from '../NodeIcon/NodeIcon';
+import NodeIcon from '../NodeIcon/NodeIcon';
 import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
 import { Menu } from '../Menu/Menu';
 import { MenuItem } from '../MenuItem/MenuItem';

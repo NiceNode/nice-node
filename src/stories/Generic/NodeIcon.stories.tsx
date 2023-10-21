@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { NodeIcon } from '../../renderer/Generics/redesign/NodeIcon/NodeIcon';
+import NodeIcon from '../../renderer/Generics/redesign/NodeIcon/NodeIcon';
 
 export default {
   title: 'Generic/NodeIcon',

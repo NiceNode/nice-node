@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
-import { NodeIcon } from '../NodeIcon/NodeIcon';
+import NodeIcon from '../NodeIcon/NodeIcon';
 import {
   container,
   selectedContainer,

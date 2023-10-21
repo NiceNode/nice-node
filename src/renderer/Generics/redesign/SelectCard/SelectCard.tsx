@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NodeIconId } from 'renderer/assets/images/nodeIcons';
-import { NodeIcon } from '../NodeIcon/NodeIcon';
+import NodeIcon from '../NodeIcon/NodeIcon';
 import { Label } from '../Label/Label';
 import {
   container,

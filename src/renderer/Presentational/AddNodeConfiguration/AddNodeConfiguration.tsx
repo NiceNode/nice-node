@@ -221,21 +221,20 @@ const AddNodeConfiguration = ({
     return <>No selected Node found</>;
   }
 
+  const { displayName, addNodeDescription, specId } = sNodePackageSpec;
+
   return (
     <div className={container}>
       {shouldHideTitle !== true && (
         <div className={titleFont}>
-          {t('LaunchAVarNode', { nodeName: sNodePackageSpec.displayName })}
+          {t('LaunchAVarNode', { nodeName: displayName })}
         </div>
       )}
       <div>
         <div className={descriptionFont}>
-          <>
-            {sNodePackageSpec?.addNodeDescription ??
-              t('AddNodeConfigurationDescription')}
-          </>
+          <>{addNodeDescription ?? t('AddNodeConfigurationDescription')}</>
         </div>
-        {sNodePackageSpec?.specId === 'ethereum' && (
+        {specId === 'ethereum' && (
           <ExternalLink
             text={t('LearnMoreClientDiversity')}
             url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
