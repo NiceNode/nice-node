@@ -3,9 +3,55 @@ import logger from './logger';
 import { reportEvent } from './events';
 import { getUserNodePackagesWithNodes } from './state/nodePackages';
 import store from './state/store';
+import { NodeId, NodeStatus, UserNodePackages } from '../common/node';
 
 const CRON_ONCE_A_DAY = '0 0 * * *';
 // const CRON_ONCE_A_DAY = '* * * * *'; // one minute for testing
+
+type NodeReportData = {
+  specId: string;
+  specVersion: string;
+  status: NodeStatus;
+  diskUsedGBs?: number;
+};
+
+type PackageReportData = {
+  specId: string;
+  specVersion: string;
+  status: NodeStatus;
+  nodes: Record<NodeId, NodeReportData>;
+};
+export const reportDataForNodePackages = (
+  userNodePackages: UserNodePackages,
+) => {
+  const reportData: Record<NodeId, PackageReportData> = {};
+
+  userNodePackages?.nodeIds.forEach((nodeId: NodeId) => {
+    const nodePackage = userNodePackages.nodes[nodeId];
+    const packageReportData: PackageReportData = {
+      specId: nodePackage.spec.specId,
+      specVersion: nodePackage.spec.version,
+      status: nodePackage.status,
+      nodes: {},
+    };
+
+    nodePackage.nodes.forEach((node) => {
+      let diskUsedGBs;
+      if (node.runtime?.usage?.diskGBs?.[0]?.y !== undefined) {
+        diskUsedGBs = node.runtime.usage.diskGBs[0].y;
+      }
+      packageReportData.nodes[node.id] = {
+        specId: node.spec.specId,
+        specVersion: node.spec.version,
+        status: node.status,
+        diskUsedGBs,
+      };
+    });
+
+    reportData[nodeId] = packageReportData;
+  });
+  return reportData;
+};
 
 const dailyReportFunc = async () => {
   const lastDailyReportTimestamp = store.get(
@@ -24,8 +70,13 @@ const dailyReportFunc = async () => {
       'Cron dailyReportJob: it has been more than a day. Reporting dailyReport.',
     );
     const userNodePackages = await getUserNodePackagesWithNodes();
-    // console.log('userNodePackages: ', JSON.stringify(userNodePackages));
-    reportEvent('DailyUserReport', userNodePackages);
+    // console.log(
+    //   'userNodePackages: ',
+    //   JSON.stringify(userNodePackages, null, 2),
+    // );
+    const reportData = reportDataForNodePackages(userNodePackages);
+    // console.log('reportData: ', JSON.stringify(reportData));
+    reportEvent('DailyUserReport', reportData);
     store.set('lastDailyReportTimestamp', nowTimestamp);
   }
 };
