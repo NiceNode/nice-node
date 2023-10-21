@@ -58,7 +58,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     const fetchNodeLibrarys = async () => {
       const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
       setNodeLibrary(nodeLibrary);
-
       const nodePackageLibrary: NodePackageLibrary =
         await electron.getNodePackageLibrary();
       setNodePackageLibrary(nodePackageLibrary);
@@ -249,10 +248,10 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     [sNodeLibrary],
   );
 
-  const getStepScreen = (step: number) => {
+  const getStepScreen = () => {
     let stepScreen = null;
     let stepImage = step1;
-    switch (step) {
+    switch (sStep) {
       case 0:
         stepScreen = <AddNode onChange={onChangeAddNode} />;
         stepImage = step1;
@@ -299,25 +298,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   return (
     <div className={container}>
       <div className={componentContainer}>
-        {/* Step 0 - select node */}
-        <div style={{ display: sStep === 0 ? '' : 'none', height: '100%' }}>
-          {getStepScreen(0)}
-        </div>
-
-        {/* Step 1 - select node clients */}
-        <div style={{ display: sStep === 1 ? '' : 'none', height: '100%' }}>
-          {getStepScreen(1)}
-        </div>
-
-        {/* Step 2 - Node requirements */}
-        <div style={{ display: sStep === 2 ? '' : 'none', height: '100%' }}>
-          {getStepScreen(2)}
-        </div>
-
-        {/* Step 3 - If Podman is not installed */}
-        <div style={{ display: sStep === 3 ? '' : 'none', height: '100%' }}>
-          {getStepScreen(3)}
-        </div>
+        <div style={{ height: '100%' }}>{getStepScreen()}</div>
       </div>
       <Stepper
         step={sStep}
