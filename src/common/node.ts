@@ -87,7 +87,8 @@ export type NodePackage = {
   lastStarted?: string;
   lastStopped?: string;
 };
-type NodePackageMap = Record<string, NodePackage>;
+export type NodePackageMap = Record<string, NodePackage>;
+
 export type UserNodePackages = {
   nodes: NodePackageMap;
   nodeIds: string[];

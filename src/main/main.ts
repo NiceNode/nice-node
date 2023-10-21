@@ -11,10 +11,9 @@ import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import * as Sentry from '@sentry/electron/main';
 import Store from 'electron-store';
-
+import cron from 'cron';
 import logger from './logger';
 import MenuBuilder from './menu';
-import cron from 'cron';
 import { resolveHtmlPath } from './util';
 import { fixPathEnvVar } from './util/fixPathEnvVar';
 import { setWindow } from './messenger';
@@ -31,6 +30,7 @@ import * as systemInfo from './systemInfo';
 import { setCorsForNiceNode } from './corsMiddleware';
 import * as updater from './updater';
 import * as monitor from './monitor';
+import { reportEvent } from './events';
 
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
@@ -140,21 +140,20 @@ const createWindow = async () => {
   // Intercepts web requests from the UI an internet and sets origins
   setCorsForNiceNode(mainWindow);
 
-  const dailyReportJob = new cron.CronJob('0 0 * * *', () => {
+  const dailyReportJob = new cron.CronJob('0 0 * * *', async () => {
     const store = new Store();
     const lastDailyReportTimestamp = store.get('lastDailyReportTimestamp') as number;
     const oneDayAgo = Date.now() - 23 * 60 * 60 * 1000 - 59 * 60 * 1000; // 23 hours and 59 minutes ago
     if (lastDailyReportTimestamp < oneDayAgo) {
      // It's been more than a day, proceed with the report
-     getUserNodePackagesWithNodes();
+     const userNodePackages = await getUserNodePackagesWithNodes();
+     reportEvent('DailyUserReport', userNodePackages);
     }
   });
 
   // Start the cron job
   dailyReportJob.start();
 };
-
-
 
 /**
  * Add event listeners...

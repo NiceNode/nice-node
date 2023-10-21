@@ -178,13 +178,16 @@ export const getUserNodePackagesWithNodes = async () => {
   const userNodePackages = await getUserNodePackages();
   const userNodes = await getUserNodes();
 
-  userNodePackages.forEach((nodePackage: NodePackage) => {
+  userNodePackages?.nodeIds.forEach((nodeId: NodeId) => {
+    const nodePackage = userNodePackages.nodes[nodeId];
     const nodes: Node[] = [];
-    nodePackage.services.map((service) => {
+
+    nodePackage.services.forEach((service) => {
       const nodeId: NodeId = service.node.id;
       const node = userNodes?.nodes[nodeId];
-      nodes.push(node)
+      nodes.push(node);
     });
     nodePackage.nodes = nodes;
   });
+  return userNodePackages;
 };
