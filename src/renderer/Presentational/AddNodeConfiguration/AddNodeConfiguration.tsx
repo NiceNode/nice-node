@@ -46,6 +46,7 @@ export type AddNodeConfigurationValues = {
 export interface AddNodeConfigurationProps {
   nodeId?: NodeId;
   nodeLibrary?: NodeLibrary;
+  nodePackageLibrary?: NodePackageLibrary;
   onChange?: (newValue: AddNodeConfigurationValues) => void;
   nodePackageConfig?: AddNodeConfigurationValues;
   shouldHideTitle?: boolean;
@@ -67,6 +68,7 @@ const AddNodeConfiguration = ({
   nodeId,
   nodePackageConfig,
   nodeLibrary,
+  nodePackageLibrary,
   shouldHideTitle,
   onChange,
 }: AddNodeConfigurationProps) => {
@@ -84,8 +86,6 @@ const AddNodeConfiguration = ({
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>(
     nodePackageConfig?.storageLocation || '',
   );
-  const [sNodePackageLibrary, setNodePackageLibrary] =
-    useState<NodePackageLibrary>();
   const [sClientNodeSpecifications, setClientNodeSpecifications] = useState<
     NodeSpecification[]
   >([]);
@@ -112,19 +112,10 @@ const AddNodeConfiguration = ({
   }, [sNodePackageSpec]);
 
   useEffect(() => {
-    const fetchNodeLibrarys = async () => {
-      const nodePackageLibrary: NodePackageLibrary =
-        await electron.getNodePackageLibrary();
-      setNodePackageLibrary(nodePackageLibrary);
-    };
-    fetchNodeLibrarys();
-  }, []);
-
-  useEffect(() => {
-    if (sNodePackageLibrary && nodeId && sNodePackageLibrary[nodeId]) {
-      setNodePackageSpec(sNodePackageLibrary[nodeId]);
+    if (nodePackageLibrary && nodeId && nodePackageLibrary[nodeId]) {
+      setNodePackageSpec(nodePackageLibrary[nodeId]);
     }
-  }, [sNodePackageLibrary, nodeId]);
+  }, [nodePackageLibrary, nodeId]);
 
   useEffect(() => {
     // initialize sClientSelections when nodePackage changes, then create options arrays for each service and all of its options
@@ -216,7 +207,7 @@ const AddNodeConfiguration = ({
   ]);
 
   if (!sNodePackageSpec) {
-    console.error(sNodePackageLibrary, nodeId);
+    console.error(nodePackageLibrary, nodeId);
     return <>No selected Node found</>;
   }
 

@@ -48,7 +48,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
 
   const [sNodeClientsAndSettings, setNodeClientsAndSettings] =
     useState<AddNodeConfigurationValues>();
-  const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
+  const [sNodeRequirements, setEthereumNodeRequirements] =
     useState<SystemRequirements>();
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
 
@@ -261,6 +261,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         stepScreen = (
           <AddNodeConfiguration
             nodeLibrary={sNodeLibrary}
+            nodePackageLibrary={sNodePackageLibrary}
             nodeId={sNode?.node?.value}
             onChange={onChangeAddNodeConfiguration}
           />
@@ -270,7 +271,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       case 2:
         stepScreen = (
           <NodeRequirements
-            nodeRequirements={sEthereumNodeRequirements}
+            nodeRequirements={sNodeRequirements}
             nodeStorageLocation={sNodeStorageLocation}
           />
         );

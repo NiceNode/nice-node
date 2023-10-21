@@ -14,13 +14,17 @@ import AddNode, { AddNodeValues } from '../AddNode/AddNode';
 import AddNodeConfiguration, {
   AddNodeConfigurationValues,
 } from '../AddNodeConfiguration/AddNodeConfiguration';
-import { NodeLibrary } from '../../../main/state/nodeLibrary';
+import {
+  NodeLibrary,
+  NodePackageLibrary,
+} from '../../../main/state/nodeLibrary';
 
 export interface AddNodeStepperModalProps {
   modal?: boolean;
   modalConfig: ModalConfig;
   modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
-  nodeLibrary: NodeLibrary;
+  nodeLibrary?: NodeLibrary;
+  nodePackageLibrary?: NodePackageLibrary;
   step: number;
   disableSaveButton: (value: boolean) => void;
   setIsPodmanRunning: (value: boolean) => void;
@@ -31,6 +35,7 @@ const AddNodeStepperModal = ({
   modalConfig,
   modalOnChangeConfig,
   nodeLibrary,
+  nodePackageLibrary,
   step,
   disableSaveButton,
   setIsPodmanRunning,
@@ -134,6 +139,7 @@ const AddNodeStepperModal = ({
           <AddNodeConfiguration
             nodeId={sNodeConfig?.node?.value}
             nodeLibrary={nodeLibrary}
+            nodePackageLibrary={nodePackageLibrary}
             nodePackageConfig={sEthereumNodeConfig}
             onChange={onChangeAddNodeConfiguration}
             shouldHideTitle

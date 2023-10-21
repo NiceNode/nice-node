@@ -233,6 +233,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       <AddNodeStepperModal
         step={step}
         nodeLibrary={sNodeLibrary}
+        nodePackageLibrary={sNodePackageLibrary}
         setIsPodmanRunning={setIsPodmanRunning}
         modal
         modalConfig={modalConfig}
