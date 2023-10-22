@@ -8,6 +8,7 @@ import Node, {
 } from '../../common/node';
 import store from './store';
 import { ConfigValuesMap } from '../../common/nodeConfig';
+import { getUserNodes } from './nodes';
 
 export const USER_NODE_PACKAGES_KEY = 'userNodePackages';
 const NODES_KEY = 'nodes';
@@ -46,6 +47,10 @@ const initialize = () => {
   });
 };
 initialize();
+
+export const clear = () => {
+  store.set(USER_NODE_PACKAGES_KEY, { [NODES_KEY]: {}, [NODE_IDS_KEY]: [] });
+};
 
 export const getUserNodePackages = (): UserNodePackages => {
   const userNodePackages: UserNodePackages = store.get(USER_NODE_PACKAGES_KEY);
@@ -171,4 +176,22 @@ export const removeNodePackage = (nodeId: NodeId) => {
   const newNodeIds = nodeIds.filter((id) => id !== nodeId); // will return ['A', 'C']
   store.set(USER_NODE_PACKAGES_KEY, { nodes, nodeIds: newNodeIds });
   return nodeToRemove;
+};
+
+export const getUserNodePackagesWithNodes = async () => {
+  const userNodePackages = await getUserNodePackages();
+  const userNodes = await getUserNodes();
+
+  userNodePackages?.nodeIds.forEach((nodeId: NodeId) => {
+    const nodePackage = userNodePackages.nodes[nodeId];
+    const nodes: Node[] = [];
+
+    nodePackage.services.forEach((service) => {
+      const nodeId: NodeId = service.node.id;
+      const node = userNodes?.nodes[nodeId];
+      nodes.push(node);
+    });
+    nodePackage.nodes = nodes;
+  });
+  return userNodePackages;
 };

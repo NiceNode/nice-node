@@ -38,7 +38,7 @@ export const setRemoteEventReportingEnabled = (isEnabled: boolean) => {
 };
 
 export type ReportEventData = {
-  [x: string]: string | number | boolean | string[];
+  [x: string]: string | number | boolean | string[] | any;
 };
 /**
  * Components should use this to report significant events. Events will be
@@ -54,7 +54,7 @@ export const reportEvent = async (
     return;
   }
   const defaultProperties = await getDebugInfo();
-  mixpanel.track(event, { properties, ...defaultProperties });
+  mixpanel.track(event, { eventData: properties, context: defaultProperties });
 };
 
 export const initialize = async () => {
