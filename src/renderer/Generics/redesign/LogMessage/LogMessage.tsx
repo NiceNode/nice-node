@@ -7,6 +7,7 @@ import {
   copyStyle,
 } from './logMessage.css';
 import FloatingButton from '../FloatingButton/FloatingButton';
+import CopyButton from '../CopyButton/CopyButton';
 
 export interface LogMessageProps {
   /**
@@ -38,7 +39,8 @@ export const LogMessage = ({ timestamp, level, message }: LogMessageProps) => {
       <div className={[levelStyle, `${level}`].join(' ')}>{level}</div>
       <div className={messageStyle}>{message}</div>
       <div className={copyStyle}>
-        <FloatingButton variant="icon" iconId="copy" onClick={copy} />
+        {/* <FloatingButton variant="icon" iconId="copy" onClick={copy} /> */}
+        <CopyButton onClick={copy} />
       </div>
     </div>
   );
