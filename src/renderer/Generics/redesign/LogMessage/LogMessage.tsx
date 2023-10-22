@@ -6,7 +6,6 @@ import {
   messageStyle,
   copyStyle,
 } from './logMessage.css';
-import FloatingButton from '../FloatingButton/FloatingButton';
 import CopyButton from '../CopyButton/CopyButton';
 
 export interface LogMessageProps {
@@ -25,10 +24,6 @@ export interface LogMessageProps {
 }
 
 export const LogMessage = ({ timestamp, level, message }: LogMessageProps) => {
-  const copy = async () => {
-    await navigator.clipboard.writeText(message);
-  };
-
   return (
     <div className={container}>
       <div className={timestampStyle}>
@@ -39,8 +34,7 @@ export const LogMessage = ({ timestamp, level, message }: LogMessageProps) => {
       <div className={[levelStyle, `${level}`].join(' ')}>{level}</div>
       <div className={messageStyle}>{message}</div>
       <div className={copyStyle}>
-        {/* <FloatingButton variant="icon" iconId="copy" onClick={copy} /> */}
-        <CopyButton onClick={copy} />
+        <CopyButton data={message} />
       </div>
     </div>
   );

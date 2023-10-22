@@ -40,25 +40,3 @@ export const iconStyle = style({
   width: 16,
   height: 16,
 });
-
-export const copyIcon = style({
-  bottom: 0,
-  width: 3,
-  height: 3,
-  top: -5,
-  left: '-20px',
-  color: vars.color.font70,
-  // no opacity desired here, so using background with alpha=1
-  background: vars.color.background,
-  selectors: {
-    // follows secondary button
-    '&:hover:enabled': {
-      background: vars.color.backgroundHoverGradient,
-    },
-    '&:active:enabled': {
-      background: vars.color.backgroundActiveGradient,
-    },
-  },
-  borderRadius: 5,
-  padding: '10px 12px',
-});
