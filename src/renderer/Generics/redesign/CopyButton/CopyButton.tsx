@@ -19,9 +19,20 @@ const CopyButton = ({ data }: CopyButtonProps) => {
       }, 2000);
     }
   };
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleClick();
+    }
+  };
 
   return (
-    <div className={copyIcon} onClick={handleClick}>
+    <div
+      className={copyIcon}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+    >
       <div className={isCopied ? checkIcon : copyIcon}>
         <Icon iconId={isCopied ? 'check' : 'copy'} />
       </div>

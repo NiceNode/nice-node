@@ -24,6 +24,11 @@ export const container = style({
   fontSize: '11px',
   lineHeight: '14px',
   letterSpacing: '0.24px',
+  selectors: {
+    '&:hover': {
+      background: vars.color.background96,
+    },
+  },
 });
 
 export const timestampStyle = style({

@@ -1,12 +1,12 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '../theme.css';
+import { common, vars } from '../theme.css';
 
 export const copyIcon = style({
   color: vars.color.font40,
   cursor: 'pointer',
   selectors: {
     '&:hover': {
-      color: '#753bf4',
+      color: common.color.purple600,
     },
   },
 });

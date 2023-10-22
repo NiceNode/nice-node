@@ -35,7 +35,7 @@ import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import Select from '../../Generics/redesign/Select/Select';
 import Linking from '../../Generics/redesign/Link/Linking';
 import { SettingChangeHandler } from './NodeSettingsWrapper';
-import CopyButton from 'renderer/Generics/redesign/CopyButton/CopyButton';
+import CopyButton from '../../Generics/redesign/CopyButton/CopyButton';
 
 export interface WalletSettingsProps {
   configValuesMap?: ConfigValuesMap;
