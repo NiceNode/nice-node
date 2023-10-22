@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Icon } from '../Icon/Icon';
 import { checkIcon, copyIcon, copyMessage } from './copyButton.css';
 
@@ -19,7 +19,7 @@ const CopyButton = ({ data }: CopyButtonProps) => {
       }, 2000);
     }
   };
-  const handleKeyDown = (event: any) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       handleClick();
     }
