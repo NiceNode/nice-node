@@ -248,7 +248,7 @@
     "@types/throttle-debounce": "^5.0.0",
     "@types/uuid": "^9.0.3",
     "@types/webpack-bundle-analyzer": "^4.6.0",
-    "@types/webpack-env": "^1.18.2",
+    "@types/webpack-env": "^1.18.3",
     "@typescript-eslint/eslint-plugin": "^5.45.1",
     "@typescript-eslint/parser": "^5.45.1",
     "@vanilla-extract/babel-plugin": "^1.2.0",
