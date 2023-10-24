@@ -1,6 +1,6 @@
 {
-  "LowDiskSpaceTitle": "Low disk space",
-  "LowDiskSpaceDescription": "Disk space is lower than 40GB",
-  "InternetConnectionDownTitle": "Internet connection down",
-  "InternetConnectionDownDescription": "All nodes affected"
+  "LowDiskSpaceTitle": "Низкое место на диске",
+  "LowDiskSpaceDescription": "Дисковое пространство меньше 40ГБ",
+  "InternetConnectionDownTitle": "Подключение к интернету отключено",
+  "InternetConnectionDownDescription": "Все узлы затронуты"
 }
