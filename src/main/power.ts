@@ -1,4 +1,4 @@
-import { app, powerSaveBlocker, powerMonitor } from 'electron';
+import { powerSaveBlocker, powerMonitor } from 'electron';
 
 // import { getIsStartOnLogin, watchIsStartOnLogin } from './state/store';
 import logger from './logger';
@@ -20,10 +20,11 @@ export const allowSuspendSystem = () => {
 };
 
 export const initialize = () => {
+  console.log('Initialize power settings...');
   // get saved settings and make sure app values are up to date
   // const isStartOnLogin = getIsStartOnLogin();
   // logger.info(`isStartOnLogin: ${isStartOnLogin}`);
-  app.setLoginItemSettings({ openAtLogin: false });
+  // app.setLoginItemSettings({ openAtLogin: false });
   // app.setLoginItemSettings({ openAtLogin: isStartOnLogin });
   // watchIsStartOnLogin((openAtLogin: boolean) => {
   //   app.setLoginItemSettings({ openAtLogin });

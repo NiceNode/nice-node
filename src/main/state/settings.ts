@@ -2,9 +2,10 @@ import { app, nativeTheme } from 'electron';
 import { getArch } from '../arch';
 import { sendMessageOnThemeChange } from '../docker/messageFrontEnd';
 import logger from '../logger';
-import { getPlatform } from '../platform';
+import { getPlatform, isLinux } from '../platform';
 
 import store from './store';
+import { setOpenAtLoginLinux } from '../util/linuxAutostartFile';
 
 // export type Settings = Record<string, string | object | boolean>;
 const SETTINGS_KEY = 'settings';
@@ -104,10 +105,22 @@ export const setThemeSetting = (theme: ThemeSetting) => {
   sendMessageOnThemeChange();
 };
 
-export const setIsOpenOnStartup = (isOpenOnStartup: boolean) => {
+export const setIsOpenOnStartup = async (isOpenOnStartup: boolean) => {
   logger.info(`Setting isOpenOnStartup to ${isOpenOnStartup}`);
   // electron tells OS to open at login
   app.setLoginItemSettings({ openAtLogin: isOpenOnStartup });
+  // Linux is not officially supported by Electron. This covers common
+  //  linux distros and standards, but not all.
+  if (isLinux()) {
+    // If this fails, do not update the store.
+    // Todo: notify user
+    try {
+      await setOpenAtLoginLinux(isOpenOnStartup);
+    } catch (err) {
+      logger.error(err);
+      return;
+    }
+  }
   store.set(`${SETTINGS_KEY}.${APP_IS_OPEN_ON_STARTUP}`, isOpenOnStartup);
   logger.info(
     `App isOpenOnStartup is ${store.get(
