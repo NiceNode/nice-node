@@ -1,5 +1,5 @@
 module.exports = {
-  extends: 'erb',
+  extends: ['erb', 'plugin:storybook/recommended'],
   rules: {
     // Javascript can handle cycles in dependencies
     'import/no-cycle': 'off',

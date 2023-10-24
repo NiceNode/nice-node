@@ -38,6 +38,7 @@ Start the app in the `dev` environment:
 ```bash
 npm start
 ```
+
 A window should pop open with NiceNode and a chrome devtools inspector running.
 
 You may need to set environment variables locally. To do so, create a `.env` file at the top level with:
