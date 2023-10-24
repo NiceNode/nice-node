@@ -92,7 +92,7 @@
   "BlockExplorer": "Block Explorer",
   "BrowserExtensionId": "Browser Extension ID",
   "UnableSetWalletConnections": "Unable to set wallet connections for this node. This node is missing configuration values for this feature.",
-  "WalletDescription": "Hook up your browser wallet to this node so you can enjoy greater security, privacy, and read speeds. Enable your favourite browser wallets below to allow access to your node. Don’t forget to add a new network in your wallet with the configuration below.",
+  "WalletDescription": "Connect your browser wallet to this node so you can enjoy greater security, privacy, and read speeds. Enable your favourite browser wallets below to allow access to your node. Don’t forget to add a new network in your wallet with the configuration below.",
   "UsingLesserKnownWallet": "Using a lesser known wallet?",
   "SelectBrowser": "If your wallet of choice is not displayed in the list above you can select the browser used for the extension and provide the extension ID to allow access.",
   "AddRow": "Add Row",
