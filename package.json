@@ -345,8 +345,8 @@
     "winston": "^3.8.2"
   },
   "devEngines": {
-    "node": ">=14.x",
-    "npm": ">=7.x"
+    "node": ">=20.x",
+    "npm": ">=9.x"
   },
   "collective": {
     "url": "https://opencollective.com/electron-react-boilerplate-594"
