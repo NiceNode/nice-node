@@ -2,17 +2,26 @@ const path = require('path');
 
 module.exports = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+
   addons: [
     path.resolve('./.storybook/vanilla-extract.js'),
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
+    '@storybook/addon-mdx-gfm',
   ],
-  framework: '@storybook/react',
+
+  framework: {
+    name: '@storybook/react-webpack5',
+    options: {},
+  },
+
   logLevel: 'debug',
+
   typescript: {
     reactDocgen: 'react-docgen-typescript-plugin',
   },
+
   webpackFinal: async (config, { configType }) => {
     // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
     // You can change the configuration based on that.
@@ -20,7 +29,7 @@ module.exports = {
 
     // disable whatever is already set to load SVGs
     config.module.rules
-      .filter((rule) => rule.test.test('.svg'))
+      .filter((rule) => rule?.test?.test('.svg'))
       .forEach((rule) => (rule.exclude = /\.svg$/i));
 
     // Make whatever fine-grained changes you need
@@ -60,7 +69,8 @@ module.exports = {
     // Return the altered config
     return config;
   },
-  core: {
-    builder: 'webpack5',
+
+  docs: {
+    autodocs: true,
   },
 };
