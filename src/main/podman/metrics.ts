@@ -1,4 +1,3 @@
-import logger from '../logger';
 import { runCommand } from './podman';
 import { ContainerStats } from './types';
 
