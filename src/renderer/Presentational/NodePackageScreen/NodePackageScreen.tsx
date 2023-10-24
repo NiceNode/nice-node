@@ -84,8 +84,17 @@ const NodePackageScreen = () => {
     isPodmanRunning = qIsPodmanRunning.data;
   }
   // temporary until network is set at the node package level
-  const [sNetworkFromClients, setNetworkFromClients] = useState<string>('');
+  const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
 
+  useEffect(() => {
+    if (selectedNodePackage?.config?.configValuesMap?.network) {
+      setNetworkNodePackage(
+        selectedNodePackage?.config?.configValuesMap?.network,
+      );
+    } else {
+      setNetworkNodePackage('');
+    }
+  }, [selectedNodePackage]);
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
   //   // Only polls network connection if there are exactly 0 peers
@@ -227,7 +236,6 @@ const NodePackageScreen = () => {
 
   useEffect(() => {
     // format for presentation
-    let guessNetworkFromClients = '';
     const formattedServices: ClientProps[] = [];
     selectedNodePackage?.services.map((service) => {
       const nodeId = service.node.id;
@@ -251,14 +259,8 @@ const NodePackageScreen = () => {
         stats: {},
       };
       formattedServices.push(serviceProps);
-
-      // temporary network parsing from client configs
-      if (node?.config?.configValuesMap?.network) {
-        guessNetworkFromClients = node?.config?.configValuesMap?.network;
-      }
     });
     setFormattedServices(formattedServices);
-    setNetworkFromClients(guessNetworkFromClients);
   }, [selectedNodePackage?.services, sUserNodes]);
 
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {
@@ -304,62 +306,20 @@ const NodePackageScreen = () => {
 
   // TODO: make this more flexible for other client specs
   const formatSpec = (info: string | undefined) => {
-    if (!info) {
-      return '';
+    let result = '';
+    if (info) {
+      result = `${info} ${sNetworkNodePackage}`;
+    } else if (sNetworkNodePackage !== '') {
+      result = `${sNetworkNodePackage}`;
     }
-    return `${info} ${sNetworkFromClients}`;
+    return result;
   };
 
-  const formatVersion = (version: string | undefined, name: string) => {
+  const formatVersion = (version: string | undefined) => {
     if (!version) {
       return '';
     }
-    const capitalize = (s: string) =>
-      (s && s[0].toUpperCase() + s.slice(1)) || '';
-
-    let regex;
-    switch (name) {
-      case 'geth':
-      case 'op-geth':
-      case 'op-node':
-        regex = /Geth\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'besu':
-        regex = /besu\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'erigon':
-        regex = /(\d+\.\d+\.\d+)-dev/;
-        break;
-      case 'nethermind':
-      case 'lighthouse':
-        // eslint-disable-next-line no-useless-escape
-        regex = new RegExp(`${capitalize(name)}\/v(\\d+\\.\\d+\\.\\d+)`);
-        break;
-      case 'lodestar':
-        regex = /Lodestar\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'prysm':
-        regex = /prysm\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'teku':
-        regex = /teku\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'nimbus':
-        regex = /Nimbus\/v(\d+\.\d+\.\d+)/;
-        break;
-      default:
-        console.log(`Version parsing not found for node name: ${name}`);
-        return version; // At least, return the unformatted version string
-    }
-
-    const match = version.match(regex);
-
-    if (match) {
-      const versionString = `v${match[1]}`;
-      return versionString;
-    }
-    console.error(`No version number found for ${name}`);
-    return '';
+    return version;
   };
 
   const clientName = spec.specId.replace('-beacon', '');
@@ -372,7 +332,7 @@ const NodePackageScreen = () => {
     name: clientName as NodeBackgroundId,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
-    version: formatVersion(nodeVersionData, clientName),
+    version: formatVersion(nodeVersionData), // todo: remove
     info: formatSpec(spec.displayTagline),
     status: {
       stopped: status === 'stopped',

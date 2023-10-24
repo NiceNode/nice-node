@@ -2,6 +2,7 @@
   "specId": "op-geth",
   "version": "1.0.0",
   "displayName": "OP Geth",
+  "displayTaglin": "Execution Client - OP Chains",
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
@@ -32,15 +33,11 @@
       "cores": 4
     },
     "memory": {
-      "minSizeGBs": 16
+      "minSizeGBs": 8
     },
     "storage": {
-      "minSizeGBs": 1600,
+      "minSizeGBs": 30,
       "ssdRequired": true
-    },
-    "internet": {
-      "minDownloadSpeedMbps": 25,
-      "minUploadSpeedMbps": 10
     },
     "docker": {
       "required": true
@@ -193,7 +190,7 @@
     "httpAddress": {
       "displayName": "HTTP-RPC server listening interface",
       "cliConfigPrefix": "--http.addr ",
-      "defaultValue": "localhost",
+      "defaultValue": "0.0.0.0",
       "uiControl": {
         "type": "text"
       },

@@ -5,7 +5,7 @@ import { Settings } from '../main/state/settings';
 import { darkTheme, lightTheme } from './Generics/redesign/theme.css';
 import { useGetSettingsQuery } from './state/settingsService';
 import { ThemeSetting } from './Presentational/Preferences/Preferences';
-import { reportEvent } from './events/reportEvent';
+import { ReportEventData, reportEvent } from './events/reportEvent';
 import { NNEvent } from './events/events';
 import { background } from './themeManager.css';
 
@@ -74,16 +74,23 @@ const ThemeManager = ({ children }: Props) => {
 
   // todo: move reportEvent logic to another component or replace on backend
   // subscribes to a channel which notifies when dark mode settings change
-  const onReportEventMessage = useCallback((event: NNEvent) => {
-    // onChange, retrieve new settings
-    console.log('theme: onReportEventMessage', event);
-    reportEvent(event);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const onReportEventMessage = useCallback(
+    (event: NNEvent, eventData?: ReportEventData) => {
+      // onChange, retrieve new settings
+      console.log('theme: onReportEventMessage', event);
+      reportEvent(event, eventData);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [],
+  );
 
+  type messageArgs = [NNEvent, ReportEventData];
   const listenForReportEventMessages = useCallback(async () => {
     console.log('theme: listenForReportEventMessages');
-    electron.ipcRenderer.on(CHANNELS.reportEvent, onReportEventMessage);
+    electron.ipcRenderer.on(CHANNELS.reportEvent, (args: messageArgs) => {
+      // console.log('reportEvent: ', args);
+      onReportEventMessage(args[0], args[1]);
+    });
     return () =>
       electron.ipcRenderer.removeListener(
         CHANNELS.reportEvent,

@@ -10,7 +10,6 @@
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import * as Sentry from '@sentry/electron/main';
-
 import logger from './logger';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -28,6 +27,7 @@ import * as systemInfo from './systemInfo';
 import { setCorsForNiceNode } from './corsMiddleware';
 import * as updater from './updater';
 import * as monitor from './monitor';
+import * as cronJobs from './cronJobs';
 
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
@@ -180,6 +180,7 @@ const initialize = () => {
   processExit.initialize();
   processExit.registerExitHandler(onExit);
   monitor.initialize();
+  cronJobs.initialize();
   console.log('app locale: ', app.getLocale());
   console.log('app LocaleCountryCode: ', app.getLocaleCountryCode());
 };

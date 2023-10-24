@@ -77,6 +77,7 @@ export type NodeService = {
   node: Node;
 };
 export type NodePackage = {
+  nodes: Node[];
   id: NodeId;
   services: NodeService[];
   spec: NodePackageSpecification;
@@ -86,7 +87,8 @@ export type NodePackage = {
   lastStarted?: string;
   lastStopped?: string;
 };
-type NodePackageMap = Record<string, NodePackage>;
+export type NodePackageMap = Record<string, NodePackage>;
+
 export type UserNodePackages = {
   nodes: NodePackageMap;
   nodeIds: string[];
@@ -170,6 +172,7 @@ export const createNodePackage = (input: {
   }
 
   const nodePackage: NodePackage = {
+    nodes: [],
     id: uuidv4(),
     spec: input.spec,
     services: [],

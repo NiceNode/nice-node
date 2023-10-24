@@ -36,9 +36,10 @@ export const findSystemStorageDetailsAtALocation = (
   });
 
   if (longestMatchBlockDevice === undefined) {
-    throw new Error(
+    console.error(
       `No storage device found for location ${nodeStorageLocation}`,
     );
+    return undefined;
   }
 
   // Find free storage
@@ -50,7 +51,8 @@ export const findSystemStorageDetailsAtALocation = (
   });
 
   if (matchedFileSystemSizes === undefined) {
-    throw new Error(`No filesystem found for location ${nodeStorageLocation}`);
+    console.error(`No filesystem found for location ${nodeStorageLocation}`);
+    return undefined;
   }
 
   // Use matched file system or blockDevice to retrieve disk name

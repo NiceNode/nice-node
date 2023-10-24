@@ -125,11 +125,11 @@ const watchPodmanEvents = async () => {
   });
 
   podmanWatchProcess.stderr?.on('data', (data) => {
-    logger.error(`podmanWatchProcess::error:: `, data);
+    logger.error(`podmanWatchProcess::stderr::error:: `, data);
   });
 
   podmanWatchProcess.on('error', (data) => {
-    logger.error(`podmanWatchProcess::error:: `, data);
+    logger.error(`podmanWatchProcess::on::error:: `, data);
   });
   podmanWatchProcess.on('disconnect', () => {
     logger.info(`podmanWatchProcess::disconnect::`);
@@ -194,22 +194,18 @@ export const getContainerDetails = async (containerIds: string[]) => {
 
 let sendLogsToUIProc: ChildProcess;
 export const stopSendingLogsToUI = () => {
-  // logger.info(`podman.stopSendingLogsToUI`);
   if (sendLogsToUIProc) {
-    logger.info(
-      'sendLogsToUI process was running for another node. Killing that process.',
-    );
     killChildProcess(sendLogsToUIProc);
   }
 };
 export const sendLogsToUI = (node: Node) => {
-  logger.info(`Starting podman.sendLogsToUI for node ${node.spec.specId}`);
+  // logger.info(`Starting podman.sendLogsToUI for node ${node.spec.specId}`);
 
   stopSendingLogsToUI();
-  logger.info(
-    'sendLogsToUI getPodmanEnvWithPath(): ',
-    getPodmanEnvWithPath().PATH,
-  );
+  // logger.info(
+  //   'sendLogsToUI getPodmanEnvWithPath(): ',
+  //   getPodmanEnvWithPath().PATH,
+  // );
   const spawnOptions: SpawnOptions = {
     stdio: [null, 'pipe', 'pipe'],
     detached: false,
@@ -282,7 +278,7 @@ export const sendLogsToUI = (node: Node) => {
   });
   // todo: restart?
   sendLogsToUIProc.on('close', (code) => {
-    // code == 0, clean exit
+    // code == 0 or null, clean exit
     // code == 1, crash
     if (rlStdErr) {
       rlStdErr.close();
@@ -290,8 +286,7 @@ export const sendLogsToUI = (node: Node) => {
     if (rlStdOut) {
       rlStdOut.close();
     }
-    logger.info(`podman.sendLogsToUI::close:: ${code}`);
-    if (code !== 0) {
+    if (code) {
       logger.error(
         `podman.sendLogsToUI::close:: with non-zero exit code ${code}`,
       );
@@ -299,11 +294,10 @@ export const sendLogsToUI = (node: Node) => {
     }
   });
   sendLogsToUIProc.on('exit', (code, signal) => {
-    // code == 0, clean exit
+    // code == 0  or null, clean exit
     // code == 1, crash
-    logger.info(`podman.sendLogsToUI::exit:: ${code}, ${signal}`);
-    if (code === 1) {
-      logger.error('podman.sendLogsToUI::exit::error::');
+    if (code) {
+      logger.error(`podman.sendLogsToUI::exit::error:: ${code}, ${signal}`);
     }
   });
 };
@@ -475,12 +469,19 @@ export const createRunCommand = (node: Node): string => {
     finalPodmanInput = podmanPortInput + (input?.docker.raw ?? '');
 
     if (podmanVolumePath) {
+      let volumePostFix = '';
+      if (isLinux()) {
+        // SELinux fix: ":z" post-fix tells podman to mark the volume as shared
+        // not required for all Linux distros, but for simplicity we include
+        // cannot set this on Mac (and probably windows)
+        volumePostFix = ':z';
+      }
       // We really do not want to have conditionals for specific nodes, however,
       //  this is justified as we iterate quickly for funding and prove NN work
       if (specId === 'hubble') {
-        finalPodmanInput = `-v "${node.runtime.dataDir}/hub":${podmanVolumePath}/.hub -v "${node.runtime.dataDir}/rocks":${podmanVolumePath}/.rocks ${finalPodmanInput}`;
+        finalPodmanInput = `-v "${node.runtime.dataDir}/hub":${podmanVolumePath}/.hub${volumePostFix} -v "${node.runtime.dataDir}/rocks":${podmanVolumePath}/.rocks${volumePostFix} ${finalPodmanInput}`;
       } else {
-        finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath} ${finalPodmanInput}`;
+        finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath}${volumePostFix} ${finalPodmanInput}`;
       }
     }
   }
@@ -533,12 +534,19 @@ export const createInitCommand = (node: Node): string => {
     finalPodmanInput = podmanPortInput + (input?.docker.raw ?? '');
 
     if (podmanVolumePath) {
+      let volumePostFix = '';
+      if (isLinux()) {
+        // SELinux fix: ":z" post-fix tells podman to mark the volume as shared
+        // not required for all Linux distros, but for simplicity we include
+        // cannot set this on Mac (and probably windows)
+        volumePostFix = ':z';
+      }
       // We really do not want to have conditionals for specific nodes, however,
       //  this is justified as we iterate quickly for funding and prove NN works
       if (specId === 'hubble') {
-        finalPodmanInput = `-v "${node.runtime.dataDir}/hub":${podmanVolumePath}/.hub -v "${node.runtime.dataDir}/rocks":${podmanVolumePath}/.rocks ${finalPodmanInput}`;
+        finalPodmanInput = `-v "${node.runtime.dataDir}/hub":${podmanVolumePath}/.hub${volumePostFix} -v "${node.runtime.dataDir}/rocks":${podmanVolumePath}/.rocks${volumePostFix} ${finalPodmanInput}`;
       } else {
-        finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath} ${finalPodmanInput}`;
+        finalPodmanInput = `-v "${node.runtime.dataDir}":${podmanVolumePath}${volumePostFix} ${finalPodmanInput}`;
       }
     }
   }
@@ -631,17 +639,15 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
 export const isPodmanInstalled = async () => {
   let bIsPodmanInstalled;
   try {
-    const infoResult = await runCommand('-v');
-    console.log('podman infoResult: ', infoResult);
+    await runCommand('-v');
+    // ex. infoResult = "podman version 4.6.2"
+    // const infoResult = await runCommand('-v');
+    // console.log('podman infoResult: ', infoResult);
     bIsPodmanInstalled = true;
-    logger.info(
-      'Podman is installed. Podman version command did not throw error.',
-    );
   } catch (err) {
+    // podman not installed
     logger.error(err);
     bIsPodmanInstalled = false;
-    // podman not installed?
-    logger.info('Podman install not found.');
   }
   return bIsPodmanInstalled;
 };
@@ -658,9 +664,9 @@ export const isPodmanRunning = async () => {
   // A virtual machine or "podman machine" is required for non-linux OS's
   const nnMachine = await getNiceNodeMachine();
   const bIsPodmanRunning = nnMachine?.Running === true;
-  if (!bIsPodmanRunning) {
-    logger.info(`Podman isn't running`);
-  }
+  // if (!bIsPodmanRunning) {
+  //   logger.info(`Podman isn't running`);
+  // }
   return bIsPodmanRunning;
 };
 

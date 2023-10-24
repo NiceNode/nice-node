@@ -74,7 +74,6 @@ const NodeScreen = () => {
       pollingInterval,
     },
   );
-
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
@@ -201,6 +200,8 @@ const NodeScreen = () => {
       rpcTranslation === 'eth-l1-beacon'
     ) {
       latestBlockNum = parseFloat(slotNumber);
+    } else if (rpcTranslation === 'farcaster-l1') {
+      latestBlockNum = qLatestBlock.data;
     }
 
     const syncedBlock =
@@ -288,74 +289,36 @@ const NodeScreen = () => {
   const { status, spec } = selectedNode;
 
   // TODO: make this more flexible for other client specs
-  const formatSpec = (info: string | undefined, network?: string) => {
+  const formatSpec = (info: string | undefined) => {
     if (!info) {
       return '';
     }
-    if (info.includes('BeaconNode')) {
-      return `Consensus Client — Ethereum ${network}`;
+    if (info.includes('Consensus') || info.includes('BeaconNode')) {
+      return `Consensus Client`;
     }
     if (info.includes('Execution')) {
-      return `Execution Client — Ethereum ${network}`;
+      return `Execution Client`;
     }
     return info;
   };
 
-  const formatVersion = (version: string | undefined, name: string) => {
+  const formatVersion = (version: string | undefined) => {
     if (!version) {
       return t('IdentifyingVersion');
     }
-    const capitalize = (s: string) =>
-      (s && s[0].toUpperCase() + s.slice(1)) || '';
 
-    let regex;
-    switch (name) {
-      case 'geth':
-      case 'op-geth':
-      case 'op-node':
-        regex = /Geth\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'reth':
-        regex = /Reth\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'besu':
-        regex = /besu\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'erigon':
-        regex = /(\d+\.\d+\.\d+)-dev/;
-        break;
-      case 'nethermind':
-      case 'lighthouse':
-        // eslint-disable-next-line no-useless-escape
-        regex = new RegExp(`${capitalize(name)}\/v(\\d+\\.\\d+\\.\\d+)`);
-        break;
-      case 'lodestar':
-        regex = /Lodestar\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'prysm':
-        regex = /prysm\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'teku':
-        regex = /teku\/v(\d+\.\d+\.\d+)/;
-        break;
-      case 'nimbus':
-        regex = /Nimbus\/v(\d+\.\d+\.\d+)/;
-        break;
-      default:
-        console.error(
-          `Can not parse node version string. Node name not found: ${name}`,
-        );
-        return version; // At least, return the unformatted version string
-    }
+    // At least, return the unformatted version string
+    let versionString = version;
 
-    const match = version.match(regex);
+    // Don't match -stable or -<commit-hash> that many nodes use
+    const genericVersionRegex = /v\d+\.\d+\.\d+(-[alpha|beta|edge]+)?/;
+    const match = version.match(genericVersionRegex);
 
     if (match) {
-      const versionString = `v${match[1]}`;
-      return versionString;
+      versionString = match[0];
     }
-    console.error(`No version number found for ${name}`);
-    return '';
+
+    return versionString;
   };
 
   const clientName = spec.specId.replace('-beacon', '');
@@ -368,10 +331,10 @@ const NodeScreen = () => {
     name: clientName as NodeBackgroundId,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
-    version: formatVersion(nodeVersionData, clientName),
+    version: formatVersion(nodeVersionData),
     info: formatSpec(
       spec.category,
-      selectedNode?.config?.configValuesMap?.network,
+      // selectedNode?.config?.configValuesMap?.network ?? '',
     ),
     status: {
       stopped: status === NodeStatus.stopped,
@@ -395,7 +358,7 @@ const NodeScreen = () => {
     },
     onAction: onNodeAction,
   };
-  console.log('passing content to NodeScreen: ', nodeContent);
+
   return (
     <>
       <div className={backButtonContainer}>

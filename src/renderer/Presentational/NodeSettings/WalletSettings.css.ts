@@ -109,3 +109,7 @@ export const copyIcon = style({
   color: common.color.purple500,
   cursor: 'pointer',
 });
+
+export const copyButtonContainer = style({
+  position: 'relative',
+});

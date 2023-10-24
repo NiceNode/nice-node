@@ -130,17 +130,31 @@ export const MetricTypes = ({
       case 'currentBlock':
         iconId = 'slots';
         titleText = `${(statsValue || 0).toLocaleString()}`;
-        labelText = `${g('LastSynced')} ${
-          rpcTranslation === 'eth-l1-beacon' ? g('Slot') : g('Block')
-        }`;
+        if (rpcTranslation === 'farcaster-l1') {
+          labelText = `Farcaster ${g('Messages')}`;
+        } else {
+          labelText = `${g('LastSynced')} ${
+            rpcTranslation === 'eth-l1-beacon' ||
+            rpcTranslation === 'eth-l2-consensus'
+              ? g('Slot')
+              : g('Block')
+          }`;
+        }
         break;
       case 'peers':
         iconId = 'peers';
-        titleText = `${statsValue}`;
         if (statsValue === undefined) {
           titleText = `${0}`;
+        } else if (typeof statsValue === 'string') {
+          titleText = `${(parseInt(statsValue, 10) || 0).toLocaleString()}`;
+        } else {
+          titleText = `${statsValue.toLocaleString()}`;
         }
-        labelText = g('PeersConnected');
+        if (rpcTranslation === 'farcaster-l1') {
+          labelText = `FIDs ${g('Registered')}`;
+        } else {
+          labelText = g('PeersConnected');
+        }
         break;
       case 'memoryUsagePercent':
         if (typeof statsValue === 'number') {

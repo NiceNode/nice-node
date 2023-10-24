@@ -1,4 +1,3 @@
-import logger from '../logger';
 import { runCommand } from './podman';
 import { ContainerStats } from './types';
 
@@ -27,7 +26,8 @@ export const getAllContainerMetrics = async (): Promise<ContainerStats[]> => {
     }
     return parsedContainerStats;
   } catch (err) {
-    logger.error('Unable to get podman container stats');
+    // Podman is likely not running
+    // console.error('Unable to get podman container stats');
   }
   return [];
 };

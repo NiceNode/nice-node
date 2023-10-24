@@ -10,4 +10,4 @@ Want to add a new node? Create a new folder with a spec file. Use one of the exi
 
 ## Questions
 
-Join the [discord](https://discord.gg/Juchd4th) and get help with creating or modifying a node spec
+Join the [discord](https://discord.gg/k3dpYU4Pn9) and get help with creating or modifying a node spec

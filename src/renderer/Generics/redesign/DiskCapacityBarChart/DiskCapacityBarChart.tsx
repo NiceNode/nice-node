@@ -14,7 +14,6 @@ import {
   size,
   colorBox,
 } from './diskCapacityBarChart.css';
-import { common } from '../theme.css';
 
 export interface DiskCapacityBarChartProps {
   freeSpace: number;
@@ -32,6 +31,7 @@ const DiskCapacityBarChart = ({
   const otherSpace = totalSpace - freeSpace;
   const otherPercentage = (otherSpace / totalSpace) * 100;
   const clientPercentage = (clientSpace / totalSpace) * 100;
+
   const freePercentage = (freeSpace / totalSpace) * 100;
   const capitalize = (s: string) =>
     (s && s[0].toUpperCase() + s.slice(1)) || '';
@@ -47,7 +47,8 @@ const DiskCapacityBarChart = ({
         <div
           className={`${section} ${client}`}
           style={{
-            backgroundColor: common.color[name],
+            backgroundColor: 'rgba(76, 128, 246, 1)',
+            // backgroundColor: common.color[name],
             width: `${clientPercentage}%`,
           }}
         />
@@ -69,7 +70,8 @@ const DiskCapacityBarChart = ({
         <div className={legend}>
           <div
             className={colorBox}
-            style={{ backgroundColor: common.color[name] }}
+            // style={{ backgroundColor: common.color[name] }}
+            style={{ backgroundColor: 'rgba(76, 128, 246, 1)' }}
           />
           <div className={labelContainer}>
             <div className={label}>

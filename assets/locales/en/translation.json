@@ -92,7 +92,7 @@
   "BlockExplorer": "Block Explorer",
   "BrowserExtensionId": "Browser Extension ID",
   "UnableSetWalletConnections": "Unable to set wallet connections for this node. This node is missing configuration values for this feature.",
-  "WalletDescription": "Hook up your browser wallet to this node so you can enjoy greater security, privacy, and read speeds. Enable your favourite browser wallets below to allow access to your node. Don’t forget to add a new network in your wallet with the configuration below.",
+  "WalletDescription": "Connect your browser wallet to this node so you can enjoy greater security, privacy, and read speeds. Enable your favourite browser wallets below to allow access to your node. Don’t forget to add a new network in your wallet with the configuration below.",
   "UsingLesserKnownWallet": "Using a lesser known wallet?",
   "SelectBrowser": "If your wallet of choice is not displayed in the list above you can select the browser used for the extension and provide the extension ID to allow access.",
   "AddRow": "Add Row",
@@ -130,7 +130,6 @@
   "ResetNodeSettingsQuestion": "Are you sure you want to reset all node settings to defaults?",
   "Appearance": "Appearance",
   "AutoFollowsComputerSetting": "Auto (Follows computer setting)",
-  "DataLocation": "Data location",
   "ChangingLocation": "Changing location only supported on Mac & Linux and only locations under /Users/<current-user>/ or /Volumes/",
   "DarkMode": "Dark mode",
   "HideAdvancedOptions": "Hide advanced options",
@@ -153,6 +152,7 @@
   "InitialSyncDescription": "When adding a node it first needs to catch up on the history of the network. This process downloads all the necessary data and might take a couple of days. After synchronization is complete your node will be online and part of the network.",
   "MoreResources": "More resources",
   "Clients": "Clients",
+  "Client": "Client",
   "About": "About",
   "Logs": "Logs"
 }

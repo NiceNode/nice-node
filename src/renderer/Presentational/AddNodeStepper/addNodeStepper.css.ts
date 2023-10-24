@@ -9,6 +9,7 @@ export const container = style({
   selectors: {
     [`&.modal`]: {
       width: 560,
+      height: 'auto',
     },
   },
   backgroundColor: vars.color.background,
@@ -17,7 +18,9 @@ export const container = style({
 export const componentContainer = style({
   width: '100%',
   flexGrow: 1,
-  overflow: 'visible',
+  // Overflow hidden keeps the content and art container from growing
+  //  more than 100% height and having a scroll
+  overflow: 'hidden',
   boxSizing: 'border-box',
 });
 

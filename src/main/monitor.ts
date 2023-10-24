@@ -56,8 +56,6 @@ export const checkSystemHardware = async () => {
   if (!net.isOnline()) {
     warnings.push(`Internet connection may be disconnected.`);
     addNotification(NOTIFICATIONS.WARNING.CONNECTION_DOWN);
-  } else {
-    logger.info(`Internet connection appears connected.`);
   }
   logger.info(warnings);
   return warnings;
@@ -70,7 +68,7 @@ export const updateNodeLastSyncedBlock = async (
   const node = storeNodes.getNode(nodeId);
   if (node) {
     if (block !== undefined) {
-      logger.info(`Synced block ${block} for nodeId ${nodeId}`);
+      // logger.info(`Synced block ${block} for nodeId ${nodeId}`);
       node.runtime.usage.syncedBlock = block;
       storeNodes.updateNode(node);
     }

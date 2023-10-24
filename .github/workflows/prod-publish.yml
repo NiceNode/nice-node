@@ -19,12 +19,16 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, ubuntu-latest]
 
     steps:
-      - name: Install snapcraft brew package
+      - name: Install packages for building
         run: |
-          brew install snapcraft
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt-get install --no-install-recommends -y rpm libarchive-tools
+          else
+            exit 0
+          fi
 
       - name: Used variables
         run: |
@@ -35,7 +39,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Node and NPM
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16
           cache: npm
@@ -78,4 +82,8 @@ jobs:
         run: |
           npm run postinstall
           npm run build
-          npm exec electron-builder -- --publish always --win --mac --linux
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            npm exec electron-builder -- --publish always --win --mac
+          else
+            npm exec electron-builder -- --publish always --linux
+          fi
