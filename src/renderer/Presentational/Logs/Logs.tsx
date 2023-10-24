@@ -23,6 +23,9 @@ import { LogWithMetadata } from 'main/util/nodeLogUtils';
 import FloatingButton from '../../Generics/redesign/FloatingButton/FloatingButton';
 
 export interface LogsProps {
+  /**
+   * sLogs props
+   */
   sLogs: LogWithMetadata[];
 }
 
@@ -251,7 +254,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                 <Input
                   leftIconId="search"
                   value={textFilter}
-                  placeholder="Search..."
+                  placeholder={t('Search')}
                   onChange={(text: string) => {
                     setTextFilter(text);
                   }}
