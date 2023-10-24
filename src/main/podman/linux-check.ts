@@ -73,5 +73,3 @@ export const getFailSystemRequirements = async (): Promise<
   );
   return failedRequirements;
 };
-
-getFailSystemRequirements();
