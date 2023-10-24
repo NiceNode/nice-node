@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from '../../state/store';
 
 import StorybookLanguageSelect from '../../Presentational/StorybookLanguageSelect';
-import { darkTheme, lightTheme } from './theme.css';
+import { darkTheme, lightTheme, vars } from './theme.css';
 import Button from './Button/Button';
 
 const RedesignContainerStoryBook = ({ children }: { children: ReactNode }) => {
@@ -15,7 +15,12 @@ const RedesignContainerStoryBook = ({ children }: { children: ReactNode }) => {
       <div
         id="onBoarding"
         className={isDarkTheme ? darkTheme : lightTheme}
-        style={{ display: 'flex', flexDirection: 'column', height: '90vh' }}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '90vh',
+          background: vars.color.background,
+        }}
       >
         <div
           style={{
@@ -41,9 +46,11 @@ const RedesignContainerStoryBook = ({ children }: { children: ReactNode }) => {
         <div
           style={{
             marginTop: '1em',
-            border: '1px dashed #E3E3E3',
+            border: '1px dashed',
+            borderColor: vars.color.font10,
             flexGrow: 1,
             overflow: 'auto',
+            padding: 30,
             /**
              * Then, because flex items cannot be smaller than the
              * size of their content – min-height: auto is the
