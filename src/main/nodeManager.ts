@@ -310,7 +310,8 @@ export const initialize = async () => {
           );
           nodeStore.updateNode(node);
         } catch (err) {
-          logger.error(`Docker found no container for nodeId ${node.id}`);
+          // Podman is likely stopped
+          // console.error(`Podman found no container for nodeId ${node.id}`);
           node.status = NodeStatus.stopped;
           nodeStore.updateNode(node);
         }
