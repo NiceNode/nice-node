@@ -60,7 +60,7 @@ export const mergePackageAndClientConfigValues = (
   } = mergeArgs;
 
   let mergedConfigValues: ConfigValuesMap = { ...clientConfigValues };
-  // for each packge config, look in the spec for the corresponding service configs to set
+  // for each package config, look in the spec for the corresponding service configs to set
   if (nodePackageConfigValues) {
     // For each initial package setting...
 
