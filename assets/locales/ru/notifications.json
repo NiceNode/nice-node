@@ -1,0 +1,6 @@
+{
+  "LowDiskSpaceTitle": "Низкое место на диске",
+  "LowDiskSpaceDescription": "Дисковое пространство меньше 40ГБ",
+  "InternetConnectionDownTitle": "Подключение к интернету отключено",
+  "InternetConnectionDownDescription": "Все узлы затронуты"
+}
