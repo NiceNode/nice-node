@@ -1,6 +1,6 @@
 {
-  "LowDiskSpaceTitle": "Low disk space",
-  "LowDiskSpaceDescription": "Disk space is lower than 40GB",
-  "InternetConnectionDownTitle": "Internet connection down",
-  "InternetConnectionDownDescription": "All nodes affected"
+  "LowDiskSpaceTitle": "Espacio en disco bajo",
+  "LowDiskSpaceDescription": "El espacio en disco es inferior a 40GB",
+  "InternetConnectionDownTitle": "Conexión a Internet caida",
+  "InternetConnectionDownDescription": "Todos los nodos afectados"
 }
