@@ -125,11 +125,11 @@ const watchPodmanEvents = async () => {
   });
 
   podmanWatchProcess.stderr?.on('data', (data) => {
-    logger.error(`podmanWatchProcess::error:: `, data);
+    logger.error(`podmanWatchProcess::stderr::error:: `, data);
   });
 
   podmanWatchProcess.on('error', (data) => {
-    logger.error(`podmanWatchProcess::error:: `, data);
+    logger.error(`podmanWatchProcess::on::error:: `, data);
   });
   podmanWatchProcess.on('disconnect', () => {
     logger.info(`podmanWatchProcess::disconnect::`);
@@ -648,14 +648,10 @@ export const isPodmanInstalled = async () => {
     const infoResult = await runCommand('-v');
     console.log('podman infoResult: ', infoResult);
     bIsPodmanInstalled = true;
-    logger.info(
-      'Podman is installed. Podman version command did not throw error.',
-    );
   } catch (err) {
+    // podman not installed
     logger.error(err);
     bIsPodmanInstalled = false;
-    // podman not installed?
-    logger.info('Podman install not found.');
   }
   return bIsPodmanInstalled;
 };
