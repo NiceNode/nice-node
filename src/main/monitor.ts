@@ -68,7 +68,7 @@ export const updateNodeLastSyncedBlock = async (
   const node = storeNodes.getNode(nodeId);
   if (node) {
     if (block !== undefined) {
-      logger.info(`Synced block ${block} for nodeId ${nodeId}`);
+      // logger.info(`Synced block ${block} for nodeId ${nodeId}`);
       node.runtime.usage.syncedBlock = block;
       storeNodes.updateNode(node);
     }
