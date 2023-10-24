@@ -672,9 +672,9 @@ export const isPodmanRunning = async () => {
   // A virtual machine or "podman machine" is required for non-linux OS's
   const nnMachine = await getNiceNodeMachine();
   const bIsPodmanRunning = nnMachine?.Running === true;
-  if (!bIsPodmanRunning) {
-    logger.info(`Podman isn't running`);
-  }
+  // if (!bIsPodmanRunning) {
+  //   logger.info(`Podman isn't running`);
+  // }
   return bIsPodmanRunning;
 };
 
