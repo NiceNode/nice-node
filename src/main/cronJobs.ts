@@ -75,7 +75,7 @@ const dailyReportFunc = async () => {
     //   JSON.stringify(userNodePackages, null, 2),
     // );
     const reportData = reportDataForNodePackages(userNodePackages);
-    // console.log('reportData: ', JSON.stringify(reportData));
+    logger.info('reportData: ', JSON.stringify(reportData));
     reportEvent('DailyUserReport', reportData);
     store.set('lastDailyReportTimestamp', nowTimestamp);
   }
@@ -91,5 +91,9 @@ const dailyReportJob = new CronJob(CRON_ONCE_A_DAY, async () => {
 export const initialize = () => {
   // Start the cron jobs and then run some for a first time now
   dailyReportJob.start();
-  dailyReportFunc();
+  // Wait 30 seconds for front end to load
+  // todo: send report events from backend
+  setTimeout(() => {
+    dailyReportFunc();
+  }, 30000); // 20 seconds
 };

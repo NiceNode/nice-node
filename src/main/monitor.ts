@@ -56,8 +56,6 @@ export const checkSystemHardware = async () => {
   if (!net.isOnline()) {
     warnings.push(`Internet connection may be disconnected.`);
     addNotification(NOTIFICATIONS.WARNING.CONNECTION_DOWN);
-  } else {
-    logger.info(`Internet connection appears connected.`);
   }
   logger.info(warnings);
   return warnings;
