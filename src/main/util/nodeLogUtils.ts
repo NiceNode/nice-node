@@ -204,7 +204,7 @@ export const parsePodmanLogMetadata = (
   // returns timestamp in seconds
   let timestamp = timestampFromString(nanoTimestampStr);
 
-  // If the timestamp is not a timestamp, then the log is missing a timestmap.
+  // If the timestamp is not a timestamp, then the log is missing a timestamp.
   // Or it is a multi-lined log and in this case we can only return the whole log
   let message;
   if (timestamp > 0) {
