@@ -247,7 +247,7 @@
     "@types/terser-webpack-plugin": "^5.0.4",
     "@types/throttle-debounce": "^5.0.0",
     "@types/uuid": "^9.0.3",
-    "@types/webpack-bundle-analyzer": "^4.6.0",
+    "@types/webpack-bundle-analyzer": "^4.6.2",
     "@types/webpack-env": "^1.18.3",
     "@typescript-eslint/eslint-plugin": "^5.45.1",
     "@typescript-eslint/parser": "^5.45.1",
@@ -306,7 +306,7 @@
     "typescript": "^5.1.6",
     "url-loader": "^4.1.1",
     "webpack": "^5.88.2",
-    "webpack-bundle-analyzer": "^4.7.0",
+    "webpack-bundle-analyzer": "^4.9.1",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1",
     "webpack-merge": "^5.8.0"
