@@ -101,17 +101,48 @@ export const Logs = ({ sLogs }: LogsProps) => {
     }
   };
 
-  const filteredLogMessages = logs
-    .filter((log: LogWithMetadata) => {
-      if (
-        (typeFilter === '' || log.level === typeFilter) &&
-        (textFilter === '' || log.message.includes(textFilter)) &&
-        (timeframeFilter === 0 ||
-          (log.timestamp && isWithinTimeframe(log.timestamp, timeframeFilter)))
-      ) {
+  useEffect(() => {
+    setLogs(sLogs);
+  }, [sLogs]);
+
+  // Custom filter function for case-insensitive search
+  const customFilter = (log: LogWithMetadata, searchTerm: string) => {
+    const normalizedSearchTerm = searchTerm.toLowerCase();
+    const normalizedLogMessage = log.message.toLowerCase();
+
+    for (
+      let i = 0;
+      i <= normalizedLogMessage.length - normalizedSearchTerm.length;
+      i++
+    ) {
+      let mismatchCount = 0;
+      for (let j = 0; j < normalizedSearchTerm.length; j++) {
+        if (normalizedLogMessage[i + j] !== normalizedSearchTerm[j]) {
+          mismatchCount++;
+          if (mismatchCount > 1) {
+            break;
+          }
+        }
+      }
+      if (mismatchCount <= 1) {
         return true;
       }
-      return false;
+    }
+
+    return false;
+  };
+
+  const filterLogs = () => {
+    return logs.filter((log) => customFilter(log, textFilter));
+  };
+
+  const filteredLogMessages = filterLogs()
+    .filter((log: LogWithMetadata) => {
+      return (
+        (typeFilter === '' || log.level === typeFilter) &&
+        (timeframeFilter === 0 ||
+          (log.timestamp && isWithinTimeframe(log.timestamp, timeframeFilter)))
+      );
     })
     .map((log: LogWithMetadata, index) => (
       // eslint-disable-next-line react/no-array-index-key

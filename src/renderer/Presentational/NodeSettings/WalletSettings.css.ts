@@ -113,3 +113,7 @@ export const copyIcon = style({
 export const unableSetWallet = style({
   paddingBottom: 36,
 });
+
+export const copyButtonContainer = style({
+  position: 'relative',
+});

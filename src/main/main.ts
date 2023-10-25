@@ -32,6 +32,7 @@ import * as systemInfo from './systemInfo';
 import { setCorsForNiceNode } from './corsMiddleware';
 import * as updater from './updater';
 import * as monitor from './monitor';
+import * as cronJobs from './cronJobs';
 
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
@@ -176,6 +177,7 @@ const initialize = () => {
   processExit.initialize();
   processExit.registerExitHandler(onExit);
   monitor.initialize();
+  cronJobs.initialize();
   console.log('app locale: ', app.getLocale());
   console.log('app LocaleCountryCode: ', app.getLocaleCountryCode());
 };

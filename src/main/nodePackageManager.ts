@@ -15,6 +15,7 @@ import Node, {
   NodeStatus,
 } from '../common/node';
 import * as nodePackageStore from './state/nodePackages';
+import * as nodeStore from './state/nodes';
 import {
   deleteDisk,
   getNodeSpecificationsFolder,
@@ -240,4 +241,8 @@ export const removeAllNodePackages = async () => {
     const node = nodes[i];
     await removeNodePackage(node.id, { isDeleteStorage: true });
   }
+
+  // Useful if the data in the store is stored/deleted improperly
+  nodePackageStore.clear();
+  nodeStore.clear();
 };

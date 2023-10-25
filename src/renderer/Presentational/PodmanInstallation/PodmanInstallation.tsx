@@ -80,6 +80,9 @@ const PodmanInstallation = ({
 
   const onClickDownloadAndInstall = async () => {
     setHasStartedDownload(true);
+    if (navigator.userAgent.indexOf('Linux') !== -1) {
+      setDownloadComplete(true);
+    }
     const installResult = await electron.installPodman();
     qIsPodmanInstalled.refetch();
     qIsPodmanRunning.refetch();
@@ -133,7 +136,7 @@ const PodmanInstallation = ({
   };
 
   const listenForPodmanInstallUpdates = useCallback(async () => {
-    electron.ipcRenderer.on('podman', podmanMessageListener);
+    electron.ipcRenderer.on(CHANNELS.podman, podmanMessageListener);
     electron.ipcRenderer.on(
       CHANNELS.podmanInstall,
       podmanInstallMessageListener,

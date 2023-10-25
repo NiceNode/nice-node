@@ -188,10 +188,42 @@ export const deleteDisk = async (fileOrDirPath: string) => {
 // // __dirname on Mac with npm start: /Users/johns/dev/nice-node/src
 // // __dirname on Mac, packaged: /Applications/NiceNode.app/Contents/Resources/app.asar/dist
 export const getNodeSpecificationsFolder = (): string => {
+  // logger.info(`getNodeSpecificationsFolder: __dirname: ${__dirname}`);
+  // logger.info(
+  //   `getNodeSpecificationsFolder: (process as any).resourcesPath: ${
+  //     (process as any).resourcesPath
+  //   }`,
+  // );
+
   // eslint-disable-next-line
   if (process.env.NODE_ENV === 'development') {
     return path.resolve(__dirname, '..', 'common', 'NodeSpecs');
   }
   // eslint-disable-next-line
   return path.resolve((process as any).resourcesPath, 'NodeSpecs');
+};
+
+// dev, ubuntu: __dirname:
+//  /home/johns/dev/nice-node/src/main',
+// dev, ubuntu: process.resourcesPath:
+//  /home/johns/dev/nice-node/node_modules/electron/dist/resources',
+
+// packaged, ubuntu: __dirname:
+//  /opt/NiceNode/resources/app.asar/dist/main',
+// packaged, ubuntu: process.resourcesPath:
+//  /opt/NiceNode/resources',
+export const getAssetsFolder = (): string => {
+  logger.info(`getAssetsFolder: __dirname: ${__dirname}`);
+  logger.info(
+    `getAssetsFolder: (process as any).resourcesPath: ${
+      (process as any).resourcesPath
+    }`,
+  );
+
+  // eslint-disable-next-line
+  if (process.env.NODE_ENV === 'development') {
+    return path.resolve(__dirname, '..', '..', 'assets');
+  }
+  // eslint-disable-next-line
+  return path.resolve((process as any).resourcesPath, 'assets');
 };

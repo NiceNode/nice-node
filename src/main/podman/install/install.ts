@@ -4,7 +4,7 @@ import installOnMac from './installOnMac';
 import installOnWindows from './installOnWindows';
 import installOnLinux from './installOnLinux';
 
-export const VERSION = '4.7.1';
+export const PODMAN_VERSION = '4.7.1';
 
 // eslint-disable-next-line
 const installPodman = async (): Promise<any> => {
@@ -12,9 +12,9 @@ const installPodman = async (): Promise<any> => {
 
   let result;
   if (platform.isMac()) {
-    result = await installOnMac(VERSION);
+    result = await installOnMac(PODMAN_VERSION);
   } else if (platform.isWindows()) {
-    result = await installOnWindows(VERSION);
+    result = await installOnWindows(PODMAN_VERSION);
   } else if (platform.isLinux()) {
     result = await installOnLinux();
   } else {

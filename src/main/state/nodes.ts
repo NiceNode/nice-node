@@ -47,6 +47,10 @@ const initialize = () => {
 };
 initialize();
 
+export const clear = () => {
+  store.set(USER_NODES_KEY, { [NODES_KEY]: {}, [NODE_IDS_KEY]: [] });
+};
+
 export const getUserNodes = (): UserNodes => {
   const userNodes: UserNodes = store.get(USER_NODES_KEY);
   return userNodes;

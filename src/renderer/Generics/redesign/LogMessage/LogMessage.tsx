@@ -4,7 +4,9 @@ import {
   timestampStyle,
   levelStyle,
   messageStyle,
+  copyStyle,
 } from './logMessage.css';
+import CopyButton from '../CopyButton/CopyButton';
 
 export interface LogMessageProps {
   /**
@@ -31,6 +33,9 @@ export const LogMessage = ({ timestamp, level, message }: LogMessageProps) => {
       </div>
       <div className={[levelStyle, `${level}`].join(' ')}>{level}</div>
       <div className={messageStyle}>{message}</div>
+      <div className={copyStyle}>
+        <CopyButton data={message} />
+      </div>
     </div>
   );
 };

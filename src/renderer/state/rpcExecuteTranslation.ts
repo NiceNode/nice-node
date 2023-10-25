@@ -60,7 +60,13 @@ const ethL2ConsensusProvider = new ethers.providers.JsonRpcProvider(
 // );
 // const provider = new ethers.providers.JsonRpcProvider('http://localhost:9545');
 
-type RpcCall = 'sync' | 'peers' | 'latestBlock' | 'clientVersion';
+type RpcCall =
+  | 'sync'
+  | 'peers'
+  | 'latestBlock'
+  | 'clientVersion'
+  | 'net_version'
+  | 'metrics';
 export const executeTranslation = async (
   rpcCall: RpcCall,
   rpcTranslation: string,
@@ -71,13 +77,13 @@ export const executeTranslation = async (
       const resp = await provider.send('eth_syncing');
       let isSyncing;
       let syncPercent;
-      if (resp) {
+      if (resp !== undefined) {
         if (typeof resp === 'object') {
           const syncRatio = resp.currentBlock / resp.highestBlock;
           syncPercent = (syncRatio * 100).toFixed(1);
           isSyncing = true;
         } else if (resp === false) {
-          // light client geth, it is done syncing if data is false
+          // reth, light client geth, it is done syncing if data is false
           isSyncing = false;
         }
       }
@@ -238,6 +244,16 @@ export const executeTranslation = async (
       const resp = await callFetch(`${hubbleBaseUrl}/v1/info`);
       if (resp?.version !== undefined) {
         return `v${resp.version}`;
+      }
+    } else if (rpcCall === 'latestBlock') {
+      const resp = await callFetch(`${hubbleBaseUrl}/v1/info?dbstats=1`);
+      if (resp?.dbStats?.numMessages !== undefined) {
+        return resp.dbStats.numMessages;
+      }
+    } else if (rpcCall === 'peers') {
+      const resp = await callFetch(`${hubbleBaseUrl}/v1/info?dbstats=1`);
+      if (resp?.dbStats?.numFidEvents !== undefined) {
+        return resp.dbStats.numFidEvents;
       }
     }
   } else if (rpcTranslation === 'eth-l2-starknet') {

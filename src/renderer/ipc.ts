@@ -19,8 +19,11 @@ export const initialize = async (dispatch: any) => {
   console.log('Fetching initial userNodePackages');
   dispatch(updateUserNodePackages(initUserNodePackages));
   console.log('Listening to IPC channel userNodePackages');
-  electron.ipcRenderer.on('userNodePackages', (message: UserNodePackages[]) => {
-    const userNodePackages: UserNodePackages = message[0];
-    dispatch(updateUserNodePackages(userNodePackages));
-  });
+  electron.ipcRenderer.on(
+    CHANNELS.userNodePackages,
+    (message: UserNodePackages[]) => {
+      const userNodePackages: UserNodePackages = message[0];
+      dispatch(updateUserNodePackages(userNodePackages));
+    },
+  );
 };

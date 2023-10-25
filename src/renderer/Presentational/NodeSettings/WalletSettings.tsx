@@ -28,6 +28,7 @@ import {
   selectContainer,
   buttonContainer,
   addRow,
+  copyButtonContainer,
 } from './WalletSettings.css';
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
@@ -35,6 +36,7 @@ import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import Select from '../../Generics/redesign/Select/Select';
 import Linking from '../../Generics/redesign/Link/Linking';
 import { SettingChangeHandler } from './NodeSettingsWrapper';
+import CopyButton from '../../Generics/redesign/CopyButton/CopyButton';
 
 export interface WalletSettingsProps {
   configValuesMap?: ConfigValuesMap;
@@ -273,16 +275,11 @@ export const WalletSettings = ({
       value: (
         <div className={networkValue}>
           <div>{networkDetails[key as keyof NetworkLabelsProps]}</div>
-          <Button
-            type="ghost"
-            iconId="copy"
-            variant="icon"
-            onClick={() => {
-              navigator.clipboard.writeText(
-                networkDetails[key as keyof NetworkLabelsProps],
-              );
-            }}
-          />
+          <div className={copyButtonContainer}>
+            <CopyButton
+              data={networkDetails[key as keyof NetworkLabelsProps]}
+            />
+          </div>
         </div>
       ),
     };

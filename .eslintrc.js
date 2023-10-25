@@ -1,5 +1,5 @@
 module.exports = {
-  extends: 'erb',
+  extends: ['erb', 'plugin:storybook/recommended'],
   rules: {
     // Javascript can handle cycles in dependencies
     'import/no-cycle': 'off',
@@ -35,6 +35,18 @@ module.exports = {
     ],
     'react/jsx-filename-extension': [2, { extensions: ['.jsx', '.tsx'] }],
     'array-callback-return': 'off',
+    'prefer-destructuring': [
+      'error',
+      {
+        // This is unnatural: [ someVar ] = array; someVar = array[0] is much more readable
+        VariableDeclarator: {
+          array: false,
+        },
+        AssignmentExpression: {
+          array: false,
+        },
+      },
+    ],
   },
   parserOptions: {
     ecmaVersion: 2020,

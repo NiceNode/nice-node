@@ -4,8 +4,8 @@ import { getNNDirPath } from '../../files';
 import logger from '../../logger';
 import { execAwait } from '../../execHelper';
 import { NICENODE_MACHINE_NAME } from '../machine';
-
-const iconv = require('iconv-lite');
+import { PODMAN_VERSION } from '../install/install';
+import { reportEvent } from '../../events';
 
 /**
  * Uninstall podman from Windows, and remove various configuration files
@@ -38,36 +38,40 @@ const uninstallOnWindows = async (): Promise<boolean | { error: string }> => {
         `${userHome}/.ssh/*nicenode*`,
       ];
       foldersToDelete.forEach(async (folderPath) => {
-        const rmCommand = `Remove-Item -Path ${folderPath} -Recurse -Force`;
-        ({ stdout, stderr } = await execAwait(rmCommand, {
-          log: true,
-          shell: 'powershell.exe',
-        }));
-        logger.info(`podman uninstall rm ${folderPath} ${stdout}, ${stderr}`);
+        try {
+          const rmCommand = `Remove-Item -Path ${folderPath} -Recurse -Force`;
+          ({ stdout, stderr } = await execAwait(rmCommand, {
+            log: true,
+            shell: 'powershell.exe',
+          }));
+          logger.info(`podman uninstall rm ${folderPath} ${stdout}, ${stderr}`);
+        } catch (errInner) {
+          logger.error(`remove podman dirs & files error: ${errInner}`);
+        }
       });
     } catch (err) {
       logger.error(`remove podman dirs & files error: ${err}`);
     }
 
     // This uninstall command is equivalent to the user going to Add & Remove programs UI
-    // and clicking Uninstall. msi uninstall command requires sudo.
-    const getPodmanAppIdCommand = `Get-WmiObject -Class Win32_Product -Filter "Name LIKE '%Podman%'" | Select-Object -ExpandProperty IdentifyingNumber`;
-    ({ stdout, stderr } = await execAwait(getPodmanAppIdCommand, {
-      log: true,
-      shell: 'powershell.exe',
-    }));
-    const podmanAppId = stdout.replace(/(\r\n|\n|\r)/gm, '');
-    logger.info(`podman uninstall podmanAppId ${stdout}, ${stderr}`);
-
-    const uninstallCommand = `msiexec /x ${podmanAppId} /qn /lv ${path.join(
+    // and clicking Uninstall. The exe uninstall command will prompt the user for permission.
+    const podmanExeFilePath = await path.join(
       getNNDirPath(),
-      'podman-uninstall-log.txt',
-    )}`;
-    ({ stdout, stderr } = await execAwait(uninstallCommand, {
-      log: true,
-      sudo: true,
-    }));
-    logger.info(`podman uninstall app ${stdout}, ${stderr}`);
+      `podman-${PODMAN_VERSION}-setup.exe`,
+    );
+    // todo: fix logging
+    // const logFilePath = path.join(
+    //   getNNDirPath(),
+    //   'podman-install-log.txt',
+    // );
+    // eslint-disable-next-line prefer-const
+    ({ stdout, stderr } = await execAwait(
+      `Start-Process -FilePath '${podmanExeFilePath}' -ArgumentList "/uninstall -Silent -Quiet" -Wait`,
+      { log: true, shell: 'powershell.exe' },
+    ));
+    // todo: report event if fails. Requires podman.exe specific parsing or a clever way to see
+    // if the user gave permissions to uninstall
+    console.log('podman install stdout, stderr', stdout, stderr);
 
     return true;
     // eslint-disable-next-line
@@ -75,8 +79,11 @@ const uninstallOnWindows = async (): Promise<boolean | { error: string }> => {
     console.log(err);
     logger.error(err);
     logger.info('Unable to uninstall podman.');
-    const errStr = iconv.decode(Buffer.from(err.toString()), 'ucs2');
-    return { error: `Unable to uninstall podman. ${errStr}` };
+    reportEvent('ErrorUninstallPodman', {
+      error: err.toString(),
+      podmanVersion: PODMAN_VERSION,
+    });
+    return { error: `Unable to uninstall podman. ${err}` };
   }
 };
 

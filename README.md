@@ -11,6 +11,7 @@ For the latest information, visit https://nicenode.xyz
 [![gitpoap badge](https://public-api.gitpoap.io/v1/repo/NiceNode/nice-node/badge)](https://www.gitpoap.io/gh/NiceNode/nice-node)
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=NiceNode)](https://twitter.com/NiceNodeApp)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/k3dpYU4Pn9)
+[![Crowdin](https://badges.crowdin.net/nicenode/localized.svg)](https://crowdin.com/project/nicenode)
 
 <img width="1164" alt="Nice Node Screenshot captioned work in progress" src="https://user-images.githubusercontent.com/3721291/213537206-fa5380f4-af5b-4d81-a07b-ea9072f07b24.png">
 
@@ -20,10 +21,13 @@ For the latest information, visit https://nicenode.xyz
 
 ## Install
 
+Install git, nodejs 18+, and npm.
+
 Clone the repo and install dependencies:
 
 ```bash
-git clone <nice node repo url>
+git clone https://github.com/NiceNode/nice-node.git
+cd nice-node
 npm install
 ```
 
@@ -35,12 +39,14 @@ Start the app in the `dev` environment:
 npm start
 ```
 
-To set env vars locally, create a `.env` file at the top level with:
+A window should pop open with NiceNode and a chrome devtools inspector running.
+
+You may need to set environment variables locally. To do so, create a `.env` file at the top level with:
 
 ```
-SENTRY_DSN=<...>
-MP_PROJECT_TOKEN=<...>
-MP_PROJECT_ENV=<...>
+SENTRY_DSN=fake-token
+MP_PROJECT_TOKEN=fake-token
+MP_PROJECT_ENV=dev
 NICENODE_ENV=development
 ```
 

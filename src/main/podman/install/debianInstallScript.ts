@@ -1,6 +1,8 @@
 // Same script as on https://podman.io/docs/installation, except the 'sudo' is removed as
 //  sudo-prompt will not execute a command with sudo
-export const script = `mkdir -p /etc/apt/keyrings
+export const script = `apt-get -y update -qq
+apt-get -y install curl
+mkdir -p /etc/apt/keyrings
 curl -fsSL https://download.opensuse.org/repositories/devel:kubic:libcontainers:unstable/Debian_Unstable/Release.key \
   | gpg --dearmor \
   | tee /etc/apt/keyrings/devel_kubic_libcontainers_unstable.gpg > /dev/null

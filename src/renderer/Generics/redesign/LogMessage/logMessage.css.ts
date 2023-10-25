@@ -4,6 +4,7 @@ import { vars, common } from '../theme.css';
 export const container = style({
   boxSizing: 'border-box',
   display: 'flex',
+  position: 'relative',
   flexDirection: 'row',
   alignItems: 'flex-start',
   padding: '4px 0px',
@@ -23,6 +24,11 @@ export const container = style({
   fontSize: '11px',
   lineHeight: '14px',
   letterSpacing: '0.24px',
+  selectors: {
+    '&:hover': {
+      background: vars.color.background96,
+    },
+  },
 });
 
 export const timestampStyle = style({
@@ -56,4 +62,15 @@ export const messageStyle = style({
   order: 3,
   flexGrow: 1,
   overflowWrap: 'anywhere',
+});
+
+export const copyStyle = style({
+  display: 'none',
+  position: 'absolute',
+  selectors: {
+    [`${container}:hover &`]: {
+      display: 'block',
+      right: 0,
+    },
+  },
 });
