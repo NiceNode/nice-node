@@ -1,9 +1,11 @@
 import { CHANNELS, send } from '../messenger';
+import { powerMonitor } from 'electron';
 import { didPortsChange } from '../ports';
 import Node, {
   isDockerNode,
   NodeId,
   NodeStatus,
+  NodeStoppedBy,
   UserNodes,
 } from '../../common/node';
 import store from './store';
@@ -196,4 +198,32 @@ export const removeNode = (nodeId: NodeId) => {
   const newNodeIds = nodeIds.filter((id) => id !== nodeId); // will return ['A', 'C']
   store.set(USER_NODES_KEY, { nodes, nodeIds: newNodeIds });
   return nodeToRemove;
+};
+
+powerMonitor.on('shutdown', () => {
+  restartNodes('shutdown');
+});
+
+powerMonitor.on('suspend', () => {
+  restartNodes('shutdown');
+});
+
+powerMonitor.on('resume', () => {
+  restartNodes('login');
+});
+
+const restartNodes = (reason: 'shutdown' | 'login') => {
+  const nodesToRestart = getNodes().filter(
+    (node) =>
+      node.status === NodeStatus.running &&
+      node.stoppedBy !== NodeStoppedBy.user,
+  );
+  nodesToRestart.forEach((node) => {
+    node.status = NodeStatus.starting;
+    node.stoppedBy =
+      reason === NodeStoppedBy.shutdown
+        ? NodeStoppedBy.shutdown
+        : NodeStoppedBy.niceNode;
+    updateNode(node);
+  });
 };
