@@ -30,6 +30,13 @@ export enum NodeStatus {
   updating = 'updating',
 }
 
+export enum NodeStoppedBy {
+  user = 'user',
+  niceNode = 'nice-node',
+  shutdown = 'shutdown',
+  crash = 'crash',
+}
+
 export type NodeConfig = {
   executionType?: ExecutionTypes;
   configValuesMap: ConfigValuesMap;
@@ -65,6 +72,7 @@ type Node = {
   status: NodeStatus;
   lastStarted?: string;
   lastStopped?: string;
+  stoppedBy?: NodeStoppedBy;
 };
 type NodeMap = Record<string, Node>;
 export type UserNodes = {
