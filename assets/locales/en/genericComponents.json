@@ -104,5 +104,6 @@
   "NodeSettings": "Node Settings...",
   "RemoveNode": "Remove Node...",
   "ErrorOccurred": "Error occurred",
-  "DataLocation": "Data location"
+  "DataLocation": "Data location",
+  "AvailableDiskSpace": "{{space}}GB available disk space"
 }

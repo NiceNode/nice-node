@@ -20,6 +20,13 @@ export const pathAndChangeContainer = style({
 
 export const freeStorageSpaceFontStyle = style({
   fontSize: 11,
-  lineHeight: '14px',
   color: vars.color.font50,
+  flexDirection: 'row',
+  display: 'flex',
+});
+
+export const checkCircleIcon = style({
+  width: 12,
+  height: 12,
+  marginRight: 3,
 });
