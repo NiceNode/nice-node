@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "4.5.0-alpha",
+  "version": "4.5.0-alpha-staging",
   "description": "Run a node at home, the easy way.",
   "homepage": "https://nicenode.xyz",
   "productName": "NiceNode",
@@ -100,6 +100,7 @@
         "rpm",
         "pacman"
       ],
+      "afterInstall": "nice-node",
       "synopsis": "Run a node at home, the easy way.",
       "description": "By running a node you become part of a global movement to decentralize a world of information. Prevent leaking your personal data to third party nodes. Ensure access when you need it, and don't be censored. Decentralization starts with you. Voice your choice, help your peers.",
       "category": "Network",
