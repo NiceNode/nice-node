@@ -1,0 +1,6 @@
+{
+  "LowDiskSpaceTitle": "ディスクの空き容量が少ない",
+  "LowDiskSpaceDescription": "ディスクの空き容量が40GB未満です",
+  "InternetConnectionDownTitle": "インターネット接続が切断されました",
+  "InternetConnectionDownDescription": "すべてのノードに影響があります"
+}
