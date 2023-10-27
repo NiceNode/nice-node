@@ -1,0 +1,35 @@
+{
+  "CheckForUpdates": "检查更新...",
+  "AboutNiceNode": "关于NiceNode",
+  "HideNiceNode": "隐藏NiceNode",
+  "Quit": "退出",
+
+  "Edit": "编辑",
+  "Undo": "撤销",
+  "Cut": "剪切",
+  "Copy": "复制",
+  "Paste": "粘贴",
+  "Select All": "全选",
+
+  "View": "查看",
+  "Reload": "重新加载",
+  "ToggleFullScreen": "切换全屏",
+  "ToggleDeveloperTools": "切换开发者工具",
+
+  "Window": "窗口",
+  "Minimize": "最小化",
+  "Close": "关闭",
+  "Bring All to Front": "全部带到前面",
+
+  "Help": "帮助",
+  "NiceNodeWebsite": "NiceNode 网站",
+  "ReportAProblem": "报告问题",
+  "RemoveAllNodesAndData": "删除所有节点和数据",
+  "UninstallPodman": "卸载 Podman",
+  "NuclearUninstall": "核卸载（卸载 Podman 并删除所有节点和数据）",
+  "LogMinimumSystemRequirementCheck": "记录系统最低要求检查",
+  "ShowSplashScreenAgain": "再次显示启动屏幕",
+  "CopyConfigurationDetailsToClipboard": "复制配置详细信息到剪贴板",
+  "Show Alpha Modal": "显示 Alpha 模态窗口",
+  "Check Ports": "检查端口"
+}

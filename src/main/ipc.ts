@@ -48,7 +48,6 @@ import {
   getSettings,
   setIsOpenOnStartup,
   getSetIsNotificationsEnabled,
-  setLanguage,
   setThemeSetting,
   ThemeSetting,
   setIsEventReportingEnabled,
@@ -71,6 +70,7 @@ import {
 } from './nodePackageManager';
 import { checkPorts } from './ports';
 import { getAppClientId } from './state/eventReporting';
+import { onUserChangedLanguage } from './i18nMain';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -209,7 +209,7 @@ export const initialize = () => {
   ipcMain.handle('getSettings', getSettings);
   ipcMain.handle('getAppClientId', getAppClientId);
   ipcMain.handle('setLanguage', (_event, languageCode: string) => {
-    return setLanguage(languageCode);
+    return onUserChangedLanguage(languageCode);
   });
   ipcMain.handle('setThemeSetting', (_event, theme: ThemeSetting) => {
     return setThemeSetting(theme);

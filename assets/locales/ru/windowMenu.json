@@ -1,0 +1,35 @@
+{
+  "CheckForUpdates": "Проверить наличие обновлений...",
+  "AboutNiceNode": "О NiceNode",
+  "HideNiceNode": "Скрыть NiceNode",
+  "Quit": "Выйти",
+
+  "Edit": "Редактировать",
+  "Undo": "Отмена",
+  "Cut": "Вырезать",
+  "Copy": "Копировать",
+  "Paste": "Вставить",
+  "Select All": "Выбрать все",
+
+  "View": "Просмотр",
+  "Reload": "Перезагрузить",
+  "ToggleFullScreen": "Включить полноэкранный режим",
+  "ToggleDeveloperTools": "Включить инструменты разработчика",
+
+  "Window": "Окно",
+  "Minimize": "Свернуть",
+  "Close": "Закрыть",
+  "Bring All to Front": "На передний план",
+
+  "Help": "Помощь",
+  "NiceNodeWebsite": "Веб-сайт NiceNode",
+  "ReportAProblem": "Сообщить о проблеме",
+  "RemoveAllNodesAndData": "Удалить все узлы и данные",
+  "UninstallPodman": "Удалить Podman",
+  "NuclearUninstall": "Полное удаление (удалить Podman и все узлы с данными)",
+  "LogMinimumSystemRequirementCheck": "Записать проверку минимальных системных требований",
+  "ShowSplashScreenAgain": "Показать заставку снова",
+  "CopyConfigurationDetailsToClipboard": "Копировать детали конфигурации в буфер обмена",
+  "Show Alpha Modal": "Показать альфа-модальное окно",
+  "Check Ports": "Проверить порты"
+}

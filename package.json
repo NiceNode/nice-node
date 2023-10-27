@@ -334,6 +334,7 @@
     "highcharts-react-official": "^3.2.1",
     "i18next": "^23.4.9",
     "i18next-browser-languagedetector": "^7.0.1",
+    "i18next-cli-language-detector": "^1.1.8",
     "iconv-lite": "^0.6.3",
     "mixpanel-browser": "^2.47.0",
     "moment": "^2.29.4",
@@ -350,8 +351,8 @@
     "winston": "^3.8.2"
   },
   "devEngines": {
-    "node": ">=14.x",
-    "npm": ">=7.x"
+    "node": ">=20.x",
+    "npm": ">=9.x"
   },
   "collective": {
     "url": "https://opencollective.com/electron-react-boilerplate-594"

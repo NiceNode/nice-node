@@ -1,0 +1,6 @@
+{
+  "LowDiskSpaceTitle": "Niedriger Speicherplatz",
+  "LowDiskSpaceDescription": "Der Speicherplatz ist niedriger als 40GB",
+  "InternetConnectionDownTitle": "Internetverbindung unterbrochen",
+  "InternetConnectionDownDescription": "Alle Knoten sind betroffen"
+}
