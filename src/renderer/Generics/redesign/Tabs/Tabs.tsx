@@ -57,9 +57,10 @@ export const Tabs = ({ children, id, modal }: TabsProps) => {
         <HorizontalLine />
       </div>
       <div className={[tabContent, modalStyle].join(' ')}>
-        {children
-          .filter((child) => child.props.id === activeTab)
-          .map((child) => child.props.children)}
+        {children.map((child) => {
+          if (child.props.id !== activeTab) return undefined;
+          return child.props.children;
+        })}
       </div>
     </div>
   );
