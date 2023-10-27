@@ -3,24 +3,20 @@
   "AboutNiceNode": "Acerca de NiceNode",
   "HideNiceNode": "Ocultar NiceNode",
   "Quit": "Salir",
-
   "Edit": "Editar",
   "Undo": "Deshacer",
   "Cut": "Cortar",
   "Copy": "Copiar",
   "Paste": "Pegar",
   "Select All": "Seleccionar Todo",
-
   "View": "Visualización",
   "Reload": "Recargar",
   "ToggleFullScreen": "Alternar pantalla completa",
   "ToggleDeveloperTools": "Alternar herramientas de desarrollador",
-
   "Window": "Ventana",
   "Minimize": "Minimizar",
   "Close": "Cerrar",
   "Bring All to Front": "Traer Todo al Frente",
-
   "Help": "Ayuda",
   "NiceNodeWebsite": "Sitio web de NiceNode",
   "ReportAProblem": "Informar de un problema",

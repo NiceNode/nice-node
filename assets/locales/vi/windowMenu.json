@@ -3,24 +3,20 @@
   "AboutNiceNode": "Về NiceNode",
   "HideNiceNode": "Ẩn NiceNode",
   "Quit": "Thoát",
-
   "Edit": "Chỉnh sửa",
   "Undo": "Hoàn tác",
   "Cut": "Cắt",
   "Copy": "Sao chép",
   "Paste": "Dán",
   "Select All": "Chọn tất cả",
-
   "View": "Xem",
   "Reload": "Tải lại",
   "ToggleFullScreen": "Chuyển đổi toàn màn hình",
   "ToggleDeveloperTools": "Chuyển đổi công cụ nhà phát triển",
-
   "Window": "Cửa sổ",
   "Minimize": "Thu nhỏ",
   "Close": "Đóng",
   "Bring All to Front": "Đưa tất cả lên phía trước",
-
   "Help": "Trợ giúp",
   "NiceNodeWebsite": "Trang web NiceNode",
   "ReportAProblem": "Báo cáo vấn đề",
