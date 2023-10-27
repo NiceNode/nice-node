@@ -3,24 +3,20 @@
   "AboutNiceNode": "О NiceNode",
   "HideNiceNode": "Скрыть NiceNode",
   "Quit": "Выйти",
-
   "Edit": "Редактировать",
   "Undo": "Отмена",
   "Cut": "Вырезать",
   "Copy": "Копировать",
   "Paste": "Вставить",
   "Select All": "Выбрать все",
-
   "View": "Просмотр",
   "Reload": "Перезагрузить",
   "ToggleFullScreen": "Включить полноэкранный режим",
   "ToggleDeveloperTools": "Включить инструменты разработчика",
-
   "Window": "Окно",
   "Minimize": "Свернуть",
   "Close": "Закрыть",
   "Bring All to Front": "На передний план",
-
   "Help": "Помощь",
   "NiceNodeWebsite": "Веб-сайт NiceNode",
   "ReportAProblem": "Сообщить о проблеме",
