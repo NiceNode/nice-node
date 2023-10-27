@@ -152,7 +152,8 @@
   "InitialSyncDescription": "Al añadir un nodo primero necesita ponerse al día en el historial de la red. Este proceso descarga todos los datos necesarios y puede tardar un par de días. Después de completar la sincronización, su nodo estará en línea y formará parte de la red.",
   "MoreResources": "Más recursos",
   "Clients": "Clientes",
-  "About": "Sobre",
+  "About": "Acerca",
   "Logs": "Registros",
-  "View": "Vista"
+  "View": "Vista",
+  "Node": "Nodo"
 }
