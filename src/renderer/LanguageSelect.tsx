@@ -22,11 +22,12 @@ const LanguageSelect = ({ onChange, language }: LanguageSelectProps) => {
       value={language}
       options={[
         { label: 'English', value: 'en' },
-        { label: 'Chinese', value: 'cn' },
         { label: 'Español', value: 'es' },
+        { label: 'Chinese', value: 'zh' },
         { label: 'French', value: 'fr' },
         { label: 'German', value: 'de' },
         { label: 'Japanese', value: 'ja' },
+        { label: 'Russian', value: 'ru' },
         { label: 'Vietnamese', value: 'vi' },
       ]}
       onChange={onChangeLanguage}

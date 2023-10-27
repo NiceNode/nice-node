@@ -28,6 +28,7 @@ import { setCorsForNiceNode } from './corsMiddleware';
 import * as updater from './updater';
 import * as monitor from './monitor';
 import * as cronJobs from './cronJobs';
+import * as i18nMain from './i18nMain';
 
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
@@ -45,6 +46,8 @@ Sentry.init({
 
 let mainWindow: BrowserWindow | null = null;
 export const getMainWindow = () => mainWindow;
+let menuBuilder: MenuBuilder | null = null;
+export const getMenuBuilder = () => menuBuilder;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -124,8 +127,9 @@ const createWindow = async () => {
   updater.initialize(mainWindow);
   updater.checkForUpdates(false);
 
-  const menuBuilder = new MenuBuilder(mainWindow);
+  menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+
   setWindow(mainWindow);
 
   // Open urls in the user's browser
@@ -181,6 +185,7 @@ const initialize = () => {
   processExit.registerExitHandler(onExit);
   monitor.initialize();
   cronJobs.initialize();
+  i18nMain.initialize();
   console.log('app locale: ', app.getLocale());
   console.log('app LocaleCountryCode: ', app.getLocaleCountryCode());
 };

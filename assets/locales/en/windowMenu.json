@@ -1,0 +1,35 @@
+{
+  "CheckForUpdates": "Check for updates...",
+  "AboutNiceNode": "About NiceNode",
+  "HideNiceNode": "Hide NiceNode",
+  "Quit": "Quit",
+
+  "Edit": "Edit",
+  "Undo": "Undo",
+  "Cut": "Cut",
+  "Copy": "Copy",
+  "Paste": "Paste",
+  "Select All": "Select All",
+
+  "View": "View",
+  "Reload": "Reload",
+  "ToggleFullScreen": "Toggle Full Screen",
+  "ToggleDeveloperTools": "Toggle Developer Tools",
+
+  "Window": "Window",
+  "Minimize": "Minimize",
+  "Close": "Close",
+  "Bring All to Front": "Bring All to Front",
+
+  "Help": "Help",
+  "NiceNodeWebsite": "NiceNode website",
+  "ReportAProblem": "Report a problem",
+  "RemoveAllNodesAndData": "Remove all nodes and data",
+  "UninstallPodman": "Uninstall Podamn",
+  "NuclearUninstall": "Nuclear Uninstall (uninstall podman and delete all nodes and data)",
+  "LogMinimumSystemRequirementCheck": "Log minimum system requirement check",
+  "ShowSplashScreenAgain": "Show Splash Screen again",
+  "CopyConfigurationDetailsToClipboard": "Copy Configuration Details to Clipboard",
+  "Show Alpha Modal": "Show Alpha Modal",
+  "Check Ports": "Check Ports"
+}

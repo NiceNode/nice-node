@@ -1,0 +1,6 @@
+{
+  "LowDiskSpaceTitle": "磁盘空间不足",
+  "LowDiskSpaceDescription": "磁盘空间低于40GB",
+  "InternetConnectionDownTitle": "网络连接中断",
+  "InternetConnectionDownDescription": "所有节点受影响"
+}

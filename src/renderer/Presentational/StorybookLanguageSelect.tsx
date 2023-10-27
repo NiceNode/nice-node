@@ -19,7 +19,7 @@ const StorybookLanguageSelect = () => {
       value={sLang}
       options={[
         { label: 'English', value: 'en' },
-        { label: 'Chinese', value: 'cn' },
+        { label: 'Chinese', value: 'zh' },
         { label: 'Español', value: 'es' },
         { label: 'French', value: 'fr' },
         { label: 'German', value: 'de' },

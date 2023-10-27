@@ -1,0 +1,6 @@
+{
+  "LowDiskSpaceTitle": "Espace disque faible",
+  "LowDiskSpaceDescription": "L'espace disque est inférieur à 40 Go",
+  "InternetConnectionDownTitle": "Connexion Internet interrompue",
+  "InternetConnectionDownDescription": "Tous les nœuds sont affectés"
+}

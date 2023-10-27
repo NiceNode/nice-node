@@ -1,0 +1,35 @@
+{
+  "CheckForUpdates": "Kiểm tra cập nhật...",
+  "AboutNiceNode": "Về NiceNode",
+  "HideNiceNode": "Ẩn NiceNode",
+  "Quit": "Thoát",
+
+  "Edit": "Chỉnh sửa",
+  "Undo": "Hoàn tác",
+  "Cut": "Cắt",
+  "Copy": "Sao chép",
+  "Paste": "Dán",
+  "Select All": "Chọn tất cả",
+
+  "View": "Xem",
+  "Reload": "Tải lại",
+  "ToggleFullScreen": "Chuyển đổi toàn màn hình",
+  "ToggleDeveloperTools": "Chuyển đổi công cụ nhà phát triển",
+
+  "Window": "Cửa sổ",
+  "Minimize": "Thu nhỏ",
+  "Close": "Đóng",
+  "Bring All to Front": "Đưa tất cả lên phía trước",
+
+  "Help": "Trợ giúp",
+  "NiceNodeWebsite": "Trang web NiceNode",
+  "ReportAProblem": "Báo cáo vấn đề",
+  "RemoveAllNodesAndData": "Xóa tất cả các nút và dữ liệu",
+  "UninstallPodman": "Gỡ cài đặt Podman",
+  "NuclearUninstall": "Gỡ cài đặt triệt để (gỡ cài đặt Podman và xóa tất cả các nút và dữ liệu)",
+  "LogMinimumSystemRequirementCheck": "Ghi lại kiểm tra yêu cầu hệ thống tối thiểu",
+  "ShowSplashScreenAgain": "Hiển thị lại màn hình chào mừng",
+  "CopyConfigurationDetailsToClipboard": "Sao chép chi tiết cấu hình vào bảng nhớ tạm",
+  "Show Alpha Modal": "Hiển thị cửa sổ Alpha",
+  "Check Ports": "Kiểm tra cổng"
+}
