@@ -1,0 +1,35 @@
+{
+  "CheckForUpdates": "Nach Updates suchen...",
+  "AboutNiceNode": "Über NiceNode",
+  "HideNiceNode": "NiceNode verbergen",
+  "Quit": "Beenden",
+
+  "Edit": "Bearbeiten",
+  "Undo": "Rückgängig",
+  "Cut": "Ausschneiden",
+  "Copy": "Kopieren",
+  "Paste": "Einfügen",
+  "Select All": "Alles auswählen",
+
+  "View": "Ansicht",
+  "Reload": "Neu laden",
+  "ToggleFullScreen": "Vollbild umschalten",
+  "ToggleDeveloperTools": "Entwicklertools umschalten",
+
+  "Window": "Fenster",
+  "Minimize": "Minimieren",
+  "Close": "Schließen",
+  "Bring All to Front": "Alles in den Vordergrund",
+
+  "Help": "Hilfe",
+  "NiceNodeWebsite": "NiceNode-Website",
+  "ReportAProblem": "Ein Problem melden",
+  "RemoveAllNodesAndData": "Alle Knoten und Daten entfernen",
+  "UninstallPodman": "Podman deinstallieren",
+  "NuclearUninstall": "Nukleare Deinstallation (Podman deinstallieren und alle Knoten und Daten löschen)",
+  "LogMinimumSystemRequirementCheck": "Mindestsystemanforderungen prüfen und protokollieren",
+  "ShowSplashScreenAgain": "Startbildschirm erneut anzeigen",
+  "CopyConfigurationDetailsToClipboard": "Konfigurationsdetails in die Zwischenablage kopieren",
+  "Show Alpha Modal": "Alpha-Modal anzeigen",
+  "Check Ports": "Ports überprüfen"
+}

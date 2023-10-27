@@ -186,7 +186,7 @@ const ContentMultipleClients = (props: {
     }
     const nodeOverview: NodeOverviewProps = {
       name: nodeContent.name,
-      title: `${nodeContent.displayName} node`,
+      title: `${nodeContent.displayName} ${t('Node')}`,
       info: nodeContent.info ?? '',
       screenType: 'nodePackage',
       status: nodeContent.status ?? {},
