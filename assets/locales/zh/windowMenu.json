@@ -3,24 +3,20 @@
   "AboutNiceNode": "关于NiceNode",
   "HideNiceNode": "隐藏NiceNode",
   "Quit": "退出",
-
   "Edit": "编辑",
   "Undo": "撤销",
   "Cut": "剪切",
   "Copy": "复制",
   "Paste": "粘贴",
   "Select All": "全选",
-
   "View": "查看",
   "Reload": "重新加载",
   "ToggleFullScreen": "切换全屏",
   "ToggleDeveloperTools": "切换开发者工具",
-
   "Window": "窗口",
   "Minimize": "最小化",
   "Close": "关闭",
   "Bring All to Front": "全部带到前面",
-
   "Help": "帮助",
   "NiceNodeWebsite": "NiceNode 网站",
   "ReportAProblem": "报告问题",
