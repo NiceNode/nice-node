@@ -49,7 +49,7 @@
   "EthereumNode": "Ethereum Node",
   "LaunchAnEthereumNode": "Launch an Ethereum Node",
   "LearnMoreClientDiversity": "Learn more about client diversity",
-  "AddEthereumNodeDescription": "Running a full etherum node is a two part story. Choosing minority clients are important for the health of the network.",
+  "AddEthereumNodeDescription": "Running a full Ethereum node is a two part story. Choosing minority clients are important for the health of the network.",
   "ChooseYourNetwork": "Choose your network",
   "PodmanInstallation": "Podman installation",
   "LearnMorePodman": "Learn more about Podman",
@@ -142,6 +142,7 @@
   "SaveChanges": "Save changes",
   "Continue": "Continue",
   "Back": "Back",
+  "Cancel": "Cancel",
   "IdentifyingVersion": "Identifying version...",
   "NodeRequirements": "Node Requirements",
   "NodeStartCommand": "Node start command (must save changes to take effect)",
@@ -156,5 +157,9 @@
   "Client": "Client",
   "About": "About",
   "Logs": "Logs",
-  "Node": "Node"
+  "Node": "Node",
+  "AllSettingsDataRemoved": "All settings and data for this node will be removed from your computer.",
+  "OptionallyKeepData": "Optionally you can choose to keep the current chain data to shorten future sync times for NiceNode or alternative uses.",
+  "CalculatingDataSize": "(calculating data size...)",
+  "KeepNodeData": "Keep node related chain data {{data}}"
 }

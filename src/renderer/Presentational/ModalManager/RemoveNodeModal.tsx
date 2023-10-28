@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import electron from '../../electronGlobal';
 import RemoveNodeWrapper from '../RemoveNodeModal/RemoveNodeWrapper';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
@@ -12,9 +13,10 @@ type Props = {
 export const RemoveNodeModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const [sIsRemoving, setIsRemoving] = useState<boolean>(false);
-  const modalTitle = 'Are you sure you want to remove this node?';
-  const buttonSaveLabel = 'Remove node';
-  const buttonRemovingLabel = 'Removing node...';
+  const { t } = useTranslation();
+  const modalTitle = t('ResetNodeSettingsQuestion');
+  const buttonSaveLabel = t('RemoveNode');
+  const buttonRemovingLabel = t('RemovingNode');
   const buttonSaveType = 'danger';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {

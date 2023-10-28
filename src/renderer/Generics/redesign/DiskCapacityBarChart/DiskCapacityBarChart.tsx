@@ -84,7 +84,7 @@ const DiskCapacityBarChart = ({
         <div className={legend}>
           <div className={[colorBox, 'free'].join(' ')} />
           <div className={labelContainer}>
-            <div className={label}>Free Space</div>
+            <div className={label}>{g('FreeSpace')}</div>
             <div className={size}>{freeSpace.toFixed(2)} GB</div>
           </div>
         </div>

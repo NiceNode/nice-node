@@ -92,7 +92,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const startNode =
     (step === 2 || step === 3) && (isPodmanRunning || sIsPodmanRunning);
   const buttonSaveLabel = startNode ? t('StartNode') : t('Continue');
-  const buttonCancelLabel = step === 0 ? g('Cancel') : t('Back');
+  const buttonCancelLabel = step === 0 ? t('Cancel') : t('Back');
   const buttonSaveVariant = startNode ? 'icon-left' : 'text';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {

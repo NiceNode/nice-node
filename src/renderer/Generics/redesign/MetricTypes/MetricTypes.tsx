@@ -163,7 +163,7 @@ export const MetricTypes = ({
           titleText = `${statsValue}%`;
         }
         iconId = 'lightning';
-        labelText = 'Memory usage';
+        labelText = g('MemoryUsage');
         break;
       case 'cpuLoad':
         iconId = 'cpu';

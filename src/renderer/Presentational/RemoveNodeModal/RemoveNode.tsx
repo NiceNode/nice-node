@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NodePackage } from 'common/node';
 import { ModalConfig } from '../ModalManager/modalUtils';
 import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
@@ -15,29 +16,23 @@ const RemoveNode = ({
   modalOnChangeConfig,
   selectedNodePackage,
 }: RemoveNodeProps) => {
-  const [sNodeStorageMessage, setNodeStorageMessage] = useState<string>(
-    '(calculating data size...)',
-  );
+  const [sNodeStorageMessage, setNodeStorageMessage] = useState<string>('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (nodeStorageUsedGBs) {
       setNodeStorageMessage(`(${nodeStorageUsedGBs.toFixed(1)}GB)`);
     } else {
-      setNodeStorageMessage('(calculating data size...)');
+      setNodeStorageMessage(t('CalculatingDataSize'));
     }
-  }, [nodeStorageUsedGBs]);
+  }, [nodeStorageUsedGBs, t]);
 
   return (
     <div className={container}>
-      <p className={removeText}>
-        All settings and data for this node will be removed from your computer.
-      </p>
-      <p className={removeText}>
-        Optionally you can choose to keep the current chain data to shorten
-        future sync times for NiceNode or alternative uses.
-      </p>
+      <p className={removeText}>{t('AllSettingsDataRemoved')}</p>
+      <p className={removeText}>{t('OptionallyKeepData')}</p>
       <Checkbox
-        label={`Keep node related chain data ${sNodeStorageMessage}`}
+        label={t('KeepNodeData', { data: sNodeStorageMessage })}
         onClick={(isChecked: boolean) => {
           modalOnChangeConfig({
             isDeleteStorage: !isChecked,
