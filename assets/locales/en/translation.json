@@ -161,5 +161,7 @@
   "AllSettingsDataRemoved": "All settings and data for this node will be removed from your computer.",
   "OptionallyKeepData": "Optionally you can choose to keep the current chain data to shorten future sync times for NiceNode or alternative uses.",
   "CalculatingDataSize": "(calculating data size...)",
-  "KeepNodeData": "Keep node related chain data {{data}}"
+  "KeepNodeData": "Keep node related chain data {{data}}",
+  "NoResults": "No results",
+  "TrySearching": "Try searching for another keyword or clear all filters"
 }
