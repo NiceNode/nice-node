@@ -32,7 +32,6 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const [sNodePackageLibrary, setNodePackageLibrary] =
     useState<NodePackageLibrary>();
   const { t } = useTranslation();
-  const { t: g } = useTranslation('genericComponents');
 
   // useEffect(() => {}, []);
 

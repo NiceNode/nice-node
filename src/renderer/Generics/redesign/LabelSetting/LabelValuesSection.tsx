@@ -14,7 +14,7 @@ import {
 } from './labelSettingsSection.css';
 
 export type LabelSettingsItem = {
-  key: string;
+  key?: string;
   label: ReactElement | string;
   value: ReactElement | string;
   description?: string;

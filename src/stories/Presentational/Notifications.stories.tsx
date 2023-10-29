@@ -17,6 +17,7 @@ export const Primary = Template.bind({});
 Primary.args = {
   data: [
     {
+      key: 'ScheduledSyncCommitteeDuty',
       unread: true,
       status: 'info',
       title: 'Scheduled for Sync Commitee Duty',
@@ -24,6 +25,7 @@ Primary.args = {
       timestamp: 1673384953,
     },
     {
+      key: 'SlashingReward',
       unread: true,
       status: 'info',
       title: 'Reward for slashing another validator',
@@ -31,6 +33,7 @@ Primary.args = {
       timestamp: 1673384953,
     },
     {
+      key: 'ClientSuccessfulyUpdated',
       unread: true,
       status: 'completed',
       title: 'Client successfuly updated',
@@ -38,6 +41,7 @@ Primary.args = {
       timestamp: 1673384953,
     },
     {
+      key: 'ClientUpdateAvailable',
       unread: true,
       status: 'download',
       title: 'Client update available',
@@ -45,6 +49,7 @@ Primary.args = {
       timestamp: 1673384953,
     },
     {
+      key: 'MoreThan40LogErrors',
       unread: false,
       status: 'warning',
       title: 'More than 40 log errors in one hour',
@@ -52,6 +57,7 @@ Primary.args = {
       timestamp: 1673384953,
     },
     {
+      key: 'DiskUsageNear90',
       unread: false,
       status: 'warning',
       title: 'Disk usage near 90%',
@@ -60,6 +66,7 @@ Primary.args = {
       timestamp: 1673384953,
     },
     {
+      key: 'InternetConnectionDown',
       unread: false,
       status: 'warning',
       title: 'Internet connection down for 12 minutes',

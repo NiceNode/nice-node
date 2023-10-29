@@ -1,11 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   ConfigTranslationMap,
   ConfigValuesMap,
 } from '../../../../common/nodeConfig';
 import { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
 import LineLabelSettings from '../LabelSetting/LabelSettings';
-import { LabelSettingsSectionProps } from '../LabelSetting/LabelValuesSection';
 import convertConfigToLabelSettings from './convertConfigToLabelSettings';
 
 export type CategoryConfig = {

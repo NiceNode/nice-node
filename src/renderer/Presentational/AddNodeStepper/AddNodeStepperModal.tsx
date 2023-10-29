@@ -7,7 +7,6 @@ import { ModalConfig } from '../ModalManager/modalUtils';
 import { componentContainer, container } from './addNodeStepper.css';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import { SystemRequirements } from '../../../common/systemRequirements';
-import electron from '../../electronGlobal';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import AddNode, { AddNodeValues } from '../AddNode/AddNode';

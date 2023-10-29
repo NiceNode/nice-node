@@ -1,5 +1,4 @@
 /* eslint-disable no-await-in-loop */
-import isEqual from 'lodash/isEqual';
 import { NodeSpecification } from '../common/nodeSpec';
 import {
   getContainerDetails,
