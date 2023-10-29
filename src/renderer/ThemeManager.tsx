@@ -80,7 +80,7 @@ const ThemeManager = ({ children }: Props) => {
   );
 
   type messageArgs = [NNEvent, ReportEventData];
-  const listenForReportEventMessages = useCallback(async () => {
+  useEffect(() => {
     console.log('theme: listenForReportEventMessages');
     electron.ipcRenderer.on(CHANNELS.reportEvent, (args: messageArgs) => {
       // console.log('reportEvent: ', args);
@@ -92,10 +92,6 @@ const ThemeManager = ({ children }: Props) => {
         onReportEventMessage,
       );
   }, [onReportEventMessage]);
-
-  useEffect(() => {
-    listenForReportEventMessages();
-  }, [listenForReportEventMessages]);
 
   return (
     <div

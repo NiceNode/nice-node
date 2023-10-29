@@ -121,27 +121,22 @@ const PodmanInstallation = ({
     }
   };
 
-  const podmanInstallMessageListener = (messageArray: [IpcMessage]) => {
-    // set totalSize & progress
-    const message = messageArray[0];
-    console.log('podmanInstallMessageListener message: ', message);
-    if (message.messageId === 'isGrantPermission') {
-      console.log('message: ', message);
-      // if false, notify user that podman is required and allow them another try
-      //  to grant permissions
-      setDidUserGrantPermissionToInstallPodman(message?.value as boolean);
-    } else {
-      // ignore for now?
-    }
-  };
-
-  const listenForPodmanInstallUpdates = useCallback(async () => {
-    electron.ipcRenderer.on(CHANNELS.podman, podmanMessageListener);
-    electron.ipcRenderer.on(
-      CHANNELS.podmanInstall,
-      podmanInstallMessageListener,
-    );
-  }, []);
+  const podmanInstallMessageListener = useCallback(
+    (messageArray: [IpcMessage]) => {
+      // set totalSize & progress
+      const message = messageArray[0];
+      console.log('podmanInstallMessageListener message: ', message);
+      if (message.messageId === 'isGrantPermission') {
+        console.log('message: ', message);
+        // if false, notify user that podman is required and allow them another try
+        //  to grant permissions
+        setDidUserGrantPermissionToInstallPodman(message?.value as boolean);
+      } else {
+        // ignore for now?
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     // if granted, start install & countdown
@@ -150,15 +145,19 @@ const PodmanInstallation = ({
 
   useEffect(() => {
     console.log('PodmanInstallation.tsx: listenForPodmanInstallUpdates .');
-    listenForPodmanInstallUpdates();
+    electron.ipcRenderer.on(CHANNELS.podman, podmanMessageListener);
+    electron.ipcRenderer.on(
+      CHANNELS.podmanInstall,
+      podmanInstallMessageListener,
+    );
     return () => {
-      electron.ipcRenderer.removeAllListeners('podman');
+      electron.ipcRenderer.removeAllListeners(CHANNELS.podman);
       electron.ipcRenderer.removeListener(
         CHANNELS.podmanInstall,
         podmanInstallMessageListener,
       );
     };
-  }, [listenForPodmanInstallUpdates]);
+  }, [podmanInstallMessageListener]);
 
   // useEffect(() => {
   //   return () => {
