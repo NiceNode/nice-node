@@ -46,13 +46,13 @@ export const filterMenu = style({
 });
 
 export const typeFilterContainer = style({
-  width: 158,
+  minWidth: 158,
   position: 'relative',
   textAlign: 'left',
 });
 
 export const timeframeFilterContainer = style({
-  width: 148,
+  minWidth: 148,
   position: 'relative',
 });
 
