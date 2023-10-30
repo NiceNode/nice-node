@@ -12,6 +12,10 @@ import {
   logsScroller,
   spacer,
   clearFilters,
+  noResultsContainer,
+  contentContainer,
+  descriptionFont,
+  titleFont,
 } from './logs.css';
 import { Menu } from '../../Generics/redesign/Menu/Menu';
 import { MenuItem } from '../../Generics/redesign/MenuItem/MenuItem';
@@ -420,7 +424,14 @@ export const Logs = ({ sLogs }: LogsProps) => {
             </div>
           )}
         </div>
-        {filteredLogMessages.length === 0 && <div>No logs found</div>}
+        {filteredLogMessages.length === 0 && (
+          <div className={noResultsContainer}>
+            <div className={contentContainer}>
+              <div className={titleFont}>{t('NoResults')}</div>
+              <div className={descriptionFont}>{t('TrySearching')}</div>
+            </div>
+          </div>
+        )}
         <div ref={logContainerRef} className={logsScroller}>
           <div ref={logEndRef} />
           <div>{filteredLogMessages}</div>

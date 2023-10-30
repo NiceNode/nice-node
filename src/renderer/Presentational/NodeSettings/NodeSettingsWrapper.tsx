@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { ModalConfig } from '../ModalManager/modalUtils';
 import { setModalState } from '../../state/modal';
 import Node, { NodeId } from '../../../common/node';
@@ -251,6 +251,17 @@ const NodeSettingsWrapper = ({
     }
   };
 
+  const onClickResetConfig = useCallback(() => {
+    if (selectedNode) {
+      dispatch(
+        setModalState({
+          isModalOpen: true,
+          screen: { route: 'resetConfig', type: 'alert' },
+        }),
+      );
+    }
+  }, [selectedNode, dispatch]);
+
   return (
     <NodeSettings
       categoryConfigs={sCategoryConfigs}
@@ -259,16 +270,7 @@ const NodeSettingsWrapper = ({
       isWalletSettingsEnabled={sIsWalletSettingsEnabled}
       isDisabled={sIsConfigDisabled}
       onChange={onNodeConfigChange}
-      onClickResetConfig={() => {
-        if (selectedNode) {
-          dispatch(
-            setModalState({
-              isModalOpen: true,
-              screen: { route: 'resetConfig', type: 'alert' },
-            }),
-          );
-        }
-      }}
+      onClickResetConfig={onClickResetConfig}
       nodeStartCommand={sNodeStartCommand}
     />
   );

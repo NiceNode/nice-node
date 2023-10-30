@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import {
   ConfigTranslationMap,
   ConfigValuesMap,
 } from '../../../../common/nodeConfig';
 import { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
 import LineLabelSettings from '../LabelSetting/LabelSettings';
-import { LabelSettingsSectionProps } from '../LabelSetting/LabelValuesSection';
 import convertConfigToLabelSettings from './convertConfigToLabelSettings';
 
 export type CategoryConfig = {
@@ -26,19 +25,13 @@ const DynamicSettings = ({
   onChange,
   type,
 }: DynamicSettingsProps) => {
-  const [sSections, setSections] = useState<LabelSettingsSectionProps>({
-    items: [],
-  });
-
-  useEffect(() => {
-    setSections(
-      convertConfigToLabelSettings({
-        categoryConfigs: categoryConfigs ?? [],
-        configValuesMap: configValuesMap ?? {},
-        isDisabled,
-        onChange,
-      }),
-    );
+  const sSections = useMemo(() => {
+    return convertConfigToLabelSettings({
+      categoryConfigs: categoryConfigs ?? [],
+      configValuesMap: configValuesMap ?? {},
+      isDisabled,
+      onChange,
+    });
   }, [categoryConfigs, configValuesMap, isDisabled, onChange]);
 
   if (!categoryConfigs) {

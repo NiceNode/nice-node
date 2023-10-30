@@ -22,7 +22,12 @@ export interface NotificationItemProps {
    */
   unread: boolean;
   /**
-   * Notification title
+   * Notification key
+   */
+  // eslint-disable-next-line react/no-unused-prop-types
+  key: string;
+  /**
+   * Notification title (translated string)
    */
   title: string;
   /**

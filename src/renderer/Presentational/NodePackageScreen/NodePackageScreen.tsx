@@ -257,6 +257,7 @@ const NodePackageScreen = () => {
           // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
         },
         stats: {},
+        resources: service.node.spec.resources,
       };
       formattedServices.push(serviceProps);
     });
@@ -348,6 +349,7 @@ const NodePackageScreen = () => {
     },
     onAction: onNodeAction,
     description: spec.description,
+    resources: spec.resources,
   };
 
   /**
@@ -388,6 +390,11 @@ export interface ClientProps {
 
   // todo: use ContentMultiClient
   // return <ContentSingleClient {...nodeContent} />;
+
+  if (!sFormattedServices) {
+    return null;
+  }
+
   return (
     <ContentMultipleClients
       clients={sFormattedServices}

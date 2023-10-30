@@ -10,6 +10,11 @@
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import * as Sentry from '@sentry/electron/main';
+
+import {
+  installExtension,
+  REACT_DEVELOPER_TOOLS,
+} from 'electron-extension-installer';
 import logger from './logger';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -61,22 +66,14 @@ if (isDevelopment) {
   require('electron-debug')();
 }
 
-const installExtensions = async () => {
-  const installer = require('electron-devtools-installer');
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS'];
-
-  return installer
-    .default(
-      extensions.map((name) => installer[name]),
-      forceDownload,
-    )
-    .catch(logger.info);
-};
-
 const createWindow = async () => {
   if (isDevelopment) {
-    await installExtensions();
+    // https://github.com/MarshallOfSound/electron-devtools-installer/issues/238
+    await installExtension(REACT_DEVELOPER_TOOLS, {
+      loadExtensionOptions: {
+        allowFileAccess: true,
+      },
+    });
   }
 
   const RESOURCES_PATH = app.isPackaged

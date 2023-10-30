@@ -28,7 +28,7 @@ const PreferencesWrapper = ({
   const qSettings = useGetSettingsQuery();
 
   useEffect(() => {
-    const asyncData = async () => {
+    const getUserSettings = async () => {
       const userSettings = await electron.getSettings();
       console.log('pref userSettings', userSettings);
       // use the os setting unless the user changes
@@ -51,7 +51,6 @@ const PreferencesWrapper = ({
       setIsOpenOnStartup(isOpenAtStartupSetting);
       setIsEventReportingEnabled(isEventReportingEnabled);
     };
-    asyncData();
 
     const getNiceNodeVersion = async () => {
       const debugInfo = await electron.getDebugInfo();
@@ -62,7 +61,6 @@ const PreferencesWrapper = ({
         setNiceNodeVersion(debugInfo.niceNodeVersion);
       }
     };
-    getNiceNodeVersion();
 
     const getLanguageSetting = async () => {
       let appLanguage = 'en';
@@ -82,6 +80,8 @@ const PreferencesWrapper = ({
       }
       setLanguageSetting(appLanguage);
     };
+    getUserSettings();
+    getNiceNodeVersion();
     getLanguageSetting();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -12,6 +12,7 @@ import {
   sectionFont,
   titleFont,
   advancedOptionsLink,
+  dataLocationContainer,
 } from './addNodeConfiguration.css';
 import SpecialSelect, {
   SelectOption,
@@ -44,6 +45,8 @@ export type AddNodeConfigurationValues = {
 };
 export interface AddNodeConfigurationProps {
   nodeId?: NodeId;
+  nodeLibrary?: NodeLibrary;
+  nodePackageLibrary?: NodePackageLibrary;
   onChange?: (newValue: AddNodeConfigurationValues) => void;
   nodePackageConfig?: AddNodeConfigurationValues;
   shouldHideTitle?: boolean;
@@ -64,11 +67,12 @@ const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
 const AddNodeConfiguration = ({
   nodeId,
   nodePackageConfig,
+  nodeLibrary,
+  nodePackageLibrary,
   shouldHideTitle,
   onChange,
 }: AddNodeConfigurationProps) => {
   const { t } = useTranslation();
-  const { t: tGeneric } = useTranslation('genericComponents');
   const [sNodePackageSpec, setNodePackageSpec] =
     useState<NodePackageSpecification>();
   const [sNodePackageSpecArr, setNodePackageSpecArr] = useState<
@@ -82,9 +86,6 @@ const AddNodeConfiguration = ({
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>(
     nodePackageConfig?.storageLocation || '',
   );
-  const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
-  const [sNodePackageLibrary, setNodePackageLibrary] =
-    useState<NodePackageLibrary>();
   const [sClientNodeSpecifications, setClientNodeSpecifications] = useState<
     NodeSpecification[]
   >([]);
@@ -111,21 +112,10 @@ const AddNodeConfiguration = ({
   }, [sNodePackageSpec]);
 
   useEffect(() => {
-    const fetchNodeLibrarys = async () => {
-      const nodePackageLibrary: NodePackageLibrary =
-        await electron.getNodePackageLibrary();
-      setNodePackageLibrary(nodePackageLibrary);
-      const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
-      setNodeLibrary(nodeLibrary);
-    };
-    fetchNodeLibrarys();
-  }, []);
-
-  useEffect(() => {
-    if (sNodePackageLibrary && nodeId && sNodePackageLibrary[nodeId]) {
-      setNodePackageSpec(sNodePackageLibrary[nodeId]);
+    if (nodePackageLibrary && nodeId && nodePackageLibrary[nodeId]) {
+      setNodePackageSpec(nodePackageLibrary[nodeId]);
     }
-  }, [sNodePackageLibrary, nodeId]);
+  }, [nodePackageLibrary, nodeId]);
 
   useEffect(() => {
     // initialize sClientSelections when nodePackage changes, then create options arrays for each service and all of its options
@@ -139,7 +129,7 @@ const AddNodeConfiguration = ({
           // Set the pre-selected client as the first for each service
           const option = service.nodeOptions[0];
           const nodeSpec =
-            typeof option === 'string' ? sNodeLibrary?.[option] : option;
+            typeof option === 'string' ? nodeLibrary?.[option] : option;
           if (nodeSpec) {
             clientSelections[service.serviceId] =
               nodeSpecToSelectOption(nodeSpec);
@@ -149,19 +139,19 @@ const AddNodeConfiguration = ({
     }
     setNodePackageServices(clients);
     setClientSelections(clientSelections);
-  }, [sNodePackageSpec, sNodeLibrary]);
+  }, [sNodePackageSpec, nodeLibrary]);
 
   useEffect(() => {
     const nodeSpecs: NodeSpecification[] = [];
     Object.keys(sClientSelections).forEach((serviceId) => {
       const selectOption = sClientSelections[serviceId];
-      const nodeSpec = sNodeLibrary?.[selectOption.value];
+      const nodeSpec = nodeLibrary?.[selectOption.value];
       if (nodeSpec) {
         nodeSpecs.push(nodeSpec);
       }
     });
     setClientNodeSpecifications(nodeSpecs);
-  }, [sClientSelections, sNodeLibrary]);
+  }, [sClientSelections, nodeLibrary]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -217,25 +207,24 @@ const AddNodeConfiguration = ({
   ]);
 
   if (!sNodePackageSpec) {
-    console.error(sNodePackageLibrary, nodeId);
+    console.error(nodePackageLibrary, nodeId);
     return <>No selected Node found</>;
   }
+
+  const { displayName, addNodeDescription, specId } = sNodePackageSpec;
 
   return (
     <div className={container}>
       {shouldHideTitle !== true && (
         <div className={titleFont}>
-          {t('LaunchAVarNode', { nodeName: sNodePackageSpec.displayName })}
+          {t('LaunchAVarNode', { nodeName: displayName })}
         </div>
       )}
       <div>
         <div className={descriptionFont}>
-          <>
-            {sNodePackageSpec?.addNodeDescription ??
-              t('AddNodeConfigurationDescription')}
-          </>
+          <>{addNodeDescription ?? t('AddNodeConfigurationDescription')}</>
         </div>
-        {sNodePackageSpec?.specId === 'ethereum' && (
+        {specId === 'ethereum' && (
           <ExternalLink
             text={t('LearnMoreClientDiversity')}
             url="https://ethereum.org/en/developers/docs/nodes-and-clients/client-diversity/"
@@ -247,7 +236,7 @@ const AddNodeConfiguration = ({
         for (let i = 0; i < service.nodeOptions.length; i++) {
           const option = service.nodeOptions[i];
           const nodeSpec =
-            typeof option === 'string' ? sNodeLibrary?.[option] : option;
+            typeof option === 'string' ? nodeLibrary?.[option] : option;
           if (nodeSpec) {
             options.push(nodeSpecToSelectOption(nodeSpec));
           }
@@ -267,6 +256,36 @@ const AddNodeConfiguration = ({
         );
       })}
 
+      <HorizontalLine />
+      <div className={dataLocationContainer}>
+        <p className={sectionFont}>{t('DataLocation')}</p>
+        <p className={captionText}>{t('ChangingLocation')}</p>
+        <FolderInput
+          placeholder={sNodeStorageLocation ?? t('loadingDotDotDot')}
+          freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
+          onClickChange={async () => {
+            const storageLocationDetails =
+              await electron.openDialogForStorageLocation();
+            console.log('storageLocationDetails', storageLocationDetails);
+            if (storageLocationDetails) {
+              setNodeStorageLocation(storageLocationDetails.folderPath);
+              if (onChange) {
+                onChange({
+                  storageLocation: storageLocationDetails.folderPath,
+                });
+              }
+              setNodeStorageLocationFreeStorageGBs(
+                storageLocationDetails.freeStorageGBs,
+              );
+            } else {
+              // user didn't change the folder path
+            }
+          }}
+        />
+      </div>
+
+      <HorizontalLine />
+
       {/* Initial node package settings, required */}
       <InitialClientConfigs
         clientSpecs={sNodePackageSpecArr}
@@ -283,36 +302,7 @@ const AddNodeConfiguration = ({
           dispatchClientConfigValues(newClientConfigValues);
         }}
       />
-
-      {/* <HorizontalLine /> */}
-      <p className={sectionFont}>{tGeneric('DataLocation')}</p>
-      <p
-        className={captionText}
-      >{`Changing location only supported on Mac & Linux and only locations under /Users/<current-user>/ or /Volumes/`}</p>
-      <FolderInput
-        placeholder={sNodeStorageLocation ?? tGeneric('loadingDotDotDot')}
-        freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
-        onClickChange={async () => {
-          const storageLocationDetails =
-            await electron.openDialogForStorageLocation();
-          console.log('storageLocationDetails', storageLocationDetails);
-          if (storageLocationDetails) {
-            setNodeStorageLocation(storageLocationDetails.folderPath);
-            if (onChange) {
-              onChange({
-                storageLocation: storageLocationDetails.folderPath,
-              });
-            }
-            setNodeStorageLocationFreeStorageGBs(
-              storageLocationDetails.freeStorageGBs,
-            );
-          } else {
-            // user didn't change the folder path
-          }
-        }}
-      />
-
-      <HorizontalLine />
+      {/* Initial client settings, required and optional */}
       <div className={advancedOptionsLink}>
         <DropdownLink
           text={`${

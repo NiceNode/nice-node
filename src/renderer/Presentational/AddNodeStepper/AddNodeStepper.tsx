@@ -10,7 +10,6 @@ import AddNode, { AddNodeValues } from '../AddNode/AddNode';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import { SystemRequirements } from '../../../common/systemRequirements';
-import { SystemData } from '../../../main/systemInfo';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
 import { updateSelectedNodePackageId } from '../../state/node';
 import { useAppDispatch } from '../../state/hooks';
@@ -49,20 +48,9 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
 
   const [sNodeClientsAndSettings, setNodeClientsAndSettings] =
     useState<AddNodeConfigurationValues>();
-  const [sEthereumNodeRequirements, setEthereumNodeRequirements] =
+  const [sNodeRequirements, setEthereumNodeRequirements] =
     useState<SystemRequirements>();
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
-
-  const [sSystemData, setSystemData] = useState<SystemData>();
-
-  const getData = async () => {
-    setSystemData(await electron.getSystemInfo());
-  };
-
-  useEffect(() => {
-    // on load, refresh the static data
-    getData();
-  }, []);
 
   // Load ALL node spec's when AddNodeStepper is created
   //  This can later be optimized to only retrieve NodeSpecs as needed
@@ -70,7 +58,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     const fetchNodeLibrarys = async () => {
       const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
       setNodeLibrary(nodeLibrary);
-
       const nodePackageLibrary: NodePackageLibrary =
         await electron.getNodePackageLibrary();
       setNodePackageLibrary(nodePackageLibrary);
@@ -261,10 +248,10 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     [sNodeLibrary],
   );
 
-  const getStepScreen = (step: number) => {
+  const getStepScreen = () => {
     let stepScreen = null;
     let stepImage = step1;
-    switch (step) {
+    switch (sStep) {
       case 0:
         stepScreen = <AddNode onChange={onChangeAddNode} />;
         stepImage = step1;
@@ -272,6 +259,8 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       case 1:
         stepScreen = (
           <AddNodeConfiguration
+            nodeLibrary={sNodeLibrary}
+            nodePackageLibrary={sNodePackageLibrary}
             nodeId={sNode?.node?.value}
             onChange={onChangeAddNodeConfiguration}
           />
@@ -281,8 +270,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       case 2:
         stepScreen = (
           <NodeRequirements
-            nodeRequirements={sEthereumNodeRequirements}
-            systemData={sSystemData}
+            nodeRequirements={sNodeRequirements}
             nodeStorageLocation={sNodeStorageLocation}
           />
         );
@@ -310,25 +298,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   return (
     <div className={container}>
       <div className={componentContainer}>
-        {/* Step 0 - select node */}
-        <div style={{ display: sStep === 0 ? '' : 'none', height: '100%' }}>
-          {getStepScreen(0)}
-        </div>
-
-        {/* Step 1 - select node clients */}
-        <div style={{ display: sStep === 1 ? '' : 'none', height: '100%' }}>
-          {getStepScreen(1)}
-        </div>
-
-        {/* Step 2 - Node requirements */}
-        <div style={{ display: sStep === 2 ? '' : 'none', height: '100%' }}>
-          {getStepScreen(2)}
-        </div>
-
-        {/* Step 3 - If Podman is not installed */}
-        <div style={{ display: sStep === 3 ? '' : 'none', height: '100%' }}>
-          {getStepScreen(3)}
-        </div>
+        <div style={{ height: '100%' }}>{getStepScreen()}</div>
       </div>
       <Stepper
         step={sStep}

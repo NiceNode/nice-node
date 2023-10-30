@@ -11,7 +11,7 @@ export const innerContainer = style({
   flexDirection: 'row',
   alignItems: 'flex-start',
   gap: '12px',
-  height: '56px',
+  minHeight: 56,
   boxSizing: 'border-box',
   background: vars.components.bannerBackground,
   boxShadow: vars.components.bannerBoxShadow,

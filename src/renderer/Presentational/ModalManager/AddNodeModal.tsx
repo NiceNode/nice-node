@@ -32,9 +32,8 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const [sNodePackageLibrary, setNodePackageLibrary] =
     useState<NodePackageLibrary>();
   const { t } = useTranslation();
-  const { t: g } = useTranslation('genericComponents');
 
-  useEffect(() => {}, []);
+  // useEffect(() => {}, []);
 
   useEffect(() => {
     reportEvent('OpenAddNodeModal');
@@ -92,7 +91,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
   const startNode =
     (step === 2 || step === 3) && (isPodmanRunning || sIsPodmanRunning);
   const buttonSaveLabel = startNode ? t('StartNode') : t('Continue');
-  const buttonCancelLabel = step === 0 ? g('Cancel') : t('Back');
+  const buttonCancelLabel = step === 0 ? t('Cancel') : t('Back');
   const buttonSaveVariant = startNode ? 'icon-left' : 'text';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
@@ -188,6 +187,10 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       modalOnClose();
     } else {
       setStep(step - 1);
+      // set button to enable when podman isn't running/installed, but user goes back
+      if (step === 3) {
+        setIsSaveButtonDisabled(false);
+      }
     }
   };
 
@@ -228,6 +231,8 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     >
       <AddNodeStepperModal
         step={step}
+        nodeLibrary={sNodeLibrary}
+        nodePackageLibrary={sNodePackageLibrary}
         setIsPodmanRunning={setIsPodmanRunning}
         modal
         modalConfig={modalConfig}

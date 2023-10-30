@@ -45,7 +45,7 @@
   },
   "configTranslation": {
     "dataDir": {
-      "displayName": "Node data is stored in this folder",
+      "displayName": "Data location",
       "cliConfigPrefix": "--datadir ",
       "defaultValue": "~/.ethereum",
       "uiControl": {
@@ -248,5 +248,22 @@
       }
     }
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png",
+  "resources": [
+    {
+      "label": "Website",
+      "value": "optimism.io",
+      "link": "https://optimism.io/"
+    },
+    {
+      "label": "Block explorer",
+      "value": "etherscan.io",
+      "link": "https://optimistic.etherscan.io/"
+    },
+    {
+      "label": "X (Twitter)",
+      "value": "x.com",
+      "link": "https://x.com/optimismFND"
+    }
+  ]
 }

@@ -257,5 +257,17 @@
   },
   "documentation": {
     "default": "https://paradigmxyz.github.io/reth"
-  }
+  },
+  "resources": [
+    {
+      "label": "Telegram",
+      "value": "Join",
+      "link": "https://t.me/paradigm_reth"
+    },
+    {
+      "label": "Website",
+      "value": "paradigmxyz.github.io/reth",
+      "link": "https://paradigmxyz.github.io/reth/"
+    }
+  ]
 }

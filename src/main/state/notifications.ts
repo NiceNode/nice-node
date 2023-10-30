@@ -57,7 +57,7 @@ const checkIfNotificationCanBeAdded = (
   const currentTimestamp = Date.now();
   const existingNotificationIndex = storedNotifications.findIndex(
     (notification: NotificationItemProps) =>
-      notification.title === notificationObject.title,
+      notification.key === notificationObject.title,
   );
   if (existingNotificationIndex === -1) return true;
 
@@ -69,14 +69,6 @@ const checkIfNotificationCanBeAdded = (
   );
 };
 
-const interpolate = (str: string, variable: string) => {
-  // For this example, we're handling a specific format: {variable}
-  if (str.includes('{variable}')) {
-    return str.replace('{variable}', variable);
-  }
-  return str;
-};
-
 // TODO: add variable support for language string keys
 export const addNotification = (
   notificationObject: NotificationProps,
@@ -86,15 +78,14 @@ export const addNotification = (
   // eslint-disable-next-line prefer-const
   let { title, description, status } = notificationObject;
 
-  if (variable) {
-    description = interpolate(description, variable);
-  }
-
   if (checkIfNotificationCanBeAdded(notifications, notificationObject)) {
     const translatedTitle = i18nMain.t(`notifications:${title}`);
-    const translatedDescription = i18nMain.t(`notifications:${description}`);
+    const translatedDescription = i18nMain.t(`notifications:${description}`, {
+      variable,
+    });
 
     const newNotification = {
+      key: title,
       title: translatedTitle,
       description: translatedDescription,
       unread: true,

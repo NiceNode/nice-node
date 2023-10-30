@@ -47,7 +47,7 @@
   },
   "configTranslation": {
     "dataDir": {
-      "displayName": "Node data is stored in this folder",
+      "displayName": "Data location",
       "category": "Storage",
       "cliConfigPrefix": "--data-path=",
       "uiControl": {
@@ -330,5 +330,22 @@
     "default": "https://besu.hyperledger.org/en/stable/",
     "docker": "https://besu.hyperledger.org/en/stable/HowTo/Get-Started/Installation-Options/Run-Docker-Image/"
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/besu-text-logo.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/besu-text-logo.png",
+  "resources": [
+    {
+      "label": "Twitter",
+      "value": "@HyperledgerBesu",
+      "link": "https://x.com/HyperledgerBesu"
+    },
+    {
+      "label": "Discord",
+      "value": "Join",
+      "link": "https://discord.com/invite/hyperledger"
+    },
+    {
+      "label": "Website",
+      "value": "hyperledger.org/projects/besu",
+      "link": "https://www.hyperledger.org/projects/besu"
+    }
+  ]
 }

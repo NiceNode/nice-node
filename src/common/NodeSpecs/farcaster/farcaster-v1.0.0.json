@@ -6,20 +6,25 @@
   "execution": {
     "executionTypes": ["nodePackage"],
     "defaultExecutionType": "nodePackage",
-    "services" : [{
-      "serviceId": "hub",
-      "name" : "Farcaster Hub",
-      "nodeOptions": ["hubble"],
-      "required": true,
-      "requiresCommonJwtSecret": true
-    }],
-    "dependencies": [{
-      "name" : "Ethereum node",
-      "specId": "ethereum"
-    }, {
-      "name" : "Optimism node",
-      "specId": "optimism"
-    }]
+    "services": [
+      {
+        "serviceId": "hub",
+        "name": "Farcaster Hub",
+        "nodeOptions": ["hubble"],
+        "required": true,
+        "requiresCommonJwtSecret": true
+      }
+    ],
+    "dependencies": [
+      {
+        "name": "Ethereum node",
+        "specId": "ethereum"
+      },
+      {
+        "name": "Optimism node",
+        "specId": "optimism"
+      }
+    ]
   },
   "category": "L1",
   "rpcTranslation": "farcaster-l1",
@@ -41,7 +46,7 @@
   },
   "configTranslation": {
     "dataDir": {
-      "displayName": "Node data is stored in this folder",
+      "displayName": "Data location",
       "cliConfigPrefix": "--datadir ",
       "defaultValue": "~/.farcaster",
       "uiControl": {

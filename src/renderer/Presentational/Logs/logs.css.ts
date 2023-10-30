@@ -46,13 +46,13 @@ export const filterMenu = style({
 });
 
 export const typeFilterContainer = style({
-  width: 158,
+  minWidth: 158,
   position: 'relative',
   textAlign: 'left',
 });
 
 export const timeframeFilterContainer = style({
-  width: 148,
+  minWidth: 148,
   position: 'relative',
 });
 
@@ -64,4 +64,38 @@ export const spacer = style({
 export const clearFilters = style({
   cursor: 'pointer',
   color: common.color.purple600,
+});
+
+export const noResultsContainer = style({
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
+
+export const contentContainer = style({
+  alignItems: 'center',
+  display: 'flex',
+  flexDirection: 'column',
+  width: 520,
+});
+
+export const titleFont = style({
+  fontWeight: 590,
+  fontSize: 15,
+  lineHeight: '20px',
+  color: vars.color.font,
+  letterSpacing: '-0.24px',
+  textAlign: 'center',
+  marginBottom: 8,
+});
+
+export const descriptionFont = style({
+  fontWeight: 400,
+  fontSize: 13,
+  lineHeight: '18px',
+  color: vars.color.font70,
+  letterSpacing: '-0.08px',
+  marginBottom: 24,
 });

@@ -45,7 +45,7 @@
   },
   "configTranslation": {
     "dataDir": {
-      "displayName": "Node data is stored in this folder",
+      "displayName": "Data location",
       "cliConfigPrefix": "--rootDir ",
       "uiControl": {
         "type": "filePath"
@@ -162,5 +162,22 @@
     "default": "https://chainsafe.github.io/lodestar/",
     "docker": "https://chainsafe.github.io/lodestar/installation/#install-with-docker"
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/lodestar-logo-text.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/lodestar-logo-text.png",
+  "resources": [
+    {
+      "label": "Twitter",
+      "value": "@lodestar_eth",
+      "link": "https://x.com/lodestar_eth"
+    },
+    {
+      "label": "Discord",
+      "value": "Join",
+      "link": "https://discord.com/invite/xSAwrnCWcg"
+    },
+    {
+      "label": "Website",
+      "value": "lodestar.chainsafe.io",
+      "link": "https://lodestar.chainsafe.io/"
+    }
+  ]
 }
