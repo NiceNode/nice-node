@@ -4,28 +4,26 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import { ModalConfig } from '../ModalManager/modalUtils';
-import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
 import { componentContainer, container } from './addNodeStepper.css';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
-import { SystemData } from '../../../main/systemInfo';
 import { SystemRequirements } from '../../../common/systemRequirements';
-import electron from '../../electronGlobal';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
-
-import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
-import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
-import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import AddNode, { AddNodeValues } from '../AddNode/AddNode';
 import AddNodeConfiguration, {
   AddNodeConfigurationValues,
 } from '../AddNodeConfiguration/AddNodeConfiguration';
-import { NodeLibrary } from '../../../main/state/nodeLibrary';
+import {
+  NodeLibrary,
+  NodePackageLibrary,
+} from '../../../main/state/nodeLibrary';
 
 export interface AddNodeStepperModalProps {
   modal?: boolean;
   modalConfig: ModalConfig;
   modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
+  nodeLibrary?: NodeLibrary;
+  nodePackageLibrary?: NodePackageLibrary;
   step: number;
   disableSaveButton: (value: boolean) => void;
   setIsPodmanRunning: (value: boolean) => void;
@@ -35,6 +33,8 @@ const AddNodeStepperModal = ({
   modal = false,
   modalConfig,
   modalOnChangeConfig,
+  nodeLibrary,
+  nodePackageLibrary,
   step,
   disableSaveButton,
   setIsPodmanRunning,
@@ -44,21 +44,6 @@ const AddNodeStepperModal = ({
     useState<AddNodeConfigurationValues>();
   const [sNodeRequirements, setNodeRequirements] =
     useState<SystemRequirements>();
-  const [sSystemData, setSystemData] = useState<SystemData>();
-  const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
-
-  const getData = async () => {
-    setSystemData(await electron.getSystemInfo());
-  };
-  const fetchNodeLibrary = async () => {
-    const nodeLibrary: NodeLibrary = await electron.getNodeLibrary();
-    setNodeLibrary(nodeLibrary);
-  };
-
-  useEffect(() => {
-    getData();
-    fetchNodeLibrary();
-  }, []);
 
   const onChangeAddNodeConfiguration = (
     newValue: AddNodeConfigurationValues,
@@ -80,7 +65,6 @@ const AddNodeStepperModal = ({
 
   useEffect(() => {
     const { clientSelections, storageLocation } = modalConfig;
-    const nodeLibrary = sNodeLibrary;
     if (nodeLibrary && clientSelections && storageLocation) {
       const reqs: SystemRequirements[] = [];
       // eslint-disable-next-line
@@ -109,26 +93,27 @@ const AddNodeStepperModal = ({
         console.error(e);
       }
     }
-  }, [modalConfig, sNodeLibrary]);
+  }, [modalConfig, nodeLibrary]);
 
-  const setNode = (
-    nodeSelectOption: SelectOption,
-    nodeConfig: AddNodeValues,
-  ) => {
-    const config = { ...nodeConfig, node: nodeSelectOption };
-    console.log('AddNodeStepperModal calling modalOnChangeConfig()', {
-      ...modalConfig,
-      node: nodeSelectOption.value,
-    });
-    modalOnChangeConfig({
-      ...nodeConfig,
-      node: nodeSelectOption.value,
-    });
-    // clear step 1 (client selections) when user changes node (package)
-    setEthereumNodeConfig(undefined);
-    console.log('AddNodeStepperModal setNode: config', config);
-    setNodeConfig(config);
-  };
+  const setNode = useCallback(
+    (nodeSelectOption: SelectOption, nodeConfig: AddNodeValues) => {
+      const config = { ...nodeConfig, node: nodeSelectOption };
+      console.log('AddNodeStepperModal calling modalOnChangeConfig()', {
+        ...modalConfig,
+        node: nodeSelectOption.value,
+      });
+      modalOnChangeConfig({
+        ...nodeConfig,
+        node: nodeSelectOption.value,
+      });
+      // clear step 1 (client selections) when user changes node (package)
+      setEthereumNodeConfig(undefined);
+      console.log('AddNodeStepperModal setNode: config', config);
+      setNodeConfig(config);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   const onChangeDockerInstall = useCallback((newValue: string) => {
     console.log('onChangeDockerInstall newValue ', newValue);
@@ -142,35 +127,32 @@ const AddNodeStepperModal = ({
 
   const getStepScreen = () => {
     let stepScreen = null;
-    let stepImage = step1;
     switch (step) {
       case 0:
         stepScreen = (
           <AddNode nodeConfig={sNodeConfig} setNode={setNode} shouldHideTitle />
         );
-        stepImage = step1;
         break;
       case 1:
         stepScreen = (
           <AddNodeConfiguration
             nodeId={sNodeConfig?.node?.value}
+            nodeLibrary={nodeLibrary}
+            nodePackageLibrary={nodePackageLibrary}
             nodePackageConfig={sEthereumNodeConfig}
             onChange={onChangeAddNodeConfiguration}
             shouldHideTitle
           />
         );
-        stepImage = step1;
         break;
       case 2:
         stepScreen = (
           <NodeRequirements
             type="modal"
             nodeRequirements={sNodeRequirements}
-            systemData={sSystemData}
             nodeStorageLocation={modalConfig?.storageLocation}
           />
         );
-        stepImage = step2;
         break;
       case 3:
         stepScreen = (
@@ -180,18 +162,11 @@ const AddNodeStepperModal = ({
             type="modal"
           />
         );
-        stepImage = step3;
         break;
       default:
     }
 
-    return (
-      <div style={{ height: '100%' }}>
-        <ContentWithSideArt modal={modal} graphic={stepImage}>
-          {stepScreen}
-        </ContentWithSideArt>
-      </div>
-    );
+    return <div style={{ height: '100%' }}>{stepScreen}</div>;
   };
 
   const modalStyle = modal ? 'modal' : '';

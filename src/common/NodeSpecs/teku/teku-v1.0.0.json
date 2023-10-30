@@ -47,7 +47,7 @@
   },
   "configTranslation": {
     "dataDir": {
-      "displayName": "Node data is stored in this folder",
+      "displayName": "Data location",
       "cliConfigPrefix": "--data-path=",
       "uiControl": {
         "type": "filePath"
@@ -163,5 +163,22 @@
     "default": "https://docs.teku.consensys.net/en/stable/",
     "docker": "https://docs.teku.consensys.net/en/stable/HowTo/Get-Started/Installation-Options/Run-Docker-Image/"
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/teku-logo.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/teku-logo.png",
+  "resources": [
+    {
+      "label": "Twitter",
+      "value": "@teku_consensys",
+      "link": "https://x.com/teku_consensys"
+    },
+    {
+      "label": "Discord",
+      "value": "Join",
+      "link": "https://discord.com/invite/consensys"
+    },
+    {
+      "label": "Website",
+      "value": "consensys.io/teku",
+      "link": "https://consensys.io/teku"
+    }
+  ]
 }

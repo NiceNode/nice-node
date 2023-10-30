@@ -7,7 +7,6 @@ export const container = style({
   gap: 8,
   width: '100%',
   minWidth: 400,
-  height: 52,
 });
 
 export const pathAndChangeContainer = style({
@@ -16,11 +15,18 @@ export const pathAndChangeContainer = style({
   flexDirection: 'row',
   alignItems: 'flex-start',
   padding: '0px',
-  gap: 20,
+  gap: 5,
 });
 
 export const freeStorageSpaceFontStyle = style({
   fontSize: 11,
-  lineHeight: '14px',
   color: vars.color.font50,
+  flexDirection: 'row',
+  display: 'flex',
+});
+
+export const checkCircleIcon = style({
+  width: 12,
+  height: 12,
+  marginRight: 3,
 });

@@ -21,3 +21,12 @@ export const descriptionFont = style({
   lineHeight: '18px',
   color: vars.color.font70,
 });
+
+export const checklistContainer = style({
+  selectors: {
+    '&.loading': {
+      height: 445,
+      width: '100%',
+    },
+  },
+});

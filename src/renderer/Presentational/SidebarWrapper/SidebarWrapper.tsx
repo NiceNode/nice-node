@@ -37,7 +37,6 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
     pollingInterval: 15000,
   });
   const qNetwork = useGetNetworkConnectedQuery(null, {
-    // Only polls network connection if there are exactly 0 peers
     pollingInterval: 30000,
   });
   const [platform, setPlatform] = useState<string>('');
@@ -75,18 +74,15 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const listenForNotifications = useCallback(async () => {
+  useEffect(() => {
     electron.ipcRenderer.on(CHANNELS.notifications, onNotificationChange);
-    return () =>
+    return () => {
       electron.ipcRenderer.removeListener(
         CHANNELS.notifications,
         onNotificationChange,
       );
+    };
   }, [onNotificationChange]);
-
-  useEffect(() => {
-    listenForNotifications();
-  }, [listenForNotifications]);
 
   // Default selected node to be the first node
   useEffect(() => {

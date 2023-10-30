@@ -48,6 +48,7 @@ import {
   getSettings,
   setIsOpenOnStartup,
   getSetIsNotificationsEnabled,
+  setNativeThemeSetting,
   setThemeSetting,
   ThemeSetting,
   setIsEventReportingEnabled,
@@ -210,6 +211,9 @@ export const initialize = () => {
   ipcMain.handle('getAppClientId', getAppClientId);
   ipcMain.handle('setLanguage', (_event, languageCode: string) => {
     return onUserChangedLanguage(languageCode);
+  });
+  ipcMain.handle('setNativeThemeSetting', (_event, theme: ThemeSetting) => {
+    return setNativeThemeSetting(theme);
   });
   ipcMain.handle('setThemeSetting', (_event, theme: ThemeSetting) => {
     return setThemeSetting(theme);

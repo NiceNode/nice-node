@@ -20,9 +20,10 @@ export const rightIconContainer = style({
 });
 
 export const inputContainer = style({
-  height: '16px',
+  height: 28,
   display: 'block',
   width: '-webkit-fill-available',
+  boxSizing: 'border-box',
   paddingTop: 6,
   paddingBottom: 6,
   paddingLeft: 8,

@@ -2,21 +2,21 @@
   "specId": "hubble",
   "version": "1.0.0",
   "displayName": "Hubble",
-  "displayTagline" : "A fast, simple implementation of a Farcaster Hub in Typescript + Rust",
+  "displayTagline": "A fast, simple implementation of a Farcaster Hub in Typescript + Rust",
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
     "input": {
       "defaultConfig": {
-        "p2pPorts" : "2282",
-        "httpPort" : "2281",
-        "farcasterNetwork" : "1",
+        "p2pPorts": "2282",
+        "httpPort": "2281",
+        "farcasterNetwork": "1",
         "boostrapNode": "/dns/nemes.farcaster.xyz/tcp/2282"
       },
       "docker": {
         "containerVolumePath": "/home/node/app/apps/hubble",
         "raw": " --user 0",
-        "initNodeCommand" : "yarn identity create",
+        "initNodeCommand": "yarn identity create",
         "forcedRawNodeInput": "node --no-warnings build/cli.js start --ip 0.0.0.0 "
       }
     },
@@ -42,25 +42,27 @@
   },
   "configTranslation": {
     "ethMainnetRpcUrl": {
-      "displayName": "Ethereum Mainnet RPC Endpoint (local node or provider)",
+      "displayName": "Ethereum Mainnet RPC Endpoint",
       "cliConfigPrefix": "--eth-mainnet-rpc-url ",
       "defaultValue": "",
       "uiControl": {
         "type": "text"
       },
-      "addNodeFlow": "required"
+      "addNodeFlow": "required",
+      "infoDescription": "Local node or provider"
     },
     "optimismMainnetRpcUrl": {
-      "displayName": "Optimism Mainnet RPC Endpoint (local node or provider)",
+      "displayName": "Optimism Mainnet RPC Endpoint",
       "cliConfigPrefix": "--l2-rpc-url ",
       "defaultValue": "",
       "uiControl": {
         "type": "text"
       },
-      "addNodeFlow": "required"
+      "addNodeFlow": "required",
+      "infoDescription": "Local node or provider"
     },
     "hubOperatorFid": {
-      "displayName": "Set this to your Farcaster FID ",
+      "displayName": "Farcaster FID",
       "cliConfigPrefix": "--hub-operator-fid ",
       "uiControl": {
         "type": "text"
@@ -96,14 +98,14 @@
       "infoDescription": "Example value: /dns/nemes.farcaster.xyz/tcp/2282"
     },
     "farcasterNetwork": {
-      "displayName": "The Farcaster network ID (mainnet or testnet)",
+      "displayName": "Farcaster network ID",
       "cliConfigPrefix": "--network ",
       "defaultValue": "1",
       "uiControl": {
         "type": "text"
       },
       "addNodeFlow": "advanced",
-      "infoDescription": "Example value: 1"
+      "infoDescription": "Mainnet or testnet - Example value: 1"
     }
   },
   "iconUrl": "https://avatars.githubusercontent.com/u/98775309"

@@ -131,6 +131,9 @@ contextBridge.exposeInMainWorld('electron', {
   setLanguage: (languageCode: string) => {
     ipcRenderer.invoke('setLanguage', languageCode);
   },
+  setNativeThemeSetting: (theme: ThemeSetting) => {
+    ipcRenderer.invoke('setNativeThemeSetting', theme);
+  },
   setThemeSetting: (theme: ThemeSetting) => {
     ipcRenderer.invoke('setThemeSetting', theme);
   },

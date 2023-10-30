@@ -269,6 +269,7 @@
     "electron": "^25.8.4",
     "electron-builder": "^24.8.0",
     "electron-devtools-installer": "^3.2.0",
+    "electron-extension-installer": "^1.2.0",
     "electron-mock-ipc": "^0.3.12",
     "electronmon": "^2.0.2",
     "eslint": "^8.29.0",

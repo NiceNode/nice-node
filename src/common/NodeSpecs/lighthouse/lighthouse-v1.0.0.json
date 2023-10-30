@@ -57,7 +57,7 @@
   },
   "configTranslation": {
     "dataDir": {
-      "displayName": "Node data is stored in this folder",
+      "displayName": "Data location",
       "cliConfigPrefix": "--datadir ",
       "uiControl": {
         "type": "filePath"
@@ -204,5 +204,22 @@
     "default": "https://lighthouse-book.sigmaprime.io/intro.html",
     "docker": "https://lighthouse-book.sigmaprime.io/docker.html"
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/lighthouse-logo.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/lighthouse-logo.png",
+  "resources": [
+    {
+      "label": "Twitter",
+      "value": "@sigp_io",
+      "link": "https://x.com/sigp_io"
+    },
+    {
+      "label": "Discord",
+      "value": "Join",
+      "link": "https://discord.gg/TX7HKfgJN3"
+    },
+    {
+      "label": "Website",
+      "value": "lighthouse.sigmaprime.io",
+      "link": "https://lighthouse.sigmaprime.io/"
+    }
+  ]
 }

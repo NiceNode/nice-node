@@ -4,6 +4,7 @@
 import { useTranslation } from 'react-i18next';
 import { MetricData } from 'common/node';
 import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
+import { LabelValuesSectionItemsProps } from '../../Generics/redesign/LabelValues/LabelValuesSection';
 import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
 import TabContent from '../../Generics/redesign/TabContent/TabContent';
@@ -54,6 +55,7 @@ export type SingleNodeContent = {
   };
   onAction?: (action: NodeAction) => void;
   description?: string;
+  resources?: LabelValuesSectionItemsProps[];
 };
 
 type ContentSingleClientProps = {

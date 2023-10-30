@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { container, descriptionFont, titleFont } from './nodeRequirements.css';
+import {
+  container,
+  descriptionFont,
+  titleFont,
+  checklistContainer,
+} from './nodeRequirements.css';
 import { SystemData } from '../../../main/systemInfo';
 import { ChecklistItemProps } from '../../Generics/redesign/Checklist/ChecklistItem';
 import { Checklist } from '../../Generics/redesign/Checklist/Checklist';
 import { SystemRequirements } from '../../../common/systemRequirements';
+import electron from '../../electronGlobal';
 // eslint-disable-next-line import/no-cycle
 import { makeCheckList } from './requirementsChecklistUtil';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
@@ -18,6 +24,7 @@ export interface NodeRequirementsProps {
   /**
    * Title of the checklist
    */
+  // eslint-disable-next-line react/no-unused-prop-types
   systemData?: SystemData;
   /**
    * A folder path where the node data will be stored.
@@ -28,34 +35,41 @@ export interface NodeRequirementsProps {
 
 const NodeRequirements = ({
   nodeRequirements,
-  systemData,
   nodeStorageLocation,
   type,
 }: NodeRequirementsProps) => {
   const { t } = useTranslation('systemRequirements');
   const [sItems, setItems] = useState<ChecklistItemProps[]>([]);
+  const [sSystemData, setSystemData] = useState<SystemData>();
+
+  const getData = async () => {
+    setSystemData(await electron.getSystemInfo());
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   useEffect(() => {
     // determine checkList and status
     // for each node req, determine if systemData meets it
     // Object.keys(nodeRequirements).forEach(key => {
     // })
-    console.log(
-      'useEffect: nodeRequirements, systemData, t',
-      nodeRequirements,
-      systemData,
-    );
-    const newChecklistItems = makeCheckList(
-      {
-        nodeRequirements,
-        systemData,
-        nodeStorageLocation,
-      },
-      t,
-    );
-    setItems(newChecklistItems);
+    if (sSystemData === undefined) {
+      setItems([]);
+    } else {
+      const newChecklistItems = makeCheckList(
+        {
+          nodeRequirements,
+          systemData: sSystemData,
+          nodeStorageLocation,
+        },
+        t,
+      );
+      setItems(newChecklistItems);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nodeRequirements, systemData, nodeStorageLocation]);
+  }, [nodeRequirements, sSystemData, nodeStorageLocation]);
 
   return (
     <div className={container}>
@@ -76,7 +90,14 @@ const NodeRequirements = ({
         />
       )}
       {!nodeRequirements && <>{t('nodeRequirementsUnavailable')}</>}
-      <Checklist items={sItems} />
+      <div
+        className={[
+          checklistContainer,
+          sItems.length === 0 ? 'loading' : '',
+        ].join(' ')}
+      >
+        <Checklist items={sItems} />
+      </div>
     </div>
   );
 };

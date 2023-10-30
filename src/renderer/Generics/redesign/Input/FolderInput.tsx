@@ -4,8 +4,10 @@ import {
   container,
   pathAndChangeContainer,
   freeStorageSpaceFontStyle,
+  checkCircleIcon,
 } from './folderInput.css';
 import Input from './Input';
+import { Icon } from '../Icon/Icon';
 
 export interface FolderInputProps {
   /**
@@ -48,9 +50,12 @@ const FolderInput = ({
         />
       </div>
       {freeStorageSpaceGBs && (
-        <span className={freeStorageSpaceFontStyle}>
-          {Math.round(freeStorageSpaceGBs)}GB available storage
-        </span>
+        <div className={freeStorageSpaceFontStyle}>
+          <div className={checkCircleIcon}>
+            <Icon iconId="checkcircle" />
+          </div>
+          {g('AvailableDiskSpace', { space: Math.round(freeStorageSpaceGBs) })}
+        </div>
       )}
     </div>
   );

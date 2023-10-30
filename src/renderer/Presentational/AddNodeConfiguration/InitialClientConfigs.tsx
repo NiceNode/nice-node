@@ -7,6 +7,7 @@ import {
   ConfigValue,
   ConfigValuesMap,
 } from '../../../common/nodeConfig';
+import { initialClientConfigContainer } from './addNodeConfiguration.css';
 import { mergeObjectReducer } from './deepMerge';
 
 // The core data structure for this component
@@ -132,7 +133,7 @@ const InitialClientConfigs = ({
   }
 
   return (
-    <div style={{ width: '100%' }}>
+    <div className={initialClientConfigContainer}>
       {Object.keys(sClientConfigTranslations)?.map((clientId: string) => {
         const requiredClientConfigTranslation =
           sRequiredClientConfigTranslationByClient[clientId];

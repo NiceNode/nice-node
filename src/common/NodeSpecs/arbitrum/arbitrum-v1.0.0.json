@@ -39,7 +39,7 @@
   },
   "configTranslation": {
     "dataDir": {
-      "displayName": "Node data is stored in this folder",
+      "displayName": "Data location",
       "cliConfigPrefix": "--datadir ",
       "defaultValue": "~/.ethereum",
       "uiControl": {

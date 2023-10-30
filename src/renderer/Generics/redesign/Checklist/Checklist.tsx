@@ -1,7 +1,8 @@
 import React from 'react';
-import { container } from './checklist.css';
+import { container, iconComponent, iconContainer } from './checklist.css';
 import ChecklistItem, { ChecklistItemProps } from './ChecklistItem';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
+import { Icon } from '../Icon/Icon';
 
 export interface ChecklistProps {
   /**
@@ -15,6 +16,15 @@ export interface ChecklistProps {
 }
 
 export const Checklist = ({ title, items }: ChecklistProps) => {
+  if (items.length === 0) {
+    return (
+      <div className={iconContainer}>
+        <div className={iconComponent}>
+          <Icon iconId="syncing" />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={container}>
       {title && <h2>{title}</h2>}

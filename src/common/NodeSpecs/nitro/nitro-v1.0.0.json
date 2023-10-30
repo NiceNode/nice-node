@@ -9,16 +9,16 @@
     "input": {
       "defaultConfig": {
         "ethMainnetRpcUrl": "",
-        "httpAddress" : "0.0.0.0",
-        "httpPort" : "8547",
-        "l2ChainId" : "42161",
+        "httpAddress": "0.0.0.0",
+        "httpPort": "8547",
+        "l2ChainId": "42161",
         "httpCorsDomains": "http://localhost",
         "httpVirtualHosts": "localhost,host.containers.internal"
       },
       "docker": {
         "containerVolumePath": "/home/user/.arbitrum",
         "raw": "",
-        "forcedRawNodeInput" : "--l1.chain-id=1 --init.url=\"https://snapshot.arbitrum.foundation/arb1/nitro-pruned.tar\" --log-level=5"
+        "forcedRawNodeInput": "--l1.chain-id=1 --init.url=\"https://snapshot.arbitrum.foundation/arb1/nitro-pruned.tar\" --log-level=5"
       }
     },
     "dependencies": ["L1/ExecutionClient"]
@@ -47,13 +47,14 @@
   },
   "configTranslation": {
     "ethMainnetRpcUrl": {
-      "displayName": "Ethereum Mainnet RPC Endpoint (local node http://host.containers.internal:8545 or provider)",
+      "displayName": "Ethereum Mainnet RPC Endpoint",
       "cliConfigPrefix": "--l1.url=",
       "defaultValue": "",
       "uiControl": {
         "type": "text"
       },
-      "addNodeFlow": "required"
+      "addNodeFlow": "required",
+      "infoDescription": "Local node http://host.containers.internal:8545 or provider"
     },
     "l2ChainId": {
       "displayName": "Arbitrum L2 Chain ID",

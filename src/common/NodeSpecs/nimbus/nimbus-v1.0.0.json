@@ -169,5 +169,22 @@
     "default": "https://nimbus.guide/",
     "docker": "https://nimbus.guide/docker.html"
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/nimbus-logo-text.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/nimbus-logo-text.png",
+  "resources": [
+    {
+      "label": "Twitter",
+      "value": "@ethnimbus",
+      "link": "https://x.com/ethnimbus"
+    },
+    {
+      "label": "Discord",
+      "value": "Join",
+      "link": "https://discord.com/invite/XRxWahP"
+    },
+    {
+      "label": "Website",
+      "value": "nimbus.team",
+      "link": "https://nimbus.team/"
+    }
+  ]
 }

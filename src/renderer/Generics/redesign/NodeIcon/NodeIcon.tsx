@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   NODE_ICONS,
@@ -40,7 +41,7 @@ export interface NodeIconProps {
 /**
  * Primary UI component for user interaction
  */
-export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
+const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
   const { t: g } = useTranslation('genericComponents');
 
   let sizeStyle = mediumStyle;
@@ -100,3 +101,5 @@ export const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
     </div>
   );
 };
+
+export default memo(NodeIcon);
