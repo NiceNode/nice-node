@@ -20,7 +20,7 @@
         "forcedRawNodeInput": "op-node --rpc.addr 0.0.0.0 --l2.jwt-secret /root/.ethereum/jwtsecret"
       }
     },
-    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.1.3"
+    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.3.0"
   },
   "category": "L2/ConsensusClient",
   "rpcTranslation": "eth-l2-consensus",
