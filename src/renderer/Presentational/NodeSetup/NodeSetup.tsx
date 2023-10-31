@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import electron from '../../electronGlobal';
-import NNSplash from '../NNSplashScreen/NNSplashScreen';
+import Splash from '../../Generics/redesign/Splash/Splash';
+import FailSystemRequirementsDetector from '../FailSystemRequirements/FailSystemRequirementsDetector';
 import AddNodeStepper from '../AddNodeStepper/AddNodeStepper';
 
 const NodeSetup = () => {
@@ -9,7 +10,12 @@ const NodeSetup = () => {
   const navigate = useNavigate();
 
   if (!hasClicked) {
-    return <NNSplash onClickGetStarted={() => setHasClicked(true)} />;
+    return (
+      <>
+        <Splash onClickGetStarted={() => setHasClicked(true)} />
+        <FailSystemRequirementsDetector />
+      </>
+    );
   }
   return (
     <AddNodeStepper
