@@ -18,7 +18,7 @@ export const contentContainer = style({
   display: 'flex',
   flexDirection: 'column',
   gap: 24,
-  width: 420,
+  width: 424,
   height: 378,
 });
 
@@ -31,10 +31,24 @@ export const titleFont = style({
   textAlign: 'center',
 });
 
+export const termsContainer = style({
+  padding: '12px 16px 12px 16px',
+  borderRadius: 6,
+  border: `1px solid ${vars.color.background92}`,
+});
+
+export const termsText = style({
+  fontWeight: 400,
+  fontSize: 11,
+  lineHeight: '14px',
+  color: vars.color.font50,
+});
+
 export const descriptionFont = style({
   fontWeight: 400,
   fontSize: 13,
   lineHeight: '18px',
+  textAlign: 'center',
   color: vars.color.font70,
 });
 

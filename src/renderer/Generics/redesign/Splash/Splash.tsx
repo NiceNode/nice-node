@@ -1,34 +1,28 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import {
   container,
   contentContainer,
   titleFont,
   descriptionFont,
   iconClass,
+  termsContainer,
+  termsText,
 } from './splash.css';
 import niceNodeIcon from '../../../assets/images/logo/mono.svg';
 import Button from '../Button/Button';
 import welcome from '../../../assets/images/artwork/welcome.png';
+import Linking from '../Link/Linking';
 
 /**
  * icon: ImgHTMLAttributes<HTMLImageElement>.src?: string | undefined
  *  can be an svg string, or http url
  */
 export interface SplashProps {
-  icon?: string;
-  title: string;
-  description: string;
-  getStartedLabel?: string;
   onClickGetStarted?: () => void;
 }
 
-const Splash = ({
-  title,
-  description,
-  icon,
-  getStartedLabel,
-  onClickGetStarted,
-}: SplashProps) => {
+const Splash = ({ onClickGetStarted }: SplashProps) => {
+  const { t } = useTranslation();
   const { t: g } = useTranslation('genericComponents');
 
   return (
@@ -40,11 +34,37 @@ const Splash = ({
       }}
     >
       <div className={contentContainer}>
-        <img className={iconClass} alt="App logo" src={icon ?? niceNodeIcon} />
-        <div className={titleFont}>{title}</div>
-        <div className={descriptionFont}>{description}</div>
+        <img className={iconClass} alt="App logo" src={niceNodeIcon} />
+        <div className={titleFont}>{t('WelcomeToNiceNode')}</div>
+        <div className={descriptionFont}>
+          {t('WelcomeToNiceNodeDescription')}
+        </div>
+        <div className={termsContainer}>
+          <div className={termsText}>
+            <Trans
+              i18nKey="genericComponents:TermsAgreement"
+              components={[
+                <Linking
+                  url="http://nicenode.xyz/terms.html"
+                  text="Terms of Use"
+                  inline
+                  hideIcon
+                  small
+                  underline={false}
+                />,
+                <Linking
+                  url="http://nicenode.xyz/privacy.html"
+                  text="Privacy Statement"
+                  inline
+                  hideIcon
+                  small
+                />,
+              ]}
+            />
+          </div>
+        </div>
         <Button
-          label={getStartedLabel ?? g('GetStarted')}
+          label={g('GetStarted')}
           type="primary"
           onClick={onClickGetStarted}
         />
