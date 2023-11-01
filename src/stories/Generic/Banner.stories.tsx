@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import { Banner } from '../../renderer/Generics/redesign/Banner/Banner';
 
@@ -8,12 +8,10 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof Banner>;
+} as Meta<typeof Banner>;
 
-const Template: ComponentStory<typeof Banner> = (args) => <Banner {...args} />;
-
-export const Primary = Template.bind({});
-
-Primary.args = {
-  updateAvailable: true,
+export const Primary = {
+  args: {
+    updateAvailable: true,
+  },
 };

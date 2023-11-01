@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import { Tooltip } from '../../renderer/Generics/redesign/Tooltip/Tooltip';
 
@@ -8,15 +8,11 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof Tooltip>;
+} as Meta<typeof Tooltip>;
 
-const Template: ComponentStory<typeof Tooltip> = (args) => (
-  <Tooltip {...args} />
-);
-
-export const Primary = Template.bind({});
-
-Primary.args = {
-  title: 'Low peer count',
-  content: 'Try lorem ipsum sit dolor amet.',
+export const Primary = {
+  args: {
+    title: 'Low peer count',
+    content: 'Try lorem ipsum sit dolor amet.',
+  },
 };

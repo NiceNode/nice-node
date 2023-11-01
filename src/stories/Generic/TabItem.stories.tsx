@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import TabItem from '../../renderer/Generics/redesign/TabItem/TabItem';
 
@@ -8,22 +8,18 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof TabItem>;
+} as Meta<typeof TabItem>;
 
-const Template: ComponentStory<typeof TabItem> = (args) => (
-  <TabItem {...args} />
-);
-
-export const TabItemActive = Template.bind({});
-
-TabItemActive.args = {
-  activeTabId: 'Sync',
-  label: 'Sync',
+export const TabItemActive = {
+  args: {
+    activeTabId: 'Sync',
+    label: 'Sync',
+  },
 };
 
-export const TabItemIdle = Template.bind({});
-
-TabItemIdle.args = {
-  activeTabId: 'Sync',
-  label: 'CPU',
+export const TabItemIdle = {
+  args: {
+    activeTabId: 'Sync',
+    label: 'CPU',
+  },
 };
