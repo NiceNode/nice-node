@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 import { MenuItem } from '../../renderer/Generics/redesign/MenuItem/MenuItem';
 import { HorizontalLine } from '../../renderer/Generics/redesign/HorizontalLine/HorizontalLine';
 import { Menu } from '../../renderer/Generics/redesign/Menu/Menu';
@@ -9,9 +9,9 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof Menu>;
+} as Meta<typeof Menu>;
 
-export const Settings: ComponentStory<typeof Menu> = () => (
+export const Settings: StoryFn<typeof Menu> = () => (
   <Menu width={156}>
     <MenuItem
       text="Restart Client"
@@ -43,7 +43,7 @@ export const Settings: ComponentStory<typeof Menu> = () => (
   </Menu>
 );
 
-export const LogMessageType: ComponentStory<typeof Menu> = () => (
+export const LogMessageType: StoryFn<typeof Menu> = () => (
   <Menu width={156}>
     <MenuItem
       variant="checkbox"
@@ -72,7 +72,7 @@ export const LogMessageType: ComponentStory<typeof Menu> = () => (
   </Menu>
 );
 
-export const LogMessageTime: ComponentStory<typeof Menu> = () => (
+export const LogMessageTime: StoryFn<typeof Menu> = () => (
   <Menu width={156}>
     <MenuItem
       text="Last 30 minutes"

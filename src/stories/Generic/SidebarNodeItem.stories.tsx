@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import { SidebarNodeItem } from '../../renderer/Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 
@@ -8,16 +8,13 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof SidebarNodeItem>;
+} as Meta<typeof SidebarNodeItem>;
 
-const Template: ComponentStory<typeof SidebarNodeItem> = (args) => (
-  <SidebarNodeItem {...args} />
-);
-
-export const Ethereum = Template.bind({});
-Ethereum.args = {
-  iconId: 'ethereum',
-  status: 'healthy',
-  title: 'Ethereum node',
-  info: 'Mainnet',
+export const Ethereum = {
+  args: {
+    iconId: 'ethereum',
+    status: 'healthy',
+    title: 'Ethereum node',
+    info: 'Mainnet',
+  },
 };
