@@ -19,6 +19,7 @@ export type SettingChangeHandler = (
   newValue: ConfigValue,
 ) => void;
 export interface NodeSettingsWrapperProps {
+  option?: string | undefined;
   modalOnChangeConfig: (config: ModalConfig, save?: true) => void;
   disableSaveButton: (value: boolean) => void;
 }
@@ -26,6 +27,7 @@ export interface NodeSettingsWrapperProps {
 const HTTP_CORS_DOMAINS_KEY = 'httpCorsDomains';
 
 const NodeSettingsWrapper = ({
+  option,
   modalOnChangeConfig,
   disableSaveButton,
 }: NodeSettingsWrapperProps) => {
@@ -264,6 +266,7 @@ const NodeSettingsWrapper = ({
 
   return (
     <NodeSettings
+      option={option}
       categoryConfigs={sCategoryConfigs}
       configValuesMap={selectedNode?.config.configValuesMap}
       httpCorsConfigTranslation={sHttpCorsConfigTranslation}

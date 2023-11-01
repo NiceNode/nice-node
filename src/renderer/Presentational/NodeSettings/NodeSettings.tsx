@@ -17,6 +17,7 @@ import {
 } from './NodeSettings.css';
 
 export interface NodeSettingsProps {
+  option?: string | undefined;
   categoryConfigs?: CategoryConfig[];
   configValuesMap?: ConfigValuesMap;
   httpCorsConfigTranslation?: ConfigTranslation;
@@ -28,6 +29,7 @@ export interface NodeSettingsProps {
 }
 
 const NodeSettings = ({
+  option,
   categoryConfigs,
   configValuesMap,
   httpCorsConfigTranslation,
@@ -43,9 +45,10 @@ const NodeSettings = ({
     return <div className={emptyContainer} />;
   }
 
-  const renderTabs = () => {
-    const tabs = [];
-    tabs.push(
+  const activeTabId = option ? t('WalletConnections') : t('General');
+
+  return (
+    <Tabs id={activeTabId} modal>
       <div id={t('General')}>
         {isDisabled && (
           <Message type="warning" title={t('StopeNodeToChangeSettings')} />
@@ -84,24 +87,18 @@ const NodeSettings = ({
             danger
           />
         </div>
-      </div>,
-    );
-
-    if (isWalletSettingsEnabled) {
-      tabs.push(
+      </div>
+      {(isWalletSettingsEnabled && (
         <div id={t('WalletConnections')}>
           <WalletSettings
             configValuesMap={configValuesMap}
             httpCorsConfigTranslation={httpCorsConfigTranslation}
             onChange={onChange}
           />
-        </div>,
-      );
-    }
-    return tabs;
-  };
-
-  return <Tabs modal>{renderTabs()}</Tabs>;
+        </div>
+      )) || <></>}
+    </Tabs>
+  );
 };
 
 export default NodeSettings;

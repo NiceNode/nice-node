@@ -6,10 +6,14 @@ import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
 
 type Props = {
+  option?: string;
   modalOnClose: () => void;
 };
 
-export const NodeSettingsModal = ({ modalOnClose }: Props) => {
+export const NodeSettingsModal = ({
+  option = undefined,
+  modalOnClose,
+}: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
   const { t } = useTranslation();
@@ -48,6 +52,7 @@ export const NodeSettingsModal = ({ modalOnClose }: Props) => {
       isSaveButtonDisabled={isSaveButtonDisabled}
     >
       <NodeSettingsWrapper
+        option={option}
         modalOnChangeConfig={(config, save) => {
           modalOnChangeConfig(
             config,

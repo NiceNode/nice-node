@@ -35,7 +35,9 @@ const ModalManager = () => {
     case modalRoutes.addNode:
       return <AddNodeModal modalOnClose={modalOnClose} />;
     case modalRoutes.nodeSettings:
-      return <NodeSettingsModal modalOnClose={modalOnClose} />;
+      return (
+        <NodeSettingsModal option={screen.option} modalOnClose={modalOnClose} />
+      );
     case modalRoutes.preferences:
       return <PreferencesModal modalOnClose={modalOnClose} />;
     case modalRoutes.failSystemRequirements:

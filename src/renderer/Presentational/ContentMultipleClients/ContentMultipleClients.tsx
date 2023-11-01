@@ -21,6 +21,7 @@ import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
 import { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
 import electron from '../../electronGlobal';
+import { setModalState } from '../../state/modal';
 
 const ContentMultipleClients = (props: {
   clients: ClientProps[];
@@ -42,7 +43,7 @@ const ContentMultipleClients = (props: {
   const [walletDismissed, setWalletDismissed] = useState<boolean>(
     initialWalletDismissedState,
   );
-  const [initialSyncMessageDismissed, setinitialSyncMessageDismissed] =
+  const [initialSyncMessageDismissed, setInitialSyncMessageDismissed] =
     useState<boolean>(initialSyncMessageDismissedState);
 
   const onDismissClick = useCallback(() => {
@@ -50,10 +51,19 @@ const ContentMultipleClients = (props: {
     localStorage.setItem('walletDismissed', 'true');
   }, []);
 
-  const onSetupClick = useCallback(() => {
-    // TODO: open wallet screen
-    onDismissClick();
-  }, [onDismissClick]);
+  const onSetupClick = useCallback(
+    (id: string) => {
+      dispatch(updateSelectedNodeId(id));
+      dispatch(
+        setModalState({
+          isModalOpen: true,
+          screen: { route: 'nodeSettings', type: 'modal', option: 'wallet' },
+        }),
+      );
+      onDismissClick();
+    },
+    [dispatch, onDismissClick],
+  );
 
   const onAction = useCallback(
     (action: any) => {
@@ -70,8 +80,12 @@ const ContentMultipleClients = (props: {
     [nodeContent],
   );
 
-  const clClient = clients.find((client) => client.nodeType === 'consensus');
-  const elClient = clients.find((client) => client.nodeType === 'execution');
+  const clClient = clients.find(
+    (client) => client.nodeType === 'Consensus Client',
+  );
+  const elClient = clients.find(
+    (client) => client.nodeType === 'Execution Client',
+  );
 
   const resourceData = useMemo(() => {
     const resourceData: { title: string; items: any[] } = {
@@ -111,7 +125,13 @@ const ContentMultipleClients = (props: {
     ) {
       return (
         <WalletPrompt
-          onSetupClick={onSetupClick}
+          onSetupClick={() => {
+            if (!elClient?.id) {
+              onDismissClick();
+            } else {
+              onSetupClick(elClient?.id);
+            }
+          }}
           onDismissClick={onDismissClick}
         />
       );
@@ -129,7 +149,7 @@ const ContentMultipleClients = (props: {
           description={t('InitialSyncDescription')}
           onClick={() => {
             localStorage.setItem('initialSyncMessageDismissed', 'true');
-            setinitialSyncMessageDismissed(true);
+            setInitialSyncMessageDismissed(true);
           }}
         />
       );
