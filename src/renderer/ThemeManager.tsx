@@ -33,7 +33,7 @@ const ThemeManager = ({ children }: Props) => {
   useEffect(() => {
     const settingsData = qSettings?.data as Settings;
     if (settingsData) {
-      const { osIsDarkMode, appThemeSetting } = settingsData;
+      const { osIsDarkMode, appThemeSetting, osPlatform } = settingsData;
       // check user and os settings
       if (appThemeSetting === 'light') {
         setIsDarkTheme(false);
@@ -41,14 +41,12 @@ const ThemeManager = ({ children }: Props) => {
       } else if (appThemeSetting === 'dark') {
         setIsDarkTheme(true);
         handleColorSchemeChange('dark');
-      } else if (appThemeSetting === 'auto') {
-        setIsDarkTheme(osIsDarkMode);
-        handleColorSchemeChange(osIsDarkMode ? 'dark' : 'light');
       } else {
         setIsDarkTheme(osIsDarkMode);
         handleColorSchemeChange(osIsDarkMode ? 'dark' : 'light');
       }
-      setPlatform(settingsData.osPlatform || '');
+      electron.setNativeThemeSetting(appThemeSetting || 'auto');
+      setPlatform(osPlatform || '');
     }
   }, [qSettings.data]);
 
@@ -61,16 +59,13 @@ const ThemeManager = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const listenForThemeChanges = useCallback(async () => {
+  useEffect(() => {
     console.log('theme: listenForThemeChanges');
     electron.ipcRenderer.on(CHANNELS.theme, onThemeChange);
-    return () =>
+    return () => {
       electron.ipcRenderer.removeListener(CHANNELS.theme, onThemeChange);
+    };
   }, [onThemeChange]);
-
-  useEffect(() => {
-    listenForThemeChanges();
-  }, [listenForThemeChanges]);
 
   // todo: move reportEvent logic to another component or replace on backend
   // subscribes to a channel which notifies when dark mode settings change
@@ -85,7 +80,7 @@ const ThemeManager = ({ children }: Props) => {
   );
 
   type messageArgs = [NNEvent, ReportEventData];
-  const listenForReportEventMessages = useCallback(async () => {
+  useEffect(() => {
     console.log('theme: listenForReportEventMessages');
     electron.ipcRenderer.on(CHANNELS.reportEvent, (args: messageArgs) => {
       // console.log('reportEvent: ', args);
@@ -97,10 +92,6 @@ const ThemeManager = ({ children }: Props) => {
         onReportEventMessage,
       );
   }, [onReportEventMessage]);
-
-  useEffect(() => {
-    listenForReportEventMessages();
-  }, [listenForReportEventMessages]);
 
   return (
     <div

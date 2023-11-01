@@ -5,7 +5,7 @@ import { setModalState } from '../../../state/modal';
 import { useAppDispatch } from '../../../state/hooks';
 import Button, { ButtonProps } from '../Button/Button';
 import { NodeOverviewProps } from '../consts';
-import { NodeIcon } from '../NodeIcon/NodeIcon';
+import NodeIcon from '../NodeIcon/NodeIcon';
 import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
 import { Menu } from '../Menu/Menu';
 import { MenuItem } from '../MenuItem/MenuItem';
@@ -79,7 +79,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
   if (screenType !== 'nodePackage') {
     logsButtonProps = {
       label: g('Logs'),
-      iconId: 'logs',
+      iconId: 'scroll',
       onClick: () => {
         if (onAction) onAction('logs');
       },

@@ -30,5 +30,16 @@ export const sectionFont = style({
 });
 
 export const advancedOptionsLink = style({
-  marginTop: 16,
+  // marginTop: 16,
+});
+
+export const initialClientConfigContainer = style({
+  width: '100%',
+});
+
+export const dataLocationContainer = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 8,
+  width: '100%',
 });

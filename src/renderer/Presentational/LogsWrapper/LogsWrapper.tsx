@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LogWithMetadata } from '../../../main/util/nodeLogUtils';
 import electron from '../../electronGlobal';
 import { useAppSelector } from '../../state/hooks';
@@ -11,27 +11,22 @@ const LogsWrapper = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);
   const [sLogs, setLogs] = useState<LogWithMetadata[]>([]);
 
-  const nodeLogsListener = (message: LogWithMetadata[]) => {
-    setLogs((prevState) => {
-      if (prevState.length < 1000) {
-        return [...prevState, message[0]];
-      }
-      return [message[0]];
-    });
-  };
-
-  const listenForNodeLogs = useCallback(async () => {
-    electron.ipcRenderer.on(CHANNELS.nodeLogs, nodeLogsListener);
-  }, []);
-
   useEffect(() => {
+    const nodeLogsListener = (message: LogWithMetadata[]) => {
+      setLogs((prevState) => {
+        if (prevState.length < 1000) {
+          return [...prevState, message[0]];
+        }
+        return [message[0]];
+      });
+    };
     console.log('LogsWrapper: isOpen. Listening for logs.');
-    listenForNodeLogs();
+    electron.ipcRenderer.on(CHANNELS.nodeLogs, nodeLogsListener);
     return () => {
       setLogs([]);
       electron.ipcRenderer.removeAllListeners(CHANNELS.nodeLogs);
     };
-  }, [listenForNodeLogs]);
+  }, []);
 
   useEffect(() => {
     // when switching selected nodes...

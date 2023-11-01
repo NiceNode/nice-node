@@ -110,6 +110,10 @@ export const copyIcon = style({
   cursor: 'pointer',
 });
 
+export const unableSetWallet = style({
+  paddingBottom: 36,
+});
+
 export const copyButtonContainer = style({
   position: 'relative',
 });

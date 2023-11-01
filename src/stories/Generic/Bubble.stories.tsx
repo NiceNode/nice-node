@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import { Bubble } from '../../renderer/Generics/redesign/Bubble/Bubble';
 
@@ -8,11 +8,10 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof Bubble>;
+} as Meta<typeof Bubble>;
 
-const Template: ComponentStory<typeof Bubble> = (args) => <Bubble {...args} />;
-
-export const Primary = Template.bind({});
-Primary.args = {
-  count: 23,
+export const Primary = {
+  args: {
+    count: 23,
+  },
 };

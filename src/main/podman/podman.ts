@@ -399,6 +399,7 @@ const createPodmanPortInput = (
     enginePort,
     httpPort,
     webSocketsPort,
+    quicPortUdp = undefined,
   } = configTranslation;
   const {
     p2pPorts: configP2pPorts,
@@ -407,6 +408,7 @@ const createPodmanPortInput = (
     enginePort: configEnginePort,
     httpPort: configHttpPort,
     webSocketsPort: configWsPort,
+    quicPortUdp: configQuicPortUdp,
   } = configValuesMap || {};
   const result = [];
 
@@ -449,6 +451,13 @@ const createPodmanPortInput = (
     configEnginePort || (enginePort && enginePort.defaultValue);
   if (enginePortValue) {
     result.push(`-p ${enginePortValue}:${enginePortValue}`);
+  }
+
+  // Handle quic port if it exists (only lighthouse)
+  const quicPortValue =
+    configQuicPortUdp || (quicPortUdp && quicPortUdp.defaultValue);
+  if (quicPortValue) {
+    result.push(`-p ${quicPortValue}:${quicPortValue}/udp`);
   }
 
   return result.join(' ');

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { container, tabsList, tabsContainer, tabContent } from './tabs.css';
 import TabItem from '../TabItem/TabItem';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
@@ -27,9 +27,9 @@ export const Tabs = ({ children, id, modal }: TabsProps) => {
     }
   }, [activeTab, children]);
 
-  const onClickTabItem = (tab: string | undefined) => {
+  const onClickTabItem = useCallback((tab: string | undefined) => {
     setActiveTab(tab);
-  };
+  }, []);
 
   if (children === null) {
     return null;

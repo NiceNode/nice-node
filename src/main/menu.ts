@@ -20,6 +20,8 @@ import { removeAllNodePackages } from './nodePackageManager';
 import { checkNodePortsAndNotify } from './ports';
 import { reportEvent } from './events';
 import { onResume, onShutdown, onSuspend } from './power';
+import { i18nMain } from './i18nMain';
+import logger from './logger';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -55,6 +57,7 @@ const developerMenu: CommonMenuItemConstructorOptions = {
   ],
 };
 
+const t = (str: string) => i18nMain.t(str, { ns: 'windowMenu' });
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
 
@@ -63,6 +66,7 @@ export default class MenuBuilder {
   }
 
   buildMenu(): Menu {
+    logger.info('Building menu. Current Lang is : ', i18nMain.language);
     if (
       process.env.NODE_ENV === 'development' ||
       process.env.DEBUG_PROD === 'true'
@@ -96,16 +100,19 @@ export default class MenuBuilder {
     });
   }
 
+  // ============================
+  // ======== macOS Menu ========
+  // ============================
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
       label: 'NiceNode',
       submenu: [
         {
-          label: 'About NiceNode',
+          label: t('AboutNiceNode'),
           selector: 'orderFrontStandardAboutPanel:',
         },
         {
-          label: 'Check for updates...',
+          label: t('CheckForUpdates'),
           click() {
             reportEvent('UserCheckForUpdateNN');
             checkForUpdates(true);
@@ -113,13 +120,13 @@ export default class MenuBuilder {
         },
         { type: 'separator' },
         {
-          label: 'Hide NiceNode',
+          label: t('HideNiceNode'),
           accelerator: 'Command+H',
           selector: 'hide:',
         },
         { type: 'separator' },
         {
-          label: 'Quit',
+          label: t('Quit'),
           accelerator: 'Command+Q',
           click: () => {
             app.quit();
@@ -131,40 +138,40 @@ export default class MenuBuilder {
     // to be in the menu on macOS.
     // https://pracucci.com/atom-electron-enable-copy-and-paste.html
     const subMenuEdit: DarwinMenuItemConstructorOptions = {
-      label: 'Edit',
+      label: t('Edit'),
       submenu: [
-        { label: 'Undo', accelerator: 'Command+Z', selector: 'undo:' },
-        { label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:' },
+        { label: t('Undo'), accelerator: 'Command+Z', selector: 'undo:' },
+        { label: t('Redo'), accelerator: 'Shift+Command+Z', selector: 'redo:' },
         { type: 'separator' },
-        { label: 'Cut', accelerator: 'Command+X', selector: 'cut:' },
-        { label: 'Copy', accelerator: 'Command+C', selector: 'copy:' },
-        { label: 'Paste', accelerator: 'Command+V', selector: 'paste:' },
+        { label: t('Cut'), accelerator: 'Command+X', selector: 'cut:' },
+        { label: t('Copy'), accelerator: 'Command+C', selector: 'copy:' },
+        { label: t('Paste'), accelerator: 'Command+V', selector: 'paste:' },
         {
-          label: 'Select All',
+          label: t('Select All'),
           accelerator: 'Command+A',
           selector: 'selectAll:',
         },
       ],
     };
     const subMenuViewDev: MenuItemConstructorOptions = {
-      label: 'View',
+      label: t('View'),
       submenu: [
         {
-          label: 'Reload',
+          label: t('Reload'),
           accelerator: 'Command+R',
           click: () => {
             this.mainWindow.webContents.reload();
           },
         },
         {
-          label: 'Toggle Full Screen',
+          label: t('ToggleFullScreen'),
           accelerator: 'Ctrl+Command+F',
           click: () => {
             this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
           },
         },
         {
-          label: 'Toggle Developer Tools',
+          label: t('ToggleDeveloperTools'),
           accelerator: 'Alt+Command+I',
           click: () => {
             this.mainWindow.webContents.toggleDevTools();
@@ -176,7 +183,7 @@ export default class MenuBuilder {
       label: 'View',
       submenu: [
         {
-          label: 'Toggle Full Screen',
+          label: t('ToggleFullScreen'),
           accelerator: 'Ctrl+Command+F',
           click: () => {
             this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
@@ -185,76 +192,80 @@ export default class MenuBuilder {
       ],
     };
     const subMenuWindow: DarwinMenuItemConstructorOptions = {
-      label: 'Window',
+      label: t('Window'),
       submenu: [
         {
-          label: 'Minimize',
+          label: t('Minimize'),
           accelerator: 'Command+M',
           selector: 'performMiniaturize:',
         },
-        { label: 'Close', accelerator: 'Command+W', selector: 'performClose:' },
+        {
+          label: t('Close'),
+          accelerator: 'Command+W',
+          selector: 'performClose:',
+        },
         { type: 'separator' },
-        { label: 'Bring All to Front', selector: 'arrangeInFront:' },
+        { label: t('Bring All to Front'), selector: 'arrangeInFront:' },
       ],
     };
     const subMenuHelp: MenuItemConstructorOptions = {
-      label: 'Help',
+      label: t('Help'),
       submenu: [
         {
-          label: 'NiceNode Website',
+          label: t('NiceNodeWebsite'),
           click() {
             shell.openExternal('https://nicenode.xyz');
           },
         },
         { type: 'separator' },
         {
-          label: 'Report Problems',
+          label: t('ReportAProblem'),
           click() {
             shell.openExternal(getGithubIssueProblemURL());
           },
         },
         {
-          label: 'Copy Configuration Details to Clipboard',
+          label: t('CopyConfigurationDetailsToClipboard'),
           click() {
             clipboard.writeText(getDebugInfoString());
           },
         },
         { type: 'separator' },
         {
-          label: 'Show Splash Screen On Launch',
+          label: t('ShowSplashScreenAgain'),
           click() {
             getSetHasSeenSplashscreen(false);
           },
         },
         { type: 'separator' },
         {
-          label: 'Show Alpha Modal',
+          label: t('Show Alpha Modal'),
           click() {
             getSetHasSeenAlphaModal(false);
           },
         },
         { type: 'separator' },
         {
-          label: 'Check Ports',
+          label: t('Check Ports'),
           click() {
             checkNodePortsAndNotify();
           },
         },
         { type: 'separator' },
         {
-          label: 'Remove all nodes and data',
+          label: t('RemoveAllNodesAndData'),
           click() {
             removeAllNodePackages();
           },
         },
         {
-          label: 'Uninstall podman',
+          label: t('UninstallPodman'),
           click() {
             uninstallPodman();
           },
         },
         {
-          label: 'Nuclear uninstall (unistall podman and delete all NN data)',
+          label: t('NuclearUninstall'),
           click() {
             nuclearUninstall();
           },
@@ -284,13 +295,19 @@ export default class MenuBuilder {
     return menus;
   }
 
+  // ============================
+  // ====== non-macOS Menu ======
+  // ============================
+  // Prefix '&' for Alt-<char> keyboard shortcuts
+  // Example: &File allows Alt-F to open File menu
+  // more: https://www.electronjs.org/docs/latest/api/menu
   buildDefaultTemplate() {
     const templateDefault = [
       {
-        label: '&NiceNode',
+        label: 'NiceNode',
         submenu: [
           {
-            label: 'Check for updates...',
+            label: t('CheckForUpdates'),
             click() {
               reportEvent('UserCheckForUpdateNN');
               checkForUpdates(true);
@@ -299,20 +316,20 @@ export default class MenuBuilder {
         ],
       },
       {
-        label: '&View',
+        label: `&${t('View')}`,
         submenu:
           process.env.NODE_ENV === 'development' ||
           process.env.DEBUG_PROD === 'true'
             ? [
                 {
-                  label: '&Reload',
+                  label: t('Reload'),
                   accelerator: 'Ctrl+R',
                   click: () => {
                     this.mainWindow.webContents.reload();
                   },
                 },
                 {
-                  label: 'Toggle &Full Screen',
+                  label: t('ToggleFullScreen'),
                   accelerator: 'F11',
                   click: () => {
                     this.mainWindow.setFullScreen(
@@ -321,7 +338,7 @@ export default class MenuBuilder {
                   },
                 },
                 {
-                  label: 'Toggle &Developer Tools',
+                  label: t('ToggleDeveloperTools'),
                   accelerator: 'Alt+Ctrl+I',
                   click: () => {
                     this.mainWindow.webContents.toggleDevTools();
@@ -330,7 +347,7 @@ export default class MenuBuilder {
               ]
             : [
                 {
-                  label: 'Toggle &Full Screen',
+                  label: t('ToggleFullScreen'),
                   accelerator: 'F11',
                   click: () => {
                     this.mainWindow.setFullScreen(
@@ -339,7 +356,7 @@ export default class MenuBuilder {
                   },
                 },
                 {
-                  label: '&Close',
+                  label: `&${t('Close')}`,
                   accelerator: 'Ctrl+W',
                   click: () => {
                     this.mainWindow.close();
@@ -348,54 +365,66 @@ export default class MenuBuilder {
               ],
       },
       {
-        label: 'Help',
+        label: t('Help'),
         submenu: [
           {
-            label: 'NiceNode Website',
+            label: t('NiceNodeWebsite'),
             click() {
               shell.openExternal('https://nicenode.xyz');
             },
           },
           {
-            label: 'Report Problems',
+            label: t('ReportAProblem'),
             click() {
               shell.openExternal(getGithubIssueProblemURL());
             },
           },
           {
-            label: 'Copy Configuration Details to Clipboard',
+            label: t('CopyConfigurationDetailsToClipboard'),
             click() {
               clipboard.writeText(getDebugInfoString());
             },
           },
           {
-            label: 'Remove all nodes and data',
+            label: t('RemoveAllNodesAndData'),
             click() {
               removeAllNodePackages();
             },
           },
           {
-            label: 'Uninstall podman',
+            label: t('UninstallPodman'),
             click() {
               uninstallPodman();
             },
           },
           {
-            label: 'Nuclear uninstall (unistall podman and delete all NN data)',
+            label: t('NuclearUninstall'),
             click() {
               nuclearUninstall();
             },
           },
           {
-            label: 'Log minimum system requirement check',
+            label: t('LogMinimumSystemRequirementCheck'),
             click() {
               getFailSystemRequirements();
             },
           },
           {
-            label: 'Show Splash Screen On Launch',
+            label: t('ShowSplashScreenAgain'),
             click() {
               getSetHasSeenSplashscreen(false);
+            },
+          },
+          {
+            label: t('Show Alpha Modal'),
+            click() {
+              getSetHasSeenAlphaModal(false);
+            },
+          },
+          {
+            label: t('Check Ports'),
+            click() {
+              checkNodePortsAndNotify();
             },
           },
         ],

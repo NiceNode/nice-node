@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ClientProps, NodeOverviewProps } from '../../Generics/redesign/consts';
@@ -22,10 +22,8 @@ import { updateSelectedNodeId } from '../../state/node';
 import { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
 import electron from '../../electronGlobal';
 
-const resourceJson = require('./resources.json');
-
 const ContentMultipleClients = (props: {
-  clients: ClientProps[] | undefined;
+  clients: ClientProps[];
   nodeContent: SingleNodeContent | undefined;
   isPodmanRunning: boolean;
 }) => {
@@ -72,15 +70,35 @@ const ContentMultipleClients = (props: {
     [nodeContent],
   );
 
-  if (!clients) {
-    return <></>;
-  }
-  if (clients.length < 1) {
-    return <>No node found</>;
-  }
-
   const clClient = clients.find((client) => client.nodeType === 'consensus');
   const elClient = clients.find((client) => client.nodeType === 'execution');
+
+  const resourceData = useMemo(() => {
+    const resourceData: { title: string; items: any[] } = {
+      title: t('MoreResources'),
+      items: [],
+    };
+
+    clients.forEach((client) => {
+      const clientResource = client?.resources;
+      if (clientResource) {
+        resourceData.items.push({
+          sectionTitle: client.displayName,
+          items: client.resources,
+        });
+      }
+    });
+
+    const nodePackageResource = nodeContent?.resources;
+    if (nodePackageResource) {
+      resourceData.items.push({
+        sectionTitle: `${nodeContent.displayName} ${t('Node')}`,
+        items: nodePackageResource,
+      });
+    }
+
+    return resourceData;
+  }, [clients, t, nodeContent]);
 
   const renderPrompt = () => {
     const synchronized =
@@ -119,7 +137,7 @@ const ContentMultipleClients = (props: {
     return null;
   };
 
-  const getNodeOverview = () => {
+  const nodeOverview = useMemo(() => {
     // useEffect, used only in Header and Metrics
 
     // TODO: loop over all node's services/clients for missing statuses in nodeOverview
@@ -162,12 +180,13 @@ const ContentMultipleClients = (props: {
     //   };
     //   return nodeOverview;
     // }
+    // non-Ethereum node conditions added here
     if (!nodeContent) {
       return {};
     }
     const nodeOverview: NodeOverviewProps = {
       name: nodeContent.name,
-      title: `${nodeContent.displayName} node`,
+      title: `${nodeContent.displayName} ${t('Node')}`,
       info: nodeContent.info ?? '',
       screenType: 'nodePackage',
       status: nodeContent.status ?? {},
@@ -177,37 +196,21 @@ const ContentMultipleClients = (props: {
       rpcTranslation: 'eth-l1', // todo
     };
     return nodeOverview;
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(nodeContent?.status), JSON.stringify(nodeContent?.stats)]);
 
-  const getResourceData = () => {
-    // eslint-disable-next-line
-    const resourceData: { title: string; items: any[] } = {
-      title: t('MoreResources'),
-      items: [],
-    };
-    const clientNames = clients.map((client) => {
-      return client.name;
-    });
-    // Look through json and find exact client resource data
-    clientNames.forEach((value) => {
-      const clientSearch = (clientString: string) =>
-        resourceJson.find(
-          (clientObject: { key: string }) => clientObject.key === clientString,
-        );
-      const found = clientSearch(value);
-      if (found) {
-        resourceData.items.push(found);
-      }
-    });
-    if (clClient || elClient) {
-      // Altruistic node, so add Ethereum information at end
-      resourceData.items.push(resourceJson[0]);
-    }
-    return resourceData;
-  };
-
-  const nodeOverview = getNodeOverview();
-  const resourceData = getResourceData();
+  const handleClientClick = useCallback(
+    (clientId: string | undefined) => {
+      console.log('ContentMultipleClients client on click!', clientId);
+      dispatch(updateSelectedNodeId(clientId));
+      // Added a delay to navigate because NodeScreen can't handle a
+      // node change properly here after NodeScreen renders
+      setTimeout(() => {
+        navigate('/main/node');
+      }, 500);
+    },
+    [dispatch, navigate],
+  );
 
   return (
     <div className={container}>
@@ -226,19 +229,9 @@ const ContentMultipleClients = (props: {
         {clients.map((client) => {
           return (
             <ClientCard
+              key={client.id}
               {...client}
-              onClick={() => {
-                console.log(
-                  'ContentMultipleClients client on click!',
-                  client.id,
-                );
-                dispatch(updateSelectedNodeId(client.id));
-                // Added a delay to navigate because NodeScreen can't handle a
-                //  node change properly here after NodeScreen renders
-                setTimeout(() => {
-                  navigate('/main/node');
-                }, 500);
-              }}
+              onClick={() => handleClientClick(client.id)}
             />
           );
         })}

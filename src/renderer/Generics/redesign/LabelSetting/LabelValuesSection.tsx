@@ -14,6 +14,7 @@ import {
 } from './labelSettingsSection.css';
 
 export type LabelSettingsItem = {
+  key?: string;
   label: ReactElement | string;
   value: ReactElement | string;
   description?: string;
@@ -47,7 +48,7 @@ const LabelSettingsSection = ({
       )}
       {items &&
         items.map((item, index) => (
-          <div className={lineContainer} key={index}>
+          <div className={[lineContainer, item.key].join(' ')} key={index}>
             <div className={labelAndDescriptionContainer}>
               <div className={lineKeyText}>{item.label}</div>
               <Caption type={type}>
@@ -63,7 +64,9 @@ const LabelSettingsSection = ({
               </Caption>
             </div>
 
-            <div className={lineValueText}>{item.value}</div>
+            <div className={[lineValueText, item.key].join(' ')}>
+              {item.value}
+            </div>
           </div>
         ))}
     </div>

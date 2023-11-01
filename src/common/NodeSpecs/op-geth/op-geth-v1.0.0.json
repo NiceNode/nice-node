@@ -23,7 +23,7 @@
         "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
-    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101106.0"
+    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101304.0"
   },
   "category": "L2/ExecutionClient",
   "rpcTranslation": "eth-l2",
@@ -45,7 +45,7 @@
   },
   "configTranslation": {
     "dataDir": {
-      "displayName": "Node data is stored in this folder",
+      "displayName": "Data location",
       "cliConfigPrefix": "--datadir ",
       "defaultValue": "~/.ethereum",
       "uiControl": {
@@ -248,5 +248,22 @@
       }
     }
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png",
+  "resources": [
+    {
+      "label": "Website",
+      "value": "optimism.io",
+      "link": "https://optimism.io/"
+    },
+    {
+      "label": "Block explorer",
+      "value": "etherscan.io",
+      "link": "https://optimistic.etherscan.io/"
+    },
+    {
+      "label": "X (Twitter)",
+      "value": "x.com",
+      "link": "https://x.com/optimismFND"
+    }
+  ]
 }

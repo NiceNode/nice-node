@@ -14,7 +14,7 @@ import {
   clientLabels,
   clientBackground,
 } from './clientCard.css';
-import { NodeIcon } from '../NodeIcon/NodeIcon';
+import NodeIcon from '../NodeIcon/NodeIcon';
 import { Label, LabelColor } from '../Label/Label';
 // import ProgressBar from '../ProgressBar/ProgressBar';
 import { ClientProps, ClientStatusProps } from '../consts';

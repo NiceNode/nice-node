@@ -12,7 +12,9 @@
         "httpCorsDomains": "http://localhost",
         "websockets": "Enabled",
         "executionEndpoint": "http://host.containers.internal:8551",
-        "network": "Mainnet"
+        "network": "Mainnet",
+        "quicPort": "Enabled",
+        "quicPortUdp": "9001"
       },
       "docker": {
         "containerVolumePath": "/root/.lighthouse",
@@ -55,7 +57,7 @@
   },
   "configTranslation": {
     "dataDir": {
-      "displayName": "Node data is stored in this folder",
+      "displayName": "Data location",
       "cliConfigPrefix": "--datadir ",
       "uiControl": {
         "type": "filePath"
@@ -114,6 +116,33 @@
       "defaultValue": "Disabled",
       "infoDescription": "NiceNode requires http connections",
       "documentation": "https://lighthouse-book.sigmaprime.io/api-bn.html#starting-the-server"
+    },
+    "quicPort": {
+      "displayName": "QUIC Connections",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled"
+          },
+          {
+            "value": "Disabled",
+            "config": "--disable-quic"
+          }
+        ]
+      },
+      "defaultValue": "Enabled",
+      "documentation": "https://lighthouse-blog.sigmaprime.io/Quic.html"
+    },
+    "quicPortUdp": {
+      "displayName": "QUIC port (UDP)",
+      "cliConfigPrefix": ["--quic-port ", "--quic-port6 "],
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 9001",
+      "defaultValue": "9001",
+      "documentation": "https://lighthouse-blog.sigmaprime.io/Quic.html"
     },
     "p2pPorts": {
       "displayName": "P2P port (UDP and TCP)",
@@ -175,5 +204,22 @@
     "default": "https://lighthouse-book.sigmaprime.io/intro.html",
     "docker": "https://lighthouse-book.sigmaprime.io/docker.html"
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/lighthouse-logo.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/lighthouse-logo.png",
+  "resources": [
+    {
+      "label": "Twitter",
+      "value": "@sigp_io",
+      "link": "https://x.com/sigp_io"
+    },
+    {
+      "label": "Discord",
+      "value": "Join",
+      "link": "https://discord.gg/TX7HKfgJN3"
+    },
+    {
+      "label": "Website",
+      "value": "lighthouse.sigmaprime.io",
+      "link": "https://lighthouse.sigmaprime.io/"
+    }
+  ]
 }
