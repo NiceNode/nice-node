@@ -64,7 +64,7 @@ export const initialize = async () => {
       logger.error(err);
     }
   });
-  console.log('nodeSpecBySpecId: ', nodeSpecBySpecId);
+  // console.log('nodeSpecBySpecId: ', nodeSpecBySpecId);
   updateNodeLibrary(nodeSpecBySpecId);
 
   const nodePackageSpecBySpecId: NodePackageLibrary = {};
@@ -82,7 +82,7 @@ export const initialize = async () => {
       logger.error(err);
     }
   });
-  console.log('nodePackageSpecBySpecId: ', nodePackageSpecBySpecId);
+  // console.log('nodePackageSpecBySpecId: ', nodePackageSpecBySpecId);
 
   return updateNodePackageLibrary(nodePackageSpecBySpecId);
 };

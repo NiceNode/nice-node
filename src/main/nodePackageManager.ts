@@ -13,6 +13,7 @@ import Node, {
   NodeRuntime,
   NodeService,
   NodeStatus,
+  NodeStoppedBy,
 } from '../common/node';
 import * as nodePackageStore from './state/nodePackages';
 import * as nodeStore from './state/nodes';
@@ -139,6 +140,7 @@ export const startNodePackage = async (nodeId: NodeId) => {
   logger.info(`Starting node ${JSON.stringify(node)}`);
   let nodePackageStatus = NodeStatus.starting;
   node.status = nodePackageStatus;
+  node.stoppedBy = undefined;
   nodePackageStore.updateNodePackage(node);
 
   nodePackageStatus = NodeStatus.running;
@@ -159,7 +161,10 @@ export const startNodePackage = async (nodeId: NodeId) => {
   nodePackageStore.updateNodePackage(node);
 };
 
-export const stopNodePackage = async (nodeId: NodeId) => {
+export const stopNodePackage = async (
+  nodeId: NodeId,
+  stoppedBy: NodeStoppedBy,
+) => {
   const node = nodePackageStore.getNodePackage(nodeId);
   if (!node) {
     throw new Error(`Unable to stop node package ${nodeId}. Not found.`);
@@ -167,13 +172,14 @@ export const stopNodePackage = async (nodeId: NodeId) => {
   logger.info(`Stopping node ${JSON.stringify(node)}`);
   let nodePackageStatus = NodeStatus.stopping;
   node.status = nodePackageStatus;
+  node.stoppedBy = stoppedBy;
   nodePackageStore.updateNodePackage(node);
 
   nodePackageStatus = NodeStatus.stopped;
   for (let i = 0; i < node.services.length; i++) {
     const service = node.services[i];
     try {
-      await stopNode(service.node.id);
+      await stopNode(service.node.id, stoppedBy);
     } catch (e) {
       logger.error(`Unable to stop node service: ${JSON.stringify(service)}`);
       nodePackageStatus = NodeStatus.errorStopping;
@@ -204,7 +210,8 @@ export const removeNodePackage = async (
     `Remove node package ${nodeId} and delete storage? ${options.isDeleteStorage}`,
   );
   try {
-    await stopNodePackage(nodeId);
+    // stoppedBy set to user as only users remove nodes
+    await stopNodePackage(nodeId, NodeStoppedBy.user);
   } catch (err) {
     logger.info(
       'Unable to stop the node package before removing. Continuing with removal.',
@@ -245,4 +252,42 @@ export const removeAllNodePackages = async () => {
   // Useful if the data in the store is stored/deleted improperly
   nodePackageStore.clear();
   nodeStore.clear();
+};
+
+// Stop all running nodes to prevent unclean shutdowns
+//  and mark them as stopped by a shutdown
+export const onShutDown = () => {
+  const nodes = nodePackageStore.getNodePackages();
+  nodes.forEach((node) => {
+    if (node.status === NodeStatus.running) {
+      // do not block and await, limited shutdown time given
+      stopNodePackage(node.id, NodeStoppedBy.shutdown);
+    }
+  });
+};
+
+/**
+ * Restarts all of the nodes that were running prior to the previous
+ * shutdown (ie. nodes.stoppedBy !== 'user') or app close.
+ * Does not restart nodes that are already running.
+ */
+export const restartNodes = () => {
+  const nodesToRestart = nodePackageStore
+    .getNodePackages()
+    .filter(
+      (node) =>
+        node.stoppedBy !== NodeStoppedBy.user &&
+        node.status !== NodeStatus.running,
+    );
+  if (nodesToRestart.length > 0) {
+    logger.info(
+      `restartNodes: ${nodesToRestart
+        .map((node) => node.spec.displayName)
+        .join(', ')}`,
+    );
+  }
+  nodesToRestart.forEach((node) => {
+    startNodePackage(node.id);
+  });
+  // Todo: Create notification if a node restart fails
 };

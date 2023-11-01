@@ -4,12 +4,10 @@ import Node, {
   isDockerNode,
   NodeId,
   NodeStatus,
-  NodeStoppedBy,
   UserNodes,
 } from '../../common/node';
 import store from './store';
 import { ConfigValuesMap } from '../../common/nodeConfig';
-import { startNodePackage } from '../nodePackageManager';
 
 export const USER_NODES_KEY = 'userNodes';
 const NODES_KEY = 'nodes';
@@ -198,29 +196,4 @@ export const removeNode = (nodeId: NodeId) => {
   const newNodeIds = nodeIds.filter((id) => id !== nodeId); // will return ['A', 'C']
   store.set(USER_NODES_KEY, { nodes, nodeIds: newNodeIds });
   return nodeToRemove;
-};
-
-export const onShutDown = () => {
-  const nodes = getNodes();
-  nodes.forEach((node) => {
-    if (node.stoppedBy !== NodeStoppedBy.user) {
-      node.stoppedBy = NodeStoppedBy.shutdown;
-      updateNode(node);
-    }
-  });
-};
-
-export const restartNodes = (reason: 'shutdown' | 'login') => {
-  const nodesToRestart = getNodes().filter(
-    (node) => node.stoppedBy !== NodeStoppedBy.user,
-  );
-  nodesToRestart.forEach((node) => {
-    startNodePackage(node.id);
-    node.status = NodeStatus.starting;
-    node.stoppedBy =
-      reason === NodeStoppedBy.shutdown
-        ? NodeStoppedBy.shutdown
-        : NodeStoppedBy.niceNode;
-    updateNode(node);
-  });
 };

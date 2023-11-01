@@ -3,7 +3,6 @@ import enNotifications from '../../assets/locales/en/notifications.json';
 
 i18n.init({
   fallbackLng: 'en',
-  debug: true,
   interpolation: {
     escapeValue: false,
   },

@@ -20,8 +20,9 @@ import { parsePodmanLogMetadata } from '../util/nodeLogUtils';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
 import { getPodmanEnvWithPath } from './podman-env-path';
 import { getNiceNodeMachine } from './machine';
-import startPodman from './start';
+import startPodman, { onStartUp } from './start';
 import { isLinux } from '../platform';
+import { restartNodes } from '../nodePackageManager';
 
 let podmanWatchProcess: ChildProcess;
 
@@ -303,13 +304,16 @@ export const sendLogsToUI = (node: Node) => {
 };
 
 export const initialize = async () => {
-  logger.info('Connecting to local podman dameon...');
+  logger.info('podman.initialize() called');
   try {
     // podman = new Podman(options);
+    await onStartUp(); // Ensures Podman is running if installed
+    // Todo: Only call this if Podman is Installed AND call this after Podman is installed
     watchPodmanEvents();
     metricsPolling.initialize();
     // todo: update podman node usages
     // runCommand('-v');
+    restartNodes();
   } catch (err) {
     console.error(err);
     // podman not installed?

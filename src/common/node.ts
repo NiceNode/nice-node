@@ -32,9 +32,7 @@ export enum NodeStatus {
 
 export enum NodeStoppedBy {
   user = 'user',
-  niceNode = 'nice-node',
   shutdown = 'shutdown',
-  crash = 'crash',
 }
 
 export type NodeConfig = {
@@ -94,6 +92,7 @@ export type NodePackage = {
   status: NodeStatus;
   lastStarted?: string;
   lastStopped?: string;
+  stoppedBy?: NodeStoppedBy;
 };
 export type NodePackageMap = Record<string, NodePackage>;
 

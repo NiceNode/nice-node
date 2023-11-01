@@ -1,4 +1,6 @@
+/* eslint-disable no-await-in-loop */
 import {
+  isPodmanInstalled,
   isPodmanRunning,
   isPodmanStarting,
   runCommand as runPodmanCommand,
@@ -7,6 +9,7 @@ import { execAwait } from '../execHelper';
 import logger from '../logger';
 import * as platform from '../platform';
 import { startMachineIfCreated } from './machine';
+import { delay } from '../util/delay';
 
 const NICENODE_MACHINE_NAME = 'nicenode-machine';
 
@@ -86,6 +89,29 @@ export const startOnWindows = async (): Promise<any> => {
   }
 };
 
+const waitForPodmanToFinishStarting = async (maxTime?: number) => {
+  logger.info(`waitForPodmanToFinishStarting...`);
+  const startTime = Date.now();
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    if (await isPodmanRunning()) {
+      logger.info(`waitForPodmanToFinishStarting: Podman is running!`);
+      return true;
+      // Continue with the rest of the code here
+    }
+    if (maxTime !== undefined && Date.now() - startTime > maxTime) {
+      logger.info(
+        'waitForPodmanToFinishStarting: Maximum time exceeded, stopping check...',
+      );
+      return false;
+      // Continue with the rest of the code here, if needed
+    }
+    logger.info(
+      'waitForPodmanToFinishStarting: checking again in 5 seconds...',
+    );
+    await delay(20000);
+  }
+};
 /**
  * Creates a podman machine if one does not exists. Starts
  * the machine. No machine required on Linux.
@@ -94,9 +120,17 @@ const startPodman = async (): Promise<any> => {
   logger.info(`Starting podman...`);
 
   if (await isPodmanRunning()) {
+    logger.info(`startPodman: Podman is already running.`);
     return true;
   }
   if (await isPodmanStarting()) {
+    // todo: wait for Podman to be started
+    logger.info(
+      `startPodman: Podman is already starting. Waiting for Podman to be running...`,
+    );
+    // check every 5 seconds, for a total possible time of 3 minutes
+    await waitForPodmanToFinishStarting(3 * 60 * 1000);
+
     return true;
   }
   let result;
@@ -110,6 +144,16 @@ const startPodman = async (): Promise<any> => {
   }
   logger.info(`Finished starting podman. Result:`, result);
   return result;
+};
+
+/**
+ * If podman is installed, starts podman.
+ */
+export const onStartUp = async () => {
+  logger.info(`podman.onStartUp() called`);
+  if (await isPodmanInstalled()) {
+    await startPodman();
+  }
 };
 
 export default startPodman;

@@ -19,11 +19,41 @@ import { getFailSystemRequirements } from './minSystemRequirement';
 import { removeAllNodePackages } from './nodePackageManager';
 import { checkNodePortsAndNotify } from './ports';
 import { reportEvent } from './events';
+import { onResume, onShutdown, onSuspend } from './power';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
   submenu?: DarwinMenuItemConstructorOptions[] | Menu;
 }
+
+interface CommonMenuItemConstructorOptions {
+  label: string;
+  submenu: { label: string; click: () => void; accelerator?: string }[];
+}
+
+const developerMenu: CommonMenuItemConstructorOptions = {
+  label: 'Developer',
+  submenu: [
+    {
+      label: 'Simulate Shutdown',
+      click: () => {
+        onShutdown();
+      },
+    },
+    {
+      label: 'Simulate Suspend',
+      click: () => {
+        onSuspend();
+      },
+    },
+    {
+      label: 'Simulate Resume',
+      click: () => {
+        onResume();
+      },
+    },
+  ],
+};
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -238,7 +268,20 @@ export default class MenuBuilder {
         ? subMenuViewDev
         : subMenuViewProd;
 
-    return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
+    const menus = [
+      subMenuAbout,
+      subMenuEdit,
+      subMenuView,
+      subMenuWindow,
+      subMenuHelp,
+    ];
+    if (
+      process.env.NODE_ENV === 'development' ||
+      process.env.DEBUG_PROD === 'true'
+    ) {
+      menus.push(developerMenu);
+    }
+    return menus;
   }
 
   buildDefaultTemplate() {
@@ -358,6 +401,13 @@ export default class MenuBuilder {
         ],
       },
     ];
+
+    if (
+      process.env.NODE_ENV === 'development' ||
+      process.env.DEBUG_PROD === 'true'
+    ) {
+      templateDefault.push(developerMenu);
+    }
 
     return templateDefault;
   }
