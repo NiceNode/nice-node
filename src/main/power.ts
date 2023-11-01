@@ -2,6 +2,7 @@ import { powerSaveBlocker, powerMonitor } from 'electron';
 
 // import { getIsStartOnLogin, watchIsStartOnLogin } from './state/store';
 import logger from './logger';
+import { onShutDown, restartNodes } from './state/nodes';
 
 let id: number | undefined;
 // eslint-disable-next-line import/prefer-default-export
@@ -40,3 +41,15 @@ powerMonitor.on('on-ac', () => {
   logger.info('PowerChange: On power!');
 });
 // dontSuspendSystem();
+
+powerMonitor.on('shutdown', () => {
+  onShutDown();
+});
+
+powerMonitor.on('suspend', () => {
+  onShutDown();
+});
+
+powerMonitor.on('resume', () => {
+  restartNodes('login');
+});

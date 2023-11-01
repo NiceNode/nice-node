@@ -1,5 +1,4 @@
 import { CHANNELS, send } from '../messenger';
-import { powerMonitor } from 'electron';
 import { didPortsChange } from '../ports';
 import Node, {
   isDockerNode,
@@ -10,6 +9,7 @@ import Node, {
 } from '../../common/node';
 import store from './store';
 import { ConfigValuesMap } from '../../common/nodeConfig';
+import { startNodePackage } from '../nodePackageManager';
 
 export const USER_NODES_KEY = 'userNodes';
 const NODES_KEY = 'nodes';
@@ -200,25 +200,22 @@ export const removeNode = (nodeId: NodeId) => {
   return nodeToRemove;
 };
 
-powerMonitor.on('shutdown', () => {
-  restartNodes('shutdown');
-});
+export const onShutDown = () => {
+  const nodes = getNodes();
+  nodes.forEach((node) => {
+    if (node.stoppedBy !== NodeStoppedBy.user) {
+      node.stoppedBy = NodeStoppedBy.shutdown;
+      updateNode(node);
+    }
+  });
+};
 
-powerMonitor.on('suspend', () => {
-  restartNodes('shutdown');
-});
-
-powerMonitor.on('resume', () => {
-  restartNodes('login');
-});
-
-const restartNodes = (reason: 'shutdown' | 'login') => {
+export const restartNodes = (reason: 'shutdown' | 'login') => {
   const nodesToRestart = getNodes().filter(
-    (node) =>
-      node.status === NodeStatus.running &&
-      node.stoppedBy !== NodeStoppedBy.user,
+    (node) => node.stoppedBy !== NodeStoppedBy.user,
   );
   nodesToRestart.forEach((node) => {
+    startNodePackage(node.id);
     node.status = NodeStatus.starting;
     node.stoppedBy =
       reason === NodeStoppedBy.shutdown
