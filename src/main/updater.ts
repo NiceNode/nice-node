@@ -84,12 +84,6 @@ export const initialize = (mainWindow: BrowserWindow) => {
   autoUpdater.logger = autoUpdateLogger;
   autoUpdater.autoDownload = false;
   autoUpdater.autoInstallOnAppQuit = false;
-  // Github allows releases to be marked as "pre-release" for
-  //  testing purposes. Devs can set this to true and create
-  //  a "pre-release" to test the auto update functionality.
-  // https://www.electron.build/auto-update#appupdater-moduleeventseventemitter
-  // Revert to false for public releases. For testing, keep pre-release
-  autoUpdater.allowPrerelease = true;
   notifyUserIfNoUpdateAvailable = false;
   intiUpdateHandlers(mainWindow);
 };
