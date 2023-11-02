@@ -35,6 +35,7 @@ export const termsContainer = style({
   padding: '12px 16px 12px 16px',
   borderRadius: 6,
   border: `1px solid ${vars.color.background92}`,
+  marginTop: 30,
 });
 
 export const termsText = style({
