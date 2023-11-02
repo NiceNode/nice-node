@@ -1,5 +1,5 @@
 import { net } from 'electron';
-import { getNodesDirPathDetails } from './files';
+// import { getNodesDirPathDetails } from './files';
 
 import { NodeId } from '../common/node';
 import logger from './logger';
@@ -43,16 +43,16 @@ export const checkSystemHardware = async () => {
     logger.info(`${totalMemoryGB}GB memory is sufficient.`);
   }
   // Is disk size < 1 TB?
-  const getStorageDetails = await getNodesDirPathDetails();
-  const sizeDiskGB = Math.round(getStorageDetails.freeStorageGBs);
-  if (sizeDiskGB < 40) {
-    warnings.push(
-      `Computer storage is only ${sizeDiskGB}GB. The recommended amount is greater than 1TB (1000GB).`,
-    );
-    addNotification(NOTIFICATIONS.WARNING.LOW_DISK_SPACE);
-  } else {
-    logger.info(`${sizeDiskGB}GB size storage is sufficient.`);
-  }
+  // const getStorageDetails = await getNodesDirPathDetails();
+  // const sizeDiskGB = Math.round(getStorageDetails.freeStorageGBs);
+  // if (sizeDiskGB < 40) {
+  //   warnings.push(
+  //     `Computer storage is only ${sizeDiskGB}GB. The recommended amount is greater than 1TB (1000GB).`,
+  //   );
+  //   addNotification(NOTIFICATIONS.WARNING.LOW_DISK_SPACE);
+  // } else {
+  //   logger.info(`${sizeDiskGB}GB size storage is sufficient.`);
+  // }
   // Is the internet connected?
   if (!net.isOnline()) {
     warnings.push(`Internet connection may be disconnected.`);
