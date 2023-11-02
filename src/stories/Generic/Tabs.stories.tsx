@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 import { Tabs } from '../../renderer/Generics/redesign/Tabs/Tabs';
 
 export default {
@@ -7,9 +7,9 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof Tabs>;
+} as Meta<typeof Tabs>;
 
-const NodeSettingTabs: ComponentStory<typeof Tabs> = () => {
+const NodeSettingTabs: StoryFn<typeof Tabs> = () => {
   return (
     <Tabs id="Wallet Connections">
       <div id="General">General content goes here!</div>
@@ -18,9 +18,11 @@ const NodeSettingTabs: ComponentStory<typeof Tabs> = () => {
   );
 };
 
-export const NoteSettings = NodeSettingTabs.bind({});
+export const NoteSettings = {
+  render: NodeSettingTabs,
+};
 
-const SingleClientTabs: ComponentStory<typeof Tabs> = () => {
+const SingleClientTabs: StoryFn<typeof Tabs> = () => {
   return (
     <Tabs>
       <div id="Sync">Sync content goes here!</div>
@@ -32,4 +34,6 @@ const SingleClientTabs: ComponentStory<typeof Tabs> = () => {
   );
 };
 
-export const SingleClient = SingleClientTabs.bind({});
+export const SingleClient = {
+  render: SingleClientTabs,
+};

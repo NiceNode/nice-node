@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import { Label } from '../../renderer/Generics/redesign/Label/Label';
 
@@ -8,12 +8,11 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof Label>;
+} as Meta<typeof Label>;
 
-const Template: ComponentStory<typeof Label> = (args) => <Label {...args} />;
-
-export const Primary = Template.bind({});
-Primary.args = {
-  label: 'Minority Client',
-  type: 'pink',
+export const Primary = {
+  args: {
+    label: 'Minority Client',
+    type: 'pink',
+  },
 };

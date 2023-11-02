@@ -1,20 +1,16 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import Preferences from '../../renderer/Presentational/Preferences/Preferences';
 
 export default {
   title: 'Presentational/Preferences',
   component: Preferences,
-  argTypes: {},
-} as ComponentMeta<typeof Preferences>;
+} as Meta<typeof Preferences>;
 
-const Template: ComponentStory<typeof Preferences> = (args) => (
-  <Preferences {...args} />
-);
-
-export const Primary = Template.bind({});
-Primary.args = {
-  themeSetting: 'dark',
-  isOpenOnStartup: true,
-  version: 'v69.69',
+export const Primary = {
+  args: {
+    themeSetting: 'dark',
+    isOpenOnStartup: true,
+    version: 'v69.69',
+  },
 };
