@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import Button from '../../renderer/Generics/redesign/Button/Button';
 
@@ -8,55 +8,54 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof Button>;
+} as Meta<typeof Button>;
 
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
-
-export const PrimarySmall = Template.bind({});
-PrimarySmall.args = {
-  type: 'primary',
-  label: 'Button',
-  size: 'small',
-};
-export const PrimarySmallIcon = Template.bind({});
-PrimarySmallIcon.args = {
-  type: 'primary',
-  label: 'Button',
-  size: 'small',
-  iconId: 'settings',
+export const PrimarySmall = {
+  args: {
+    type: 'primary',
+    label: 'Button',
+    size: 'small',
+  },
 };
 
-export const SecondarySmall = Template.bind({});
-SecondarySmall.args = {
-  label: 'Button',
-  size: 'small',
+export const PrimarySmallIcon = {
+  args: {
+    type: 'primary',
+    label: 'Button',
+    size: 'small',
+    iconId: 'settings',
+  },
 };
 
-export const PrimaryMedium = Template.bind({});
-PrimaryMedium.args = {
-  type: 'primary',
-  size: 'medium',
-  label: 'Button',
+export const SecondarySmall = {
+  args: {
+    label: 'Button',
+    size: 'small',
+  },
 };
 
-export const SecondaryMedium = Template.bind({});
-SecondaryMedium.args = {
-  size: 'medium',
-  label: 'Button',
+export const PrimaryMedium = {
+  args: {
+    type: 'primary',
+    size: 'medium',
+    label: 'Button',
+  },
 };
 
-export const SecondaryMediumIcon = Template.bind({});
-SecondaryMediumIcon.args = {
-  size: 'medium',
-  label: 'Settings',
-  iconId: 'settings',
-  variant: 'icon-right',
+export const SecondaryMedium = {
+  args: {
+    size: 'medium',
+    label: 'Button',
+  },
 };
 
-export const GhostSmallIcon = Template.bind({});
-SecondaryMediumIcon.args = {
-  size: 'small',
-  iconId: 'close',
-  variant: 'icon',
-  type: 'ghost',
+export const SecondaryMediumIcon = {
+  args: {
+    size: 'small',
+    iconId: 'close',
+    variant: 'icon',
+    type: 'ghost',
+  },
 };
+
+export const GhostSmallIcon = {};

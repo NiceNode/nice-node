@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import { SidebarLinkItem } from '../../renderer/Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 
@@ -8,27 +8,26 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof SidebarLinkItem>;
+} as Meta<typeof SidebarLinkItem>;
 
-const Template: ComponentStory<typeof SidebarLinkItem> = (args) => (
-  <SidebarLinkItem {...args} />
-);
-
-export const Notifications = Template.bind({});
-Notifications.args = {
-  count: 4,
-  label: 'Notifications',
-  iconId: 'bell',
+export const Notifications = {
+  args: {
+    count: 4,
+    label: 'Notifications',
+    iconId: 'bell',
+  },
 };
 
-export const Add = Template.bind({});
-Add.args = {
-  label: 'Add Node',
-  iconId: 'add',
+export const Add = {
+  args: {
+    label: 'Add Node',
+    iconId: 'add',
+  },
 };
 
-export const Preferences = Template.bind({});
-Preferences.args = {
-  label: 'Preferences',
-  iconId: 'preferences',
+export const Preferences = {
+  args: {
+    label: 'Preferences',
+    iconId: 'preferences',
+  },
 };

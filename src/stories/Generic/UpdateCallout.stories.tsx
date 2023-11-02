@@ -1,14 +1,10 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import { UpdateCallout } from '../../renderer/Generics/redesign/UpdateCallout/UpdateCallout';
 
 export default {
   title: 'Generic/UpdateCallout',
   component: UpdateCallout,
-} as ComponentMeta<typeof UpdateCallout>;
+} as Meta<typeof UpdateCallout>;
 
-const Template: ComponentStory<typeof UpdateCallout> = (args) => (
-  <UpdateCallout {...args} />
-);
-
-export const Single = Template.bind({});
+export const Single = {};

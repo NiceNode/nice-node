@@ -27,7 +27,7 @@ import {
 } from './nodeManager';
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import { getUserNodePackages } from './state/nodePackages';
-import Node, { NodeId, NodePackage } from '../common/node';
+import Node, { NodeId, NodePackage, NodeStoppedBy } from '../common/node';
 import { ConfigValuesMap } from '../common/nodeConfig';
 import {
   NodePackageSpecification,
@@ -133,7 +133,7 @@ export const initialize = () => {
     return startNodePackage(nodeId);
   });
   ipcMain.handle('stopNodePackage', (_event, nodeId: NodeId) => {
-    return stopNodePackage(nodeId);
+    return stopNodePackage(nodeId, NodeStoppedBy.user);
   });
   ipcMain.handle(
     'addNode',
@@ -160,7 +160,7 @@ export const initialize = () => {
     return getNodeStartCommand(nodeId);
   });
   ipcMain.handle('stopNode', (_event, nodeId: NodeId) => {
-    return stopNode(nodeId);
+    return stopNode(nodeId, NodeStoppedBy.user);
   });
   ipcMain.handle(
     'updateNodeDataDir',

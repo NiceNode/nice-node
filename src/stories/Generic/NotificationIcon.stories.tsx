@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import { NotificationIcon } from '../../renderer/Generics/redesign/NotificationIcon/NotificationIcon';
 
@@ -8,14 +8,11 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof NotificationIcon>;
+} as Meta<typeof NotificationIcon>;
 
-const Template: ComponentStory<typeof NotificationIcon> = (args) => (
-  <NotificationIcon {...args} />
-);
-
-export const Unread = Template.bind({});
-Unread.args = {
-  status: 'info',
-  unread: true,
+export const Unread = {
+  args: {
+    status: 'info',
+    unread: true,
+  },
 };

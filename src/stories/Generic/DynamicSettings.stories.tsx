@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import { ConfigValuesMap } from '../../common/nodeConfig';
 
 import DynamicSettings, {
@@ -8,13 +8,7 @@ import DynamicSettings, {
 export default {
   title: 'Generic/DynamicSettings',
   component: DynamicSettings,
-  argTypes: {},
-} as ComponentMeta<typeof DynamicSettings>;
-
-const Template: ComponentStory<typeof DynamicSettings> = (args) => (
-  <DynamicSettings {...args} />
-);
-console.log('yoooooo');
+} as Meta<typeof DynamicSettings>;
 
 const configValuesMap: ConfigValuesMap = {
   dataDir:
@@ -236,8 +230,9 @@ const categoryConfigs: CategoryConfig[] = [
   },
 ];
 
-export const Primary = Template.bind({});
-Primary.args = {
-  categoryConfigs,
-  configValuesMap,
+export const Primary = {
+  args: {
+    categoryConfigs,
+    configValuesMap,
+  },
 };

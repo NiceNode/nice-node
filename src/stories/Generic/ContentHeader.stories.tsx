@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta } from '@storybook/react';
 
 import { ContentHeader } from '../../renderer/Generics/redesign/ContentHeader/ContentHeader';
 
@@ -8,16 +8,13 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof ContentHeader>;
+} as Meta<typeof ContentHeader>;
 
-const Template: ComponentStory<typeof ContentHeader> = (args) => (
-  <ContentHeader {...args} />
-);
-
-export const Primary = Template.bind({});
-Primary.args = {
-  title: 'Title',
-  subtitle: 'Subtitle',
-  leftButtonIconId: 'left',
-  rightButtonIconId: 'close',
+export const Primary = {
+  args: {
+    title: 'Title',
+    subtitle: 'Subtitle',
+    leftButtonIconId: 'left',
+    rightButtonIconId: 'close',
+  },
 };

@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 import { NodeIconId } from '../../renderer/assets/images/nodeIcons';
 
 import SelectCard from '../../renderer/Generics/redesign/SelectCard/SelectCard';
@@ -9,7 +9,7 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof SelectCard>;
+} as Meta<typeof SelectCard>;
 
 const networksCards = [
   { iconId: 'ethereum', title: 'Ethereum', info: 'The world computer' },
@@ -67,7 +67,7 @@ const clientsCards = [
   { iconId: 'nimbus', title: 'Nimbus', info: 'Consensus Client' },
 ];
 
-const NetworksTemplate: ComponentStory<typeof SelectCard> = () => (
+const NetworksTemplate: StoryFn<typeof SelectCard> = () => (
   <>
     {networksCards.map((obj) => {
       const { iconId, ...rest } = obj;
@@ -76,7 +76,7 @@ const NetworksTemplate: ComponentStory<typeof SelectCard> = () => (
   </>
 );
 
-const ClientsTemplate: ComponentStory<typeof SelectCard> = () => (
+const ClientsTemplate: StoryFn<typeof SelectCard> = () => (
   <>
     {clientsCards.map((obj) => {
       const { iconId, ...rest } = obj;
@@ -85,5 +85,9 @@ const ClientsTemplate: ComponentStory<typeof SelectCard> = () => (
   </>
 );
 
-export const Networks = NetworksTemplate.bind({});
-export const Clients = ClientsTemplate.bind({});
+export const Networks = {
+  render: NetworksTemplate,
+};
+export const Clients = {
+  render: ClientsTemplate,
+};

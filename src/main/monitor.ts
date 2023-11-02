@@ -6,8 +6,9 @@ import logger from './logger';
 import * as storeNodes from './state/nodes';
 import { addNotification } from './state/notifications';
 import { NOTIFICATIONS } from './consts/notifications';
+import { delay } from './util/delay';
 
-const watchProcessPollingInterval = 300000;
+const watchProcessPollingInterval = 300000; // 5 minutes
 let monitoringInterval: ReturnType<typeof setTimeout>;
 const pidusage = require('pidusage');
 
@@ -75,7 +76,10 @@ export const updateNodeLastSyncedBlock = async (
   }
 };
 
-export const initialize = () => {
+export const initialize = async () => {
+  // Delay the initial system check for 20 seconds after the app opens
+  //  Operating systems take some time to connect to wifi after starting up
+  await delay(20000);
   checkSystemHardware();
   monitoringInterval = setInterval(
     checkSystemHardware,

@@ -1,18 +1,14 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import Stepper from '../../renderer/Generics/redesign/Stepper/Stepper';
 
 export default {
   title: 'Generic/Stepper',
   component: Stepper,
-  argTypes: {},
-} as ComponentMeta<typeof Stepper>;
+} as Meta<typeof Stepper>;
 
-const Template: ComponentStory<typeof Stepper> = (args) => (
-  <Stepper {...args} />
-);
-
-export const Primary = Template.bind({});
-Primary.args = {
-  onChange: (change) => window.alert(change),
+export const Primary: StoryObj<typeof Stepper> = {
+  args: {
+    onChange: (change) => window.alert(change),
+  },
 };
