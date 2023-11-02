@@ -41,7 +41,6 @@ const ENGLISH_LANGUAGE_CODE = 'en';
 
 i18n.use(I18nextCLILanguageDetector).init({
   fallbackLng: 'en',
-  debug: true,
   interpolation: {
     escapeValue: false,
   },

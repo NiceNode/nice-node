@@ -18,6 +18,7 @@ import Node, {
   NodeId,
   NodeRuntime,
   NodeStatus,
+  NodeStoppedBy,
 } from '../common/node';
 import * as nodeStore from './state/nodes';
 import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
@@ -106,6 +107,7 @@ export const startNode = async (nodeId: NodeId) => {
   }
   logger.info(`Starting node ${JSON.stringify(node)}`);
   node.status = NodeStatus.starting;
+  node.stoppedBy = undefined;
   nodeStore.updateNode(node);
 
   try {
@@ -127,13 +129,14 @@ export const startNode = async (nodeId: NodeId) => {
   }
 };
 
-export const stopNode = async (nodeId: NodeId) => {
+export const stopNode = async (nodeId: NodeId, stoppedBy: NodeStoppedBy) => {
   const node = nodeStore.getNode(nodeId);
   if (!node) {
     throw new Error(`Unable to stop node ${nodeId}. Node not found.`);
   }
   logger.info(`Stopping node ${JSON.stringify(node)}`);
   node.status = NodeStatus.stopping;
+  node.stoppedBy = stoppedBy;
   nodeStore.updateNode(node);
 
   try {
@@ -178,7 +181,8 @@ export const removeNode = async (
     `Remove node ${nodeId} and delete storage? ${options.isDeleteStorage}`,
   );
   try {
-    await stopNode(nodeId);
+    // Only users remove nodes
+    await stopNode(nodeId, NodeStoppedBy.user);
   } catch (err) {
     logger.info(
       'Unable to stop the node before removing. Continuing with removal.',
@@ -277,10 +281,10 @@ export const initialize = async () => {
           const containerDetails = await getContainerDetails(
             dockerNode.runtime.processIds,
           );
-          console.log(
-            'NodeManager.initialize containerDetails: ',
-            containerDetails,
-          );
+          // console.log(
+          //   'NodeManager.initialize containerDetails: ',
+          //   containerDetails,
+          // );
           // {..."State": {
           //     "Status": "exited",
           //     "Running": false,
@@ -296,10 +300,10 @@ export const initialize = async () => {
           // },
           if (containerDetails?.State?.Running) {
             node.status = NodeStatus.running;
-            console.log('checkNode: running', node);
+            // console.log('checkNode: running', node);
           } else {
             node.status = NodeStatus.stopped;
-            console.log('checkNode: stoppeds', node);
+            // console.log('checkNode: stoppeds', node);
           }
           if (containerDetails?.State?.FinishedAt) {
             node.lastStopped = containerDetails?.State?.FinishedAt;
