@@ -108,5 +108,7 @@
   "DataLocation": "Data location",
   "AvailableDiskSpace": "{{space}}GB available disk space",
   "FreeSpace": "Free space",
-  "TermsAgreement": "By pressing “Get started” below you agree to our <0></0> and <1></1> and acknowledge that collected data is anonymous but includes basic system information and encountered errors."
+  "TermsAgreement": "By pressing “Get started” below you agree to our <0></0> and <1></1> and acknowledge that collected data is anonymous but includes basic system information and encountered errors.",
+  "Terms": "Terms of Service",
+  "Privacy": "Privacy Notice"
 }

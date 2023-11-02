@@ -46,7 +46,7 @@ const Splash = ({ onClickGetStarted }: SplashProps) => {
               components={[
                 <Linking
                   url="http://nicenode.xyz/terms.html"
-                  text="Terms of Use"
+                  text={g('Terms')}
                   inline
                   hideIcon
                   small
@@ -54,7 +54,7 @@ const Splash = ({ onClickGetStarted }: SplashProps) => {
                 />,
                 <Linking
                   url="http://nicenode.xyz/privacy.html"
-                  text="Privacy Statement"
+                  text={g('Privacy')}
                   inline
                   hideIcon
                   small
