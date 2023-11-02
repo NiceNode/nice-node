@@ -85,7 +85,7 @@
                 {
                   "serviceId": "executionClient",
                   "configValues": {
-                    "rollupConfigFile": "sepolia-genesis-l2.json",
+                    "genesisFile": "sepolia-genesis-l2.json",
                     "rollupSequencerHttpEndpoint": "https://sepolia-sequencer.base.org/"
                   }
                 },

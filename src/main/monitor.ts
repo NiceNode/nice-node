@@ -1,13 +1,14 @@
 import { net } from 'electron';
-import { getNodesDirPathDetails } from './files';
+// import { getNodesDirPathDetails } from './files';
 
 import { NodeId } from '../common/node';
 import logger from './logger';
 import * as storeNodes from './state/nodes';
 import { addNotification } from './state/notifications';
 import { NOTIFICATIONS } from './consts/notifications';
+import { delay } from './util/delay';
 
-const watchProcessPollingInterval = 300000;
+const watchProcessPollingInterval = 300000; // 5 minutes
 let monitoringInterval: ReturnType<typeof setTimeout>;
 const pidusage = require('pidusage');
 
@@ -42,16 +43,16 @@ export const checkSystemHardware = async () => {
     logger.info(`${totalMemoryGB}GB memory is sufficient.`);
   }
   // Is disk size < 1 TB?
-  const getStorageDetails = await getNodesDirPathDetails();
-  const sizeDiskGB = Math.round(getStorageDetails.freeStorageGBs);
-  if (sizeDiskGB < 40) {
-    warnings.push(
-      `Computer storage is only ${sizeDiskGB}GB. The recommended amount is greater than 1TB (1000GB).`,
-    );
-    addNotification(NOTIFICATIONS.WARNING.LOW_DISK_SPACE);
-  } else {
-    logger.info(`${sizeDiskGB}GB size storage is sufficient.`);
-  }
+  // const getStorageDetails = await getNodesDirPathDetails();
+  // const sizeDiskGB = Math.round(getStorageDetails.freeStorageGBs);
+  // if (sizeDiskGB < 40) {
+  //   warnings.push(
+  //     `Computer storage is only ${sizeDiskGB}GB. The recommended amount is greater than 1TB (1000GB).`,
+  //   );
+  //   addNotification(NOTIFICATIONS.WARNING.LOW_DISK_SPACE);
+  // } else {
+  //   logger.info(`${sizeDiskGB}GB size storage is sufficient.`);
+  // }
   // Is the internet connected?
   if (!net.isOnline()) {
     warnings.push(`Internet connection may be disconnected.`);
@@ -75,7 +76,10 @@ export const updateNodeLastSyncedBlock = async (
   }
 };
 
-export const initialize = () => {
+export const initialize = async () => {
+  // Delay the initial system check for 20 seconds after the app opens
+  //  Operating systems take some time to connect to wifi after starting up
+  await delay(20000);
   checkSystemHardware();
   monitoringInterval = setInterval(
     checkSystemHardware,

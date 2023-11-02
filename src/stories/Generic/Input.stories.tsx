@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryFn, Meta } from '@storybook/react';
 import FolderInput from '../../renderer/Generics/redesign/Input/FolderInput';
 
 import Input from '../../renderer/Generics/redesign/Input/Input';
@@ -9,34 +9,43 @@ export default {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof Input>;
+} as Meta<typeof Input>;
 
-const Template: ComponentStory<typeof Input> = (args) => (
+const Template: StoryFn<typeof Input> = (args) => (
   <div style={{ width: 300 }}>
     <Input {...args} />
   </div>
 );
 
-export const Primary = Template.bind({});
-Primary.args = {
-  placeholder: 'Test placeholder',
+export const Primary = {
+  render: Template,
+
+  args: {
+    placeholder: 'Test placeholder',
+  },
 };
 
-export const Icon = Template.bind({});
-Icon.args = {
-  leftIconId: 'search',
-  placeholder: 'Test placeholder',
+export const Icon = {
+  render: Template,
+
+  args: {
+    leftIconId: 'search',
+    placeholder: 'Test placeholder',
+  },
 };
 
-const FolderTemplate: ComponentStory<typeof FolderInput> = (args) => (
+const FolderTemplate: StoryFn<typeof FolderInput> = (args) => (
   <FolderInput {...args} />
 );
 
-export let FolderInputPrimary = FolderTemplate.bind({});
-FolderInputPrimary.args = {
-  placeholder: '/Users/Danneh/Library/Application Library/NiceNode/nodes',
-  onClickChange: () => {
-    alert('Platform specific user prompt to select a folder location');
+export const FolderInputPrimary = {
+  render: FolderTemplate,
+
+  args: {
+    placeholder: '/Users/Danneh/Library/Application Library/NiceNode/nodes',
+    onClickChange: () => {
+      alert('Platform specific user prompt to select a folder location');
+    },
+    freeStorageSpaceGBs: 250,
   },
-  freeStorageSpaceGBs: 250,
 };
