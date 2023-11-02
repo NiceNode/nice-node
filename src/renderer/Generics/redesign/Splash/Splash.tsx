@@ -58,6 +58,7 @@ const Splash = ({ onClickGetStarted }: SplashProps) => {
                   inline
                   hideIcon
                   small
+                  underline={false}
                 />,
               ]}
             />
