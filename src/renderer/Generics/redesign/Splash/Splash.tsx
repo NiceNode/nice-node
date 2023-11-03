@@ -45,7 +45,7 @@ const Splash = ({ onClickGetStarted }: SplashProps) => {
               i18nKey="genericComponents:TermsAgreement"
               components={[
                 <Linking
-                  url="http://nicenode.xyz/terms.html"
+                  url="http://nicenode.xyz/terms"
                   text={g('Terms')}
                   inline
                   hideIcon
@@ -53,7 +53,7 @@ const Splash = ({ onClickGetStarted }: SplashProps) => {
                   underline={false}
                 />,
                 <Linking
-                  url="http://nicenode.xyz/privacy.html"
+                  url="http://nicenode.xyz/privacy"
                   text={g('Privacy')}
                   inline
                   hideIcon
