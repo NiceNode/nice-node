@@ -652,7 +652,7 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
 export const isPodmanInstalled = async () => {
   let bIsPodmanInstalled;
   try {
-    await runCommand('-v');
+    await runCommand('--version');
     // ex. infoResult = "podman version 4.6.2"
     // const infoResult = await runCommand('-v');
     // console.log('podman infoResult: ', infoResult);

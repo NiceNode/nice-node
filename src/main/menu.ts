@@ -22,6 +22,7 @@ import { reportEvent } from './events';
 import { onResume, onShutdown, onSuspend } from './power';
 import { i18nMain } from './i18nMain';
 import logger from './logger';
+import { checkForPodmanUpdate } from './podman/update';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -268,6 +269,13 @@ export default class MenuBuilder {
           label: t('NuclearUninstall'),
           click() {
             nuclearUninstall();
+          },
+        },
+        { type: 'separator' },
+        {
+          label: t('Update Podman'),
+          click() {
+            checkForPodmanUpdate();
           },
         },
       ],

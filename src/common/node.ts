@@ -33,6 +33,7 @@ export enum NodeStatus {
 export enum NodeStoppedBy {
   user = 'user',
   shutdown = 'shutdown',
+  podmanUpdate = 'podmanUpdate',
 }
 
 export type NodeConfig = {
