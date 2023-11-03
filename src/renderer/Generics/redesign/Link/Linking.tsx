@@ -91,7 +91,12 @@ const Linking = ({
   }
 
   const smallStyle = small ? 'small' : '';
-  const underlineStyle = underline || url ? 'underline' : '';
+  let underlineStyle = '';
+  if (underline === false) {
+    underlineStyle = '';
+  } else if (underline || url) {
+    underlineStyle = 'underline';
+  }
 
   const getIcon = (type: string) => {
     let iconId: IconId;

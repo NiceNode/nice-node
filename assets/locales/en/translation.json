@@ -58,7 +58,7 @@
   "StartNode": "Start node",
   "PodmanIsRunningProceed": "Podman is running. Please proceed to start your node.",
   "WelcomeToNiceNode": "Welcome to NiceNode",
-  "WelcomeToNiceNodeDescription": "Run a node how you want it — without commands and a terminal. NiceNode shows what the node is doing at a glance. Stats like how many peer nodes are connected and synching progress are built into the app.",
+  "WelcomeToNiceNodeDescription": "Set up a blockchain node in no-time without any technical knowledge. Join a global movement to decentralize a world of information.",
   "DeleteNodeDataQuestion": "Delete all of the node chain data?",
   "RecommendedExecutionClient": "Recommended execution client",
   "RecommendedConsensusClient": "Recommended consensus client",

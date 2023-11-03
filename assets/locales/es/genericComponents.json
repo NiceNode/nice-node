@@ -104,5 +104,8 @@
   "NodeSettings": "Configuración del nodo...",
   "RemoveNode": "Eliminar Nodo...",
   "ErrorOccurred": "Se produjo un error",
-  "DataLocation": "Ubicación de los datos"
+  "DataLocation": "Ubicación de los datos",
+  "TermsAgreement": "Al pulsar “Empiece aquí” abajo, usted acepta los términos de nuestros <0></0> y <1></1> y reconoce que los datos recopilados son anónimos pero incluyen información básica del sistema y errores encontrados.",
+  "Terms": "Términos de Servicio",
+  "Privacy": "Aviso de Privacidad"
 }
