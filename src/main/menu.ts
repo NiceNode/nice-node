@@ -435,6 +435,12 @@ export default class MenuBuilder {
               checkNodePortsAndNotify();
             },
           },
+          {
+            label: t('Update Podman'),
+            click() {
+              checkForPodmanUpdate();
+            },
+          },
         ],
       },
     ];
