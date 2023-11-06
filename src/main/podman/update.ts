@@ -14,6 +14,7 @@ import { removeNiceNodeMachine } from './machine';
 /**
  * Stops all nodes, downloads and installs new podman version,
  * restarts all the nodes that were previously running prior to the update.
+ * todo: send messages to the front-end updating the status of the update
  */
 export const updatePodman = async () => {
   logger.info('updatePodman...');

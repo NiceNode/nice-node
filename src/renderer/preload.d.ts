@@ -16,6 +16,7 @@ import { CheckStorageDetails } from '../main/files';
 import { FailSystemRequirementsData } from '../main/minSystemRequirement';
 import { SystemData } from '../main/systemInfo';
 import { ConfigValuesMap } from '../common/nodeConfig';
+import { PodmanDetails } from '../main/podman/details';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
 //  we extend window.performance to include Chrome's memory stats
@@ -101,7 +102,9 @@ declare global {
       getIsPodmanInstalled(): boolean;
       installPodman(): any;
       getIsPodmanRunning(): true;
+      getPodmanDetails(): PodmanDetails;
       startPodman(): any;
+      updatePodman(): any;
 
       // Settings
       getSetHasSeenSplashscreen(hasSeen?: boolean): boolean;

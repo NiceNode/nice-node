@@ -24,10 +24,12 @@ import TimedProgressBar from '../../Generics/redesign/ProgressBar/TimedProgressB
 import {
   useGetIsPodmanInstalledQuery,
   useGetIsPodmanRunningQuery,
+  useGetPodmanDetailsQuery,
 } from '../../state/settingsService';
 // import { reportEvent } from '../../events/reportEvent';
 import { CHANNELS } from '../../../main/messenger';
 import { IpcMessage } from '../../../main/podman/messageFrontEnd';
+import { Message } from '../../Generics/redesign/Message/Message';
 
 // 6.5(docker), ? min on 2022 MacbookPro 16inch, baseline
 const TOTAL_INSTALL_TIME_SEC = 5 * 60;
@@ -52,6 +54,10 @@ const PodmanInstallation = ({
     pollingInterval: 15000,
   });
   const isPodmanRunning = qIsPodmanRunning?.data;
+  const qPodmanDetails = useGetPodmanDetailsQuery(null, {
+    pollingInterval: 15000,
+  });
+  const podmanDetails = qPodmanDetails?.data;
   const [sHasStartedDownload, setHasStartedDownload] = useState<boolean>();
   const [sDownloadComplete, setDownloadComplete] = useState<boolean>();
   const [sDownloadProgress, setDownloadProgress] = useState<number>(0);
@@ -73,10 +79,10 @@ const PodmanInstallation = ({
   console.log('isPodmanRunning: ', isPodmanRunning);
 
   useEffect(() => {
-    if (isPodmanRunning) {
+    if (isPodmanRunning && !podmanDetails?.isOutdated) {
       onChange('done');
     }
-  }, [isPodmanRunning, onChange]);
+  }, [isPodmanRunning, podmanDetails, onChange]);
 
   const onClickDownloadAndInstall = async () => {
     setHasStartedDownload(true);
@@ -100,6 +106,22 @@ const PodmanInstallation = ({
     const startResult = await electron.startPodman();
     qIsPodmanRunning.refetch();
     console.log('startPodman finished. Start result: ', startResult);
+  };
+
+  const onClickUpdatePodman = async () => {
+    setHasStartedDownload(true);
+    if (navigator.userAgent.indexOf('Linux') !== -1) {
+      setDownloadComplete(true);
+    }
+    const updateResult = await electron.updatePodman();
+    // todo: consolodate these to just use qPodmanDetails
+    qIsPodmanInstalled.refetch();
+    qIsPodmanRunning.refetch();
+    qPodmanDetails.refetch();
+    if (updateResult && !updateResult.error) {
+      setInstallComplete(true);
+    }
+    console.log('updatePodman finished. Start result: ', updateResult);
   };
 
   const podmanMessageListener = (message: FileDownloadProgress[]) => {
@@ -167,6 +189,7 @@ const PodmanInstallation = ({
   // }, []);
 
   console.log('isPodmanInstalled', isPodmanInstalled);
+  console.log('podmanDetails', podmanDetails);
 
   // listen to podman install messages
   return (
@@ -182,7 +205,16 @@ const PodmanInstallation = ({
       </div>
       {/* Podman is not installed */}
       <div className={installContentContainer}>
-        {!isPodmanInstalled && (
+        {podmanDetails?.isOutdated && (
+          <div style={{ marginBottom: 32 }}>
+            <Message
+              description={t('PodmanUpdateRequiredDescription')}
+              title={t('Podman update required')}
+              type="info"
+            />
+          </div>
+        )}
+        {(!isPodmanInstalled || podmanDetails?.isOutdated) && (
           <>
             {!sDownloadComplete && !sInstallComplete && (
               <>
@@ -191,7 +223,13 @@ const PodmanInstallation = ({
                     <Button
                       type="primary"
                       label={t('DownloadAndInstall')}
-                      onClick={onClickDownloadAndInstall}
+                      onClick={() => {
+                        if (isPodmanInstalled && podmanDetails?.isOutdated) {
+                          onClickUpdatePodman();
+                        } else {
+                          onClickDownloadAndInstall();
+                        }
+                      }}
                     />
                     <div className={captionText}>~100MB {t('download')}</div>
                   </div>

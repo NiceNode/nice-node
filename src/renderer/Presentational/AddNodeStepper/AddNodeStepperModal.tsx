@@ -26,7 +26,7 @@ export interface AddNodeStepperModalProps {
   nodePackageLibrary?: NodePackageLibrary;
   step: number;
   disableSaveButton: (value: boolean) => void;
-  setIsPodmanRunning: (value: boolean) => void;
+  setPodmanInstallDone: (value: boolean) => void;
 }
 
 const AddNodeStepperModal = ({
@@ -37,7 +37,7 @@ const AddNodeStepperModal = ({
   nodePackageLibrary,
   step,
   disableSaveButton,
-  setIsPodmanRunning,
+  setPodmanInstallDone,
 }: AddNodeStepperModalProps) => {
   const [sNodeConfig, setNodeConfig] = useState<AddNodeValues>();
   const [sEthereumNodeConfig, setEthereumNodeConfig] =
@@ -119,7 +119,7 @@ const AddNodeStepperModal = ({
     console.log('onChangeDockerInstall newValue ', newValue);
     disableSaveButton(false);
     if (newValue === 'done') {
-      setIsPodmanRunning(true);
+      setPodmanInstallDone(true);
       disableSaveButton(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
