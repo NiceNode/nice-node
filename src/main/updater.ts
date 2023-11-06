@@ -10,7 +10,7 @@ let notifyUserIfNoUpdateAvailable: boolean;
 
 const t = (str: string) => i18nMain.t(str, { ns: 'updater' });
 
-const initUpdateHandlers = (browserWindow: BrowserWindow) => {
+const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
   autoUpdater.on('error', (error) => {
     logger.error(t(`autoUpdater:::::::::error, ${error}`));
   });
@@ -94,7 +94,7 @@ export const initialize = (mainWindow: BrowserWindow) => {
   notifyUserIfNoUpdateAvailable = false;
   // Todo: remove this next line of code after testing this PR
   autoUpdater.forceDevUpdateConfig = true;
-  initUpdateHandlers(mainWindow);
+  intiUpdateHandlers(mainWindow);
 };
 
 export const checkForUpdates = (notifyIfNoUpdateAvailable: boolean) => {
