@@ -1,0 +1,7 @@
+{
+    "Unable to open dialog to select node data dir. No node found for node id": "Impossible d'ouvrir le dialogue de sélection du répertoire de données du nœud. Aucun nœud trouvé pour l'ID du nœud",
+    "Unable to open dialog to select node data dir. mainWindow is null.": "Impossible d'ouvrir le dialogue de sélection du répertoire de données du nœud. La fenêtre principale est nulle.",
+    "Select folder for storage": "Sélectionner un dossier de stockage",
+    "Select a folder for storing node data": "Sélectionner un dossier pour stocker les données du nœud"
+  }
+  

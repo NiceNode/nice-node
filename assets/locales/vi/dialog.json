@@ -1,0 +1,7 @@
+{
+    "Unable to open dialog to select node data dir. No node found for node id": "Không thể mở hộp thoại để chọn thư mục dữ liệu của nút. Không tìm thấy nút nào cho ID nút",
+    "Unable to open dialog to select node data dir. mainWindow is null.": "Không thể mở hộp thoại để chọn thư mục dữ liệu của nút. Cửa sổ chính đang bằng null",
+    "Select folder for storage": "Chọn thư mục để lưu trữ",
+    "Select a folder for storing node data": "Chọn một thư mục để lưu trữ dữ liệu của nút"
+  }
+  

@@ -1,0 +1,7 @@
+{
+    "Unable to open dialog to select node data dir. No node found for node id": "ノードデータディレクトリを選択するダイアログを開けません。ノードIDが見つかりません",
+    "Unable to open dialog to select node data dir. mainWindow is null.": "ノードデータディレクトリを選択するダイアログを開けません。メインウィンドウが存在しません",
+    "Select folder for storage": "ストレージ用のフォルダを選択",
+    "Select a folder for storing node data": "ノードデータを保存するためのフォルダを選択"
+  }
+  

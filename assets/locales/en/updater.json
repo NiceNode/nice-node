@@ -1,0 +1,19 @@
+{
+  "autoUpdater:::::::::checking-for-update": "Checking for updates...",
+  "autoUpdater:::::::::error": "AutoUpdater error: ",
+  "autoUpdater:::::::::download-progress: ": "Download progress: ",
+  "autoUpdater:::::::::update-available: ": "Update available: ",
+  "Updates for NiceNode available": "Updates for NiceNode available",
+  "Downloading NiceNode update...": "Downloading NiceNode update...",
+  "Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version": "Do you want to update NiceNode now? NiceNode will restart after downloading the update. Update to version",
+  "Yes": "Yes",
+  "No": "No",
+  "autoUpdater:::::::::update-not-available": "No update available",
+  "No update available": "No update available",
+  "autoUpdater:::::::::update-downloaded": "Update downloaded",
+  "Calling autoUpdater.quitAndInstall()": "Calling autoUpdater.quitAndInstall()",
+  "UpdatedNiceNode": "NiceNode has been updated",
+  "Sorry, there was an error updating NiceNode": "Sorry, there was an error updating NiceNode",
+  "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download": "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download",
+  "error in update available dialog: ": "Error in update available dialog: "
+}

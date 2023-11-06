@@ -12,33 +12,37 @@ const t = (str: string) => i18nMain.t(str, { ns: 'updater' });
 
 const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
   autoUpdater.on('error', (error) => {
-    logger.error(t(`autoUpdater:::::::::error, ${error}`));
+    logger.error(t('autoUpdater:::::::::error,' + error));
   });
 
   autoUpdater.on('checking-for-update', () => {
     logger.info(t('autoUpdater:::::::::checking-for-update'));
   });
   autoUpdater.on('download-progress', (info) => {
-    logger.info(t(`autoUpdater:::::::::download-progress: ${info}`));
+    logger.info(t('autoUpdater:::::::::download-progress: ' + info));
   });
   autoUpdater.on('update-available', async (info: UpdateInfo) => {
-    logger.info(t(`autoUpdater:::::::::update-available: ${info}`));
+    logger.info(t('autoUpdater:::::::::update-available: ' + info));
     // Quick fix to wait for window load before showing update prompt
     await sleep(5000);
     dialog
       .showMessageBox(browserWindow, {
         type: 'info',
         title: t('Updates for NiceNode available'),
-        message: t(
-          `Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version ${info.version}.`,
-        ),
+        message:
+          t(
+            'Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version',
+          ) +
+          ' ' +
+          info.version +
+          '.',
         buttons: [t('Yes'), t('No')],
       })
       .then(async (buttonIndex) => {
         // eslint-disable-next-line promise/always-return
         if (buttonIndex.response === 0) {
-          console.log(t('update accepted by user'));
-          console.log(t('starting download'));
+          console.log('update accepted by user');
+          console.log('starting download');
           autoUpdater.downloadUpdate();
           dialog.showMessageBox(browserWindow, {
             type: 'info',
@@ -46,11 +50,11 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
             message: t('Downloading NiceNode update...'),
           });
         } else {
-          console.log(t('update checkbox not checked'));
+          console.log('update checkbox not checked');
         }
       })
       .catch((err) => {
-        console.error(t(`error in update available dialog:  ${err}`));
+        console.error(t('error in update available dialog: ' + err));
       });
   });
 
