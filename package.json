@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "4.5.0-alpha",
+  "version": "4.6.1-staging",
   "description": "Run a node at home, the easy way.",
   "homepage": "https://nicenode.xyz",
   "productName": "NiceNode",
