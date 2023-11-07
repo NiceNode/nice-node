@@ -30,6 +30,7 @@ import {
 import { CHANNELS } from '../../../main/messenger';
 import { IpcMessage } from '../../../main/podman/messageFrontEnd';
 import { Message } from '../../Generics/redesign/Message/Message';
+import { arePodmanRequirementsMet } from '../AddNodeStepper/podmanRequirements';
 
 // 6.5(docker), ? min on 2022 MacbookPro 16inch, baseline
 const TOTAL_INSTALL_TIME_SEC = 5 * 60;
@@ -79,7 +80,8 @@ const PodmanInstallation = ({
   console.log('isPodmanRunning: ', isPodmanRunning);
 
   useEffect(() => {
-    if (isPodmanRunning && !podmanDetails?.isOutdated) {
+    // wait until podman is running and not outdated before confirming 'done'
+    if (arePodmanRequirementsMet(podmanDetails)) {
       onChange('done');
     }
   }, [isPodmanRunning, podmanDetails, onChange]);

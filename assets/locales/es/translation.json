@@ -53,6 +53,7 @@
   "ChooseYourNetwork": "Elige tu red",
   "PodmanInstallation": "Instalación de Podman",
   "LearnMorePodman": "Aprenda más sobre Podman",
+  "PodmanUpdateRequiredDescription": "Se requiere una actualización de Podman. Por favor, Descargue y instale la actualización para continuar. Tenga en cuenta que los nodos en ejecución se detendrán temporalmente.",
   "DownloadAndInstall": "Descargar e Instalar",
   "StartPodman": "Iniciar Podman",
   "StartNode": "Iniciar nodo",
