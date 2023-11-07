@@ -119,7 +119,9 @@ contextBridge.exposeInMainWorld('electron', {
   getIsPodmanInstalled: () => ipcRenderer.invoke('getIsPodmanInstalled'),
   installPodman: () => ipcRenderer.invoke('installPodman'),
   getIsPodmanRunning: () => ipcRenderer.invoke('getIsPodmanRunning'),
+  getPodmanDetails: () => ipcRenderer.invoke('getPodmanDetails'),
   startPodman: () => ipcRenderer.invoke('startPodman'),
+  updatePodman: () => ipcRenderer.invoke('updatePodman'),
 
   // Settings
   getSetHasSeenSplashscreen: (hasSeen?: boolean) =>

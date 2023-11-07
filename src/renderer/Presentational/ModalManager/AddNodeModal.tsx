@@ -6,7 +6,7 @@ import { updateSelectedNodePackageId } from '../../state/node';
 import AddNodeStepperModal from '../AddNodeStepper/AddNodeStepperModal';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
-import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
+import { useGetPodmanDetailsQuery } from '../../state/settingsService';
 import { reportEvent } from '../../events/reportEvent';
 import { NodePackageSpecification } from '../../../common/nodeSpec';
 import { AddNodePackageNodeService } from '../../../main/nodePackageManager';
@@ -15,6 +15,7 @@ import {
   NodePackageLibrary,
 } from '../../../main/state/nodeLibrary';
 import { mergePackageAndClientConfigValues } from '../AddNodeConfiguration/mergePackageAndClientConfigValues';
+import { arePodmanRequirementsMet } from '../AddNodeStepper/podmanRequirements';
 
 type Props = {
   modalOnClose: () => void;
@@ -26,7 +27,6 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     useState<NodePackageSpecification>();
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] =
     useState<boolean>(false);
-  const [sIsPodmanRunning, setIsPodmanRunning] = useState<boolean>(false);
   const [step, setStep] = useState(0);
   const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
   const [sNodePackageLibrary, setNodePackageLibrary] =
@@ -47,10 +47,10 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     fetchNodeLibrarys();
   }, []);
 
-  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
+  const qPodmanDetails = useGetPodmanDetailsQuery(null, {
     pollingInterval: 15000,
   });
-  const isPodmanRunning = qIsPodmanRunning?.data;
+  const podmanDetails = qPodmanDetails?.data;
 
   const dispatch = useAppDispatch();
 
@@ -88,8 +88,8 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     default:
   }
 
-  const startNode =
-    (step === 2 || step === 3) && (isPodmanRunning || sIsPodmanRunning);
+  const isPodmanRequirementsMet = arePodmanRequirementsMet(podmanDetails);
+  const startNode = (step === 2 || step === 3) && isPodmanRequirementsMet;
   const buttonSaveLabel = startNode ? t('StartNode') : t('Continue');
   const buttonCancelLabel = step === 0 ? t('Cancel') : t('Back');
   const buttonSaveVariant = startNode ? 'icon-left' : 'text';
@@ -203,7 +203,8 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       setStep(2);
       // optionally advance to Podman screen (install or start)
     } else if (step === 2) {
-      if (isPodmanRunning || sIsPodmanRunning) {
+      const isPodmanRequirementsMet = arePodmanRequirementsMet(podmanDetails);
+      if (isPodmanRequirementsMet) {
         modalOnSaveConfig(undefined);
         modalOnClose();
       } else {
@@ -214,6 +215,13 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
       modalOnSaveConfig(undefined);
       modalOnClose();
     }
+  };
+
+  const onSetPodmanInstallDone = () => {
+    // refetch podman details to verify podman is installed
+    //  which will allow the user to continue.
+    //  This is faster than waiting for the qPodmanDetails polling
+    qPodmanDetails?.refetch();
   };
 
   return (
@@ -233,7 +241,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
         step={step}
         nodeLibrary={sNodeLibrary}
         nodePackageLibrary={sNodePackageLibrary}
-        setIsPodmanRunning={setIsPodmanRunning}
+        setPodmanInstallDone={onSetPodmanInstallDone}
         modal
         modalConfig={modalConfig}
         modalOnChangeConfig={(config, save) => {

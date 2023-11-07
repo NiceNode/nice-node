@@ -53,6 +53,7 @@
   "ChooseYourNetwork": "Choose your network",
   "PodmanInstallation": "Podman installation",
   "LearnMorePodman": "Learn more about Podman",
+  "PodmanUpdateRequiredDescription": "An update to Podman is required. Please download and install the update to continue. Note that any running nodes will be temporarily stopped.",
   "DownloadAndInstall": "Download and Install",
   "StartPodman": "Start Podman",
   "StartNode": "Start node",

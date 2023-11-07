@@ -254,24 +254,25 @@ export const removeAllNodePackages = async () => {
   nodeStore.clear();
 };
 
+export const stopAllNodePackages = async (stoppedBy: NodeStoppedBy) => {
+  const nodes = nodePackageStore.getNodePackages();
+  const stopPromises: Promise<any>[] = [];
+  nodes.forEach((node) => {
+    if (node.status === NodeStatus.running) {
+      stopPromises.push(stopNodePackage(node.id, stoppedBy));
+    }
+  });
+  await Promise.all(stopPromises);
+};
+
 // Stop all running nodes to prevent unclean shutdowns
 //  and mark them as stopped by a shutdown
 export const onShutDown = () => {
-  const nodes = nodePackageStore.getNodePackages();
-  nodes.forEach((node) => {
-    if (node.status === NodeStatus.running) {
-      // do not block and await, limited shutdown time given
-      stopNodePackage(node.id, NodeStoppedBy.shutdown);
-    }
-  });
+  // do not block and await, limited shutdown time given
+  stopAllNodePackages(NodeStoppedBy.shutdown);
 };
 
-/**
- * Restarts all of the nodes that were running prior to the previous
- * shutdown (ie. nodes.stoppedBy !== 'user') or app close.
- * Does not restart nodes that are already running.
- */
-export const restartNodes = () => {
+export const restartNodePackagesNotStoppedByUser = async () => {
   const nodesToRestart = nodePackageStore
     .getNodePackages()
     .filter(
@@ -286,8 +287,19 @@ export const restartNodes = () => {
         .join(', ')}`,
     );
   }
+  const startPromises: Promise<any>[] = [];
   nodesToRestart.forEach((node) => {
-    startNodePackage(node.id);
+    startPromises.push(startNodePackage(node.id));
   });
+  await Promise.all(startPromises);
+};
+
+/**
+ * Restarts all of the nodes that were running prior to the previous
+ * shutdown (ie. nodes.stoppedBy !== 'user') or app close.
+ * Does not restart nodes that are already running.
+ */
+export const restartNodes = () => {
+  restartNodePackagesNotStoppedByUser();
   // Todo: Create notification if a node restart fails
 };

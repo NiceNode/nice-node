@@ -4,7 +4,7 @@ import { getNNDirPath } from '../../files';
 import logger from '../../logger';
 import { execAwait } from '../../execHelper';
 import { NICENODE_MACHINE_NAME } from '../machine';
-import { PODMAN_VERSION } from '../install/install';
+import { PODMAN_LATEST_VERSION } from '../install/install';
 import { reportEvent } from '../../events';
 
 /**
@@ -57,7 +57,7 @@ const uninstallOnWindows = async (): Promise<boolean | { error: string }> => {
     // and clicking Uninstall. The exe uninstall command will prompt the user for permission.
     const podmanExeFilePath = await path.join(
       getNNDirPath(),
-      `podman-${PODMAN_VERSION}-setup.exe`,
+      `podman-${PODMAN_LATEST_VERSION}-setup.exe`,
     );
     // todo: fix logging
     // const logFilePath = path.join(
@@ -81,7 +81,7 @@ const uninstallOnWindows = async (): Promise<boolean | { error: string }> => {
     logger.info('Unable to uninstall podman.');
     reportEvent('ErrorUninstallPodman', {
       error: err.toString(),
-      podmanVersion: PODMAN_VERSION,
+      podmanVersion: PODMAN_LATEST_VERSION,
     });
     return { error: `Unable to uninstall podman. ${err}` };
   }

@@ -41,7 +41,6 @@ export const downloadFile = async (
       });
       // if (!res.ok) throw new Error(`unexpected response ${res.statusText}`);
       logger.info('http response received');
-      logger.info('http response', response);
       console.log(
         'http response content-length',
         response.headers['content-length'],

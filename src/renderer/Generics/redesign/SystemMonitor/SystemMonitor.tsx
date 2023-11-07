@@ -34,6 +34,7 @@ export const SystemMonitor = () => {
   useEffect(() => {
     // when new system data arrives
     if (sData) {
+      console.log('systeminfo all: ', sData);
       const newParsedData = [];
       // todo: internet. storage IOPS.
       if (Array.isArray(sData.diskLayout)) {

@@ -72,6 +72,8 @@ import {
 import { checkPorts } from './ports';
 import { getAppClientId } from './state/eventReporting';
 import { onUserChangedLanguage } from './i18nMain';
+import { getPodmanDetails } from './podman/details';
+import { updatePodman } from './podman/update';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -198,7 +200,9 @@ export const initialize = () => {
   ipcMain.handle('getIsPodmanInstalled', isPodmanInstalled);
   ipcMain.handle('installPodman', installPodman);
   ipcMain.handle('getIsPodmanRunning', isPodmanRunning);
+  ipcMain.handle('getPodmanDetails', getPodmanDetails);
   ipcMain.handle('startPodman', startPodman);
+  ipcMain.handle('updatePodman', updatePodman);
 
   // Settings
   ipcMain.handle('getSetHasSeenSplashscreen', (_event, hasSeen?: boolean) => {

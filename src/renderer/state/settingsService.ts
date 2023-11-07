@@ -2,6 +2,7 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Settings } from '../../main/state/settings';
 import electron from '../electronGlobal';
+import { PodmanDetails } from '../../main/podman/details';
 
 type CustomerErrorType = {
   message: string;
@@ -55,6 +56,19 @@ export const RtkqSettingsService: any = createApi({
         return { data };
       },
     }),
+    getPodmanDetails: builder.query<PodmanDetails, null>({
+      queryFn: async () => {
+        let data;
+        try {
+          data = await electron.getPodmanDetails();
+        } catch (e) {
+          const error = { message: 'Unable to getPodmanDetails' };
+          console.log(e);
+          return { error };
+        }
+        return { data };
+      },
+    }),
   }),
 });
 
@@ -62,4 +76,5 @@ export const {
   useGetSettingsQuery,
   useGetIsPodmanInstalledQuery,
   useGetIsPodmanRunningQuery,
+  useGetPodmanDetailsQuery,
 } = RtkqSettingsService;
