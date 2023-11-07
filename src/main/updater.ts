@@ -12,17 +12,17 @@ const t = (str: string) => i18nMain.t(str, { ns: 'updater' });
 
 const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
   autoUpdater.on('error', (error) => {
-    logger.error(t('autoUpdater:::::::::error,' + error));
+    logger.error('autoUpdater:::::::::error,' + error);
   });
 
   autoUpdater.on('checking-for-update', () => {
-    logger.info(t('autoUpdater:::::::::checking-for-update'));
+    logger.info('autoUpdater:::::::::checking-for-update');
   });
   autoUpdater.on('download-progress', (info) => {
-    logger.info(t('autoUpdater:::::::::download-progress: ' + info));
+    logger.info('autoUpdater:::::::::download-progress: ' + info);
   });
   autoUpdater.on('update-available', async (info: UpdateInfo) => {
-    logger.info(t('autoUpdater:::::::::update-available: ' + info));
+    logger.info('autoUpdater:::::::::update-available: ' + info);
     // Quick fix to wait for window load before showing update prompt
     await sleep(5000);
     dialog
@@ -54,12 +54,12 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
         }
       })
       .catch((err) => {
-        console.error(t('error in update available dialog: ' + err));
+        console.error('error in update available dialog: ' + err);
       });
   });
 
   autoUpdater.on('update-not-available', () => {
-    logger.info(t('autoUpdater:::::::::update-not-available'));
+    logger.info('autoUpdater:::::::::update-not-available');
     if (notifyUserIfNoUpdateAvailable) {
       dialog.showMessageBox(browserWindow, {
         type: 'info',
@@ -71,13 +71,13 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
   });
 
   autoUpdater.on('update-downloaded', () => {
-    logger.info(t('autoUpdater:::::::::update-downloaded'));
-    logger.info(t('Calling autoUpdater.quitAndInstall()'));
-    reportEvent(t('UpdatedNiceNode'));
+    logger.info('autoUpdater:::::::::update-downloaded');
+    logger.info('Calling autoUpdater.quitAndInstall()');
+    reportEvent('UpdatedNiceNode');
     try {
       autoUpdater.quitAndInstall();
     } catch (err) {
-      logger.error(t('Error in: autoUpdater.quitAndInstall()'));
+      logger.error('Error in: autoUpdater.quitAndInstall()');
       logger.error(err);
       dialog.showErrorBox(
         t('Sorry, there was an error updating NiceNode'),
@@ -86,7 +86,7 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
         ),
       );
       // todo: send error details
-      reportEvent(t('ErrorUpdatingNiceNode'));
+      reportEvent('ErrorUpdatingNiceNode');
     }
   });
 };

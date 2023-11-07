@@ -1,19 +1,10 @@
 {
-  "autoUpdater:::::::::checking-for-update": "检查更新中...",
-  "autoUpdater:::::::::error": "AutoUpdater 错误：",
-  "autoUpdater:::::::::download-progress: ": "下载进度：",
-  "autoUpdater:::::::::update-available: ": "有更新：",
   "Updates for NiceNode available": "NiceNode 有更新",
   "Downloading NiceNode update...": "正在下载 NiceNode 更新...",
   "Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version": "您现在要更新 NiceNode 吗？NiceNode 将在下载更新后重新启动。更新到版本",
   "Yes": "是",
   "No": "否",
-  "autoUpdater:::::::::update-not-available": "没有可用更新",
   "No update available": "没有可用更新",
-  "autoUpdater:::::::::update-downloaded": "更新已下载",
-  "Calling autoUpdater.quitAndInstall()": "正在调用 autoUpdater.quitAndInstall()",
-  "UpdatedNiceNode": "NiceNode 已更新",
   "Sorry, there was an error updating NiceNode": "抱歉，更新 NiceNode 时出现错误",
-  "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download": "无法安装 NiceNode 的新版本。您可以尝试手动下载新版本，网址为 https://www.nicenode.xyz/#download",
-  "error in update available dialog: ": "更新可用对话框中的错误："
+  "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download": "无法安装 NiceNode 的新版本。您可以尝试手动下载新版本，网址为 https://www.nicenode.xyz/#download"
 }

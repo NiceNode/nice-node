@@ -1,19 +1,10 @@
 {
-  "autoUpdater:::::::::checking-for-update": "Vérification des mises à jour...",
-  "autoUpdater:::::::::error": "Erreur d'AutoUpdater : ",
-  "autoUpdater:::::::::download-progress: ": "Progression du téléchargement : ",
-  "autoUpdater:::::::::update-available: ": "Mise à jour disponible : ",
   "Updates for NiceNode available": "Mises à jour disponibles pour NiceNode",
   "Downloading NiceNode update...": "Téléchargement de la mise à jour de NiceNode...",
   "Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version": "Voulez-vous mettre à jour NiceNode maintenant ? NiceNode redémarrera après le téléchargement de la mise à jour. Mettre à jour vers la version",
   "Yes": "Oui",
   "No": "Non",
-  "autoUpdater:::::::::update-not-available": "Aucune mise à jour disponible",
   "No update available": "Aucune mise à jour disponible",
-  "autoUpdater:::::::::update-downloaded": "Mise à jour téléchargée",
-  "Calling autoUpdater.quitAndInstall()": "Appel de autoUpdater.quitAndInstall()",
-  "UpdatedNiceNode": "NiceNode a été mis à jour",
   "Sorry, there was an error updating NiceNode": "Désolé, une erreur s'est produite lors de la mise à jour de NiceNode",
-  "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download": "Impossible d'installer la nouvelle version de NiceNode. Vous pouvez essayer de télécharger la nouvelle version manuellement sur https://www.nicenode.xyz/#download",
-  "error in update available dialog: ": "Erreur dans le dialogue de mise à jour disponible : "
+  "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download": "Impossible d'installer la nouvelle version de NiceNode. Vous pouvez essayer de télécharger la nouvelle version manuellement sur https://www.nicenode.xyz/#download"
 }

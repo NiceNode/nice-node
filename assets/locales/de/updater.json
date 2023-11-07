@@ -1,20 +1,10 @@
 {
-    "autoUpdater:::::::::checking-for-update": "Suche nach Updates...",
-    "autoUpdater:::::::::error": "Fehler beim AutoUpdater: ",
-    "autoUpdater:::::::::download-progress: ": "Download-Fortschritt: ",
-    "autoUpdater:::::::::update-available: ": "Update verfügbar: ",
-    "Updates for NiceNode available": "Updates für NiceNode verfügbar",
-    "Downloading NiceNode update...": "NiceNode Update wird heruntergeladen...",
-    "Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version": "Möchten Sie NiceNode jetzt aktualisieren? NiceNode wird nach dem Herunterladen des Updates neu gestartet. Aktualisieren auf Version.",
-    "Yes": "Ja",
-    "No": "Nein",
-    "autoUpdater:::::::::update-not-available": "Kein Update verfügbar",
-    "No update available": "Kein Update verfügbar",
-    "autoUpdater:::::::::update-downloaded": "Update heruntergeladen",
-    "Calling autoUpdater.quitAndInstall()": "Aufruf von autoUpdater.quitAndInstall()",
-    "UpdatedNiceNode": "NiceNode wurde aktualisiert",
-    "Sorry, there was an error updating NiceNode": "Entschuldigung, beim Aktualisieren von NiceNode ist ein Fehler aufgetreten",
-    "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download": "Die Installation der neuen Version von NiceNode ist nicht möglich. Sie können versuchen, die neue Version manuell herunterzuladen unter https://www.nicenode.xyz/#download",
-    "error in update available dialog: ": "Fehler im Dialog für verfügbare Updates: "
-  }
-  
+  "Updates for NiceNode available": "Updates für NiceNode verfügbar",
+  "Downloading NiceNode update...": "NiceNode Update wird heruntergeladen...",
+  "Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version": "Möchten Sie NiceNode jetzt aktualisieren? NiceNode wird nach dem Herunterladen des Updates neu gestartet. Aktualisieren auf Version.",
+  "Yes": "Ja",
+  "No": "Nein",
+  "No update available": "Kein Update verfügbar",
+  "Sorry, there was an error updating NiceNode": "Entschuldigung, beim Aktualisieren von NiceNode ist ein Fehler aufgetreten",
+  "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download": "Die Installation der neuen Version von NiceNode ist nicht möglich. Sie können versuchen, die neue Version manuell herunterzuladen unter https://www.nicenode.xyz/#download"
+}

@@ -1,19 +1,10 @@
 {
-  "autoUpdater:::::::::checking-for-update": "Đang kiểm tra cập nhật...",
-  "autoUpdater:::::::::error": "Lỗi AutoUpdater: ",
-  "autoUpdater:::::::::download-progress: ": "Tiến trình tải về: ",
-  "autoUpdater:::::::::update-available: ": "Có cập nhật: ",
   "Updates for NiceNode available": "Có cập nhật cho NiceNode",
   "Downloading NiceNode update...": "Đang tải về cập nhật cho NiceNode...",
   "Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version": "Bạn có muốn cập nhật NiceNode ngay bây giờ không? NiceNode sẽ khởi động lại sau khi tải xong cập nhật. Cập nhật lên phiên bản",
   "Yes": "Có",
   "No": "Không",
-  "autoUpdater:::::::::update-not-available": "Không có cập nhật",
   "No update available": "Không có cập nhật",
-  "autoUpdater:::::::::update-downloaded": "Cập nhật đã tải xong",
-  "Calling autoUpdater.quitAndInstall()": "Gọi autoUpdater.quitAndInstall()",
-  "UpdatedNiceNode": "NiceNode đã được cập nhật",
   "Sorry, there was an error updating NiceNode": "Xin lỗi, đã xảy ra lỗi khi cập nhật NiceNode",
-  "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download": "Không thể cài đặt phiên bản mới của NiceNode. Bạn có thể thử tải phiên bản mới bằng cách thủ công tại https://www.nicenode.xyz/#download",
-  "error in update available dialog: ": "Lỗi trong hộp thoại cập nhật có sẵn: "
+  "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download": "Không thể cài đặt phiên bản mới của NiceNode. Bạn có thể thử tải phiên bản mới bằng cách thủ công tại https://www.nicenode.xyz/#download"
 }
