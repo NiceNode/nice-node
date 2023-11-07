@@ -1,7 +1,4 @@
 {
-    "Unable to open dialog to select node data dir. No node found for node id": "无法打开选择节点数据目录的对话框。找不到节点ID对应的节点",
-    "Unable to open dialog to select node data dir. mainWindow is null.": "无法打开选择节点数据目录的对话框。主窗口为空",
-    "Select folder for storage": "选择用于存储的文件夹",
-    "Select a folder for storing node data": "选择一个用于存储节点数据的文件夹"
-  }
-  
+  "Select folder for storage": "选择用于存储的文件夹",
+  "Select a folder for storing node data": "选择一个用于存储节点数据的文件夹"
+}

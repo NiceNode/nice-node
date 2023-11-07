@@ -1,7 +1,4 @@
 {
-    "Unable to open dialog to select node data dir. No node found for node id": "No se puede abrir el diálogo para seleccionar el directorio de datos del nodo. No se encontró ningún nodo para el ID del nodo",
-    "Unable to open dialog to select node data dir. mainWindow is null.": "No se puede abrir el diálogo para seleccionar el directorio de datos del nodo. La ventana principal está nula.",
-    "Select folder for storage": "Seleccionar carpeta para almacenamiento",
-    "Select a folder for storing node data": "Seleccionar una carpeta para almacenar los datos del nodo"
-  }
-  
+  "Select folder for storage": "Seleccionar carpeta para almacenamiento",
+  "Select a folder for storing node data": "Seleccionar una carpeta para almacenar los datos del nodo"
+}

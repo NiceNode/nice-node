@@ -1,8 +1,4 @@
 {
-    "Unable to open dialog to select node data dir. No node found for node id": "Unable to open dialog to select node data dir. No node found for node id",
-    "Unable to open dialog to select node data dir. mainWindow is null.": "Unable to open dialog to select node data dir. mainWindow is null.",
-    "Select folder for storage": "Select folder for storage",
-    "Select a folder for storing node data": "Select a folder for storing node data"
-  }
-  
-  
+  "Select folder for storage": "Select folder for storage",
+  "Select a folder for storing node data": "Select a folder for storing node data"
+}

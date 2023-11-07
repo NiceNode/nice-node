@@ -1,7 +1,4 @@
 {
-    "Unable to open dialog to select node data dir. No node found for node id": "Невозможно открыть диалог выбора каталога данных узла. Узел не найден для ID узла",
-    "Unable to open dialog to select node data dir. mainWindow is null.": "Невозможно открыть диалог выбора каталога данных узла. Главное окно равно нулю",
-    "Select folder for storage": "Выберите папку для хранения",
-    "Select a folder for storing node data": "Выберите папку для хранения данных узла"
-  }
-  
+  "Select folder for storage": "Выберите папку для хранения",
+  "Select a folder for storing node data": "Выберите папку для хранения данных узла"
+}
