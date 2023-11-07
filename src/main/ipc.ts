@@ -74,6 +74,7 @@ import { getAppClientId } from './state/eventReporting';
 import { onUserChangedLanguage } from './i18nMain';
 import { getPodmanDetails } from './podman/details';
 import { updatePodman } from './podman/update';
+import { getBenchmarks } from './state/benchmark';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -105,6 +106,8 @@ export const initialize = () => {
   ipcMain.handle('getMainProcessUsage', getMainProcessUsage);
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
   ipcMain.handle('getSystemInfo', getSystemInfo);
+  ipcMain.handle('getBenchmarks', getBenchmarks);
+
   ipcMain.handle('getFailSystemRequirements', getFailSystemRequirements);
   ipcMain.handle('closeApp', () => app.quit());
 

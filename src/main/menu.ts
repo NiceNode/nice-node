@@ -23,6 +23,7 @@ import { onResume, onShutdown, onSuspend } from './power';
 import { i18nMain } from './i18nMain';
 import logger from './logger';
 import { checkForPodmanUpdate } from './podman/update';
+import { runBenchmark } from './benchbuddy/runBenchmark';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -53,6 +54,12 @@ const developerMenu: CommonMenuItemConstructorOptions = {
       label: 'Simulate Resume',
       click: () => {
         onResume();
+      },
+    },
+    {
+      label: 'Run Benchmark',
+      click: () => {
+        runBenchmark();
       },
     },
   ],
