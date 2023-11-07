@@ -8,10 +8,6 @@ on:
 
 jobs:
   publish:
-    # To enable auto publishing to github, update your electron publisher
-    # config in package.json > "build" and remove the conditional below
-    # if: ${{ github.repository_owner == 'electron-react-boilerplate' }}
-
     # all published versions are considered "staging" until we release a non-alpha version
     environment: staging
 
