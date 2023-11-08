@@ -157,5 +157,6 @@ export const getIsPodmanInstalled = () => true;
 export const getIsPodmanRunning = () => true;
 
 export const getSystemInfo = () => {};
+export const runBenchmark = () => {};
 
 export const SENTRY_DSN = 'fake_sentry_dsn';
