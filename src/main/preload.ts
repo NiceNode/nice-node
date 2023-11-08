@@ -52,6 +52,8 @@ contextBridge.exposeInMainWorld('electron', {
   checkSystemHardware: () => ipcRenderer.invoke('checkSystemHardware'),
   getSystemInfo: () => ipcRenderer.invoke('getSystemInfo'),
   getBenchmarks: () => ipcRenderer.invoke('getBenchmarks'),
+  runBenchmark: () => ipcRenderer.invoke('runBenchmark'),
+
   getFailSystemRequirements: () =>
     ipcRenderer.invoke('getFailSystemRequirements'),
   closeApp: () => ipcRenderer.invoke('closeApp'),

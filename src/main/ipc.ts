@@ -75,6 +75,7 @@ import { onUserChangedLanguage } from './i18nMain';
 import { getPodmanDetails } from './podman/details';
 import { updatePodman } from './podman/update';
 import { getBenchmarks } from './state/benchmark';
+import { runBenchmark } from './benchbuddy/runBenchmark';
 
 // eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
@@ -107,6 +108,7 @@ export const initialize = () => {
   ipcMain.handle('checkSystemHardware', checkSystemHardware);
   ipcMain.handle('getSystemInfo', getSystemInfo);
   ipcMain.handle('getBenchmarks', getBenchmarks);
+  ipcMain.handle('runBenchmark', runBenchmark);
 
   ipcMain.handle('getFailSystemRequirements', getFailSystemRequirements);
   ipcMain.handle('closeApp', () => app.quit());

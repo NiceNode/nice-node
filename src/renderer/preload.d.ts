@@ -17,7 +17,7 @@ import { FailSystemRequirementsData } from '../main/minSystemRequirement';
 import { SystemData } from '../main/systemInfo';
 import { ConfigValuesMap } from '../common/nodeConfig';
 import { PodmanDetails } from '../main/podman/details';
-import { getBenchmarks, Benchmark } from '../main/state/benchmark';
+import { Benchmark } from '../main/state/benchmark';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
 //  we extend window.performance to include Chrome's memory stats
@@ -57,6 +57,7 @@ declare global {
       checkSystemHardware(): string[];
       getSystemInfo(): SystemData;
       getBenchmarks(): Benchmark[];
+      runBenchmark(): Benchmark;
       getFailSystemRequirements(): Promise<FailSystemRequirementsData>;
       closeApp(): void;
 

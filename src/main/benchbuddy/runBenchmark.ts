@@ -1,20 +1,27 @@
 import logger from '../logger';
 import { runCommand } from '../podman/podman';
-import { addBenchmark } from '../state/benchmark';
+import { Benchmark, addBenchmark } from '../state/benchmark';
 
 export const runBenchmark = async () => {
   // run (attached) with json output
   const output = await runCommand(
-    'run ghcr.io/nicenode/speedometer -r eth-node -f json',
+    'run ghcr.io/nicenode/benchbuddy -r eth-node -f json',
   );
   logger.info(`Ethereum node benchmark results: ${JSON.stringify(output)}`);
-
-  // on output, store results and send message to front-end
-  addBenchmark({
-    type: 'ethereum-node',
-    timestamp: Date.now(),
-    results: output,
-  });
+  try {
+    const parsedOutput = JSON.parse(output);
+    const benchmark: Benchmark = {
+      type: 'ethereum-node',
+      timestamp: Date.now(),
+      results: parsedOutput,
+    };
+    addBenchmark(benchmark);
+    return benchmark;
+  } catch (err) {
+    logger.error('Error parsing the json output of benchbuddy benchmark');
+    logger.error(err);
+    throw err;
+  }
 };
 
 /**
