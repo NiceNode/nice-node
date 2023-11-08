@@ -12,30 +12,26 @@ const t = (str: string) => i18nMain.t(str, { ns: 'updater' });
 
 const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
   autoUpdater.on('error', (error) => {
-    logger.error('autoUpdater:::::::::error,' + error);
+    logger.error('autoUpdater:::::::::error', error);
   });
 
   autoUpdater.on('checking-for-update', () => {
     logger.info('autoUpdater:::::::::checking-for-update');
   });
   autoUpdater.on('download-progress', (info) => {
-    logger.info('autoUpdater:::::::::download-progress: ' + info);
+    logger.info('autoUpdater:::::::::download-progress: ', info);
   });
   autoUpdater.on('update-available', async (info: UpdateInfo) => {
-    logger.info('autoUpdater:::::::::update-available: ' + info);
+    logger.info('autoUpdater:::::::::update-available: ', info);
     // Quick fix to wait for window load before showing update prompt
     await sleep(5000);
     dialog
       .showMessageBox(browserWindow, {
         type: 'info',
         title: t('Updates for NiceNode available'),
-        message:
-          t(
-            'Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version',
-          ) +
-          ' ' +
-          info.version +
-          '.',
+        message: `${t(
+          'Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version',
+        )} ${info.version}.`,
         buttons: [t('Yes'), t('No')],
       })
       .then(async (buttonIndex) => {
@@ -54,7 +50,7 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
         }
       })
       .catch((err) => {
-        console.error('error in update available dialog: ' + err);
+        console.error('error in update available dialog: ', err);
       });
   });
 
