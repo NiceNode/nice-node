@@ -72,7 +72,7 @@ export const openDialogForStorageLocation = async (): Promise<
   }
   const defaultPath = getNodesDirPath();
   const result = await dialog.showOpenDialog(mainWindow, {
-    title: t('Select a folder for storing node data'),
+    title: t('SelectNodeFolder'),
     defaultPath,
     properties: ['openDirectory'],
   });
