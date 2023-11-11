@@ -1,10 +1,10 @@
 {
-  "Updates for NiceNode available": "Доступны обновления для NiceNode",
-  "Downloading NiceNode update...": "Загрузка обновления NiceNode...",
-  "Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version": "Вы хотите обновить NiceNode сейчас? NiceNode перезапустится после загрузки обновления. Обновить до версии",
+  "UpdateAvailable": "Доступны обновления для NiceNode",
+  "DownloadingUpdate": "Загрузка обновления NiceNode...",
+  "UpdateNiceNode": "Вы хотите обновить NiceNode сейчас? NiceNode перезапустится после загрузки обновления. Обновить до версии",
   "Yes": "Да",
   "No": "Нет",
-  "No update available": "Обновление не доступно",
-  "Sorry, there was an error updating NiceNode": "Извините, произошла ошибка при обновлении NiceNode",
-  "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download": "Невозможно установить новую версию NiceNode. Вы можете попробовать скачать новую версию вручную по адресу https://www.nicenode.xyz/#download"
+  "NoUpdateAvailable": "Обновление не доступно",
+  "ErrorUpdating": "Извините, произошла ошибка при обновлении NiceNode",
+  "UnableToInstallUpdate": "Невозможно установить новую версию NiceNode. Вы можете попробовать скачать новую версию вручную по адресу https://www.nicenode.xyz/#download"
 }

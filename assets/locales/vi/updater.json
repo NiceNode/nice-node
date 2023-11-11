@@ -1,10 +1,10 @@
 {
-  "Updates for NiceNode available": "Có cập nhật cho NiceNode",
-  "Downloading NiceNode update...": "Đang tải về cập nhật cho NiceNode...",
-  "Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version": "Bạn có muốn cập nhật NiceNode ngay bây giờ không? NiceNode sẽ khởi động lại sau khi tải xong cập nhật. Cập nhật lên phiên bản",
+  "UpdateAvailable": "Có cập nhật cho NiceNode",
+  "DownloadingUpdate": "Đang tải về cập nhật cho NiceNode...",
+  "UpdateNiceNode": "Bạn có muốn cập nhật NiceNode ngay bây giờ không? NiceNode sẽ khởi động lại sau khi tải xong cập nhật. Cập nhật lên phiên bản",
   "Yes": "Có",
   "No": "Không",
-  "No update available": "Không có cập nhật",
-  "Sorry, there was an error updating NiceNode": "Xin lỗi, đã xảy ra lỗi khi cập nhật NiceNode",
-  "Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download": "Không thể cài đặt phiên bản mới của NiceNode. Bạn có thể thử tải phiên bản mới bằng cách thủ công tại https://www.nicenode.xyz/#download"
+  "NoUpdateAvailable": "Không có cập nhật",
+  "ErrorUpdating": "Xin lỗi, đã xảy ra lỗi khi cập nhật NiceNode",
+  "UnableToInstallUpdate": "Không thể cài đặt phiên bản mới của NiceNode. Bạn có thể thử tải phiên bản mới bằng cách thủ công tại https://www.nicenode.xyz/#download"
 }

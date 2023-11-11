@@ -28,10 +28,8 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
     dialog
       .showMessageBox(browserWindow, {
         type: 'info',
-        title: t('Updates for NiceNode available'),
-        message: `${t(
-          'Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version',
-        )} ${info.version}.`,
+        title: t('UpdateAvailable'),
+        message: `${t('UpdateNiceNode')} ${info.version}.`,
         buttons: [t('Yes'), t('No')],
       })
       .then(async (buttonIndex) => {
@@ -42,8 +40,8 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
           autoUpdater.downloadUpdate();
           dialog.showMessageBox(browserWindow, {
             type: 'info',
-            title: t('Updates for NiceNode available'),
-            message: t('Downloading NiceNode update...'),
+            title: t('UpdateAvailable'),
+            message: t('DownloadingUpdate'),
           });
         } else {
           console.log('update checkbox not checked');
@@ -59,8 +57,8 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
     if (notifyUserIfNoUpdateAvailable) {
       dialog.showMessageBox(browserWindow, {
         type: 'info',
-        title: t('No update available'),
-        message: t('No update available'),
+        title: t('NoUpdateAvailable'),
+        message: t('NoUpdateAvailable'),
       });
       notifyUserIfNoUpdateAvailable = false;
     }
@@ -75,12 +73,7 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
     } catch (err) {
       logger.error('Error in: autoUpdater.quitAndInstall()');
       logger.error(err);
-      dialog.showErrorBox(
-        t('Sorry, there was an error updating NiceNode'),
-        t(
-          'Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download',
-        ),
-      );
+      dialog.showErrorBox(t('ErrorUpdating'), t('UnableToInstallUpdate'));
       // todo: send error details
       reportEvent('ErrorUpdatingNiceNode');
     }
