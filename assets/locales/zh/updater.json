@@ -1,0 +1,10 @@
+{
+  "UpdateAvailable": "NiceNode 有更新",
+  "DownloadingUpdate": "正在下载 NiceNode 更新...",
+  "UpdateNiceNode": "您现在要更新 NiceNode 吗？NiceNode 将在下载更新后重新启动。更新到版本",
+  "Yes": "是",
+  "No": "否",
+  "NoUpdateAvailable": "没有可用更新",
+  "ErrorUpdating": "抱歉，更新 NiceNode 时出现错误",
+  "UnableToInstallUpdate": "无法安装NiceNode的新版本。您可以尝试在{{downloadLink}}手动下载新版本。"
+}
