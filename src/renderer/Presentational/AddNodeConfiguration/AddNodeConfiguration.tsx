@@ -48,7 +48,7 @@ export interface AddNodeConfigurationProps {
   nodeLibrary?: NodeLibrary;
   nodePackageLibrary?: NodePackageLibrary;
   onChange?: (newValue: AddNodeConfigurationValues) => void;
-  nodePackageConfig?: AddNodeConfigurationValues;
+  nodeStorageLocation?: string;
   shouldHideTitle?: boolean;
 }
 
@@ -66,7 +66,7 @@ const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
 
 const AddNodeConfiguration = ({
   nodeId,
-  nodePackageConfig,
+  nodeStorageLocation,
   nodeLibrary,
   nodePackageLibrary,
   shouldHideTitle,
@@ -84,7 +84,7 @@ const AddNodeConfiguration = ({
     {},
   );
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>(
-    nodePackageConfig?.storageLocation || '',
+    nodeStorageLocation || '',
   );
   const [sClientNodeSpecifications, setClientNodeSpecifications] = useState<
     NodeSpecification[]
@@ -104,14 +104,6 @@ const AddNodeConfiguration = ({
     useState<boolean>();
 
   useEffect(() => {
-    if (sNodePackageSpec) {
-      setNodePackageSpecArr([sNodePackageSpec]);
-    } else {
-      setNodePackageSpecArr([]);
-    }
-  }, [sNodePackageSpec]);
-
-  useEffect(() => {
     if (nodePackageLibrary && nodeId && nodePackageLibrary[nodeId]) {
       setNodePackageSpec(nodePackageLibrary[nodeId]);
     }
@@ -122,6 +114,7 @@ const AddNodeConfiguration = ({
     const clients: NodePackageNodeServiceSpec[] = [];
     const clientSelections: ClientSelections = {};
     if (sNodePackageSpec) {
+      setNodePackageSpecArr([sNodePackageSpec]);
       sNodePackageSpec.execution.services.forEach(
         (service: NodePackageNodeServiceSpec) => {
           clients.push(service);
@@ -136,6 +129,8 @@ const AddNodeConfiguration = ({
           }
         },
       );
+    } else {
+      setNodePackageSpecArr([]);
     }
     setNodePackageServices(clients);
     setClientSelections(clientSelections);
@@ -290,17 +285,13 @@ const AddNodeConfiguration = ({
       <InitialClientConfigs
         clientSpecs={sNodePackageSpecArr}
         addNodeFlowSelection="required"
-        onChange={(newConfigValues) => {
-          dispatchNodePackageConfigValues(newConfigValues);
-        }}
+        onChange={dispatchNodePackageConfigValues}
       />
       {/* Initial client settings, required */}
       <InitialClientConfigs
         clientSpecs={sClientNodeSpecifications}
         addNodeFlowSelection="required"
-        onChange={(newClientConfigValues) => {
-          dispatchClientConfigValues(newClientConfigValues);
-        }}
+        onChange={dispatchClientConfigValues}
       />
       {/* Initial client settings, required and optional */}
       <div className={advancedOptionsLink}>
@@ -320,17 +311,13 @@ const AddNodeConfiguration = ({
           <InitialClientConfigs
             clientSpecs={sNodePackageSpecArr}
             addNodeFlowSelection="advanced"
-            onChange={(newConfigValues) => {
-              dispatchNodePackageConfigValues(newConfigValues);
-            }}
+            onChange={dispatchNodePackageConfigValues}
           />
           {/* Initial client settings, advanced */}
           <InitialClientConfigs
             clientSpecs={sClientNodeSpecifications}
             addNodeFlowSelection="advanced"
-            onChange={(newClientConfigValues) => {
-              dispatchClientConfigValues(newClientConfigValues);
-            }}
+            onChange={dispatchClientConfigValues}
           />
         </>
       )}

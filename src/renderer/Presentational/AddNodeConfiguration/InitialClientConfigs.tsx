@@ -83,13 +83,13 @@ const InitialClientConfigs = ({
     > = {};
     const newClientConfigValues: ClientConfigValues = {};
 
-    Object.keys(sClientConfigTranslations)?.map((clientId: string) => {
+    Object.keys(sClientConfigTranslations)?.forEach((clientId: string) => {
       const singleClientConfigTranslation = sClientConfigTranslations[clientId];
 
       const defaultValuesForConfigTranslations: ConfigValuesMap = {};
       const requiredClientConfigTranslation: ConfigTranslationMap = {};
       // Filter out only node config that is required for the add node flow
-      Object.keys(singleClientConfigTranslation)?.map((configKey) => {
+      Object.keys(singleClientConfigTranslation)?.forEach((configKey) => {
         const configTranslation = singleClientConfigTranslation[configKey];
         if (configTranslation.addNodeFlow === addNodeFlowSelection) {
           // Put in list of config to show the user

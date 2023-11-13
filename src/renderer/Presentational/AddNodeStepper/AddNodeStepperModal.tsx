@@ -139,7 +139,7 @@ const AddNodeStepperModal = ({
             nodeId={sNodeConfig?.node?.value}
             nodeLibrary={nodeLibrary}
             nodePackageLibrary={nodePackageLibrary}
-            nodePackageConfig={sEthereumNodeConfig}
+            nodeStorageLocation={sEthereumNodeConfig?.storageLocation}
             onChange={onChangeAddNodeConfiguration}
             shouldHideTitle
           />
