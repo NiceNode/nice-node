@@ -6,5 +6,5 @@
   "No": "Không",
   "NoUpdateAvailable": "Không có cập nhật",
   "ErrorUpdating": "Xin lỗi, đã xảy ra lỗi khi cập nhật NiceNode",
-  "UnableToInstallUpdate": "Không thể cài đặt phiên bản mới của NiceNode. Bạn có thể thử tải phiên bản mới bằng cách thủ công tại https://www.nicenode.xyz/#download"
+  "UnableToInstallUpdate": "Không thể cài đặt phiên bản mới của NiceNode. Bạn có thể thử tải xuống phiên bản mới thủ công tại {{downloadLink}}"
 }

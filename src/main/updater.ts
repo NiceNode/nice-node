@@ -8,7 +8,7 @@ import { i18nMain } from './i18nMain';
 
 let notifyUserIfNoUpdateAvailable: boolean;
 
-const t = (str: string) => i18nMain.t(str, { ns: 'updater' });
+const t = i18nMain.getFixedT(null, 'updater');
 
 const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
   autoUpdater.on('error', (error) => {
@@ -73,7 +73,12 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
     } catch (err) {
       logger.error('Error in: autoUpdater.quitAndInstall()');
       logger.error(err);
-      dialog.showErrorBox(t('ErrorUpdating'), t('UnableToInstallUpdate'));
+      dialog.showErrorBox(
+        t('ErrorUpdating'),
+        t('UnableToInstallUpdate', {
+          downloadLink: 'https://www.nicenode.xyz/#download',
+        }),
+      );
       // todo: send error details
       reportEvent('ErrorUpdatingNiceNode');
     }

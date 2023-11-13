@@ -1,4 +1,4 @@
 {
-  "Select folder for storage": "ストレージ用のフォルダを選択",
+  "SelectFolderForStorage": "{{storageForName}}ストレージ用のフォルダーを選択",
   "SelectNodeFolder": "ノードデータを保存するためのフォルダを選択"
 }

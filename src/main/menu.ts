@@ -56,8 +56,7 @@ const developerMenu: CommonMenuItemConstructorOptions = {
     },
   ],
 };
-
-const t = (str: string) => i18nMain.t(str, { ns: 'windowMenu' });
+const t = i18nMain.getFixedT(null, 'windowMenu');
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
 

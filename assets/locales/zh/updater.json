@@ -6,5 +6,5 @@
   "No": "否",
   "NoUpdateAvailable": "没有可用更新",
   "ErrorUpdating": "抱歉，更新 NiceNode 时出现错误",
-  "UnableToInstallUpdate": "无法安装 NiceNode 的新版本。您可以尝试手动下载新版本，网址为 https://www.nicenode.xyz/#download"
+  "UnableToInstallUpdate": "无法安装NiceNode的新版本。您可以尝试在{{downloadLink}}手动下载新版本。"
 }

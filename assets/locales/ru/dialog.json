@@ -1,4 +1,4 @@
 {
-  "Select folder for storage": "Выберите папку для хранения",
+  "SelectFolderForStorage": "Выберите папку для хранения {{storageForName}}",
   "SelectNodeFolder": "Выберите папку для хранения данных узла"
 }

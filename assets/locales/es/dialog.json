@@ -1,4 +1,4 @@
 {
-  "Select folder for storage": "Seleccionar carpeta para almacenamiento",
+  "SelectFolderForStorage": "Seleccionar carpeta para almacenamiento de {{storageForName}}",
   "SelectNodeFolder": "Seleccionar una carpeta para almacenar los datos del nodo"
 }

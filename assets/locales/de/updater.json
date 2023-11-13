@@ -6,5 +6,5 @@
   "No": "Nein",
   "NoUpdateAvailable": "Kein Update verfügbar",
   "ErrorUpdating": "Entschuldigung, beim Aktualisieren von NiceNode ist ein Fehler aufgetreten",
-  "UnableToInstallUpdate": "Die Installation der neuen Version von NiceNode ist nicht möglich. Sie können versuchen, die neue Version manuell herunterzuladen unter https://www.nicenode.xyz/#download"
+  "UnableToInstallUpdate": "Kann die neue Version von NiceNode nicht installieren. Sie können versuchen, die neue Version manuell unter {{downloadLink}} herunterzuladen"
 }

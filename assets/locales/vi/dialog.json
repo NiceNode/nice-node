@@ -1,4 +1,4 @@
 {
-  "Select folder for storage": "Chọn thư mục để lưu trữ",
+  "SelectFolderForStorage": "Chọn thư mục cho bộ nhớ {{storageForName}}",
   "SelectNodeFolder": "Chọn một thư mục để lưu trữ dữ liệu của nút"
 }

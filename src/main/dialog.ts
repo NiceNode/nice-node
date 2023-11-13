@@ -13,7 +13,7 @@ import { getMainWindow } from './main';
 import { getNode, updateNode } from './state/nodes';
 import { i18nMain } from './i18nMain';
 
-const t = (str: string) => i18nMain.t(str, { ns: 'dialog' });
+const t = i18nMain.getFixedT(null, 'dialog');
 
 export const updateNodeDataDir = async (node: Node, newDataDir: string) => {
   node.runtime.dataDir = newDataDir;
@@ -43,7 +43,9 @@ export const openDialogForNodeDataDir = async (nodeId: NodeId) => {
     defaultPath = getNodesDirPath();
   }
   const result = await dialog.showOpenDialog(mainWindow, {
-    title: t(`Select folder for ${node.spec.displayName} storage`),
+    title: t('SelectFolderForStorage', {
+      storageForName: node.spec.displayName,
+    }),
     defaultPath,
     properties: ['openDirectory'],
   });
