@@ -12,7 +12,7 @@
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
     "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
-    "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts && opencollective-postinstall",
+    "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
     "start-no-reload": "ts-node ./.erb/scripts/check-port-in-use.js && NO_RELOAD=true npm run start:renderer",
     "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start-auto-start-node": "ts-node ./.erb/scripts/check-port-in-use.js && cross-env NN_AUTOSTART_NODE=true npm run start:renderer",
@@ -294,7 +294,6 @@
     "jest-environment-jsdom": "^29.7.0",
     "lint-staged": "^14.0.1",
     "mini-css-extract-plugin": "^2.7.1",
-    "opencollective-postinstall": "^2.0.3",
     "prettier": "^3.0.3",
     "react-docgen-typescript-plugin": "^1.0.5",
     "react-refresh": "^0.14.0",
@@ -354,9 +353,6 @@
   "devEngines": {
     "node": ">=20.x",
     "npm": ">=9.x"
-  },
-  "collective": {
-    "url": "https://opencollective.com/electron-react-boilerplate-594"
   },
   "browserslist": [
     "last 2 chrome versions",
