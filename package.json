@@ -241,7 +241,7 @@
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
     "@types/dockerode": "^3.3.15",
-    "@types/jest": "^29.5.6",
+    "@types/jest": "^29.5.7",
     "@types/mixpanel-browser": "^2.47.3",
     "@types/node": "20.4.5",
     "@types/react": "^18.2.36",
