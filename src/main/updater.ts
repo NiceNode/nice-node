@@ -90,8 +90,6 @@ export const initialize = (mainWindow: BrowserWindow) => {
   autoUpdater.autoDownload = false;
   autoUpdater.autoInstallOnAppQuit = false;
   notifyUserIfNoUpdateAvailable = false;
-  // Todo: remove this next line of code after testing this PR
-  autoUpdater.forceDevUpdateConfig = true;
   intiUpdateHandlers(mainWindow);
 };
 
