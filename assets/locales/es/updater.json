@@ -1,0 +1,10 @@
+{
+  "UpdateAvailable": "Actualizaciones disponibles para NiceNode",
+  "DownloadingUpdate": "Descargando la actualización de NiceNode...",
+  "UpdateNiceNode": "¿Desea actualizar NiceNode ahora? NiceNode se reiniciará después de descargar la actualización. Actualizar a la versión",
+  "Yes": "Sí",
+  "No": "No",
+  "NoUpdateAvailable": "No hay actualizaciones disponibles",
+  "ErrorUpdating": "Lo siento, se produjo un error al actualizar NiceNode",
+  "UnableToInstallUpdate": "No se puede instalar la nueva versión de NiceNode. Puede intentar descargar la nueva versión manualmente en {{downloadLink}}"
+}

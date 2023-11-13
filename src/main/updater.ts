@@ -4,8 +4,11 @@ import sleep from 'await-sleep';
 
 import logger, { autoUpdateLogger } from './logger';
 import { reportEvent } from './events';
+import { i18nMain } from './i18nMain';
 
 let notifyUserIfNoUpdateAvailable: boolean;
+
+const t = i18nMain.getFixedT(null, 'updater');
 
 const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
   autoUpdater.on('error', (error) => {
@@ -16,7 +19,7 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
     logger.info('autoUpdater:::::::::checking-for-update');
   });
   autoUpdater.on('download-progress', (info) => {
-    logger.info(`autoUpdater:::::::::download-progress: `, info);
+    logger.info('autoUpdater:::::::::download-progress: ', info);
   });
   autoUpdater.on('update-available', async (info: UpdateInfo) => {
     logger.info('autoUpdater:::::::::update-available: ', info);
@@ -25,9 +28,9 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
     dialog
       .showMessageBox(browserWindow, {
         type: 'info',
-        title: 'Updates for NiceNode available',
-        message: `Do you want update NiceNode now? NiceNode will restart after downloading the update. Update to version ${info.version}.`,
-        buttons: ['Yes', 'No'],
+        title: t('UpdateAvailable'),
+        message: `${t('UpdateNiceNode')} ${info.version}.`,
+        buttons: [t('Yes'), t('No')],
       })
       .then(async (buttonIndex) => {
         // eslint-disable-next-line promise/always-return
@@ -37,15 +40,15 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
           autoUpdater.downloadUpdate();
           dialog.showMessageBox(browserWindow, {
             type: 'info',
-            title: 'Updates for NiceNode available',
-            message: `Downloading NiceNode update...`,
+            title: t('UpdateAvailable'),
+            message: t('DownloadingUpdate'),
           });
         } else {
           console.log('update checkbox not checked');
         }
       })
       .catch((err) => {
-        console.error('error in update available diaglog: ', err);
+        console.error('error in update available dialog: ', err);
       });
   });
 
@@ -54,8 +57,8 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
     if (notifyUserIfNoUpdateAvailable) {
       dialog.showMessageBox(browserWindow, {
         type: 'info',
-        title: 'No update available',
-        message: `No update available`,
+        title: t('NoUpdateAvailable'),
+        message: t('NoUpdateAvailable'),
       });
       notifyUserIfNoUpdateAvailable = false;
     }
@@ -71,8 +74,10 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
       logger.error('Error in: autoUpdater.quitAndInstall()');
       logger.error(err);
       dialog.showErrorBox(
-        'Sorry, there was an error updating NiceNode',
-        'Unable to install the new version of NiceNode. You can try downloading the new version manually at https://www.nicenode.xyz/#download',
+        t('ErrorUpdating'),
+        t('UnableToInstallUpdate', {
+          downloadLink: 'https://www.nicenode.xyz/#download',
+        }),
       );
       // todo: send error details
       reportEvent('ErrorUpdatingNiceNode');
