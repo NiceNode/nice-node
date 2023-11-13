@@ -23,6 +23,7 @@ import { onResume, onShutdown, onSuspend } from './power';
 import { i18nMain } from './i18nMain';
 import logger from './logger';
 import { checkForPodmanUpdate } from './podman/update';
+import { runBenchmark } from './benchbuddy/runBenchmark';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -55,10 +56,15 @@ const developerMenu: CommonMenuItemConstructorOptions = {
         onResume();
       },
     },
+    {
+      label: 'Run Benchmark',
+      click: () => {
+        runBenchmark();
+      },
+    },
   ],
 };
-
-const t = (str: string) => i18nMain.t(str, { ns: 'windowMenu' });
+const t = i18nMain.getFixedT(null, 'windowMenu');
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
 
