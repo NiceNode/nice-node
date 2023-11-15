@@ -7,7 +7,7 @@ import { getInstalledPodmanVersion } from './podman/install/install';
 
 export default async function getDebugInfo() {
   let niceNodeVersion = app.getVersion();
-  let podmanVersion = await getInstalledPodmanVersion();
+  const podmanVersion = await getInstalledPodmanVersion();
 
   if (process.env.NODE_ENV === 'development') {
     niceNodeVersion = `Dev-${niceNodeVersion}`;
@@ -26,7 +26,7 @@ export default async function getDebugInfo() {
 
 const getDebugInfoShort = async () => {
   let niceNodeVersion = app.getVersion();
-  let podmanVersion = await getInstalledPodmanVersion();
+  const podmanVersion = await getInstalledPodmanVersion();
 
   if (process.env.NODE_ENV === 'development') {
     niceNodeVersion = `Dev-${niceNodeVersion}`;
