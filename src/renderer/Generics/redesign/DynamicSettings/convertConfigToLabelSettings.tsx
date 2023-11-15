@@ -31,11 +31,13 @@ const convertConfigToLabelSettings = ({
   configValuesMap,
   isDisabled,
   onChange,
+  required,
 }: {
   categoryConfigs: CategoryConfig[];
   configValuesMap: ConfigValuesMap;
   isDisabled?: boolean;
   onChange?: SettingChangeHandler;
+  required?: boolean;
 }): LabelSettingsSectionProps => {
   // no separate settings sections (Only one for now)
   const section: LabelSettingsSectionProps = {
@@ -73,6 +75,7 @@ const convertConfigToLabelSettings = ({
                 currentValue={currentValue}
                 isDisabled={isDisabled}
                 onChange={onChange}
+                required={required}
               />
             ),
           };

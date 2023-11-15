@@ -152,6 +152,7 @@ const InitialClientConfigs = ({
               ]}
               configValuesMap={singleClientConfigValues}
               isDisabled={false}
+              required={required}
               onChange={(configKey: string, newValue: ConfigValue) => {
                 handleInputChange(configKey, newValue, clientId);
               }}

@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IconId } from 'renderer/assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import {
@@ -40,12 +41,13 @@ const Input = ({
   leftIconId,
   rightIconId,
   value,
-  placeholder,
+  placeholder = '',
   required,
   disabled,
   onChange = () => {},
 }: InputProps) => {
   const [sValue, setValue] = useState<string>('');
+  const { t: g } = useTranslation('genericComponents');
 
   useEffect(() => {
     setValue(value || '');
@@ -60,6 +62,8 @@ const Input = ({
   };
   const leftIconStyle = leftIconId ? 'leftIcon' : '';
   const rightIconStyle = rightIconId ? 'rightIcon' : '';
+  const placeHolderText = required ? g('Required') : placeholder;
+
   return (
     <div className={container}>
       {leftIconId && (
@@ -71,7 +75,7 @@ const Input = ({
         {...{
           type: 'text',
           className: [inputContainer, leftIconStyle, rightIconStyle].join(' '),
-          placeholder,
+          placeholder: placeHolderText,
           value: sValue,
           ...(disabled && { disabled }),
           ...(required && { required }),

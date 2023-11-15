@@ -17,6 +17,7 @@ export type SettingProps = {
   currentValue: string | string[];
   isDisabled?: boolean;
   onChange?: SettingChangeHandler;
+  required?: boolean;
 };
 const Setting = ({
   configTranslation,
@@ -24,6 +25,7 @@ const Setting = ({
   currentValue,
   isDisabled,
   onChange,
+  required,
 }: SettingProps) => {
   const onNodeConfigChange = useCallback(
     (newValue?: ConfigValue) => {
@@ -55,6 +57,7 @@ const Setting = ({
           value={currentValue as string}
           onChange={(newValue: string) => onNodeConfigChange(newValue)}
           disabled={isDisabled}
+          required={required}
         />
       )}
       {configTranslationControl?.type === 'select/single' && (
