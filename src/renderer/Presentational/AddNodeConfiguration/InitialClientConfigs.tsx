@@ -34,7 +34,7 @@ const InitialClientConfigs = ({
 }: InitialClientConfigsProps) => {
   const [sClientConfigValues, dispatchClientConfigValues] = useReducer(
     mergeObjectReducer,
-    {},
+    {} as ConfigValuesMap,
   );
   const [sClientConfigTranslations, setClientConfigTranslations] =
     useState<ClientConfigTranslations>({});
@@ -43,19 +43,21 @@ const InitialClientConfigs = ({
   useEffect(() => {
     if (required) {
       // Initialize input values based on defaultValues
-      const initialValues = {};
+      const initialValues: Record<string, string> = {};
       clientSpecs.forEach((spec) => {
-        Object.entries(spec.configTranslation).forEach(([key, value]) => {
-          if (value.addNodeFlow === 'required') {
-            initialValues[key] = value.defaultValue || '';
-          }
-        });
+        if (spec.configTranslation) {
+          Object.entries(spec.configTranslation).forEach(([key, value]) => {
+            if (value.addNodeFlow === 'required') {
+              initialValues[key] = value.defaultValue?.toString() || '';
+            }
+          });
+        }
       });
       setInputValues(initialValues);
     }
   }, [clientSpecs, required]);
 
-  const validateInputs = (currentValues) => {
+  const validateInputs = (currentValues: Record<string, string>) => {
     return Object.values(currentValues).every((value) => value.trim() !== '');
   };
 
@@ -67,7 +69,10 @@ const InitialClientConfigs = ({
           Object.values(spec.configTranslation).every((translation) => {
             return (
               translation.addNodeFlow !== 'required' ||
-              translation.defaultValue.trim() !== ''
+              (translation.defaultValue !== undefined &&
+                (typeof translation.defaultValue !== 'string'
+                  ? translation.defaultValue[0]?.trim() !== ''
+                  : translation.defaultValue.trim() !== ''))
             );
           })
         );
@@ -132,7 +137,8 @@ const InitialClientConfigs = ({
     <div className={initialClientConfigContainer}>
       {Object.keys(sClientConfigTranslations).map((clientId: string) => {
         const clientConfigTranslation = sClientConfigTranslations[clientId];
-        const singleClientConfigValues = sClientConfigValues[clientId];
+        const singleClientConfigValues =
+          (sClientConfigValues as ConfigValuesMap)[clientId] || {};
 
         return (
           <React.Fragment key={clientId}>

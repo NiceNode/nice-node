@@ -120,19 +120,21 @@ const AddNodeConfiguration = ({
 
   useEffect(() => {
     // For Node Package Specs
-    const requiredNodePackageSpecs = [];
-    const advancedNodePackageSpecs = [];
+    const requiredNodePackageSpecs: NodeSpecification[] = [];
+    const advancedNodePackageSpecs: NodeSpecification[] = [];
     sNodePackageSpecArr.forEach((spec) => {
-      const requiredConfigTranslations = {};
-      const advancedConfigTranslations = {};
+      const requiredConfigTranslations: { [key: string]: any } = {};
+      const advancedConfigTranslations: { [key: string]: any } = {};
 
-      Object.entries(spec?.configTranslation).forEach(([key, value]) => {
-        if (value.addNodeFlow === 'required') {
-          requiredConfigTranslations[key] = value;
-        } else if (value.addNodeFlow === 'advanced') {
-          advancedConfigTranslations[key] = value;
-        }
-      });
+      if (spec?.configTranslation) {
+        Object.entries(spec?.configTranslation).forEach(([key, value]) => {
+          if (value.addNodeFlow === 'required') {
+            requiredConfigTranslations[key] = value;
+          } else if (value.addNodeFlow === 'advanced') {
+            advancedConfigTranslations[key] = value;
+          }
+        });
+      }
 
       if (Object.keys(requiredConfigTranslations).length > 0) {
         requiredNodePackageSpecs.push({
@@ -148,19 +150,21 @@ const AddNodeConfiguration = ({
       }
     });
 
-    const requiredClientSpecs = [];
-    const advancedClientSpecs = [];
+    const requiredClientSpecs: NodeSpecification[] = [];
+    const advancedClientSpecs: NodeSpecification[] = [];
     sClientNodeSpecifications.forEach((spec) => {
-      const requiredConfigTranslations = {};
-      const advancedConfigTranslations = {};
+      const requiredConfigTranslations: { [key: string]: any } = {};
+      const advancedConfigTranslations: { [key: string]: any } = {};
 
-      Object.entries(spec.configTranslation).forEach(([key, value]) => {
-        if (value.addNodeFlow === 'required') {
-          requiredConfigTranslations[key] = value;
-        } else if (value.addNodeFlow === 'advanced') {
-          advancedConfigTranslations[key] = value;
-        }
-      });
+      if (spec.configTranslation) {
+        Object.entries(spec.configTranslation).forEach(([key, value]) => {
+          if (value.addNodeFlow === 'required') {
+            requiredConfigTranslations[key] = value;
+          } else if (value.addNodeFlow === 'advanced') {
+            advancedConfigTranslations[key] = value;
+          }
+        });
+      }
 
       if (Object.keys(requiredConfigTranslations).length > 0) {
         requiredClientSpecs.push({
@@ -176,12 +180,16 @@ const AddNodeConfiguration = ({
       }
     });
     // Function to check if all required fields have non-empty default values
-    const checkRequiredFields = (specs) => {
+    const checkRequiredFields = (specs: NodeSpecification[]) => {
       return specs.every((spec) =>
-        Object.values(spec.configTranslation).every(
+        Object.values(spec.configTranslation || {}).every(
           (translation) =>
             translation.addNodeFlow !== 'required' ||
-            (translation.defaultValue || '').trim() !== '',
+            (
+              (typeof translation.defaultValue === 'string'
+                ? translation.defaultValue
+                : '') || ''
+            ).trim() !== '',
         ),
       );
     };
