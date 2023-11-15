@@ -227,8 +227,9 @@ export default class MenuBuilder {
         { type: 'separator' },
         {
           label: t('ReportAProblem'),
-          click() {
-            shell.openExternal(getGithubIssueProblemURL());
+          async click() {
+            const url = await getGithubIssueProblemURL();
+            shell.openExternal(url);
           },
         },
         {
@@ -389,8 +390,9 @@ export default class MenuBuilder {
           },
           {
             label: t('ReportAProblem'),
-            click() {
-              shell.openExternal(getGithubIssueProblemURL());
+            async click() {
+              const url = await getGithubIssueProblemURL();
+              shell.openExternal(url);
             },
           },
           {
