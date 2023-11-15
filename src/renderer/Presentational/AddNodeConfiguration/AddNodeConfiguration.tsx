@@ -13,6 +13,8 @@ import {
   titleFont,
   advancedOptionsLink,
   dataLocationContainer,
+  settingsContainer,
+  horizontalContainer,
 } from './addNodeConfiguration.css';
 import SpecialSelect, {
   SelectOption,
@@ -360,87 +362,91 @@ const AddNodeConfiguration = ({
       })}
 
       <HorizontalLine />
-      <div className={dataLocationContainer}>
-        <p className={sectionFont}>{t('DataLocation')}</p>
-        <p className={captionText}>{t('ChangingLocation')}</p>
-        <FolderInput
-          placeholder={sNodeStorageLocation ?? t('loadingDotDotDot')}
-          freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
-          onClickChange={async () => {
-            const storageLocationDetails =
-              await electron.openDialogForStorageLocation();
-            console.log('storageLocationDetails', storageLocationDetails);
-            if (storageLocationDetails) {
-              setNodeStorageLocation(storageLocationDetails.folderPath);
-              if (onChange) {
-                onChange({
-                  storageLocation: storageLocationDetails.folderPath,
-                });
+      <div className={settingsContainer}>
+        <div className={dataLocationContainer}>
+          <p className={sectionFont}>{t('DataLocation')}</p>
+          <p className={captionText}>{t('ChangingLocation')}</p>
+          <FolderInput
+            placeholder={sNodeStorageLocation ?? t('loadingDotDotDot')}
+            freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
+            onClickChange={async () => {
+              const storageLocationDetails =
+                await electron.openDialogForStorageLocation();
+              console.log('storageLocationDetails', storageLocationDetails);
+              if (storageLocationDetails) {
+                setNodeStorageLocation(storageLocationDetails.folderPath);
+                if (onChange) {
+                  onChange({
+                    storageLocation: storageLocationDetails.folderPath,
+                  });
+                }
+                setNodeStorageLocationFreeStorageGBs(
+                  storageLocationDetails.freeStorageGBs,
+                );
+              } else {
+                // user didn't change the folder path
               }
-              setNodeStorageLocationFreeStorageGBs(
-                storageLocationDetails.freeStorageGBs,
-              );
-            } else {
-              // user didn't change the folder path
-            }
-          }}
-        />
-      </div>
-
-      <HorizontalLine />
-
-      {/* Initial node package settings, required */}
-      {requiredNodePackageSpecs.length > 0 && (
-        <InitialClientConfigs
-          clientSpecs={requiredNodePackageSpecs}
-          required
-          disableSaveButton={disableSaveButton}
-          onChange={dispatchNodePackageConfigValues}
-        />
-      )}
-      {/* Initial client settings, required */}
-      {requiredClientSpecs.length > 0 && (
-        <InitialClientConfigs
-          clientSpecs={requiredClientSpecs}
-          required
-          disableSaveButton={disableSaveButton}
-          onChange={dispatchClientConfigValues}
-        />
-      )}
-      {/* Initial client settings, required and optional */}
-      {(advancedNodePackageSpecs.length > 0 ||
-        advancedClientSpecs.length > 0) && (
-        <div className={advancedOptionsLink}>
-          <DropdownLink
-            text={`${
-              sIsAdvancedOptionsOpen
-                ? t('HideAdvancedOptions')
-                : t('ShowAdvancedOptions')
-            }`}
-            onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
-            isDown={!sIsAdvancedOptionsOpen}
+            }}
           />
         </div>
-      )}
-      {sIsAdvancedOptionsOpen && (
-        <>
-          {/* Initial node package settings, advanced */}
-          {advancedNodePackageSpecs.length > 0 && (
-            <InitialClientConfigs
-              clientSpecs={advancedNodePackageSpecs}
-              onChange={dispatchNodePackageConfigValues}
-            />
-          )}
 
-          {/* Initial client settings, advanced */}
-          {advancedClientSpecs.length > 0 && (
-            <InitialClientConfigs
-              clientSpecs={advancedClientSpecs}
-              onChange={dispatchClientConfigValues}
+        <div className={horizontalContainer}>
+          <HorizontalLine />
+        </div>
+
+        {/* Initial node package settings, required */}
+        {requiredNodePackageSpecs.length > 0 && (
+          <InitialClientConfigs
+            clientSpecs={requiredNodePackageSpecs}
+            required
+            disableSaveButton={disableSaveButton}
+            onChange={dispatchNodePackageConfigValues}
+          />
+        )}
+        {/* Initial client settings, required */}
+        {requiredClientSpecs.length > 0 && (
+          <InitialClientConfigs
+            clientSpecs={requiredClientSpecs}
+            required
+            disableSaveButton={disableSaveButton}
+            onChange={dispatchClientConfigValues}
+          />
+        )}
+        {/* Initial client settings, required and optional */}
+        {(advancedNodePackageSpecs.length > 0 ||
+          advancedClientSpecs.length > 0) && (
+          <div className={advancedOptionsLink}>
+            <DropdownLink
+              text={`${
+                sIsAdvancedOptionsOpen
+                  ? t('HideAdvancedOptions')
+                  : t('ShowAdvancedOptions')
+              }`}
+              onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
+              isDown={!sIsAdvancedOptionsOpen}
             />
-          )}
-        </>
-      )}
+          </div>
+        )}
+        {sIsAdvancedOptionsOpen && (
+          <>
+            {/* Initial node package settings, advanced */}
+            {advancedNodePackageSpecs.length > 0 && (
+              <InitialClientConfigs
+                clientSpecs={advancedNodePackageSpecs}
+                onChange={dispatchNodePackageConfigValues}
+              />
+            )}
+
+            {/* Initial client settings, advanced */}
+            {advancedClientSpecs.length > 0 && (
+              <InitialClientConfigs
+                clientSpecs={advancedClientSpecs}
+                onChange={dispatchClientConfigValues}
+              />
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
