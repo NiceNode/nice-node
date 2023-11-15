@@ -50,6 +50,7 @@ export interface AddNodeConfigurationProps {
   onChange?: (newValue: AddNodeConfigurationValues) => void;
   nodeStorageLocation?: string;
   shouldHideTitle?: boolean;
+  disableSaveButton?: (value: boolean) => void;
 }
 
 const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
@@ -71,6 +72,7 @@ const AddNodeConfiguration = ({
   nodePackageLibrary,
   shouldHideTitle,
   onChange,
+  disableSaveButton,
 }: AddNodeConfigurationProps) => {
   const { t } = useTranslation();
   const [sNodePackageSpec, setNodePackageSpec] =
@@ -118,6 +120,8 @@ const AddNodeConfiguration = ({
 
   useEffect(() => {
     // For Node Package Specs
+    const requiredNodePackageSpecs = [];
+    const advancedNodePackageSpecs = [];
     sNodePackageSpecArr.forEach((spec) => {
       const requiredConfigTranslations = {};
       const advancedConfigTranslations = {};
@@ -131,16 +135,16 @@ const AddNodeConfiguration = ({
       });
 
       if (Object.keys(requiredConfigTranslations).length > 0) {
-        setRequiredNodePackageSpecs((prev) => [
-          ...prev,
-          { ...spec, configTranslation: requiredConfigTranslations },
-        ]);
+        requiredNodePackageSpecs.push({
+          ...spec,
+          configTranslation: requiredConfigTranslations,
+        });
       }
       if (Object.keys(advancedConfigTranslations).length > 0) {
-        setAdvancedNodePackageSpecs((prev) => [
-          ...prev,
-          { ...spec, configTranslation: advancedConfigTranslations },
-        ]);
+        advancedNodePackageSpecs.push({
+          ...spec,
+          configTranslation: advancedConfigTranslations,
+        });
       }
     });
 
@@ -171,10 +175,33 @@ const AddNodeConfiguration = ({
         });
       }
     });
+    // Function to check if all required fields have non-empty default values
+    const checkRequiredFields = (specs) => {
+      return specs.every((spec) =>
+        Object.values(spec.configTranslation).every(
+          (translation) =>
+            translation.addNodeFlow !== 'required' ||
+            (translation.defaultValue || '').trim() !== '',
+        ),
+      );
+    };
 
+    setRequiredNodePackageSpecs(requiredNodePackageSpecs);
+    setAdvancedNodePackageSpecs(advancedNodePackageSpecs);
     setRequiredClientSpecs(requiredClientSpecs);
     setAdvancedClientSpecs(advancedClientSpecs);
-  }, [sNodePackageSpecArr, sClientNodeSpecifications]);
+
+    if (disableSaveButton) {
+      // Perform the check for both Node Package Specs and Client Node Specs
+      const allNodePackageFieldsValid = checkRequiredFields(
+        requiredNodePackageSpecs,
+      );
+      const allClientFieldsValid = checkRequiredFields(requiredClientSpecs);
+
+      // Disable save button if any required field is empty
+      disableSaveButton(!(allNodePackageFieldsValid && allClientFieldsValid));
+    }
+  }, [sNodePackageSpecArr, sClientNodeSpecifications, disableSaveButton]);
 
   useEffect(() => {
     if (nodePackageLibrary && nodeId && nodePackageLibrary[nodeId]) {
@@ -358,6 +385,8 @@ const AddNodeConfiguration = ({
       {requiredNodePackageSpecs.length > 0 && (
         <InitialClientConfigs
           clientSpecs={requiredNodePackageSpecs}
+          required
+          disableSaveButton={disableSaveButton}
           onChange={dispatchNodePackageConfigValues}
         />
       )}
@@ -365,6 +394,8 @@ const AddNodeConfiguration = ({
       {requiredClientSpecs.length > 0 && (
         <InitialClientConfigs
           clientSpecs={requiredClientSpecs}
+          required
+          disableSaveButton={disableSaveButton}
           onChange={dispatchClientConfigValues}
         />
       )}

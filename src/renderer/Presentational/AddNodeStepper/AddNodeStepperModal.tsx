@@ -141,6 +141,7 @@ const AddNodeStepperModal = ({
             nodePackageLibrary={nodePackageLibrary}
             nodeStorageLocation={sEthereumNodeConfig?.storageLocation}
             onChange={onChangeAddNodeConfiguration}
+            disableSaveButton={disableSaveButton}
             shouldHideTitle
           />
         );

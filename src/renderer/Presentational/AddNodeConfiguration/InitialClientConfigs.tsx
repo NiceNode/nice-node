@@ -21,11 +21,15 @@ export type ClientConfigTranslations = {
 
 export interface InitialClientConfigsProps {
   clientSpecs: NodeSpecification[];
+  required?: boolean;
+  disableSaveButton?: (value: boolean) => void;
   onChange?: (newClientConfigValues: ClientConfigValues) => void;
 }
 
 const InitialClientConfigs = ({
   clientSpecs,
+  required = false,
+  disableSaveButton = () => {},
   onChange,
 }: InitialClientConfigsProps) => {
   const [sClientConfigValues, dispatchClientConfigValues] = useReducer(
@@ -34,6 +38,43 @@ const InitialClientConfigs = ({
   );
   const [sClientConfigTranslations, setClientConfigTranslations] =
     useState<ClientConfigTranslations>({});
+  const [inputValues, setInputValues] = useState({});
+
+  useEffect(() => {
+    if (required) {
+      // Initialize input values based on defaultValues
+      const initialValues = {};
+      clientSpecs.forEach((spec) => {
+        Object.entries(spec.configTranslation).forEach(([key, value]) => {
+          if (value.addNodeFlow === 'required') {
+            initialValues[key] = value.defaultValue || '';
+          }
+        });
+      });
+      setInputValues(initialValues);
+    }
+  }, [clientSpecs, required]);
+
+  const validateInputs = (currentValues) => {
+    return Object.values(currentValues).every((value) => value.trim() !== '');
+  };
+
+  useEffect(() => {
+    if (required) {
+      const allRequiredFieldsHaveValues = clientSpecs.every((spec) => {
+        return (
+          spec.configTranslation &&
+          Object.values(spec.configTranslation).every((translation) => {
+            return (
+              translation.addNodeFlow !== 'required' ||
+              translation.defaultValue.trim() !== ''
+            );
+          })
+        );
+      });
+      disableSaveButton(!allRequiredFieldsHaveValues);
+    }
+  }, [clientSpecs, required, disableSaveButton]);
 
   useEffect(() => {
     const clientConfigValues: ClientConfigValues = {};
@@ -62,6 +103,31 @@ const InitialClientConfigs = ({
     return <>No clients found</>;
   }
 
+  const handleInputChange = (
+    configKey: string,
+    newValue: ConfigValue,
+    clientId: string,
+  ) => {
+    dispatchClientConfigValues({
+      [clientId]: {
+        [configKey]: newValue as string,
+      },
+    });
+
+    // Apply validation logic only for required specs
+    if (required) {
+      // Calculate the new state first
+      const updatedValues = { ...inputValues, [configKey]: newValue };
+
+      // Set the new state
+      setInputValues(updatedValues);
+
+      // Use the newly calculated state for validation
+      const allInputsValid = validateInputs(updatedValues);
+      disableSaveButton(!allInputsValid);
+    }
+  };
+
   return (
     <div className={initialClientConfigContainer}>
       {Object.keys(sClientConfigTranslations).map((clientId: string) => {
@@ -81,11 +147,7 @@ const InitialClientConfigs = ({
               configValuesMap={singleClientConfigValues}
               isDisabled={false}
               onChange={(configKey: string, newValue: ConfigValue) => {
-                dispatchClientConfigValues({
-                  [clientId]: {
-                    [configKey]: newValue as string,
-                  },
-                });
+                handleInputChange(configKey, newValue, clientId);
               }}
             />
           </React.Fragment>
