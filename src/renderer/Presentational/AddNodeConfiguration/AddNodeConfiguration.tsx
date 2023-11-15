@@ -103,6 +103,79 @@ const AddNodeConfiguration = ({
   const [sIsAdvancedOptionsOpen, setIsAdvancedOptionsOpen] =
     useState<boolean>();
 
+  const [requiredNodePackageSpecs, setRequiredNodePackageSpecs] = useState<
+    NodeSpecification[]
+  >([]);
+  const [advancedNodePackageSpecs, setAdvancedNodePackageSpecs] = useState<
+    NodeSpecification[]
+  >([]);
+  const [requiredClientSpecs, setRequiredClientSpecs] = useState<
+    NodeSpecification[]
+  >([]);
+  const [advancedClientSpecs, setAdvancedClientSpecs] = useState<
+    NodeSpecification[]
+  >([]);
+
+  useEffect(() => {
+    // For Node Package Specs
+    sNodePackageSpecArr.forEach((spec) => {
+      const requiredConfigTranslations = {};
+      const advancedConfigTranslations = {};
+
+      Object.entries(spec?.configTranslation).forEach(([key, value]) => {
+        if (value.addNodeFlow === 'required') {
+          requiredConfigTranslations[key] = value;
+        } else if (value.addNodeFlow === 'advanced') {
+          advancedConfigTranslations[key] = value;
+        }
+      });
+
+      if (Object.keys(requiredConfigTranslations).length > 0) {
+        setRequiredNodePackageSpecs((prev) => [
+          ...prev,
+          { ...spec, configTranslation: requiredConfigTranslations },
+        ]);
+      }
+      if (Object.keys(advancedConfigTranslations).length > 0) {
+        setAdvancedNodePackageSpecs((prev) => [
+          ...prev,
+          { ...spec, configTranslation: advancedConfigTranslations },
+        ]);
+      }
+    });
+
+    const requiredClientSpecs = [];
+    const advancedClientSpecs = [];
+    sClientNodeSpecifications.forEach((spec) => {
+      const requiredConfigTranslations = {};
+      const advancedConfigTranslations = {};
+
+      Object.entries(spec.configTranslation).forEach(([key, value]) => {
+        if (value.addNodeFlow === 'required') {
+          requiredConfigTranslations[key] = value;
+        } else if (value.addNodeFlow === 'advanced') {
+          advancedConfigTranslations[key] = value;
+        }
+      });
+
+      if (Object.keys(requiredConfigTranslations).length > 0) {
+        requiredClientSpecs.push({
+          ...spec,
+          configTranslation: requiredConfigTranslations,
+        });
+      }
+      if (Object.keys(advancedConfigTranslations).length > 0) {
+        advancedClientSpecs.push({
+          ...spec,
+          configTranslation: advancedConfigTranslations,
+        });
+      }
+    });
+
+    setRequiredClientSpecs(requiredClientSpecs);
+    setAdvancedClientSpecs(advancedClientSpecs);
+  }, [sNodePackageSpecArr, sClientNodeSpecifications]);
+
   useEffect(() => {
     if (nodePackageLibrary && nodeId && nodePackageLibrary[nodeId]) {
       setNodePackageSpec(nodePackageLibrary[nodeId]);
@@ -283,42 +356,46 @@ const AddNodeConfiguration = ({
 
       {/* Initial node package settings, required */}
       <InitialClientConfigs
-        clientSpecs={sNodePackageSpecArr}
-        addNodeFlowSelection="required"
+        clientSpecs={requiredNodePackageSpecs}
         onChange={dispatchNodePackageConfigValues}
       />
       {/* Initial client settings, required */}
       <InitialClientConfigs
-        clientSpecs={sClientNodeSpecifications}
-        addNodeFlowSelection="required"
+        clientSpecs={requiredClientSpecs}
         onChange={dispatchClientConfigValues}
       />
       {/* Initial client settings, required and optional */}
-      <div className={advancedOptionsLink}>
-        <DropdownLink
-          text={`${
-            sIsAdvancedOptionsOpen
-              ? t('HideAdvancedOptions')
-              : t('ShowAdvancedOptions')
-          }`}
-          onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
-          isDown={!sIsAdvancedOptionsOpen}
-        />
-      </div>
+      {(advancedNodePackageSpecs.length > 0 ||
+        advancedClientSpecs.length > 0) && (
+        <div className={advancedOptionsLink}>
+          <DropdownLink
+            text={`${
+              sIsAdvancedOptionsOpen
+                ? t('HideAdvancedOptions')
+                : t('ShowAdvancedOptions')
+            }`}
+            onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
+            isDown={!sIsAdvancedOptionsOpen}
+          />
+        </div>
+      )}
       {sIsAdvancedOptionsOpen && (
         <>
           {/* Initial node package settings, advanced */}
-          <InitialClientConfigs
-            clientSpecs={sNodePackageSpecArr}
-            addNodeFlowSelection="advanced"
-            onChange={dispatchNodePackageConfigValues}
-          />
+          {advancedNodePackageSpecs.length > 0 && (
+            <InitialClientConfigs
+              clientSpecs={advancedNodePackageSpecs}
+              onChange={dispatchNodePackageConfigValues}
+            />
+          )}
+
           {/* Initial client settings, advanced */}
-          <InitialClientConfigs
-            clientSpecs={sClientNodeSpecifications}
-            addNodeFlowSelection="advanced"
-            onChange={dispatchClientConfigValues}
-          />
+          {advancedClientSpecs.length > 0 && (
+            <InitialClientConfigs
+              clientSpecs={advancedClientSpecs}
+              onChange={dispatchClientConfigValues}
+            />
+          )}
         </>
       )}
     </div>
