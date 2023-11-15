@@ -355,15 +355,19 @@ const AddNodeConfiguration = ({
       <HorizontalLine />
 
       {/* Initial node package settings, required */}
-      <InitialClientConfigs
-        clientSpecs={requiredNodePackageSpecs}
-        onChange={dispatchNodePackageConfigValues}
-      />
+      {requiredNodePackageSpecs.length > 0 && (
+        <InitialClientConfigs
+          clientSpecs={requiredNodePackageSpecs}
+          onChange={dispatchNodePackageConfigValues}
+        />
+      )}
       {/* Initial client settings, required */}
-      <InitialClientConfigs
-        clientSpecs={requiredClientSpecs}
-        onChange={dispatchClientConfigValues}
-      />
+      {requiredClientSpecs.length > 0 && (
+        <InitialClientConfigs
+          clientSpecs={requiredClientSpecs}
+          onChange={dispatchClientConfigValues}
+        />
+      )}
       {/* Initial client settings, required and optional */}
       {(advancedNodePackageSpecs.length > 0 ||
         advancedClientSpecs.length > 0) && (

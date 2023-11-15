@@ -1,8 +1,7 @@
-import React, { Dispatch, useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { NodeSpecification } from '../../../common/nodeSpec';
 import DynamicSettings from '../../Generics/redesign/DynamicSettings/DynamicSettings';
 import {
-  ConfigTranslationAddNodeFlow,
   ConfigTranslationMap,
   ConfigValue,
   ConfigValuesMap,
