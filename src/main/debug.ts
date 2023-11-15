@@ -54,7 +54,9 @@ export const getDebugInfoShortString = async () => {
   try {
     const formattedString = JSON.stringify(await getDebugInfoShort(), null, 2)
       .replace(/[{}"]/g, '')
-      .replace(/:/g, ': ');
+      .replace(/:/g, ': ')
+      .replace(/,\n/g, '\n')
+      .replace(/(^|\n)\s*\w/g, (s) => s.toUpperCase());
 
     return formattedString;
   } catch (err) {
