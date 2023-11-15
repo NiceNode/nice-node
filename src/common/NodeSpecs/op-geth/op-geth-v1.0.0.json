@@ -159,7 +159,7 @@
       }
     },
     "syncMode": {
-      "displayName": "Node synchronization mode",
+      "displayName": "Execution Client Sync Mode",
       "infoDescription": "Blockchain sync mode (\"snap\", \"full\") (default: snap)",
       "category": "Syncronization",
       "cliConfigPrefix": "--syncmode ",

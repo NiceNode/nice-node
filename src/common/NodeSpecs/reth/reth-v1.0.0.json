@@ -171,7 +171,7 @@
       }
     },
     "syncMode": {
-      "displayName": "Node synchronization mode",
+      "displayName": "Execution Client Sync Mode",
       "infoDescription": "Blockchain sync mode (\"archive\" or \"full\") (default: full). The sync mode that was chosen when first running a node can not be changed after the initial sync. Example: Turning Archive into Pruned, or Pruned into Full is not supported.",
       "category": "Syncronization",
       "cliConfigPrefix": "",
@@ -188,6 +188,7 @@
           }
         ]
       },
+      "addNodeFlow": "required",
       "defaultValue": "full",
       "documentation": "https://paradigmxyz.github.io/reth/run/pruning.html"
     },

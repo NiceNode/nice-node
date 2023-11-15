@@ -188,23 +188,27 @@
       "infoDescription": "Change where the node accepts http connections (use comma separated urls)"
     },
     "syncMode": {
-      "displayName": "Node synchronization mode",
+      "displayName": "Execution Client Sync Mode",
       "infoDescription": "Blockchain sync mode (\"snap\", \"full\") (default: snap)",
       "category": "Syncronization",
-      "cliConfigPrefix": "--syncmode ",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
             "value": "snap",
-            "config": "snap"
+            "config": "--syncmode snap"
           },
           {
             "value": "full",
-            "config": "full"
+            "config": "--syncmode full"
+          },
+          {
+            "value": "archive",
+            "config": "--syncmode full --gcmode archive"
           }
         ]
       },
+      "addNodeFlow": "required",
       "defaultValue": "snap",
       "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
     },

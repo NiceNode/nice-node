@@ -83,23 +83,28 @@
       }
     },
     "syncMode": {
-      "displayName": "Node synchronization mode",
+      "displayName": "Execution Client Sync Mode",
       "category": "Syncronization",
       "cliConfigPrefix": "--sync-mode=",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
-            "value": "FAST",
-            "config": "FAST"
+            "value": "snap",
+            "config": "X_SNAP"
           },
           {
-            "value": "FULL",
+            "value": "checkpoint",
+            "config": "X_CHECKPOINT"
+          },
+          {
+            "value": "archive",
             "config": "FULL"
           }
         ]
       },
-      "defaultValue": "FAST",
+      "addNodeFlow": "required",
+      "defaultValue": "snap",
       "documentation": "https://besu.hyperledger.org/en/stable/Concepts/Node-Types/"
     },
     "p2pPorts": {
