@@ -11,7 +11,6 @@ export default function getDebugInfo() {
     niceNodeVersion = `Dev-${niceNodeVersion}`;
   }
 
-  // todo: make human readable (version)
   return {
     platform: getPlatform(),
     platformRelease: os.release(),
@@ -35,7 +34,6 @@ const getDebugInfoShort = () => {
     arch: getArch(),
     totalMemory: os.totalmem(),
     niceNodeVersion,
-    // ethereumNodeVersion: gethBuildNameForPlatformAndArch(),
   };
 };
 
@@ -49,7 +47,11 @@ export const getDebugInfoString = () => {
 
 export const getDebugInfoShortString = () => {
   try {
-    return JSON.stringify(getDebugInfoShort(), null, 2);
+    const formattedString = JSON.stringify(getDebugInfoShort(), null, 2)
+      .replace(/[{}"]/g, '')
+      .replace(/:/g, ': ');
+
+    return formattedString;
   } catch (err) {
     return 'No system details.';
   }
