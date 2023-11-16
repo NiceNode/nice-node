@@ -52,6 +52,7 @@ const NodeSettings = ({
         )}
         {/* todo: tab1 */}
         <DynamicSettings
+          flow="nodeSettings"
           type="modal"
           categoryConfigs={categoryConfigs}
           configValuesMap={configValuesMap}

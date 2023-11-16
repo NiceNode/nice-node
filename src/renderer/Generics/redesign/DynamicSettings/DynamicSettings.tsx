@@ -18,6 +18,7 @@ export type DynamicSettingsProps = {
   onChange?: SettingChangeHandler;
   type?: string;
   required?: boolean;
+  flow?: string;
 };
 const DynamicSettings = ({
   categoryConfigs,
@@ -26,6 +27,7 @@ const DynamicSettings = ({
   onChange,
   type,
   required,
+  flow,
 }: DynamicSettingsProps) => {
   const sSections = useMemo(() => {
     return convertConfigToLabelSettings({
@@ -34,8 +36,9 @@ const DynamicSettings = ({
       isDisabled,
       onChange,
       required,
+      flow,
     });
-  }, [categoryConfigs, configValuesMap, isDisabled, onChange, required]);
+  }, [categoryConfigs, configValuesMap, isDisabled, onChange, required, flow]);
 
   if (!categoryConfigs) {
     return <>No node settings found.</>;

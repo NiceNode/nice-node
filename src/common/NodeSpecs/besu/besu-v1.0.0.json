@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "displayName": "Besu",
   "execution": {
-    "executionTypes": [
-      "docker"
-    ],
+    "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
     "imageName": "docker.io/hyperledger/besu:latest",
     "input": {
@@ -284,11 +282,7 @@
           }
         ]
       },
-      "defaultValue": [
-        "ETH",
-        "NET",
-        "WEB3"
-      ],
+      "defaultValue": ["ETH", "NET", "WEB3"],
       "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-http-api"
     },
     "hostAllowList": {
@@ -334,10 +328,7 @@
     },
     "maxPeerCount": {
       "displayName": "Max Peer Count",
-      "cliConfigPrefix": [
-        "--max-peers=",
-        "--Xp2p-peer-lower-bound="
-      ],
+      "cliConfigPrefix": ["--max-peers=", "--Xp2p-peer-lower-bound="],
       "defaultValue": "25",
       "uiControl": {
         "type": "text"
