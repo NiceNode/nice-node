@@ -16,9 +16,16 @@ export interface SyncModeProps {
   onClick: (newValue: string) => void;
   isSelected?: boolean;
   index?: number;
+  info?: string;
 }
 
-const SyncMode = ({ value, onClick, isSelected, index }: SyncModeProps) => {
+const SyncMode = ({
+  value,
+  info,
+  onClick,
+  isSelected,
+  index,
+}: SyncModeProps) => {
   const containerStyles = [container];
   if (isSelected) {
     containerStyles.push(selectedContainer);
@@ -52,11 +59,11 @@ const SyncMode = ({ value, onClick, isSelected, index }: SyncModeProps) => {
     >
       <div className={containerStyles.join(' ')}>
         <div>
-          <img alt="Alpha build" src={syncImage} />
+          <img alt="sync" src={syncImage} />
         </div>
         <div className={syncModeInfo}>
           <div className={syncModeTitle}>{value}</div>
-          <div className={syncModeDetails}>~25GB / 2h sync</div>
+          <div className={syncModeDetails}>{info}</div>
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ const SyncModes = ({
   const handleModeChange = (newValue: string) => {
     if (!isDisabled) {
       setSelectedMode(newValue);
-      onChange({ value: newValue });
+      onChange(newValue);
     }
   };
 
@@ -31,6 +31,7 @@ const SyncModes = ({
         <SyncMode
           key={translation.value}
           value={translation.value}
+          info={translation.info}
           isSelected={selectedMode === translation.value}
           onClick={handleModeChange}
           index={index}

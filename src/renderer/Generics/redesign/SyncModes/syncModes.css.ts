@@ -5,6 +5,7 @@ export const syncModeContainer = style({
   display: 'flex',
   flexDirection: 'row',
   color: vars.color.font85,
+  gap: 12,
 });
 
 export const syncModeButton = style({
@@ -14,7 +15,6 @@ export const syncModeButton = style({
 });
 
 export const container = style({
-  margin: 5,
   flexGrow: 1,
   flexBasis: 0,
   maxWidth: '100%',

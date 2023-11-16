@@ -212,15 +212,18 @@
         "controlTranslations": [
           {
             "value": "snap",
-            "config": "--Sync.SnapSync true"
+            "config": "--Sync.SnapSync true",
+            "info": "~500GB / 11h"
           },
           {
             "value": "fast",
-            "config": "--Sync.FastSync true"
+            "config": "--Sync.FastSync true",
+            "info": "~500GB / 11h"
           },
           {
             "value": "archive",
-            "config": "--config mainnet_archive"
+            "config": "--config mainnet_archive",
+            "info": "~12TB / 3w"
           }
         ]
       },

@@ -13,7 +13,8 @@
         "webSockets": "Disabled",
         "httpVirtualHosts": "localhost,host.containers.internal",
         "authVirtualHosts": "localhost,host.containers.internal",
-        "httpAddress": "0.0.0.0"
+        "httpAddress": "0.0.0.0",
+        "syncMode": "snap"
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
@@ -189,22 +190,24 @@
     },
     "syncMode": {
       "displayName": "Execution Client Sync Mode",
-      "infoDescription": "Blockchain sync mode (\"snap\", \"full\") (default: snap)",
       "category": "Syncronization",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
             "value": "snap",
-            "config": "--syncmode snap"
+            "config": "--syncmode snap",
+            "info": ""
           },
           {
             "value": "full",
-            "config": "--syncmode full"
+            "config": "--syncmode full",
+            "info": "~800GB / ~2d"
           },
           {
             "value": "archive",
-            "config": "--syncmode full --gcmode archive"
+            "config": "--syncmode full --gcmode archive",
+            "info": "~16TB"
           }
         ]
       },

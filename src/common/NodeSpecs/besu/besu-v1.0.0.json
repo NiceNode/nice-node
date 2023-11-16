@@ -13,7 +13,9 @@
         "httpCorsDomains": "\"http://localhost\"",
         "hostAllowList": "localhost,host.containers.internal",
         "engineRpc": "Enabled",
-        "engineHostAllowList": "localhost,host.containers.internal"
+        "engineHostAllowList": "localhost,host.containers.internal",
+        "syncMode": "snap",
+        "dataStorageFormat": "Bonsai"
       },
       "docker": {
         "containerVolumePath": "/var/lib/besu",
@@ -91,15 +93,18 @@
         "controlTranslations": [
           {
             "value": "snap",
-            "config": "X_SNAP"
+            "config": "X_SNAP",
+            "info": "~700GB/ 6h"
           },
           {
             "value": "checkpoint",
-            "config": "X_CHECKPOINT"
+            "config": "X_CHECKPOINT",
+            "info": "~5h"
           },
           {
-            "value": "archive",
-            "config": "FULL"
+            "value": "full",
+            "config": "FULL",
+            "info": "~1.5d"
           }
         ]
       },
@@ -301,23 +306,24 @@
       "defaultValue": "localhost,host.containers.internal,127.0.0.1"
     },
     "dataStorageFormat": {
-      "displayName": "The data storage format to use",
+      "displayName": "Data storage format",
       "category": "Storage",
       "cliConfigPrefix": "--data-storage-format=",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
-            "value": "FOREST",
+            "value": "Forest",
             "config": "FOREST"
           },
           {
-            "value": "BONSAI",
+            "value": "Bonsai",
             "config": "BONSAI"
           }
         ]
       },
-      "defaultValue": "FOREST",
+      "defaultValue": "Bonsai",
+      "addNodeFlow": "advanced",
       "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#data-storage-format"
     },
     "maxPeerCount": {
