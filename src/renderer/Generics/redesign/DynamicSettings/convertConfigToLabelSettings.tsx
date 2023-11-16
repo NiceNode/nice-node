@@ -67,7 +67,8 @@ const convertConfigToLabelSettings = ({
           );
 
           const keyDisabled =
-            configKey === 'syncMode' && flow === 'nodeSettings'
+            (configKey === 'syncMode' || configKey === 'dataStorageFormat') &&
+            flow === 'nodeSettings'
               ? true
               : isDisabled;
 
