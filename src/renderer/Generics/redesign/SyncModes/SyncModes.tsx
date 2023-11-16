@@ -1,25 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SelectTranslation } from 'common/nodeConfig';
 import SyncMode from './SyncMode';
 import { syncModeContainer } from './syncModes.css';
 
 export interface SyncModesProps {
+  value?: string;
   controlTranslations: SelectTranslation[];
   onChange: (newValue: string) => void;
-  isDisabled?: boolean;
+  disabled?: boolean;
 }
 
 const SyncModes = ({
+  value,
   controlTranslations,
   onChange,
-  isDisabled,
+  disabled,
 }: SyncModesProps) => {
-  const [selectedMode, setSelectedMode] = useState(
-    controlTranslations[0].value,
-  );
+  const [selectedMode, setSelectedMode] = useState('');
+
+  useEffect(() => {
+    setSelectedMode(value || controlTranslations[0].value);
+  }, [value]);
 
   const handleModeChange = (newValue: string) => {
-    if (!isDisabled) {
+    if (!disabled) {
       setSelectedMode(newValue);
       onChange(newValue);
     }

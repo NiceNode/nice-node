@@ -64,8 +64,10 @@ const Setting = ({
       {configTranslationControl?.type === 'select/single' &&
         configKey === 'syncMode' && (
           <SyncModes
+            value={currentValue as string}
             controlTranslations={configTranslationControl.controlTranslations}
             onChange={(newValue: string) => onNodeConfigChange(newValue)}
+            disabled={isDisabled}
           />
         )}
       {configTranslationControl?.type === 'select/single' &&
