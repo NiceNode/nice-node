@@ -144,6 +144,7 @@ const InitialClientConfigs = ({
           <React.Fragment key={clientId}>
             <DynamicSettings
               type="modal"
+              flow="addNode"
               categoryConfigs={[
                 {
                   category: '',

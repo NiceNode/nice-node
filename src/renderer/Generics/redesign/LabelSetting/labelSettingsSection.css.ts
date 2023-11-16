@@ -53,6 +53,13 @@ export const lineContainer = style({
       alignItems: 'unset',
       flexDirection: 'column',
     },
+    [`&.nodeSettings.syncMode`]: {
+      display: 'none',
+    },
+    [`&.syncMode`]: {
+      alignItems: 'flex-start',
+      flexDirection: 'column',
+    },
   },
 });
 
@@ -82,6 +89,9 @@ export const lineValueText = style({
   maxWidth: 352,
   selectors: {
     [`&.dataDir`]: {
+      maxWidth: 'unset',
+    },
+    [`&.syncMode`]: {
       maxWidth: 'unset',
     },
   },

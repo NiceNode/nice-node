@@ -60,18 +60,21 @@ const Setting = ({
           required={required}
         />
       )}
-      {configTranslationControl?.type === 'select/single' && (
-        <Select
-          value={currentValue as string}
-          onChange={(newValue) => onNodeConfigChange(newValue?.value)}
-          options={configTranslationControl.controlTranslations.map(
-            ({ value }) => {
-              return { value, label: value };
-            },
-          )}
-          isDisabled={isDisabled}
-        />
-      )}
+      {configTranslationControl?.type === 'select/single' &&
+        configKey === 'syncMode' && <div>Test</div>}
+      {configTranslationControl?.type === 'select/single' &&
+        configKey !== 'syncMode' && (
+          <Select
+            value={currentValue as string}
+            onChange={(newValue) => onNodeConfigChange(newValue?.value)}
+            options={configTranslationControl.controlTranslations.map(
+              ({ value }) => {
+                return { value, label: value };
+              },
+            )}
+            isDisabled={isDisabled}
+          />
+        )}
       {configTranslationControl?.type === 'select/multiple' && (
         <MultiSelect
           value={currentValue}

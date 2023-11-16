@@ -30,12 +30,14 @@ export interface LabelSettingsSectionProps {
    */
   items: LabelSettingsItem[];
   type?: string;
+  flow?: string;
 }
 
 const LabelSettingsSection = ({
   sectionTitle,
   items,
   type,
+  flow,
 }: LabelSettingsSectionProps) => {
   const { t: g } = useTranslation('genericComponents');
 
@@ -48,7 +50,10 @@ const LabelSettingsSection = ({
       )}
       {items &&
         items.map((item, index) => (
-          <div className={[lineContainer, item.key].join(' ')} key={index}>
+          <div
+            className={[lineContainer, flow, item.key].join(' ')}
+            key={index}
+          >
             <div className={labelAndDescriptionContainer}>
               <div className={lineKeyText}>{item.label}</div>
               <Caption type={type}>
