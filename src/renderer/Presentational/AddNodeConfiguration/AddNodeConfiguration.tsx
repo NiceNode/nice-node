@@ -412,21 +412,6 @@ const AddNodeConfiguration = ({
             onChange={dispatchClientConfigValues}
           />
         )}
-        {/* Initial client settings, required and optional */}
-        {(advancedNodePackageSpecs.length > 0 ||
-          advancedClientSpecs.length > 0) && (
-          <div className={advancedOptionsLink}>
-            <DropdownLink
-              text={`${
-                sIsAdvancedOptionsOpen
-                  ? t('HideAdvancedOptions')
-                  : t('ShowAdvancedOptions')
-              }`}
-              onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
-              isDown={!sIsAdvancedOptionsOpen}
-            />
-          </div>
-        )}
         {sIsAdvancedOptionsOpen && (
           <>
             {/* Initial node package settings, advanced */}
@@ -445,6 +430,21 @@ const AddNodeConfiguration = ({
               />
             )}
           </>
+        )}
+        {/* Initial client settings, required and optional */}
+        {(advancedNodePackageSpecs.length > 0 ||
+          advancedClientSpecs.length > 0) && (
+          <div className={advancedOptionsLink}>
+            <DropdownLink
+              text={`${
+                sIsAdvancedOptionsOpen
+                  ? t('HideAdvancedOptions')
+                  : t('ShowAdvancedOptions')
+              }`}
+              onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
+              isDown={!sIsAdvancedOptionsOpen}
+            />
+          </div>
         )}
       </div>
     </div>
