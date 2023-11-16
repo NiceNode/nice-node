@@ -20,7 +20,7 @@ const SyncModes = ({
 
   useEffect(() => {
     setSelectedMode(value || controlTranslations[0].value);
-  }, [value]);
+  }, [value, controlTranslations]);
 
   const handleModeChange = (newValue: string) => {
     if (!disabled) {
