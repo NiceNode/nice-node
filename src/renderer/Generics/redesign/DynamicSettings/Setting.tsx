@@ -10,6 +10,7 @@ import Input from '../Input/Input';
 import Select from '../Select/Select';
 import MultiSelect from '../Select/MultiSelect';
 import { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
+import SyncModes from '../SyncModes/SyncModes';
 
 export type SettingProps = {
   configTranslation: ConfigTranslation;
@@ -60,18 +61,28 @@ const Setting = ({
           required={required}
         />
       )}
-      {configTranslationControl?.type === 'select/single' && (
-        <Select
-          value={currentValue as string}
-          onChange={(newValue) => onNodeConfigChange(newValue?.value)}
-          options={configTranslationControl.controlTranslations.map(
-            ({ value }) => {
-              return { value, label: value };
-            },
-          )}
-          isDisabled={isDisabled}
-        />
-      )}
+      {configTranslationControl?.type === 'select/single' &&
+        configKey === 'syncMode' && (
+          <SyncModes
+            value={currentValue as string}
+            controlTranslations={configTranslationControl.controlTranslations}
+            onChange={(newValue: string) => onNodeConfigChange(newValue)}
+            disabled={isDisabled}
+          />
+        )}
+      {configTranslationControl?.type === 'select/single' &&
+        configKey !== 'syncMode' && (
+          <Select
+            value={currentValue as string}
+            onChange={(newValue) => onNodeConfigChange(newValue?.value)}
+            options={configTranslationControl.controlTranslations.map(
+              ({ value }) => {
+                return { value, label: value };
+              },
+            )}
+            isDisabled={isDisabled}
+          />
+        )}
       {configTranslationControl?.type === 'select/multiple' && (
         <MultiSelect
           value={currentValue}

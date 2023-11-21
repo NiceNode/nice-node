@@ -272,6 +272,7 @@
     "electron-extension-installer": "^1.2.0",
     "electron-mock-ipc": "^0.3.12",
     "electronmon": "^2.0.2",
+    "esbuild": "^0.19.5",
     "eslint": "^8.29.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-erb": "^4.0.3",

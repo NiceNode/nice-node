@@ -14,6 +14,9 @@ export type TextControl = {
 export type SelectTranslation = {
   value: string;
   config?: string;
+
+  // Only used for sync modes for now
+  info?: string;
   // Should only be used by node packages
   serviceConfigs?: ServiceConfigs;
 };

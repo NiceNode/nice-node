@@ -205,22 +205,30 @@
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/json-rpc"
     },
     "syncMode": {
-      "displayName": "Node synchronization mode",
+      "displayName": "Execution Client Sync Mode",
       "category": "Syncronization",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
-            "value": "fast",
-            "config": "--Sync.FastSync true"
+            "value": "snap",
+            "config": "--Sync.SnapSync true",
+            "info": "~500GB / 11h"
           },
           {
-            "value": "snap",
-            "config": "--Sync.SnapSync true"
+            "value": "fast",
+            "config": "--Sync.FastSync true",
+            "info": "~500GB / 11h"
+          },
+          {
+            "value": "archive",
+            "config": "--config mainnet_archive",
+            "info": "~12TB / 3w"
           }
         ]
       },
-      "defaultValue": "fast",
+      "addNodeFlow": "required",
+      "defaultValue": "snap",
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/sync-modes"
     },
     "webSocketsPort": {
