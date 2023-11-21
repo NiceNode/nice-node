@@ -61,7 +61,7 @@ export const Primary = {
         category: 'Syncronization',
         configTranslationMap: {
           syncMode: {
-            displayName: 'Node synchronization mode',
+            displayName: 'Execution Client Sync Mode',
             category: 'Syncronization',
             cliConfigPrefix: '--sync-mode=',
             uiControl: {

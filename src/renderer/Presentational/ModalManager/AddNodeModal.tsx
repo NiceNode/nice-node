@@ -188,7 +188,7 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     } else {
       setStep(step - 1);
       // set button to enable when podman isn't running/installed, but user goes back
-      if (step === 3) {
+      if (step === 1 || step === 3) {
         setIsSaveButtonDisabled(false);
       }
     }

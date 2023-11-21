@@ -1,8 +1,7 @@
-import React, { Dispatch, useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { NodeSpecification } from '../../../common/nodeSpec';
 import DynamicSettings from '../../Generics/redesign/DynamicSettings/DynamicSettings';
 import {
-  ConfigTranslationAddNodeFlow,
   ConfigTranslationMap,
   ConfigValue,
   ConfigValuesMap,
@@ -22,102 +21,79 @@ export type ClientConfigTranslations = {
 
 export interface InitialClientConfigsProps {
   clientSpecs: NodeSpecification[];
-  addNodeFlowSelection: ConfigTranslationAddNodeFlow;
+  required?: boolean;
+  disableSaveButton?: (value: boolean) => void;
   onChange?: (newClientConfigValues: ClientConfigValues) => void;
 }
 
 const InitialClientConfigs = ({
   clientSpecs,
-  addNodeFlowSelection,
+  required = false,
+  disableSaveButton = () => {},
   onChange,
 }: InitialClientConfigsProps) => {
-  const [sClientConfigValues, dispatchClientConfigValues]: [
-    ClientConfigValues,
-    Dispatch<Object>,
-  ] = useReducer(mergeObjectReducer, {});
+  const [sClientConfigValues, dispatchClientConfigValues] = useReducer(
+    mergeObjectReducer,
+    {} as ConfigValuesMap,
+  );
   const [sClientConfigTranslations, setClientConfigTranslations] =
     useState<ClientConfigTranslations>({});
-  const [
-    sRequiredClientConfigTranslationByClient,
-    setRequiredClientConfigTranslationByClient,
-  ] = useState<Record<string, ConfigTranslationMap>>({});
+  const [inputValues, setInputValues] = useState({});
+
+  useEffect(() => {
+    if (required) {
+      // Initialize input values based on defaultValues
+      const initialValues: Record<string, string> = {};
+      clientSpecs.forEach((spec) => {
+        if (spec.configTranslation) {
+          Object.entries(spec.configTranslation).forEach(([key, value]) => {
+            if (value.addNodeFlow === 'required') {
+              initialValues[key] = value.defaultValue?.toString() || '';
+            }
+          });
+        }
+      });
+      setInputValues(initialValues);
+    }
+  }, [clientSpecs, required]);
+
+  const validateInputs = (currentValues: Record<string, string>) => {
+    return Object.values(currentValues).every((value) => value.trim() !== '');
+  };
+
+  useEffect(() => {
+    if (required) {
+      const allRequiredFieldsHaveValues = clientSpecs.every((spec) => {
+        return (
+          spec.configTranslation &&
+          Object.values(spec.configTranslation).every((translation) => {
+            return (
+              translation.addNodeFlow !== 'required' ||
+              (translation.defaultValue !== undefined &&
+                (typeof translation.defaultValue !== 'string'
+                  ? translation.defaultValue[0]?.trim() !== ''
+                  : translation.defaultValue.trim() !== ''))
+            );
+          })
+        );
+      });
+      disableSaveButton(!allRequiredFieldsHaveValues);
+    }
+  }, [clientSpecs, required, disableSaveButton]);
 
   useEffect(() => {
     const clientConfigValues: ClientConfigValues = {};
     const clientConfigTranslations: ClientConfigTranslations = {};
-    if (clientSpecs) {
-      clientSpecs.forEach((clientSpec: NodeSpecification) => {
-        // if the client is not new, keep the current config
-        // todo: does this cause re-render?
-        if (
-          sClientConfigValues[clientSpec.specId] &&
-          sClientConfigTranslations[clientSpec.specId]
-        ) {
-          clientConfigValues[clientSpec.specId] =
-            sClientConfigValues[clientSpec.specId];
-          clientConfigTranslations[clientSpec.specId] =
-            sClientConfigTranslations[clientSpec.specId];
-        } else {
-          // if the user selectes a different client, initialize the state config translation and values
-          clientConfigValues[clientSpec.specId] = {};
-          clientConfigTranslations[clientSpec.specId] =
-            clientSpec.configTranslation || {};
-        }
-      });
-    }
-    setClientConfigTranslations(clientConfigTranslations);
-    dispatchClientConfigValues(clientConfigValues);
 
-    // we only want to update these values when props.clientSpecs changes
-    // adding the other deps would cause a loop
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clientSpecs]);
-
-  useEffect(() => {
-    // When client config translations change, then it is first render or a newly selected node/client occurs.
-    //  In both cases, we should set the default value for settings and notify the parents. DynamicSettings
-    //  doesn't call onChange unless the user interacts with a settings control.
-    const requiredClientConfigTranslationByClient: Record<
-      string,
-      ConfigTranslationMap
-    > = {};
-    const newClientConfigValues: ClientConfigValues = {};
-
-    Object.keys(sClientConfigTranslations)?.map((clientId: string) => {
-      const singleClientConfigTranslation = sClientConfigTranslations[clientId];
-
-      const defaultValuesForConfigTranslations: ConfigValuesMap = {};
-      const requiredClientConfigTranslation: ConfigTranslationMap = {};
-      // Filter out only node config that is required for the add node flow
-      Object.keys(singleClientConfigTranslation)?.map((configKey) => {
-        const configTranslation = singleClientConfigTranslation[configKey];
-        if (configTranslation.addNodeFlow === addNodeFlowSelection) {
-          // Put in list of config to show the user
-          requiredClientConfigTranslation[configKey] = configTranslation;
-          // Get the default value and set it
-          if (configTranslation.defaultValue !== undefined) {
-            // todo: handle array of strings
-            defaultValuesForConfigTranslations[configKey] =
-              configTranslation.defaultValue as string;
-          }
-        }
-      });
-      requiredClientConfigTranslationByClient[clientId] =
-        requiredClientConfigTranslation;
-
-      // once we have the required configs, if undefined, set them to the default value
-      // const currentClientConfigValues = sClientConfigValues[clientId];
-      newClientConfigValues[clientId] = {
-        ...defaultValuesForConfigTranslations,
-        // ...currentClientConfigValues,
-      };
+    clientSpecs.forEach((clientSpec: NodeSpecification) => {
+      clientConfigValues[clientSpec.specId] = {};
+      clientConfigTranslations[clientSpec.specId] =
+        clientSpec.configTranslation || {};
     });
 
-    dispatchClientConfigValues(newClientConfigValues);
-    setRequiredClientConfigTranslationByClient(
-      requiredClientConfigTranslationByClient,
-    );
-  }, [sClientConfigTranslations, addNodeFlowSelection]);
+    setClientConfigTranslations(clientConfigTranslations);
+    dispatchClientConfigValues(clientConfigValues);
+  }, [clientSpecs]);
 
   useEffect(() => {
     console.log('useEffect sClientConfigValues: ', sClientConfigValues);
@@ -132,12 +108,37 @@ const InitialClientConfigs = ({
     return <>No clients found</>;
   }
 
+  const handleInputChange = (
+    configKey: string,
+    newValue: ConfigValue,
+    clientId: string,
+  ) => {
+    dispatchClientConfigValues({
+      [clientId]: {
+        [configKey]: newValue as string,
+      },
+    });
+
+    // Apply validation logic only for required specs
+    if (required) {
+      // Calculate the new state first
+      const updatedValues = { ...inputValues, [configKey]: newValue };
+
+      // Set the new state
+      setInputValues(updatedValues);
+
+      // Use the newly calculated state for validation
+      const allInputsValid = validateInputs(updatedValues);
+      disableSaveButton(!allInputsValid);
+    }
+  };
+
   return (
     <div className={initialClientConfigContainer}>
-      {Object.keys(sClientConfigTranslations)?.map((clientId: string) => {
-        const requiredClientConfigTranslation =
-          sRequiredClientConfigTranslationByClient[clientId];
-        const singleClientConfigValues = sClientConfigValues[clientId];
+      {Object.keys(sClientConfigTranslations).map((clientId: string) => {
+        const clientConfigTranslation = sClientConfigTranslations[clientId];
+        const singleClientConfigValues =
+          (sClientConfigValues as ConfigValuesMap)[clientId] || {};
 
         return (
           <React.Fragment key={clientId}>
@@ -146,17 +147,14 @@ const InitialClientConfigs = ({
               categoryConfigs={[
                 {
                   category: '',
-                  configTranslationMap: requiredClientConfigTranslation,
+                  configTranslationMap: clientConfigTranslation,
                 },
               ]}
               configValuesMap={singleClientConfigValues}
               isDisabled={false}
+              required={required}
               onChange={(configKey: string, newValue: ConfigValue) => {
-                dispatchClientConfigValues({
-                  [clientId]: {
-                    [configKey]: newValue as string,
-                  },
-                });
+                handleInputChange(configKey, newValue, clientId);
               }}
             />
           </React.Fragment>

@@ -31,11 +31,15 @@ const convertConfigToLabelSettings = ({
   configValuesMap,
   isDisabled,
   onChange,
+  required,
+  flow,
 }: {
   categoryConfigs: CategoryConfig[];
   configValuesMap: ConfigValuesMap;
   isDisabled?: boolean;
   onChange?: SettingChangeHandler;
+  required?: boolean;
+  flow?: string;
 }): LabelSettingsSectionProps => {
   // no separate settings sections (Only one for now)
   const section: LabelSettingsSectionProps = {
@@ -62,6 +66,12 @@ const convertConfigToLabelSettings = ({
             configValuesMap,
           );
 
+          const keyDisabled =
+            (configKey === 'syncMode' || configKey === 'dataStorageFormat') &&
+            flow === 'nodeSettings'
+              ? true
+              : isDisabled;
+
           const settingItem: LabelSettingsItem = {
             key: configKey,
             label: configTranslation.displayName,
@@ -71,8 +81,9 @@ const convertConfigToLabelSettings = ({
                 configKey={configKey}
                 configTranslation={configTranslation}
                 currentValue={currentValue}
-                isDisabled={isDisabled}
+                isDisabled={keyDisabled}
                 onChange={onChange}
+                required={required}
               />
             ),
           };
