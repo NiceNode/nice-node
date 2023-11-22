@@ -35,6 +35,8 @@ import * as monitor from './monitor';
 import * as cronJobs from './cronJobs';
 import * as i18nMain from './i18nMain';
 
+debugger;
+
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
 }

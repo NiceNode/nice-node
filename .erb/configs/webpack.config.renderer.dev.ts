@@ -226,18 +226,26 @@ const configuration: webpack.Configuration = {
         .on('error', (spawnError) => console.error(spawnError));
 
       console.log('Starting Main Process...');
-      const startScript = process.env.NO_RELOAD
-        ? 'start:main-no-reload'
-        : 'start:main';
+      let startScript = 'start:main';
+      if (process.env.NO_RELOAD) {
+        startScript = 'start:main-no-reload';
+      }
+      if (process.env.DEBUG) {
+        startScript = 'start:main-debug';
+      }
       spawn('npm', ['run', startScript], {
         shell: true,
         stdio: 'inherit',
       })
         .on('close', (code: number) => {
+          console.log('onClose webpack.config.renderer.dev.ts. code: ', code);
           preloadProcess.kill();
           process.exit(code!);
         })
-        .on('error', (spawnError) => console.error(spawnError));
+        .on('error', (spawnError) => {
+          console.log('error webpack.config.renderer.dev.ts');
+          console.error(spawnError);
+        });
       return middlewares;
     },
   },
