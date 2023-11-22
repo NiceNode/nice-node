@@ -266,7 +266,7 @@
     "css-loader": "^6.7.2",
     "css-minimizer-webpack-plugin": "^5.0.1",
     "detect-port": "^1.5.1",
-    "electron": "^27.0.4",
+    "electron": "^25.8.4",
     "electron-builder": "^24.8.1",
     "electron-devtools-installer": "^3.2.0",
     "electron-extension-installer": "^1.2.0",
