@@ -8,6 +8,7 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
+        "webSockets": "Disabled",
         "syncMode": "snap",
         "webSocketsPort": "8546",
         "enginePort": "8551"
@@ -109,6 +110,25 @@
       "infoDescription": "NiceNode requires http connections",
       "defaultValue": "Enabled",
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/json-rpc"
+    },
+    "webSockets": {
+      "displayName": "WebSocket JSON-RPC connections",
+      "category": "RPC APIs",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": ""
+          },
+          {
+            "value": "Disabled",
+            "config": "--Init.WebSocketsEnabled false"
+          }
+        ]
+      },
+      "defaultValue": "Enabled",
+      "documentation": "https://docs.nethermind.io/interacting/json-rpc-server/#websocket"
     },
     "p2pPorts": {
       "displayName": "P2P port (UDP and TCP)",
@@ -234,8 +254,8 @@
     "webSocketsPort": {
       "displayName": "WebSockets JSON-RPC port",
       "cliConfigPrefix": "--JsonRpc.WebSocketsPort ",
-      "defaultValue": "8545",
-      "niceNodeDefaultValue": "8545",
+      "defaultValue": "8546",
+      "niceNodeDefaultValue": "8546",
       "uiControl": {
         "type": "text"
       },
