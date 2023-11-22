@@ -9,7 +9,7 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "webSockets": "Enabled",
+        "webSockets": "Disabled",
         "httpCorsDomains": "\"http://localhost\"",
         "hostAllowList": "localhost,host.containers.internal",
         "engineRpc": "Enabled",
@@ -197,6 +197,84 @@
       },
       "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-ws-port",
       "infoDescription": "The port (TCP) on which WebSocket JSON-RPC listens. The default is 8546. You must expose ports appropriately (https://besu.hyperledger.org/en/stable/HowTo/Find-and-Connect/Configuring-Ports/)."
+    },
+    "webSocketAddress": {
+      "displayName": "WebSocket-RPC server listening interface",
+      "cliConfigPrefix": "--rpc-ws-host=",
+      "defaultValue": "0.0.0.0",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-ws-host"
+    },
+    "webSocketApis": {
+      "displayName": "Enabled certain WebSocket APIs",
+      "category": "RPC APIs",
+      "cliConfigPrefix": "--rpc-ws-api=",
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "ADMIN",
+            "config": "ADMIN"
+          },
+          {
+            "value": "CLIQUE",
+            "config": "CLIQUE"
+          },
+          {
+            "value": "DEBUG",
+            "config": "DEBUG"
+          },
+          {
+            "value": "EEA",
+            "config": "EEA"
+          },
+          {
+            "value": "ETH",
+            "config": "ETH"
+          },
+          {
+            "value": "IBFT",
+            "config": "IBFT"
+          },
+          {
+            "value": "MINER",
+            "config": "MINER"
+          },
+          {
+            "value": "NET",
+            "config": "NET"
+          },
+          {
+            "value": "PERM",
+            "config": "PERM"
+          },
+          {
+            "value": "PLUGINS",
+            "config": "PLUGINS"
+          },
+          {
+            "value": "QBFT",
+            "config": "QBFT"
+          },
+          {
+            "value": "TRACE",
+            "config": "TRACE"
+          },
+          {
+            "value": "TXPOOL",
+            "config": "TXPOOL"
+          },
+          {
+            "value": "WEB3",
+            "config": "WEB3"
+          }
+        ]
+      },
+      "defaultValue": ["ETH", "NET", "WEB3"],
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-ws-api"
     },
     "httpCorsDomains": {
       "displayName": "HTTP-RPC CORS domains",

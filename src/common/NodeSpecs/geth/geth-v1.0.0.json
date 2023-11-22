@@ -14,6 +14,7 @@
         "httpVirtualHosts": "localhost,host.containers.internal",
         "authVirtualHosts": "localhost,host.containers.internal",
         "httpAddress": "0.0.0.0",
+        "webSocketAddress": "0.0.0.0",
         "syncMode": "snap"
       },
       "docker": {
@@ -143,6 +144,60 @@
       },
       "infoDescription": "The port (TCP) on which WebSocket JSON-RPC listens. The default is 8546. You must expose ports appropriately.",
       "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+    },
+    "webSocketAddress": {
+      "displayName": "WebSocket-RPC server listening interface",
+      "cliConfigPrefix": "--ws.addr ",
+      "defaultValue": "0.0.0.0",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/interacting-with-geth/rpc#websockets-server"
+    },
+    "webSocketAllowedOrigins": {
+      "displayName": "WebSocket-RPC allowed origins",
+      "defaultValue": "http://localhost",
+      "cliConfigPrefix": "--ws.origins ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Change where the node accepts web socket connections (use comma separated urls) or \"*\" for all"
+    },
+    "webSocketApis": {
+      "displayName": "Enabled WebSocket APIs",
+      "cliConfigPrefix": "--ws.api ",
+      "defaultValue": ["eth", "net", "web3"],
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "eth",
+            "config": "eth"
+          },
+          {
+            "value": "net",
+            "config": "net"
+          },
+          {
+            "value": "web3",
+            "config": "web3"
+          },
+          {
+            "value": "debug",
+            "config": "debug"
+          },
+
+          {
+            "value": "personal",
+            "config": "personal"
+          },
+          {
+            "value": "admin",
+            "config": "admin"
+          }
+        ]
+      }
     },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
