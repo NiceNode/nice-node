@@ -21,7 +21,7 @@ import { Benchmark } from '../main/state/benchmark';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
 //  we extend window.performance to include Chrome's memory stats
-interface Performance extends Performance {
+interface PerformanceNN extends Performance {
   memory?: {
     /** The maximum size of the heap, in bytes, that is available to the context. */
     jsHeapSizeLimit: number;
@@ -131,7 +131,7 @@ declare global {
       checkPorts(ports: number[]): void;
     };
 
-    performance: Performance;
+    performance: PerformanceNN;
   }
 }
 

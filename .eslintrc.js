@@ -1,5 +1,6 @@
 module.exports = {
   extends: ['erb', 'plugin:storybook/recommended'],
+  plugins: ['@typescript-eslint'],
   rules: {
     // Javascript can handle cycles in dependencies
     'import/no-cycle': 'off',

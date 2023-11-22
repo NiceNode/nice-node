@@ -23,7 +23,7 @@ import { LogMessage } from '../../Generics/redesign/LogMessage/LogMessage';
 import Input from '../../Generics/redesign/Input/Input';
 import Button from '../../Generics/redesign/Button/Button';
 import { ContentHeader } from '../../Generics/redesign/ContentHeader/ContentHeader';
-import { LogWithMetadata } from 'main/util/nodeLogUtils';
+import { LogWithMetadata } from '../../../main/util/nodeLogUtils';
 import FloatingButton from '../../Generics/redesign/FloatingButton/FloatingButton';
 
 export interface LogsProps {

@@ -1,5 +1,5 @@
-import { NotificationProps } from 'main/consts/notifications';
-import { NotificationItemProps } from 'renderer/Generics/redesign/NotificationItem/NotificationItem';
+import { NotificationProps } from '../consts/notifications';
+import { NotificationItemProps } from '../../renderer/Generics/redesign/NotificationItem/NotificationItem';
 import { i18nMain } from '../i18nMain';
 import { send } from '../messenger';
 import store from './store';

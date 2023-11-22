@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Settings } from 'main/state/settings';
+import { Settings } from '../../../main/state/settings';
 import { useGetSettingsQuery } from '../../state/settingsService';
 import { ModalConfig } from '../ModalManager/modalUtils';
 import electron from '../../electronGlobal';

@@ -18,7 +18,7 @@
     "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start-auto-start-node": "ts-node ./.erb/scripts/check-port-in-use.js && cross-env NN_AUTOSTART_NODE=true npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
-    "start:main-debug": "cross-env NODE_ENV=development ELECTRON_ENABLE_LOGGING=true electron --inspect=5858 --remote-debugging-port=9223 -r ts-node/register/transpile-only .",
+    "start:main-debug": "cross-env NODE_ENV=development ELECTRON_ENABLE_LOGGING=true electron --inspect=5858 --remote-debugging-port=9223 --trace-warnings -r ts-node/register/transpile-only .",
     "start:main-no-reload": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
     "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
     "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",

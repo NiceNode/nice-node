@@ -22,6 +22,9 @@ const configuration: webpack.Configuration = {
           options: {
             // Remove this line to enable type checking in webpack builds
             transpileOnly: true,
+            compilerOptions: {
+              module: 'esnext',
+            },
           },
         },
       },

@@ -9,12 +9,12 @@
  */
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
-import * as Sentry from '@sentry/electron/main';
+// import * as Sentry from '@sentry/electron/main';
 
-import {
-  installExtension,
-  REACT_DEVELOPER_TOOLS,
-} from 'electron-extension-installer';
+// import {
+//   installExtension,
+//   REACT_DEVELOPER_TOOLS,
+// } from 'electron-extension-installer';
 import logger from './logger';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -35,8 +35,6 @@ import * as monitor from './monitor';
 import * as cronJobs from './cronJobs';
 import * as i18nMain from './i18nMain';
 
-debugger;
-
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
 }
@@ -44,12 +42,12 @@ if (process.env.NODE_ENV === 'development') {
 fixPathEnvVar();
 logger.info(`NICENODE_ENV: ${process.env.NICENODE_ENV}`);
 logger.info(`MP_PROJECT_ENV: ${process.env.MP_PROJECT_ENV}`);
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  maxBreadcrumbs: 50,
-  debug: process.env.NODE_ENV === 'development',
-  environment: process.env.NICENODE_ENV || 'development',
-});
+// Sentry.init({
+//   dsn: process.env.SENTRY_DSN,
+//   maxBreadcrumbs: 50,
+//   debug: process.env.NODE_ENV === 'development',
+//   environment: process.env.NICENODE_ENV || 'development',
+// });
 
 let mainWindow: BrowserWindow | null = null;
 export const getMainWindow = () => mainWindow;
@@ -64,18 +62,18 @@ if (process.env.NODE_ENV === 'production') {
 const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
-if (isDevelopment) {
-  require('electron-debug')();
-}
+// if (isDevelopment) {
+//   require('electron-debug')();
+// }
 
 const createWindow = async () => {
   if (isDevelopment) {
     // https://github.com/MarshallOfSound/electron-devtools-installer/issues/238
-    await installExtension(REACT_DEVELOPER_TOOLS, {
-      loadExtensionOptions: {
-        allowFileAccess: true,
-      },
-    });
+    // await installExtension(REACT_DEVELOPER_TOOLS, {
+    //   loadExtensionOptions: {
+    //     allowFileAccess: true,
+    //   },
+    // });
   }
 
   const RESOURCES_PATH = app.isPackaged
@@ -190,3 +188,30 @@ const initialize = () => {
 };
 
 logger.info(`app name: ${app.getName()}`);
+
+// const { app, BrowserWindow } = require('electron');
+
+// const createWindow = () => {
+//   const win = new BrowserWindow({
+//     width: 800,
+//     height: 600,
+//   });
+
+//   win.loadFile('./src/renderer/index.html');
+// };
+
+// app.whenReady().then(() => {
+//   createWindow();
+
+//   app.on('activate', () => {
+//     if (BrowserWindow.getAllWindows().length === 0) {
+//       createWindow();
+//     }
+//   });
+// });
+
+// app.on('window-all-closed', () => {
+//   if (process.platform !== 'darwin') {
+//     app.quit();
+//   }
+// });

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NodePackage } from 'common/node';
+import { NodePackage } from '../../../common/node';
 import { ModalConfig } from '../ModalManager/modalUtils';
 import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
 import { container, removeText } from './removeNode.css';

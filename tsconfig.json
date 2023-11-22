@@ -1,15 +1,13 @@
 {
   "compilerOptions": {
+    "incremental": true,
     "target": "es2022",
     "module": "commonjs",
     "lib": ["dom", "es2022"],
-    "declaration": true,
-    "declarationMap": true,
     "jsx": "react-jsx",
     "strict": true,
     "pretty": true,
     "sourceMap": true,
-    "baseUrl": "./src",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
@@ -19,7 +17,7 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "outDir": "release/app/dist",
+    "outDir": ".erb/dll",
     // skip because github's macos-latest was checking lib types
     "skipLibCheck": true
   },
