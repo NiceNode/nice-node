@@ -10,7 +10,7 @@ import { ThemeSetting } from './state/settings';
 import { AddNodePackageNodeService } from './nodePackageManager';
 import { ConfigValuesMap } from '../common/nodeConfig';
 
-contextBridge.exposeInMainWorld('electron', {
+const electronHandler = {
   SENTRY_DSN: process.env.SENTRY_DSN,
   ipcRenderer: {
     // eslint-disable-next-line
@@ -164,4 +164,6 @@ contextBridge.exposeInMainWorld('electron', {
   checkPorts: (ports: number[]) => {
     ipcRenderer.invoke('checkPorts', ports);
   },
-});
+};
+contextBridge.exposeInMainWorld('electron', electronHandler);
+export type ElectronHandler = typeof electronHandler;

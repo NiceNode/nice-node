@@ -25,16 +25,17 @@ import {
   onExit as onExitNodeManager,
 } from './nodeManager';
 // eslint-disable-next-line import/no-cycle
-import * as ipc from './ipc';
-import * as power from './power';
-import * as processExit from './processExit';
-import * as systemInfo from './systemInfo';
-import { setCorsForNiceNode } from './corsMiddleware';
-import * as updater from './updater';
-import * as monitor from './monitor';
-import * as cronJobs from './cronJobs';
-import * as i18nMain from './i18nMain';
+// import * as ipc from './ipc';
+// import * as power from './power';
+// import * as processExit from './processExit';
+// import * as systemInfo from './systemInfo';
+// import { setCorsForNiceNode } from './corsMiddleware';
+// import * as updater from './updater';
+// import * as monitor from './monitor';
+// import * as cronJobs from './cronJobs';
+// import * as i18nMain from './i18nMain';
 
+console.log('HEY!');
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
 }
@@ -120,12 +121,12 @@ const createWindow = async () => {
     mainWindow = null;
   });
 
-  // App auto updates
-  updater.initialize(mainWindow);
-  updater.checkForUpdates(false);
+  // // App auto updates
+  // updater.initialize(mainWindow);
+  // updater.checkForUpdates(false);
 
-  menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
+  // menuBuilder = new MenuBuilder(mainWindow);
+  // menuBuilder.buildMenu();
 
   setWindow(mainWindow);
 
@@ -136,7 +137,7 @@ const createWindow = async () => {
   });
 
   // Intercepts web requests from the UI an internet and sets origins
-  setCorsForNiceNode(mainWindow);
+  // setCorsForNiceNode(mainWindow);
 };
 
 /**
@@ -154,7 +155,7 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
-    initialize();
+    // initialize();
 
     createWindow();
     // dontSuspendSystem();
@@ -168,21 +169,21 @@ app
 
 const onExit = () => {
   onExitNodeManager();
-  monitor.onExit();
+  // monitor.onExit();
 };
 
 // no blocking work
 const initialize = () => {
   logger.info('Initializing main process work...');
-  ipc.initialize();
-  power.initialize();
-  initNodeManager();
-  systemInfo.initialize();
-  processExit.initialize();
-  processExit.registerExitHandler(onExit);
-  monitor.initialize();
-  cronJobs.initialize();
-  i18nMain.initialize();
+  // ipc.initialize();
+  // power.initialize();
+  // initNodeManager();
+  // systemInfo.initialize();
+  // processExit.initialize();
+  // processExit.registerExitHandler(onExit);
+  // monitor.initialize();
+  // cronJobs.initialize();
+  // i18nMain.initialize();
   console.log('app locale: ', app.getLocale());
   console.log('app LocaleCountryCode: ', app.getLocaleCountryCode());
 };

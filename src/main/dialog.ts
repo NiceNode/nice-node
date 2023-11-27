@@ -9,11 +9,11 @@ import {
 } from './files';
 import logger from './logger';
 // eslint-disable-next-line import/no-cycle
-import { getMainWindow } from './main';
+import { getMainWindow } from './mainNew';
 import { getNode, updateNode } from './state/nodes';
 import { i18nMain } from './i18nMain';
 
-const t = i18nMain.getFixedT(null, 'dialog');
+const t = i18nMain?.getFixedT(null, 'dialog');
 
 export const updateNodeDataDir = async (node: Node, newDataDir: string) => {
   node.runtime.dataDir = newDataDir;

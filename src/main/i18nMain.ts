@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import I18nextCLILanguageDetector from 'i18next-cli-language-detector';
 
 import { getSettings, setLanguage } from './state/settings';
-import { getMenuBuilder } from './main';
+// import { getMenuBuilder } from './mainNew';
 
 import enTranslations from '../../assets/locales/en/translation.json';
 import enNotifications from '../../assets/locales/en/notifications.json';
@@ -130,7 +130,7 @@ export const onUserChangedLanguage = (languageCode: string) => {
   i18n.changeLanguage(languageCode);
   // Builds menu again with new translations and sets it on the
   //  main window (app view)
-  getMenuBuilder()?.buildMenu();
+  // getMenuBuilder()?.buildMenu();
 };
 
 // get value on load
