@@ -13,6 +13,8 @@ import {
   titleFont,
   advancedOptionsLink,
   dataLocationContainer,
+  settingsContainer,
+  horizontalContainer,
 } from './addNodeConfiguration.css';
 import SpecialSelect, {
   SelectOption,
@@ -48,8 +50,9 @@ export interface AddNodeConfigurationProps {
   nodeLibrary?: NodeLibrary;
   nodePackageLibrary?: NodePackageLibrary;
   onChange?: (newValue: AddNodeConfigurationValues) => void;
-  nodePackageConfig?: AddNodeConfigurationValues;
+  nodeStorageLocation?: string;
   shouldHideTitle?: boolean;
+  disableSaveButton?: (value: boolean) => void;
 }
 
 const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
@@ -66,11 +69,12 @@ const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
 
 const AddNodeConfiguration = ({
   nodeId,
-  nodePackageConfig,
+  nodeStorageLocation,
   nodeLibrary,
   nodePackageLibrary,
   shouldHideTitle,
   onChange,
+  disableSaveButton,
 }: AddNodeConfigurationProps) => {
   const { t } = useTranslation();
   const [sNodePackageSpec, setNodePackageSpec] =
@@ -84,7 +88,7 @@ const AddNodeConfiguration = ({
     {},
   );
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>(
-    nodePackageConfig?.storageLocation || '',
+    nodeStorageLocation || '',
   );
   const [sClientNodeSpecifications, setClientNodeSpecifications] = useState<
     NodeSpecification[]
@@ -103,13 +107,111 @@ const AddNodeConfiguration = ({
   const [sIsAdvancedOptionsOpen, setIsAdvancedOptionsOpen] =
     useState<boolean>();
 
+  const [requiredNodePackageSpecs, setRequiredNodePackageSpecs] = useState<
+    NodeSpecification[]
+  >([]);
+  const [advancedNodePackageSpecs, setAdvancedNodePackageSpecs] = useState<
+    NodeSpecification[]
+  >([]);
+  const [requiredClientSpecs, setRequiredClientSpecs] = useState<
+    NodeSpecification[]
+  >([]);
+  const [advancedClientSpecs, setAdvancedClientSpecs] = useState<
+    NodeSpecification[]
+  >([]);
+
   useEffect(() => {
-    if (sNodePackageSpec) {
-      setNodePackageSpecArr([sNodePackageSpec]);
-    } else {
-      setNodePackageSpecArr([]);
+    // For Node Package Specs
+    const requiredNodePackageSpecs: NodeSpecification[] = [];
+    const advancedNodePackageSpecs: NodeSpecification[] = [];
+    sNodePackageSpecArr.forEach((spec) => {
+      const requiredConfigTranslations: { [key: string]: any } = {};
+      const advancedConfigTranslations: { [key: string]: any } = {};
+
+      if (spec?.configTranslation) {
+        Object.entries(spec?.configTranslation).forEach(([key, value]) => {
+          if (value.addNodeFlow === 'required') {
+            requiredConfigTranslations[key] = value;
+          } else if (value.addNodeFlow === 'advanced') {
+            advancedConfigTranslations[key] = value;
+          }
+        });
+      }
+
+      if (Object.keys(requiredConfigTranslations).length > 0) {
+        requiredNodePackageSpecs.push({
+          ...spec,
+          configTranslation: requiredConfigTranslations,
+        });
+      }
+      if (Object.keys(advancedConfigTranslations).length > 0) {
+        advancedNodePackageSpecs.push({
+          ...spec,
+          configTranslation: advancedConfigTranslations,
+        });
+      }
+    });
+
+    const requiredClientSpecs: NodeSpecification[] = [];
+    const advancedClientSpecs: NodeSpecification[] = [];
+    sClientNodeSpecifications.forEach((spec) => {
+      const requiredConfigTranslations: { [key: string]: any } = {};
+      const advancedConfigTranslations: { [key: string]: any } = {};
+
+      if (spec.configTranslation) {
+        Object.entries(spec.configTranslation).forEach(([key, value]) => {
+          if (value.addNodeFlow === 'required') {
+            requiredConfigTranslations[key] = value;
+          } else if (value.addNodeFlow === 'advanced') {
+            advancedConfigTranslations[key] = value;
+          }
+        });
+      }
+
+      if (Object.keys(requiredConfigTranslations).length > 0) {
+        requiredClientSpecs.push({
+          ...spec,
+          configTranslation: requiredConfigTranslations,
+        });
+      }
+      if (Object.keys(advancedConfigTranslations).length > 0) {
+        advancedClientSpecs.push({
+          ...spec,
+          configTranslation: advancedConfigTranslations,
+        });
+      }
+    });
+    // Function to check if all required fields have non-empty default values
+    const checkRequiredFields = (specs: NodeSpecification[]) => {
+      return specs.every((spec) =>
+        Object.values(spec.configTranslation || {}).every(
+          (translation) =>
+            translation.addNodeFlow !== 'required' ||
+            (
+              (typeof translation.defaultValue === 'string'
+                ? translation.defaultValue
+                : '') || ''
+            ).trim() !== '',
+        ),
+      );
+    };
+
+    setRequiredNodePackageSpecs(requiredNodePackageSpecs);
+    setAdvancedNodePackageSpecs(advancedNodePackageSpecs);
+    setRequiredClientSpecs(requiredClientSpecs);
+    setAdvancedClientSpecs(advancedClientSpecs);
+
+    if (disableSaveButton) {
+      // Perform the check for both Node Package Specs and Client Node Specs
+      const allNodePackageFieldsValid = checkRequiredFields(
+        requiredNodePackageSpecs,
+      );
+      const allClientFieldsValid = checkRequiredFields(requiredClientSpecs);
+
+      // Disable save button if any required field is empty
+      disableSaveButton(!(allNodePackageFieldsValid && allClientFieldsValid));
     }
-  }, [sNodePackageSpec]);
+  }, [sNodePackageSpecArr, sClientNodeSpecifications, disableSaveButton]);
 
   useEffect(() => {
     if (nodePackageLibrary && nodeId && nodePackageLibrary[nodeId]) {
@@ -122,6 +224,7 @@ const AddNodeConfiguration = ({
     const clients: NodePackageNodeServiceSpec[] = [];
     const clientSelections: ClientSelections = {};
     if (sNodePackageSpec) {
+      setNodePackageSpecArr([sNodePackageSpec]);
       sNodePackageSpec.execution.services.forEach(
         (service: NodePackageNodeServiceSpec) => {
           clients.push(service);
@@ -136,6 +239,8 @@ const AddNodeConfiguration = ({
           }
         },
       );
+    } else {
+      setNodePackageSpecArr([]);
     }
     setNodePackageServices(clients);
     setClientSelections(clientSelections);
@@ -257,83 +362,91 @@ const AddNodeConfiguration = ({
       })}
 
       <HorizontalLine />
-      <div className={dataLocationContainer}>
-        <p className={sectionFont}>{t('DataLocation')}</p>
-        <p className={captionText}>{t('ChangingLocation')}</p>
-        <FolderInput
-          placeholder={sNodeStorageLocation ?? t('loadingDotDotDot')}
-          freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
-          onClickChange={async () => {
-            const storageLocationDetails =
-              await electron.openDialogForStorageLocation();
-            console.log('storageLocationDetails', storageLocationDetails);
-            if (storageLocationDetails) {
-              setNodeStorageLocation(storageLocationDetails.folderPath);
-              if (onChange) {
-                onChange({
-                  storageLocation: storageLocationDetails.folderPath,
-                });
+      <div className={settingsContainer}>
+        <div className={dataLocationContainer}>
+          <p className={sectionFont}>{t('DataLocation')}</p>
+          <p className={captionText}>{t('ChangingLocation')}</p>
+          <FolderInput
+            placeholder={sNodeStorageLocation ?? t('loadingDotDotDot')}
+            freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
+            onClickChange={async () => {
+              const storageLocationDetails =
+                await electron.openDialogForStorageLocation();
+              console.log('storageLocationDetails', storageLocationDetails);
+              if (storageLocationDetails) {
+                setNodeStorageLocation(storageLocationDetails.folderPath);
+                if (onChange) {
+                  onChange({
+                    storageLocation: storageLocationDetails.folderPath,
+                  });
+                }
+                setNodeStorageLocationFreeStorageGBs(
+                  storageLocationDetails.freeStorageGBs,
+                );
+              } else {
+                // user didn't change the folder path
               }
-              setNodeStorageLocationFreeStorageGBs(
-                storageLocationDetails.freeStorageGBs,
-              );
-            } else {
-              // user didn't change the folder path
-            }
-          }}
-        />
-      </div>
-
-      <HorizontalLine />
-
-      {/* Initial node package settings, required */}
-      <InitialClientConfigs
-        clientSpecs={sNodePackageSpecArr}
-        addNodeFlowSelection="required"
-        onChange={(newConfigValues) => {
-          dispatchNodePackageConfigValues(newConfigValues);
-        }}
-      />
-      {/* Initial client settings, required */}
-      <InitialClientConfigs
-        clientSpecs={sClientNodeSpecifications}
-        addNodeFlowSelection="required"
-        onChange={(newClientConfigValues) => {
-          dispatchClientConfigValues(newClientConfigValues);
-        }}
-      />
-      {/* Initial client settings, required and optional */}
-      <div className={advancedOptionsLink}>
-        <DropdownLink
-          text={`${
-            sIsAdvancedOptionsOpen
-              ? t('HideAdvancedOptions')
-              : t('ShowAdvancedOptions')
-          }`}
-          onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
-          isDown={!sIsAdvancedOptionsOpen}
-        />
-      </div>
-      {sIsAdvancedOptionsOpen && (
-        <>
-          {/* Initial node package settings, advanced */}
-          <InitialClientConfigs
-            clientSpecs={sNodePackageSpecArr}
-            addNodeFlowSelection="advanced"
-            onChange={(newConfigValues) => {
-              dispatchNodePackageConfigValues(newConfigValues);
             }}
           />
-          {/* Initial client settings, advanced */}
+        </div>
+
+        <div className={horizontalContainer}>
+          <HorizontalLine />
+        </div>
+
+        {/* Initial node package settings, required */}
+        {requiredNodePackageSpecs.length > 0 && (
           <InitialClientConfigs
-            clientSpecs={sClientNodeSpecifications}
-            addNodeFlowSelection="advanced"
-            onChange={(newClientConfigValues) => {
-              dispatchClientConfigValues(newClientConfigValues);
-            }}
+            clientSpecs={requiredNodePackageSpecs}
+            required
+            disableSaveButton={disableSaveButton}
+            onChange={dispatchNodePackageConfigValues}
           />
-        </>
-      )}
+        )}
+        {/* Initial client settings, required */}
+        {requiredClientSpecs.length > 0 && (
+          <InitialClientConfigs
+            clientSpecs={requiredClientSpecs}
+            required
+            disableSaveButton={disableSaveButton}
+            onChange={dispatchClientConfigValues}
+          />
+        )}
+        {sIsAdvancedOptionsOpen && (
+          <>
+            {/* Initial node package settings, advanced */}
+            {advancedNodePackageSpecs.length > 0 && (
+              <InitialClientConfigs
+                clientSpecs={advancedNodePackageSpecs}
+                onChange={dispatchNodePackageConfigValues}
+              />
+            )}
+
+            {/* Initial client settings, advanced */}
+            {advancedClientSpecs.length > 0 && (
+              <InitialClientConfigs
+                clientSpecs={advancedClientSpecs}
+                onChange={dispatchClientConfigValues}
+              />
+            )}
+          </>
+        )}
+        {/* Initial client settings, required and optional */}
+        {(advancedNodePackageSpecs.length > 0 ||
+          advancedClientSpecs.length > 0) && (
+          <div className={advancedOptionsLink}>
+            <DropdownLink
+              text={`${
+                sIsAdvancedOptionsOpen
+                  ? t('HideAdvancedOptions')
+                  : t('ShowAdvancedOptions')
+              }`}
+              onClick={() => setIsAdvancedOptionsOpen(!sIsAdvancedOptionsOpen)}
+              isDown={!sIsAdvancedOptionsOpen}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

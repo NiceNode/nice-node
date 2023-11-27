@@ -58,7 +58,7 @@ const categoryConfigs: CategoryConfig[] = [
     category: 'Syncronization',
     configTranslationMap: {
       syncMode: {
-        displayName: 'Sync mode',
+        displayName: 'Execution Client Sync Mode',
         category: 'Syncronization',
         cliConfigPrefix: '--sync-mode=',
         uiControl: {

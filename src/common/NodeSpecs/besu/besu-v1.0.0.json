@@ -9,11 +9,13 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "webSockets": "Enabled",
+        "webSockets": "Disabled",
         "httpCorsDomains": "\"http://localhost\"",
         "hostAllowList": "localhost,host.containers.internal",
         "engineRpc": "Enabled",
-        "engineHostAllowList": "localhost,host.containers.internal"
+        "engineHostAllowList": "localhost,host.containers.internal",
+        "syncMode": "snap",
+        "dataStorageFormat": "Bonsai"
       },
       "docker": {
         "containerVolumePath": "/var/lib/besu",
@@ -83,23 +85,31 @@
       }
     },
     "syncMode": {
-      "displayName": "Node synchronization mode",
+      "displayName": "Execution Client Sync Mode",
       "category": "Syncronization",
       "cliConfigPrefix": "--sync-mode=",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
-            "value": "FAST",
-            "config": "FAST"
+            "value": "snap",
+            "config": "X_SNAP",
+            "info": "~700GB / 6h"
           },
           {
-            "value": "FULL",
-            "config": "FULL"
+            "value": "checkpoint",
+            "config": "X_CHECKPOINT",
+            "info": "~5h"
+          },
+          {
+            "value": "full",
+            "config": "FULL",
+            "info": "~1.5d"
           }
         ]
       },
-      "defaultValue": "FAST",
+      "addNodeFlow": "required",
+      "defaultValue": "snap",
       "documentation": "https://besu.hyperledger.org/en/stable/Concepts/Node-Types/"
     },
     "p2pPorts": {
@@ -187,6 +197,84 @@
       },
       "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-ws-port",
       "infoDescription": "The port (TCP) on which WebSocket JSON-RPC listens. The default is 8546. You must expose ports appropriately (https://besu.hyperledger.org/en/stable/HowTo/Find-and-Connect/Configuring-Ports/)."
+    },
+    "webSocketAddress": {
+      "displayName": "WebSocket-RPC server listening interface",
+      "cliConfigPrefix": "--rpc-ws-host=",
+      "defaultValue": "0.0.0.0",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-ws-host"
+    },
+    "webSocketApis": {
+      "displayName": "Enabled certain WebSocket APIs",
+      "category": "RPC APIs",
+      "cliConfigPrefix": "--rpc-ws-api=",
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "ADMIN",
+            "config": "ADMIN"
+          },
+          {
+            "value": "CLIQUE",
+            "config": "CLIQUE"
+          },
+          {
+            "value": "DEBUG",
+            "config": "DEBUG"
+          },
+          {
+            "value": "EEA",
+            "config": "EEA"
+          },
+          {
+            "value": "ETH",
+            "config": "ETH"
+          },
+          {
+            "value": "IBFT",
+            "config": "IBFT"
+          },
+          {
+            "value": "MINER",
+            "config": "MINER"
+          },
+          {
+            "value": "NET",
+            "config": "NET"
+          },
+          {
+            "value": "PERM",
+            "config": "PERM"
+          },
+          {
+            "value": "PLUGINS",
+            "config": "PLUGINS"
+          },
+          {
+            "value": "QBFT",
+            "config": "QBFT"
+          },
+          {
+            "value": "TRACE",
+            "config": "TRACE"
+          },
+          {
+            "value": "TXPOOL",
+            "config": "TXPOOL"
+          },
+          {
+            "value": "WEB3",
+            "config": "WEB3"
+          }
+        ]
+      },
+      "defaultValue": ["ETH", "NET", "WEB3"],
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#rpc-ws-api"
     },
     "httpCorsDomains": {
       "displayName": "HTTP-RPC CORS domains",
@@ -296,23 +384,24 @@
       "defaultValue": "localhost,host.containers.internal,127.0.0.1"
     },
     "dataStorageFormat": {
-      "displayName": "The data storage format to use",
+      "displayName": "Data storage format",
       "category": "Storage",
       "cliConfigPrefix": "--data-storage-format=",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
-            "value": "FOREST",
+            "value": "Forest",
             "config": "FOREST"
           },
           {
-            "value": "BONSAI",
+            "value": "Bonsai",
             "config": "BONSAI"
           }
         ]
       },
-      "defaultValue": "FOREST",
+      "defaultValue": "Bonsai",
+      "addNodeFlow": "advanced",
       "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#data-storage-format"
     },
     "maxPeerCount": {

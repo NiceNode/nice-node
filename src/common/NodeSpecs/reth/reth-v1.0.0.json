@@ -107,6 +107,80 @@
       "defaultValue": "Disabled",
       "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
     },
+    "webSocketAddress": {
+      "displayName": "WebSocket-RPC server listening interface",
+      "cliConfigPrefix": "--ws.addr ",
+      "defaultValue": "0.0.0.0",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/interacting-with-geth/rpc#websockets-server"
+    },
+    "webSocketAllowedOrigins": {
+      "displayName": "WebSocket-RPC allowed origins",
+      "defaultValue": "http://localhost",
+      "cliConfigPrefix": "--ws.origins ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Change where the node accepts web socket connections (use comma separated urls) or \"*\" for all"
+    },
+    "webSocketApis": {
+      "displayName": "Enabled WebSocket APIs",
+      "cliConfigPrefix": "--ws.api ",
+      "defaultValue": ["eth", "net", "web3"],
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "eth",
+            "config": "eth"
+          },
+          {
+            "value": "net",
+            "config": "net"
+          },
+          {
+            "value": "web3",
+            "config": "web3"
+          },
+          {
+            "value": "debug",
+            "config": "debug"
+          },
+
+          {
+            "value": "personal",
+            "config": "personal"
+          },
+          {
+            "value": "admin",
+            "config": "admin"
+          },
+          {
+            "value": "ots",
+            "config": "ots"
+          },
+          {
+            "value": "rpc",
+            "config": "rpc"
+          },
+          {
+            "value": "reth",
+            "config": "reth"
+          },
+          {
+            "value": "trace",
+            "config": "trace"
+          },
+          {
+            "value": "txpool",
+            "config": "txpool"
+          }
+        ]
+      }
+    },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
       "cliConfigPrefix": "--http.api ",
@@ -171,8 +245,7 @@
       }
     },
     "syncMode": {
-      "displayName": "Node synchronization mode",
-      "infoDescription": "Blockchain sync mode (\"archive\" or \"full\") (default: full). The sync mode that was chosen when first running a node can not be changed after the initial sync. Example: Turning Archive into Pruned, or Pruned into Full is not supported.",
+      "displayName": "Execution Client Sync Mode",
       "category": "Syncronization",
       "cliConfigPrefix": "",
       "uiControl": {
@@ -180,14 +253,17 @@
         "controlTranslations": [
           {
             "value": "full",
-            "config": "--full"
+            "config": "--full",
+            "info": "~1TB"
           },
           {
             "value": "archive",
-            "config": ""
+            "config": "",
+            "info": "~2.2TB / 2d"
           }
         ]
       },
+      "addNodeFlow": "required",
       "defaultValue": "full",
       "documentation": "https://paradigmxyz.github.io/reth/run/pruning.html"
     },

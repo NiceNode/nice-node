@@ -13,7 +13,9 @@
         "webSockets": "Disabled",
         "httpVirtualHosts": "localhost,host.containers.internal",
         "authVirtualHosts": "localhost,host.containers.internal",
-        "httpAddress": "0.0.0.0"
+        "httpAddress": "0.0.0.0",
+        "webSocketAddress": "0.0.0.0",
+        "syncMode": "snap"
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
@@ -143,6 +145,60 @@
       "infoDescription": "The port (TCP) on which WebSocket JSON-RPC listens. The default is 8546. You must expose ports appropriately.",
       "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
     },
+    "webSocketAddress": {
+      "displayName": "WebSocket-RPC server listening interface",
+      "cliConfigPrefix": "--ws.addr ",
+      "defaultValue": "0.0.0.0",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/interacting-with-geth/rpc#websockets-server"
+    },
+    "webSocketAllowedOrigins": {
+      "displayName": "WebSocket-RPC allowed origins",
+      "defaultValue": "http://localhost",
+      "cliConfigPrefix": "--ws.origins ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Change where the node accepts web socket connections (use comma separated urls) or \"*\" for all"
+    },
+    "webSocketApis": {
+      "displayName": "Enabled WebSocket APIs",
+      "cliConfigPrefix": "--ws.api ",
+      "defaultValue": ["eth", "net", "web3"],
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "eth",
+            "config": "eth"
+          },
+          {
+            "value": "net",
+            "config": "net"
+          },
+          {
+            "value": "web3",
+            "config": "web3"
+          },
+          {
+            "value": "debug",
+            "config": "debug"
+          },
+
+          {
+            "value": "personal",
+            "config": "personal"
+          },
+          {
+            "value": "admin",
+            "config": "admin"
+          }
+        ]
+      }
+    },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
       "cliConfigPrefix": "--http.api ",
@@ -188,23 +244,29 @@
       "infoDescription": "Change where the node accepts http connections (use comma separated urls)"
     },
     "syncMode": {
-      "displayName": "Node synchronization mode",
-      "infoDescription": "Blockchain sync mode (\"snap\", \"full\") (default: snap)",
+      "displayName": "Execution Client Sync Mode",
       "category": "Syncronization",
-      "cliConfigPrefix": "--syncmode ",
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
             "value": "snap",
-            "config": "snap"
+            "config": "--syncmode snap",
+            "info": ""
           },
           {
             "value": "full",
-            "config": "full"
+            "config": "--syncmode full",
+            "info": "~800GB / ~2d"
+          },
+          {
+            "value": "archive",
+            "config": "--syncmode full --gcmode archive",
+            "info": "~16TB"
           }
         ]
       },
+      "addNodeFlow": "required",
       "defaultValue": "snap",
       "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
     },

@@ -49,7 +49,7 @@ const LabelSettingsSection = ({
       {items &&
         items.map((item, index) => (
           <div className={[lineContainer, item.key].join(' ')} key={index}>
-            <div className={labelAndDescriptionContainer}>
+            <div className={[labelAndDescriptionContainer, item.key].join(' ')}>
               <div className={lineKeyText}>{item.label}</div>
               <Caption type={type}>
                 {item.description}{' '}
