@@ -244,7 +244,7 @@
     "@types/jest": "^29.5.7",
     "@types/mixpanel-browser": "^2.47.3",
     "@types/node": "20.4.5",
-    "@types/react": "^18.2.36",
+    "@types/react": "^18.2.39",
     "@types/react-dom": "^18.0.9",
     "@types/react-test-renderer": "^18.0.5",
     "@types/terser-webpack-plugin": "^5.0.4",
