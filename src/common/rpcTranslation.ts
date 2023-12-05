@@ -21,6 +21,7 @@ export type RpcTranslation = {
 export type NiceNodeRpcTranslation =
   | 'eth-l1'
   | 'eth-l1-beacon'
+  | 'eth-l2-op-stack'
   | 'eth-l2-starknet'
   | 'eth-l2-arbitrum'
   | 'eth-l2-consensus'

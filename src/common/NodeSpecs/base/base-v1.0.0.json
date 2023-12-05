@@ -8,7 +8,7 @@
       {
         "serviceId": "executionClient",
         "name": "Execution Client",
-        "nodeOptions": ["op-geth"],
+        "nodeOptions": ["nethermind", "op-geth"],
         "required": true,
         "requiresCommonJwtSecret": true,
         "requiresFiles": true
@@ -30,7 +30,7 @@
     ]
   },
   "category": "Ethereum/L2",
-  "rpcTranslation": "op-node",
+  "rpcTranslation": "eth-l2-op-stack",
   "systemRequirements": {
     "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
     "cpu": {
@@ -65,7 +65,9 @@
                   "serviceId": "executionClient",
                   "configValues": {
                     "genesisFile": "genesis-l2.json",
-                    "rollupSequencerHttpEndpoint": "https://mainnet-sequencer.base.org"
+                    "rollupSequencerHttpEndpoint": "https://mainnet-sequencer.base.org",
+                    "chainId": "8453",
+                    "enginePort": "8553"
                   }
                 },
                 {
@@ -86,7 +88,9 @@
                   "serviceId": "executionClient",
                   "configValues": {
                     "genesisFile": "sepolia-genesis-l2.json",
-                    "rollupSequencerHttpEndpoint": "https://sepolia-sequencer.base.org/"
+                    "rollupSequencerHttpEndpoint": "https://sepolia-sequencer.base.org/",
+                    "chainId": "84532",
+                    "enginePort": "8553"
                   }
                 },
                 {
