@@ -516,6 +516,20 @@ export const createRunCommand = (node: Node): string => {
       },
     );
   }
+
+  // Special case: "chainId" takes priority over "network"
+  // chainId is disambiguous and allows a client like Nethermind) to
+  // easily work for many chains and testnets. network="mainnet" is very ambiguous.
+  // Only exclude node specification includes chainId
+  const excludeConfigKeys = ['dataDir', ...initCommandConfigKeys];
+  if (
+    node.config.configValuesMap.chainId &&
+    node.spec.configTranslation?.chainId
+  ) {
+    console.log('EXCLUDING NETWORK!: ', node.spec.specId);
+    excludeConfigKeys.push('network');
+  }
+
   const cliConfigInput = buildCliConfig({
     configValuesMap: node.config.configValuesMap,
     configTranslationMap: node.spec.configTranslation,

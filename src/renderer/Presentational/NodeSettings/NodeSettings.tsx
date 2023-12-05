@@ -46,7 +46,7 @@ const NodeSettings = ({
   const renderTabs = () => {
     const tabs = [];
     tabs.push(
-      <div id={t('General')}>
+      <div id={t('General')} key="general">
         {isDisabled && (
           <Message type="warning" title={t('StopeNodeToChangeSettings')} />
         )}
@@ -90,7 +90,7 @@ const NodeSettings = ({
 
     if (isWalletSettingsEnabled) {
       tabs.push(
-        <div id={t('WalletConnections')}>
+        <div id={t('WalletConnections')} key="walletconnections">
           <WalletSettings
             configValuesMap={configValuesMap}
             httpCorsConfigTranslation={httpCorsConfigTranslation}

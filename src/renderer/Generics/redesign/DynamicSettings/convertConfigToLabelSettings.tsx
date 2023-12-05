@@ -10,22 +10,6 @@ import {
 import { CategoryConfig } from './DynamicSettings';
 import Setting from './Setting';
 
-const getConfigValue = (
-  configTranslation: ConfigTranslation,
-  configKey: string,
-  configValuesMap: ConfigValuesMap,
-) => {
-  let currentValue: string | string[] = configValuesMap?.[configKey];
-  if (currentValue === undefined) {
-    if (configTranslation.niceNodeDefaultValue !== undefined) {
-      currentValue = configTranslation.niceNodeDefaultValue;
-    } else if (configTranslation.defaultValue !== undefined) {
-      currentValue = configTranslation.defaultValue;
-    }
-  }
-  return currentValue;
-};
-
 const convertConfigToLabelSettings = ({
   categoryConfigs,
   configValuesMap,
@@ -60,11 +44,8 @@ const convertConfigToLabelSettings = ({
           const configTranslation: ConfigTranslation =
             configTranslationMap[configKey];
 
-          const currentValue: string | string[] = getConfigValue(
-            configTranslation,
-            configKey,
-            configValuesMap,
-          );
+          const currentValue: string | string[] | undefined =
+            configValuesMap?.[configKey];
 
           const keyDisabled =
             (configKey === 'syncMode' || configKey === 'dataStorageFormat') &&
