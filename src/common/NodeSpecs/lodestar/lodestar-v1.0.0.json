@@ -10,7 +10,7 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpPort": "5052",
-        "executionEndpoint": "http://host.containers.internal:8551",
+        "executionEndpoint": "http://host.containers.internal",
         "network": "Mainnet"
       },
       "docker": {

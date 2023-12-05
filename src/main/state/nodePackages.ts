@@ -75,6 +75,16 @@ export const getNodePackageBySpecId = (specId: string): Node | undefined => {
   );
 };
 
+export const getNodePackageByServiceNodeId = (nodeId: NodeId) => {
+  return getNodePackages().find((nodePackage) => {
+    // Check each service in the services array of the nodePackage
+    return nodePackage.services.some((service) => {
+      // Return true if the service's node id matches the given nodeId
+      return service.node.id === nodeId;
+    });
+  });
+};
+
 export const addNodePackage = (newNode: NodePackage) => {
   const userNodePackages = getUserNodePackages();
   const { nodes, nodeIds } = userNodePackages;
