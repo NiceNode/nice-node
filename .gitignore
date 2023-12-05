@@ -40,3 +40,6 @@ src/__tests__/node/NiceNode/*
 
 # storybook build files
 storybook-static
+
+# docs for docs.nicenode.xyz
+docs
