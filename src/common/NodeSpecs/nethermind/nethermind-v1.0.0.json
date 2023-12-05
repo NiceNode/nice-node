@@ -91,6 +91,36 @@
         ]
       }
     },
+    "chainId": {
+      "displayName": "Chain ID (Network)",
+      "cliConfigPrefix": "--config ",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "1",
+            "config": "mainnet"
+          },
+          {
+            "value": "17000",
+            "config": "holesky"
+          },
+          {
+            "value": "11155111",
+            "config": "sepolia"
+          },
+          {
+            "value": "10",
+            "config": "op-mainnet"
+          },
+          {
+            "value": "8453",
+            "config": "base-mainnet"
+          }
+        ]
+      }
+    },
     "http": {
       "displayName": "RPC HTTP connections",
       "category": "RPC APIs",
