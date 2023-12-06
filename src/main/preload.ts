@@ -151,6 +151,12 @@ contextBridge.exposeInMainWorld('electron', {
   setIsEventReportingEnabled: (isEventReportingEnabled: boolean) => {
     ipcRenderer.invoke('setIsEventReportingEnabled', isEventReportingEnabled);
   },
+  getSetIsPreReleaseUpdatesEnabled: (isPreReleaseUpdatesEnabled?: boolean) => {
+    ipcRenderer.invoke(
+      'getSetIsPreReleaseUpdatesEnabled',
+      isPreReleaseUpdatesEnabled,
+    );
+  },
 
   // Notifications
   getNotifications: () => ipcRenderer.invoke('getNotifications'),
