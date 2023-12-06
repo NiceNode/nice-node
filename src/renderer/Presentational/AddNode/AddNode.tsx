@@ -54,6 +54,16 @@ const nodeOptions = [
   },
 ];
 
+const otherNodeOptions = [
+  {
+    iconId: 'minecraft',
+    title: 'Minecraft Server',
+    value: 'minecraft',
+    label: 'Minecraft Server',
+    info: 'The world is yours for the making',
+  },
+];
+
 let alphaModalRendered = false;
 
 export type AddNodeValues = {
@@ -148,9 +158,25 @@ const AddNode = ({
           <>{t('AddNodeDescription')}</>
         </div>
       </div>
-      <p className={sectionFont}>Network</p>
+      <p className={sectionFont}>{t('Network')}</p>
       <div style={{ width: '100%' }}>
         {nodeOptions.map((nodeOption) => {
+          return (
+            <SelectCard
+              key={nodeOption.value}
+              title={nodeOption.title}
+              iconId={nodeOption.iconId as keyof NodeIcons}
+              info={nodeOption.info}
+              onClick={() => onChangeNode(nodeOption)}
+              isSelected={sSelectedNode?.value === nodeOption.value}
+            />
+          );
+        })}
+      </div>
+
+      <p className={sectionFont}>{t('Other')}</p>
+      <div style={{ width: '100%' }}>
+        {otherNodeOptions.map((nodeOption) => {
           return (
             <SelectCard
               key={nodeOption.value}

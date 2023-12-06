@@ -1,0 +1,113 @@
+{
+  "specId": "itzg-minecraft",
+  "version": "1.0.0",
+  "displayName": "ItzgMinecraft",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "input": {
+      "defaultConfig": {
+        "p2pPorts": "25565"
+      },
+      "docker": {
+        "raw": " -e EULA=TRUE --user $(id -u):$(id -g)",
+        "containerVolumePath": "/data",
+        "forcedRawNodeInput": "--nogui"
+      }
+    },
+    "architectures": {
+      "docker": ["amd64", "arm64"]
+    },
+    "imageName": "itzg/minecraft-server"
+  },
+  "category": "gaming/minecraft-server",
+  "rpcTranslation": "minecraft-server",
+  "systemRequirements": {
+    "documentationUrl": "https://docs.itzg-minecraft.io/itzg-minecraft/guides-and-helpers/validator-setup/eth2-validator#hardware-and-network-requirements",
+    "cpu": {
+      "cores": 2
+    },
+    "memory": {
+      "minSizeGBs": 4
+    },
+    "storage": {
+      "minSizeGBs": 2
+    },
+    "docker": {
+      "required": true
+    }
+  },
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "Data location",
+      "category": "Storage",
+      "uiControl": {
+        "type": "filePath"
+      }
+    },
+    "worldName": {
+      "displayName": "World Name",
+      "cliConfigPrefix": "--world ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Default value: world",
+      "defaultValue": "world",
+      "documentation": "https://minecraft.wiki/w/Tutorials/Setting_up_a_server#Minecraft_options"
+    },
+    "p2pPorts": {
+      "displayName": "P2P port (UDP and TCP)",
+      "cliConfigPrefix": "--port ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Default value: 25565",
+      "defaultValue": "25565",
+      "documentation": "https://minecraft.wiki/w/Tutorials/Setting_up_a_server#Minecraft_options"
+    },
+    "initialBonusChest": {
+      "displayName": "Initial Bonus Chest",
+      "addNodeFlow": "required",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--bonusChest"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "infoDescription": "If a bonus chest should be generated, when the world is first generated.",
+      "documentation": "https://minecraft.wiki/w/Bonus_Chest"
+    }
+  },
+  "documentation": {
+    "default": "https://docker-minecraft-server.readthedocs.io/"
+  },
+  "resources": [
+    {
+      "label": "Website",
+      "value": "docker-minecraft-server.readthedocs.io",
+      "link": "https://docker-minecraft-server.readthedocs.io/"
+    },
+    {
+      "label": "Github",
+      "value": "github.com/itzg/docker-minecraft-server",
+      "link": "https://github.com/itzg/docker-minecraft-server"
+    },
+    {
+      "label": "EULA (Terms of Use)",
+      "value": "minecraft.net/eula",
+      "link": "https://www.minecraft.net/en-us/eula"
+    },
+    {
+      "label": "Privacy Policy",
+      "value": "privacy.microsoft.com",
+      "link": "https://privacy.microsoft.com/en-us/privacystatement"
+    }
+  ]
+}

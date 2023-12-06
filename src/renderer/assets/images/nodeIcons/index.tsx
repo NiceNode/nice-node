@@ -28,6 +28,9 @@ const radicle = require('./Logo-Radicle.png');
 const livepeer = require('./Logo-Livepeer.png');
 const farcaster = require('./Logo-Farcaster.png');
 
+// Other node/server types
+const minecraft = require('./Logo-Minecraft.png');
+
 export interface NodeIcons {
   geth?: string;
   erigon?: string;
@@ -57,6 +60,8 @@ export interface NodeIcons {
   farcaster?: string;
   hubble?: string;
   nitro?: string;
+  minecraft?: string;
+  ['itzg-minecraft']?: string;
 }
 
 // Define all icons here
@@ -89,6 +94,8 @@ export const NODE_ICONS: NodeIcons = {
   farcaster,
   hubble: farcaster,
   nitro: arbitrum,
+  minecraft,
+  'itzg-minecraft': minecraft,
 };
 
 const white = '#FFFFFF';
@@ -122,6 +129,8 @@ export const NODE_COLORS: NodeIcons = {
   farcaster: common.color.farcaster,
   hubble: common.color.farcaster,
   nitro: common.color.arbitrum,
+  minecraft: common.color.minecraft,
+  'itzg-minecraft': common.color.minecraft,
 };
 
 export type NodeIconId = keyof NodeIcons;
