@@ -1,7 +1,7 @@
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
 import logger from '../logger';
-import Node, { NodeStatus } from '../../common/node';
+import Node, { NodeStatus, getContainerName } from '../../common/node';
 import { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
 import {
   setDockerNodeStatus as setPodmanNodeStatus,
@@ -200,8 +200,6 @@ export const stopSendingLogsToUI = () => {
   }
 };
 export const sendLogsToUI = (node: Node) => {
-  // logger.info(`Starting podman.sendLogsToUI for node ${node.spec.specId}`);
-
   stopSendingLogsToUI();
   // logger.info(
   //   'sendLogsToUI getPodmanEnvWithPath(): ',
@@ -325,8 +323,9 @@ export const stopPodmanNode = async (node: Node) => {
   // todo: could try stopping container by name using node spec
   let isRemoved = false;
   try {
-    await runCommand(`stop ${node.spec.specId}`);
-    logger.info(`stopPodmanNode container stopped by name ${node.spec.specId}`);
+    const containerName = getContainerName(node);
+    await runCommand(`stop ${containerName}`);
+    logger.info(`stopPodmanNode container stopped by name ${containerName}`);
     isRemoved = true;
   } catch (err) {
     // todo: returns an error?
@@ -335,6 +334,9 @@ export const stopPodmanNode = async (node: Node) => {
   if (isRemoved) {
     return true;
   }
+
+  // If the container can't be stopped by name, try to stop it by
+  // the containerId. Should only occur if the user alters name in a terminal.
   let containerIds;
   if (
     Array.isArray(node.runtime.processIds) &&
@@ -351,7 +353,8 @@ export const stopPodmanNode = async (node: Node) => {
 };
 
 export const removePodmanNode = async (node: Node) => {
-  logger.info(`removePodmanNode node specId ${node.spec.specId}`);
+  const containerName = getContainerName(node);
+  logger.info(`removePodmanNode node ${containerName}`);
   let isRemoved = false;
   // (stop &) remove possible previous podman container for this node
   try {
@@ -361,10 +364,8 @@ export const removePodmanNode = async (node: Node) => {
     logger.info('Error in stopping podman node. Continuing remove node.');
   }
   try {
-    await runCommand(`container rm ${node.spec.specId}`);
-    logger.info(
-      `removePodmanNode container removed by name ${node.spec.specId}`,
-    );
+    await runCommand(`container rm ${containerName}`);
+    logger.info(`removePodmanNode container removed by name ${containerName}`);
     isRemoved = true;
   } catch (err) {
     // todo: returns an error when the container is running
@@ -373,6 +374,8 @@ export const removePodmanNode = async (node: Node) => {
   if (isRemoved) {
     return true;
   }
+  // If the container can't be stopped by name, try to stop it by
+  // the containerId. Should only occur if the user alters name in a terminal.
   if (
     Array.isArray(node.runtime.processIds) &&
     node.runtime.processIds.length > 0
@@ -526,7 +529,6 @@ export const createRunCommand = (node: Node): string => {
     node.config.configValuesMap.chainId &&
     node.spec.configTranslation?.chainId
   ) {
-    console.log('EXCLUDING NETWORK!: ', node.spec.specId);
     excludeConfigKeys.push('network');
   }
 
@@ -537,8 +539,9 @@ export const createRunCommand = (node: Node): string => {
   });
   nodeInput += ` ${cliConfigInput}`;
 
+  const containerName = getContainerName(node);
   // -q quiets podman logs (pulling new image logs) so we can parse the containerId
-  const podmanCommand = `run -q -d --name ${specId} ${finalPodmanInput} ${imageName} ${nodeInput}`;
+  const podmanCommand = `run -q -d --name ${containerName} ${finalPodmanInput} ${imageName} ${nodeInput}`;
   logger.info(`podman run command ${podmanCommand}`);
   return podmanCommand;
 };
@@ -607,7 +610,8 @@ export const createInitCommand = (node: Node): string => {
   // -q quiets podman logs (pulling new image logs) so we can parse the containerId
   // -d is not used here as this should be short-lived and we want to be blocked
   //  so that we know when to start the node
-  const podmanCommand = `run -q --user 0 --name ${specId} ${finalPodmanInput} ${imageName} ${nodeInput}`;
+  const containerName = getContainerName(node);
+  const podmanCommand = `run -q --user 0 --name ${containerName} ${finalPodmanInput} ${imageName} ${nodeInput}`;
   logger.info(`createInitCommand: podman run command ${podmanCommand}`);
   return podmanCommand;
 };
