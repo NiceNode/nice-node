@@ -74,6 +74,8 @@
   "Privacy": "Privacy",
   "SendErrorReports": "Send error reports",
   "SendErrorReportsDescription": "Enabled by default in alpha releases to fix bugs and improve the app.",
+  "PreReleaseUpdates": "Pre-release Updates",
+  "PreReleaseUpdatesDescription": "Disabled by default. Enable to update and test pre-release versions of the app. Pre-releases are more likely to have issues.",
   "YouAreRunningNiceNode": "You are running NiceNode",
   "NoNotificationsYet": "No notifications yet",
   "WellLetYouKnow": "We’ll let you know when something interesting happens!",
