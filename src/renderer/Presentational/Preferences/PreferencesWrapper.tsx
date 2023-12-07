@@ -21,6 +21,8 @@ const PreferencesWrapper = ({
     useState<boolean>();
   const [sIsEventReportingEnabled, setIsEventReportingEnabled] =
     useState<boolean>();
+  const [sIsPreReleaseUpdatesEnabled, setIsPreReleaseUpdatesEnabled] =
+    useState<boolean>();
   const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
   const [sLanguageSetting, setLanguageSetting] = useState<string>();
 
@@ -45,11 +47,14 @@ const PreferencesWrapper = ({
       const isOpenAtStartupSetting = userSettings.appIsOpenOnStartup || false;
       const isEventReportingEnabled =
         userSettings.appIsEventReportingEnabled || false;
+      const isPreReleaseUpdatesEnabled =
+        userSettings.appIsPreReleaseUpdatesEnabled || false;
       setThemeSetting(themeSetting);
       setOsIsDarkMode(osIsDarkMode);
       setIsNotificationsEnabled(notificationsSetting);
       setIsOpenOnStartup(isOpenAtStartupSetting);
       setIsEventReportingEnabled(isEventReportingEnabled);
+      setIsPreReleaseUpdatesEnabled(isPreReleaseUpdatesEnabled);
     };
 
     const getNiceNodeVersion = async () => {
@@ -112,6 +117,12 @@ const PreferencesWrapper = ({
         modalOnChangeConfig({
           isEventReportingEnabled,
         });
+      } else if (preference === 'isPreReleaseUpdatesEnabled') {
+        const isPreReleaseUpdatesEnabled = value as boolean;
+        setIsPreReleaseUpdatesEnabled(isPreReleaseUpdatesEnabled);
+        modalOnChangeConfig({
+          isPreReleaseUpdatesEnabled,
+        });
       } else if (preference === 'language') {
         const language = value as string;
         setLanguageSetting(language);
@@ -132,6 +143,7 @@ const PreferencesWrapper = ({
       version={sNiceNodeVersion}
       isNotificationsEnabled={sIsNotificationsEnabled}
       isEventReportingEnabled={sIsEventReportingEnabled}
+      isPreReleaseUpdatesEnabled={sIsPreReleaseUpdatesEnabled}
       language={sLanguageSetting}
       onChange={onChangePreference}
     />

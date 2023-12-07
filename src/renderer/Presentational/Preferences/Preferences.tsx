@@ -35,6 +35,7 @@ export type Preference =
   | 'isOpenOnStartup'
   | 'isNotificationsEnabled'
   | 'isEventReportingEnabled'
+  | 'isPreReleaseUpdatesEnabled'
   | 'language';
 export interface PreferencesProps {
   themeSetting?: ThemeSetting;
@@ -42,6 +43,7 @@ export interface PreferencesProps {
   osDarkMode?: boolean;
   isNotificationsEnabled?: boolean;
   isEventReportingEnabled?: boolean;
+  isPreReleaseUpdatesEnabled?: boolean;
   version?: string;
   language?: string;
   onChange?: (preference: Preference, value: unknown) => void;
@@ -53,6 +55,7 @@ const Preferences = ({
   osDarkMode,
   isNotificationsEnabled,
   isEventReportingEnabled,
+  isPreReleaseUpdatesEnabled,
   version,
   language,
   onChange,
@@ -235,6 +238,35 @@ const Preferences = ({
                       onChange={(newValue) => {
                         if (onChange) {
                           onChange('isEventReportingEnabled', newValue);
+                        }
+                      }}
+                    />
+                  ),
+                },
+              ],
+            },
+          ]}
+        />
+      </div>
+      <div className={preferenceSection}>
+        <div className={sectionTitle}>{t('Advanced')}</div>
+        <HorizontalLine />
+        <LineLabelSettings
+          items={[
+            {
+              sectionTitle: '',
+              items: [
+                {
+                  label: t('PreReleaseUpdates'),
+                  description: t('PreReleaseUpdatesDescription'),
+                  value: (
+                    <Toggle
+                      onText={t('Enabled')}
+                      offText={t('Disabled')}
+                      checked={isPreReleaseUpdatesEnabled}
+                      onChange={(newValue) => {
+                        if (onChange) {
+                          onChange('isPreReleaseUpdatesEnabled', newValue);
                         }
                       }}
                     />
