@@ -1,5 +1,3 @@
-# NiceNode
-
 Run a node at home, the easy way.
 
 Set up an Ethereum node in no-time on every modern computer without any technical knowledge (coming soon).
@@ -13,7 +11,7 @@ For the latest information, visit https://nicenode.xyz
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/k3dpYU4Pn9)
 [![Crowdin](https://badges.crowdin.net/nicenode/localized.svg)](https://crowdin.com/project/nicenode)
 
-<img width="1164" alt="Nice Node Screenshot captioned work in progress" src="https://user-images.githubusercontent.com/3721291/213537206-fa5380f4-af5b-4d81-a07b-ea9072f07b24.png">
+<img width="1164" alt="Application Window Dark" src="https://github.com/NiceNode/nice-node/assets/3721291/835ced91-3a2f-4be6-a30e-11dd025fa20e">
 
 # Development
 
