@@ -37,6 +37,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
       isOpenOnStartup,
       isNotificationsEnabled,
       isEventReportingEnabled,
+      isPreReleaseUpdatesEnabled,
       language,
     } = updatedConfig || (modalConfig as ModalConfig);
 
@@ -53,6 +54,11 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
     if (isEventReportingEnabled !== undefined) {
       await electron.setIsEventReportingEnabled(isEventReportingEnabled);
       setRemoteEventReportingEnabled(isEventReportingEnabled);
+    }
+    if (isPreReleaseUpdatesEnabled !== undefined) {
+      await electron.getSetIsPreReleaseUpdatesEnabled(
+        isPreReleaseUpdatesEnabled,
+      );
     }
     if (language) {
       await electron.setLanguage(language);

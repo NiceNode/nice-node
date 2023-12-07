@@ -120,6 +120,9 @@ declare global {
       setIsOpenOnStartup(isOpenOnStartup: boolean): void;
       getSetIsNotificationsEnabled(isNotificationsEnabled?: boolean): void;
       setIsEventReportingEnabled(isEventReportingEnabled: boolean): void;
+      getSetIsPreReleaseUpdatesEnabled(
+        isPreReleaseUpdatesEnabled?: boolean,
+      ): void;
 
       // Notifications
       getNotifications(): any;

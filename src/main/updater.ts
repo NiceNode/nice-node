@@ -5,6 +5,7 @@ import sleep from 'await-sleep';
 import logger, { autoUpdateLogger } from './logger';
 import { reportEvent } from './events';
 import { i18nMain } from './i18nMain';
+import { getSetIsPreReleaseUpdatesEnabled } from './state/settings';
 
 let notifyUserIfNoUpdateAvailable: boolean;
 
@@ -89,6 +90,9 @@ export const initialize = (mainWindow: BrowserWindow) => {
   autoUpdater.logger = autoUpdateLogger;
   autoUpdater.autoDownload = false;
   autoUpdater.autoInstallOnAppQuit = false;
+  const isPreReleaseUpdatesEnabled = getSetIsPreReleaseUpdatesEnabled();
+  logger.info(`isPreReleaseUpdatesEnabled: ${isPreReleaseUpdatesEnabled}`);
+  autoUpdater.allowPrerelease = isPreReleaseUpdatesEnabled;
   notifyUserIfNoUpdateAvailable = false;
   intiUpdateHandlers(mainWindow);
 };
@@ -96,4 +100,9 @@ export const initialize = (mainWindow: BrowserWindow) => {
 export const checkForUpdates = (notifyIfNoUpdateAvailable: boolean) => {
   notifyUserIfNoUpdateAvailable = notifyIfNoUpdateAvailable;
   autoUpdater.checkForUpdatesAndNotify();
+};
+
+export const setAllowPrerelease = (isAllowPrerelease: boolean) => {
+  logger.info(`updater.allowPrerelease set to: ${isAllowPrerelease}`);
+  autoUpdater.allowPrerelease = isAllowPrerelease;
 };

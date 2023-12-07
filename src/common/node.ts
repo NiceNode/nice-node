@@ -69,6 +69,10 @@ type Node = {
   config: NodeConfig;
   runtime: NodeRuntime;
   status: NodeStatus;
+  /**
+   * Timestamp the node was first created, UTC milliseconds
+   */
+  createdTimestampMs: number;
   lastStarted?: string;
   lastStopped?: string;
   stoppedBy?: NodeStoppedBy;
@@ -91,6 +95,10 @@ export type NodePackage = {
   config: NodeConfig;
   runtime: NodeRuntime;
   status: NodeStatus;
+  /**
+   * Timestamp the node was first created, UTC milliseconds
+   */
+  createdTimestampMs: number;
   lastStarted?: string;
   lastStopped?: string;
   stoppedBy?: NodeStoppedBy;
@@ -152,6 +160,7 @@ export const createNode = (input: {
     config: { configValuesMap: initialConfigValues },
     runtime: input.runtime,
     status: NodeStatus.created,
+    createdTimestampMs: Date.now(),
   };
   return node;
 };
@@ -187,7 +196,23 @@ export const createNodePackage = (input: {
     config: { configValuesMap: initialConfigValues },
     runtime: input.runtime,
     status: NodeStatus.created,
+    createdTimestampMs: Date.now(),
   };
   return nodePackage;
+};
+
+/**
+ * This naming convention supports a user running two of the same nodes,
+ * while still being human-readable.
+ * Returns just the specId for backwards compatibility.
+ * @param node
+ * @returns "node.spec.specId-node.createdTimestampMs"
+ */
+export const getContainerName = (node: Node): string => {
+  const specId = node.spec.specId;
+  const conatinerName = node.createdTimestampMs
+    ? `${specId}-${node.createdTimestampMs}`
+    : specId;
+  return conatinerName;
 };
 export default Node;
