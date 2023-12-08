@@ -150,26 +150,6 @@ The top level specificiation
                 }
               ]
             }
-          },
-          {
-            "value": "Goerli",
-            "config": "unused in nodespec",
-            "serviceConfigs": {
-              "services": [
-                {
-                  "serviceId": "executionClient",
-                  "configValues": {
-                    "network": "Goerli"
-                  }
-                },
-                {
-                  "serviceId": "consensusClient",
-                  "configValues": {
-                    "network": "Goerli"
-                  }
-                }
-              ]
-            }
           }
         ]
       },
@@ -292,10 +272,6 @@ Ignore references to binary (not currently supported)
           {
             "value": "Holesky",
             "config": "--holesky"
-          },
-          {
-            "value": "Goerli",
-            "config": "--goerli"
           },
           {
             "value": "Sepolia",
