@@ -68,7 +68,9 @@ export const config: Options.Testrunner = {
         // custom application args
         appArgs: [],
         appBinaryPath:
-          '/home/runner/work/nice-node/nice-node/release/build/linux-unpacked/nice-node',
+          process.platform === 'linux'
+            ? './release/build/linux-unpacked/nice-node'
+            : undefined,
       },
     },
   ],

@@ -1,9 +1,9 @@
 name: e2e-tests-mac
 
 on:
-  # push:
-  #   branches:
-  #     - tests/webdriver-app-open
+  push:
+    branches:
+      - tests/webdriver-app-open
   pull_request:
 
 jobs:
