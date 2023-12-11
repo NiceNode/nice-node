@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - tests/webdriver-app-open
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        node-version: [20.x]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: 💚 Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: 🧱 Install Dependencies
+        run: npm install
+      - name: 📦 Bundle Application
+        # run: npm run package
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            npm run package -- --linux --x64
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            npm run package -- --mac --x64
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            npm run package -- --win --x64
+          else
+            exit 0
+          fi
+      - name: 🧪 Run Tests
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: npm run wdio
+      - name: 🐛 Debug Build
+        uses: stateful/vscode-server-action@v1
+        if: failure()
+        with:
+          timeout: '120000'

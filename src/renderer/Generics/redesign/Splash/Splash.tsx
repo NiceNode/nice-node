@@ -35,7 +35,9 @@ const Splash = ({ onClickGetStarted }: SplashProps) => {
     >
       <div className={contentContainer}>
         <img className={iconClass} alt="App logo" src={niceNodeIcon} />
-        <div className={titleFont}>{t('WelcomeToNiceNode')}</div>
+        <div id="welcome" className={titleFont}>
+          {t('WelcomeToNiceNode')}
+        </div>
         <div className={descriptionFont}>
           {t('WelcomeToNiceNodeDescription')}
         </div>

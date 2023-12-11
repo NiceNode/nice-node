@@ -68,4 +68,7 @@ module.exports = {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
   },
+  env: {
+    mocha: true,
+  },
 };
