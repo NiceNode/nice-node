@@ -29,7 +29,7 @@ jobs:
           if [ "$RUNNER_OS" == "macOS" ]; then
             npm i dmg-license
           else
-            exit 0
+            sudo apt-get install --no-install-recommends -y rpm libarchive-tools
           fi
         shell: bash
 
@@ -47,7 +47,7 @@ jobs:
         #   npm run package -- --win --x64
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
-            npm run package -- --linux dir
+            npm run package
           else
             npm run package
           fi
