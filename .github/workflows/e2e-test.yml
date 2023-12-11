@@ -1,4 +1,4 @@
-name: CI
+name: e2e-tests
 
 on:
   push:
@@ -7,7 +7,8 @@ on:
   pull_request:
 
 jobs:
-  build:
+  e2e-build-n-test:
+    environment: staging
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -23,6 +24,12 @@ jobs:
       - name: 🧱 Install Dependencies
         run: npm install
       - name: 📦 Bundle Application
+        env:
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+          MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
+          NICENODE_ENV: ${{ vars.NICENODE_ENV }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         # run: npm run package
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
