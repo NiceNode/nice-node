@@ -50,4 +50,3 @@ jobs:
           else
             npm run package
           fi
-        shell: bash

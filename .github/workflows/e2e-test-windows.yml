@@ -1,4 +1,4 @@
-name: e2e-tests
+name: e2e-tests-windows
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest]
+        os: [windows-latest]
         node-version: [20.x]
 
     steps:
@@ -25,13 +25,6 @@ jobs:
       - name: 🧱 Install Dependencies
         run: |
           npm install
-          # This dependency wasn't needed until suddenly on Dec. 2, 2022
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            npm i dmg-license
-          else
-            exit 0
-          fi
-        shell: bash
 
       - name: 📦 Bundle Application
         env:
@@ -45,12 +38,7 @@ jobs:
         #   npm run package -- --mac --x64
         # elif [ "$RUNNER_OS" == "Windows" ]; then
         #   npm run package -- --win --x64
-        run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            npm run package -- --linux dir
-          else
-            npm run package
-          fi
+        run: npm run package
 
       - name: 🧪 Run Tests
         uses: coactions/setup-xvfb@v1
