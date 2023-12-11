@@ -67,6 +67,7 @@ export const config: Options.Testrunner = {
       'wdio:electronServiceOptions': {
         // custom application args
         appArgs: [],
+        appBinaryPath: './release/build/linux-unpacked/nice-node',
       },
     },
   ],
