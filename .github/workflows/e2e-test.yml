@@ -12,7 +12,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        # os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [macOS-latest]
         node-version: [20.x]
 
     steps:
@@ -32,15 +33,20 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         # run: npm run package
         run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            npm run package -- --linux --x64
-          elif [ "$RUNNER_OS" == "macOS" ]; then
+          if [ "$RUNNER_OS" == "macOS" ]; then
             npm run package -- --mac --x64
-          elif [ "$RUNNER_OS" == "Windows" ]; then
-            npm run package -- --win --x64
           else
             exit 0
           fi
+          # if [ "$RUNNER_OS" == "Linux" ]; then
+          #   npm run package -- --linux deb
+          # elif [ "$RUNNER_OS" == "macOS" ]; then
+          #   npm run package -- --mac --x64
+          # elif [ "$RUNNER_OS" == "Windows" ]; then
+          #   npm run package -- --win --x64
+          # else
+          #   exit 0
+          # fi
       - name: 🧪 Run Tests
         uses: coactions/setup-xvfb@v1
         with:
