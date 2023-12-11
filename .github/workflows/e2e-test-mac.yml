@@ -1,4 +1,4 @@
-name: e2e-tests
+name: e2e-tests-mac
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest]
+        os: [macOS-latest]
         node-version: [20.x]
 
     steps:
@@ -26,11 +26,7 @@ jobs:
         run: |
           npm install
           # This dependency wasn't needed until suddenly on Dec. 2, 2022
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            npm i dmg-license
-          else
-            sudo apt-get install --no-install-recommends -y rpm libarchive-tools
-          fi
+          npm i dmg-license
         shell: bash
 
       - name: 📦 Bundle Application
@@ -40,17 +36,7 @@ jobs:
           MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        # run: npm run package
-        # if [ "$RUNNER_OS" == "macOS" ]; then
-        #   npm run package -- --mac --x64
-        # elif [ "$RUNNER_OS" == "Windows" ]; then
-        #   npm run package -- --win --x64
-        run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            npm run package
-          else
-            npm run package
-          fi
+        run: npm run package
 
       - name: 🧪 Run Tests
         uses: coactions/setup-xvfb@v1
