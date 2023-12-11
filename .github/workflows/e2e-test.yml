@@ -43,7 +43,7 @@ jobs:
         # run: npm run package
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
-            npm run package -- --linux deb
+            npm run package -- --linux deb AppImage
           elif [ "$RUNNER_OS" == "macOS" ]; then
             npm run package -- --mac --x64
           elif [ "$RUNNER_OS" == "Windows" ]; then
