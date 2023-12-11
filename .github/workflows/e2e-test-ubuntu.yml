@@ -34,7 +34,7 @@ jobs:
           MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npm run package -- --dir
+        run: npm run package -- --linux --dir
 
       - name: 🧪 Run Tests
         uses: coactions/setup-xvfb@v1

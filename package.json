@@ -96,11 +96,7 @@
     },
     "linux": {
       "target": [
-        "snap",
-        "deb",
-        "AppImage",
-        "rpm",
-        "pacman"
+        "dir"
       ],
       "synopsis": "Run a node at home, the easy way.",
       "description": "By running a node you become part of a global movement to decentralize a world of information. Prevent leaking your personal data to third party nodes. Ensure access when you need it, and don't be censored. Decentralization starts with you. Voice your choice, help your peers.",
