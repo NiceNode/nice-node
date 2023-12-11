@@ -34,7 +34,12 @@ jobs:
           MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npm run package -- --linux --dir
+        run: |
+          npm run package -- --linux --dir
+          ls -al
+          ls -al /home/runner/work/nice-node/nice-node/release/build/
+          ls -al /home/runner/work/nice-node/nice-node/release/build/linux-unpacked
+          ls -al /home/runner/work/nice-node/nice-node/release/build/linux-unpacked/
 
       - name: 🧪 Run Tests
         uses: coactions/setup-xvfb@v1
