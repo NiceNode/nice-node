@@ -42,8 +42,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         # run: npm run package
         run: |
-          # if [ "$RUNNER_OS" == "Linux" ]; then
-          #   npm run package -- --linux --dir
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            npm run package -- --linux --dir
           if [ "$RUNNER_OS" == "macOS" ]; then
             npm run package -- --mac --x64
           elif [ "$RUNNER_OS" == "Windows" ]; then
