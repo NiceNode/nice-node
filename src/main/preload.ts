@@ -10,6 +10,11 @@ import { ThemeSetting } from './state/settings';
 import { AddNodePackageNodeService } from './nodePackageManager';
 import { ConfigValuesMap } from '../common/nodeConfig';
 
+const isTest = process.env.NODE_ENV === 'test';
+if (isTest) {
+  require('wdio-electron-service/preload');
+}
+
 contextBridge.exposeInMainWorld('electron', {
   SENTRY_DSN: process.env.SENTRY_DSN,
   ipcRenderer: {

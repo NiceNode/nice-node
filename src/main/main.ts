@@ -38,6 +38,10 @@ import * as i18nMain from './i18nMain';
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
 }
+const isTest = process.env.NODE_ENV === 'test';
+if (isTest) {
+  require('wdio-electron-service/main');
+}
 
 fixPathEnvVar();
 logger.info(`NICENODE_ENV: ${process.env.NICENODE_ENV}`);
