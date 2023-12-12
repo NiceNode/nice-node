@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "displayName": "Lodestar",
   "execution": {
-    "executionTypes": ["docker"],
+    "executionTypes": [
+      "docker"
+    ],
     "defaultExecutionType": "docker",
     "imageName": "docker.io/chainsafe/lodestar:latest",
     "input": {
@@ -11,7 +13,7 @@
         "http": "Enabled",
         "httpPort": "5052",
         "httpHostAddress": "0.0.0.0",
-        "executionEndpoint": "http://host.containers.internal:8551",
+        "executionEndpoint": "http://host.containers.internal",
         "network": "Mainnet"
       },
       "docker": {
