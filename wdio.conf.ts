@@ -32,8 +32,8 @@ export const config: Options.Testrunner = {
   // then the current working directory is where your `package.json` resides, so `wdio`
   // will be called from there.
   //
-  specs: [['./test/specs/**/*.ts'], ['./test/specs/**/*.ts']],
-  // specs: ['./test/specs/**/*.ts'],
+  // specs: [['./test/specs/**/*.ts'], ['./test/specs/**/*.ts']],
+  specs: ['./test/specs/**/*.ts'],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -55,6 +55,7 @@ export const config: Options.Testrunner = {
   // from the same test should run tests.
   //
   maxInstances: 10,
+
   //
   // If you have trouble getting all important capabilities together, check out the
   // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -67,7 +68,9 @@ export const config: Options.Testrunner = {
       // see https://webdriver.io/docs/wdio-electron-service/#configuration
       'wdio:electronServiceOptions': {
         // custom application args
-        appArgs: [],
+        // See https://github.com/webdriverio-community/wdio-electron-service#appargs
+        // for available Electron and Chrome flags
+        appArgs: ['--lang=EN'],
         appBinaryPath:
           process.platform === 'linux'
             ? './release/build/linux-unpacked/nice-node'

@@ -1,48 +1,26 @@
 /* global $ */
-import { browser } from '@wdio/globals';
+import { expect } from '@wdio/globals';
+// import { browser } from 'wdio-electron-service';
 
-// import * as i18nMain from '../../src/main/i18nMain';
-// i18nMain.initialize();
-
-// const t = i18nMain.i18nMain.getFixedT(null, 'translation');
-process.env.LANG = 'en_US.UTF-8';
-
-describe('Electron Testing', () => {
-  before(function () {
-    // Save the old value if necessary
-    // this.oldValue = process.env.MY_VARIABLE;
-
-    // // Set the variable for this block
-    // process.env.MY_VARIABLE = 'new value';
-    console.log('process.env.LANG: ', process.env.LANG);
-    process.env.LANG = 'en_US.UTF-8';
-  });
-
-  after(function () {
-    // Reset the variable to its original value or clear it
-    // if (this.oldValue) {
-    //   process.env.MY_VARIABLE = this.oldValue;
-    // } else {
-    //   delete process.env.MY_VARIABLE;
-    // }
-    console.log('process.env.LANG: ', process.env.LANG);
-    process.env.LANG = 'en_US.UTF-8';
-  });
-
+describe('Splash screen tests', () => {
   it('application should open to splash screen with welcome message', async () => {
-    console.log('Hello', await browser.getTitle(), 'application!');
-    // Fails if your language is set to anything other than English
-    await expect($('#welcome')).toHaveText('Welcome to NiceNode');
-    // await expect($('#welcome')).toHaveText('Bienvenido a NiceNode');
-    // await expect($('#welcome')).toHaveText(t('WelcomeToNiceNode'));
+    const elWelcome = await $('#welcome');
+    await expect(elWelcome).toBeDisplayed();
+    await expect(elWelcome).toHaveText(expect.stringContaining('NiceNode'));
   });
 
-  // it('app name should have nicenice', async () => {
-  //   const appName = await browser.electron.get('appName');
+  it('clicking get started btn should take the user to add node screen', async () => {
+    await $('#getStartedBtn').click();
+    const elAddFirstNodeTitle = await $('#addFirstNodeTitle');
+    await expect(elAddFirstNodeTitle).toBeDisplayed();
+    await expect(elAddFirstNodeTitle).toHaveText('Add your first node');
+  });
 
-  //   // Fails if your language is set to anything other than English
-  //   await expect(appName).toEqual('NiceNode');
-  //   // await expect($('#welcome')).toHaveText('Bienvenido a NiceNode');
-  //   // await expect($('#welcome')).toHaveText(t('WelcomeToNiceNode'));
+  // todo: when moving from require to imports
+  // it('app name should be set', async () => {
+  //   await browser.electron.execute(async (electron) => {
+  //     const appName = await electron.app.getName();
+  //     await expect(appName).toEqual('NiceNode');
+  //   });
   // });
 });

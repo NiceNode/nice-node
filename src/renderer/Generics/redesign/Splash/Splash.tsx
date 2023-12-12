@@ -67,6 +67,7 @@ const Splash = ({ onClickGetStarted }: SplashProps) => {
           </div>
         </div>
         <Button
+          id="getStartedBtn"
           label={g('GetStarted')}
           type="primary"
           onClick={onClickGetStarted}
