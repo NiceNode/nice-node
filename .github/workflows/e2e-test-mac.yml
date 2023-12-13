@@ -1,10 +1,10 @@
 name: e2e-tests-mac
 
 on:
-  push:
-    branches:
-      - tests/webdriver-app-open
   pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   e2e-build-n-test:
