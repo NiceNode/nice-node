@@ -58,20 +58,26 @@ const NodePackageScreen = () => {
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
+  const executionNode = selectedNodePackage?.services.find((service) => {
+    return service.serviceId === 'executionClient';
+  });
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     selectedNodePackage?.spec.rpcTranslation,
+    executionNode?.node.config.configValuesMap?.httpPort,
     {
       pollingInterval,
     },
   );
   const qExecutionPeers = useGetExecutionPeersQuery(
     selectedNodePackage?.spec.rpcTranslation,
+    executionNode?.node.config.configValuesMap?.httpPort,
     {
       pollingInterval,
     },
   );
   const qLatestBlock = useGetExecutionLatestBlockQuery(
     selectedNodePackage?.spec.rpcTranslation,
+    executionNode?.node.config.configValuesMap?.httpPort,
     {
       pollingInterval,
     },

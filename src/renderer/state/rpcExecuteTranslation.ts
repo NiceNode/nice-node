@@ -47,19 +47,6 @@ const callFetch = async (apiRoute: string) => {
   }
 };
 
-const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
-const ethL2Provider = new ethers.providers.JsonRpcProvider(
-  'http://localhost:8547',
-);
-const ethL2ConsensusProvider = new ethers.providers.JsonRpcProvider(
-  'http://localhost:8549',
-);
-
-// const provider9545 = new ethers.providers.JsonRpcProvider(
-//   'http://localhost:9545'
-// );
-// const provider = new ethers.providers.JsonRpcProvider('http://localhost:9545');
-
 type RpcCall =
   | 'sync'
   | 'peers'
@@ -70,7 +57,11 @@ type RpcCall =
 export const executeTranslation = async (
   rpcCall: RpcCall,
   rpcTranslation: string,
+  httpPort: string,
 ): Promise<any> => {
+  const provider = new ethers.providers.JsonRpcProvider(
+    `http://localhost:${httpPort}`,
+  );
   if (rpcTranslation === 'eth-l1') {
     // use provider
     if (rpcCall === 'sync') {
@@ -112,9 +103,8 @@ export const executeTranslation = async (
       }
     }
   } else if (rpcTranslation === 'eth-l2') {
-    // use ethL2Provider
     if (rpcCall === 'sync') {
-      const resp = await ethL2Provider.send('eth_syncing');
+      const resp = await provider.send('eth_syncing');
       let isSyncing;
       let syncPercent;
       if (resp) {
@@ -129,20 +119,20 @@ export const executeTranslation = async (
       }
       return { isSyncing, syncPercent };
     } else if (rpcCall === 'peers') {
-      const resp = await ethL2Provider.send('net_peerCount');
+      const resp = await provider.send('net_peerCount');
       if (resp) {
         return hexToDecimal(resp);
       } else {
         return undefined;
       }
     } else if (rpcCall === 'latestBlock') {
-      const resp = await ethL2Provider.send('eth_getBlockByNumber', [
+      const resp = await provider.send('eth_getBlockByNumber', [
         'latest',
         true,
       ]);
       return resp;
     } else if (rpcCall === 'clientVersion') {
-      const resp = await ethL2Provider.send('web3_clientVersion');
+      const resp = await provider.send('web3_clientVersion');
       if (resp) {
         return resp;
       } else {
@@ -151,7 +141,7 @@ export const executeTranslation = async (
     } else if (rpcCall === 'net_version') {
       // Returns chain Id. Example 1=eth mainnet, 8453=base mainnet
       // we can use this to confirm that a node is running on the right network
-      const resp = await ethL2Provider.send('net_version');
+      const resp = await provider.send('net_version');
       console.log('net_version: ', resp);
       if (resp) {
         return resp;
@@ -160,9 +150,9 @@ export const executeTranslation = async (
       }
     }
   } else if (rpcTranslation === 'eth-l2-consensus') {
-    // use ethL2ConsensusProvider
+    // use provider
     if (rpcCall === 'sync') {
-      const resp = await ethL2ConsensusProvider.send('eth_syncing');
+      const resp = await provider.send('eth_syncing');
       let isSyncing;
       let currentSlot;
       let highestSlot;
@@ -178,20 +168,20 @@ export const executeTranslation = async (
       }
       return { isSyncing, currentSlot, highestSlot };
     } else if (rpcCall === 'peers') {
-      const resp = await ethL2ConsensusProvider.send('net_peerCount');
+      const resp = await provider.send('net_peerCount');
       if (resp) {
         return hexToDecimal(resp);
       } else {
         return undefined;
       }
     } else if (rpcCall === 'latestBlock') {
-      const resp = await ethL2ConsensusProvider.send('eth_getBlockByNumber', [
+      const resp = await provider.send('eth_getBlockByNumber', [
         'latest',
         true,
       ]);
       return resp;
     } else if (rpcCall === 'clientVersion') {
-      const resp = await ethL2ConsensusProvider.send('web3_clientVersion');
+      const resp = await provider.send('web3_clientVersion');
       if (resp) {
         return resp;
       } else {
@@ -200,7 +190,7 @@ export const executeTranslation = async (
     }
   } else if (rpcTranslation === 'eth-l1-beacon') {
     // call beacon api
-    const beaconBaseUrl = 'http://localhost:5052';
+    const beaconBaseUrl = `http://localhost:${httpPort}`;
     if (rpcCall === 'sync') {
       const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/syncing`);
       if (resp?.data?.is_syncing !== undefined) {
