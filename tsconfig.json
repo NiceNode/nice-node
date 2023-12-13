@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2021",
+    "target": "esnext",
     "module": "commonjs",
     "lib": ["dom", "esnext"],
     "declaration": true,
@@ -21,14 +21,17 @@
     "allowJs": true,
     "outDir": "release/app/dist",
     // skip because github's macos-latest was checking lib types
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    // todo: when using electron apis in e2e tests
+    // "types": ["@wdio/globals/types", "wdio-electron-service", "@wdio/types"],
+    // "typeRoots": ["./node_modules", "./node_modules/@types", "./@types"]
   },
   "exclude": [
-    "test",
     "release/build",
     "release/app/dist",
     ".erb/dll",
-    "storybook-static"
+    "storybook-static",
+    ".eslintrc.js"
     // "src/main/util/timestamp.js"
   ]
 }

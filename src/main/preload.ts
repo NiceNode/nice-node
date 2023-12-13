@@ -10,6 +10,13 @@ import { ThemeSetting } from './state/settings';
 import { AddNodePackageNodeService } from './nodePackageManager';
 import { ConfigValuesMap } from '../common/nodeConfig';
 
+// todo: when moving from require to imports
+// const isTest = process.env.NODE_ENV === 'test';
+// if (isTest) {
+//   console.log('NODE_ENV=TEST... requiring wdio-electron-service/main');
+//   require('wdio-electron-service/preload');
+// }
+
 contextBridge.exposeInMainWorld('electron', {
   SENTRY_DSN: process.env.SENTRY_DSN,
   ipcRenderer: {
