@@ -1,7 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 
 /* eslint-disable no-else-return */
-import { hexToDecimal } from '../utils';
+import { hexToDecimal, safeNumber } from '../utils';
 import { ethers } from '../ethers';
 import { callJsonRpc } from '../jsonRpcClient';
 
@@ -76,18 +76,20 @@ export const executeTranslation = async (
     if (rpcCall === 'sync') {
       const resp = await provider.send('eth_syncing');
       let isSyncing;
-      let syncPercent;
+      let currentBlock = 0;
+      let highestBlock = 0;
+      console.log('resp',resp);
       if (resp !== undefined) {
         if (typeof resp === 'object') {
-          const syncRatio = resp.currentBlock / resp.highestBlock;
-          syncPercent = (syncRatio * 100).toFixed(1);
+          currentBlock = parseInt(resp.currentBlock);
+          highestBlock = parseInt(resp.highestBlock);
           isSyncing = true;
         } else if (resp === false) {
           // reth, light client geth, it is done syncing if data is false
           isSyncing = false;
         }
       }
-      return { isSyncing, syncPercent };
+      return { isSyncing, currentBlock, highestBlock };
     } else if (rpcCall === 'peers') {
       const resp = await provider.send('net_peerCount');
       if (resp) {
@@ -162,18 +164,19 @@ export const executeTranslation = async (
     if (rpcCall === 'sync') {
       const resp = await ethL2ConsensusProvider.send('eth_syncing');
       let isSyncing;
-      let syncPercent;
+      let currentSlot;
+      let highestSlot;
       if (resp) {
         if (typeof resp === 'object') {
-          const syncRatio = resp.currentBlock / resp.highestBlock;
-          syncPercent = (syncRatio * 100).toFixed(1);
+          currentSlot = parseInt(resp.currentSlot);
+          highestSlot = parseInt(resp.highestSlot);
           isSyncing = true;
         } else if (resp === false) {
           // light client geth, it is done syncing if data is false
           isSyncing = false;
         }
       }
-      return { isSyncing, syncPercent };
+      return { isSyncing, currentSlot, highestSlot };
     } else if (rpcCall === 'peers') {
       const resp = await ethL2ConsensusProvider.send('net_peerCount');
       if (resp) {
