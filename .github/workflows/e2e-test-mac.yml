@@ -1,0 +1,51 @@
+name: e2e-tests-mac
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  e2e-build-n-test:
+    environment: staging
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macOS-latest]
+        node-version: [20.x]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: 💚 Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 🧱 Install Dependencies
+        run: |
+          npm install
+          # This dependency wasn't needed until suddenly on Dec. 2, 2022
+          npm i dmg-license
+        shell: bash
+
+      - name: 📦 Bundle Application
+        env:
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+          MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
+          NICENODE_ENV: ${{ vars.NICENODE_ENV }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          npm run package
+          ls -al
+
+      - name: 🧪 Run Tests
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: npm run wdio
+      - name: 🐛 Debug Build
+        uses: stateful/vscode-server-action@v1
+        if: failure()
+        with:
+          timeout: '120000'

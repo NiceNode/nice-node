@@ -18,10 +18,10 @@ export const escapePath = (given_path) => {
     ? // for posix path, escape is simple
       given_path.replace(/(\s+)/g, '\\$1')
     : // for windows, it depend of the build
-    should_not_escape(...windows_version_regex.exec(version).splice(1))
-    ? // on major version, no need to escape anymore
-      // https://support.microsoft.com/en-us/help/4467268/url-encoded-unc-paths-not-url-decoded-in-windows-10-version-1803-later
-      given_path
-    : // on older version, replace space with symbol %20
-      given_path.replace(/(\s+)/g, '%20');
+      should_not_escape(...windows_version_regex.exec(version).splice(1))
+      ? // on major version, no need to escape anymore
+        // https://support.microsoft.com/en-us/help/4467268/url-encoded-unc-paths-not-url-decoded-in-windows-10-version-1803-later
+        given_path
+      : // on older version, replace space with symbol %20
+        given_path.replace(/(\s+)/g, '%20');
 };

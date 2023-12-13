@@ -42,3 +42,5 @@ src/stories
 src/stories/Generic
 src/stories/Presentational
 storybook-static
+
+.eslintrc.js

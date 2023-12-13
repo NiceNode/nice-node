@@ -39,6 +39,10 @@ export interface ButtonProps {
    */
   label?: string;
   onClick?: () => void;
+  /**
+   * id for the <button/> element
+   */
+  id?: string;
 }
 
 const Button = ({
