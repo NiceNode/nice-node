@@ -54,7 +54,7 @@ export const config: Options.Testrunner = {
   // and 30 processes will get spawned. The property handles how many capabilities
   // from the same test should run tests.
   //
-  maxInstances: 9,
+  maxInstances: 10,
 
   //
   // If you have trouble getting all important capabilities together, check out the
