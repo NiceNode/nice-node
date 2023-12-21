@@ -13,6 +13,7 @@ type NodeReportData = {
   specVersion: string;
   status: NodeStatus;
   diskUsedGBs?: number;
+  network?: string;
 };
 
 type PackageReportData = {
@@ -20,6 +21,7 @@ type PackageReportData = {
   specVersion: string;
   status: NodeStatus;
   nodes: Record<NodeId, NodeReportData>;
+  network?: string;
 };
 export const reportDataForNodePackages = (
   userNodePackages: UserNodePackages,
@@ -32,6 +34,7 @@ export const reportDataForNodePackages = (
       specId: nodePackage.spec.specId,
       specVersion: nodePackage.spec.version,
       status: nodePackage.status,
+      network: nodePackage.config?.configValuesMap?.network,
       nodes: {},
     };
 
@@ -44,6 +47,7 @@ export const reportDataForNodePackages = (
         specId: node.spec.specId,
         specVersion: node.spec.version,
         status: node.status,
+        network: nodePackage.config?.configValuesMap?.network,
         diskUsedGBs,
       };
     });
@@ -95,5 +99,5 @@ export const initialize = () => {
   // todo: send report events from backend
   setTimeout(() => {
     dailyReportFunc();
-  }, 30000); // 20 seconds
+  }, 30000); // 30 seconds
 };
