@@ -14,6 +14,9 @@ type NodeReportData = {
   status: NodeStatus;
   diskUsedGBs?: number;
   network?: string;
+  lastRunningTimestampMs?: number;
+  lastStartedTimestampMs?: number;
+  lastStoppedTimestampMs?: number;
 };
 
 type PackageReportData = {
@@ -22,6 +25,9 @@ type PackageReportData = {
   status: NodeStatus;
   nodes: Record<NodeId, NodeReportData>;
   network?: string;
+  lastRunningTimestampMs?: number;
+  lastStartedTimestampMs?: number;
+  lastStoppedTimestampMs?: number;
 };
 export const reportDataForNodePackages = (
   userNodePackages: UserNodePackages,
@@ -35,6 +41,9 @@ export const reportDataForNodePackages = (
       specVersion: nodePackage.spec.version,
       status: nodePackage.status,
       network: nodePackage.config?.configValuesMap?.network,
+      lastRunningTimestampMs: nodePackage.lastRunningTimestampMs,
+      lastStartedTimestampMs: nodePackage.lastStartedTimestampMs,
+      lastStoppedTimestampMs: nodePackage.lastStoppedTimestampMs,
       nodes: {},
     };
 
@@ -47,7 +56,10 @@ export const reportDataForNodePackages = (
         specId: node.spec.specId,
         specVersion: node.spec.version,
         status: node.status,
-        network: nodePackage.config?.configValuesMap?.network,
+        network: node.config?.configValuesMap?.network,
+        lastRunningTimestampMs: node.lastRunningTimestampMs,
+        lastStartedTimestampMs: node.lastStartedTimestampMs,
+        lastStoppedTimestampMs: node.lastStoppedTimestampMs,
         diskUsedGBs,
       };
     });
