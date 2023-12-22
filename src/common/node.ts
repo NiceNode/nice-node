@@ -73,8 +73,9 @@ type Node = {
    * Timestamp the node was first created, UTC milliseconds
    */
   createdTimestampMs: number;
-  lastStarted?: string;
-  lastStopped?: string;
+  lastRunningTimestampMs?: number;
+  lastStartedTimestampMs?: number;
+  lastStoppedTimestampMs?: number;
   stoppedBy?: NodeStoppedBy;
 };
 type NodeMap = Record<string, Node>;
@@ -99,8 +100,24 @@ export type NodePackage = {
    * Timestamp the node was first created, UTC milliseconds
    */
   createdTimestampMs: number;
-  lastStarted?: string;
-  lastStopped?: string;
+  /**
+   * When the Node Package was most recently detected as running properly.
+   * Definition: "running properly" means the node was running for at least 30 seconds
+   */
+  lastRunningTimestampMs?: number;
+  /**
+   * When the Node Package was most recently started.
+   * (Does not indicate that it successfully started, see lastRunningTimestampMs)
+   */
+  lastStartedTimestampMs?: number;
+  /**
+   * When the Node Package was most recently stopped.
+   */
+  lastStoppedTimestampMs?: number;
+  /**
+   * Sets what stopped the Node Package.
+   * Examples: 'shutdown', 'user', 'crash', or undefined if the node is running
+   */
   stoppedBy?: NodeStoppedBy;
 };
 export type NodePackageMap = Record<string, NodePackage>;
