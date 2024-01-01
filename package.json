@@ -352,7 +352,7 @@
     "i18next-cli-language-detector": "^1.1.8",
     "iconv-lite": "^0.6.3",
     "mixpanel-browser": "^2.47.0",
-    "moment": "^2.29.4",
+    "moment": "^2.30.1",
     "pidusage": "^3.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
