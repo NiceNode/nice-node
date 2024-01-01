@@ -237,7 +237,7 @@
     "@storybook/addon-links": "^7.5.1",
     "@storybook/addon-mdx-gfm": "^7.5.3",
     "@storybook/react": "^7.5.1",
-    "@storybook/react-webpack5": "^7.5.1",
+    "@storybook/react-webpack5": "^7.6.7",
     "@storybook/testing-library": "^0.2.2",
     "@svgr/webpack": "^8.0.1",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
