@@ -9,6 +9,12 @@ const uninstallPodman = async (): Promise<boolean | { error: string }> => {
   logger.info(`Starting podman uninstall...`);
 
   // force stop and remove nicenode-machine
+  // npm install p-timeout
+  // const rmPromise = removeNiceNodeMachine();
+
+  // await pTimeout(rmPromise, {
+  // 	milliseconds: 10000,
+  // });
   await removeNiceNodeMachine();
 
   let result;
