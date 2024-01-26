@@ -46,14 +46,16 @@ export const runCommand = async (command: string, log?: boolean) => {
   return data;
 };
 
+/**
+ * Streams `podman events` to watch for things like crashes.
+ * Safe to call multiple times as it only creates a single watch process
+ */
 const watchPodmanEvents = async () => {
   logger.info('Starting podmanWatchProcess');
 
   // podmanWatchProcess is killed if (killed || exitCode === null)
   if (podmanWatchProcess && !podmanWatchProcess.killed) {
-    logger.error(
-      'podmanWatchProcess process still running. Wait to stop or stop first.',
-    );
+    logger.debug('podmanWatchProcess process already running');
     return;
   }
   const spawnOptions: SpawnOptions = {
@@ -623,6 +625,8 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
 
   // Ensure a podman machine is running (Mac and Win)
   await startPodman();
+  // Ensure podman events are being watched
+  watchPodmanEvents();
 
   // try catch? .. podman dameon might need to be restarted if a bad gateway error occurs
   await runCommand(`pull ${imageName}`);
