@@ -5,7 +5,7 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "docker.io/offchainlabs/nitro-node:v2.0.14-2baa834",
+    "imageName": "docker.io/offchainlabs/nitro-node:v2.2.2-8f33fea",
     "input": {
       "defaultConfig": {
         "ethMainnetRpcUrl": "",
