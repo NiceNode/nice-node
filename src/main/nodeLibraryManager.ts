@@ -19,6 +19,7 @@ import pathfinderv1 from '../common/NodeSpecs/pathfinder/pathfinder-v1.0.0.json'
 
 import opGethv1 from '../common/NodeSpecs/op-geth/op-geth-v1.0.0.json';
 import opNodev1 from '../common/NodeSpecs/op-node/op-node-v1.0.0.json';
+import hildrv1 from '../common/NodeSpecs/hildr/hildr-v1.0.0.json';
 
 import hubblev1 from '../common/NodeSpecs/hubble/hubble-v1.0.0.json';
 
@@ -55,6 +56,7 @@ export const initialize = async () => {
     pathfinderv1,
     opGethv1,
     opNodev1,
+    hildrv1,
     hubblev1,
   ];
   specs.forEach((spec) => {

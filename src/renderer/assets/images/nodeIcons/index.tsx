@@ -18,6 +18,7 @@ const nimbus = require('./Logo-Nimbus.png');
 
 // L2
 const optimism = require('./Logo-Optimism.png');
+const optimismJava = require('./Logo-OptimismJava.png');
 const arbitrum = require('./Logo-Arbitrum.png');
 const base = require('./Logo-Base.png');
 const starknet = require('./Logo-Starknet.png');
@@ -54,6 +55,7 @@ export interface NodeIcons {
   livepeer?: string;
   ['op-geth']?: string;
   ['op-node']?: string;
+  hildr?: string;
   farcaster?: string;
   hubble?: string;
   nitro?: string;
@@ -86,6 +88,7 @@ export const NODE_ICONS: NodeIcons = {
   livepeer,
   'op-geth': optimism,
   'op-node': optimism,
+  hildr: optimismJava,
   farcaster,
   hubble: farcaster,
   nitro: arbitrum,
@@ -112,6 +115,7 @@ export const NODE_COLORS: NodeIcons = {
   optimism: common.color.optimism,
   'op-geth': common.color.optimism,
   'op-node': common.color.optimism,
+  hildr: common.color.optimism,
   base: common.color.base,
   ethereum: common.color.ethereum,
   arbitrum: common.color.arbitrum,
