@@ -5,7 +5,7 @@ import installOnWindows from './installOnWindows';
 import installOnLinux from './installOnLinux';
 import { runCommand } from '../podman';
 
-export const PODMAN_LATEST_VERSION = '4.9.0';
+export const PODMAN_LATEST_VERSION = '4.9.2';
 export const PODMAN_MIN_VERSION = '4.5.0';
 
 // eslint-disable-next-line
