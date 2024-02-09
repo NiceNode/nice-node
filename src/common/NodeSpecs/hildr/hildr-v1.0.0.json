@@ -7,8 +7,8 @@
     "defaultExecutionType": "docker",
     "input": {
       "defaultConfig": {
-        "l1": "",
-        "l1WebSocketUrl": "",
+        "l1": "https://eth-sepolia.g.alchemy.com/v2/-5lX2yPd5CXPObtYiq63R-t5_5jI_BUg",
+        "l1WebSocketUrl": "wss://eth-sepolia.g.alchemy.com/v2/-5lX2yPd5CXPObtYiq63R-t5_5jI_BUg",
         "l2RpcUrl": "http://host.containers.internal:8547",
         "l2EngineUrl" : "http://host.containers.internal:8553",
         "httpPort": "8549"
@@ -16,12 +16,13 @@
       "docker": {
         "containerVolumePath": "/data",
         "raw": " ",
-        "forcedRawNodeInput": "--sync-mode full --jwt-secret bf549f5188556ce0951048ef467ec93067bc4ea21acebe46ef675cd4e8e015ff"
+        "forcedRawNodeInput": "--sync-mode full --jwt-file /data/jwtsecret"
       }
     },
     "imageName": "ghcr.io/optimism-java/hildr:latest-native"
   },
   "category": "L2/ConsensusClient",
+  "minorityClient": true,
   "rpcTranslation": "eth-l2-consensus",
   "systemRequirements": {
     "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
@@ -84,7 +85,7 @@
         "type": "text"
       },
       "addNodeFlow": "required",
-      "defaultValue": ""
+      "defaultValue": "https://eth-sepolia.g.alchemy.com/v2/-5lX2yPd5CXPObtYiq63R-t5_5jI_BUg"
     },
     "l1WebSocketUrl": {
       "displayName": "Ethereum WebSocket Endpoint (local node or provider)",
@@ -93,7 +94,7 @@
         "type": "text"
       },
       "addNodeFlow": "required",
-      "defaultValue": ""
+      "defaultValue": "wss://eth-sepolia.g.alchemy.com/v2/-5lX2yPd5CXPObtYiq63R-t5_5jI_BUg"
     },
     "l2RpcUrl": {
       "displayName": "Optimism RPC Endpoint (local node or provider)",
