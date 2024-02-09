@@ -62,6 +62,13 @@ const otherNodeOptions = [
     label: 'Minecraft Server',
     info: 'The world is yours for the making',
   },
+  {
+    iconId: 'home-assistant',
+    title: 'Home Assistant',
+    value: 'home-assistant',
+    label: 'Home Assistant',
+    info: 'Awaken your home',
+  },
 ];
 
 let alphaModalRendered = false;
