@@ -8,19 +8,18 @@
     "input": {
       "defaultConfig": {
         "l1": "",
+        "l1WebSocketUrl": "",
         "l2RpcUrl": "http://host.containers.internal:8547",
         "l2EngineUrl" : "http://host.containers.internal:8553",
-        "l1TrustRpc": "Enabled",
-        "httpPort": "8549",
-        "p2pPorts": "9200"
+        "httpPort": "8549"
       },
       "docker": {
         "containerVolumePath": "/data",
-        "raw": " -e SYNC_MODE=full ",
-        "forcedRawNodeInput": "exec java --enable-preview --sync-mode full --rpc.addr 0.0.0.0 --jwt-secret /data/jwtsecret"
+        "raw": " ",
+        "forcedRawNodeInput": "--sync-mode full --jwt-secret bf549f5188556ce0951048ef467ec93067bc4ea21acebe46ef675cd4e8e015ff"
       }
     },
-    "imageName": "ghcr.io/optimism-java/hildr:latest"
+    "imageName": "ghcr.io/optimism-java/hildr:latest-native"
   },
   "category": "L2/ConsensusClient",
   "rpcTranslation": "eth-l2-consensus",
@@ -62,15 +61,6 @@
         ]
       }
     },
-    "rollupConfigFile": {
-      "displayName": "Rollup config file",
-      "cliConfigPrefix": "--rollup.config /root/.ethereum/",
-      "hideFromUserAfterStart": true,
-      "uiControl": {
-        "type": "text"
-      },
-      "infoDescription": "Default for unknown chain (rollup.json)"
-    },
     "l1TrustRpc": {
       "displayName": "Trust the L1 RPC connection",
       "uiControl": {
@@ -88,8 +78,17 @@
       "defaultValue": "Enabled"
     },
     "l1": {
-      "displayName": "Ethereum RPC Endpoint  (local node or provider)",
+      "displayName": "Ethereum RPC Endpoint (local node or provider)",
       "cliConfigPrefix": "--l1-rpc-url ",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "defaultValue": ""
+    },
+    "l1WebSocketUrl": {
+      "displayName": "Ethereum WebSocket Endpoint (local node or provider)",
+      "cliConfigPrefix": "--l1-ws-rpc-url ",
       "uiControl": {
         "type": "text"
       },
@@ -118,21 +117,12 @@
     },
     "httpPort": {
       "displayName": "HTTP-RPC server listening port",
-      "cliConfigPrefix": "--rpc.port ",
+      "cliConfigPrefix": "--rpc-port ",
       "defaultValue": "8549",
       "uiControl": {
         "type": "text"
       },
       "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
-    },
-    "p2pPorts": {
-      "displayName": "P2P port (UDP and TCP)",
-      "cliConfigPrefix": "--p2p.listen.tcp ",
-      "uiControl": {
-        "type": "text"
-      },
-      "infoDescription": "Example value: 9200",
-      "defaultValue": "9200"
     }
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png",

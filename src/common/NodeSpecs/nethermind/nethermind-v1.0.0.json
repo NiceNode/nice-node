@@ -111,6 +111,10 @@
             "config": "op-mainnet"
           },
           {
+            "value": "11155420",
+            "config": "op-sepolia"
+          },
+          {
             "value": "8453",
             "config": "base-mainnet"
           }
