@@ -6,6 +6,7 @@ import { getPlatform, isLinux } from '../platform';
 
 import store from './store';
 import { setOpenAtLoginLinux } from '../util/linuxAutostartFile';
+import { setAllowPrerelease } from '../updater';
 
 // export type Settings = Record<string, string | object | boolean>;
 const SETTINGS_KEY = 'settings';
@@ -21,6 +22,7 @@ const APP_THEME_SETTING = 'appThemeSetting';
 const APP_IS_OPEN_ON_STARTUP = 'appIsOpenOnStartup';
 const APP_IS_NOTIFICATIONS_ENABLED = 'appIsNotificationsEnabled';
 const APP_IS_EVENT_REPORTING_ENABLED = 'appIsEventReportingEnabled';
+const APP_IS_PRE_RELEASE_UPDATES_ENABLED = 'appIsPreReleaseUpdatesEnabled';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Settings = {
@@ -34,6 +36,7 @@ export type Settings = {
   [APP_IS_OPEN_ON_STARTUP]?: boolean;
   [APP_IS_NOTIFICATIONS_ENABLED]?: boolean;
   [APP_IS_EVENT_REPORTING_ENABLED]?: boolean;
+  [APP_IS_PRE_RELEASE_UPDATES_ENABLED]?: boolean;
 };
 
 /**
@@ -163,6 +166,25 @@ export const setIsEventReportingEnabled = (
       APP_IS_EVENT_REPORTING_ENABLED,
     )}`,
   );
+};
+
+export const getSetIsPreReleaseUpdatesEnabled = (
+  isPreReleaseUpdatesEnabled?: boolean,
+) => {
+  if (isPreReleaseUpdatesEnabled !== undefined) {
+    logger.info(
+      `Setting isPreReleaseUpdatesEnabled to ${isPreReleaseUpdatesEnabled}`,
+    );
+    store.set(
+      `${SETTINGS_KEY}.${APP_IS_PRE_RELEASE_UPDATES_ENABLED}`,
+      isPreReleaseUpdatesEnabled,
+    );
+    setAllowPrerelease(isPreReleaseUpdatesEnabled);
+  }
+  const savedIsPreReleaseUpdatesEnabled: boolean = store.get(
+    `${SETTINGS_KEY}.${APP_IS_PRE_RELEASE_UPDATES_ENABLED}`,
+  );
+  return savedIsPreReleaseUpdatesEnabled;
 };
 
 // listen to OS theme updates

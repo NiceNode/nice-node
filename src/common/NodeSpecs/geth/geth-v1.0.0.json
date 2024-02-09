@@ -89,10 +89,6 @@
             "config": "--holesky"
           },
           {
-            "value": "Goerli",
-            "config": "--goerli"
-          },
-          {
             "value": "Sepolia",
             "config": "--sepolia"
           }

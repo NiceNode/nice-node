@@ -24,20 +24,6 @@ export const allowSuspendSystem = () => {
   }
 };
 
-export const initialize = () => {
-  console.log('Initialize power settings...');
-};
-
-logger.info(`Is on battery: ${powerMonitor.isOnBatteryPower()}`);
-logger.info(`on battery: ${powerMonitor.onBatteryPower}`);
-powerMonitor.on('on-battery', () => {
-  logger.info('PowerChange: On battery!');
-});
-powerMonitor.on('on-ac', () => {
-  logger.info('PowerChange: On power!');
-});
-// dontSuspendSystem();
-
 export const onShutdown = () => {
   logger.info("powerMonitor.on('shutdown'). Shutting down nodes.");
   shutdownNodes();
@@ -55,13 +41,30 @@ export const onResume = async () => {
   await onStartUp();
   restartNodes();
 };
-// Electron supports 'shutdown' for Linux and Mac
-// Also called when a user logs out
-// Todo: optionally prompt user, "Are you sure you want to log out? You have running nodes."
-powerMonitor.on('shutdown', () => {
-  onShutdown();
-});
 
-powerMonitor.on('suspend', () => {
-  onSuspend();
-});
+export const initialize = () => {
+  logger.info('Initialize power settings');
+  // Electron supports 'shutdown' for Linux and Mac
+  // Also called when a user logs out
+  // Todo: optionally prompt user, "Are you sure you want to log out? You have running nodes."
+  // Electron 26+ has a bug where these have to be set AFTER
+  //  app.whenReady()
+  // https://github.com/electron/electron/issues/40694
+  powerMonitor.on('shutdown', () => {
+    onShutdown();
+  });
+  powerMonitor.on('suspend', () => {
+    onSuspend();
+  });
+  powerMonitor.on('on-battery', () => {
+    logger.info('PowerChange: On battery!');
+  });
+  powerMonitor.on('on-ac', () => {
+    logger.info('PowerChange: On power!');
+  });
+};
+
+logger.info(`Is on battery: ${powerMonitor.isOnBatteryPower()}`);
+logger.info(`on battery: ${powerMonitor.onBatteryPower}`);
+
+// dontSuspendSystem();

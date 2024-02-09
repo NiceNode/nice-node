@@ -10,13 +10,14 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpPort": "5052",
+        "httpHostAddress": "0.0.0.0",
         "executionEndpoint": "http://host.containers.internal:8551",
         "network": "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/usr/app/data",
         "raw": "",
-        "forcedRawNodeInput": "beacon --rest.address 0.0.0.0 --dataDir /usr/app/data --jwt-secret /usr/app/data/jwtsecret"
+        "forcedRawNodeInput": "beacon --dataDir /usr/app/data --jwt-secret /usr/app/data/jwtsecret"
       }
     }
   },
@@ -62,15 +63,11 @@
         "controlTranslations": [
           {
             "value": "Mainnet",
-            "config": "mainnet --checkpointSyncUrl https://mainnet.checkpoint.sigp.io"
+            "config": "mainnet --checkpointSyncUrl https://beaconstate-mainnet.chainsafe.io"
           },
           {
             "value": "Holesky",
             "config": "holesky"
-          },
-          {
-            "value": "Goerli",
-            "config": "goerli"
           },
           {
             "value": "Sepolia",
@@ -133,8 +130,8 @@
     },
     "httpCorsDomains": {
       "displayName": "HTTP-RPC CORS domains",
-      "cliConfigPrefix": "--rest.corsdomain ",
-      "defaultValue": "*",
+      "cliConfigPrefix": "--rest.cors ",
+      "defaultValue": "\"*\"",
       "uiControl": {
         "type": "text"
       },

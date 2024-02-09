@@ -139,26 +139,6 @@
                 }
               ]
             }
-          },
-          {
-            "value": "Goerli",
-            "config": "unused in nodespec",
-            "serviceConfigs": {
-              "services": [
-                {
-                  "serviceId": "executionClient",
-                  "configValues": {
-                    "network": "Goerli"
-                  }
-                },
-                {
-                  "serviceId": "consensusClient",
-                  "configValues": {
-                    "network": "Goerli"
-                  }
-                }
-              ]
-            }
           }
         ]
       },

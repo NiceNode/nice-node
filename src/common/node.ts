@@ -69,8 +69,13 @@ type Node = {
   config: NodeConfig;
   runtime: NodeRuntime;
   status: NodeStatus;
-  lastStarted?: string;
-  lastStopped?: string;
+  /**
+   * Timestamp the node was first created, UTC milliseconds
+   */
+  createdTimestampMs: number;
+  lastRunningTimestampMs?: number;
+  lastStartedTimestampMs?: number;
+  lastStoppedTimestampMs?: number;
   stoppedBy?: NodeStoppedBy;
 };
 type NodeMap = Record<string, Node>;
@@ -91,8 +96,28 @@ export type NodePackage = {
   config: NodeConfig;
   runtime: NodeRuntime;
   status: NodeStatus;
-  lastStarted?: string;
-  lastStopped?: string;
+  /**
+   * Timestamp the node was first created, UTC milliseconds
+   */
+  createdTimestampMs: number;
+  /**
+   * When the Node Package was most recently detected as running properly.
+   * Definition: "running properly" means the node was running for at least 30 seconds
+   */
+  lastRunningTimestampMs?: number;
+  /**
+   * When the Node Package was most recently started.
+   * (Does not indicate that it successfully started, see lastRunningTimestampMs)
+   */
+  lastStartedTimestampMs?: number;
+  /**
+   * When the Node Package was most recently stopped.
+   */
+  lastStoppedTimestampMs?: number;
+  /**
+   * Sets what stopped the Node Package.
+   * Examples: 'shutdown', 'user', 'crash', or undefined if the node is running
+   */
   stoppedBy?: NodeStoppedBy;
 };
 export type NodePackageMap = Record<string, NodePackage>;
@@ -152,6 +177,7 @@ export const createNode = (input: {
     config: { configValuesMap: initialConfigValues },
     runtime: input.runtime,
     status: NodeStatus.created,
+    createdTimestampMs: Date.now(),
   };
   return node;
 };
@@ -187,7 +213,23 @@ export const createNodePackage = (input: {
     config: { configValuesMap: initialConfigValues },
     runtime: input.runtime,
     status: NodeStatus.created,
+    createdTimestampMs: Date.now(),
   };
   return nodePackage;
+};
+
+/**
+ * This naming convention supports a user running two of the same nodes,
+ * while still being human-readable.
+ * Returns just the specId for backwards compatibility.
+ * @param node
+ * @returns "node.spec.specId-node.createdTimestampMs"
+ */
+export const getContainerName = (node: Node): string => {
+  const specId = node.spec.specId;
+  const conatinerName = node.createdTimestampMs
+    ? `${specId}-${node.createdTimestampMs}`
+    : specId;
+  return conatinerName;
 };
 export default Node;

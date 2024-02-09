@@ -52,6 +52,7 @@ import {
   setThemeSetting,
   ThemeSetting,
   setIsEventReportingEnabled,
+  getSetIsPreReleaseUpdatesEnabled,
 } from './state/settings';
 import { getSystemInfo } from './systemInfo';
 import startPodman from './podman/start';
@@ -240,6 +241,12 @@ export const initialize = () => {
     'setIsEventReportingEnabled',
     (_event, isEventReportingEnabled: boolean) => {
       return setIsEventReportingEnabled(isEventReportingEnabled);
+    },
+  );
+  ipcMain.handle(
+    'getSetIsPreReleaseUpdatesEnabled',
+    (_event, isPreReleaseUpdatesEnabled?: boolean) => {
+      return getSetIsPreReleaseUpdatesEnabled(isPreReleaseUpdatesEnabled);
     },
   );
 

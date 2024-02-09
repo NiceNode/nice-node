@@ -39,6 +39,13 @@ if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
 }
 
+// todo: when moving from require to imports
+// const isTest = process.env.NODE_ENV === 'test';
+// if (isTest) {
+//   console.log('NODE_ENV=TEST... requiring wdio-electron-service/main');
+//   require('wdio-electron-service/main');
+// }
+
 fixPathEnvVar();
 logger.info(`NICENODE_ENV: ${process.env.NICENODE_ENV}`);
 logger.info(`MP_PROJECT_ENV: ${process.env.MP_PROJECT_ENV}`);
@@ -95,6 +102,7 @@ const createWindow = async () => {
     height: 780,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      // sandbox: !isTest,
       nodeIntegration: true,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')

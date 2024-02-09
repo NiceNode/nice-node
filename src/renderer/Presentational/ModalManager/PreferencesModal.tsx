@@ -6,7 +6,10 @@ import electron from '../../electronGlobal';
 import PreferencesWrapper from '../Preferences/PreferencesWrapper';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalOnChangeConfig, ModalConfig } from './modalUtils';
-import { setRemoteEventReportingEnabled } from '../../events/reportEvent';
+import {
+  reportEvent,
+  setRemoteEventReportingEnabled,
+} from '../../events/reportEvent';
 
 type Props = {
   modalOnClose: () => void;
@@ -37,6 +40,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
       isOpenOnStartup,
       isNotificationsEnabled,
       isEventReportingEnabled,
+      isPreReleaseUpdatesEnabled,
       language,
     } = updatedConfig || (modalConfig as ModalConfig);
 
@@ -52,7 +56,17 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
     }
     if (isEventReportingEnabled !== undefined) {
       await electron.setIsEventReportingEnabled(isEventReportingEnabled);
-      setRemoteEventReportingEnabled(isEventReportingEnabled);
+      await setRemoteEventReportingEnabled(isEventReportingEnabled);
+    }
+    if (isPreReleaseUpdatesEnabled !== undefined) {
+      await electron.getSetIsPreReleaseUpdatesEnabled(
+        isPreReleaseUpdatesEnabled,
+      );
+      if (isPreReleaseUpdatesEnabled) {
+        reportEvent('EnablePreReleaseUpdates');
+      } else {
+        reportEvent('DisablePreReleaseUpdates');
+      }
     }
     if (language) {
       await electron.setLanguage(language);

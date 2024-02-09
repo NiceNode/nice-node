@@ -71,10 +71,10 @@ type TPrimitives =
 type TMerged<T> = [T] extends [Array<any>]
   ? { [K in keyof T]: TMerged<T[K]> }
   : [T] extends [TPrimitives]
-  ? T
-  : [T] extends [object]
-  ? TPartialKeys<{ [K in TAllKeys<T>]: TMerged<TIndexValue<T, K>> }, never>
-  : T;
+    ? T
+    : [T] extends [object]
+      ? TPartialKeys<{ [K in TAllKeys<T>]: TMerged<TIndexValue<T, K>> }, never>
+      : T;
 
 // istanbul ignore next
 const isObject = (obj: any) => {

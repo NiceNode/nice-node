@@ -151,7 +151,9 @@ const AddNode = ({
   return (
     <div className={container}>
       {shouldHideTitle !== true && (
-        <div className={titleFont}>{t('AddYourFirstNode')}</div>
+        <div id="addFirstNodeTitle" className={titleFont}>
+          {t('AddYourFirstNode')}
+        </div>
       )}
       <div className={descriptionContainer}>
         <div className={descriptionFont}>
