@@ -5,6 +5,7 @@ import basev1 from '../common/NodeSpecs/base/base-v1.0.0.json';
 import farcasterv1 from '../common/NodeSpecs/farcaster/farcaster-v1.0.0.json';
 import arbitrumv1 from '../common/NodeSpecs/arbitrum/arbitrum-v1.0.0.json';
 import minecraftv1 from '../common/NodeSpecs/minecraft/minecraft-v1.0.0.json';
+import homeAssistantv1 from '../common/NodeSpecs/home-assistant/home-assistant-v1.0.0.json';
 
 // Node Services
 import besuv1 from '../common/NodeSpecs/besu/besu-v1.0.0.json';
@@ -28,6 +29,7 @@ import hubblev1 from '../common/NodeSpecs/hubble/hubble-v1.0.0.json';
 import nitrov1 from '../common/NodeSpecs/nitro/nitro-v1.0.0.json';
 
 import itzgMinecraftv1 from '../common/NodeSpecs/itzg-minecraft/itzg-minecraft-v1.0.0.json';
+import homeAssistantServicev1 from '../common/NodeSpecs/home-assistant-service/home-assistant-service-v1.0.0.json';
 
 import logger from './logger';
 import {
@@ -62,6 +64,7 @@ export const initialize = async () => {
     opNodev1,
     hubblev1,
     itzgMinecraftv1,
+    homeAssistantServicev1,
   ];
   specs.forEach((spec) => {
     try {
@@ -81,6 +84,7 @@ export const initialize = async () => {
     optimismv1,
     basev1,
     minecraftv1,
+    homeAssistantv1,
   ];
   packageSpecs.forEach((spec) => {
     try {

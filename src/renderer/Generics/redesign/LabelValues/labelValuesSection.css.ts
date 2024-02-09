@@ -46,6 +46,11 @@ export const lineKeyText = style({
   flex: 'none',
   order: 0,
   flexGrow: 0,
+  // todo: possible fix for long name or link which needs ellipse'd
+  // max-width: 50%;
+  // text-overflow: ellipsis;
+  // overflow: hidden;
+  // white-space: nowrap;
 });
 
 export const lineValueText = style({
