@@ -15,7 +15,9 @@ import crypto from 'node:crypto';
 export const createJwtSecretAtDirs = async (
   dirPaths: string[],
 ): Promise<boolean> => {
-  const jwtSecret = `0x${crypto.randomBytes(32).toString('hex')}`;
+  // const jwtSecret = `0x${crypto.randomBytes(32).toString('hex')}`;
+  const jwtSecret =
+    'bf549f5188556ce0951048ef467ec93067bc4ea21acebe46ef675cd4e8e015ff';
   // dirPaths.forEach(async (dirPath) => {
   for (const dirPath of dirPaths) {
     // open file for writing only, fails if the file exists
