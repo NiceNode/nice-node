@@ -14,6 +14,7 @@ import { useAppDispatch } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
 import SelectCard from '../../Generics/redesign/SelectCard/SelectCard';
 import { NodeIcons } from '../../assets/images/nodeIcons';
+import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 
 // Other node types are not ready yet
 const nodeOptions = [
@@ -56,18 +57,18 @@ const nodeOptions = [
 
 const otherNodeOptions = [
   {
-    iconId: 'minecraft',
-    title: 'Minecraft Server',
-    value: 'minecraft',
-    label: 'Minecraft Server',
-    info: 'The world is yours for the making',
-  },
-  {
     iconId: 'home-assistant',
     title: 'Home Assistant',
     value: 'home-assistant',
     label: 'Home Assistant',
     info: 'Awaken your home',
+  },
+  {
+    iconId: 'minecraft',
+    title: 'Minecraft Server',
+    value: 'minecraft',
+    label: 'Minecraft Server',
+    info: 'The world is yours for the making',
   },
 ];
 
@@ -97,6 +98,7 @@ const AddNode = ({
     nodeConfig?.node || nodeOptions[0],
   );
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
+  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
 
   const dispatch = useAppDispatch();
 
@@ -183,21 +185,33 @@ const AddNode = ({
         })}
       </div>
 
-      <p className={sectionFont}>{t('Other')}</p>
-      <div style={{ width: '100%' }}>
-        {otherNodeOptions.map((nodeOption) => {
-          return (
-            <SelectCard
-              key={nodeOption.value}
-              title={nodeOption.title}
-              iconId={nodeOption.iconId as keyof NodeIcons}
-              info={nodeOption.info}
-              onClick={() => onChangeNode(nodeOption)}
-              isSelected={sSelectedNode?.value === nodeOption.value}
-            />
-          );
-        })}
-      </div>
+      {/* Other options are default hidden by a dropdown */}
+      <DropdownLink
+        text={`${
+          isOptionsOpen ? t('HideAdvancedOptions') : t('ShowAdvancedOptions')
+        }`}
+        onClick={() => setIsOptionsOpen(!isOptionsOpen)}
+        isDown={!isOptionsOpen}
+      />
+      {isOptionsOpen && (
+        <>
+          <p className={sectionFont}>{t('Other')}</p>
+          <div style={{ width: '100%' }}>
+            {otherNodeOptions.map((nodeOption) => {
+              return (
+                <SelectCard
+                  key={nodeOption.value}
+                  title={nodeOption.title}
+                  iconId={nodeOption.iconId as keyof NodeIcons}
+                  info={nodeOption.info}
+                  onClick={() => onChangeNode(nodeOption)}
+                  isSelected={sSelectedNode?.value === nodeOption.value}
+                />
+              );
+            })}
+          </div>
+        </>
+      )}
 
       {/* <SpecialSelect
         selectedOption={sSelectedNode}
