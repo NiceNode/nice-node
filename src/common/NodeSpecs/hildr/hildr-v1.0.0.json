@@ -7,8 +7,8 @@
     "defaultExecutionType": "docker",
     "input": {
       "defaultConfig": {
-        "l1": "https://eth-sepolia.g.alchemy.com/v2/-5lX2yPd5CXPObtYiq63R-t5_5jI_BUg",
-        "l1WebSocketUrl": "wss://eth-sepolia.g.alchemy.com/v2/-5lX2yPd5CXPObtYiq63R-t5_5jI_BUg",
+        "l1": "",
+        "l1WebSocketUrl": "",
         "l2RpcUrl": "http://host.containers.internal:8547",
         "l2EngineUrl" : "http://host.containers.internal:8553",
         "httpPort": "8549"
@@ -85,7 +85,7 @@
         "type": "text"
       },
       "addNodeFlow": "required",
-      "defaultValue": "https://eth-sepolia.g.alchemy.com/v2/-5lX2yPd5CXPObtYiq63R-t5_5jI_BUg"
+      "defaultValue": ""
     },
     "l1WebSocketUrl": {
       "displayName": "Ethereum WebSocket Endpoint (local node or provider)",
@@ -94,7 +94,7 @@
         "type": "text"
       },
       "addNodeFlow": "required",
-      "defaultValue": "wss://eth-sepolia.g.alchemy.com/v2/-5lX2yPd5CXPObtYiq63R-t5_5jI_BUg"
+      "defaultValue": ""
     },
     "l2RpcUrl": {
       "displayName": "Optimism RPC Endpoint (local node or provider)",
