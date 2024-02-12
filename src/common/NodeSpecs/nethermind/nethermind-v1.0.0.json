@@ -85,7 +85,8 @@
             "config": "sepolia"
           }
         ]
-      }
+      },
+      "documentation" : "https://docs.nethermind.io/fundamentals/configuration#basic-options"
     },
     "chainId": {
       "displayName": "Chain ID (Network)",
@@ -109,6 +110,10 @@
           {
             "value": "10",
             "config": "op-mainnet"
+          },
+          {
+            "value": "11155420",
+            "config": "op-sepolia"
           },
           {
             "value": "8453",

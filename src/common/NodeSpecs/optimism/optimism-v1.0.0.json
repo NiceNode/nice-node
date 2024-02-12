@@ -17,7 +17,7 @@
       {
         "serviceId": "consensusClient",
         "name": "Consensus Client",
-        "nodeOptions": ["op-node"],
+        "nodeOptions": ["op-node", "hildr"],
         "required": true,
         "requiresCommonJwtSecret": true,
         "requiresFiles": true
