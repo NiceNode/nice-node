@@ -27,6 +27,7 @@ export interface NodeBackgrounds {
   'op-node'?: string;
   hubble?: string;
   nitro?: string;
+  'itzg-minecraft'?: string;
 }
 
 // Define all icons here
@@ -45,6 +46,7 @@ export const NODE_BACKGROUNDS: NodeBackgrounds = {
   'op-node': nimbus,
   hubble: lighthouse,
   nitro: teku,
+  'itzg-minecraft': geth,
 };
 
 export type NodeBackgroundId = keyof NodeBackgrounds;

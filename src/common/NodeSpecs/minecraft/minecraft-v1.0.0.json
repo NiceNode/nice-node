@@ -1,0 +1,72 @@
+{
+  "specId": "minecraft",
+  "version": "1.0.0",
+  "displayName": "Minecraft Server",
+  "displayTagline": "Local Minecraft server at 'localhost'. [Note] NOT AFFLIATED with Mojang or Microsoft!",
+  "execution": {
+    "executionTypes": ["nodePackage"],
+    "defaultExecutionType": "nodePackage",
+    "services": [
+      {
+        "serviceId": "minecraftServer",
+        "name": "Minecraft Server",
+        "nodeOptions": ["itzg-minecraft"],
+        "required": true
+      }
+    ]
+  },
+  "category": "gaming/minecraft-server",
+  "rpcTranslation": "minecraft-server",
+  "systemRequirements": {
+    "documentationUrl": "https://minecraft.wiki/w/Server/Requirements",
+    "cpu": {
+      "cores": 1
+    },
+    "memory": {
+      "minSizeGBs": 2
+    },
+    "storage": {
+      "minSizeGBs": 2
+    },
+    "docker": {
+      "required": true
+    }
+  },
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "Data location",
+      "uiControl": {
+        "type": "filePath",
+        "serviceConfigs": {
+          "services": [
+            {
+              "serviceId": "minecraftServer",
+              "configKey": "dataDir"
+            }
+          ]
+        }
+      },
+      "infoDescription": "Data directory for the databases and keystore (default: \"~/.minecraft\")"
+    }
+  },
+  "iconUrl": "https://www.minecraft.net/content/dam/games/minecraft/logos/logo-minecraft.svg",
+  "description": "[Note] This is NOT AFFLIATED in any way with the official Minecraft, Mojang, or Microsoft organizations! This offering is open-source, free, and not guarenteed any support by us. Please read our terms and privacy policies on https://nicenode.xyz for more information. To play on this server on the same computer that it is being run, add 'localhost' for the multiplayer server. To add this server on a different computer and on the same network, add your computer's local IP address to the multiplayer server.",
+  "addNodeDescription": "Want to set up a multiplayer server? Run a Minecraft multiplayer server by yourself. [Note] This is NOT AFFLIATED in any way with the official Minecraft, Mojang, or Microsoft organizations!",
+  "resources": [
+    {
+      "label": "Website",
+      "value": "minecraft.net",
+      "link": "https://www.minecraft.net/en-us/download/server"
+    },
+    {
+      "label": "EULA (Terms of Use)",
+      "value": "minecraft.net/eula",
+      "link": "https://www.minecraft.net/en-us/eula"
+    },
+    {
+      "label": "Privacy Policy",
+      "value": "privacy.microsoft.com",
+      "link": "https://privacy.microsoft.com/en-us/privacystatement"
+    }
+  ]
+}
