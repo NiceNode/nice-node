@@ -1,9 +1,13 @@
+// Node Packages
 import ethereumv1 from '../common/NodeSpecs/ethereum/ethereum-v1.0.0.json';
 import optimismv1 from '../common/NodeSpecs/optimism/optimism-v1.0.0.json';
 import basev1 from '../common/NodeSpecs/base/base-v1.0.0.json';
 import farcasterv1 from '../common/NodeSpecs/farcaster/farcaster-v1.0.0.json';
 import arbitrumv1 from '../common/NodeSpecs/arbitrum/arbitrum-v1.0.0.json';
+import minecraftv1 from '../common/NodeSpecs/minecraft/minecraft-v1.0.0.json';
+import homeAssistantv1 from '../common/NodeSpecs/home-assistant/home-assistant-v1.0.0.json';
 
+// Node Services
 import besuv1 from '../common/NodeSpecs/besu/besu-v1.0.0.json';
 import nethermindv1 from '../common/NodeSpecs/nethermind/nethermind-v1.0.0.json';
 import gethv1 from '../common/NodeSpecs/geth/geth-v1.0.0.json';
@@ -19,10 +23,14 @@ import pathfinderv1 from '../common/NodeSpecs/pathfinder/pathfinder-v1.0.0.json'
 
 import opGethv1 from '../common/NodeSpecs/op-geth/op-geth-v1.0.0.json';
 import opNodev1 from '../common/NodeSpecs/op-node/op-node-v1.0.0.json';
+import hildrv1 from '../common/NodeSpecs/hildr/hildr-v1.0.0.json';
 
 import hubblev1 from '../common/NodeSpecs/hubble/hubble-v1.0.0.json';
 
 import nitrov1 from '../common/NodeSpecs/nitro/nitro-v1.0.0.json';
+
+import itzgMinecraftv1 from '../common/NodeSpecs/itzg-minecraft/itzg-minecraft-v1.0.0.json';
+import homeAssistantServicev1 from '../common/NodeSpecs/home-assistant-service/home-assistant-service-v1.0.0.json';
 
 import logger from './logger';
 import {
@@ -55,7 +63,10 @@ export const initialize = async () => {
     pathfinderv1,
     opGethv1,
     opNodev1,
+    hildrv1,
     hubblev1,
+    itzgMinecraftv1,
+    homeAssistantServicev1,
   ];
   specs.forEach((spec) => {
     try {
@@ -74,6 +85,8 @@ export const initialize = async () => {
     arbitrumv1,
     optimismv1,
     basev1,
+    minecraftv1,
+    homeAssistantv1,
   ];
   packageSpecs.forEach((spec) => {
     try {

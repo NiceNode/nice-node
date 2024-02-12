@@ -18,6 +18,7 @@ const nimbus = require('./Logo-Nimbus.png');
 
 // L2
 const optimism = require('./Logo-Optimism.png');
+const optimismJava = require('./Logo-OptimismJava.png');
 const arbitrum = require('./Logo-Arbitrum.png');
 const base = require('./Logo-Base.png');
 const starknet = require('./Logo-Starknet.png');
@@ -27,6 +28,9 @@ const zkSync = require('./Logo-zkSync.png');
 const radicle = require('./Logo-Radicle.png');
 const livepeer = require('./Logo-Livepeer.png');
 const farcaster = require('./Logo-Farcaster.png');
+
+// Other node/server types
+const minecraft = require('./Logo-Minecraft.png');
 
 export interface NodeIcons {
   geth?: string;
@@ -54,9 +58,12 @@ export interface NodeIcons {
   livepeer?: string;
   ['op-geth']?: string;
   ['op-node']?: string;
+  hildr?: string;
   farcaster?: string;
   hubble?: string;
   nitro?: string;
+  minecraft?: string;
+  ['itzg-minecraft']?: string;
 }
 
 // Define all icons here
@@ -86,9 +93,12 @@ export const NODE_ICONS: NodeIcons = {
   livepeer,
   'op-geth': optimism,
   'op-node': optimism,
+  hildr: optimismJava,
   farcaster,
   hubble: farcaster,
   nitro: arbitrum,
+  minecraft,
+  'itzg-minecraft': minecraft,
 };
 
 const white = '#FFFFFF';
@@ -112,6 +122,7 @@ export const NODE_COLORS: NodeIcons = {
   optimism: common.color.optimism,
   'op-geth': common.color.optimism,
   'op-node': common.color.optimism,
+  hildr: common.color.optimism,
   base: common.color.base,
   ethereum: common.color.ethereum,
   arbitrum: common.color.arbitrum,
@@ -122,6 +133,8 @@ export const NODE_COLORS: NodeIcons = {
   farcaster: common.color.farcaster,
   hubble: common.color.farcaster,
   nitro: common.color.arbitrum,
+  minecraft: common.color.minecraft,
+  'itzg-minecraft': common.color.minecraft,
 };
 
 export type NodeIconId = keyof NodeIcons;
