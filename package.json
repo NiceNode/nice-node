@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "4.7.4-alpha",
+  "version": "4.7.7-alpha",
   "description": "Run a node at home, the easy way.",
   "homepage": "https://nicenode.xyz",
   "productName": "NiceNode",
@@ -360,7 +360,7 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.4",
     "react-select": "^5.8.0",
-    "systeminformation": "^5.21.7",
+    "systeminformation": "^5.21.24",
     "throttle-debounce": "^5.0.0",
     "uuid": "^9.0.0",
     "winston": "^3.8.2"

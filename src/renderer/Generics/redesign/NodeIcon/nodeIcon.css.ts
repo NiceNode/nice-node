@@ -21,6 +21,9 @@ export const updating = style({});
 
 export const iconBackground = style({
   // position: 'relative',
+  // overflow hidden keeps the logo within the size of the icon
+  // as node logos become user defined, we need to account for this.
+  overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
