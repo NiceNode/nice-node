@@ -343,6 +343,7 @@ const NodeScreen = () => {
       //  node http api as the source of truth
       // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
       synchronized: sIsSyncing === false && status === NodeStatus.running,
+      updating: status === NodeStatus.updating,
     },
     stats: {
       peers: sPeers,

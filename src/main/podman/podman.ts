@@ -618,6 +618,11 @@ export const createInitCommand = (node: Node): string => {
   return podmanCommand;
 };
 
+/**
+ * Sets the node.status to updating if there is a new container
+ * @param node
+ * @returns the processIds to run the node (ex. containerId)
+ */
 export const startPodmanNode = async (node: Node): Promise<string[]> => {
   // pull image
   const { execution } = node.spec;
@@ -628,8 +633,17 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
   // Ensure podman events are being watched
   watchPodmanEvents();
 
-  // try catch? .. podman dameon might need to be restarted if a bad gateway error occurs
+  // Node status is starting.. Set node as updating here
+  node.status = NodeStatus.updating;
+  storeUpdateNode(node);
+
+  // todo: only set as updating if there is a new image, otherwise updating
+  // will "flash" to the user quickly here
   await runCommand(`pull ${imageName}`);
+
+  // Set node as starting here
+  node.status = NodeStatus.starting;
+  storeUpdateNode(node);
 
   // todo: custom setup: ex. use network specific data directory?
   // todo: check if there is a stopped container?
