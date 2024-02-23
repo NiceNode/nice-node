@@ -8,6 +8,7 @@
     "input": {
       "defaultConfig": {
         "l1": "",
+        "l1Beacon": "",
         "l2": "http://host.containers.internal:8553",
         "l1TrustRpc": "Enabled",
         "httpPort": "8549",
@@ -20,7 +21,7 @@
         "forcedRawNodeInput": "op-node --rpc.addr 0.0.0.0 --l2.jwt-secret /root/.ethereum/jwtsecret"
       }
     },
-    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.5.1"
+    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.6.1"
   },
   "category": "L2/ConsensusClient",
   "rpcTranslation": "eth-l2-consensus",
@@ -91,6 +92,15 @@
     "l1": {
       "displayName": "Ethereum RPC Endpoint  (local node or provider)",
       "cliConfigPrefix": "--l1 ",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "defaultValue": ""
+    },
+    "l1Beacon": {
+      "displayName": "Ethereum Beacon RPC Endpoint  (local node or provider)",
+      "cliConfigPrefix": "--l1.beacon ",
       "uiControl": {
         "type": "text"
       },
