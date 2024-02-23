@@ -146,8 +146,7 @@ export const startNodePackage = async (nodeId: NodeId) => {
   nodePackageStore.updateNodePackage(node);
 
   nodePackageStatus = NodeStatus.running;
-  for (let i = 0; i < node.services.length; i++) {
-    const service = node.services[i];
+  const startPromises = node.services.map(async (service) => {
     try {
       await startNode(service.node.id);
     } catch (e) {
@@ -157,7 +156,10 @@ export const startNodePackage = async (nodeId: NodeId) => {
       // todo: set as partially started?
       // throw e;
     }
-  }
+  });
+
+  await Promise.all(startPromises);
+
   // If all node services start without error, the package is considered running
   if (nodePackageStatus === NodeStatus.running) {
     setLastRunningTime(nodeId, 'node');
