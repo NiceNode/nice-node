@@ -23,7 +23,7 @@
         "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
-    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101308.0"
+    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101308.2"
   },
   "category": "L2/ExecutionClient",
   "rpcTranslation": "eth-l2",
@@ -114,6 +114,15 @@
       },
       "defaultValue": "Disabled",
       "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+    },
+    "p2pPorts": {
+      "displayName": "P2P port (UDP and TCP)",
+      "cliConfigPrefix": "--discovery.port ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 30303",
+      "defaultValue": "30303"
     },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
