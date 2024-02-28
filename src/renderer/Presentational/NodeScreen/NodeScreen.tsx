@@ -311,7 +311,7 @@ const NodeScreen = () => {
     let versionString = version;
 
     // Don't match -stable or -<commit-hash> that many nodes use
-    const genericVersionRegex = /v\d+\.\d+\.\d+(-[alpha|beta|edge]+)?/;
+    const genericVersionRegex = /v\d+\.\d+\.\d+(-[alpha|beta|edge]+)?(\.\d+)?/;
     const match = version.match(genericVersionRegex);
 
     if (match) {
