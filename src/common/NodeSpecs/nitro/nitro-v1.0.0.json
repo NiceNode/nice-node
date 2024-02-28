@@ -66,7 +66,7 @@
         "type": "text"
       },
       "addNodeFlow": "required",
-      "infoDescription": "Provider with historical blob API enabled or a local node http://host.containers.internal:8545. Parent chain Beacon endpoint"
+      "infoDescription": "Provider with historical blob API enabled or a local node http://host.containers.internal:5052. Parent chain Beacon endpoint"
     },
     "initUrl" : {
       "displayName": "Network snapshot data URL",
