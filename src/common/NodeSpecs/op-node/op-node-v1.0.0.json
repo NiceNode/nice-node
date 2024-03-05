@@ -8,6 +8,7 @@
     "input": {
       "defaultConfig": {
         "l1": "",
+        "l1Beacon": "",
         "l2": "http://host.containers.internal:8553",
         "l1TrustRpc": "Enabled",
         "httpPort": "8549",
@@ -17,10 +18,10 @@
       "docker": {
         "containerVolumePath": "/root/.ethereum",
         "raw": "",
-        "forcedRawNodeInput": "op-node --rpc.addr 0.0.0.0 --l2.jwt-secret /root/.ethereum/jwtsecret"
+        "forcedRawNodeInput": "op-node --syncmode=execution-layer --rpc.addr 0.0.0.0 --l2.jwt-secret /root/.ethereum/jwtsecret"
       }
     },
-    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.5.1"
+    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.7.0"
   },
   "category": "L2/ConsensusClient",
   "rpcTranslation": "eth-l2-consensus",
@@ -95,7 +96,18 @@
         "type": "text"
       },
       "addNodeFlow": "required",
-      "defaultValue": ""
+      "defaultValue": "",
+      "infoDescription": "Provider or a local node http://host.containers.internal:8545"
+    },
+    "l1Beacon": {
+      "displayName": "Ethereum Beacon RPC Endpoint  (local node or provider)",
+      "cliConfigPrefix": "--l1.beacon ",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "defaultValue": "",
+      "infoDescription": "Provider with historical blob API enabled or a local node http://host.containers.internal:5052"
     },
     "l2": {
       "displayName": "Optimism RPC Endpoint (local node or provider)",
