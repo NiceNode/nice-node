@@ -15,12 +15,13 @@
         "httpAddress": "0.0.0.0",
         "httpPort": "8547",
         "httpCorsDomains": "http://localhost",
-        "httpVirtualHosts": "localhost,host.containers.internal"
+        "httpVirtualHosts": "localhost,host.containers.internal",
+        "logLevel": "Info"
       },
       "docker": {
         "containerVolumePath": "/home/user/.arbitrum",
         "raw": "",
-        "forcedRawNodeInput": "--log-level=5"
+        "forcedRawNodeInput": ""
       }
     },
     "dependencies": ["L1/ExecutionClient"]
@@ -131,6 +132,41 @@
         ]
       },
       "defaultValue": "Disabled"
+    },
+    "logLevel": {
+      "displayName": "Log level",
+      "cliConfigPrefix": "--log-level=",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Info",
+            "config": "3"
+          },
+          {
+            "value": "Warn",
+            "config": "2"
+          },
+          {
+            "value": "Error",
+            "config": "1"
+          },
+          {
+            "value": "Trace",
+            "config": "5"
+          },
+          {
+            "value": "Debug",
+            "config": "4"
+          },
+          {
+            "value": "Fatal",
+            "config": "0"
+          }
+        ]
+      },
+      "addNodeFlow": "advanced",
+      "defaultValue": "Info"
     },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
