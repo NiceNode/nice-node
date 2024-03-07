@@ -7,8 +7,8 @@
     "defaultExecutionType": "docker",
     "input": {
       "defaultConfig": {
-        "l1": "",
-        "l1Beacon": "",
+        "l1": "http://10.1.70.61:8545",
+        "l1Beacon": "http://10.1.70.61:5052",
         "l2": "http://host.containers.internal:8553",
         "l1TrustRpc": "Enabled",
         "httpPort": "8549",
@@ -86,7 +86,7 @@
           }
         ]
       },
-      "defaultValue": "Enabled",
+      "defaultValue": "Disabled",
       "documentation": "https://github.com/jgresham/superhack/blob/main/README.md#op-node-settings"
     },
     "l1": {
@@ -96,7 +96,7 @@
         "type": "text"
       },
       "addNodeFlow": "required",
-      "defaultValue": "",
+      "defaultValue": "http://10.1.70.61:8545",
       "infoDescription": "Provider or a local node http://host.containers.internal:8545"
     },
     "l1Beacon": {
@@ -106,7 +106,7 @@
         "type": "text"
       },
       "addNodeFlow": "required",
-      "defaultValue": "",
+      "defaultValue": "http://10.1.70.61:5052",
       "infoDescription": "Provider with historical blob API enabled or a local node http://host.containers.internal:5052"
     },
     "l2": {
