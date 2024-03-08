@@ -19,7 +19,7 @@
         "forcedRawNodeInput": "node --color never --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/mainnet/db/jwtsecret --ipcdisable"
       }
     },
-    "imageName": "ghcr.io/paradigmxyz/reth"
+    "imageName": "ghcr.io/paradigmxyz/reth:v0.2.0-beta.1"
   },
   "category": "L1/ExecutionClient",
   "minorityClient": true,
