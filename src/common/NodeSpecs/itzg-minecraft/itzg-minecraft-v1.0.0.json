@@ -18,7 +18,8 @@
     "architectures": {
       "docker": ["amd64", "arm64"]
     },
-    "imageName": "itzg/minecraft-server"
+    "imageName": "itzg/minecraft-server",
+    "defaultImageTag": "latest"
   },
   "category": "gaming/minecraft-server",
   "rpcTranslation": "minecraft-server",

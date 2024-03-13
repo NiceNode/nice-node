@@ -186,6 +186,7 @@ const AddNode = ({
       </div>
 
       {/* Other options are default hidden by a dropdown */}
+      {/* Todo: this should be named "Show more options" */}
       <DropdownLink
         text={`${
           isOptionsOpen ? t('HideAdvancedOptions') : t('ShowAdvancedOptions')
