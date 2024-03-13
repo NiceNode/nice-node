@@ -9,6 +9,7 @@
     "input": {
       "defaultConfig": {
         "l1RpcUrl": "",
+        "l1BeaconUrl": "",
         "l2RpcUrl": "http://host.containers.internal:8547",
         "l2EngineUrl": "http://host.containers.internal:8553",
         "l1TrustRpc": "Enabled",
@@ -21,7 +22,8 @@
         "forcedRawNodeInput": "magi --jwt-file /data/jwtsecret"
       }
     },
-    "imageName": "a16zcrypto/magi:latest"
+    "imageName": "a16zcrypto/magi",
+    "defaultImageTag": "latest"
   },
   "category": "L2/ConsensusClient",
   "minorityClient": true,
@@ -133,6 +135,16 @@
       },
       "addNodeFlow": "required",
       "defaultValue": ""
+    },
+    "l1BeaconUrl": {
+      "displayName": "Ethereum Beacon RPC Endpoint  (local node or provider)",
+      "cliConfigPrefix": "--l1-beacon-url ",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "defaultValue": "",
+      "infoDescription": "Provider with historical blob API enabled or a local node http://host.containers.internal:5052"
     },
     "l2RpcUrl": {
       "displayName": "Layer 2 RPC Endpoint (local node or provider)",
