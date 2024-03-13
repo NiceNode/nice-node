@@ -25,7 +25,8 @@
     "architectures": {
       "docker": ["amd64", "arm64"]
     },
-    "imageName": "docker.io/sigp/lighthouse:latest-modern",
+    "imageName": "sigp/lighthouse",
+    "defaultImageTag": "latest-modern",
     "binaryDownload": {
       "type": "githubReleases",
       "latestVersionUrl": "https://api.github.com/repos/sigp/lighthouse/releases/latest",

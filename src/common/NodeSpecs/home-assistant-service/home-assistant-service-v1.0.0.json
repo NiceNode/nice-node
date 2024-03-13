@@ -16,7 +16,9 @@
     "architectures": {
       "docker": ["amd64", "arm64"]
     },
-    "imageName": "ghcr.io/home-assistant/home-assistant:stable"
+    "imageName": "ghcr.io/home-assistant/home-assistant",
+    "defaultImageTag": "stable"
+
   },
   "category": "utility/automation",
   "rpcTranslation": "home-assistant-service",

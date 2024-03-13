@@ -41,6 +41,7 @@ import {
   updateNodePackageLibrary,
 } from './state/nodeLibrary';
 import {
+  DockerExecution as PodmanExecution,
   NodePackageSpecification,
   NodeSpecification,
 } from '../common/nodeSpec';
@@ -70,9 +71,34 @@ export const initialize = async () => {
     itzgMinecraftv1,
     homeAssistantServicev1,
   ];
+
   specs.forEach((spec) => {
     try {
-      nodeSpecBySpecId[spec.specId] = spec as NodeSpecification;
+      const nodeSpec: NodeSpecification = spec as NodeSpecification;
+      if (nodeSpec.configTranslation === undefined) {
+        nodeSpec.configTranslation = {};
+      }
+
+      // "inject" serviceVersion and dataDir (todo) here. Universal for all nodes.
+      const execution = nodeSpec.execution as PodmanExecution;
+      let defaultImageTag = 'latest';
+      // if the defaultImageTag is set in the spec use that, otherwise 'latest'
+      if (execution.defaultImageTag !== undefined) {
+        defaultImageTag = execution.defaultImageTag;
+      }
+
+      nodeSpec.configTranslation.serviceVersion = {
+        displayName: `${spec.displayName} version`,
+        uiControl: {
+          type: 'text',
+        },
+        defaultValue: defaultImageTag,
+        addNodeFlow: 'advanced',
+        infoDescription:
+          'Caution Advised! Example value: latest, v1.0.0, stable. Consult service documentation for available versions.',
+      };
+
+      nodeSpecBySpecId[spec.specId] = nodeSpec;
     } catch (err) {
       logger.error(err);
     }

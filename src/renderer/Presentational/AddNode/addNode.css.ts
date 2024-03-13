@@ -8,6 +8,10 @@ export const container = style({
   gap: 16,
   paddingBottom: 20,
   minHeight: '40vh',
+  // height must be set along with border box to avoid a small scroll bar
+  // due to the 20px of padding on the bottom
+  height: '100%',
+  boxSizing: 'border-box',
 });
 
 export const titleFont = style({

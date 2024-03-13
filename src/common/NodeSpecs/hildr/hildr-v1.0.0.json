@@ -19,7 +19,9 @@
         "forcedRawNodeInput": "--sync-mode full --jwt-file /data/jwtsecret"
       }
     },
-    "imageName": "ghcr.io/optimism-java/hildr:latest-native"
+    "imageName": "ghcr.io/optimism-java/hildr",
+    "defaultImageTag": "latest-native"
+
   },
   "category": "L2/ConsensusClient",
   "minorityClient": true,
