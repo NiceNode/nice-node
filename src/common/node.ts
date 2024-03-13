@@ -5,6 +5,7 @@ import {
   ExecutionTypes,
   NodePackageSpecification,
   NodeSpecification,
+  DockerExecution as PodmanExecution,
 } from './nodeSpec';
 
 export type NodeId = string;
@@ -231,5 +232,32 @@ export const getContainerName = (node: Node): string => {
     ? `${specId}-${node.createdTimestampMs}`
     : specId;
   return conatinerName;
+};
+
+/**
+ * @param node a node that runs with a container
+ * @returns imageTag set by user, spec, or latest if not set
+ */
+export const getImageTag = (node: Node): string => {
+  const { execution } = node.spec;
+  const { imageName, defaultImageTag } = execution as PodmanExecution;
+
+  let imageTag = 'latest';
+
+  // backwards compatible with old spec files which include image tags in the names
+  //   : matches the colon character.
+  // \S matches any non-whitespace character.
+  // + indicates one or more of the preceding character (non-whitespace characters in this case).
+  // $ asserts the position at the end of the string.
+  const imageNameEndsWithTagRegex = /:\S+$/;
+  if (imageNameEndsWithTagRegex.test(imageName)) {
+    imageTag = '';
+  } else if (node.config.configValuesMap?.serviceVersion) {
+    imageTag = node.config.configValuesMap?.serviceVersion;
+  } else if (defaultImageTag) {
+    // defaultImageTag is set in node.spec.execution
+    imageTag = defaultImageTag;
+  }
+  return imageTag;
 };
 export default Node;

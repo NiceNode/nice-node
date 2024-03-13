@@ -23,7 +23,7 @@
         "forcedRawNodeInput": "--chain=optimism-mainnet --rollup.disabletxpoolgossip=true --nodiscover --http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
-    "imageName": "docker.io/testinprod/op-erigon:latest"
+    "imageName": "testinprod/op-erigon:latest"
   },
   "category": "L2/ExecutionClient",
   "rpcTranslation": "eth-l2",

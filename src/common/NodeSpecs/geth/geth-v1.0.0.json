@@ -23,7 +23,8 @@
         "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
-    "imageName": "docker.io/ethereum/client-go:stable",
+    "imageName": "ethereum/client-go",
+    "defaultImageTag": "stable",
     "binaryDownload": {
       "type": "static",
       "darwin": {
@@ -264,6 +265,7 @@
       },
       "addNodeFlow": "required",
       "defaultValue": "snap",
+      "hideFromUserAfterStart": true,
       "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
     },
     "p2pPorts": {
