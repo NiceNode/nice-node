@@ -11,6 +11,7 @@
         "http": "Enabled",
         "httpPort": "8547",
         "enginePort": "8553",
+        "p2pPorts": "39393",
         "httpCorsDomains": "http://localhost",
         "webSockets": "Disabled",
         "httpVirtualHosts": "localhost,host.containers.internal",
@@ -121,8 +122,8 @@
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "Example value: 30303",
-      "defaultValue": "30303"
+      "infoDescription": "Example value: 39393",
+      "defaultValue": "39393"
     },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
