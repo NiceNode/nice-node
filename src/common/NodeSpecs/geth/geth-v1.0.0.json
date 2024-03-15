@@ -23,7 +23,7 @@
         "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
-    "imageName": "ethereum/client-go",
+    "imageName": "docker.io/ethereum/client-go",
     "defaultImageTag": "stable",
     "binaryDownload": {
       "type": "static",

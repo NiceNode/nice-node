@@ -208,7 +208,7 @@ Ignore references to binary (not currently supported)
         "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
-    "imageName": "ethereum/client-go:stable",
+    "imageName": "docker.io/ethereum/client-go:stable",
     "binaryDownload": {
       "type": "static",
       "darwin": {
