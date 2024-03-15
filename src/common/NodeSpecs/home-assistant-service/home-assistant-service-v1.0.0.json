@@ -16,7 +16,7 @@
     "architectures": {
       "docker": ["amd64", "arm64"]
     },
-    "imageName": "ghcr.io/home-assistant/home-assistant",
+    "imageName": "docker.io/ghcr.io/home-assistant/home-assistant",
     "defaultImageTag": "stable"
 
   },

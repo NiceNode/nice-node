@@ -5,7 +5,7 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "hyperledger/besu",
+    "imageName": "docker.io/hyperledger/besu",
     "defaultImageTag": "latest",
     "input": {
       "defaultConfig": {

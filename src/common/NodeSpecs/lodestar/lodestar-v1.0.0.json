@@ -5,7 +5,7 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "chainsafe/lodestar",
+    "imageName": "docker.io/chainsafe/lodestar",
     "defaultImageTag": "latest",
     "input": {
       "defaultConfig": {

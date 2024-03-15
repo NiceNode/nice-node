@@ -5,7 +5,7 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "consensys/teku",
+    "imageName": "docker.io/consensys/teku",
     "defaultImageTag": "latest",
     "input": {
       "defaultConfig": {

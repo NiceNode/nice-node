@@ -5,7 +5,7 @@
   "execution": {
     "executionTypes": ["docker", "binary"],
     "defaultExecutionType": "docker",
-    "imageName": "statusim/nimbus-eth2",
+    "imageName": "docker.io/statusim/nimbus-eth2",
     "defaultImageTag": "multiarch-latest",
     "input": {
       "defaultConfig": {
