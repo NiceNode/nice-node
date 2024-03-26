@@ -1,5 +1,6 @@
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
+import { assignPortsToNode } from '../ports';
 import logger from '../logger';
 import Node, {
   NodeStatus,
@@ -700,7 +701,14 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
     }
   }
 
-  const podmanCommand = createRunCommand(node);
+  let initializedNode = node;
+  if (node.runtime?.initialized !== true) {
+    initializedNode = assignPortsToNode(node);
+    initializedNode.runtime.initialized = true;
+    storeUpdateNode(initializedNode);
+  }
+
+  const podmanCommand = createRunCommand(initializedNode);
   // todo: test if input is empty string
   const runData = await runCommand(podmanCommand);
   // todoo: get containerId by container name?

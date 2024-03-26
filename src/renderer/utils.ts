@@ -3,6 +3,13 @@ import { NodeLibrary } from '../main/state/nodeLibrary';
 
 export const hexToDecimal = (hex: string) => parseInt(hex, 16);
 
+export const safeNumber = (number: number) => {
+  if (Number.isNaN(number) || typeof number !== 'number') {
+    return 0;
+  }
+  return number;
+};
+
 const EXECUTION_CLIENTS = ['Geth', 'Nethermind', 'Besu'];
 
 export const detectExecutionClient = (

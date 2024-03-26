@@ -58,20 +58,26 @@ const NodePackageScreen = () => {
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
+  const executionNode = selectedNodePackage?.services.find((service) => {
+    return service.serviceId === 'executionClient';
+  });
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     selectedNodePackage?.spec.rpcTranslation,
+    executionNode?.node.config.configValuesMap?.httpPort,
     {
       pollingInterval,
     },
   );
   const qExecutionPeers = useGetExecutionPeersQuery(
     selectedNodePackage?.spec.rpcTranslation,
+    executionNode?.node.config.configValuesMap?.httpPort,
     {
       pollingInterval,
     },
   );
   const qLatestBlock = useGetExecutionLatestBlockQuery(
     selectedNodePackage?.spec.rpcTranslation,
+    executionNode?.node.config.configValuesMap?.httpPort,
     {
       pollingInterval,
     },
@@ -138,7 +144,7 @@ const NodePackageScreen = () => {
     }
     const syncingData = qExecutionIsSyncing.data;
     if (typeof syncingData === 'object') {
-      setSyncPercent(syncingData.syncPercent);
+      setSyncPercent('');
       setIsSyncing(syncingData.isSyncing);
     } else if (syncingData === false) {
       // for nodes that do not have sync percent or other sync data
@@ -240,6 +246,18 @@ const NodePackageScreen = () => {
     selectedNodePackage?.services.map((service) => {
       const nodeId = service.node.id;
       const node = sUserNodes?.nodes[nodeId];
+      const data = qExecutionIsSyncing?.data;
+      console.log('data', data);
+      const stats =
+        service.serviceName === 'Execution Client'
+          ? {
+              currentBlock: data?.currentBlock || 0,
+              highestBlock: data?.highestBlock || 0,
+            }
+          : {
+              currentSlot: data?.currentSlot || 0,
+              highestSlot: data?.highestSlot || 0,
+            };
       const serviceProps: ClientProps = {
         id: service.node.id,
         name: service.node.spec.specId,
@@ -257,12 +275,13 @@ const NodePackageScreen = () => {
           error: node?.status.includes('error'),
           // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
         },
-        stats: {},
+        stats,
         resources: service.node.spec.resources,
       };
       formattedServices.push(serviceProps);
     });
     setFormattedServices(formattedServices);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNodePackage?.services, sUserNodes]);
 
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {
