@@ -94,8 +94,8 @@ export const assignPortsToNode = (node: Node): Node => {
   // Retrieve all used ports and convert them to strings
   const { p2pPorts: usedP2pPorts, otherPorts: usedOtherPorts } =
     getPodmanPorts();
-  const usedPorts = [...usedP2pPorts, ...usedOtherPorts].map((port) =>
-    port.toString(),
+  const usedPorts = [...usedP2pPorts, ...usedOtherPorts].map(
+    (port) => port?.toString() ?? '',
   );
 
   // Define the port types to update
@@ -116,7 +116,8 @@ export const assignPortsToNode = (node: Node): Node => {
   });
   // Update ports using array methods
   portTypes.forEach((portType) => {
-    const defaultPort = node.spec.configTranslation[portType]?.defaultValue;
+    const defaultPort =
+      node.spec.configTranslation?.[portType]?.defaultValue ?? null;
     const currentPort = node.config.configValuesMap[portType];
 
     if (!defaultPort && !currentPort) {
@@ -124,7 +125,7 @@ export const assignPortsToNode = (node: Node): Node => {
     }
 
     // Use current port, or default if not initialized, converted to a number
-    let assignedPort = parseInt(currentPort || defaultPort, 10);
+    let assignedPort = parseInt((currentPort || defaultPort) as string, 10);
 
     // Find next available port if the current/default one is in use
     if (usedPorts.includes(assignedPort.toString())) {

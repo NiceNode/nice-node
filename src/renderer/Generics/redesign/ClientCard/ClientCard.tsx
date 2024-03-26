@@ -60,8 +60,6 @@ export const ClientCard = (props: ClientProps) => {
     return labelDetails;
   };
 
-  console.log('stats',stats);
-
   // const isNotCloseToSynchronized =
   //   (stats.highestSlot &&
   //     stats.currentSlot &&
@@ -77,11 +75,11 @@ export const ClientCard = (props: ClientProps) => {
       return <Label type="gray" label={label} />;
     }
     if (stats.currentBlock !== 0 || stats.currentSlot !== 0) {
-      let progress;
+      let progress = 0;
       if (stats.highestSlot && stats.currentSlot) {
-        progress = (stats.currentSlot / stats.highestSlot);
+        progress = stats.currentSlot / stats.highestSlot;
       } else if (stats.highestBlock && stats.currentBlock) {
-        progress = (stats.currentBlock / stats.highestBlock);
+        progress = stats.currentBlock / stats.highestBlock;
       }
       const syncPercent = (progress * 100).toFixed(1);
       const caption = !status.initialized
@@ -101,7 +99,8 @@ export const ClientCard = (props: ClientProps) => {
           />
         </>
       );
-    } else if (isNotSynchronizedAndNotStopped) {
+    }
+    if (isNotSynchronizedAndNotStopped) {
       const label = g('Syncing');
       return <Label type="gray" label={label} />;
     }

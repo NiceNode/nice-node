@@ -281,6 +281,7 @@ const NodePackageScreen = () => {
       formattedServices.push(serviceProps);
     });
     setFormattedServices(formattedServices);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNodePackage?.services, sUserNodes]);
 
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {

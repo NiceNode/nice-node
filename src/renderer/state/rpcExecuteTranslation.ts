@@ -1,7 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 
 /* eslint-disable no-else-return */
-import { hexToDecimal, safeNumber } from '../utils';
+import { hexToDecimal } from '../utils';
 import { ethers } from '../ethers';
 import { callJsonRpc } from '../jsonRpcClient';
 
@@ -69,11 +69,10 @@ export const executeTranslation = async (
       let isSyncing;
       let currentBlock = 0;
       let highestBlock = 0;
-      console.log('resp',resp);
       if (resp !== undefined) {
         if (typeof resp === 'object') {
-          currentBlock = parseInt(resp.currentBlock);
-          highestBlock = parseInt(resp.highestBlock);
+          currentBlock = parseInt(resp.currentBlock, 10);
+          highestBlock = parseInt(resp.highestBlock, 10);
           isSyncing = true;
         } else if (resp === false) {
           // reth, light client geth, it is done syncing if data is false
@@ -158,8 +157,8 @@ export const executeTranslation = async (
       let highestSlot;
       if (resp) {
         if (typeof resp === 'object') {
-          currentSlot = parseInt(resp.currentSlot);
-          highestSlot = parseInt(resp.highestSlot);
+          currentSlot = parseInt(resp.currentSlot, 10);
+          highestSlot = parseInt(resp.highestSlot, 10);
           isSyncing = true;
         } else if (resp === false) {
           // light client geth, it is done syncing if data is false
