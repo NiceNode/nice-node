@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import logger from '../logger';
 import { runCommand } from './podman';
-import { MachineJSON } from './types';
+import type { MachineJSON } from './types';
 
 export const NICENODE_MACHINE_NAME = 'nicenode-machine';
 
@@ -14,7 +14,7 @@ export const getNiceNodeMachine = async (): Promise<
   try {
     const result = await runCommand(`machine list --format json`);
     if (!result) {
-      // logger.error(`Podman machine ls result returned: ${result}`);
+      logger.error(`Podman machine ls result returned: ${result}`);
       return undefined;
     }
 
@@ -56,6 +56,25 @@ export const startMachineIfCreated = async (): Promise<boolean> => {
       } else {
         logger.info('Podman machine in state of running or starting');
       }
+      return true;
+    }
+  } catch (err) {
+    logger.error('Error getting the machine.');
+  }
+  return false;
+};
+
+/**
+ * @returns false if the machine hasn't been stopped. true if the machine
+ * is stopped and stop command was sent or is already Stopping
+ */
+export const stopMachineIfCreated = async (): Promise<boolean> => {
+  try {
+    const nnMachine = await getNiceNodeMachine();
+    if (nnMachine) {
+      await runCommand(`machine stop ${NICENODE_MACHINE_NAME}`);
+      // todo: validate machine stopped properly
+      // consider: removing the machine here if the machine is stuck
       return true;
     }
   } catch (err) {

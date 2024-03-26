@@ -82,7 +82,7 @@ const getAssetPath = (...paths: string[]): string => {
   return path.join(RESOURCES_PATH, ...paths);
 };
 
-const createWindow = async () => {
+export const createWindow = async () => {
   if (isDevelopment) {
     // https://github.com/MarshallOfSound/electron-devtools-installer/issues/238
     await installExtension(REACT_DEVELOPER_TOOLS, {
