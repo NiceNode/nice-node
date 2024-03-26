@@ -2,7 +2,11 @@
 // React select docs at:
 // https://react-select.com/components#Option
 import { useState, useCallback, useEffect } from 'react';
-import ReactSelect, { MenuPlacement, SingleValue } from 'react-select';
+import ReactSelect, {
+  CSSObjectWithLabel,
+  MenuPlacement,
+  SingleValue,
+} from 'react-select';
 import { Icon } from '../Icon/Icon';
 import { vars } from '../theme.css';
 
@@ -80,55 +84,65 @@ const Select = ({
           IndicatorsContainer,
         }}
         styles={{
-          control: (base) => ({
-            ...base,
-            backgroundColor: isDisabled
-              ? vars.color.backgroundDisabled
-              : 'inherit',
-            color: isDisabled ? vars.color.fontDisabled : 'inherit',
-            borderColor: vars.color.border,
-            boxShadow: 'none',
-            ':hover': {
-              borderColor: vars.color.border15,
+          control: (base) => {
+            return {
+              ...base,
+              backgroundColor: isDisabled
+                ? vars.color.backgroundDisabled
+                : 'inherit',
+              color: isDisabled ? vars.color.fontDisabled : 'inherit',
+              borderColor: vars.color.border,
               boxShadow: 'none',
-              color: vars.color.font50,
-            },
-            minHeight: 28,
-          }),
-          menu: (base) => ({
-            ...base,
-            width: 'auto', // makes menu as wide as longest option name
-            backgroundColor: vars.color.background,
-            marginTop: 0,
-            borderTop: 0,
-            boxShadow: '0px 14px 16px rgba(0, 0, 0, 0.14)',
-            zIndex: 100,
-          }),
-          option: (base) => ({
-            ...base,
-            backgroundColor: 'inherit',
-            ':hover': {
-              backgroundColor: vars.color.background96,
-            },
-          }),
+              ':hover': {
+                borderColor: vars.color.border15,
+                boxShadow: 'none',
+                color: vars.color.font50,
+              },
+              minHeight: 28,
+            } as CSSObjectWithLabel;
+          },
+          menu: (base) => {
+            return {
+              ...base,
+              width: 'auto', // makes menu as wide as longest option name
+              backgroundColor: vars.color.background,
+              marginTop: 0,
+              borderTop: 0,
+              boxShadow: '0px 14px 16px rgba(0, 0, 0, 0.14)',
+              zIndex: 100,
+            } as CSSObjectWithLabel;
+          },
+          option: (base) => {
+            return {
+              ...base,
+              backgroundColor: 'inherit',
+              ':hover': {
+                backgroundColor: vars.color.background96,
+              },
+            } as CSSObjectWithLabel;
+          },
           dropdownIndicator: () => ({
             display: 'none',
           }),
-          valueContainer: (base) => ({
-            ...base,
-            padding: 0,
-            // https://github.com/JedWatson/react-select/issues/3995#issuecomment-738470183
-            input: {
-              gridArea: 'auto',
-              height: 0,
-            },
-          }),
-          singleValue: (base) => ({
-            ...base,
-            color: 'inherit',
-            marginLeft: 8,
-            lineHeight: '16px',
-          }),
+          valueContainer: (base) => {
+            return {
+              ...base,
+              padding: 0,
+              // https://github.com/JedWatson/react-select/issues/3995#issuecomment-738470183
+              input: {
+                gridArea: 'auto',
+                height: 0,
+              },
+            } as CSSObjectWithLabel;
+          },
+          singleValue: (base) => {
+            return {
+              ...base,
+              color: 'inherit',
+              marginLeft: 8,
+              lineHeight: '16px',
+            } as CSSObjectWithLabel;
+          },
         }}
       />
     </>

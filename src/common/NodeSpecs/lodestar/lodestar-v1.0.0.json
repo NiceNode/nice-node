@@ -7,7 +7,8 @@
       "docker"
     ],
     "defaultExecutionType": "docker",
-    "imageName": "docker.io/chainsafe/lodestar:latest",
+    "imageName": "docker.io/chainsafe/lodestar",
+    "defaultImageTag": "latest",
     "input": {
       "defaultConfig": {
         "http": "Enabled",

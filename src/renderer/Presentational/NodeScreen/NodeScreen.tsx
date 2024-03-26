@@ -314,7 +314,7 @@ const NodeScreen = () => {
     let versionString = version;
 
     // Don't match -stable or -<commit-hash> that many nodes use
-    const genericVersionRegex = /v\d+\.\d+\.\d+(-[alpha|beta|edge]+)?/;
+    const genericVersionRegex = /v\d+\.\d+\.\d+(-[alpha|beta|edge]+)?(\.\d+)?/;
     const match = version.match(genericVersionRegex);
 
     if (match) {
@@ -346,6 +346,7 @@ const NodeScreen = () => {
       //  node http api as the source of truth
       // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
       synchronized: sIsSyncing === false && status === NodeStatus.running,
+      updating: status === NodeStatus.updating,
     },
     stats: {
       peers: sPeers,

@@ -26,6 +26,7 @@ import {
 import { addNode, removeNode, startNode, stopNode } from './nodeManager';
 import { createJwtSecretAtDirs } from './util/jwtSecrets';
 import { ConfigValuesMap } from '../common/nodeConfig';
+import { setLastRunningTime } from './node/setLastRunningTime';
 
 // Created when adding a node and is used to pair a node spec and config
 // for a specific node package service
@@ -140,12 +141,12 @@ export const startNodePackage = async (nodeId: NodeId) => {
   logger.info(`Starting node ${JSON.stringify(node)}`);
   let nodePackageStatus = NodeStatus.starting;
   node.status = nodePackageStatus;
+  node.lastStartedTimestampMs = Date.now();
   node.stoppedBy = undefined;
   nodePackageStore.updateNodePackage(node);
 
   nodePackageStatus = NodeStatus.running;
-  for (let i = 0; i < node.services.length; i++) {
-    const service = node.services[i];
+  const startPromises = node.services.map(async (service) => {
     try {
       await startNode(service.node.id);
     } catch (e) {
@@ -155,7 +156,15 @@ export const startNodePackage = async (nodeId: NodeId) => {
       // todo: set as partially started?
       // throw e;
     }
+  });
+
+  await Promise.all(startPromises);
+
+  // If all node services start without error, the package is considered running
+  if (nodePackageStatus === NodeStatus.running) {
+    setLastRunningTime(nodeId, 'node');
   }
+
   // set node status
   node.status = nodePackageStatus;
   nodePackageStore.updateNodePackage(node);
@@ -172,6 +181,7 @@ export const stopNodePackage = async (
   logger.info(`Stopping node ${JSON.stringify(node)}`);
   let nodePackageStatus = NodeStatus.stopping;
   node.status = nodePackageStatus;
+  node.lastStoppedTimestampMs = Date.now();
   node.stoppedBy = stoppedBy;
   nodePackageStore.updateNodePackage(node);
 

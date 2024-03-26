@@ -5,6 +5,7 @@ import {
   ExecutionTypes,
   NodePackageSpecification,
   NodeSpecification,
+  DockerExecution as PodmanExecution,
 } from './nodeSpec';
 
 export type NodeId = string;
@@ -73,8 +74,9 @@ type Node = {
    * Timestamp the node was first created, UTC milliseconds
    */
   createdTimestampMs: number;
-  lastStarted?: string;
-  lastStopped?: string;
+  lastRunningTimestampMs?: number;
+  lastStartedTimestampMs?: number;
+  lastStoppedTimestampMs?: number;
   stoppedBy?: NodeStoppedBy;
 };
 type NodeMap = Record<string, Node>;
@@ -99,8 +101,24 @@ export type NodePackage = {
    * Timestamp the node was first created, UTC milliseconds
    */
   createdTimestampMs: number;
-  lastStarted?: string;
-  lastStopped?: string;
+  /**
+   * When the Node Package was most recently detected as running properly.
+   * Definition: "running properly" means the node was running for at least 30 seconds
+   */
+  lastRunningTimestampMs?: number;
+  /**
+   * When the Node Package was most recently started.
+   * (Does not indicate that it successfully started, see lastRunningTimestampMs)
+   */
+  lastStartedTimestampMs?: number;
+  /**
+   * When the Node Package was most recently stopped.
+   */
+  lastStoppedTimestampMs?: number;
+  /**
+   * Sets what stopped the Node Package.
+   * Examples: 'shutdown', 'user', 'crash', or undefined if the node is running
+   */
   stoppedBy?: NodeStoppedBy;
 };
 export type NodePackageMap = Record<string, NodePackage>;
@@ -214,5 +232,32 @@ export const getContainerName = (node: Node): string => {
     ? `${specId}-${node.createdTimestampMs}`
     : specId;
   return conatinerName;
+};
+
+/**
+ * @param node a node that runs with a container
+ * @returns imageTag set by user, spec, or latest if not set
+ */
+export const getImageTag = (node: Node): string => {
+  const { execution } = node.spec;
+  const { imageName, defaultImageTag } = execution as PodmanExecution;
+
+  let imageTag = 'latest';
+
+  // backwards compatible with old spec files which include image tags in the names
+  //   : matches the colon character.
+  // \S matches any non-whitespace character.
+  // + indicates one or more of the preceding character (non-whitespace characters in this case).
+  // $ asserts the position at the end of the string.
+  const imageNameEndsWithTagRegex = /:\S+$/;
+  if (imageNameEndsWithTagRegex.test(imageName)) {
+    imageTag = '';
+  } else if (node.config.configValuesMap?.serviceVersion) {
+    imageTag = node.config.configValuesMap?.serviceVersion;
+  } else if (defaultImageTag) {
+    // defaultImageTag is set in node.spec.execution
+    imageTag = defaultImageTag;
+  }
+  return imageTag;
 };
 export default Node;

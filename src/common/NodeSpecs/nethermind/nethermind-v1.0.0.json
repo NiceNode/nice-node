@@ -24,6 +24,7 @@
       "binary": ["amd64", "arm64"]
     },
     "imageName": "docker.io/nethermind/nethermind",
+    "defaultImageTag": "latest",
     "binaryDownload": {
       "type": "githubReleases",
       "latestVersionUrl": "https://api.github.com/repos/NethermindEth/nethermind/releases/latest",
@@ -85,7 +86,8 @@
             "config": "sepolia"
           }
         ]
-      }
+      },
+      "documentation" : "https://docs.nethermind.io/fundamentals/configuration#basic-options"
     },
     "chainId": {
       "displayName": "Chain ID (Network)",
@@ -109,6 +111,10 @@
           {
             "value": "10",
             "config": "op-mainnet"
+          },
+          {
+            "value": "11155420",
+            "config": "op-sepolia"
           },
           {
             "value": "8453",
@@ -275,6 +281,7 @@
       },
       "addNodeFlow": "required",
       "defaultValue": "snap",
+      "hideFromUserAfterStart": true,
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/sync-modes"
     },
     "webSocketsPort": {

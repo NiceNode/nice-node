@@ -2,7 +2,11 @@ import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
 import { assignPortsToNode } from '../ports';
 import logger from '../logger';
-import Node, { NodeStatus, getContainerName } from '../../common/node';
+import Node, {
+  NodeStatus,
+  getContainerName,
+  getImageTag,
+} from '../../common/node';
 import { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
 import {
   setDockerNodeStatus as setPodmanNodeStatus,
@@ -47,14 +51,16 @@ export const runCommand = async (command: string, log?: boolean) => {
   return data;
 };
 
+/**
+ * Streams `podman events` to watch for things like crashes.
+ * Safe to call multiple times as it only creates a single watch process
+ */
 const watchPodmanEvents = async () => {
   logger.info('Starting podmanWatchProcess');
 
   // podmanWatchProcess is killed if (killed || exitCode === null)
   if (podmanWatchProcess && !podmanWatchProcess.killed) {
-    logger.error(
-      'podmanWatchProcess process still running. Wait to stop or stop first.',
-    );
+    logger.debug('podmanWatchProcess process already running');
     return;
   }
   const spawnOptions: SpawnOptions = {
@@ -80,12 +86,12 @@ const watchPodmanEvents = async () => {
   rl.on('line', (log: string) => {
     console.log('podmanWatchProcess event::::::', log);
     /**
-     * {"Name":"docker.io/hyperledger/besu:latest",
+     * {"Name":"hyperledger/besu:latest",
      *    "Status":"pull","Time":"2023-03-07T11:24:33.736404783-08:00","Type":"image",
      *      "Attributes":{"podId":""}}
               {
               "ID":"1fb9cc9d810b1481cd0e4a380f1b47a4f3ff1b3771a069f3a382e0f90bfc6bb4",
-              "Image":"docker.io/hyperledger/besu:latest",
+              "Image":"hyperledger/besu:latest",
               "Name":"besu",
               "Status":"start",
               "Time":"2023-03-07T11:26:30.597007105-08:00",
@@ -525,7 +531,11 @@ export const createRunCommand = (node: Node): string => {
   // chainId is disambiguous and allows a client like Nethermind) to
   // easily work for many chains and testnets. network="mainnet" is very ambiguous.
   // Only exclude node specification includes chainId
-  const excludeConfigKeys = ['dataDir', ...initCommandConfigKeys];
+  const excludeConfigKeys = [
+    'dataDir',
+    'serviceVersion',
+    ...initCommandConfigKeys,
+  ];
   if (
     node.config.configValuesMap.chainId &&
     node.spec.configTranslation?.chainId
@@ -536,13 +546,18 @@ export const createRunCommand = (node: Node): string => {
   const cliConfigInput = buildCliConfig({
     configValuesMap: node.config.configValuesMap,
     configTranslationMap: node.spec.configTranslation,
-    excludeConfigKeys: ['dataDir', ...initCommandConfigKeys],
+    excludeConfigKeys,
   });
   nodeInput += ` ${cliConfigInput}`;
 
+  const imageTag = getImageTag(node);
+  // if imageTage is empty, use then imageTag is already included in the imageName (backwards compatability)
+  const imageNameWithTag =
+    imageTag !== '' ? `${imageName}:${imageTag}` : imageName;
+
   const containerName = getContainerName(node);
   // -q quiets podman logs (pulling new image logs) so we can parse the containerId
-  const podmanCommand = `run -q -d --name ${containerName} ${finalPodmanInput} ${imageName} ${nodeInput}`;
+  const podmanCommand = `run -q -d --name ${containerName} ${finalPodmanInput} ${imageNameWithTag} ${nodeInput}`;
   logger.info(`podman run command ${podmanCommand}`);
   return podmanCommand;
 };
@@ -601,22 +616,37 @@ export const createInitCommand = (node: Node): string => {
       return configTranslation?.initCommandConfig !== true;
     });
   }
+  const excludeInitConfigKeys = [
+    'dataDir',
+    'serviceVersion',
+    ...nonInitCommandConfigKeys,
+  ];
   const cliConfigInput = buildCliConfig({
     configValuesMap: node.config.configValuesMap,
     configTranslationMap: node.spec.configTranslation,
-    excludeConfigKeys: ['dataDir', ...nonInitCommandConfigKeys],
+    excludeConfigKeys: excludeInitConfigKeys,
   });
   nodeInput += ` ${cliConfigInput}`;
+
+  const imageTag = getImageTag(node);
+  // if imageTage is empty, use then imageTag is already included in the imageName (backwards compatability)
+  const imageNameWithTag =
+    imageTag !== '' ? `${imageName}:${imageTag}` : imageName;
 
   // -q quiets podman logs (pulling new image logs) so we can parse the containerId
   // -d is not used here as this should be short-lived and we want to be blocked
   //  so that we know when to start the node
   const containerName = getContainerName(node);
-  const podmanCommand = `run -q --user 0 --name ${containerName} ${finalPodmanInput} ${imageName} ${nodeInput}`;
+  const podmanCommand = `run -q --user 0 --name ${containerName} ${finalPodmanInput} ${imageNameWithTag} ${nodeInput}`;
   logger.info(`createInitCommand: podman run command ${podmanCommand}`);
   return podmanCommand;
 };
 
+/**
+ * Sets the node.status to updating if there is a new container
+ * @param node
+ * @returns the processIds to run the node (ex. containerId)
+ */
 export const startPodmanNode = async (node: Node): Promise<string[]> => {
   // pull image
   const { execution } = node.spec;
@@ -624,9 +654,20 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
 
   // Ensure a podman machine is running (Mac and Win)
   await startPodman();
+  // Ensure podman events are being watched
+  watchPodmanEvents();
 
-  // try catch? .. podman dameon might need to be restarted if a bad gateway error occurs
+  // Node status is starting.. Set node as updating here
+  node.status = NodeStatus.updating;
+  storeUpdateNode(node);
+
+  // todo: only set as updating if there is a new image, otherwise updating
+  // will "flash" to the user quickly here
   await runCommand(`pull ${imageName}`);
+
+  // Set node as starting here
+  node.status = NodeStatus.starting;
+  storeUpdateNode(node);
 
   // todo: custom setup: ex. use network specific data directory?
   // todo: check if there is a stopped container?

@@ -128,7 +128,12 @@ export const parseLogLevel = (
     }
   }
   const uppercaseLog = log.toUpperCase();
-  if (uppercaseLog.includes('ERROR') || uppercaseLog.includes('ERR')) {
+  if (
+    uppercaseLog.includes('ERROR') ||
+    (uppercaseLog.includes('ERR') &&
+      !uppercaseLog.includes('ERR=NIL') &&
+      !uppercaseLog.includes('ERR=NULL'))
+  ) {
     level = 'ERROR';
   } else if (uppercaseLog.includes('WARN') || uppercaseLog.includes('WRN')) {
     level = 'WARN';

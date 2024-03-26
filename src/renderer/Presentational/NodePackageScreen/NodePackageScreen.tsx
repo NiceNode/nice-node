@@ -271,6 +271,7 @@ const NodePackageScreen = () => {
           stopped:
             node?.status === NodeStatus.stopped ||
             node?.status === NodeStatus.stopping,
+          updating: node?.status === NodeStatus.updating,
           error: node?.status.includes('error'),
           // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
         },
@@ -357,6 +358,7 @@ const NodePackageScreen = () => {
       stopped: status === 'stopped',
       error: status.includes('error'),
       online: status === 'running',
+      updating: status === NodeStatus.updating,
     },
     stats: {
       peers: sPeers,

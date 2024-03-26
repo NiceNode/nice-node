@@ -122,6 +122,7 @@ export const common: { color: { [key: string]: string } } = {
     farcaster: '#855DCD',
     base: '#0052FF',
     optimism: '#FF0420',
+    minecraft: '#5b8731',
   },
 };
 

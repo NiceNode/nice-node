@@ -5,8 +5,8 @@ import installOnWindows from './installOnWindows';
 import installOnLinux from './installOnLinux';
 import { runCommand } from '../podman';
 
-export const PODMAN_LATEST_VERSION = '4.8.2';
-export const PODMAN_MIN_VERSION = '4.5.0';
+export const PODMAN_LATEST_VERSION = '5.0.0';
+export const PODMAN_MIN_VERSION = '4.6.0';
 
 // eslint-disable-next-line
 const installPodman = async (): Promise<any> => {
