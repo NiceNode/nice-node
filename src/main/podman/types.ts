@@ -13,6 +13,7 @@ export type MachineJSON = {
   Port: number;
   RemoteUsername: string;
   IdentityPath: string;
+  UserModeNetworking: boolean;
 };
 
 /**

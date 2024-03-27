@@ -7,7 +7,7 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import path from 'path';
+import path from 'node:path';
 import { app, BrowserWindow, shell } from 'electron';
 import * as Sentry from '@sentry/electron/main';
 
@@ -34,6 +34,7 @@ import * as updater from './updater';
 import * as monitor from './monitor';
 import * as cronJobs from './cronJobs';
 import * as i18nMain from './i18nMain';
+import * as tray from './tray';
 
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
@@ -73,7 +74,15 @@ if (isDevelopment) {
   require('electron-debug')();
 }
 
-const createWindow = async () => {
+const RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, 'assets')
+  : path.join(__dirname, '../../assets');
+
+const getAssetPath = (...paths: string[]): string => {
+  return path.join(RESOURCES_PATH, ...paths);
+};
+
+export const createWindow = async () => {
   if (isDevelopment) {
     // https://github.com/MarshallOfSound/electron-devtools-installer/issues/238
     await installExtension(REACT_DEVELOPER_TOOLS, {
@@ -82,14 +91,6 @@ const createWindow = async () => {
       },
     });
   }
-
-  const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
-
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
 
   mainWindow = new BrowserWindow({
     titleBarOverlay: true,
@@ -159,6 +160,33 @@ app.on('window-all-closed', () => {
   }
 });
 
+// This is called by the tray icon "Quit" menu item
+let isFullQuit = false;
+export const fullQuit = () => {
+  isFullQuit = true;
+  app.quit();
+};
+
+// Emitted on app.quit() after all windows have been closed
+app.on('will-quit', (e) => {
+  // Remove dev env check to test background. This is to prevent
+  // multiple instances of the app staying open in dev env where we
+  // regularly quit the app.
+  if (isFullQuit || process.env.NODE_ENV === 'development') {
+    console.log('quitting app from background');
+    app.quit();
+  } else {
+    console.log('quitting app from foreground');
+    // This allows NN to run in the background. The purpose is to keep a tray icon updated,
+    // monitor node's statuses and alert the user when a node is down, and to continuously
+    // track node usage.
+    e.preventDefault();
+    if (process.platform === 'darwin' && app.dock) {
+      app.dock.hide(); // app appears "quitted" in the dock
+    }
+  }
+});
+
 app
   .whenReady()
   .then(() => {
@@ -191,6 +219,7 @@ const initialize = () => {
   monitor.initialize();
   cronJobs.initialize();
   i18nMain.initialize();
+  tray.initialize(getAssetPath);
   console.log('app locale: ', app.getLocale());
   console.log('app LocaleCountryCode: ', app.getLocaleCountryCode());
 };
