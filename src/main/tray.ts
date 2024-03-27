@@ -23,7 +23,9 @@ let openNiceNodeMenu: { label: string; click: () => void }[] = [];
 // todo: define when to use alert icon. For notifications? For errors?
 export const setTrayIcon = (style: 'Default' | 'Alert') => {
   if (_getAssetPath) {
-    tray.setImage(_getAssetPath('icons', `NNIcon${style}Template.png`));
+    tray.setImage(
+      _getAssetPath('icons', 'tray', `NNIcon${style}InvertedTemplate.png`),
+    );
   }
 };
 
@@ -140,7 +142,11 @@ export const updateTrayMenu = () => {
 export const initialize = (getAssetPath: (...paths: string[]) => string) => {
   logger.info('tray initializing...');
   _getAssetPath = getAssetPath;
-  const icon = getAssetPath('icons', 'NNIconDefaultTemplate.png');
+  const icon = getAssetPath(
+    'icons',
+    'tray',
+    'NNIconDefaultInvertedTemplate.png',
+  );
   tray = new Tray(icon);
   updateTrayMenu();
   // Update the status of everything in the tray when it is opened
