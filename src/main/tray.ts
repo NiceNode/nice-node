@@ -2,7 +2,7 @@ import { Menu, Tray, MenuItem } from 'electron';
 import logger from './logger';
 import { createWindow, fullQuit, getMainWindow } from './main';
 import { getUserNodePackages } from './state/nodePackages';
-import { isLinux } from './platform';
+import { isLinux, isWindows } from './platform';
 import {
   getNiceNodeMachine,
   startMachineIfCreated,
@@ -23,9 +23,14 @@ let openNiceNodeMenu: { label: string; click: () => void }[] = [];
 // todo: define when to use alert icon. For notifications? For errors?
 export const setTrayIcon = (style: 'Default' | 'Alert') => {
   if (_getAssetPath) {
-    tray.setImage(
-      _getAssetPath('icons', 'tray', `NNIcon${style}InvertedTemplate.png`),
-    );
+    if (isWindows()) {
+      // Windows icon docs: https://learn.microsoft.com/en-us/windows/apps/design/style/iconography/app-icon-construction#icon-scaling
+      tray.setImage(_getAssetPath('icon.ico'));
+    } else {
+      tray.setImage(
+        _getAssetPath('icons', 'tray', `NNIcon${style}InvertedTemplate.png`),
+      );
+    }
   }
 };
 
@@ -142,17 +147,33 @@ export const updateTrayMenu = () => {
 export const initialize = (getAssetPath: (...paths: string[]) => string) => {
   logger.info('tray initializing...');
   _getAssetPath = getAssetPath;
-  const icon = getAssetPath(
-    'icons',
-    'tray',
-    'NNIconDefaultInvertedTemplate.png',
-  );
+  let icon = getAssetPath('icons', 'tray', 'NNIconDefaultInvertedTemplate.png');
+  if (isWindows()) {
+    icon = getAssetPath('icon.ico');
+  }
+
   tray = new Tray(icon);
+  // on windows, show a colored icon, 64x64 default icon seems ok
   updateTrayMenu();
   // Update the status of everything in the tray when it is opened
   tray.on('click', () => {
+    // on windows, default is open/show window on click
+    // on mac, default is open menu on click (no code needed)
+    // on linux?
     updateTrayMenu();
+    if (isWindows()) {
+      const window = getMainWindow();
+      if (window) {
+        // brings window to the foreground and/or maximizes
+        window.show();
+      } else {
+        // and if no window open yet
+        createWindow();
+      }
+    }
   });
+  // on windows, the menu opens with a right click (no code needed)
+  // also, the 'right-click' event is not triggered on windows
   logger.info('tray initialized');
 };
 

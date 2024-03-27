@@ -7,7 +7,7 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import path from 'path';
+import path from 'node:path';
 import { app, BrowserWindow, shell } from 'electron';
 import * as Sentry from '@sentry/electron/main';
 
@@ -169,7 +169,10 @@ export const fullQuit = () => {
 
 // Emitted on app.quit() after all windows have been closed
 app.on('will-quit', (e) => {
-  if (isFullQuit) {
+  // Remove dev env check to test background. This is to prevent
+  // multiple instances of the app staying open in dev env where we
+  // regularly quit the app.
+  if (isFullQuit || process.env.NODE_ENV === 'development') {
     console.log('quitting app from background');
     app.quit();
   } else {
@@ -178,7 +181,9 @@ app.on('will-quit', (e) => {
     // monitor node's statuses and alert the user when a node is down, and to continuously
     // track node usage.
     e.preventDefault();
-    app.dock.hide(); // app appears "quitted" in the dock
+    if (process.platform === 'darwin' && app.dock) {
+      app.dock.hide(); // app appears "quitted" in the dock
+    }
   }
 });
 
