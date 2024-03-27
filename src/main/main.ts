@@ -178,7 +178,7 @@ app.on('will-quit', (e) => {
     // monitor node's statuses and alert the user when a node is down, and to continuously
     // track node usage.
     e.preventDefault();
-    app.dock.hide(); // app appears "quitted" in the dock
+    // app.dock.hide(); // app appears "quitted" in the dock
   }
 });
 
