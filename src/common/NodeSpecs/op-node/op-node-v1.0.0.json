@@ -87,7 +87,7 @@
           }
         ]
       },
-      "defaultValue": "Enabled",
+      "defaultValue": "Disabled",
       "documentation": "https://github.com/jgresham/superhack/blob/main/README.md#op-node-settings"
     },
     "l1": {
