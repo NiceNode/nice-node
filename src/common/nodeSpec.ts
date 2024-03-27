@@ -32,6 +32,7 @@ export type BaseNodeExecution = {
 export type DockerExecution = BaseNodeExecution & {
   executionTypes: ['docker'];
   imageName: string; // todo: support multi-image node
+  defaultImageTag?: string; // if not set, 'latest' is used
   // todo: support non-docker hub
   // containerIds?: string[];
   input?: {

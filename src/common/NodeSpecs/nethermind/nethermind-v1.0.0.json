@@ -24,6 +24,7 @@
       "binary": ["amd64", "arm64"]
     },
     "imageName": "docker.io/nethermind/nethermind",
+    "defaultImageTag": "latest",
     "binaryDownload": {
       "type": "githubReleases",
       "latestVersionUrl": "https://api.github.com/repos/NethermindEth/nethermind/releases/latest",
@@ -280,6 +281,7 @@
       },
       "addNodeFlow": "required",
       "defaultValue": "snap",
+      "hideFromUserAfterStart": true,
       "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/sync-modes"
     },
     "webSocketsPort": {

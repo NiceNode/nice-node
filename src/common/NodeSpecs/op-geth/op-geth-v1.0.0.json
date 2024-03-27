@@ -12,6 +12,7 @@
         "httpPort": "8547",
         "webSocketsPort": "8548",
         "enginePort": "8553",
+        "p2pPorts": "39393",
         "httpCorsDomains": "http://localhost",
         "webSockets": "Disabled",
         "httpVirtualHosts": "localhost,host.containers.internal",
@@ -23,7 +24,8 @@
         "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
-    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101308.2"
+    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth",
+    "defaultImageTag": "v1.101308.2"
   },
   "category": "L2/ExecutionClient",
   "rpcTranslation": "eth-l2",
@@ -138,8 +140,8 @@
       "uiControl": {
         "type": "text"
       },
-      "infoDescription": "Example value: 30303",
-      "defaultValue": "30303"
+      "infoDescription": "Example value: 39393",
+      "defaultValue": "39393"
     },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",
