@@ -23,7 +23,7 @@
       "docker": ["amd64", "arm64"],
       "binary": ["amd64", "arm64"]
     },
-    "imageName": "nethermind/nethermind",
+    "imageName": "docker.io/nethermind/nethermind",
     "defaultImageTag": "latest",
     "binaryDownload": {
       "type": "githubReleases",

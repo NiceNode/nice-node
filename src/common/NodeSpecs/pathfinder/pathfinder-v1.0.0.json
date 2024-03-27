@@ -5,7 +5,7 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "eqlabs/pathfinder",
+    "imageName": "docker.io/eqlabs/pathfinder",
     "defaultImageTag": "latest",
     "input": {
       "defaultConfig": {
