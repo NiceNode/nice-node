@@ -160,6 +160,7 @@ export const initialize = (getAssetPath: (...paths: string[]) => string) => {
     }
   });
   tray.on('right-click', () => {
+    // event doesnt get called on windows
     console.log('RIGHTTTTTT CLICK');
     // windows default way to open menu
     updateTrayMenu();
