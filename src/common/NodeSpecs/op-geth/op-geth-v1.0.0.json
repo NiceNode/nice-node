@@ -10,6 +10,7 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpPort": "8547",
+        "webSocketsPort": "8548",
         "enginePort": "8553",
         "p2pPorts": "39393",
         "httpCorsDomains": "http://localhost",
@@ -20,7 +21,6 @@
       "docker": {
         "containerVolumePath": "/root/.ethereum",
         "raw": "",
-        "initNodeCommand": "init",
         "forcedRawNodeInput": "--http.addr 0.0.0.0 --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
@@ -73,15 +73,32 @@
         ]
       }
     },
-    "genesisFile": {
-      "displayName": "Genesis file",
-      "cliConfigPrefix": "/root/.ethereum/",
-      "defaultValue": "genesis-l2.json",
+    "chainId": {
+      "displayName": "Chain ID (Network)",
+      "cliConfigPrefix": "--op-network=",
+      "hideFromUserAfterStart": true,
       "uiControl": {
-        "type": "text"
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "10",
+            "config": "op-mainnet"
+          },
+          {
+            "value": "11155420",
+            "config": "op-sepolia"
+          },
+          {
+            "value": "8453",
+            "config": "base-mainnet"
+          },
+          {
+            "value": "84532",
+            "config": "base-sepolia"
+          }
+        ]
       },
-      "initCommandConfig": true,
-      "infoDescription": "Data directory for the databases and keystore (default: \"~/.ethereum\")"
+      "documentation": "https://docs.optimism.io/builders/node-operators/management/configuration#op-network-betaop-network"
     },
     "http": {
       "displayName": "rpc http connections (*NiceNode requires http connections)",
@@ -265,6 +282,11 @@
       "label": "Website",
       "value": "optimism.io",
       "link": "https://optimism.io/"
+    },
+    {
+      "label": "Node Configuration Documentation",
+      "value": "docs.optimism.io",
+      "link": "https://docs.optimism.io/builders/node-operators/management/configuration"
     },
     {
       "label": "Block explorer",
