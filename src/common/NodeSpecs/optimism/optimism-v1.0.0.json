@@ -74,7 +74,8 @@
                 {
                   "serviceId": "consensusClient",
                   "configValues": {
-                    "network": "Mainnet"
+                    "network": "Mainnet",
+                    "chainId": "10"
                   }
                 }
               ]
