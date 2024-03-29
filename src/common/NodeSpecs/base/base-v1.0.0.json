@@ -8,7 +8,7 @@
       {
         "serviceId": "executionClient",
         "name": "Execution Client",
-        "nodeOptions": ["nethermind", "op-geth"],
+        "nodeOptions": ["op-geth", "nethermind"],
         "required": true,
         "requiresCommonJwtSecret": true,
         "requiresFiles": true
@@ -16,7 +16,7 @@
       {
         "serviceId": "consensusClient",
         "name": "Consensus Client",
-        "nodeOptions": ["op-node"],
+        "nodeOptions": ["op-node", "magi", "hildr"],
         "required": true,
         "requiresCommonJwtSecret": true,
         "requiresFiles": true

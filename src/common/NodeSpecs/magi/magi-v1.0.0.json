@@ -1,28 +1,29 @@
 {
-  "specId": "hildr",
+  "specId": "magi",
   "version": "1.0.0",
-  "displayName": "Hildr",
+  "displayName": "Magi",
+  "displayTagLine": "An OP Stack rollup client written in Rust",
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
     "input": {
       "defaultConfig": {
-        "l1": "",
-        "l1WebSocketUrl": "",
-        "l1BeaconUrl" : "",
+        "l1RpcUrl": "",
+        "l1BeaconUrl": "",
         "l2RpcUrl": "http://host.containers.internal:8547",
-        "l2EngineUrl" : "http://host.containers.internal:8553",
-        "httpPort": "8549"
+        "l2EngineUrl": "http://host.containers.internal:8553",
+        "l1TrustRpc": "Enabled",
+        "httpPort": "8549",
+        "p2pPorts": "9222"
       },
       "docker": {
         "containerVolumePath": "/data",
-        "raw": " ",
-        "forcedRawNodeInput": " --sync-mode full --jwt-file /data/jwtsecret"
+        "raw": "",
+        "forcedRawNodeInput": "magi --jwt-file /data/jwtsecret"
       }
     },
-    "imageName": "ghcr.io/optimism-java/hildr",
-    "defaultImageTag": "latest-native"
-
+    "imageName": "a16zcrypto/magi",
+    "defaultImageTag": "latest"
   },
   "category": "L2/ConsensusClient",
   "minorityClient": true,
@@ -92,16 +93,42 @@
           {
             "value": "8453",
             "config": "base"
-          },
-          {
-            "value": "84532",
-            "config": "base-sepolia"
           }
         ]
       }
     },
-    "l1": {
-      "displayName": "Ethereum RPC Endpoint (local node or provider)",
+    "rollupConfigFile": {
+      "displayName": "Rollup config file",
+      "cliConfigPrefix": "--rollup.config /root/.ethereum/",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Default for unknown chain (rollup.json)"
+    },
+    "syncMode": {
+      "displayName": "Consensus Client Sync Mode",
+      "category": "Syncronization",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "full",
+            "config": "--sync-mode full",
+            "info": "More secure!"
+          },
+          {
+            "value": "checkpoint",
+            "config": "--sync-mode checkpoint",
+            "info": "Quicker!"
+          }
+        ]
+      },
+      "addNodeFlow": "required",
+      "defaultValue": "full"
+    },
+    "l1RpcUrl": {
+      "displayName": "Ethereum RPC Endpoint  (local node or provider)",
       "cliConfigPrefix": "--l1-rpc-url ",
       "uiControl": {
         "type": "text"
@@ -109,43 +136,32 @@
       "addNodeFlow": "required",
       "defaultValue": ""
     },
-    "l1WebSocketUrl": {
-      "displayName": "Ethereum WebSocket Endpoint (local node or provider)",
-      "cliConfigPrefix": "--l1-ws-rpc-url ",
-      "uiControl": {
-        "type": "text"
-      },
-      "addNodeFlow": "required",
-      "defaultValue": ""
-    },
     "l1BeaconUrl": {
-      "displayName": "Ethereum Beacon RPC Endpoint (local node or provider)",
+      "displayName": "Ethereum Beacon RPC Endpoint  (local node or provider)",
       "cliConfigPrefix": "--l1-beacon-url ",
       "uiControl": {
         "type": "text"
       },
       "addNodeFlow": "required",
-      "defaultValue": ""
+      "defaultValue": "",
+      "infoDescription": "Provider with historical blob API enabled or a local node http://host.containers.internal:5052"
     },
     "l2RpcUrl": {
-      "displayName": "Optimism RPC Endpoint (local node or provider)",
+      "displayName": "Layer 2 RPC Endpoint (local node or provider)",
       "cliConfigPrefix": "--l2-rpc-url ",
       "uiControl": {
         "type": "text"
       },
       "defaultValue": "http://host.containers.internal:8547",
-      "addNodeFlow": "advanced",
-      "infoDescription": "engine and eth namespace required"
+      "addNodeFlow": "advanced"
     },
     "l2EngineUrl": {
-      "displayName": "Optimism Engine URL (local node)",
+      "displayName": "Layer 2 Engine Endpoint (local node)",
       "cliConfigPrefix": "--l2-engine-url ",
       "uiControl": {
         "type": "text"
       },
-      "defaultValue": "http://host.containers.internal:8553",
-      "addNodeFlow": "advanced",
-      "infoDescription": "engine and eth namespace required"
+      "defaultValue": "http://host.containers.internal:8553"
     },
     "httpPort": {
       "displayName": "HTTP-RPC server listening port",
@@ -153,11 +169,37 @@
       "defaultValue": "8549",
       "uiControl": {
         "type": "text"
+      }
+    },
+    "httpRpcAddress": {
+      "displayName": "HTTP-RPC server listening address",
+      "cliConfigPrefix": "--rpc-addr ",
+      "defaultValue": "0.0.0.0",
+      "uiControl": {
+        "type": "text"
+      }
+    },
+    "checkpointSyncUrl": {
+      "displayName": "Checkpoint Sync URL",
+      "cliConfigPrefix": "--checkpoint-sync-url ",
+      "uiControl": {
+        "type": "text"
       },
-      "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
+      "addNodeFlow": "advanced",
+      "defaultValue": "",
+      "infoDescription": "Only usable with sync mode checkpoint"
+    },
+    "checkpointSyncHash": {
+      "displayName": "Checkpoint Sync Hash",
+      "cliConfigPrefix": "--checkpoint-hash ",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "advanced",
+      "defaultValue": "",
+      "infoDescription": "Only usable with sync mode checkpoint"
     }
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png",
   "resources": [
     {
       "label": "OP Stack docs",
@@ -165,14 +207,9 @@
       "link": "https://stack.optimism.io/"
     },
     {
-      "label": "Hildr Optimism Java Github",
+      "label": "Magi Github",
       "value": "github.com",
-      "link": "https://github.com/optimism-java/hildr#readme"
-    },
-    {
-      "label": "OP Geth Github",
-      "value": "github.com",
-      "link": "https://github.com/ethereum-optimism/op-geth#readme"
+      "link": "https://github.com/a16z/magi"
     }
   ]
 }
