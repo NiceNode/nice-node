@@ -192,6 +192,8 @@ nativeTheme.on('updated', () => {
   console.log("nativeTheme.on('updated')");
   const settings = getSettings();
 
+  // bug: nativeTheme.shouldUseDarkColors stays true when OS theme changes to light and
+  // NN is set to dark mode
   console.log(
     'nativeTheme shouldUseDarkColors vs settings.osIsDarkMode',
     nativeTheme.shouldUseDarkColors,

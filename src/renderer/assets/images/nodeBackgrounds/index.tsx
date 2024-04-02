@@ -26,6 +26,7 @@ export interface NodeBackgrounds {
   'op-geth'?: string;
   'op-node'?: string;
   hildr?: string;
+  magi?: string;
   hubble?: string;
   nitro?: string;
   'itzg-minecraft'?: string;
@@ -46,6 +47,7 @@ export const NODE_BACKGROUNDS: NodeBackgrounds = {
   'op-geth': geth,
   'op-node': nimbus,
   hildr: nimbus,
+  magi: nethermind,
   hubble: lighthouse,
   nitro: teku,
   'itzg-minecraft': geth,
