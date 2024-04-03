@@ -8,7 +8,7 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "webSockets": "Disabled",
+        "webSockets": "Enabled",
         "syncMode": "snap",
         "webSocketsPort": "8546",
         "enginePort": "8551"

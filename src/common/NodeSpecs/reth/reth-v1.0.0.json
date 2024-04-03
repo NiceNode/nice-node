@@ -9,9 +9,12 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
+        "webSockets": "Enabled",
         "httpCorsDomains": "http://localhost",
         "syncMode": "full",
-        "httpAddress": "0.0.0.0"
+        "httpAddress": "0.0.0.0",
+        "webSocketAddress": "0.0.0.0",
+        "webSocketAllowedOrigins": "http://localhost"
       },
       "docker": {
         "containerVolumePath": "/root/.local/share/reth/mainnet/db",
@@ -101,7 +104,7 @@
           }
         ]
       },
-      "defaultValue": "Disabled",
+      "defaultValue": "Enabled",
       "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
     },
     "webSocketAddress": {

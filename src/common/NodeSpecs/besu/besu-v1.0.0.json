@@ -10,7 +10,7 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "webSockets": "Disabled",
+        "webSockets": "Enabled",
         "httpCorsDomains": "\"http://localhost\"",
         "hostAllowList": "localhost,host.containers.internal",
         "engineRpc": "Enabled",
