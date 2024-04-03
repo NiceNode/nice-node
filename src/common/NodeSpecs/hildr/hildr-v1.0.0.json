@@ -101,7 +101,7 @@
       }
     },
     "l1": {
-      "displayName": "Ethereum RPC Endpoint (local node or provider)",
+      "displayName": "Ethereum *Archival* RPC Endpoint",
       "cliConfigPrefix": "--l1-rpc-url ",
       "uiControl": {
         "type": "text"
@@ -110,7 +110,7 @@
       "defaultValue": ""
     },
     "l1WebSocketUrl": {
-      "displayName": "Ethereum WebSocket Endpoint (local node or provider)",
+      "displayName": "Ethereum *Archival* WebSocket Endpoint",
       "cliConfigPrefix": "--l1-ws-rpc-url ",
       "uiControl": {
         "type": "text"
@@ -119,7 +119,7 @@
       "defaultValue": ""
     },
     "l1BeaconUrl": {
-      "displayName": "Ethereum Beacon RPC Endpoint (local node or provider)",
+      "displayName": "Ethereum Beacon RPC Endpoint",
       "cliConfigPrefix": "--l1-beacon-url ",
       "uiControl": {
         "type": "text"
