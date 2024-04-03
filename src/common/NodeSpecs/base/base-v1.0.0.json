@@ -73,7 +73,8 @@
                 {
                   "serviceId": "consensusClient",
                   "configValues": {
-                    "rollupConfigFile": "rollup.json"
+                    "network": "Mainnet",
+                    "chainId": "8453"
                   }
                 }
               ]
@@ -96,7 +97,8 @@
                 {
                   "serviceId": "consensusClient",
                   "configValues": {
-                    "rollupConfigFile": "sepolia-rollup.json"
+                    "network": "Sepolia",
+                    "chainId": "84532"
                   }
                 }
               ]
