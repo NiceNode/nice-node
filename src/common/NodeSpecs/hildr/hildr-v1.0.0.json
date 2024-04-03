@@ -12,7 +12,8 @@
         "l1BeaconUrl" : "",
         "l2RpcUrl": "http://host.containers.internal:8547",
         "l2EngineUrl" : "http://host.containers.internal:8553",
-        "httpPort": "8549"
+        "httpPort": "8549",
+        "logLevel": "Debug"
       },
       "docker": {
         "containerVolumePath": "/data",
@@ -155,6 +156,36 @@
         "type": "text"
       },
       "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
+    },
+    "logLevel": {
+      "displayName": "Log level",
+      "cliConfigPrefix": "--log-level ",
+      "defaultValue": "Info",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Info",
+            "config": "INFO"
+          },
+          {
+            "value": "Debug",
+            "config": "DEBUG"
+          },
+          {
+            "value": "Warn",
+            "config": "WARN"
+          },
+          {
+            "value": "Error",
+            "config": "ERROR"
+          },
+          {
+            "value": "Trace",
+            "config": "TRACE"
+          }
+        ]
+      }
     }
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png",

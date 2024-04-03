@@ -98,7 +98,8 @@
                 {
                   "serviceId": "consensusClient",
                   "configValues": {
-                    "network": "Sepolia"
+                    "network": "Sepolia",
+                    "chainId": "11155420"
                   }
                 }
               ]
