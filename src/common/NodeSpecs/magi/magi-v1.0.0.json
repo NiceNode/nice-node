@@ -22,7 +22,7 @@
         "forcedRawNodeInput": "magi --jwt-file /data/jwtsecret"
       }
     },
-    "imageName": "a16zcrypto/magi",
+    "imageName": "docker.io/a16zcrypto/magi",
     "defaultImageTag": "latest"
   },
   "category": "L2/ConsensusClient",
@@ -93,6 +93,10 @@
           {
             "value": "8453",
             "config": "base"
+          },
+          {
+            "value": "84532",
+            "config": "base-sepolia"
           }
         ]
       }
@@ -128,7 +132,7 @@
       "defaultValue": "full"
     },
     "l1RpcUrl": {
-      "displayName": "Ethereum RPC Endpoint  (local node or provider)",
+      "displayName": "Ethereum *Archival* RPC Endpoint",
       "cliConfigPrefix": "--l1-rpc-url ",
       "uiControl": {
         "type": "text"
@@ -137,7 +141,7 @@
       "defaultValue": ""
     },
     "l1BeaconUrl": {
-      "displayName": "Ethereum Beacon RPC Endpoint  (local node or provider)",
+      "displayName": "Ethereum Beacon RPC Endpoint",
       "cliConfigPrefix": "--l1-beacon-url ",
       "uiControl": {
         "type": "text"
