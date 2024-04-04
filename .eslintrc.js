@@ -1,5 +1,11 @@
 module.exports = {
-  extends: ['erb', 'plugin:storybook/recommended'],
+  extends: ['erb', 'plugin:storybook/recommended',
+  'eslint:recommended',
+  'plugin:@typescript-eslint/eslint-recommended',
+  'plugin:@typescript-eslint/recommended',
+  'plugin:import/recommended',
+  'plugin:import/electron',
+  'plugin:import/typescript'],
   rules: {
     // Javascript can handle cycles in dependencies
     'import/no-cycle': 'off',
@@ -69,6 +75,9 @@ module.exports = {
     },
   },
   env: {
-    mocha: true,
+    browser: true,
+    es6: true,
+    node: true,
+    mocha: true
   },
 };
