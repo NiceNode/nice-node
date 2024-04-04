@@ -1,37 +1,63 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+
+    "target": "ESNext",
     "module": "commonjs",
-    "lib": ["dom", "esnext"],
-    "declaration": true,
-    "declarationMap": true,
-    "jsx": "react-jsx",
-    "strict": true,
-    "pretty": true,
-    "sourceMap": true,
-    "baseUrl": "./src",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
     "allowJs": true,
-    "outDir": "release/app/dist",
-    // skip because github's macos-latest was checking lib types
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+
+    "jsx": "react-jsx",
+    "paths": {
+      "main/*": ["./src/main/*"],
+      "renderer/*": ["./src/renderer/*"],
+      "#root/*": ["./*"]
+    }
+
+    // not in vite template but was in previously
+    // "declaration": true,
+    // "declarationMap": true,
+    // "strict": true,
+    // "pretty": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noImplicitReturns": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "allowSyntheticDefaultImports": true,
+    // [end] not in vite template but was in previously
+
+    // "target": "ESNext",
+    // "module": "commonjs",
+    // "lib": ["dom", "esnext"],
+
+
+    // "sourceMap": true,
+    // "baseUrl": "./src",
+
+    // "moduleResolution": "node",
+    // "esModuleInterop": true,
+    // "resolveJsonModule": true,
+    // "allowJs": true,
+    // "outDir": "release/app/dist",
+    // skip because github's macos-latest was checking lib types
+    // "skipLibCheck": true,
     // todo: when using electron apis in e2e tests
     // "types": ["@wdio/globals/types", "wdio-electron-service", "@wdio/types"],
     // "typeRoots": ["./node_modules", "./node_modules/@types", "./@types"]
   },
-  "exclude": [
-    "release/build",
-    "release/app/dist",
-    ".erb/dll",
-    "storybook-static",
-    ".eslintrc.js"
-    // "src/main/util/timestamp.js"
-  ]
+  // not in vite template but was in previously
+  // "exclude": [
+  //   "release/build",
+  //   "release/app/dist",
+  //   ".erb/dll",
+  //   "storybook-static",
+  //   ".eslintrc.js"
+  //   // "src/main/util/timestamp.js"
+  // ]
 }

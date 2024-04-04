@@ -104,15 +104,23 @@ export const createWindow = async () => {
     icon: getAssetPath('icon.png'),
     webPreferences: {
       // sandbox: !isTest,
-      nodeIntegration: true,
-      preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js'),
+      // nodeIntegration: true,
+      // preload: app.isPackaged
+      //   ? path.join(__dirname, 'preload.js')
+      //   : path.join(__dirname, '../../.vite/build/preload.js'),
+      preload: path.join(__dirname, 'preload.js'),
     },
     vibrancy: process.platform === 'darwin' ? 'sidebar' : undefined,
   });
 
-  mainWindow.loadURL(resolveHtmlPath('index.html'));
+  console.log("MAIN_WINDOW_VITE_DEV_SERVER_URL: ", MAIN_WINDOW_VITE_DEV_SERVER_URL);
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+  } else {
+    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+  };
+
+  // mainWindow.loadURL(resolveHtmlPath('index.html'));
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
@@ -172,6 +180,7 @@ app.on('will-quit', (e) => {
   // Remove dev env check to test background. This is to prevent
   // multiple instances of the app staying open in dev env where we
   // regularly quit the app.
+  app.quit();
   if (isFullQuit || process.env.NODE_ENV === 'development') {
     console.log('quitting app from background');
     app.quit();
