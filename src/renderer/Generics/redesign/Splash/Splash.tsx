@@ -8,7 +8,7 @@ import {
   termsContainer,
   termsText,
 } from './splash.css';
-import niceNodeIcon from '../../../assets/images/logo/mono.svg?react';
+import niceNodeIcon from '../../../assets/images/logo/mono.svg';
 import Button from '../Button/Button';
 import welcome from '../../../assets/images/artwork/welcome.png';
 import Linking from '../Link/Linking';

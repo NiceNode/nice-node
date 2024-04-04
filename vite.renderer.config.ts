@@ -1,8 +1,9 @@
 import type { ConfigEnv, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
-import { pluginExposeRenderer } from './vite.base.config';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
-import svgr from 'vite-plugin-svgr';
+import svgr from "vite-plugin-svgr";
+
+import { pluginExposeRenderer } from './vite.base.config';
 
 // https://vitejs.dev/config
 export default defineConfig((env) => {
