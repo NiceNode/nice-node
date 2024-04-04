@@ -4,7 +4,10 @@ export interface Icons {
 }
 
 // Define all icons here
-export const ICONS: Icons = {
-  settings: require('./settings.svg'),
-  play: require('./play.svg'),
+import settingsIcon from './settings.svg?react';
+import playIcon from './play.svg?react';
+
+export const ICONS = {
+  settings: settingsIcon,
+  play: playIcon,
 };

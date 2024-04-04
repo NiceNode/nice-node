@@ -8,7 +8,7 @@ import {
   contentTitle,
   topBanner,
 } from './alphaBuild.css';
-import alphaBanner from '../../assets/images/artwork/alphaBanner.svg';
+import { ReactComponent as alphaBanner } from '../../assets/images/artwork/alphaBanner.svg';
 
 const AlphaBuild = () => {
   const { t } = useTranslation();

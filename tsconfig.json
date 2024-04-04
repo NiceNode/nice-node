@@ -1,3 +1,5 @@
+/// <reference types="./vite-env-override.d.ts" />
+/// <reference types="vite/client" />
 {
   "compilerOptions": {
 
@@ -18,7 +20,8 @@
       "main/*": ["./src/main/*"],
       "renderer/*": ["./src/renderer/*"],
       "#root/*": ["./*"]
-    }
+    },
+    "types": ["vite/client", "vite-plugin-svgr/client"]
 
     // not in vite template but was in previously
     // "declaration": true,

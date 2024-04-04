@@ -1,4 +1,5 @@
-import React from 'react';
+/// <reference types="./svg.d.ts" />
+/// <reference types="vite/client" />
 import { ReactComponent as Add } from './Add.svg';
 import { ReactComponent as Bell } from './Bell.svg';
 import { ReactComponent as Binoculars } from './Binoculars.svg';

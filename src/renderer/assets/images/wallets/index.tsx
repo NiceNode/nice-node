@@ -1,8 +1,8 @@
-const argent = require('./argent.png');
-const brave = require('./brave.png');
-const coinbase = require('./coinbase.png');
-const metamask = require('./metamask.png');
-const tally = require('./tally.png');
+import argent from './argent.png';
+import brave from './brave.png';
+import coinbase from './coinbase.png';
+import metamask from './metamask.png';
+import tally from './tally.png';
 
 export interface WalletBackgrounds {
   argent?: string;

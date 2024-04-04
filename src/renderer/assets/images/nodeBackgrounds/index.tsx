@@ -1,16 +1,16 @@
 // Execution
-const geth = require('./Geth.png');
-const erigon = require('./Erigon.png');
-const besu = require('./Besu.png');
-const nethermind = require('./Nethermind.png');
-const reth = require('./Reth.png');
+import geth from './Geth.png';
+import erigon from './Erigon.png';
+import besu from './Besu.png';
+import nethermind from './Nethermind.png';
+import reth from './Reth.png';
 
 // Consensus
-const prysm = require('./Prysm.png');
-const lighthouse = require('./Lighthouse.png');
-const teku = require('./Teku.png');
-const lodestar = require('./Lodestar.png');
-const nimbus = require('./Nimbus.png');
+import prysm from './Prysm.png';
+import lighthouse from './Lighthouse.png';
+import teku from './Teku.png';
+import lodestar from './Lodestar.png';
+import nimbus from './Nimbus.png';
 
 export interface NodeBackgrounds {
   geth?: string;

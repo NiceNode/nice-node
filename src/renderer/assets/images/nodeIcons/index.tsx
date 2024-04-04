@@ -1,37 +1,38 @@
 import { common } from '../../../Generics/redesign/theme.css';
 
-const ethereum = require('./Logo-Ethereum.png');
+import ethereum from './Logo-Ethereum.png';
 
 // Execution
-const geth = require('./Logo-Geth.png');
-const erigon = require('./Logo-Erigon.png');
-const besu = require('./Logo-Besu.png');
-const nethermind = require('./Logo-Nethermind.png');
-const reth = require('./Logo-Reth.png');
+import geth from './Logo-Geth.png';
+import erigon from './Logo-Erigon.png';
+import besu from './Logo-Besu.png';
+import nethermind from './Logo-Nethermind.png';
+import reth from './Logo-Reth.png';
 
 // Consensus
-const prysm = require('./Logo-Prysm.png');
-const lighthouse = require('./Logo-Lighthouse.png');
-const teku = require('./Logo-Teku.png');
-const lodestar = require('./Logo-Lodestar.png');
-const nimbus = require('./Logo-Nimbus.png');
+import prysm from './Logo-Prysm.png';
+import lighthouse from './Logo-Lighthouse.png';
+import teku from './Logo-Teku.png';
+import lodestar from './Logo-Lodestar.png';
+import nimbus from './Logo-Nimbus.png';
 
 // L2
-const optimism = require('./Logo-Optimism.png');
-const hildr = require('./Logo-OptimismJava.png');
-const magi = require('./Logo-Magi.png');
-const arbitrum = require('./Logo-Arbitrum.png');
-const base = require('./Logo-Base.png');
-const starknet = require('./Logo-Starknet.png');
-const zkSync = require('./Logo-zkSync.png');
+import optimism from './Logo-Optimism.png';
+import hildr from './Logo-OptimismJava.png';
+import magi from './Logo-Magi.png';
+import arbitrum from './Logo-Arbitrum.png';
+import base from './Logo-Base.png';
+import starknet from './Logo-Starknet.png';
+import zkSync from './Logo-zkSync.png';
 
 // Other networks
-const radicle = require('./Logo-Radicle.png');
-const livepeer = require('./Logo-Livepeer.png');
-const farcaster = require('./Logo-Farcaster.png');
+import radicle from './Logo-Radicle.png';
+import livepeer from './Logo-Livepeer.png';
+import farcaster from './Logo-Farcaster.png';
 
 // Other node/server types
-const minecraft = require('./Logo-Minecraft.png');
+import minecraft from './Logo-Minecraft.png';
+
 
 export interface NodeIcons {
   geth?: string;

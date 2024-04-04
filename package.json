@@ -11,16 +11,15 @@
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
     "docs:nodeSpec": "typedoc --plugin typedoc-plugin-markdown --name \"Node Spec examples\" --readme src/common/index.md --entryDocument index.md --out docs src/common/*",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
-    "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
-    "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
-    "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
+    "olint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
+    "opackage": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
     "start-no-reload": "ts-node ./.erb/scripts/check-port-in-use.js && NO_RELOAD=true npm run start:renderer",
-    "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
-    "start-auto-start-node": "ts-node ./.erb/scripts/check-port-in-use.js && cross-env NN_AUTOSTART_NODE=true npm run start:renderer",
-    "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
-    "start:main-no-reload": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
-    "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
-    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
+    "ostart": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
+    "ostart-auto-start-node": "ts-node ./.erb/scripts/check-port-in-use.js && cross-env NN_AUTOSTART_NODE=true npm run start:renderer",
+    "ostart:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
+    "ostart:main-no-reload": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
+    "ostart:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
+    "ostart:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
     "test": "jest",
     "test-precommit": "jest --testPathIgnorePatterns geth release/app/dist",
     "test-dev": "jest  --watch --detectOpenHandles --verbose",
@@ -28,11 +27,11 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "wdio": "cross-env NODE_ENV=test wdio run ./wdio.conf.ts",
-    "fstart": "electron-forge start",
-    "fpackage": "electron-forge package",
-    "fmake": "electron-forge make",
-    "fpublish": "electron-forge publish",
-    "flint": "eslint --ext .ts,.tsx ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "eslint --ext .ts,.tsx ."
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -228,10 +227,6 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.22.15",
-    "@babel/preset-env": "^7.23.2",
-    "@babel/preset-react": "^7.22.15",
-    "@babel/preset-typescript": "^7.23.2",
     "@electron-forge/cli": "^7.3.1",
     "@electron-forge/maker-deb": "^7.3.1",
     "@electron-forge/maker-dmg": "^7.3.1",
@@ -242,6 +237,7 @@
     "@electron-forge/plugin-fuses": "^7.3.1",
     "@electron-forge/plugin-vite": "^7.3.1",
     "@electron-forge/plugin-webpack": "^7.3.1",
+    "@electron-forge/shared-types": "^7.3.1",
     "@electron/fuses": "^1.8.0",
     "@electron/notarize": "^2.1.0",
     "@electron/rebuild": "^3.4.1",
@@ -273,8 +269,8 @@
     "@types/webpack-env": "^1.18.3",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "@vanilla-extract/babel-plugin": "^1.2.0",
     "@vanilla-extract/jest-transform": "^1.0.1",
+    "@vanilla-extract/vite-plugin": "^4.0.7",
     "@vanilla-extract/webpack-plugin": "^2.3.1",
     "@wdio/cli": "^8.32.3",
     "@wdio/local-runner": "^8.32.3",
@@ -337,6 +333,7 @@
     "typescript": "^4.5.4",
     "url-loader": "^4.1.1",
     "vite": "^5.2.8",
+    "vite-plugin-svgr": "^4.2.0",
     "wdio-electron-service": "^6.3.1",
     "wdio-wait-for": "^3.0.11",
     "webpack": "^5.88.2",
@@ -348,7 +345,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
     "@sentry/electron": "^4.10.0",
-    "@vanilla-extract/css": "^1.14.0",
+    "@vanilla-extract/css": "^1.14.2",
     "@vscode/sudo-prompt": "^9.3.1",
     "await-sleep": "0.0.1",
     "check-disk-space": "^3.3.1",
@@ -378,7 +375,8 @@
     "systeminformation": "^5.21.24",
     "throttle-debounce": "^5.0.0",
     "uuid": "^9.0.0",
-    "winston": "^3.8.2"
+    "winston": "^3.13.0",
+    "winston-transport": "^4.7.0"
   },
   "devEngines": {
     "node": ">=20.x",
@@ -395,7 +393,7 @@
       {
         "files": [
           ".prettierrc",
-          ".eslintrc"
+          ".eslint.json"
         ],
         "options": {
           "parser": "json"

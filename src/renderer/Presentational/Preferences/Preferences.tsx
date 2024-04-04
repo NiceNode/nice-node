@@ -228,7 +228,7 @@ const Preferences = ({
                 {
                   label: t('SendErrorReports'),
                   description: `${t('SendErrorReportsDescription')} (${
-                    process.env.MP_PROJECT_ENV
+                    import.meta.env.MP_PROJECT_ENV
                   })`,
                   value: (
                     <Toggle
@@ -278,7 +278,7 @@ const Preferences = ({
         />
       </div>
       <div className={versionContainer}>
-        {t('YouAreRunningNiceNode')} {version} {process.env.NICENODE_ENV}
+        {t('YouAreRunningNiceNode')} {version} {import.meta.env.NICENODE_ENV}
       </div>
     </div>
   );

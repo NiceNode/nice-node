@@ -10,6 +10,7 @@
 import path from 'node:path';
 import { app, BrowserWindow, shell } from 'electron';
 import * as Sentry from '@sentry/electron/main';
+import dotenv from 'dotenv';
 
 import {
   installExtension,
@@ -37,7 +38,7 @@ import * as i18nMain from './i18nMain';
 import * as tray from './tray';
 
 if (process.env.NODE_ENV === 'development') {
-  require('dotenv').config();
+  dotenv.config();
 }
 
 // todo: when moving from require to imports
@@ -47,7 +48,11 @@ if (process.env.NODE_ENV === 'development') {
 //   require('wdio-electron-service/main');
 // }
 
-fixPathEnvVar();
+if (require('electron-squirrel-startup')) {
+  app.quit();
+}
+
+// fixPathEnvVar();
 logger.info(`NICENODE_ENV: ${process.env.NICENODE_ENV}`);
 logger.info(`MP_PROJECT_ENV: ${process.env.MP_PROJECT_ENV}`);
 Sentry.init({
@@ -83,6 +88,12 @@ const getAssetPath = (...paths: string[]): string => {
 };
 
 export const createWindow = async () => {
+  // let name: string;
+  // if (windowName === 'log') {
+  //   name = getLogWindowName();
+  // } else {
+  //   name = windowName;
+  // }
   if (isDevelopment) {
     // https://github.com/MarshallOfSound/electron-devtools-installer/issues/238
     await installExtension(REACT_DEVELOPER_TOOLS, {
@@ -92,6 +103,8 @@ export const createWindow = async () => {
     });
   }
 
+  const preloadPath = path.join(__dirname, 'preload.js');
+  console.log("preloadPath: ", preloadPath);
   mainWindow = new BrowserWindow({
     titleBarOverlay: true,
     titleBarStyle: 'hiddenInset',
@@ -101,14 +114,15 @@ export const createWindow = async () => {
     minHeight: 480,
     width: 1068,
     height: 780,
-    icon: getAssetPath('icon.png'),
+    icon: '/public/icon.png',
     webPreferences: {
-      // sandbox: !isTest,
-      // nodeIntegration: true,
+      // contextIsolation: true,
+      // sandbox: true,
+      nodeIntegration: true,
       // preload: app.isPackaged
       //   ? path.join(__dirname, 'preload.js')
       //   : path.join(__dirname, '../../.vite/build/preload.js'),
-      preload: path.join(__dirname, 'preload.js'),
+      preload: preloadPath,
     },
     vibrancy: process.platform === 'darwin' ? 'sidebar' : undefined,
   });
@@ -163,6 +177,7 @@ export const createWindow = async () => {
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
+  app.quit(); // todo: remove
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -180,7 +195,7 @@ app.on('will-quit', (e) => {
   // Remove dev env check to test background. This is to prevent
   // multiple instances of the app staying open in dev env where we
   // regularly quit the app.
-  app.quit();
+  app.quit(); // todo: remove
   if (isFullQuit || process.env.NODE_ENV === 'development') {
     console.log('quitting app from background');
     app.quit();
@@ -214,6 +229,7 @@ app
 const onExit = () => {
   onExitNodeManager();
   monitor.onExit();
+  app.quit(); // todo: remove
 };
 
 // no blocking work

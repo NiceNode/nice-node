@@ -7,9 +7,9 @@ import {
   syncModeDetails,
   syncModeInfo,
 } from './syncModes.css';
-import syncMode1 from '../../../assets/images/syncModes/syncMode1.svg';
-import syncMode2 from '../../../assets/images/syncModes/syncMode2.svg';
-import syncMode3 from '../../../assets/images/syncModes/syncMode3.svg';
+import syncMode1 from '../../../assets/images/syncModes/syncMode1.svg?react';
+import syncMode2 from '../../../assets/images/syncModes/syncMode2.svg?react';
+import syncMode3 from '../../../assets/images/syncModes/syncMode3.svg?react';
 
 export interface SyncModeProps {
   value: string;
