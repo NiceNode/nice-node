@@ -54,19 +54,20 @@ module.exports = {
       },
     ],
   },
-  parserOptions: {
-    ecmaVersion: 2020,
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.eslint.json'],
-    tsconfigRootDir: __dirname,
-    createDefaultProgram: true,
-  },
+  // parserOptions: {
+  //   ecmaVersion: 2020,
+  //   sourceType: 'module',
+  //   project: ['./tsconfig.json', './tsconfig.eslint.json'],
+  //   tsconfigRootDir: __dirname,
+  //   createDefaultProgram: true,
+  // },
+  parser: "@typescript-eslint/parser",
   settings: {
     'import/resolver': {
       // See https://github.com/benmosher/eslint-plugin-import/issues/1396#issuecomment-575727774 for line below
       node: {},
       webpack: {
-        config: require.resolve('./.erb/configs/webpack.config.eslint.ts'),
+        config: require.resolve('./zerb/configs/webpack.config.eslint.ts'),
       },
       typescript: {},
     },

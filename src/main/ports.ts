@@ -1,4 +1,4 @@
-import { ConfigValue } from 'common/nodeConfig';
+import { ConfigValue } from '../common/nodeConfig';
 import Node, { NodeConfig } from '../common/node';
 import { httpGet } from './httpReq';
 import { getNodes, getSetPortHasChanged } from './state/nodes';

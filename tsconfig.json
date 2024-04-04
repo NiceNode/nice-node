@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ES6",
     "module": "commonjs",
-    "lib": ["dom", "esnext"],
+    "lib": ["dom", "ES6"],
     "declaration": true,
     "declarationMap": true,
     "jsx": "react-jsx",
@@ -22,9 +22,14 @@
     "outDir": "release/app/dist",
     // skip because github's macos-latest was checking lib types
     "skipLibCheck": true,
+
     // todo: when using electron apis in e2e tests
     // "types": ["@wdio/globals/types", "wdio-electron-service", "@wdio/types"],
     // "typeRoots": ["./node_modules", "./node_modules/@types", "./@types"]
+    // Electron forge
+    "paths": {
+      "*": ["node_modules/*"]
+    },
   },
   "exclude": [
     "release/build",
@@ -33,5 +38,26 @@
     "storybook-static",
     ".eslintrc.js"
     // "src/main/util/timestamp.js"
-  ]
+  ],
+  /////// forge default ///////////
+  /////////////////////////////////
+  "include": ["src/**/*"]
+
+  // "compilerOptions": {
+  //   "target": "ES6",
+  //   "allowJs": true,
+  //   "module": "commonjs",
+  //   "skipLibCheck": true,
+  //   "esModuleInterop": true,
+  //   "noImplicitAny": true,
+  //   "sourceMap": true,
+  //   "baseUrl": ".",
+  //   "outDir": "dist",
+  //   "moduleResolution": "node",
+  //   "resolveJsonModule": true,
+  //   "paths": {
+  //     "*": ["node_modules/*"]
+  //   },
+  //   "jsx": "react-jsx"
+  // },
 }

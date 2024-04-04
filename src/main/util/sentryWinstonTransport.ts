@@ -6,7 +6,7 @@
  * Code initially taken from https://github.com/aandrewww/winston-transport-sentry-node
  */
 import * as Sentry from '@sentry/electron/main';
-import TransportStream = require('winston-transport');
+import TransportStream from 'winston-transport';
 // import { LEVEL } from 'triple-beam';
 
 enum SentrySeverity {

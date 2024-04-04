@@ -1,11 +1,12 @@
-import { NotificationProps } from 'main/consts/notifications';
-import { NotificationItemProps } from 'renderer/Generics/redesign/NotificationItem/NotificationItem';
+import { Notification } from 'electron';
+import { NotificationProps } from '../consts/notifications';
+import { NotificationItemProps } from '../../renderer/Generics/redesign/NotificationItem/NotificationItem';
 import { i18nMain } from '../i18nMain';
 import { send } from '../messenger';
 import store from './store';
 import { getSetIsNotificationsEnabled } from './settings';
 
-const { Notification } = require('electron');
+// const { Notification } = require('electron');
 
 export const NOTIFICATIONS_KEY = 'notifications';
 

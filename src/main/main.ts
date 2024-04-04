@@ -46,6 +46,8 @@ if (process.env.NODE_ENV === 'development') {
 //   console.log('NODE_ENV=TEST... requiring wdio-electron-service/main');
 //   require('wdio-electron-service/main');
 // }
+declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
+declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 fixPathEnvVar();
 logger.info(`NICENODE_ENV: ${process.env.NICENODE_ENV}`);
@@ -105,14 +107,19 @@ export const createWindow = async () => {
     webPreferences: {
       // sandbox: !isTest,
       nodeIntegration: true,
-      preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js'),
+      // preload: app.isPackaged
+      //   ? path.join(__dirname, 'preload.js')
+      //   : // : path.join(__dirname, '../../.webpack/main/native_modules/preload.js'),
+      //     path.join(
+      //       __dirname,
+      //       '../../.webpack/renderer/main_window/preload.js',
+      //     ),
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
     vibrancy: process.platform === 'darwin' ? 'sidebar' : undefined,
   });
-
-  mainWindow.loadURL(resolveHtmlPath('index.html'));
+  // mainWindow.loadURL(resolveHtmlPath('index.html'));
+  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
