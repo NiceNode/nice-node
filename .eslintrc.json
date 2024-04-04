@@ -15,7 +15,8 @@
   "parser": "@typescript-eslint/parser",
   "rules": {
     // https://github.com/pd4d10/vite-plugin-svgr/issues/91
-    "import/no-unresolved": ["error", { "ignore": ["\\.svg\\?react$"] }]
+    "import/no-unresolved": ["error", { "ignore": ["\\.svg\\?react$"] }],
+    "@typescript-eslint/no-explicit-any": "off"
 
   }
 }

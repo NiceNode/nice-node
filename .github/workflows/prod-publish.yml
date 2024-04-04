@@ -76,7 +76,6 @@ jobs:
           # This is used for publishing snap release assets to snapcraft
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
         run: |
-          npm run postinstall
           npm run build
           if [ "$RUNNER_OS" == "macOS" ]; then
             npm exec electron-builder -- --publish always --win --mac

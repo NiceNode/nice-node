@@ -1,8 +1,8 @@
-import { BrowserWindow, dialog } from 'electron';
-import { autoUpdater, UpdateInfo } from 'electron-updater';
+import { autoUpdater, BrowserWindow, dialog } from 'electron';
 import sleep from 'await-sleep';
 
-import logger, { autoUpdateLogger } from './logger';
+// import logger, { autoUpdateLogger } from './logger';
+import logger from './logger';
 import { reportEvent } from './events';
 import { i18nMain } from './i18nMain';
 import { getSetIsPreReleaseUpdatesEnabled } from './state/settings';
@@ -19,10 +19,7 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
   autoUpdater.on('checking-for-update', () => {
     logger.info('autoUpdater:::::::::checking-for-update');
   });
-  autoUpdater.on('download-progress', (info) => {
-    logger.info('autoUpdater:::::::::download-progress: ', info);
-  });
-  autoUpdater.on('update-available', async (info: UpdateInfo) => {
+  autoUpdater.on('update-available', async (info: any) => {
     logger.info('autoUpdater:::::::::update-available: ', info);
     // Quick fix to wait for window load before showing update prompt
     await sleep(5000);
@@ -34,11 +31,10 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
         buttons: [t('Yes'), t('No')],
       })
       .then(async (buttonIndex) => {
-        // eslint-disable-next-line promise/always-return
         if (buttonIndex.response === 0) {
           console.log('update accepted by user');
           console.log('starting download');
-          autoUpdater.downloadUpdate();
+          autoUpdater.quitAndInstall();
           dialog.showMessageBox(browserWindow, {
             type: 'info',
             title: t('UpdateAvailable'),
@@ -87,22 +83,23 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
 };
 
 export const initialize = (mainWindow: BrowserWindow) => {
-  autoUpdater.logger = autoUpdateLogger;
-  autoUpdater.autoDownload = false;
-  autoUpdater.autoInstallOnAppQuit = false;
+  // autoUpdater.logger = autoUpdateLogger;
+  // autoUpdater.autoDownload = false;
+  // autoUpdater.autoInstallOnAppQuit = false;
   const isPreReleaseUpdatesEnabled = getSetIsPreReleaseUpdatesEnabled();
   logger.info(`isPreReleaseUpdatesEnabled: ${isPreReleaseUpdatesEnabled}`);
-  autoUpdater.allowPrerelease = isPreReleaseUpdatesEnabled;
+  // autoUpdater.allowPrerelease = isPreReleaseUpdatesEnabled;
   notifyUserIfNoUpdateAvailable = false;
   intiUpdateHandlers(mainWindow);
 };
 
 export const checkForUpdates = (notifyIfNoUpdateAvailable: boolean) => {
   notifyUserIfNoUpdateAvailable = notifyIfNoUpdateAvailable;
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdates();
 };
 
 export const setAllowPrerelease = (isAllowPrerelease: boolean) => {
   logger.info(`updater.allowPrerelease set to: ${isAllowPrerelease}`);
-  autoUpdater.allowPrerelease = isAllowPrerelease;
+  // pre-release: not available https://www.electronjs.org/docs/latest/api/auto-updater#event-update-available
+  // autoUpdater.allowPrerelease = isAllowPrerelease;
 };
