@@ -1,7 +1,7 @@
 import React from 'react';
-import Node, { NodePackage } from 'common/node';
-import { ThemeSetting } from 'main/state/settings';
-import { NodeLibrary, NodePackageLibrary } from 'main/state/nodeLibrary';
+import Node, { NodePackage } from '../../../common/node';
+import { ThemeSetting } from '../../../main/state/settings';
+import { NodeLibrary, NodePackageLibrary } from '../../../main/state/nodeLibrary';
 import { ClientSelections } from '../AddNodeConfiguration/AddNodeConfiguration';
 
 export interface ModalConfig {

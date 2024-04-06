@@ -7,7 +7,7 @@ import checkDiskSpace from 'check-disk-space';
 
 import logger from './logger';
 
-const du = require('du');
+import du from 'du';
 
 logger.info(`App data dir: ${app.getPath('appData')}`);
 logger.info(`User data dir: ${app.getPath('userData')}`);

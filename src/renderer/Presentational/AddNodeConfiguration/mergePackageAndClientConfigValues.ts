@@ -1,4 +1,4 @@
-import { ConfigValuesMap } from 'common/nodeConfig';
+import { ConfigValuesMap } from '../../../common/nodeConfig';
 import { NodePackageSpecification } from '../../../common/nodeSpec';
 
 export type ConfigMergeArgs = {

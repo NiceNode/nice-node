@@ -8,7 +8,7 @@ import { getNNDirPath } from '../../files';
 import { sendMessageOnDownloadProgress } from '../messageFrontEnd';
 import { startOnWindows } from '../start';
 
-const iconv = require('iconv-lite');
+import iconv from 'iconv-lite';
 
 /**
  * Download podman.msi, install podman, handle reboot, and start podman

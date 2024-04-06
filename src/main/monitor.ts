@@ -1,4 +1,5 @@
 import { net } from 'electron';
+import pidusage from 'pidusage';
 // import { getNodesDirPathDetails } from './files';
 
 import { NodeId } from '../common/node';
@@ -10,7 +11,6 @@ import { delay } from './util/delay';
 
 const watchProcessPollingInterval = 300000; // 5 minutes
 let monitoringInterval: ReturnType<typeof setTimeout>;
-const pidusage = require('pidusage');
 
 export const getProcessUsageByPid = async (pid: number) => {
   const stats = await pidusage(pid);

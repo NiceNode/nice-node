@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { MetricData } from 'common/node';
+import { MetricData } from '../../../../common/node';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
 import { container, contentHeader, contentTitle } from './tabContent.css';
 import LabelValues from '../LabelValues/LabelValues';

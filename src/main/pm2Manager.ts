@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { promisify } from 'node:util';
 import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';

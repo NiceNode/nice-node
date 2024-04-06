@@ -6,7 +6,7 @@ import { getNNDirPath } from '../files';
 import { sendMessageOnDownloadProgress } from './messageFrontEnd';
 import { startOnWindows } from './start';
 
-const iconv = require('iconv-lite');
+import iconv from 'iconv-lite';
 
 /**
  * Install WSL, download docker.exe, install docker, start docker

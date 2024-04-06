@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { SelectTranslation } from 'common/nodeConfig';
+import { SelectTranslation } from '../../../../common/nodeConfig';
 import SyncMode from './SyncMode';
 import { syncModeContainer } from './syncModes.css';
 

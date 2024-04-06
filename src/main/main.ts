@@ -1,4 +1,4 @@
-/* eslint global-require: off, no-console: off, promise/always-return: off, no-use-before-define: off */
+/* eslint global-require: off, no-console: off, no-use-before-define: off */
 /**
  * This module executes inside of electron's main process. You can start
  * electron renderer process from here and communicate with the other processes
@@ -67,17 +67,17 @@ export const getMainWindow = () => mainWindow;
 let menuBuilder: MenuBuilder | null = null;
 export const getMenuBuilder = () => menuBuilder;
 
-if (process.env.NODE_ENV === 'production') {
-  const sourceMapSupport = require('source-map-support');
-  sourceMapSupport.install();
-}
+// if (process.env.NODE_ENV === 'production') {
+//   const sourceMapSupport = require('source-map-support');
+//   sourceMapSupport.install();
+// }
 
 const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
-if (isDevelopment) {
-  require('electron-debug')();
-}
+// if (isDevelopment) {
+//   require('electron-debug')();
+// }
 
 const RESOURCES_PATH = app.isPackaged
   ? path.join(process.resourcesPath, 'assets')
@@ -132,7 +132,7 @@ export const createWindow = async () => {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
-  };
+  }
 
   // mainWindow.loadURL(resolveHtmlPath('index.html'));
 

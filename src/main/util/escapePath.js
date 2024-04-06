@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 /* eslint-disable no-nested-ternary */
 // npm escape-path-with-spaces at https://github.com/jy95/escape-path-with-spaces
-const os = require('os');
+import os from 'node:os';
 
 // to detect on with os user had used path.resolve(...)
 const is_posix_os = os.platform() !== 'win32';

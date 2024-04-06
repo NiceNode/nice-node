@@ -18,7 +18,7 @@ const config: ForgeConfig = {
     new MakerZIP({}, ['darwin']),
     new MakerRpm({}),
     new MakerDeb({}),
-    new MakerDMG({}, ['darwin']),
+    new MakerDMG({}),
   ],
   plugins: [
     new VitePlugin({
@@ -42,6 +42,10 @@ const config: ForgeConfig = {
         },
       ],
     }),
+    {
+      name: '@electron-forge/plugin-auto-unpack-natives',
+      config: {}
+    },
     // Fuses are used to enable/disable various Electron functionality
     // at package time, before code signing the application
     new FusesPlugin({

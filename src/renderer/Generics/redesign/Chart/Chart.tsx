@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { MetricData } from 'common/node';
+import { MetricData } from '../../../../common/node';
 import { vars } from '../theme.css';
 import { container, iconContainer, iconComponent } from './chart.css';
 import { Icon } from '../Icon/Icon';

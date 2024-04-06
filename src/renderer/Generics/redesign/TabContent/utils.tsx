@@ -1,4 +1,4 @@
-import { MetricData } from 'common/node';
+import { MetricData } from '../../../../common/node';
 import { PeriodBreakdownDataProps } from './TabContent';
 import i18n from '../../../i18n';
 

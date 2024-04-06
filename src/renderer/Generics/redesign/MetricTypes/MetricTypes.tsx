@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
+import { NiceNodeRpcTranslation } from '../../../../common/rpcTranslation';
 import { IconId } from '../../../assets/images/icons';
 import { SYNC_STATUS } from '../consts';
 import { Icon } from '../Icon/Icon';
