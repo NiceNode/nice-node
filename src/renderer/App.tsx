@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useEffect, useState, useRef } from 'react';
 import { MemoryRouter, Routes, Route, Outlet } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
@@ -47,7 +46,7 @@ const WindowContainer = ({ children }: { children: React.ReactNode }) => {
 
 const Main = (props: { platform?: string }) => {
   const sidebarRef = useRef<HTMLDivElement | null>(null);
-  const [isResizing, setIsResizing] = useState<Boolean>(false);
+  const [isResizing, setIsResizing] = useState<boolean>(false);
   const [lastX, setLastX] = useState<number>(0);
   const { platform } = props;
 

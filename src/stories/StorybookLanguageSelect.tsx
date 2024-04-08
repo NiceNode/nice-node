@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import Select from '../Generics/redesign/Select/Select';
+import Select from '../renderer/Generics/redesign/Select/Select';
 
 const StorybookLanguageSelect = () => {
   const { i18n } = useTranslation();

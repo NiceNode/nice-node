@@ -7,8 +7,8 @@ export interface IpcMessage {
 }
 
 export class MessageGrantPermissionToInstallPodman {
-  messageId: string = 'isGrantedPermission';
-  value: boolean = false;
+  messageId = 'isGrantedPermission';
+  value = false;
 }
 
 export const sendMessageOnDownloadProgress = (

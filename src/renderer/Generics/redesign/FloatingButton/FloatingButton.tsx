@@ -1,4 +1,4 @@
-import { IconId } from 'renderer/assets/images/icons';
+import { IconId } from '../../../assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import { baseButton, iconLeft, iconStyle } from './floatingButton.css';
 

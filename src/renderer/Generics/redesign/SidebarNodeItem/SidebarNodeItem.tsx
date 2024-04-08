@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NodeIconId } from 'renderer/assets/images/nodeIcons';
+import { NodeIconId } from '../../../assets/images/nodeIcons';
 import NodeIcon from '../NodeIcon/NodeIcon';
 import {
   container,

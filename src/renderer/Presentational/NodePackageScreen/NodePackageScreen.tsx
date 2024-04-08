@@ -46,9 +46,7 @@ const NodePackageScreen = () => {
   );
   const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>();
   // we will bring these vars back in the future
-  // @ts-ignore: no-unused-variable
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
-  // @ts-ignore: no-unused-variable
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sDiskUsed, setDiskUsed] = useState<number>(0);

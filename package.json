@@ -236,6 +236,7 @@
     "@storybook/addon-interactions": "^7.5.1",
     "@storybook/addon-links": "^7.5.1",
     "@storybook/addon-mdx-gfm": "^7.5.3",
+    "@storybook/builder-vite": "^8.0.6",
     "@storybook/react": "^7.5.1",
     "@storybook/react-webpack5": "^7.5.1",
     "@storybook/testing-library": "^0.2.2",

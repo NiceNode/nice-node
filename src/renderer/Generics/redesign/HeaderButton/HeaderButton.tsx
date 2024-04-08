@@ -52,7 +52,6 @@ export const HeaderButton = ({
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/control-has-associated-label
     <div
       className={[container, isToggled ? 'toggled' : ''].join(' ')}
       onKeyDown={handleButtonClick}

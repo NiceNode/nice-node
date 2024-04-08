@@ -11,7 +11,10 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses';
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
+    // unsure if this is needed below:
+    ignore: [ /stories/, /__tests__/, /.storybook/, /storybook/ ],
   },
+
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({}),
@@ -42,10 +45,10 @@ const config: ForgeConfig = {
         },
       ],
     }),
-    {
-      name: '@electron-forge/plugin-auto-unpack-natives',
-      config: {}
-    },
+    // {
+    //   name: '@electron-forge/plugin-auto-unpack-natives',
+    //   config: {}
+    // },
     // Fuses are used to enable/disable various Electron functionality
     // at package time, before code signing the application
     new FusesPlugin({

@@ -1,6 +1,5 @@
-/* eslint-disable no-script-url */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import { IconId } from 'renderer/assets/images/icons';
+/* eslint-disable no-script-url @typescript-eslint/no-unused-vars */
+import { IconId } from '../../../assets/images/icons';
 import {
   blockContainer,
   inlineContainer,

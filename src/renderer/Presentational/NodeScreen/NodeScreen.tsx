@@ -45,7 +45,6 @@ const NodeScreen = () => {
   );
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   // we will bring this var back in the future
-  // @ts-ignore: no-unused-variable
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>(0);

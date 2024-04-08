@@ -108,7 +108,6 @@ const MultiSelect = ({
         value={sSelectedOptions}
         options={options}
         styles={customStyles}
-        // @ts-ignore
         onChange={(
           newValue: SingleValue<SelectOption> | MultiValue<SelectOption>,
         ) => {

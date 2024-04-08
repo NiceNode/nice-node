@@ -55,12 +55,9 @@
     // "typeRoots": ["./node_modules", "./node_modules/@types", "./@types"]
   },
   // not in vite template but was in previously
-  // "exclude": [
-  //   "release/build",
-  //   "release/app/dist",
-  //   ".erb/dll",
-  //   "storybook-static",
-  //   ".eslintrc.js"
-  //   // "src/main/util/timestamp.js"
-  // ]
+  "exclude": [
+    "storybook-static",
+    "eslintrc.json"
+    // "src/main/util/timestamp.js"
+  ]
 }

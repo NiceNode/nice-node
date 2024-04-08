@@ -1,4 +1,4 @@
-import { IconId } from 'renderer/assets/images/icons';
+import { IconId } from '../../../assets/images/icons';
 import {
   iconBackground,
   hasStatusStyle,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconId } from 'renderer/assets/images/icons';
+import { IconId } from '../../../assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import {
   container,

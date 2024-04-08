@@ -201,7 +201,6 @@ export const Chart = ({ tabId, metricData }: ChartProps) => {
         color: 'rgba(255, 255, 255, 1)',
       },
       formatter(this: Highcharts.TooltipFormatterContextObject): string {
-        // eslint-disable-next-line react/no-this-in-sfc
         const yValue = this.y || 0;
         return getToolTipFormat(yValue, tabId);
       },

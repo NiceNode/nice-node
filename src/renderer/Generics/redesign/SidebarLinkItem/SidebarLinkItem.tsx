@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconId } from 'renderer/assets/images/icons';
+import { IconId } from '../../../assets/images/icons';
 import { Bubble } from '../Bubble/Bubble';
 import { Icon } from '../Icon/Icon';
 import { container, selectedContainer, labelText } from './sidebarLinkItem.css';

@@ -1,11 +1,11 @@
-import { ReactNode, useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { Provider } from 'react-redux';
 
-import { store } from '../../state/store';
+import { store } from '../renderer/state/store';
 
-import StorybookLanguageSelect from '../../Presentational/StorybookLanguageSelect';
-import { darkTheme, lightTheme, vars } from './theme.css';
-import Button from './Button/Button';
+import StorybookLanguageSelect from './StorybookLanguageSelect';
+import { darkTheme, lightTheme, vars } from '../renderer/Generics/redesign/theme.css';
+import Button from '../renderer/Generics/redesign/Button/Button';
 
 const RedesignContainerStoryBook = ({ children }: { children: ReactNode }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
