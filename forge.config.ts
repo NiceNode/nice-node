@@ -12,7 +12,7 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     // unsure if this is needed below:
-    ignore: [ /stories/, /__tests__/, /.storybook/, /storybook/ ],
+    ignore: [ /stories/, /__tests__/, /.storybook/, /storybook/, /storybook-static/ ],
   },
 
   rebuildConfig: {},
@@ -45,10 +45,10 @@ const config: ForgeConfig = {
         },
       ],
     }),
-    // {
-    //   name: '@electron-forge/plugin-auto-unpack-natives',
-    //   config: {}
-    // },
+    {
+      name: '@electron-forge/plugin-auto-unpack-natives',
+      config: {}
+    },
     // Fuses are used to enable/disable various Electron functionality
     // at package time, before code signing the application
     new FusesPlugin({

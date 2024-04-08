@@ -15,13 +15,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
 
-    "jsx": "react-jsx",
-    "paths": {
-      "main/*": ["./src/main/*"],
-      "renderer/*": ["./src/renderer/*"],
-      "#root/*": ["./*"]
-    },
-    "types": []
+    "jsx": "react-jsx"
 
     // not in vite template but was in previously
     // "declaration": true,
