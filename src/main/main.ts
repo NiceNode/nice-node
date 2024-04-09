@@ -48,6 +48,7 @@ if (process.env.NODE_ENV === 'development') {
 //   require('wdio-electron-service/main');
 // }
 
+// https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
 if (require('electron-squirrel-startup')) {
   app.quit();
 }

@@ -1,4 +1,4 @@
-import type { ForgeConfig } from '@electron-forge/shared-types';
+import type { ForgeConfig, ForgePackagerOptions } from '@electron-forge/shared-types';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { MakerDeb } from '@electron-forge/maker-deb';
@@ -8,17 +8,32 @@ import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 
+const packagerConfig: ForgePackagerOptions = {
+  asar: true,
+  icon: './assets/icon',
+  // unsure if this is needed below:
+  ignore: [ /stories/, /__tests__/, /.storybook/, /storybook/, /storybook-static/ ],
+};
+
+// skip signing & notarizing on local builds
+if(process.env.CI) {
+  packagerConfig.osxSign = {};
+  packagerConfig.osxNotarize = {
+    // tool: 'notarytool', the default
+    appleId: process.env.APPLE_ID,
+    appleIdPassword: process.env.APPLE_ID_PASSWORD,
+    teamId: process.env.APPLE_TEAM_ID
+  };
+}
+
 const config: ForgeConfig = {
-  packagerConfig: {
-    asar: true,
-    icon: './assets/icon',
-    // unsure if this is needed below:
-    ignore: [ /stories/, /__tests__/, /.storybook/, /storybook/, /storybook-static/ ],
-  },
+  packagerConfig,
 
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
+    new MakerSquirrel({
+      authors: 'NiceNode LLC'
+    }),
     new MakerZIP({}),
     new MakerRpm({}),
     new MakerDeb({}),
@@ -69,6 +84,18 @@ const config: ForgeConfig = {
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
     }),
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'NiceNode',
+          name: 'nice-node',
+        },
+        prerelease: true
+      },
+    },
+  ]
 };
 
 export default config;

@@ -1,4 +1,4 @@
-import { autoUpdater, BrowserWindow, dialog } from 'electron';
+import { autoUpdater, type BrowserWindow, dialog } from 'electron';
 import sleep from 'await-sleep';
 
 // import logger, { autoUpdateLogger } from './logger';
