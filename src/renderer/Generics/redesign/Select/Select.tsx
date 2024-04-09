@@ -1,11 +1,11 @@
 /* eslint-disable react/destructuring-assignment */
 // React select docs at:
 // https://react-select.com/components#Option
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactSelect, {
-  CSSObjectWithLabel,
-  MenuPlacement,
-  SingleValue,
+  type CSSObjectWithLabel,
+  type MenuPlacement,
+  type SingleValue,
 } from 'react-select';
 import { Icon } from '../Icon/Icon';
 import { vars } from '../theme.css';

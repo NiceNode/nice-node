@@ -1,10 +1,10 @@
-import { useRef, useEffect } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { MetricData } from '../../../../common/node';
-import { vars } from '../theme.css';
-import { container, iconContainer, iconComponent } from './chart.css';
+import { useEffect, useRef } from 'react';
+import type { MetricData } from '../../../../common/node';
 import { Icon } from '../Icon/Icon';
+import { vars } from '../theme.css';
+import { container, iconComponent, iconContainer } from './chart.css';
 
 type ChartStyleProp = {
   linearGradient: string[];
@@ -21,9 +21,9 @@ type ChartProps = {
 // Function to convert GB to human-readable format (GB or TB)
 const gbToSize = (gb: number, xAxis = false) => {
   if (gb < 1024) {
-    return xAxis ? `GB` : `{value} GB`;
+    return xAxis ? 'GB' : '{value} GB';
   }
-  return xAxis ? `TB` : `{value} TB`;
+  return xAxis ? 'TB' : '{value} TB';
 };
 
 const getToolTipFormat = (value: number, tabId: string) => {
@@ -94,7 +94,7 @@ export const Chart = ({ tabId, metricData }: ChartProps) => {
           ],
           lineColor: 'rgba(62, 187, 100, 1)',
           toolTipColor: 'rgba(62, 187, 100, 1)',
-          yAxisFormat: gbToSize((metricData && metricData[0]?.y) || 0),
+          yAxisFormat: gbToSize(metricData?.[0]?.y || 0),
         };
         break;
       default:

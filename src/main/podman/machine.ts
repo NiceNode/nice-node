@@ -12,7 +12,7 @@ export const getNiceNodeMachine = async (): Promise<
   MachineJSON | undefined
 > => {
   try {
-    const result = await runCommand(`machine list --format json`);
+    const result = await runCommand('machine list --format json');
     if (!result) {
       logger.error(`Podman machine ls result returned: ${result}`);
       return undefined;

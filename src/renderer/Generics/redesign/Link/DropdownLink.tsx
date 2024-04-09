@@ -1,6 +1,6 @@
+import { Icon } from '../Icon/Icon';
 /* eslint-disable no-script-url */
 import { blockContainer, inlineContainer, linkText } from './externalLink.css';
-import { Icon } from '../Icon/Icon';
 
 // todo: variants for downloads or internal links
 export interface DropdownLinkProps {
@@ -26,6 +26,7 @@ const DropdownLink = ({ text, inline, onClick, isDown }: DropdownLinkProps) => {
       role="button"
       tabIndex={0}
     >
+      {/* biome-ignore lint/a11y/useValidAnchor: <explanation> */}
       <a className={linkText} href="javascript:void(0);">
         {text}
       </a>

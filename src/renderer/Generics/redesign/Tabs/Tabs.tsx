@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { container, tabsList, tabsContainer, tabContent } from './tabs.css';
-import TabItem from '../TabItem/TabItem';
+import type React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
+import TabItem from '../TabItem/TabItem';
+import { container, tabContent, tabsContainer, tabsList } from './tabs.css';
 
 export interface TabsProps {
   modal?: boolean;

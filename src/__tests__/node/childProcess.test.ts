@@ -1,4 +1,4 @@
-import { spawn, SpawnOptions } from 'child_process';
+import { type SpawnOptions, spawn } from 'node:child_process';
 import sleep from 'await-sleep';
 
 jest.setTimeout(10000);

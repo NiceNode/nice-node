@@ -1,17 +1,15 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { NodeSpecification } from '../../common/nodeSpec';
-import Node from '../../common/node';
+import type Node from '../../common/node';
+import type { NodeSpecification } from '../../common/nodeSpec';
 import electron from '../electronGlobal';
 
 type CustomerErrorType = {
   message: string;
 };
-// eslint-disable-next-line
 type ProviderResponse = any;
 
 // Define a service using a base URL and expected endpoints
 // lots of issues in RTKQ github complaining about typescript breaking changes
-// eslint-disable-next-line
 export const RtkqNodeService: any = createApi({
   reducerPath: 'RtkqNodeService',
   baseQuery: fakeBaseQuery<CustomerErrorType>(),

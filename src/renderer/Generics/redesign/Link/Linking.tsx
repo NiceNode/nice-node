@@ -1,13 +1,12 @@
-/* eslint-disable no-script-url @typescript-eslint/no-unused-vars */
-import { IconId } from '../../../assets/images/icons';
+import type { IconId } from '../../../assets/images/icons';
+import { Icon } from '../Icon/Icon';
 import {
   blockContainer,
+  dangerLinkText,
+  iconStyle,
   inlineContainer,
   linkText,
-  iconStyle,
-  dangerLinkText,
 } from './linking.css';
-import { Icon } from '../Icon/Icon';
 
 // todo: variants for downloads or internal links
 export interface LinkingProps {

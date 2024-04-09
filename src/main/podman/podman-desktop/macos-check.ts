@@ -2,10 +2,10 @@
  * Based from macos-check in podman-desktop repo src/extensions/podman/
  */
 import * as os from 'node:os';
-import { FailSystemRequirements } from '../../minSystemRequirement';
+import type { FailSystemRequirements } from '../../minSystemRequirement';
 
-import darwinToMacOsVersion from '../../util/macos-release';
 import logger from '../../logger';
+import darwinToMacOsVersion from '../../util/macos-release';
 
 export const getFailSystemRequirements = (): FailSystemRequirements[] => {
   const failedRequirements: FailSystemRequirements[] = [];

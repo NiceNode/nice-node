@@ -3,11 +3,14 @@
 import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
 import { useTranslation } from 'react-i18next';
-import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
-import { setModalState } from '../../state/modal';
+import { NodeStatus } from '../../../common/node';
+import Button from '../../Generics/redesign/Button/Button';
+import type { ClientProps, NodeAction } from '../../Generics/redesign/consts';
+import type { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import electron from '../../electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
-import { useAppSelector, useAppDispatch } from '../../state/hooks';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { setModalState } from '../../state/modal';
 import {
   selectIsAvailableForPolling,
   selectSelectedNodePackage,
@@ -19,20 +22,17 @@ import {
   useGetExecutionPeersQuery,
   useGetNodeVersionQuery,
 } from '../../state/services';
-// import { useGetNetworkConnectedQuery } from './state/network';
-import { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
+import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import { hexToDecimal } from '../../utils';
-import { ClientProps, NodeAction } from '../../Generics/redesign/consts';
-import Button from '../../Generics/redesign/Button/Button';
+import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
+// import { useGetNetworkConnectedQuery } from './state/network';
+import type { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
 import {
   container,
   contentContainer,
-  titleFont,
   descriptionFont,
+  titleFont,
 } from './NodePackageScreen.css';
-import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
-import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
-import { NodeStatus } from '../../../common/node';
 
 let alphaModalRendered = false;
 
@@ -197,7 +197,7 @@ const NodePackageScreen = () => {
       typeof slotNumber === 'string' &&
       rpcTranslation === 'eth-l1-beacon'
     ) {
-      latestBlockNum = parseFloat(slotNumber);
+      latestBlockNum = Number.parseFloat(slotNumber);
     }
 
     const syncedBlock =

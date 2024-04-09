@@ -1,33 +1,34 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { MemoryRouter, Routes, Route, Outlet } from 'react-router-dom';
 import * as Sentry from '@sentry/electron/renderer';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { MemoryRouter, Outlet, Route, Routes } from 'react-router-dom';
 
-import { NotificationsWrapper } from './Presentational/Notifications/NotificationsWrapper';
-import SystemMonitor from './Presentational/SystemMonitor/SystemMonitor';
-import './Generics/redesign/globalStyle.css';
-import './reset.css';
-import { useAppDispatch } from './state/hooks';
-import { initialize as initializeIpcListeners } from './ipc';
-import NodeScreen from './Presentational/NodeScreen/NodeScreen';
 import DataRefresher from './DataRefresher';
-import electron from './electronGlobal';
-import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
+import './Generics/redesign/globalStyle.css';
 import LogsWrapper from './Presentational/LogsWrapper/LogsWrapper';
+import ModalManager from './Presentational/ModalManager/ModalManager';
+import NodePackageScreen from './Presentational/NodePackageScreen/NodePackageScreen';
+import NodeScreen from './Presentational/NodeScreen/NodeScreen';
 import NodeSetup from './Presentational/NodeSetup/NodeSetup';
+import { NotificationsWrapper } from './Presentational/Notifications/NotificationsWrapper';
+import { SidebarWrapper } from './Presentational/SidebarWrapper/SidebarWrapper';
+import SystemMonitor from './Presentational/SystemMonitor/SystemMonitor';
+import ThemeManager from './ThemeManager';
 import {
-  dragWindowContainer,
-  homeContainer,
-  contentContainer,
-  sidebarDrag,
-  borderLeft,
   borderCenter,
   borderCenterLine,
+  borderLeft,
   borderRight,
+  contentContainer,
+  dragWindowContainer,
+  homeContainer,
+  sidebarDrag,
 } from './app.css';
-import ThemeManager from './ThemeManager';
-import ModalManager from './Presentational/ModalManager/ModalManager';
+import electron from './electronGlobal';
 import { reportEvent } from './events/reportEvent';
-import NodePackageScreen from './Presentational/NodePackageScreen/NodePackageScreen';
+import { initialize as initializeIpcListeners } from './ipc';
+import './reset.css';
+import { useAppDispatch } from './state/hooks';
 
 Sentry.init({
   dsn: electron.SENTRY_DSN,

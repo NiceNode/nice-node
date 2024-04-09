@@ -1,18 +1,18 @@
 import { useTranslation } from 'react-i18next';
-import { NodeBackgroundId } from '../../../assets/images/nodeBackgrounds';
+import type { NodeBackgroundId } from '../../../assets/images/nodeBackgrounds';
 import {
-  wrapper,
-  container,
-  section,
-  other,
   client,
-  free,
-  legendContainer,
-  legend,
-  labelContainer,
-  label,
-  size,
   colorBox,
+  container,
+  free,
+  label,
+  labelContainer,
+  legend,
+  legendContainer,
+  other,
+  section,
+  size,
+  wrapper,
 } from './diskCapacityBarChart.css';
 
 export interface DiskCapacityBarChartProps {

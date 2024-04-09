@@ -1,7 +1,7 @@
-import { TFunction } from 'i18next';
+import type { TFunction } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ProgressBar, { ProgressBarProps } from './ProgressBar';
+import ProgressBar, { type ProgressBarProps } from './ProgressBar';
 
 export interface TimedProgressBarProps extends ProgressBarProps {
   totalTimeSeconds: number;

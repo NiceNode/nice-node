@@ -10,7 +10,9 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx .",
+    "lint": "biome lint ./src",
+    "safeFix": "biome check --apply ./src",
+    "unsafeFix": "biome check --apply-unsafe ./src",
     "vvvvvvvvvvvvv": "vvvvvvvvvvvvv",
     "test": "jest",
     "test-precommit": "jest --testPathIgnorePatterns geth out",
@@ -20,20 +22,6 @@
     "build-storybook": "storybook build",
     "wdio": "cross-env NODE_ENV=test wdio run ./wdio.conf.ts",
     "docs:nodeSpec": "typedoc --plugin typedoc-plugin-markdown --name \"Node Spec examples\" --readme src/common/index.md --entryDocument index.md --out docs src/common/*"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "cross-env NODE_ENV=development eslint --cache"
-    ],
-    "*.json,.{eslintrc,prettierrc}": [
-      "prettier --ignore-path .eslintignore --parser json --write"
-    ],
-    "*.{css,scss}": [
-      "prettier --ignore-path .eslintignore --single-quote --write"
-    ],
-    "*.{html,md,yml}": [
-      "prettier --ignore-path .eslintignore --single-quote --write"
-    ]
   },
   "repository": {
     "type": "git",
@@ -53,6 +41,7 @@
     "local"
   ],
   "devDependencies": {
+    "@biomejs/biome": "1.6.4",
     "@electron-forge/cli": "^7.3.1",
     "@electron-forge/maker-deb": "^7.3.1",
     "@electron-forge/maker-dmg": "^7.3.1",
@@ -174,19 +163,5 @@
     "last 2 edge versions",
     "last 2 firefox versions",
     "last 2 safari versions"
-  ],
-  "prettier": {
-    "overrides": [
-      {
-        "files": [
-          ".prettierrc",
-          ".eslintrc.json"
-        ],
-        "options": {
-          "parser": "json"
-        }
-      }
-    ],
-    "singleQuote": true
-  }
+  ]
 }

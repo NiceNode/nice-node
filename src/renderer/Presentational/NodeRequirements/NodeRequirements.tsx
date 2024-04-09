@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { SystemRequirements } from '../../../common/systemRequirements';
+import type { SystemData } from '../../../main/systemInfo';
+import { Checklist } from '../../Generics/redesign/Checklist/Checklist';
+import type { ChecklistItemProps } from '../../Generics/redesign/Checklist/ChecklistItem';
+import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
+import electron from '../../electronGlobal';
 import {
+  checklistContainer,
   container,
   descriptionFont,
   titleFont,
-  checklistContainer,
 } from './nodeRequirements.css';
-import { SystemData } from '../../../main/systemInfo';
-import { ChecklistItemProps } from '../../Generics/redesign/Checklist/ChecklistItem';
-import { Checklist } from '../../Generics/redesign/Checklist/Checklist';
-import { SystemRequirements } from '../../../common/systemRequirements';
-import electron from '../../electronGlobal';
-// eslint-disable-next-line import/no-cycle
 import { makeCheckList } from './requirementsChecklistUtil';
-import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 
 export interface NodeRequirementsProps {
   /**
@@ -24,7 +23,6 @@ export interface NodeRequirementsProps {
   /**
    * Title of the checklist
    */
-  // eslint-disable-next-line react/no-unused-prop-types
   systemData?: SystemData;
   /**
    * A folder path where the node data will be stored.
@@ -68,7 +66,6 @@ const NodeRequirements = ({
       );
       setItems(newChecklistItems);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodeRequirements, sSystemData, nodeStorageLocation]);
 
   return (
@@ -89,7 +86,7 @@ const NodeRequirements = ({
           url={nodeRequirements.documentationUrl}
         />
       )}
-      {!nodeRequirements && <>{t('nodeRequirementsUnavailable')}</>}
+      {!nodeRequirements && t('nodeRequirementsUnavailable')}
       <div
         className={[
           checklistContainer,

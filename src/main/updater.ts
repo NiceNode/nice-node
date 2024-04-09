@@ -1,10 +1,10 @@
-import { autoUpdater, type BrowserWindow, dialog } from 'electron';
 import sleep from 'await-sleep';
+import { type BrowserWindow, autoUpdater, dialog } from 'electron';
 
+import { reportEvent } from './events';
+import i18nMain from './i18nMain';
 // import logger, { autoUpdateLogger } from './logger';
 import logger from './logger';
-import { reportEvent } from './events';
-import { i18nMain } from './i18nMain';
 import { getSetIsPreReleaseUpdatesEnabled } from './state/settings';
 
 let notifyUserIfNoUpdateAvailable: boolean;

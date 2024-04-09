@@ -2,17 +2,20 @@
 // import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 // import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
 import { useTranslation } from 'react-i18next';
-import { MetricData } from '../../../common/node';
-import { NiceNodeRpcTranslation } from '../../../common/rpcTranslation';
-import { LabelValuesSectionItemsProps } from '../../Generics/redesign/LabelValues/LabelValuesSection';
-import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
-import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
-import TabContent from '../../Generics/redesign/TabContent/TabContent';
-import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
-import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
+import type { MetricData } from '../../../common/node';
+import type { NiceNodeRpcTranslation } from '../../../common/rpcTranslation';
 import { Header } from '../../Generics/redesign/Header/Header';
+import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
+import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
+import type { LabelValuesSectionItemsProps } from '../../Generics/redesign/LabelValues/LabelValuesSection';
+import TabContent from '../../Generics/redesign/TabContent/TabContent';
+import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
 // import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
-import { NodeAction, NodeOverviewProps } from '../../Generics/redesign/consts';
+import type {
+  NodeAction,
+  NodeOverviewProps,
+} from '../../Generics/redesign/consts';
+import type { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 
 // TODO: process retrieved client data into this format
 export type SingleNodeContent = {

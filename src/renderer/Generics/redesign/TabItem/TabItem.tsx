@@ -28,8 +28,6 @@ const TabItem = ({ activeTabId, label, onClickTabItem }: TabItemProps) => {
       className={[container, tabActiveStyle].join(' ')}
       onClick={onClickAction}
       onKeyDown={onClickAction}
-      role="tab"
-      tabIndex={0}
     >
       {label}
     </li>

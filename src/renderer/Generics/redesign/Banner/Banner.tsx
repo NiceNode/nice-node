@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconId } from '../../../assets/images/icons';
+import type { IconId } from '../../../assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import {
   container,
+  descriptionStyle,
   innerContainer,
   textContainer,
   titleStyle,
-  descriptionStyle,
 } from './banner.css';
 
 export interface BannerProps {

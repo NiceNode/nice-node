@@ -1,17 +1,20 @@
+import ethereumv1 from '../../common/NodeSpecs/ethereum/ethereum-v1.0.0.json';
+import gethv1 from '../../common/NodeSpecs/geth/geth-v1.0.0.json';
 /* eslint-disable @typescript-eslint/no-empty-function */
 import {
+  type UserNodePackages,
+  type UserNodes,
   createNode,
   createNodePackage,
-  UserNodePackages,
-  UserNodes,
 } from '../../common/node';
-import {
+import type {
   NodePackageSpecification,
   NodeSpecification,
 } from '../../common/nodeSpec';
-import gethv1 from '../../common/NodeSpecs/geth/geth-v1.0.0.json';
-import ethereumv1 from '../../common/NodeSpecs/ethereum/ethereum-v1.0.0.json';
-import { NodeLibrary, NodePackageLibrary } from '../../main/state/nodeLibrary';
+import type {
+  NodeLibrary,
+  NodePackageLibrary,
+} from '../../main/state/nodeLibrary';
 
 export const getSystemFreeDiskSpace = (): number => {
   return 2000;

@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import InternalLink from '../../renderer/Generics/redesign/Link/InternalLink';
 

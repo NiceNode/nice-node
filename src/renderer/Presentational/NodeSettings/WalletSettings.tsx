@@ -1,42 +1,45 @@
-import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { SingleValue } from 'react-select';
-import { ConfigTranslation, ConfigValuesMap } from '../../../common/nodeConfig';
+import { useTranslation } from 'react-i18next';
+import type { SingleValue } from 'react-select';
+import type {
+  ConfigTranslation,
+  ConfigValuesMap,
+} from '../../../common/nodeConfig';
+import Button from '../../Generics/redesign/Button/Button';
+import CopyButton from '../../Generics/redesign/CopyButton/CopyButton';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import Input from '../../Generics/redesign/Input/Input';
-import Button from '../../Generics/redesign/Button/Button';
+import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
+import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
+import Linking from '../../Generics/redesign/Link/Linking';
+import Select from '../../Generics/redesign/Select/Select';
+import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
 import {
-  WalletBackgroundId,
   WALLET_BACKGROUNDS,
+  type WalletBackgroundId,
 } from '../../assets/images/wallets';
+import type { SettingChangeHandler } from './NodeSettingsWrapper';
 import {
-  walletDescription,
-  title,
-  walletContainer,
-  walletTitle,
-  walletImage,
-  walletDetails,
-  advancedOptionsLink,
+  addRow,
   advancedOptions,
   advancedOptionsDescription,
-  advancedOptionsListContainer,
   advancedOptionsItemContainer,
-  unableSetWallet,
-  networkValue,
-  inputContainer,
-  selectContainer,
+  advancedOptionsLink,
+  advancedOptionsListContainer,
   buttonContainer,
-  addRow,
   copyButtonContainer,
+  inputContainer,
+  networkValue,
+  selectContainer,
+  title,
+  unableSetWallet,
+  walletContainer,
+  walletDescription,
+  walletDetails,
+  walletImage,
+  walletTitle,
 } from './WalletSettings.css';
-import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
-import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
-import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
-import Select from '../../Generics/redesign/Select/Select';
-import Linking from '../../Generics/redesign/Link/Linking';
-import { SettingChangeHandler } from './NodeSettingsWrapper';
-import CopyButton from '../../Generics/redesign/CopyButton/CopyButton';
 
 export interface WalletSettingsProps {
   configValuesMap?: ConfigValuesMap;

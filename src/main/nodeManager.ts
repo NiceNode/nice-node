@@ -1,33 +1,37 @@
-/* eslint-disable no-await-in-loop */
-import { NodeSpecification } from '../common/nodeSpec';
+import type Node from '../common/node';
 import {
+  type NodeId,
+  type NodeRuntime,
+  NodeStatus,
+  NodeStoppedBy,
+  createNode,
+  isDockerNode,
+} from '../common/node';
+import type {
+  ConfigTranslationMap,
+  ConfigValuesMap,
+} from '../common/nodeConfig';
+/* eslint-disable no-await-in-loop */
+import type { NodeSpecification } from '../common/nodeSpec';
+import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
+import logger from './logger';
+import { setLastRunningTime } from './node/setLastRunningTime';
+import { initialize as initNodeLibrary } from './nodeLibraryManager';
+import {
+  createRunCommand,
+  sendLogsToUI as dockerSendLogsToUI,
+  stopSendingLogsToUI as dockerStopSendingLogsToUI,
   getContainerDetails,
+  initialize as initDocker,
+  onExit as onExitDocker,
   removePodmanNode,
   startPodmanNode,
   stopPodmanNode,
-  sendLogsToUI as dockerSendLogsToUI,
-  initialize as initDocker,
-  onExit as onExitDocker,
-  stopSendingLogsToUI as dockerStopSendingLogsToUI,
-  createRunCommand,
 } from './podman/podman';
-import logger from './logger';
-import Node, {
-  createNode,
-  isDockerNode,
-  NodeId,
-  NodeRuntime,
-  NodeStatus,
-  NodeStoppedBy,
-} from '../common/node';
-import * as nodeStore from './state/nodes';
-import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
-import { initialize as initNodeLibrary } from './nodeLibraryManager';
-import { ConfigValuesMap, ConfigTranslationMap } from '../common/nodeConfig';
 import { checkNodePortsAndNotify } from './ports';
 import { getNodeLibrary } from './state/nodeLibrary';
+import * as nodeStore from './state/nodes';
 import { getSetPortHasChanged } from './state/nodes';
-import { setLastRunningTime } from './node/setLastRunningTime';
 
 export const addNode = async (
   nodeSpec: NodeSpecification,
@@ -276,7 +280,6 @@ export const initialize = async () => {
 
   // get all nodes
   const nodes = nodeStore.getNodes();
-  // eslint-disable-next-line no-plusplus
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     if (isDockerNode(node)) {

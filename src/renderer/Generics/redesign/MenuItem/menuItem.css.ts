@@ -18,7 +18,7 @@ export const container = style({
     background: vars.components.headerButtonHover,
   },
   selectors: {
-    [`&.disabled`]: {
+    '&.disabled': {
       color: vars.color.fontDisabled,
     },
   },
@@ -39,13 +39,13 @@ export const statusDot = style({
   height: 8,
   borderRadius: '50%',
   selectors: {
-    [`&.blue`]: {
+    '&.blue': {
       backgroundColor: common.color.blue500,
     },
-    [`&.orange`]: {
+    '&.orange': {
       backgroundColor: common.color.orange400,
     },
-    [`&.red`]: {
+    '&.red': {
       backgroundColor: common.color.red500,
     },
   },

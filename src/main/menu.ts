@@ -1,29 +1,29 @@
 import {
-  app,
+  type BrowserWindow,
   Menu,
-  shell,
-  BrowserWindow,
-  MenuItemConstructorOptions,
+  type MenuItemConstructorOptions,
+  app,
   clipboard,
+  shell,
 } from 'electron';
 import {
-  getSetHasSeenSplashscreen,
   getSetHasSeenAlphaModal,
+  getSetHasSeenSplashscreen,
 } from './state/settings';
 
+import { runBenchmark } from './benchbuddy/runBenchmark';
 import { getDebugInfoString, getGithubIssueProblemURL } from './debug';
-import { checkForUpdates } from './updater';
-import uninstallPodman from './podman/uninstall/uninstall';
-import nuclearUninstall from './nuclearUninstall';
+import { reportEvent } from './events';
+import i18nMain from './i18nMain';
+import logger from './logger';
 import { getFailSystemRequirements } from './minSystemRequirement';
 import { removeAllNodePackages } from './nodePackageManager';
-import { checkNodePortsAndNotify } from './ports';
-import { reportEvent } from './events';
-import { onResume, onShutdown, onSuspend } from './power';
-import { i18nMain } from './i18nMain';
-import logger from './logger';
+import nuclearUninstall from './nuclearUninstall';
+import uninstallPodman from './podman/uninstall/uninstall';
 import { checkForPodmanUpdate } from './podman/update';
-import { runBenchmark } from './benchbuddy/runBenchmark';
+import { checkNodePortsAndNotify } from './ports';
+import { onResume, onShutdown, onSuspend } from './power';
+import { checkForUpdates } from './updater';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;

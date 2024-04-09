@@ -1,9 +1,9 @@
 /* eslint-disable no-irregular-whitespace */
 
-/* eslint-disable no-else-return */
-import { hexToDecimal } from '../utils';
 import { ethers } from '../ethers';
 import { callJsonRpc } from '../jsonRpcClient';
+/* eslint-disable no-else-return */
+import { hexToDecimal } from '../utils';
 
 // export const executeTranslation = async (
 //   baseUrl: string,
@@ -42,9 +42,8 @@ const callFetch = async (apiRoute: string) => {
   console.log(response);
   if (response) {
     return response.json();
-  } else {
-    return undefined;
   }
+  return undefined;
 };
 
 const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
@@ -88,26 +87,27 @@ export const executeTranslation = async (
         }
       }
       return { isSyncing, syncPercent };
-    } else if (rpcCall === 'peers') {
+    }
+    if (rpcCall === 'peers') {
       const resp = await provider.send('net_peerCount');
       if (resp) {
         return hexToDecimal(resp);
-      } else {
-        return undefined;
       }
-    } else if (rpcCall === 'latestBlock') {
+      return undefined;
+    }
+    if (rpcCall === 'latestBlock') {
       const resp = await provider.send('eth_getBlockByNumber', [
         'latest',
         true,
       ]);
       return resp;
-    } else if (rpcCall === 'clientVersion') {
+    }
+    if (rpcCall === 'clientVersion') {
       const resp = await provider.send('web3_clientVersion');
       if (resp) {
         return resp;
-      } else {
-        return undefined;
       }
+      return undefined;
     }
   } else if (rpcTranslation === 'eth-l2') {
     // use ethL2Provider
@@ -126,36 +126,37 @@ export const executeTranslation = async (
         }
       }
       return { isSyncing, syncPercent };
-    } else if (rpcCall === 'peers') {
+    }
+    if (rpcCall === 'peers') {
       const resp = await ethL2Provider.send('net_peerCount');
       if (resp) {
         return hexToDecimal(resp);
-      } else {
-        return undefined;
       }
-    } else if (rpcCall === 'latestBlock') {
+      return undefined;
+    }
+    if (rpcCall === 'latestBlock') {
       const resp = await ethL2Provider.send('eth_getBlockByNumber', [
         'latest',
         true,
       ]);
       return resp;
-    } else if (rpcCall === 'clientVersion') {
+    }
+    if (rpcCall === 'clientVersion') {
       const resp = await ethL2Provider.send('web3_clientVersion');
       if (resp) {
         return resp;
-      } else {
-        return undefined;
       }
-    } else if (rpcCall === 'net_version') {
+      return undefined;
+    }
+    if (rpcCall === 'net_version') {
       // Returns chain Id. Example 1=eth mainnet, 8453=base mainnet
       // we can use this to confirm that a node is running on the right network
       const resp = await ethL2Provider.send('net_version');
       console.log('net_version: ', resp);
       if (resp) {
         return resp;
-      } else {
-        return undefined;
       }
+      return undefined;
     }
   } else if (rpcTranslation === 'eth-l2-consensus') {
     // use ethL2ConsensusProvider
@@ -174,26 +175,27 @@ export const executeTranslation = async (
         }
       }
       return { isSyncing, syncPercent };
-    } else if (rpcCall === 'peers') {
+    }
+    if (rpcCall === 'peers') {
       const resp = await ethL2ConsensusProvider.send('net_peerCount');
       if (resp) {
         return hexToDecimal(resp);
-      } else {
-        return undefined;
       }
-    } else if (rpcCall === 'latestBlock') {
+      return undefined;
+    }
+    if (rpcCall === 'latestBlock') {
       const resp = await ethL2ConsensusProvider.send('eth_getBlockByNumber', [
         'latest',
         true,
       ]);
       return resp;
-    } else if (rpcCall === 'clientVersion') {
+    }
+    if (rpcCall === 'clientVersion') {
       const resp = await ethL2ConsensusProvider.send('web3_clientVersion');
       if (resp) {
         return resp;
-      } else {
-        return undefined;
       }
+      return undefined;
     }
   } else if (rpcTranslation === 'eth-l1-beacon') {
     // call beacon api
@@ -204,9 +206,9 @@ export const executeTranslation = async (
         let syncPercent;
         if (resp.data.is_syncing) {
           const syncRatio =
-            parseInt(resp.data.head_slot, 10) /
-            (parseInt(resp.data.sync_distance, 10) +
-              parseInt(resp.data.head_slot, 10));
+            Number.parseInt(resp.data.head_slot, 10) /
+            (Number.parseInt(resp.data.sync_distance, 10) +
+              Number.parseInt(resp.data.head_slot, 10));
           syncPercent = (syncRatio * 100).toFixed(1);
         }
 
@@ -268,9 +270,9 @@ export const executeTranslation = async (
         let syncPercent;
         if (resp.data.is_syncing) {
           const syncRatio =
-            parseInt(resp.data.head_slot, 10) /
-            (parseInt(resp.data.sync_distance, 10) +
-              parseInt(resp.data.head_slot, 10));
+            Number.parseInt(resp.data.head_slot, 10) /
+            (Number.parseInt(resp.data.sync_distance, 10) +
+              Number.parseInt(resp.data.head_slot, 10));
           syncPercent = (syncRatio * 100).toFixed(1);
         }
 
@@ -280,9 +282,8 @@ export const executeTranslation = async (
       const resp = await callJsonRpc('starknet_net_peerCount', []);
       if (resp) {
         return hexToDecimal(resp);
-      } else {
-        return undefined;
       }
+      return undefined;
     } else if (rpcCall === 'latestBlock') {
       const resp = await callJsonRpc('starknet_getBlockByNumber', [
         'latest',
@@ -293,9 +294,8 @@ export const executeTranslation = async (
       const resp = await callJsonRpc('web3_clientVersion', []);
       if (resp) {
         return resp;
-      } else {
-        return undefined;
       }
+      return undefined;
     }
   }
   return undefined;

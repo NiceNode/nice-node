@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import { SidebarLinkItem } from '../../renderer/Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 

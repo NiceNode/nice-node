@@ -1,4 +1,4 @@
-import { container, titleStyle, contentStyle } from './tooltip.css';
+import { container, contentStyle, titleStyle } from './tooltip.css';
 
 export interface TooltipProps {
   /**

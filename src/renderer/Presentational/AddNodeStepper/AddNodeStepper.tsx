@@ -2,30 +2,30 @@
 // Just make sure to always render each child so that children component state isn't cleard
 import { useCallback, useEffect, useState } from 'react';
 
-import electron from '../../electronGlobal';
-import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
-import { componentContainer, container } from './addNodeStepper.css';
-import Stepper from '../../Generics/redesign/Stepper/Stepper';
-import AddNode, { AddNodeValues } from '../AddNode/AddNode';
-import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
-import NodeRequirements from '../NodeRequirements/NodeRequirements';
-import { SystemRequirements } from '../../../common/systemRequirements';
-import { mergeSystemRequirements } from './mergeNodeRequirements';
-import { updateSelectedNodePackageId } from '../../state/node';
-import { useAppDispatch } from '../../state/hooks';
-import {
+import type { SystemRequirements } from '../../../common/systemRequirements';
+import type {
   NodeLibrary,
   NodePackageLibrary,
 } from '../../../main/state/nodeLibrary';
+import ContentWithSideArt from '../../Generics/redesign/ContentWithSideArt/ContentWithSideArt';
+import Stepper from '../../Generics/redesign/Stepper/Stepper';
+import electron from '../../electronGlobal';
 import { reportEvent } from '../../events/reportEvent';
+import { useAppDispatch } from '../../state/hooks';
+import { updateSelectedNodePackageId } from '../../state/node';
+import AddNode, { type AddNodeValues } from '../AddNode/AddNode';
+import NodeRequirements from '../NodeRequirements/NodeRequirements';
+import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
+import { componentContainer, container } from './addNodeStepper.css';
+import { mergeSystemRequirements } from './mergeNodeRequirements';
 
+import type { NodePackageSpecification } from '../../../common/nodeSpec';
+import type { AddNodePackageNodeService } from '../../../main/nodePackageManager';
 import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
 import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
-import { AddNodePackageNodeService } from '../../../main/nodePackageManager';
-import { NodePackageSpecification } from '../../../common/nodeSpec';
 import AddNodeConfiguration, {
-  AddNodeConfigurationValues,
+  type AddNodeConfigurationValues,
 } from '../AddNodeConfiguration/AddNodeConfiguration';
 import { mergePackageAndClientConfigValues } from '../AddNodeConfiguration/mergePackageAndClientConfigValues';
 
@@ -124,7 +124,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     const { clientSelections, clientConfigValues, nodePackageConfigValues } =
       sNodeClientsAndSettings;
     if (sNodeLibrary && clientSelections) {
-      // eslint-disable-next-line
       for (const [serviceId, selectOption] of Object.entries(
         clientSelections,
       )) {
@@ -221,7 +220,6 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         return;
       }
       if (newValue?.clientSelections) {
-        // eslint-disable-next-line
         for (const [serviceId, selectOption] of Object.entries(
           newValue?.clientSelections,
         )) {

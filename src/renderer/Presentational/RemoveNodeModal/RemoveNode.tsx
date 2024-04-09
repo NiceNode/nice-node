@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NodePackage } from '../../../common/node';
-import { ModalConfig } from '../ModalManager/modalUtils';
+import type { NodePackage } from '../../../common/node';
 import { Checkbox } from '../../Generics/redesign/Checkbox/Checkbox';
+import type { ModalConfig } from '../ModalManager/modalUtils';
 import { container, removeText } from './removeNode.css';
 
 export interface RemoveNodeProps {

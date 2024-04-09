@@ -1,8 +1,8 @@
 import React from 'react';
-import { container, iconComponent, iconContainer } from './checklist.css';
-import ChecklistItem, { ChecklistItemProps } from './ChecklistItem';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
 import { Icon } from '../Icon/Icon';
+import ChecklistItem, { type ChecklistItemProps } from './ChecklistItem';
+import { container, iconComponent, iconContainer } from './checklist.css';
 
 export interface ChecklistProps {
   /**
@@ -28,13 +28,12 @@ export const Checklist = ({ title, items }: ChecklistProps) => {
   return (
     <div className={container}>
       {title && <h2>{title}</h2>}
-      {items &&
-        items.map((item, index) => (
-          <React.Fragment key={item.checkTitle}>
-            <ChecklistItem {...item} />
-            {index !== items.length - 1 && <HorizontalLine />}
-          </React.Fragment>
-        ))}
+      {items?.map((item, index) => (
+        <React.Fragment key={item.checkTitle}>
+          <ChecklistItem {...item} />
+          {index !== items.length - 1 && <HorizontalLine />}
+        </React.Fragment>
+      ))}
     </div>
   );
 };

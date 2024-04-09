@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import { NotificationIcon } from '../../renderer/Generics/redesign/NotificationIcon/NotificationIcon';
 

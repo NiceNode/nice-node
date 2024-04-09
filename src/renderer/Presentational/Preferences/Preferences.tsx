@@ -1,33 +1,33 @@
+import { useState } from 'react';
 /* eslint-disable no-case-declarations */
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { Icon } from '../../Generics/redesign/Icon/Icon';
 import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
 import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
 import LanguageSelect from '../../LanguageSelect';
+import AutoDark from '../../assets/images/artwork/auto-dark.png';
+import AutoLight from '../../assets/images/artwork/auto-light.png';
+import DarkDark from '../../assets/images/artwork/dark-dark.png';
+import DarkLight from '../../assets/images/artwork/dark-light.png';
+import LightDark from '../../assets/images/artwork/light-dark.png';
+import LightLight from '../../assets/images/artwork/light-light.png';
 import {
-  preferencesContainer,
+  appearanceSection,
   captionText,
-  selectedThemeImage,
-  themeContainer,
-  themeInnerContainer,
+  preferenceSection,
+  preferencesContainer,
+  sectionTitle,
   selectedThemeContainer,
-  themeImage,
+  selectedThemeImage,
+  themeCircleBackground,
   themeCircleContainer,
   themeCircleIcon,
-  themeCircleBackground,
-  sectionTitle,
-  preferenceSection,
-  appearanceSection,
+  themeContainer,
+  themeImage,
+  themeInnerContainer,
   versionContainer,
 } from './preferences.css';
-import AutoDark from '../../assets/images/artwork/auto-dark.png';
-import DarkDark from '../../assets/images/artwork/dark-dark.png';
-import LightDark from '../../assets/images/artwork/light-dark.png';
-import AutoLight from '../../assets/images/artwork/auto-light.png';
-import DarkLight from '../../assets/images/artwork/dark-light.png';
-import LightLight from '../../assets/images/artwork/light-light.png';
-import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Preference =

@@ -1,32 +1,33 @@
+import { cp } from 'node:fs/promises';
 /* eslint-disable no-await-in-loop */
-import path from 'path';
-import { cp } from 'fs/promises';
+import path from 'node:path';
+import type Node from '../common/node';
 import {
+  type NodeId,
+  type NodePackage,
+  type NodeRuntime,
+  type NodeService,
+  NodeStatus,
+  NodeStoppedBy,
+  createNodePackage,
+} from '../common/node';
+import type { ConfigValuesMap } from '../common/nodeConfig';
+import type {
   NodePackageSpecification,
   NodeSpecification,
 } from '../common/nodeSpec';
-import logger from './logger';
-import Node, {
-  createNodePackage,
-  NodeId,
-  NodePackage,
-  NodeRuntime,
-  NodeService,
-  NodeStatus,
-  NodeStoppedBy,
-} from '../common/node';
-import * as nodePackageStore from './state/nodePackages';
-import * as nodeStore from './state/nodes';
 import {
   deleteDisk,
   getNodeSpecificationsFolder,
   getNodesDirPath,
   makeNodeDir,
 } from './files';
-import { addNode, removeNode, startNode, stopNode } from './nodeManager';
-import { createJwtSecretAtDirs } from './util/jwtSecrets';
-import { ConfigValuesMap } from '../common/nodeConfig';
+import logger from './logger';
 import { setLastRunningTime } from './node/setLastRunningTime';
+import { addNode, removeNode, startNode, stopNode } from './nodeManager';
+import * as nodePackageStore from './state/nodePackages';
+import * as nodeStore from './state/nodes';
+import { createJwtSecretAtDirs } from './util/jwtSecrets';
 
 // Created when adding a node and is used to pair a node spec and config
 // for a specific node package service

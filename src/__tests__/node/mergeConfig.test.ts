@@ -1,4 +1,4 @@
-import { NodePackageSpecification } from '../../common/nodeSpec';
+import type { NodePackageSpecification } from '../../common/nodeSpec';
 import { mergePackageAndClientConfigValues } from '../../renderer/Presentational/AddNodeConfiguration/mergePackageAndClientConfigValues';
 
 const nodePackageSpec = {

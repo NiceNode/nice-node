@@ -1,15 +1,14 @@
-import { powerSaveBlocker, powerMonitor } from 'electron';
+import { powerMonitor, powerSaveBlocker } from 'electron';
 
 // import { getIsStartOnLogin, watchIsStartOnLogin } from './state/store';
 import logger from './logger';
 import {
-  onShutDown as shutdownNodes,
   restartNodes,
+  onShutDown as shutdownNodes,
 } from './nodePackageManager';
 import { onStartUp } from './podman/start';
 
 let id: number | undefined;
-// eslint-disable-next-line import/prefer-default-export
 export const dontSuspendSystem = () => {
   // "Block the system from entering low-power (sleep) mode."
   if (id === undefined) {

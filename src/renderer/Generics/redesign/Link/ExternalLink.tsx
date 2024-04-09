@@ -1,5 +1,5 @@
-import { blockContainer, inlineContainer, linkText } from './externalLink.css';
 import { Icon } from '../Icon/Icon';
+import { blockContainer, inlineContainer, linkText } from './externalLink.css';
 
 // todo: variants for downloads or internal links
 export interface ExternalLinkProps {

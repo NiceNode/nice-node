@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import electron from '../../electronGlobal';
-import { LabelValuesSectionProps } from '../../Generics/redesign/LabelValues/LabelValuesSection';
-import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
-import { Benchmark } from '../../../main/state/benchmark';
+import type { Benchmark } from '../../../main/state/benchmark';
 import Button from '../../Generics/redesign/Button/Button';
 import { LoadingIcon } from '../../Generics/redesign/Icon/LoadingIcon';
+import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
+import type { LabelValuesSectionProps } from '../../Generics/redesign/LabelValues/LabelValuesSection';
+import electron from '../../electronGlobal';
 
 /**
  * Primary UI component for user interaction
@@ -115,11 +115,7 @@ export const Benchmarks = () => {
               value: `${benchmark.results.internet.latency} ms`,
             });
           }
-          if (
-            results?.time !== undefined &&
-            results.time.serverTime &&
-            results.time.localTime
-          ) {
+          if (results?.time?.serverTime && results.time.localTime) {
             items.push({
               label: 'System Time Inaccuracy',
               value: `${

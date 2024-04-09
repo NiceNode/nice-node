@@ -4,9 +4,9 @@ import { sendMessageOnThemeChange } from '../docker/messageFrontEnd';
 import logger from '../logger';
 import { getPlatform, isLinux } from '../platform';
 
-import store from './store';
-import { setOpenAtLoginLinux } from '../util/linuxAutostartFile';
 import { setAllowPrerelease } from '../updater';
+import { setOpenAtLoginLinux } from '../util/linuxAutostartFile';
+import store from './store';
 
 // export type Settings = Record<string, string | object | boolean>;
 const SETTINGS_KEY = 'settings';

@@ -1,17 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { MetricData } from '../../../../common/node';
+import type { MetricData } from '../../../../common/node';
+import type { NodeBackgroundId } from '../../../assets/images/nodeBackgrounds';
+import { Chart } from '../Chart/Chart';
+import DiskCapacityBarChart from '../DiskCapacityBarChart/DiskCapacityBarChart';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
-import { container, contentHeader, contentTitle } from './tabContent.css';
 import LabelValues from '../LabelValues/LabelValues';
+import { container, contentHeader, contentTitle } from './tabContent.css';
 import {
   getBreakdown,
   processMinMaxAverage,
   roundAndFormatPercentage,
 } from './utils';
-import { Chart } from '../Chart/Chart';
-import DiskCapacityBarChart from '../DiskCapacityBarChart/DiskCapacityBarChart';
-import { NodeBackgroundId } from '../../../assets/images/nodeBackgrounds';
 
 type DiskDataType = {
   diskFree: number;
@@ -98,7 +98,7 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
 
   const renderDiskCapacity = () => {
     if (tabId === 'Disk') {
-      const clientSpace = (metricData && metricData[0]?.y) || 0;
+      const clientSpace = metricData?.[0]?.y || 0;
       const { diskFree, diskTotal } = diskData as DiskDataType;
       return (
         <>
@@ -118,7 +118,6 @@ const TabContent = ({ tabId, metricData, name, diskData }: TabContentProps) => {
     return null;
   };
 
-  // eslint-disable-next-line
   const breakdownData: { title: string; items: any[] } = {
     title: g('PeriodBreakdown'),
     items: getBreakdown(tabId.toLowerCase(), processPeriodBreakdownData()),

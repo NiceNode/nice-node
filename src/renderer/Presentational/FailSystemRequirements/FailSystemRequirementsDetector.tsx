@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import electron from '../../electronGlobal';
-import { setModalState } from '../../state/modal';
 import { useAppDispatch } from '../../state/hooks';
+import { setModalState } from '../../state/modal';
 
 const FailSystemRequirementsDetector = () => {
   const dispatch = useAppDispatch();

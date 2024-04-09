@@ -3,11 +3,11 @@
 // https://react-select.com/components#Option
 import { useEffect, useState } from 'react';
 import Select, {
-  CSSObjectWithLabel,
-  OptionProps,
-  ValueContainerProps,
+  type CSSObjectWithLabel,
+  type OptionProps,
+  type ValueContainerProps,
 } from 'react-select';
-import SelectCard, { SelectCardProps } from '../SelectCard/SelectCard';
+import SelectCard, { type SelectCardProps } from '../SelectCard/SelectCard';
 import { vars } from '../theme.css';
 
 const Option = (props: OptionProps) => {

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { IconId } from '../../../assets/images/icons';
+import type { IconId } from '../../../assets/images/icons';
 import { Bubble } from '../Bubble/Bubble';
 import { Icon } from '../Icon/Icon';
-import { container, selectedContainer, labelText } from './sidebarLinkItem.css';
+import { container, labelText, selectedContainer } from './sidebarLinkItem.css';
 
 export interface SidebarLinkItemProps {
   /**

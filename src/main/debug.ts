@@ -1,4 +1,4 @@
-import os from 'os';
+import os from 'node:os';
 import { app } from 'electron';
 
 import { getArch } from './arch';

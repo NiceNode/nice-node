@@ -1,8 +1,8 @@
-import logger from '../logger';
-import { execAwait } from '../execHelper';
 import * as arch from '../arch';
 import { downloadFile } from '../downloadFile';
+import { execAwait } from '../execHelper';
 import { getNNDirPath } from '../files';
+import logger from '../logger';
 import { sendMessageOnDownloadProgress } from './messageFrontEnd';
 import { startOnWindows } from './start';
 
@@ -11,17 +11,14 @@ import iconv from 'iconv-lite';
 /**
  * Install WSL, download docker.exe, install docker, start docker
  */
-// eslint-disable-next-line
 const installOnWindows = async (): Promise<any> => {
-  logger.info(`Starting docker install...`);
+  logger.info('Starting docker install...');
 
   try {
     // check if wsl is installed and install
-    let stdout;
-    let stderr;
     let isWslInstalled = false;
     try {
-      ({ stdout, stderr } = await execAwait('wsl -l -v', { log: true }));
+      const { stdout, stderr } = await execAwait('wsl -l -v', { log: true });
       logger.info(`wsl list verbose output: ${stdout} ${stderr}`);
       const stdoutStr = iconv.decode(Buffer.from(stdout), 'ucs2');
 
@@ -101,14 +98,13 @@ const installOnWindows = async (): Promise<any> => {
     await startOnWindows();
 
     return true;
-    // eslint-disable-next-line
   } catch (err: any) {
     console.log(err);
     logger.error(err);
     logger.info('Unable to install docker.');
     const errStr = iconv.decode(Buffer.from(err.toString()), 'ucs2');
     if (errStr.includes('system reboot is required')) {
-      return { error: `Please reboot your computer.` };
+      return { error: 'Please reboot your computer.' };
     }
     return { error: `Unable to install Docker. ${errStr}` };
   }

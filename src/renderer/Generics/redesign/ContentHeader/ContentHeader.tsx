@@ -1,10 +1,10 @@
 import { HeaderButton } from '../HeaderButton/HeaderButton';
 import {
   container,
+  spacer,
+  subtitleStyle,
   textContainer,
   titleStyle,
-  subtitleStyle,
-  spacer,
 } from './contentHeader.css';
 
 export interface ContentHeaderProps {

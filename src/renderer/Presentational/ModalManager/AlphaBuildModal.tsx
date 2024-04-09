@@ -1,6 +1,6 @@
+import { Modal } from '../../Generics/redesign/Modal/Modal';
 import electron from '../../electronGlobal';
 import AlphaBuild from '../AlphaBuild/AlphaBuild';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalRoutes } from './modalUtils';
 
 type Props = {

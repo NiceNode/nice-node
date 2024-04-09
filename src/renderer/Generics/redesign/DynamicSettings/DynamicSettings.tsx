@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import {
+import type {
   ConfigTranslationMap,
   ConfigValuesMap,
 } from '../../../../common/nodeConfig';
-import { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
+import type { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
 import LineLabelSettings from '../LabelSetting/LabelSettings';
 import convertConfigToLabelSettings from './convertConfigToLabelSettings';
 

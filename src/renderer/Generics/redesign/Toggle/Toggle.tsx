@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { container, inputContainer, toggleText } from './toggle.css';
 
 export interface ToggleProps {
