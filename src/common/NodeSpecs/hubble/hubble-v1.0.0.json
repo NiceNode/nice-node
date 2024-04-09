@@ -22,7 +22,6 @@
     },
     "imageName": "docker.io/farcasterxyz/hubble",
     "defaultImageTag": "latest"
-
   },
   "category": "L1/Hub",
   "rpcTranslation": "farcaster-l1",

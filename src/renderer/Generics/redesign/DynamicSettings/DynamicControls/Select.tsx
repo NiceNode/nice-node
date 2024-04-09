@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import ReactSelect, {
-  MenuPlacement,
-  MultiValue,
-  SingleValue,
+  type MenuPlacement,
+  type MultiValue,
+  type SingleValue,
 } from 'react-select';
 
 type SelectOption = { value: string; label: string };

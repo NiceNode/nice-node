@@ -17,9 +17,9 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************** */
 
+import { spawn } from 'node:child_process';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { spawn } from 'node:child_process';
 import { getInstallationPath } from './podman-cli';
 
 const windows = os.platform() === 'win32';
@@ -55,11 +55,10 @@ export interface RunOptions {
 }
 
 export function getAssetsFolder(): string {
-  // eslint-disable-next-line
   if (isDev()) {
     return path.resolve(__dirname, '..', 'assets');
   }
-  // eslint-disable-next-line
+
   return path.resolve(
     (process as any).resourcesPath,
     'extensions',
@@ -79,23 +78,28 @@ export function runCliCommand(
     let env = { ...process.env }; // clone original env object
 
     // In production mode, applications don't have access to the 'user' path like brew
+    let formattedCommand = command;
+    let formattedArgs = args;
     if (isMac() || isWindows()) {
       env.PATH = getInstallationPath();
       if (isWindows()) {
         // Escape any whitespaces in command
-        command = `"${command}"`;
+        formattedCommand = `"${command}"`;
       }
     } else if (env.FLATPAK_ID) {
       // need to execute the command on the host
-      args = ['--host', command, ...args];
-      command = 'flatpak-spawn';
+      formattedArgs = ['--host', command, ...args];
+      formattedCommand = 'flatpak-spawn';
     }
 
     if (options?.env) {
       env = Object.assign(env, options.env);
     }
 
-    const spawnProcess = spawn(command, args, { shell: isWindows(), env });
+    const spawnProcess = spawn(formattedCommand, formattedArgs, {
+      shell: isWindows(),
+      env,
+    });
     spawnProcess.on('error', (err) => {
       reject(err);
     });

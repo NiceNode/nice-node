@@ -1,10 +1,10 @@
-import path from 'node:path';
 import { writeFileSync } from 'node:fs';
+import path from 'node:path';
 import { app } from 'electron';
 
+import { checkAndOrCreateDir, getAssetsFolder } from '../files';
 import logger from '../logger';
 import { isLinux } from '../platform';
-import { checkAndOrCreateDir, getAssetsFolder } from '../files';
 
 const NN_DESKTOP_FILE_NAME = 'nice-node.desktop';
 const NN_DESKTOP_DIR_PATH = path.join(
@@ -30,7 +30,7 @@ export const setOpenAtLoginLinux = async (shouldOpenAtStartup: boolean) => {
     `setOpenAtLoginLinux(shouldOpenAtStartup):  ${shouldOpenAtStartup}`,
   );
   if (!isLinux()) {
-    logger.error(`setOpenAtLoginLinux called on non-linux os`);
+    logger.error('setOpenAtLoginLinux called on non-linux os');
     throw new Error(
       'Tried to set linux autostart on login file while not on linux',
     );

@@ -8,34 +8,33 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'node:path';
-import { app, BrowserWindow, shell } from 'electron';
 import * as Sentry from '@sentry/electron/main';
 import dotenv from 'dotenv';
+import { BrowserWindow, app, shell } from 'electron';
 
 import {
-  installExtension,
   REACT_DEVELOPER_TOOLS,
+  installExtension,
 } from 'electron-extension-installer';
+import { setCorsForNiceNode } from './corsMiddleware';
+import * as cronJobs from './cronJobs';
+import * as i18nMain from './i18nMain';
+import * as ipc from './ipc';
 import logger from './logger';
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
-import { fixPathEnvVar } from './util/fixPathEnvVar';
 import { setWindow } from './messenger';
+import * as monitor from './monitor';
 import {
   initialize as initNodeManager,
   onExit as onExitNodeManager,
 } from './nodeManager';
-// eslint-disable-next-line import/no-cycle
-import * as ipc from './ipc';
 import * as power from './power';
 import * as processExit from './processExit';
 import * as systemInfo from './systemInfo';
-import { setCorsForNiceNode } from './corsMiddleware';
-import * as updater from './updater';
-import * as monitor from './monitor';
-import * as cronJobs from './cronJobs';
-import * as i18nMain from './i18nMain';
 import * as tray from './tray';
+import * as updater from './updater';
+import { resolveHtmlPath } from './util';
+import { fixPathEnvVar } from './util/fixPathEnvVar';
 
 if (process.env.NODE_ENV === 'development') {
   dotenv.config();
@@ -80,13 +79,13 @@ const isDevelopment =
 //   require('electron-debug')();
 // }
 
-  // __dirname = package.json dir or app.asar in build. works in dev and built app.
+// __dirname = package.json dir or app.asar in build. works in dev and built app.
 const RESOURCES_PATH = app.isPackaged
   ? path.join(__dirname)
   : path.join(__dirname, '..', '..', 'assets'); // starting point: .vite/build/main.js
 
 const getAssetPath = (...paths: string[]): string => {
-  logger.log("RESOURCES_PATH: ", RESOURCES_PATH);
+  logger.log('RESOURCES_PATH: ', RESOURCES_PATH);
   return path.join(RESOURCES_PATH, ...paths);
 };
 
@@ -107,7 +106,7 @@ export const createWindow = async () => {
   }
 
   const preloadPath = path.join(__dirname, 'preload.js');
-  console.log("preloadPath: ", preloadPath);
+  console.log('preloadPath: ', preloadPath);
   mainWindow = new BrowserWindow({
     titleBarOverlay: true,
     titleBarStyle: 'hiddenInset',
@@ -130,11 +129,16 @@ export const createWindow = async () => {
     vibrancy: process.platform === 'darwin' ? 'sidebar' : undefined,
   });
 
-  console.log("MAIN_WINDOW_VITE_DEV_SERVER_URL: ", MAIN_WINDOW_VITE_DEV_SERVER_URL);
+  console.log(
+    'MAIN_WINDOW_VITE_DEV_SERVER_URL: ',
+    MAIN_WINDOW_VITE_DEV_SERVER_URL,
+  );
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
-    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    mainWindow.loadFile(
+      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
+    );
   }
 
   // mainWindow.loadURL(resolveHtmlPath('index.html'));

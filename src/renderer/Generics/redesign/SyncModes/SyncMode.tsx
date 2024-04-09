@@ -1,15 +1,15 @@
-import {
-  container,
-  activeContainer,
-  selectedContainer,
-  syncModeButton,
-  syncModeTitle,
-  syncModeDetails,
-  syncModeInfo,
-} from './syncModes.css';
 import syncMode1 from '../../../assets/images/syncModes/syncMode1.svg';
 import syncMode2 from '../../../assets/images/syncModes/syncMode2.svg';
 import syncMode3 from '../../../assets/images/syncModes/syncMode3.svg';
+import {
+  activeContainer,
+  container,
+  selectedContainer,
+  syncModeButton,
+  syncModeDetails,
+  syncModeInfo,
+  syncModeTitle,
+} from './syncModes.css';
 
 export interface SyncModeProps {
   value: string;

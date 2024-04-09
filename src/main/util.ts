@@ -1,6 +1,6 @@
+import path from 'node:path';
 /* eslint import/prefer-default-export: off, import/no-mutable-exports: off */
-import { URL } from 'url';
-import path from 'path';
+import { URL } from 'node:url';
 
 export function resolveHtmlPath(htmlFileName: string) {
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -10,6 +10,6 @@ export function resolveHtmlPath(htmlFileName: string) {
   }
   return `file://${path.join(
     __dirname,
-    `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html?${htmlFileName}`
+    `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html?${htmlFileName}`,
   )}`;
 }

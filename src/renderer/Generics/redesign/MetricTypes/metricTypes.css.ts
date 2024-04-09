@@ -1,5 +1,5 @@
-import { style, keyframes } from '@vanilla-extract/css';
-import { vars, common } from '../theme.css';
+import { keyframes, style } from '@vanilla-extract/css';
+import { common, vars } from '../theme.css';
 
 export const activeContainer = style({});
 

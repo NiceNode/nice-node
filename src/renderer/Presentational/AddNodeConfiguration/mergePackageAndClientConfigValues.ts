@@ -1,5 +1,5 @@
-import { ConfigValuesMap } from '../../../common/nodeConfig';
-import { NodePackageSpecification } from '../../../common/nodeSpec';
+import type { ConfigValuesMap } from '../../../common/nodeConfig';
+import type { NodePackageSpecification } from '../../../common/nodeSpec';
 
 export type ConfigMergeArgs = {
   nodePackageSpec: NodePackageSpecification;
@@ -76,7 +76,6 @@ export const mergePackageAndClientConfigValues = (
           configTranslation.uiControl.type !== 'select/single' &&
           configTranslation.uiControl.type !== 'select/multiple'
         ) {
-          // eslint
           serviceConfigs = configTranslation.uiControl?.serviceConfigs;
         } else {
           // find value in the select options which contains the serviceConfigs

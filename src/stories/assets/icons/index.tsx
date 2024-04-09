@@ -3,9 +3,9 @@ export interface Icons {
   play?: string;
 }
 
+import playIcon from './play.svg?react';
 // Define all icons here
 import settingsIcon from './settings.svg?react';
-import playIcon from './play.svg?react';
 
 export const ICONS = {
   settings: settingsIcon,

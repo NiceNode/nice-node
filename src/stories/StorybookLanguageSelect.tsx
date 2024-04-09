@@ -1,12 +1,11 @@
-import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Select from '../renderer/Generics/redesign/Select/Select';
 
 const StorybookLanguageSelect = () => {
   const { i18n } = useTranslation();
   const [sLang, setLang] = useState<string>('en');
 
-  // eslint-disable-next-line
   const onChangeLanguage = async (newLang: any) => {
     console.log('language selected: ', newLang.value);
     setLang(newLang.value);

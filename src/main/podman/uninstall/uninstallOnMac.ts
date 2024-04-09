@@ -1,13 +1,13 @@
 import { app } from 'electron';
-import logger from '../../logger';
-import { execAwait } from '../../execHelper';
 import { reportEvent } from '../../events';
+import { execAwait } from '../../execHelper';
+import logger from '../../logger';
 
 /**
  * Uninstall podman by removing binaries and various configuration files
  */
 const uninstallOnMac = async (): Promise<boolean | { error: string }> => {
-  logger.info(`Uninstalling podman...`);
+  logger.info('Uninstalling podman...');
   try {
     // Returns /Users/<user> (Ex. /Users/johns)
     const userHome = app.getPath('home');
@@ -18,9 +18,9 @@ const uninstallOnMac = async (): Promise<boolean | { error: string }> => {
       `${userHome}/.config/containers`,
       `${userHome}/.ssh/*podman*`,
       `${userHome}/.ssh/*nicenode*`,
-      `/private/etc/paths.d/podman-pkg`,
-      `/usr/local/podman`,
-      `/Library/LaunchDaemons/*podman*`,
+      '/private/etc/paths.d/podman-pkg',
+      '/usr/local/podman',
+      '/Library/LaunchDaemons/*podman*',
     ];
     // This can throw return an error if a file or folder doesn't exist.
     // This is ok, because it will still delete the other folders that do exist.

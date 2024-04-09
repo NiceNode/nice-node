@@ -22,6 +22,7 @@ const InternalLink = ({ onClick, text, danger }: InternalLinkProps) => {
     linkStyles.push(dangerLinkText);
   }
   return (
+    // biome-ignore lint/a11y/useValidAnchor: <explanation>
     <a
       className={linkStyles.join(' ')}
       href="javascript:void(0);"

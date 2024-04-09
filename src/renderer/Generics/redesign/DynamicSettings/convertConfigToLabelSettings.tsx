@@ -1,13 +1,13 @@
-import {
+import type {
   ConfigTranslation,
   ConfigValuesMap,
 } from '../../../../common/nodeConfig';
-import { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
-import {
+import type { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
+import type {
   LabelSettingsItem,
   LabelSettingsSectionProps,
 } from '../LabelSetting/LabelValuesSection';
-import { CategoryConfig } from './DynamicSettings';
+import type { CategoryConfig } from './DynamicSettings';
 import Setting from './Setting';
 
 const convertConfigToLabelSettings = ({

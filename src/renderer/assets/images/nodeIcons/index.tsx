@@ -2,37 +2,36 @@ import { common } from '../../../Generics/redesign/theme.css';
 
 import ethereum from './Logo-Ethereum.png';
 
+import besu from './Logo-Besu.png';
+import erigon from './Logo-Erigon.png';
 // Execution
 import geth from './Logo-Geth.png';
-import erigon from './Logo-Erigon.png';
-import besu from './Logo-Besu.png';
 import nethermind from './Logo-Nethermind.png';
 import reth from './Logo-Reth.png';
 
-// Consensus
-import prysm from './Logo-Prysm.png';
 import lighthouse from './Logo-Lighthouse.png';
-import teku from './Logo-Teku.png';
 import lodestar from './Logo-Lodestar.png';
 import nimbus from './Logo-Nimbus.png';
+// Consensus
+import prysm from './Logo-Prysm.png';
+import teku from './Logo-Teku.png';
 
+import arbitrum from './Logo-Arbitrum.png';
+import base from './Logo-Base.png';
+import magi from './Logo-Magi.png';
 // L2
 import optimism from './Logo-Optimism.png';
 import hildr from './Logo-OptimismJava.png';
-import magi from './Logo-Magi.png';
-import arbitrum from './Logo-Arbitrum.png';
-import base from './Logo-Base.png';
 import starknet from './Logo-Starknet.png';
 import zkSync from './Logo-zkSync.png';
 
+import farcaster from './Logo-Farcaster.png';
+import livepeer from './Logo-Livepeer.png';
 // Other networks
 import radicle from './Logo-Radicle.png';
-import livepeer from './Logo-Livepeer.png';
-import farcaster from './Logo-Farcaster.png';
 
 // Other node/server types
 import minecraft from './Logo-Minecraft.png';
-
 
 export interface NodeIcons {
   geth?: string;
@@ -45,11 +44,11 @@ export interface NodeIcons {
   teku?: string;
   lodestar?: string;
   nimbus?: string;
-  ['prysm-beacon']?: string;
-  ['lighthouse-beacon']?: string;
-  ['teku-beacon']?: string;
-  ['lodestar-beacon']?: string;
-  ['nimbus-beacon']?: string;
+  'prysm-beacon'?: string;
+  'lighthouse-beacon'?: string;
+  'teku-beacon'?: string;
+  'lodestar-beacon'?: string;
+  'nimbus-beacon'?: string;
   ethereum?: string;
   optimism?: string;
   arbitrum?: string;
@@ -58,15 +57,15 @@ export interface NodeIcons {
   zkSync?: string;
   radicle?: string;
   livepeer?: string;
-  ['op-geth']?: string;
-  ['op-node']?: string;
+  'op-geth'?: string;
+  'op-node'?: string;
   hildr?: string;
   magi?: string;
   farcaster?: string;
   hubble?: string;
   nitro?: string;
   minecraft?: string;
-  ['itzg-minecraft']?: string;
+  'itzg-minecraft'?: string;
 }
 
 // Define all icons here

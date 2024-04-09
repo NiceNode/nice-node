@@ -1,10 +1,8 @@
-/* eslint-disable no-use-before-define */
+import type { LabelValuesSectionItemsProps } from '../renderer/Generics/redesign/LabelValues/LabelValuesSection';
+import type { SystemRequirements } from './systemRequirements';
 
-import { LabelValuesSectionItemsProps } from '../renderer/Generics/redesign/LabelValues/LabelValuesSection';
-import { SystemRequirements } from './systemRequirements';
-
-import { ConfigValuesMap, ConfigTranslationMap } from './nodeConfig';
-import { NiceNodeRpcTranslation } from './rpcTranslation';
+import type { ConfigTranslationMap, ConfigValuesMap } from './nodeConfig';
+import type { NiceNodeRpcTranslation } from './rpcTranslation';
 
 /* eslint-disable max-classes-per-file */
 export type ExecutionTypes = 'docker' | 'binary' | 'nodePackage';

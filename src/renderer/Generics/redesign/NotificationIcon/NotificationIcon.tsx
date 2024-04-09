@@ -1,13 +1,13 @@
-import { IconId } from '../../../assets/images/icons';
-import {
-  iconBackground,
-  hasStatusStyle,
-  smallStyle,
-  statusStyle,
-  containerStyle,
-} from './notificationIcon.css';
+import type { IconId } from '../../../assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import { common } from '../theme.css';
+import {
+  containerStyle,
+  hasStatusStyle,
+  iconBackground,
+  smallStyle,
+  statusStyle,
+} from './notificationIcon.css';
 
 export interface NotificationIconProps {
   /**

@@ -36,10 +36,10 @@ export const inputContainer = style({
   borderRadius: '4px',
   transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
   selectors: {
-    [`&.leftIcon`]: {
+    '&.leftIcon': {
       paddingLeft: 32,
     },
-    [`&.rightIcon`]: {
+    '&.rightIcon': {
       paddingRight: 32,
     },
   },

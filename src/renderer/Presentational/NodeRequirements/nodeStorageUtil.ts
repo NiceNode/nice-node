@@ -1,5 +1,5 @@
-import { Systeminformation } from 'systeminformation';
-import { SystemData } from '../../../main/systemInfo';
+import type { Systeminformation } from 'systeminformation';
+import type { SystemData } from '../../../main/systemInfo';
 
 export type SystemStorageLocation = {
   type: string;

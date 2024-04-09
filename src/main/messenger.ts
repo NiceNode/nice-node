@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import type { BrowserWindow } from 'electron';
 
 // import logger from './logger';
 
@@ -8,7 +8,6 @@ export const setWindow = (inMainWindow: BrowserWindow): void => {
   mainWindow = inMainWindow;
 };
 
-// eslint-disable-next-line
 export const send = (channel: string, ...args: any[]): void => {
   if (!mainWindow) {
     return;

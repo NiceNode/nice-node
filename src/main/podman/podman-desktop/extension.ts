@@ -590,7 +590,7 @@
 
 //   // allows to create machines
 //   if (isMac() || isWindows()) {
-//     // eslint-disable-next-line
+//
 //     const createFunction = async (
 //       params: { [key: string]: any },
 //       logger: extensionApi.Logger

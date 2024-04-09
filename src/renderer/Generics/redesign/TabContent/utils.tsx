@@ -1,6 +1,6 @@
-import { MetricData } from '../../../../common/node';
-import { PeriodBreakdownDataProps } from './TabContent';
+import type { MetricData } from '../../../../common/node';
 import i18n from '../../../i18n';
+import type { PeriodBreakdownDataProps } from './TabContent';
 
 interface BreakDownObjects {
   sync: {
@@ -23,7 +23,7 @@ interface BreakDownObjects {
     sectionTitle: string;
     items: { label: string; value: string | undefined }[];
   }[];
-  // eslint-disable-next-line
+
   [key: string]: any; // index signature
 }
 

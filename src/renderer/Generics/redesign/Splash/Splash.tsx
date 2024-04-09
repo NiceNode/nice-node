@@ -1,17 +1,17 @@
-import { useTranslation, Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import welcome from '../../../assets/images/artwork/welcome.png';
+import niceNodeIcon from '../../../assets/images/logo/mono.svg';
+import Button from '../Button/Button';
+import Linking from '../Link/Linking';
 import {
   container,
   contentContainer,
-  titleFont,
   descriptionFont,
   iconClass,
   termsContainer,
   termsText,
+  titleFont,
 } from './splash.css';
-import niceNodeIcon from '../../../assets/images/logo/mono.svg';
-import Button from '../Button/Button';
-import welcome from '../../../assets/images/artwork/welcome.png';
-import Linking from '../Link/Linking';
 
 /**
  * icon: ImgHTMLAttributes<HTMLImageElement>.src?: string | undefined

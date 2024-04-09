@@ -1,21 +1,21 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import electron from '../../electronGlobal';
-import { useAppDispatch } from '../../state/hooks';
-import { updateSelectedNodePackageId } from '../../state/node';
-import AddNodeStepperModal from '../AddNodeStepper/AddNodeStepperModal';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
-import { modalOnChangeConfig, ModalConfig } from './modalUtils';
-import { useGetPodmanDetailsQuery } from '../../state/settingsService';
-import { reportEvent } from '../../events/reportEvent';
-import { NodePackageSpecification } from '../../../common/nodeSpec';
-import { AddNodePackageNodeService } from '../../../main/nodePackageManager';
-import {
+import type { NodePackageSpecification } from '../../../common/nodeSpec';
+import type { AddNodePackageNodeService } from '../../../main/nodePackageManager';
+import type {
   NodeLibrary,
   NodePackageLibrary,
 } from '../../../main/state/nodeLibrary';
+import { Modal } from '../../Generics/redesign/Modal/Modal';
+import electron from '../../electronGlobal';
+import { reportEvent } from '../../events/reportEvent';
+import { useAppDispatch } from '../../state/hooks';
+import { updateSelectedNodePackageId } from '../../state/node';
+import { useGetPodmanDetailsQuery } from '../../state/settingsService';
 import { mergePackageAndClientConfigValues } from '../AddNodeConfiguration/mergePackageAndClientConfigValues';
+import AddNodeStepperModal from '../AddNodeStepper/AddNodeStepperModal';
 import { arePodmanRequirementsMet } from '../AddNodeStepper/podmanRequirements';
+import { type ModalConfig, modalOnChangeConfig } from './modalUtils';
 
 type Props = {
   modalOnClose: () => void;
@@ -119,7 +119,6 @@ export const AddNodeModal = ({ modalOnClose }: Props) => {
     }
     const services: AddNodePackageNodeService[] = [];
     if (nodeLibrary && clientSelections) {
-      // eslint-disable-next-line
       for (const [serviceId, selectOption] of Object.entries(
         clientSelections,
       )) {

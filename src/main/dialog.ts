@@ -1,17 +1,17 @@
 /* eslint-disable consistent-return */
-import { BrowserWindow, dialog } from 'electron';
+import { type BrowserWindow, dialog } from 'electron';
 
-import Node, { NodeId } from '../common/node';
+import type Node from '../common/node';
+import type { NodeId } from '../common/node';
 import {
+  type CheckStorageDetails,
   getNodesDirPath,
-  CheckStorageDetails,
   getSystemFreeDiskSpace,
 } from './files';
+import i18nMain from './i18nMain';
 import logger from './logger';
-// eslint-disable-next-line import/no-cycle
 import { getMainWindow } from './main';
 import { getNode, updateNode } from './state/nodes';
-import { i18nMain } from './i18nMain';
 
 const t = i18nMain.getFixedT(null, 'dialog');
 
@@ -58,7 +58,7 @@ export const openDialogForNodeDataDir = async (nodeId: NodeId) => {
       return result.filePaths[0];
     }
   }
-  // eslint-disable-next-line no-useless-return
+
   return;
 };
 
@@ -92,6 +92,6 @@ export const openDialogForStorageLocation = async (): Promise<
       };
     }
   }
-  // eslint-disable-next-line no-useless-return
+
   return;
 };

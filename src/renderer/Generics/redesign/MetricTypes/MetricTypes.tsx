@@ -1,23 +1,23 @@
 import { useTranslation } from 'react-i18next';
-import { NiceNodeRpcTranslation } from '../../../../common/rpcTranslation';
-import { IconId } from '../../../assets/images/icons';
-import { SYNC_STATUS } from '../consts';
+import type { NiceNodeRpcTranslation } from '../../../../common/rpcTranslation';
+import type { IconId } from '../../../assets/images/icons';
 import { Icon } from '../Icon/Icon';
+import { SYNC_STATUS } from '../consts';
 import {
-  statusStyle,
   container,
+  green,
   iconContainer,
+  infoStyle,
+  labelStyle,
+  red,
+  statusStyle,
+  stopped,
+  sync,
   textContainer,
   titleContainer,
   titleStyle,
-  labelStyle,
-  infoStyle,
-  green,
-  yellow,
-  red,
-  sync,
   updating,
-  stopped,
+  yellow,
 } from './metricTypes.css';
 
 export type MetricStats =
@@ -146,7 +146,9 @@ export const MetricTypes = ({
         if (statsValue === undefined) {
           titleText = `${0}`;
         } else if (typeof statsValue === 'string') {
-          titleText = `${(parseInt(statsValue, 10) || 0).toLocaleString()}`;
+          titleText = `${(
+            Number.parseInt(statsValue, 10) || 0
+          ).toLocaleString()}`;
         } else {
           titleText = `${statsValue.toLocaleString()}`;
         }

@@ -1,10 +1,10 @@
-import {
-  SystemRequirements,
+import type {
   CpuRequirements,
   // DockerRequirements,
   InternetRequirements,
   MemoryRequirements,
   StorageRequirements,
+  SystemRequirements,
 } from '../../../common/systemRequirements';
 
 export const mergeSystemRequirements = (
@@ -13,13 +13,12 @@ export const mergeSystemRequirements = (
   const mergedReqs: SystemRequirements = {};
 
   systemRequirementsArray.forEach((systemRequirements) => {
-    // eslint-disable-next-line no-restricted-syntax
+   no-restricted-syntax
     for (const [nodeReqKey, nodeReqValue] of Object.entries(
       systemRequirements,
     )) {
       // console.log(`${nodeReqKey}: ${nodeReqValue}`);
       if (nodeReqKey === 'documentationUrl' || nodeReqKey === 'description') {
-        // eslint-disable-next-line no-continue
         continue;
       }
       if (nodeReqKey === 'cpu') {

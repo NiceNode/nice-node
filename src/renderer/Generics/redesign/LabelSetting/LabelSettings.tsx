@@ -1,11 +1,11 @@
+import LineLabelSettingsItem, {
+  type LabelSettingsSectionProps,
+} from './LabelValuesSection';
 import {
-  titleFont,
   columnContainerStyle,
   columnItemStyle,
+  titleFont,
 } from './labelSettings.css';
-import LineLabelSettingsItem, {
-  LabelSettingsSectionProps,
-} from './LabelValuesSection';
 
 export interface LineLabelSettingsProps {
   /**
@@ -42,14 +42,13 @@ const LineLabelSettings = ({
     <>
       {title && <div className={titleFont}>{title}</div>}
       <div className={columnContainer}>
-        {items &&
-          items.map((item, index) => (
-            // Settings section ordering does not change during view of modal
-            // eslint-disable-next-line react/no-array-index-key
-            <div className={columnDiv} key={index}>
-              <LineLabelSettingsItem type={type} {...item} />
-            </div>
-          ))}
+        {items?.map((item, index) => (
+          // Settings section ordering does not change during view of modal
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+          <div className={columnDiv} key={index}>
+            <LineLabelSettingsItem type={type} {...item} />
+          </div>
+        ))}
       </div>
     </>
   );

@@ -1,9 +1,7 @@
-import { access, mkdir, readFile, rm, chmod } from 'fs/promises';
-import path from 'path';
-import { app } from 'electron';
+import { access, chmod, mkdir, readFile, rm } from 'node:fs/promises';
+import path from 'node:path';
 import checkDiskSpace from 'check-disk-space';
-
-// eslint-disable-next-line import/no-cycle
+import { app } from 'electron';
 
 import logger from './logger';
 
@@ -195,11 +193,10 @@ export const getNodeSpecificationsFolder = (): string => {
   //   }`,
   // );
 
-  // eslint-disable-next-line
   if (process.env.NODE_ENV === 'development') {
     return path.resolve(__dirname, '..', 'common', 'NodeSpecs');
   }
-  // eslint-disable-next-line
+
   return path.resolve((process as any).resourcesPath, 'NodeSpecs');
 };
 
@@ -220,10 +217,9 @@ export const getAssetsFolder = (): string => {
     }`,
   );
 
-  // eslint-disable-next-line
   if (process.env.NODE_ENV === 'development') {
     return path.resolve(__dirname, '..', '..', 'assets');
   }
-  // eslint-disable-next-line
+
   return path.resolve((process as any).resourcesPath, 'assets');
 };

@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { NodeIconId } from '../../../assets/images/nodeIcons';
+import type { NodeIconId } from '../../../assets/images/nodeIcons';
 import NodeIcon from '../NodeIcon/NodeIcon';
 import {
   container,
-  selectedContainer,
   iconContainer,
+  infoStyle,
+  selectedContainer,
   textContainer,
   titleStyle,
-  infoStyle,
 } from './sideBarNodeItem.css';
 
 export type SidebarNodeStatus =

@@ -1,15 +1,15 @@
-import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { ThemeSetting } from '../../../main/state/settings';
-import { useGetSettingsQuery } from '../../state/settingsService';
-import electron from '../../electronGlobal';
-import PreferencesWrapper from '../Preferences/PreferencesWrapper';
+import { useTranslation } from 'react-i18next';
+import type { ThemeSetting } from '../../../main/state/settings';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
-import { modalOnChangeConfig, ModalConfig } from './modalUtils';
+import electron from '../../electronGlobal';
 import {
   reportEvent,
   setRemoteEventReportingEnabled,
 } from '../../events/reportEvent';
+import { useGetSettingsQuery } from '../../state/settingsService';
+import PreferencesWrapper from '../Preferences/PreferencesWrapper';
+import { type ModalConfig, modalOnChangeConfig } from './modalUtils';
 
 type Props = {
   modalOnClose: () => void;

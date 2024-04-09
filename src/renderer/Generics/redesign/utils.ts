@@ -1,4 +1,4 @@
-import { ClientStatusProps, SYNC_STATUS } from './consts';
+import { type ClientStatusProps, SYNC_STATUS } from './consts';
 
 export const getSyncStatus = (status: ClientStatusProps) => {
   let syncStatus;

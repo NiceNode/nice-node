@@ -1,9 +1,9 @@
+import { type MetricData, isDockerNode } from '../../common/node';
 import { getUsedDiskSpace } from '../files';
 import logger from '../logger';
-import { MetricData, isDockerNode } from '../../common/node';
 import * as nodeStore from '../state/nodes';
 import { getAllContainerMetrics } from './metrics';
-import { ContainerStats } from './types';
+import type { ContainerStats } from './types';
 
 const METRICS_POLLING_INTERVAL = 15000; // 15 seconds
 let monitoringInterval: ReturnType<typeof setTimeout>;
@@ -64,11 +64,10 @@ const updateAllNodeMetrics = async () => {
               const { dataDir } = node.runtime;
               return getUsedDiskSpace(dataDir) || 0;
             };
-            // eslint-disable-next-line no-await-in-loop
             const diskGBs = (await getUsedDiskSpaceFunc()) as number;
             (node.runtime.usage.diskGBs as MetricData[]).unshift({
               x: Date.now(), // timestamp
-              y: parseFloat(diskGBs.toFixed(2)), // GBs
+              y: Number.parseFloat(diskGBs.toFixed(2)), // GBs
             });
           } else {
             node.runtime.usage.memoryBytes = [];

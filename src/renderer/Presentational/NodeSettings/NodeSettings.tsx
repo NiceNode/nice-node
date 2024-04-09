@@ -1,20 +1,23 @@
 import { useTranslation } from 'react-i18next';
-import DynamicSettings, {
-  CategoryConfig,
-} from '../../Generics/redesign/DynamicSettings/DynamicSettings';
-import { ConfigTranslation, ConfigValuesMap } from '../../../common/nodeConfig';
-import { Message } from '../../Generics/redesign/Message/Message';
-import { SettingChangeHandler } from './NodeSettingsWrapper';
-import InternalLink from '../../Generics/redesign/Link/InternalLink';
-import { WalletSettings } from './WalletSettings';
-import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
+import type {
+  ConfigTranslation,
+  ConfigValuesMap,
+} from '../../../common/nodeConfig';
 import Button from '../../Generics/redesign/Button/Button';
+import DynamicSettings, {
+  type CategoryConfig,
+} from '../../Generics/redesign/DynamicSettings/DynamicSettings';
+import InternalLink from '../../Generics/redesign/Link/InternalLink';
+import { Message } from '../../Generics/redesign/Message/Message';
+import { Tabs } from '../../Generics/redesign/Tabs/Tabs';
 import {
-  nodeCommandTitle,
-  nodeCommandContainer,
-  nodeCommand,
   emptyContainer,
+  nodeCommand,
+  nodeCommandContainer,
+  nodeCommandTitle,
 } from './NodeSettings.css';
+import type { SettingChangeHandler } from './NodeSettingsWrapper';
+import { WalletSettings } from './WalletSettings';
 
 export interface NodeSettingsProps {
   categoryConfigs?: CategoryConfig[];

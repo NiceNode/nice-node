@@ -1,6 +1,6 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconId } from '../../../assets/images/icons';
+import type { IconId } from '../../../assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import {
   container,

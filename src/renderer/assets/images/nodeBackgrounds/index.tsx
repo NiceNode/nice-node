@@ -1,16 +1,16 @@
+import besu from './Besu.png';
+import erigon from './Erigon.png';
 // Execution
 import geth from './Geth.png';
-import erigon from './Erigon.png';
-import besu from './Besu.png';
 import nethermind from './Nethermind.png';
 import reth from './Reth.png';
 
-// Consensus
-import prysm from './Prysm.png';
 import lighthouse from './Lighthouse.png';
-import teku from './Teku.png';
 import lodestar from './Lodestar.png';
 import nimbus from './Nimbus.png';
+// Consensus
+import prysm from './Prysm.png';
+import teku from './Teku.png';
 
 export interface NodeBackgrounds {
   geth?: string;

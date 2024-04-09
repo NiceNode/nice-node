@@ -3,9 +3,13 @@ import { Provider } from 'react-redux';
 
 import { store } from '../renderer/state/store';
 
-import StorybookLanguageSelect from './StorybookLanguageSelect';
-import { darkTheme, lightTheme, vars } from '../renderer/Generics/redesign/theme.css';
 import Button from '../renderer/Generics/redesign/Button/Button';
+import {
+  darkTheme,
+  lightTheme,
+  vars,
+} from '../renderer/Generics/redesign/theme.css';
+import StorybookLanguageSelect from './StorybookLanguageSelect';
 
 const RedesignContainerStoryBook = ({ children }: { children: ReactNode }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(false);

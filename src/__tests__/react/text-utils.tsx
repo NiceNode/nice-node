@@ -1,14 +1,14 @@
-// test-utils.jsx
-import React from 'react';
-import { render as rtlRender } from '@testing-library/react';
 import { configureStore } from '@reduxjs/toolkit';
+import { render as rtlRender } from '@testing-library/react';
+// test-utils.jsx
+import type React from 'react';
 import { Provider } from 'react-redux';
-// Import your own reducer
-import { RtkqExecutionWs } from '../../renderer/state/services';
-import { RtkqNodeService } from '../../renderer/state/nodeService';
 // import appStore from '../renderer/state/store';
 import { RtkqNetwork } from '../../renderer/state/network';
 import nodeReducer from '../../renderer/state/node';
+import { RtkqNodeService } from '../../renderer/state/nodeService';
+// Import your own reducer
+import { RtkqExecutionWs } from '../../renderer/state/services';
 import { RtkqSettingsService } from '../../renderer/state/settingsService';
 // import { RtkqNetwork } from '../renderer/state/network';
 

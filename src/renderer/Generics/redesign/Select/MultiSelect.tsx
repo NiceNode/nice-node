@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import ReactSelect, {
-  CSSObjectWithLabel,
-  MenuPlacement,
-  MultiValue,
-  SingleValue,
-  StylesConfig,
+  type CSSObjectWithLabel,
+  type MenuPlacement,
+  type MultiValue,
+  type SingleValue,
+  type StylesConfig,
 } from 'react-select';
 import { vars } from '../theme.css';
 

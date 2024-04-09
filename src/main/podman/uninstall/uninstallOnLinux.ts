@@ -1,13 +1,13 @@
+import { reportEvent } from '../../events';
+import { execAwait } from '../../execHelper';
 // import { app } from 'electron';
 import logger from '../../logger';
-import { execAwait } from '../../execHelper';
-import { reportEvent } from '../../events';
 
 /**
  * Uninstall podman by removing binaries and various configuration files
  */
 const uninstallOnLinux = async (): Promise<boolean | { error: string }> => {
-  logger.info(`Uninstalling podman...`);
+  logger.info('Uninstalling podman...');
   try {
     // Returns /Users/<user> (Ex. /Users/johns)
     // const userHome = app.getPath('home');
