@@ -17,6 +17,7 @@ export default defineConfig((env) => {
     base: './',
     build: {
       outDir: `.vite/renderer/${name}`,
+      publicDir: 'assets'
     },
     plugins: [pluginExposeRenderer(name), vanillaExtractPlugin(), svgr()],
     resolve: {

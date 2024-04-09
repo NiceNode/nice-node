@@ -137,3 +137,6 @@ typings/
 
 # Electron-Forge
 out/
+
+# For analyzing electron built asar packed files
+outAsar/

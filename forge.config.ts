@@ -11,6 +11,7 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses';
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
+    icon: './assets/icon',
     // unsure if this is needed below:
     ignore: [ /stories/, /__tests__/, /.storybook/, /storybook/, /storybook-static/ ],
   },
@@ -18,10 +19,17 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({}),
-    new MakerZIP({}, ['darwin']),
+    new MakerZIP({}),
     new MakerRpm({}),
     new MakerDeb({}),
-    new MakerDMG({}),
+    new MakerDMG({
+      background: './assets/background.tiff',
+      // installer name. default includes version number in filename
+      // name: "NiceNode Installer",
+      icon: './assets/installer.icns',
+      additionalDMGOptions: {
+      }
+    }, ['darwin']),
   ],
   plugins: [
     new VitePlugin({

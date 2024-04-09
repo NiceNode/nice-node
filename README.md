@@ -88,3 +88,9 @@ To run Storybook locally:
 ```bash
 npm run storybook
 ```
+
+
+## Debugging ASAR and contents
+`npx @electron/asar extract app.asar <destfolder>` can be used to determine the contents of asar
+
+`npm run package` followed by `mkdir outAsar` and `npx @electron/asar extract ./out/NiceNode-darwin-arm64/NiceNode.app/Contents/Resources/app.asar outAsar` on macOS

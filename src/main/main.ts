@@ -79,11 +79,13 @@ const isDevelopment =
 //   require('electron-debug')();
 // }
 
+  // __dirname = package.json dir or app.asar in build. works in dev and built app.
 const RESOURCES_PATH = app.isPackaged
-  ? path.join(process.resourcesPath, 'assets')
-  : path.join(__dirname, '../../assets');
+  ? path.join(__dirname)
+  : path.join(__dirname, '..', '..', 'assets'); // starting point: .vite/build/main.js
 
 const getAssetPath = (...paths: string[]): string => {
+  logger.log("RESOURCES_PATH: ", RESOURCES_PATH);
   return path.join(RESOURCES_PATH, ...paths);
 };
 
@@ -211,20 +213,16 @@ app.on('will-quit', (e) => {
   }
 });
 
-app
-  .whenReady()
-  .then(() => {
-    initialize();
+app.on('ready', () => {
+  createWindow();
+  initialize();
+});
 
-    createWindow();
-    // dontSuspendSystem();
-    app.on('activate', () => {
-      // On macOS it's common to re-create a window in the app when the
-      // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
-    });
-  })
-  .catch(logger.info);
+app.on('activate', () => {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (mainWindow === null) createWindow();
+});
 
 const onExit = () => {
   onExitNodeManager();
