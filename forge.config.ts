@@ -38,13 +38,12 @@ const config: ForgeConfig = {
     new MakerRpm({}),
     new MakerDeb({}),
     new MakerDMG({
-      background: './assets/background.tiff',
+      background: './assets/dmg-background.tiff',
       // installer name. default includes version number in filename
       // name: "NiceNode Installer",
       icon: './assets/installer.icns',
-      additionalDMGOptions: {
-      }
-    }, ['darwin']),
+      overwrite: true,
+    }),
   ],
   plugins: [
     new VitePlugin({

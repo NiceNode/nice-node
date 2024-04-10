@@ -140,3 +140,6 @@ out/
 
 # For analyzing electron built asar packed files
 outAsar/
+
+# typescript default output directory (npm exec tsc)
+dist/
