@@ -11,6 +11,7 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses';
 const packagerConfig: ForgePackagerOptions = {
   asar: true,
   icon: './assets/icon',
+  executableName: 'nice-node', // required for linux?
   // unsure if this is needed below:
   ignore: [ /stories/, /__tests__/, /.storybook/, /storybook/, /storybook-static/ ],
 };
