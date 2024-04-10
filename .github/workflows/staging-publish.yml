@@ -38,6 +38,23 @@ jobs:
           node-version: 20
           cache: npm
 
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: setup appdmg
+        run: |
+          python3 -m pip install setuptools
+          npm install -g appdmg@0.6.6
+
+      - if: ${{ matrix.os == 'macos-latest' }}
+        name: Import Certs
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.CSC_LINK }}
+          p12-password: ${{ secrets.CSC_KEY_PASSWORD }}
+
       - name: Install dependencies
         run: |
           npm ci
