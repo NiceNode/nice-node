@@ -129,7 +129,7 @@ const Notifications = (props: NotificationsType) => {
 					)}
 				</div>
 			</div>
-			renderContent()
+			{renderContent()}
 		</>
 	);
 };
