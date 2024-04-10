@@ -1,6 +1,6 @@
 import { parseLogLevel } from '../../main/util/nodeLogUtils';
+import { describe, it, expect } from 'vitest';
 
-jest.setTimeout(10000);
 describe('Parsing client log level from raw log', () => {
   it('Successfully parses hubble logs', async () => {
     const hubbleInfo =

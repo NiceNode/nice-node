@@ -1,5 +1,6 @@
 import type { NodePackageSpecification } from '../../common/nodeSpec';
 import { mergePackageAndClientConfigValues } from '../../renderer/Presentational/AddNodeConfiguration/mergePackageAndClientConfigValues';
+import { describe, it, expect } from 'vitest';
 
 const nodePackageSpec = {
   specId: 'ethereum',
