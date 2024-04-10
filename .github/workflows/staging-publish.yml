@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
       - name: Install packages for building
@@ -67,8 +67,4 @@ jobs:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
         # previously
         run: |
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            npm run publish
-          else
-            npm run publish
-          fi
+          npm run publish
