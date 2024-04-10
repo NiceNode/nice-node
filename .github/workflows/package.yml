@@ -29,7 +29,7 @@ jobs:
 
       - name: npm make
         env:
-          DEBUG: *electron*
+          DEBUG: "*electron*"
           # macOS code signing and notarization
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
