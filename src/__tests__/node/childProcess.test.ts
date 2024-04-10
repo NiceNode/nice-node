@@ -1,7 +1,8 @@
 import { type SpawnOptions, spawn } from 'node:child_process';
 import sleep from 'await-sleep';
+import { describe, it, expect } from 'vitest';
 
-jest.setTimeout(10000);
+// setTimeout(10000);
 describe('Nodejs process testing', () => {
   it('Successfully Kill never ending node process', async () => {
     // spawn child process

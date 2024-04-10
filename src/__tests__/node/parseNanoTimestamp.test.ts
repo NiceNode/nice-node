@@ -1,7 +1,7 @@
 import { isNanoDateTimeWithTimezone } from '../../main/util/nodeLogUtils';
 import { timestampFromString } from '../../main/util/timestamp';
+import { describe, it, expect } from 'vitest';
 
-jest.setTimeout(10000);
 describe('Parsing nano second timestamp string testing', () => {
   it('Successfully parses valid strings', async () => {
     const string1 = '2022-11-12T21:01:01.751975587Z';
@@ -27,7 +27,6 @@ describe('Parsing nano second timestamp string testing', () => {
   });
 });
 
-jest.setTimeout(10000);
 describe('Parsing isNanoDateTimeWithTimezone', () => {
   it('Successfully parses valid strings as true', async () => {
     const string1 =

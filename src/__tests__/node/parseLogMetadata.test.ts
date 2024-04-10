@@ -1,6 +1,6 @@
 import { parseDockerLogMetadata } from '../../main/util/nodeLogUtils';
+import { describe, it, expect } from 'vitest';
 
-jest.setTimeout(10000);
 describe('Parsing log string testing', () => {
   it('Successfully parses docker log strings with valid timestamps', async () => {
     const logBesu1 =

@@ -27,6 +27,9 @@ export default defineConfig((env) => {
       //   renderer: '/src/renderer',
       // },
     },
+    // test : {
+    //   environment: 'happy-dom',
+    // },
     clearScreen: false,
   } as UserConfig;
 });
