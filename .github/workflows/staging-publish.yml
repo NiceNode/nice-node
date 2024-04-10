@@ -18,13 +18,10 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
-      - name: Install packages for building
+      - if: matrix.os == 'ubuntu-latest'
+        name: Install packages for building
         run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt-get install --no-install-recommends -y rpm libarchive-tools
-          else
-            exit 0
-          fi
+          sudo apt-get install --no-install-recommends -y rpm libarchive-tools
 
       - name: Used variables
         run: |
