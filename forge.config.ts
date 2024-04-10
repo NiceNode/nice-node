@@ -13,7 +13,7 @@ const packagerConfig: ForgePackagerOptions = {
   icon: './assets/icon',
   executableName: 'nice-node', // required for linux?
   // unsure if this is needed below:
-  ignore: [ /stories/, /__tests__/, /.storybook/, /storybook/, /storybook-static/ ],
+  // ignore: [ /stories/, /__tests__/, /.storybook/, /storybook/, /storybook-static/ ],
 };
 
 // skip signing & notarizing on local builds
@@ -23,7 +23,6 @@ if(process.env.CI) {
     identity: process.env.APPLE_PROD_CERT_NAME,
   };
   packagerConfig.osxNotarize = {
-    // tool: 'notarytool', the default
     appleId: process.env.APPLE_ID,
     appleIdPassword: process.env.APPLE_ID_PASSWORD,
     teamId: process.env.APPLE_TEAM_ID

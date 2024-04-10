@@ -25,7 +25,7 @@ jobs:
 
       - name: npm install
         run: |
-          npm install
+          npm ci
 
       - name: npm package
         env:
@@ -41,6 +41,6 @@ jobs:
           MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
           MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           npm run package

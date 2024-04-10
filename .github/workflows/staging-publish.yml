@@ -63,8 +63,5 @@ jobs:
           # This is used for uploading release assets to github
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-          # This is used for publishing snap release assets to snapcraft
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
-        # previously
         run: |
           npm run publish
