@@ -5,6 +5,8 @@ import svgr from "vite-plugin-svgr";
 
 import { pluginExposeRenderer } from './vite.base.config';
 
+console.log("vite.renderer.config.ts");
+
 // https://vitejs.dev/config
 export default defineConfig((env) => {
   const forgeEnv = env as ConfigEnv<'renderer'>;
@@ -22,14 +24,7 @@ export default defineConfig((env) => {
     plugins: [pluginExposeRenderer(name), vanillaExtractPlugin(), svgr()],
     resolve: {
       preserveSymlinks: true,
-      // alias: {
-      //   main: '/src/main',
-      //   renderer: '/src/renderer',
-      // },
     },
-    // test : {
-    //   environment: 'happy-dom',
-    // },
     clearScreen: false,
   } as UserConfig;
 });
