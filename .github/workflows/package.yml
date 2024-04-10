@@ -46,7 +46,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
-            npm run package -- --linux deb AppImage
+            npm run package -- --platform=linux deb
           else
             npm run package
           fi

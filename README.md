@@ -55,15 +55,16 @@ NICENODE_ENV=development
 To package apps for the local platform:
 
 ```bash
-npm run package
+npm run make
 ```
 
 For a specific platform & architecture:
 
 ```bash
-npm run package -- --linux --arm64
-npm run package -- --mac dmg --arm64
+npm run make -- --platform=linux --arch=arm64
+npm run make -- --arch=x64 --platform=darwin
 ```
+arch options include: ia32, x64, armv7l, arm64, mips64el, universal
 
 ## Tests
 
@@ -77,7 +78,7 @@ It requires a packaged build to complete the tests.
 To run them locally, package the source first (and after making any changes to anything other than `tests`), then run the e2e tests with `wdio`
 
 ```bash
-npm run package <your os and arch>
+npm run make <your os and arch>
 npm run wdio
 ```
 
