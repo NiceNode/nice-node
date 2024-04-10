@@ -18,7 +18,9 @@ const packagerConfig: ForgePackagerOptions = {
 // skip signing & notarizing on local builds
 console.log("process.env.CI: ", process.env.CI);
 if(process.env.CI) {
-  packagerConfig.osxSign = {};
+  packagerConfig.osxSign = {
+    identity: process.env.APPLE_PROD_CERT_NAME,
+  };
   packagerConfig.osxNotarize = {
     // tool: 'notarytool', the default
     appleId: process.env.APPLE_ID,
@@ -33,7 +35,7 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
-      authors: 'NiceNode LLC'
+      authors: 'NiceNode LLC',
     }, ['windows']),
     new MakerZIP({}),
     new MakerRpm({}, ['linux']),
