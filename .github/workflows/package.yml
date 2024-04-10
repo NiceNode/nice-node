@@ -27,7 +27,7 @@ jobs:
         run: |
           npm ci
 
-      - name: npm package
+      - name: npm make
         env:
           # macOS code signing and notarization
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -43,4 +43,5 @@ jobs:
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          npm run package
+          npm run make -- --arch=arm64
+          npm run make -- --arch=x64

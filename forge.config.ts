@@ -19,6 +19,10 @@ const packagerConfig: ForgePackagerOptions = {
 // skip signing & notarizing on local builds
 console.log("process.env.CI: ", process.env.CI);
 if(process.env.CI) {
+  console.log("Setting packagerConfig.osxSign and osxNotarize");
+  if(process.env.APPLE_PROD_CERT_NAME) {
+    console.log("process.env.APPLE_PROD_CERT_NAME is not null");
+  }
   packagerConfig.osxSign = {
     identity: process.env.APPLE_PROD_CERT_NAME,
   };
