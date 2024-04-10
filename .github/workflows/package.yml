@@ -28,12 +28,14 @@ jobs:
         run: |
           npm ci
 
-      - name: setup python
+      - if: ${{ matrix.os == 'macos-latest' }}
+        name: setup python
         uses: actions/setup-python@v5
         with:
           python-version: 3.12
 
-      - name: setup appdmg
+      - if: ${{ matrix.os == 'macos-latest' }}
+        name: setup appdmg
         run: |
           python3 -m pip install setuptools
           npm install -g appdmg@0.6.6
