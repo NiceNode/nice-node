@@ -28,6 +28,13 @@ jobs:
         run: |
           npm ci
 
+      - if: ${{ matrix.os == 'macos-latest' }}
+        name: Import Certs
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.CSC_LINK }}
+          p12-password: ${{ secrets.CSC_KEY_PASSWORD }}
+
       - name: npm make
         env:
           DEBUG: "*electron*"
@@ -37,6 +44,8 @@ jobs:
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_PROD_CERT_NAME: ${{ secrets.APPLE_PROD_CERT_NAME }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
 
           # App env vars
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
