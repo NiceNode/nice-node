@@ -65,4 +65,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
         run: |
-          npm run publish -- --arch=x64,arm64
+          npm run publish -- --arch=x64
+          npm run publish -- --arch=arm64
