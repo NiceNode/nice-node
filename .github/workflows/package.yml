@@ -39,6 +39,13 @@ jobs:
 
       - name: npm package
         env:
+          # macOS code signing and notarization
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+          # App env vars
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
           MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
