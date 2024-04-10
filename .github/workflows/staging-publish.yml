@@ -39,7 +39,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install
+          npm ci
 
       - name: Publish releases
         env:
@@ -61,7 +61,8 @@ jobs:
           MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           # This is used for uploading release assets to github
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
           # This is used for publishing snap release assets to snapcraft
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
         # previously
