@@ -4,4 +4,4 @@
 npm run lint
 # npm exec tsc
 npm run package
-npm run test-precommit
+npm run test -- --run

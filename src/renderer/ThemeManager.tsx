@@ -27,7 +27,7 @@ const ThemeManager = ({ children }: Props) => {
 		const meta = document.querySelector(
 			'meta[name="color-scheme"]',
 		) as MetaElement;
-		meta.content = colorScheme as ThemeSetting;
+		if (meta) meta.content = colorScheme as ThemeSetting;
 	};
 
 	// Sets the app language based on user or os setting

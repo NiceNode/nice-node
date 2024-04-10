@@ -163,4 +163,6 @@ export const getIsPodmanRunning = () => true;
 export const getSystemInfo = () => {};
 export const runBenchmark = () => {};
 
+export const setNativeThemeSetting = () => {};
+
 export const SENTRY_DSN = 'fake_sentry_dsn';

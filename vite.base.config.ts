@@ -9,6 +9,7 @@ export const builtins = ['electron', ...builtinModules.map((m) => [m, `node:${m}
 // export const external = [...builtins, 'cron', 'systeminformation', ...Object.keys('dependencies' in pkg ? (pkg.dependencies as Record<string, unknown>) : {})];
 export const external = [...builtins, 'cron', ...Object.keys('dependencies' in pkg ? (pkg.dependencies as Record<string, unknown>) : {})];
 
+console.log("vite.base.config.ts");
 export function getBuildConfig(env: ConfigEnv<'build'>): UserConfig {
   const { root, mode, command } = env;
 
