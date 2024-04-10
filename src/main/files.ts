@@ -1,6 +1,7 @@
 import { access, chmod, mkdir, readFile, rm } from 'node:fs/promises';
 import path from 'node:path';
 import checkDiskSpace from 'check-disk-space';
+
 import { app } from 'electron';
 
 import logger from './logger';
@@ -86,7 +87,10 @@ export const getSystemFreeDiskSpace = async (
   diskSpacePath?: string,
 ): Promise<number> => {
   const pathToCheck: string = diskSpacePath || app.getPath('userData');
-  const diskSpace = await checkDiskSpace(pathToCheck);
+  // https://github.com/Alex-D/check-disk-space/issues/30
+  // @ts-ignore:next-line
+  const diskSpace = await checkDiskSpace.default(pathToCheck);
+  console.log('diskSpace: ', diskSpace);
   const freeInGBs = diskSpace.free * 1e-9;
   return freeInGBs;
 };
@@ -107,7 +111,9 @@ export const getNodesDirPathDetails =
   };
 
 export const getSystemDiskSize = async (): Promise<number> => {
-  const diskSpace = await checkDiskSpace(app.getPath('userData'));
+  // https://github.com/Alex-D/check-disk-space/issues/30
+  // @ts-ignore:next-line
+  const diskSpace = await checkDiskSpace.default(app.getPath('userData'));
   const sizeInGBs = diskSpace.size * 1e-9;
   return sizeInGBs;
 };

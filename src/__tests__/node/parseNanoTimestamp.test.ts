@@ -1,6 +1,6 @@
+import { describe, expect, it } from 'vitest';
 import { isNanoDateTimeWithTimezone } from '../../main/util/nodeLogUtils';
 import { timestampFromString } from '../../main/util/timestamp';
-import { describe, it, expect } from 'vitest';
 
 describe('Parsing nano second timestamp string testing', () => {
   it('Successfully parses valid strings', async () => {

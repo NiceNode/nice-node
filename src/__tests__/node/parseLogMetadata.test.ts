@@ -1,5 +1,5 @@
+import { describe, expect, it } from 'vitest';
 import { parseDockerLogMetadata } from '../../main/util/nodeLogUtils';
-import { describe, it, expect } from 'vitest';
 
 describe('Parsing log string testing', () => {
   it('Successfully parses docker log strings with valid timestamps', async () => {

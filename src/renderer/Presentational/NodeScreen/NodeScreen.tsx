@@ -94,7 +94,6 @@ const NodeScreen = () => {
   const memoryPercent = selectedNode?.runtime?.usage?.memoryBytes ?? [
     { x: 0, y: 0 },
   ];
-  eqeqeq;
   // const isHttpEnabled =
   //   selectedNode?.config?.configValuesMap?.http &&
   //   ['Enabled', 'enabled', 'true', true, 1].includes(

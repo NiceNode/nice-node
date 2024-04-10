@@ -1,6 +1,6 @@
 import { type SpawnOptions, spawn } from 'node:child_process';
 import sleep from 'await-sleep';
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 // setTimeout(10000);
 describe('Nodejs process testing', () => {

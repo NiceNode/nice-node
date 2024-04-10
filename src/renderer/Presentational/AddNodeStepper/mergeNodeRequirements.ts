@@ -13,7 +13,7 @@ export const mergeSystemRequirements = (
   const mergedReqs: SystemRequirements = {};
 
   systemRequirementsArray.forEach((systemRequirements) => {
-   no-restricted-syntax
+    no - restricted - syntax;
     for (const [nodeReqKey, nodeReqValue] of Object.entries(
       systemRequirements,
     )) {

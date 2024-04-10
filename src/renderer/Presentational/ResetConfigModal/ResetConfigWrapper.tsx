@@ -1,22 +1,22 @@
-import { useEffect } from "react";
-import { useAppSelector } from "../../state/hooks";
-import { selectSelectedNode } from "../../state/node";
-import type { ModalConfig } from "../ModalManager/modalUtils";
+import { useEffect } from 'react';
+import { useAppSelector } from '../../state/hooks';
+import { selectSelectedNode } from '../../state/node';
+import type { ModalConfig } from '../ModalManager/modalUtils';
 
 export interface ResetConfigWrapperProps {
-	modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
+  modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
 }
 
 const ResetConfigWrapper = ({
-	modalOnChangeConfig,
+  modalOnChangeConfig,
 }: ResetConfigWrapperProps) => {
-	const selectedNode = useAppSelector(selectSelectedNode);
+  const selectedNode = useAppSelector(selectSelectedNode);
 
-	useEffect(() => {
-		modalOnChangeConfig({ selectedNode });
-	}, [selectedNode]);
+  useEffect(() => {
+    modalOnChangeConfig({ selectedNode });
+  }, [selectedNode]);
 
-	return <></>;
+  return <></>;
 };
 
 export default ResetConfigWrapper;
