@@ -16,6 +16,7 @@ const packagerConfig: ForgePackagerOptions = {
 };
 
 // skip signing & notarizing on local builds
+console.log("process.env.CI: ", process.env.CI);
 if(process.env.CI) {
   packagerConfig.osxSign = {};
   packagerConfig.osxNotarize = {
@@ -33,10 +34,10 @@ const config: ForgeConfig = {
   makers: [
     new MakerSquirrel({
       authors: 'NiceNode LLC'
-    }),
+    }, ['windows']),
     new MakerZIP({}),
-    new MakerRpm({}),
-    new MakerDeb({}),
+    new MakerRpm({}, ['linux']),
+    new MakerDeb({}, ['linux']),
     new MakerDMG({
       background: './assets/dmg-background.tiff',
       // installer name. default includes version number in filename
