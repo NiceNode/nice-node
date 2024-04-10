@@ -28,14 +28,14 @@ jobs:
           npm install
 
       # This dependency wasn't needed until suddenly on Dec. 2, 2022
-      - name: install dmg-license
-        run: |
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            npm i dmg-license
-          else
-            exit 0
-          fi
-        shell: bash
+      # - name: install dmg-license
+      #   run: |
+      #     if [ "$RUNNER_OS" == "macOS" ]; then
+      #       npm i dmg-license
+      #     else
+      #       exit 0
+      #     fi
+      #   shell: bash
 
       - name: npm package
         env:
