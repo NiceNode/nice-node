@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { PodmanDetails } from '../../main/podman/details';
 import type { Settings } from '../../main/state/settings';

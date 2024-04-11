@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-
 /**
  * Raw code copied from https://github.com/voodoocreation/ts-deepmerge's index.ts file
  * except for the mergeObjectReducer function and comments.

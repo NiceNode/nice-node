@@ -1,5 +1,4 @@
 import { Icon } from '../Icon/Icon';
-/* eslint-disable no-script-url */
 import { blockContainer, inlineContainer, linkText } from './externalLink.css';
 
 // todo: variants for downloads or internal links

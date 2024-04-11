@@ -1,4 +1,3 @@
-// eslint must be confusing i18n with main/i18n and errors
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';

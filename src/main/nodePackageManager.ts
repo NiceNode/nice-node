@@ -1,5 +1,4 @@
 import { cp } from 'node:fs/promises';
-/* eslint-disable no-await-in-loop */
 import path from 'node:path';
 import type Node from '../common/node';
 import {

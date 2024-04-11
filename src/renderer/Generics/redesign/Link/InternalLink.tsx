@@ -1,4 +1,3 @@
-/* eslint-disable no-script-url */
 import { dangerLinkText, linkText } from './internalLink.css';
 
 export interface InternalLinkProps {

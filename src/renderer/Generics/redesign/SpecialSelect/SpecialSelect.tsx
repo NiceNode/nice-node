@@ -1,4 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
 // Options replaceable component docs:
 // https://react-select.com/components#Option
 import { useEffect, useState } from 'react';

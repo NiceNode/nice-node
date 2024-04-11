@@ -6,7 +6,7 @@ import type {
   UserNodes,
 } from '../common/node';
 import type { ConfigValuesMap } from '../common/nodeConfig';
-/* eslint-disable no-unused-vars */
+
 import type {
   NodePackageSpecification,
   NodeSpecification,

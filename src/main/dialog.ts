@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import { type BrowserWindow, dialog } from 'electron';
 
 import type Node from '../common/node';

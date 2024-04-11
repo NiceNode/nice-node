@@ -1,5 +1,3 @@
-/* eslint-disable func-names */
-/* eslint-disable no-nested-ternary */
 // npm escape-path-with-spaces at https://github.com/jy95/escape-path-with-spaces
 import os from 'node:os';
 

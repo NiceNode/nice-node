@@ -11,7 +11,7 @@ import type {
   ConfigTranslationMap,
   ConfigValuesMap,
 } from '../common/nodeConfig';
-/* eslint-disable no-await-in-loop */
+
 import type { NodeSpecification } from '../common/nodeSpec';
 import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
 import logger from './logger';
