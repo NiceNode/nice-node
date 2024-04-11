@@ -19,6 +19,10 @@ jobs:
         os: [ubuntu-latest, windows-latest]
 
     steps:
+      # https://github.com/electron/forge/issues/2807
+      - if: ${{ matrix.os == 'macos-latest' }}
+        run: python3 -m pip install setuptools
+
       - if: matrix.os == 'ubuntu-latest'
         name: Install packages for building
         run: |
@@ -36,18 +40,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          # cache: npm
+      - run: npm ci
 
-
-      - name: Install dependencies
-        run: |
-          npm ci
-
-      - if: ${{ matrix.os == 'macos-latest' }}
-        name: setup python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.12
+      # - name: Install dependencies
+      #   run: |
+      #     npm ci
 
       - if: ${{ matrix.os == 'macos-latest' }}
         name: Import Certs
@@ -56,15 +54,11 @@ jobs:
           p12-file-base64: ${{ secrets.CSC_LINK }}
           p12-password: ${{ secrets.CSC_KEY_PASSWORD }}
 
-      - if: ${{ matrix.os == 'macos-latest' }}
-        name: setup appdmg
-        run: |
-          python3 -m pip install setuptools
-          npm install --save-dev appdmg
-          npm install -g appdmg
-
       - name: Publish releases
         env:
+          # Shows electron forge tools' debug logs
+          # DEBUG: "*electron*"
+
           # macOS code signing and notarization
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
