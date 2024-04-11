@@ -38,7 +38,8 @@ jobs:
         name: setup appdmg
         run: |
           python3 -m pip install setuptools
-          npm install -g appdmg@0.6.6
+          npm install --save-dev appdmg
+          npm install -g appdmg
 
       - if: ${{ matrix.os == 'macos-latest' }}
         name: Import Certs

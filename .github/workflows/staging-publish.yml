@@ -38,18 +38,16 @@ jobs:
           node-version: 20
           cache: npm
 
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
       - if: ${{ matrix.os == 'macos-latest' }}
         name: setup python
         uses: actions/setup-python@v5
         with:
           python-version: 3.12
-
-      - if: ${{ matrix.os == 'macos-latest' }}
-        name: setup appdmg
-        run: |
-          python3 -m pip install setuptools
-          npm install -g appdmg
-          npm install --save-dev appdmg
 
       - if: ${{ matrix.os == 'macos-latest' }}
         name: Import Certs
@@ -58,9 +56,12 @@ jobs:
           p12-file-base64: ${{ secrets.CSC_LINK }}
           p12-password: ${{ secrets.CSC_KEY_PASSWORD }}
 
-      - name: Install dependencies
+      - if: ${{ matrix.os == 'macos-latest' }}
+        name: setup appdmg
         run: |
-          npm ci
+          python3 -m pip install setuptools
+          npm install --save-dev appdmg
+          npm install -g appdmg
 
       - name: Publish releases
         env:
