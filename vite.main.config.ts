@@ -18,8 +18,11 @@ export default defineConfig((env) => {
       },
       rollupOptions: {
         external,
-      }
+      },
     },
+    // main process static assets
+    //  ./assets dir is copied to .vite/build dir
+    publicDir: './assets',
     plugins: [pluginHotRestart('restart')],
     define,
     resolve: {
