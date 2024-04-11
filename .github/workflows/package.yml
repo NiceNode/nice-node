@@ -15,6 +15,10 @@ jobs:
         os: [macos-latest, windows-latest, ubuntu-latest]
 
     steps:
+      # https://github.com/electron/forge/issues/2807
+      - if: ${{ matrix.os == 'macos-latest' }}
+        run: python3 -m pip install setuptools
+
       - name: Check out Git repository
         uses: actions/checkout@v4
 
@@ -22,24 +26,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          # cache: npm
+      - run: npm ci
 
-      - name: npm install
-        run: |
-          npm ci
-
-      - if: ${{ matrix.os == 'macos-latest' }}
-        name: setup python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.12
-
-      - if: ${{ matrix.os == 'macos-latest' }}
-        name: setup appdmg
-        run: |
-          python3 -m pip install setuptools
-          npm install --save-dev appdmg
-          npm install -g appdmg
+      # - name: npm install
+      #   run: |
+      #     npm ci
 
       - if: ${{ matrix.os == 'macos-latest' }}
         name: Import Certs
