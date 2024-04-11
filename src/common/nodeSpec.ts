@@ -4,7 +4,6 @@ import type { SystemRequirements } from './systemRequirements';
 import type { ConfigTranslationMap, ConfigValuesMap } from './nodeConfig';
 import type { NiceNodeRpcTranslation } from './rpcTranslation';
 
-/* eslint-disable max-classes-per-file */
 export type ExecutionTypes = 'docker' | 'binary' | 'nodePackage';
 export type Architectures = 'amd64' | 'arm64';
 

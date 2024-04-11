@@ -1,8 +1,5 @@
-/* eslint-disable no-irregular-whitespace */
-
 import { ethers } from '../ethers';
 import { callJsonRpc } from '../jsonRpcClient';
-/* eslint-disable no-else-return */
 import { hexToDecimal } from '../utils';
 
 // export const executeTranslation = async (

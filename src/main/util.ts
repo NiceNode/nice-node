@@ -1,5 +1,4 @@
 import path from 'node:path';
-/* eslint import/prefer-default-export: off, import/no-mutable-exports: off */
 import { URL } from 'node:url';
 
 export function resolveHtmlPath(htmlFileName: string) {

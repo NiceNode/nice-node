@@ -4,7 +4,6 @@ import {
   spawn,
 } from 'node:child_process';
 import * as readline from 'node:readline';
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { promisify } from 'node:util';
 
 import type Node from '../common/node';

@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import logger from '../logger';
 import { runCommand } from './podman';
 import type { MachineJSON } from './types';

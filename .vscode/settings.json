@@ -1,29 +1,18 @@
 {
-	"files.associations": {
-		".eslintrc": "jsonc",
-		".prettierrc": "jsonc",
-		".eslintignore": "ignore"
-	},
-	"editor.formatOnSave": true,
-	"editor.defaultFormatter": "biomejs.biome",
-	"javascript.validate.enable": false,
-	"javascript.format.enable": false,
-	"typescript.format.enable": false,
-	"search.exclude": {
-		".git": true,
-		".eslintcache": true,
-		".erb/dll": true,
-		"release/{build,app/dist}": true,
-		"node_modules": true,
-		"npm-debug.log.*": true,
-		"test/**/__snapshots__": true,
-		"package-lock.json": true,
-		"*.{css,sass,scss}.d.ts": true
-	},
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "explicit"
-	},
-	"eslint.validate": ["javascript"],
-	"eslint.format.enable": false,
-	"prettier.configPath": "package.json"
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "biomejs.biome",
+  "javascript.validate.enable": false,
+  "javascript.format.enable": false,
+  "typescript.format.enable": false,
+  "search.exclude": {
+    ".git": true,
+    ".eslintcache": true,
+    ".erb/dll": true,
+    "release/{build,app/dist}": true,
+    "node_modules": true,
+    "npm-debug.log.*": true,
+    "test/**/__snapshots__": true,
+    "package-lock.json": true,
+    "*.{css,sass,scss}.d.ts": true
+  }
 }

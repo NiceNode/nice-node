@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { Settings } from '../../main/state/settings';
 import electron from '../electronGlobal';

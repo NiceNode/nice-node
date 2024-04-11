@@ -1,5 +1,3 @@
-/* eslint-disable prefer-destructuring */
-
 // declares the type of the injected variable process from webpack plugin
 declare let process: { env: Record<string, string> };
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 /** ********************************************************************
  * Copyright (C) 2022 Red Hat, Inc.
  *

@@ -1,4 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
 // React select docs at:
 // https://react-select.com/components#Option
 import { useCallback, useEffect, useState } from 'react';

@@ -1,13 +1,3 @@
-/* eslint-disable no-useless-escape */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-bitwise */
-/* eslint-disable prefer-spread */
-/* eslint-disable no-restricted-globals */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-multi-assign */
-/* eslint-disable func-names */
-
 /**
  * Timestamp for 64-bit time_t, nanosecond precision and strftime
  *

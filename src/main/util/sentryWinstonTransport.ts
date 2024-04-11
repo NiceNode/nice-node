@@ -1,7 +1,3 @@
-/* eslint-disable promise/catch-or-return */
-/* eslint-disable promise/always-return */
-/* eslint-disable max-classes-per-file */
-/* eslint-disable class-methods-use-this */
 /**
  * Code initially taken from https://github.com/aandrewww/winston-transport-sentry-node
  */

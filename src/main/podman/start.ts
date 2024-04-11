@@ -3,7 +3,7 @@ import logger from '../logger';
 import * as platform from '../platform';
 import { delay } from '../util/delay';
 import { startMachineIfCreated } from './machine';
-/* eslint-disable no-await-in-loop */
+
 import {
   isPodmanInstalled,
   isPodmanRunning,

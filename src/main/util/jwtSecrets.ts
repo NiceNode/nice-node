@@ -1,6 +1,4 @@
 import crypto from 'node:crypto';
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-await-in-loop */
 import { open } from 'node:fs/promises';
 import path from 'node:path';
 

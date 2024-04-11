@@ -1,5 +1,4 @@
 import { useState } from 'react';
-/* eslint-disable no-case-declarations */
 import { useTranslation } from 'react-i18next';
 import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { Icon } from '../../Generics/redesign/Icon/Icon';
