@@ -8,6 +8,9 @@ import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 import * as path from 'node:path';
+import packageJson from './package.json';
+
+const { version } = packageJson;
 
 const iconDir = path.resolve(__dirname, 'assets', 'icons');
 console.log("forge.config.ts iconDir: ", iconDir);
@@ -49,9 +52,18 @@ const config: ForgeConfig = {
 
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({
-      authors: 'NiceNode LLC',
-    }, ['windows']),
+    {
+      name: '@electron-forge/maker-squirrel',
+      platforms: ['win32'],
+      config: (arch: string) => ({
+        name: 'nice-node',
+        authors: 'NiceNode LLC',
+        exe: 'nice-node.exe',
+        noMsi: true,
+        setupExe: `NiceNode-${version}-windows-${arch}-setup.exe`,
+        setupIcon: path.resolve(iconDir, '..', 'icon.ico')
+      }),
+    },
     new MakerZIP({}),
     new MakerRpm({}, ['linux']),
     {
@@ -132,7 +144,8 @@ const config: ForgeConfig = {
           owner: 'NiceNode',
           name: 'nice-node',
         },
-        prerelease: true
+        prerelease: true,
+        generateReleaseNotes: true
       },
     },
   ]
