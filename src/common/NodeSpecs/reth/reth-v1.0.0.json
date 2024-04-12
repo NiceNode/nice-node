@@ -17,9 +17,9 @@
         "webSocketAllowedOrigins": "http://localhost"
       },
       "docker": {
-        "containerVolumePath": "/root/.local/share/reth/mainnet/db",
+        "containerVolumePath": "/root/.local/share/reth/mainnet",
         "raw": "",
-        "forcedRawNodeInput": "node --color never --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/mainnet/db/jwtsecret --ipcdisable"
+        "forcedRawNodeInput": "node --color never --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/mainnet/jwtsecret --ipcdisable"
       }
     },
     "imageName": "ghcr.io/paradigmxyz/reth",
