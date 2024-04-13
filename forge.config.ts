@@ -18,7 +18,7 @@ console.log("forge.config.ts iconDir: ", iconDir);
 const packagerConfig: ForgePackagerOptions = {
   asar: true,
   icon: path.resolve(iconDir, '..', 'icon'),
-  executableName: 'nice-node', // required for linux?
+  // executableName: 'nice-node', // required for linux?
   appBundleId: 'org.jgr.NiceNode',
   protocols: [
     {
@@ -83,6 +83,7 @@ const config: ForgeConfig = {
           '32x32': path.resolve(iconDir, '32x32.png'),
           '16x16': path.resolve(iconDir, '16x16.png'),
         },
+        executableName: 'nice-node',
         productName: 'NiceNode',
         productDescription: "By running a node you become part of a global movement to decentralize a world of information. Prevent leaking your personal data to third party nodes. Ensure access when you need it, and don't be censored. Decentralization starts with you. Voice your choice, help your peers.",
         maintainer: "NiceNode LLC <johns@nicenode.xyz>",

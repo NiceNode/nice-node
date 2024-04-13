@@ -35,7 +35,7 @@ jobs:
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          npm run package -- --linux --dir
+          npm run make
           ls -al ./release/build/linux-unpacked/
 
       - name: 🧪 Run Tests

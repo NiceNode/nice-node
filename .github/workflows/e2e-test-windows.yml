@@ -38,7 +38,7 @@ jobs:
         #   npm run package -- --mac --x64
         # elif [ "$RUNNER_OS" == "Windows" ]; then
         #   npm run package -- --win --x64
-        run: npm run package
+        run: npm run make
 
       - name: 🧪 Run Tests
         uses: coactions/setup-xvfb@v1
