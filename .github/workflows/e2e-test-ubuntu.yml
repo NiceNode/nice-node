@@ -24,7 +24,7 @@ jobs:
 
       - name: 🧱 Install Dependencies
         run: |
-          npm install
+          npm ci
           sudo apt-get install --no-install-recommends -y rpm libarchive-tools
 
       - name: 📦 Bundle Application
