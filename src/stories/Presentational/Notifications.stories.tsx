@@ -1,9 +1,9 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from "@storybook/react";
 
-import Notifications from '../../renderer/Presentational/Notifications/Notifications';
+import Notifications from "../../renderer/Presentational/Notifications/Notifications";
 
 export default {
-  title: 'Presentational/Notifications',
+  title: "Presentational/Notifications",
   component: Notifications,
 } as Meta<typeof Notifications>;
 
@@ -11,60 +11,60 @@ export const Primary = {
   args: {
     data: [
       {
-        key: 'ScheduledSyncCommitteeDuty',
+        key: "ScheduledSyncCommitteeDuty",
         unread: true,
-        status: 'info',
-        title: 'Scheduled for Sync Commitee Duty',
-        description: 'Validator 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+        status: "info",
+        title: "Scheduled for Sync Commitee Duty",
+        description: "Validator 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
         timestamp: 1673384953,
       },
       {
-        key: 'SlashingReward',
+        key: "SlashingReward",
         unread: true,
-        status: 'info',
-        title: 'Reward for slashing another validator',
-        description: 'Validator 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
+        status: "info",
+        title: "Reward for slashing another validator",
+        description: "Validator 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
         timestamp: 1673384953,
       },
       {
-        key: 'ClientSuccessfulyUpdated',
+        key: "ClientSuccessfulyUpdated",
         unread: true,
-        status: 'completed',
-        title: 'Client successfuly updated',
-        description: 'Lodestar consensus client',
+        status: "completed",
+        title: "Client successfuly updated",
+        description: "Lodestar consensus client",
         timestamp: 1673384953,
       },
       {
-        key: 'ClientUpdateAvailable',
+        key: "ClientUpdateAvailable",
         unread: true,
-        status: 'download',
-        title: 'Client update available',
-        description: 'Lodestar consensus client',
+        status: "download",
+        title: "Client update available",
+        description: "Lodestar consensus client",
         timestamp: 1673384953,
       },
       {
-        key: 'MoreThan40LogErrors',
+        key: "MoreThan40LogErrors",
         unread: false,
-        status: 'warning',
-        title: 'More than 40 log errors in one hour',
-        description: 'Lodestar consensus client',
+        status: "warning",
+        title: "More than 40 log errors in one hour",
+        description: "Lodestar consensus client",
         timestamp: 1673384953,
       },
       {
-        key: 'DiskUsageNear90',
+        key: "DiskUsageNear90",
         unread: false,
-        status: 'warning',
-        title: 'Disk usage near 90%',
+        status: "warning",
+        title: "Disk usage near 90%",
         description:
-          'All nodes affected. Consider upgrading your disk to one with at least 2TB of storage.',
+          "All nodes affected. Consider upgrading your disk to one with at least 2TB of storage.",
         timestamp: 1673384953,
       },
       {
-        key: 'InternetConnectionDown',
+        key: "InternetConnectionDown",
         unread: false,
-        status: 'warning',
-        title: 'Internet connection down for 12 minutes',
-        description: 'All nodes affected',
+        status: "warning",
+        title: "Internet connection down for 12 minutes",
+        description: "All nodes affected",
         timestamp: 1673384953,
       },
     ],

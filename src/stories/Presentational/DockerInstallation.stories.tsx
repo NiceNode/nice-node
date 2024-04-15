@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-import PodmanInstallation from '../../renderer/Presentational/PodmanInstallation/PodmanInstallation';
+import PodmanInstallation from "../../renderer/Presentational/PodmanInstallation/PodmanInstallation";
 
 export default {
-  title: 'Presentational/PodmanInstallation',
+  title: "Presentational/PodmanInstallation",
   component: PodmanInstallation,
 } as Meta<typeof PodmanInstallation>;
 

@@ -1,20 +1,20 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from "@storybook/react";
 
-import { SidebarNodeItem } from '../../renderer/Generics/redesign/SidebarNodeItem/SidebarNodeItem';
+import { SidebarNodeItem } from "../../renderer/Generics/redesign/SidebarNodeItem/SidebarNodeItem";
 
 export default {
-  title: 'Generic/SidebarNodeItem',
+  title: "Generic/SidebarNodeItem",
   component: SidebarNodeItem,
   argTypes: {
-    backgroundColor: { control: 'color' },
+    backgroundColor: { control: "color" },
   },
 } as Meta<typeof SidebarNodeItem>;
 
 export const Ethereum = {
   args: {
-    iconId: 'ethereum',
-    status: 'healthy',
-    title: 'Ethereum node',
-    info: 'Mainnet',
+    iconId: "ethereum",
+    status: "healthy",
+    title: "Ethereum node",
+    info: "Mainnet",
   },
 };

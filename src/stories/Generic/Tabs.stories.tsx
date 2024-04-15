@@ -1,11 +1,11 @@
-import type { Meta, StoryFn } from '@storybook/react';
-import { Tabs } from '../../renderer/Generics/redesign/Tabs/Tabs';
+import type { Meta, StoryFn } from "@storybook/react";
+import { Tabs } from "../../renderer/Generics/redesign/Tabs/Tabs";
 
 export default {
-  title: 'Generic/Tabs',
+  title: "Generic/Tabs",
   component: Tabs,
   argTypes: {
-    backgroundColor: { control: 'color' },
+    backgroundColor: { control: "color" },
   },
 } as Meta<typeof Tabs>;
 
