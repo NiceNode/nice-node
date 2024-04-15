@@ -25,7 +25,7 @@
       }
     },
     "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth",
-    "defaultImageTag": "v1.101308.2"
+    "defaultImageTag": "v1.101311.0"
   },
   "category": "L2/ExecutionClient",
   "rpcTranslation": "eth-l2",
