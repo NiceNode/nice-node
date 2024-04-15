@@ -1,8 +1,18 @@
 /// <reference types="wdio-electron-service" />
 import type { Options } from '@wdio/types';
+import path from 'node:path';
 
 console.log("process.arch: ", process.arch);
 const arch = process.arch || 'x64';
+
+let appBinaryPath;
+if (process.platform === 'darwin') {
+  appBinaryPath = `./out/NiceNode-darwin-${arch}/NiceNode.app/Contents/MacOS/nice-node`;
+} else if(process.platform === 'linux') {
+  appBinaryPath = `./out/NiceNode-linux-${arch}/nice-node`
+} else {
+  appBinaryPath = path.join(__dirname, 'out', `NiceNode-win32-${arch}`, 'nice-node.exe')
+}
 
 export const config: Options.Testrunner = {
   //
@@ -74,10 +84,7 @@ export const config: Options.Testrunner = {
         // See https://github.com/webdriverio-community/wdio-electron-service#appargs
         // for available Electron and Chrome flags
         appArgs: ['--lang=EN'],
-        appBinaryPath:
-          process.platform === 'linux'
-            ? `./out/NiceNode-linux-${arch}/nice-node`
-            : undefined,
+        appBinaryPath: appBinaryPath
       },
     },
   ],
