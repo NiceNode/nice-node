@@ -18,7 +18,7 @@ console.log("forge.config.ts iconDir: ", iconDir);
 const packagerConfig: ForgePackagerOptions = {
   asar: true,
   icon: path.resolve(iconDir, '..', 'icon'),
-  // executableName: 'nice-node', // required for linux?
+  executableName: 'nice-node', // required for linux?
   appBundleId: 'org.jgr.NiceNode',
   protocols: [
     {

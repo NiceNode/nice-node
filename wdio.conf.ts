@@ -1,6 +1,9 @@
 /// <reference types="wdio-electron-service" />
 import type { Options } from '@wdio/types';
 
+console.log("process.arch: ", process.arch);
+const arch = process.arch || 'x64';
+
 export const config: Options.Testrunner = {
   //
   // ====================
@@ -73,7 +76,7 @@ export const config: Options.Testrunner = {
         appArgs: ['--lang=EN'],
         appBinaryPath:
           process.platform === 'linux'
-            ? './release/build/linux-unpacked/nice-node'
+            ? `./out/NiceNode-linux-${arch}/nice-node`
             : undefined,
       },
     },
