@@ -4,6 +4,7 @@
   "description": "Run a node at home, the easy way.",
   "homepage": "https://nicenode.xyz",
   "productName": "NiceNode",
+  "type": "module",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -75,7 +76,7 @@
     "vite": "^5.2.8",
     "vite-plugin-svgr": "^4.2.0",
     "vitest": "^1.5.0",
-    "wdio-electron-service": "^6.3.1",
+    "wdio-electron-service": "^6.4.1",
     "wdio-wait-for": "^3.0.11"
   },
   "dependencies": {

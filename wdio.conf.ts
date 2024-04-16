@@ -1,6 +1,7 @@
 /// <reference types="wdio-electron-service" />
 import type { Options } from '@wdio/types';
 import path from 'node:path';
+import process from 'node:process';
 
 console.log("process.arch: ", process.arch);
 const arch = process.arch || 'x64';
@@ -11,7 +12,7 @@ if (process.platform === 'darwin') {
 } else if(process.platform === 'linux') {
   appBinaryPath = `./out/NiceNode-linux-${arch}/nice-node`
 } else {
-  appBinaryPath = path.join(__dirname, 'out', `NiceNode-win32-${arch}`, 'nice-node.exe')
+  appBinaryPath = path.join('out', `NiceNode-win32-${arch}`, 'nice-node.exe')
 }
 
 export const config: Options.Testrunner = {
@@ -21,13 +22,6 @@ export const config: Options.Testrunner = {
   // ====================
   // WebdriverIO supports running e2e tests as well as unit and component tests.
   runner: 'local',
-  autoCompileOpts: {
-    autoCompile: true,
-    tsNodeOpts: {
-      project: './test/tsconfig.json',
-      transpileOnly: true,
-    },
-  },
 
   //
   // ==================

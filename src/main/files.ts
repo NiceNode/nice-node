@@ -1,5 +1,6 @@
 import { access, chmod, mkdir, readFile, rm } from 'node:fs/promises';
 import path from 'node:path';
+import url from 'node:url';
 import checkDiskSpace from 'check-disk-space';
 
 import { app } from 'electron';
@@ -11,6 +12,9 @@ import du from 'du';
 logger.info(`App data dir: ${app.getPath('appData')}`);
 logger.info(`User data dir: ${app.getPath('userData')}`);
 logger.info(`logs dir: ${app.getPath('logs')}`);
+
+export const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
 
 export const getNNDirPath = (): string => {
   // In packaged build...

@@ -9,10 +9,12 @@ import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 import * as path from 'node:path';
 import packageJson from './package.json';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const { version } = packageJson;
 
-const iconDir = path.resolve(__dirname, 'assets', 'icons');
+const iconDir = path.resolve('assets', 'icons');
 console.log("forge.config.ts iconDir: ", iconDir);
 
 const packagerConfig: ForgePackagerOptions = {

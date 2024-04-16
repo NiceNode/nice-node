@@ -19,7 +19,10 @@
 import { spawn } from 'node:child_process';
 import * as os from 'node:os';
 import * as path from 'node:path';
+import url from 'node:url';
 import { getInstallationPath } from './podman-cli';
+
+export const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const windows = os.platform() === 'win32';
 export function isWindows(): boolean {
