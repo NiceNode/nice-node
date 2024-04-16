@@ -1,12 +1,12 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from "@storybook/react";
 
-import { Toggle } from '../../renderer/Generics/redesign/Toggle/Toggle';
+import { Toggle } from "../../renderer/Generics/redesign/Toggle/Toggle";
 
 export default {
-  title: 'Generic/Toggle',
+  title: "Generic/Toggle",
   component: Toggle,
   argTypes: {
-    backgroundColor: { control: 'color' },
+    backgroundColor: { control: "color" },
   },
 } as Meta<typeof Toggle>;
 

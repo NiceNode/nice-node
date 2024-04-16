@@ -1,13 +1,13 @@
-import type { Meta, StoryFn } from '@storybook/react';
-import FolderInput from '../../renderer/Generics/redesign/Input/FolderInput';
+import type { Meta, StoryFn } from "@storybook/react";
+import FolderInput from "../../renderer/Generics/redesign/Input/FolderInput";
 
-import Input from '../../renderer/Generics/redesign/Input/Input';
+import Input from "../../renderer/Generics/redesign/Input/Input";
 
 export default {
-  title: 'Generic/Input',
+  title: "Generic/Input",
   component: Input,
   argTypes: {
-    backgroundColor: { control: 'color' },
+    backgroundColor: { control: "color" },
   },
 } as Meta<typeof Input>;
 
@@ -21,7 +21,7 @@ export const Primary = {
   render: Template,
 
   args: {
-    placeholder: 'Test placeholder',
+    placeholder: "Test placeholder",
   },
 };
 
@@ -29,8 +29,8 @@ export const Icon = {
   render: Template,
 
   args: {
-    leftIconId: 'search',
-    placeholder: 'Test placeholder',
+    leftIconId: "search",
+    placeholder: "Test placeholder",
   },
 };
 
@@ -42,9 +42,9 @@ export const FolderInputPrimary = {
   render: FolderTemplate,
 
   args: {
-    placeholder: '/Users/Danneh/Library/Application Library/NiceNode/nodes',
+    placeholder: "/Users/Danneh/Library/Application Library/NiceNode/nodes",
     onClickChange: () => {
-      alert('Platform specific user prompt to select a folder location');
+      alert("Platform specific user prompt to select a folder location");
     },
     freeStorageSpaceGBs: 250,
   },

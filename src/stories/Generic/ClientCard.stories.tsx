@@ -1,17 +1,17 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from "@storybook/react";
 
-import { ClientCard } from '../../renderer/Generics/redesign/ClientCard/ClientCard';
+import { ClientCard } from "../../renderer/Generics/redesign/ClientCard/ClientCard";
 
 export default {
-  title: 'Generic/ClientCard',
+  title: "Generic/ClientCard",
   component: ClientCard,
 } as Meta<typeof ClientCard>;
 
 export const Nethermind = {
   args: {
-    name: 'erigon',
-    version: 'v10',
-    nodeType: 'execution',
+    name: "erigon",
+    version: "v10",
+    nodeType: "execution",
     status: {
       updating: false,
       initialized: true,

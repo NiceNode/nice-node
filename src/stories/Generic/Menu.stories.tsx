@@ -1,13 +1,13 @@
-import type { Meta, StoryFn } from '@storybook/react';
-import { HorizontalLine } from '../../renderer/Generics/redesign/HorizontalLine/HorizontalLine';
-import { Menu } from '../../renderer/Generics/redesign/Menu/Menu';
-import { MenuItem } from '../../renderer/Generics/redesign/MenuItem/MenuItem';
+import type { Meta, StoryFn } from "@storybook/react";
+import { HorizontalLine } from "../../renderer/Generics/redesign/HorizontalLine/HorizontalLine";
+import { Menu } from "../../renderer/Generics/redesign/Menu/Menu";
+import { MenuItem } from "../../renderer/Generics/redesign/MenuItem/MenuItem";
 
 export default {
-  title: 'Generic/Menu',
+  title: "Generic/Menu",
   component: Menu,
   argTypes: {
-    backgroundColor: { control: 'color' },
+    backgroundColor: { control: "color" },
   },
 } as Meta<typeof Menu>;
 
@@ -16,27 +16,27 @@ export const Settings: StoryFn<typeof Menu> = () => (
     <MenuItem
       text="Restart Client"
       onClick={() => {
-        console.log('Restart Client');
+        console.log("Restart Client");
       }}
     />
     <MenuItem
       text="Check for Updates..."
       onClick={() => {
-        console.log('Check for Updates...');
+        console.log("Check for Updates...");
       }}
     />
     <HorizontalLine type="menu" />
     <MenuItem
       text="Client Versions"
       onClick={() => {
-        console.log('Client Versions');
+        console.log("Client Versions");
       }}
     />
     <HorizontalLine type="menu" />
     <MenuItem
       text="Switch Client"
       onClick={() => {
-        console.log('Switch Client');
+        console.log("Switch Client");
       }}
       disabled
     />
@@ -50,7 +50,7 @@ export const LogMessageType: StoryFn<typeof Menu> = () => (
       status="blue"
       text="Info"
       onClick={() => {
-        console.log('Info');
+        console.log("Info");
       }}
     />
     <MenuItem
@@ -58,7 +58,7 @@ export const LogMessageType: StoryFn<typeof Menu> = () => (
       status="orange"
       text="Warnings"
       onClick={() => {
-        console.log('Warnings');
+        console.log("Warnings");
       }}
     />
     <MenuItem
@@ -66,7 +66,7 @@ export const LogMessageType: StoryFn<typeof Menu> = () => (
       status="red"
       text="Errors"
       onClick={() => {
-        console.log('Errors');
+        console.log("Errors");
       }}
     />
   </Menu>
@@ -78,56 +78,56 @@ export const LogMessageTime: StoryFn<typeof Menu> = () => (
       text="Last 30 minutes"
       selectable
       onClick={() => {
-        console.log('Last 30 minutes');
+        console.log("Last 30 minutes");
       }}
     />
     <MenuItem
       text="Last hour"
       selectable
       onClick={() => {
-        console.log('Last hour');
+        console.log("Last hour");
       }}
     />
     <MenuItem
       text="Last 6 hours"
       selectable
       onClick={() => {
-        console.log('Last 6 hours');
+        console.log("Last 6 hours");
       }}
     />
     <MenuItem
       text="Last 12 hours"
       selectable
       onClick={() => {
-        console.log('Last 12 hours');
+        console.log("Last 12 hours");
       }}
     />
     <MenuItem
       text="Last day"
       selectable
       onClick={() => {
-        console.log('Last day');
+        console.log("Last day");
       }}
     />
     <MenuItem
       text="Last 3 days"
       selectable
       onClick={() => {
-        console.log('Last 3 days');
+        console.log("Last 3 days");
       }}
     />
     <MenuItem
       text="Last week"
       selectable
       onClick={() => {
-        console.log('Last week');
+        console.log("Last week");
       }}
     />
     <MenuItem
       text="Last month"
       selectable
       onClick={() => {
-        console.log('Last month');
+        console.log("Last month");
       }}
     />
   </Menu>

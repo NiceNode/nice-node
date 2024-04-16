@@ -1,9 +1,9 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from "@storybook/react";
 
-import RemoveNode from '../../renderer/Presentational/RemoveNodeModal/RemoveNode';
+import RemoveNode from "../../renderer/Presentational/RemoveNodeModal/RemoveNode";
 
 export default {
-  title: 'Presentational/RemoveNode',
+  title: "Presentational/RemoveNode",
   component: RemoveNode,
 } as Meta<typeof RemoveNode>;
 

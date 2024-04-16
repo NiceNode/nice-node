@@ -1,21 +1,21 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from "@storybook/react";
 
-import ContentSingleClient from '../../renderer/Presentational/ContentSingleClient/ContentSingleClient';
+import ContentSingleClient from "../../renderer/Presentational/ContentSingleClient/ContentSingleClient";
 
 export default {
-  title: 'Presentational/ContentSingleClient',
+  title: "Presentational/ContentSingleClient",
   component: ContentSingleClient,
 } as Meta<typeof ContentSingleClient>;
 
 export const Primary = {
   args: {
     nodeOverview: {
-      nodeId: '1f916ffa-b5e8-421e-a9b2-622efc3e8223',
-      name: 'geth',
-      displayName: 'Geth',
-      version: 'v10',
-      screenType: 'client',
-      nodeType: 'execution',
+      nodeId: "1f916ffa-b5e8-421e-a9b2-622efc3e8223",
+      name: "geth",
+      displayName: "Geth",
+      version: "v10",
+      screenType: "client",
+      nodeType: "execution",
       status: {
         updating: false,
         synchronized: true,
@@ -41,12 +41,12 @@ export const Primary = {
 export const LimitedData = {
   args: {
     nodeOverview: {
-      displayName: 'Nethermind',
-      nodeId: '1f916ffa-b5e8-421e-a9b2-622efc3e8223',
-      name: 'nethermind',
-      screenType: 'client',
-      nodeType: 'L1/ExecutionClient',
-      network: 'Ethereum mainnet',
+      displayName: "Nethermind",
+      nodeId: "1f916ffa-b5e8-421e-a9b2-622efc3e8223",
+      name: "nethermind",
+      screenType: "client",
+      nodeType: "L1/ExecutionClient",
+      network: "Ethereum mainnet",
       status: {
         stopped: true,
         error: false,
