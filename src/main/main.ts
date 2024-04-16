@@ -129,7 +129,6 @@ export const createWindow = async () => {
     webPreferences: {
       // contextIsolation: true,
       // sandbox: true,
-      nodeIntegration: true,
       // preload: app.isPackaged
       //   ? path.join(__dirname, 'preload.js')
       //   : path.join(__dirname, '../../.vite/build/preload.js'),
