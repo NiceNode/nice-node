@@ -3,7 +3,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "commonjs",
+    "module": "nodenext",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -11,10 +11,10 @@
     "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
 
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
 
     // not in vite template but was in previously
     // "declaration": true,
@@ -43,7 +43,12 @@
     // skip because github's macos-latest was checking lib types
     // "skipLibCheck": true,
     // todo: when using electron apis in e2e tests
-    // "types": ["@wdio/globals/types", "wdio-electron-service", "@wdio/types"],
+    "types": [
+      "@wdio/globals/types",
+      "wdio-electron-service",
+      "@wdio/types",
+      "mocha"
+    ]
     // "typeRoots": ["./node_modules", "./node_modules/@types", "./@types"]
   },
   // not in vite template but was in previously
