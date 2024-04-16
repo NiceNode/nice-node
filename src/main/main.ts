@@ -158,7 +158,7 @@ export const createWindow = async () => {
 
   // App auto updates
   updater.initialize(mainWindow);
-  updater.checkForUpdates(false);
+  // updater.checkForUpdates(false);
 
   menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();

@@ -45,6 +45,8 @@ if(process.env.CI && process.env.NO_CODE_SIGNING !== 'true') {
     appleIdPassword: process.env.APPLE_ID_PASSWORD,
     teamId: process.env.APPLE_TEAM_ID
   };
+} else if(process.env.LOCAL_MAC_SIGNING === 'true') {
+  packagerConfig.osxSign = {}; // local keychain works automatically
 }
 
 const config: ForgeConfig = {
@@ -143,7 +145,8 @@ const config: ForgeConfig = {
       config: {
         repository: {
           owner: 'NiceNode',
-          name: 'nice-node',
+          // name: 'nice-node',
+          name: 'test-nice-node-updater'
         },
         prerelease: true,
         generateReleaseNotes: true
