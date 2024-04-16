@@ -7,6 +7,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'node:path';
+import url from 'node:url';
 import * as Sentry from '@sentry/electron/main';
 import dotenv from 'dotenv';
 import { BrowserWindow, app, shell } from 'electron';
@@ -46,10 +47,11 @@ if (process.env.NODE_ENV === 'development') {
 //   require('wdio-electron-service/main');
 // }
 
+// todo: Turned off when switching to ESM modules. Do we need this?
 // https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
-if (require('electron-squirrel-startup')) {
-  app.quit();
-}
+// if (require('electron-squirrel-startup')) {
+//   app.quit();
+// }
 
 // fixPathEnvVar();
 logger.info(`NICENODE_ENV: ${process.env.NICENODE_ENV}`);
@@ -78,13 +80,21 @@ const isDevelopment =
 //   require('electron-debug')();
 // }
 
+export const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
+console.log('electron.app.getAppPath(): ', app.getAppPath());
+const preloadPath = path.resolve(app.getAppPath(), '.vite/build/preload.js')
+console.log('preloadPath:', preloadPath)
+
 // __dirname = package.json dir or app.asar in build. works in dev and built app.
-const RESOURCES_PATH = app.isPackaged
-  ? path.join(__dirname)
-  : path.join(__dirname, '..', '..', 'assets'); // starting point: .vite/build/main.js
+// electron.app.getAppPath() = ../../__dirname (I think .vite/build/__dirname)
+// const RESOURCES_PATH = app.isPackaged
+//   ? path.join(__dirname)
+//   : path.join(__dirname, '..', '..', 'assets'); // starting point: .vite/build/main.js
+const RESOURCES_PATH = __dirname
 
 const getAssetPath = (...paths: string[]): string => {
-  logger.log('RESOURCES_PATH: ', RESOURCES_PATH);
+  logger.info('RESOURCES_PATH: ', RESOURCES_PATH);
   return path.join(RESOURCES_PATH, ...paths);
 };
 

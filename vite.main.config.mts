@@ -1,6 +1,6 @@
 import type { ConfigEnv, UserConfig } from 'vite';
 import { defineConfig, mergeConfig } from 'vite';
-import { getBuildConfig, getBuildDefine, external, pluginHotRestart } from './vite.base.config';
+import { getBuildConfig, getBuildDefine, external, pluginHotRestart } from './vite.base.config.mjs';
 
 console.log("vite.main.config.ts");
 
@@ -14,7 +14,7 @@ export default defineConfig((env) => {
       lib: {
         entry: forgeConfigSelf.entry!,
         fileName: () => '[name].js',
-        formats: ['cjs'],
+        formats: ['es'],
       },
       rollupOptions: {
         external,

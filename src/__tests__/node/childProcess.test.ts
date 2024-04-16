@@ -1,6 +1,9 @@
 import { type SpawnOptions, spawn } from 'node:child_process';
 import sleep from 'await-sleep';
 import { describe, expect, it } from 'vitest';
+import * as url from 'node:url';
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 // setTimeout(10000);
 describe('Nodejs process testing', () => {

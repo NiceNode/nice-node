@@ -11,7 +11,7 @@ if (process.platform === 'darwin') {
 } else if(process.platform === 'linux') {
   appBinaryPath = `./out/NiceNode-linux-${arch}/nice-node`
 } else {
-  appBinaryPath = path.join(__dirname, 'out', `NiceNode-win32-${arch}`, 'nice-node.exe')
+  appBinaryPath = path.join('out', `NiceNode-win32-${arch}`, 'nice-node.exe')
 }
 
 export const config: Options.Testrunner = {

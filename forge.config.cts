@@ -9,10 +9,12 @@ import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 import * as path from 'node:path';
 import packageJson from './package.json';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const { version } = packageJson;
 
-const iconDir = path.resolve(__dirname, 'assets', 'icons');
+const iconDir = path.resolve('assets', 'icons');
 console.log("forge.config.ts iconDir: ", iconDir);
 
 const packagerConfig: ForgePackagerOptions = {
@@ -107,17 +109,17 @@ const config: ForgeConfig = {
         {
           // `entry` is just an alias for `build.lib.entry` in the corresponding file of `config`.
           entry: 'src/main/main.ts',
-          config: 'vite.main.config.ts',
+          config: 'vite.main.config.mts',
         },
         {
           entry: 'src/main/preload.ts',
-          config: 'vite.preload.config.ts',
+          config: 'vite.preload.config.mts',
         },
       ],
       renderer: [
         {
           name: 'main_window',
-          config: 'vite.renderer.config.ts',
+          config: 'vite.renderer.config.mts',
         },
       ],
     }),

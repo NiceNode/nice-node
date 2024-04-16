@@ -1,6 +1,6 @@
 import type { ConfigEnv, UserConfig } from 'vite';
 import { defineConfig, mergeConfig } from 'vite';
-import { getBuildConfig, external, pluginHotRestart } from './vite.base.config';
+import { getBuildConfig, external, pluginHotRestart } from './vite.base.config.mjs';
 
 console.log("vite.preload.config.ts");
 

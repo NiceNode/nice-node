@@ -4,6 +4,7 @@
   "description": "Run a node at home, the easy way.",
   "homepage": "https://nicenode.xyz",
   "productName": "NiceNode",
+  "type": "module",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
