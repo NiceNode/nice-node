@@ -27,6 +27,7 @@ import { ConfigValuesMap, ConfigTranslationMap } from '../common/nodeConfig';
 import { checkNodePortsAndNotify } from './ports';
 import { getNodeLibrary } from './state/nodeLibrary';
 import { getSetPortHasChanged } from './state/nodes';
+import { setLastRunningTime } from './node/setLastRunningTime';
 
 export const addNode = async (
   nodeSpec: NodeSpecification,
@@ -107,6 +108,7 @@ export const startNode = async (nodeId: NodeId) => {
   }
   logger.info(`Starting node ${JSON.stringify(node)}`);
   node.status = NodeStatus.starting;
+  node.lastStartedTimestampMs = Date.now();
   node.stoppedBy = undefined;
   nodeStore.updateNode(node);
 
@@ -117,6 +119,7 @@ export const startNode = async (nodeId: NodeId) => {
       const containerIds = await startPodmanNode(dockerNode);
       dockerNode.runtime.processIds = containerIds;
       dockerNode.status = NodeStatus.running;
+      setLastRunningTime(nodeId, 'nodeService');
       if (getSetPortHasChanged(dockerNode)) {
         checkNodePortsAndNotify(dockerNode);
       }
@@ -126,6 +129,7 @@ export const startNode = async (nodeId: NodeId) => {
     logger.error(err);
     node.status = NodeStatus.errorStarting;
     nodeStore.updateNode(node);
+    throw err;
   }
 };
 
@@ -136,6 +140,7 @@ export const stopNode = async (nodeId: NodeId, stoppedBy: NodeStoppedBy) => {
   }
   logger.info(`Stopping node ${JSON.stringify(node)}`);
   node.status = NodeStatus.stopping;
+  node.lastStoppedTimestampMs = Date.now();
   node.stoppedBy = stoppedBy;
   nodeStore.updateNode(node);
 
@@ -304,9 +309,6 @@ export const initialize = async () => {
           } else {
             node.status = NodeStatus.stopped;
             // console.log('checkNode: stoppeds', node);
-          }
-          if (containerDetails?.State?.FinishedAt) {
-            node.lastStopped = containerDetails?.State?.FinishedAt;
           }
           compareSpecsAndUpdate(
             node,

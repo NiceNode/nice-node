@@ -9,7 +9,7 @@
       {
         "serviceId": "executionClient",
         "name": "Execution Client",
-        "nodeOptions": ["nethermind", "op-geth"],
+        "nodeOptions": ["op-geth", "nethermind"],
         "required": true,
         "requiresCommonJwtSecret": true,
         "requiresFiles": true
@@ -17,7 +17,7 @@
       {
         "serviceId": "consensusClient",
         "name": "Consensus Client",
-        "nodeOptions": ["op-node"],
+        "nodeOptions": ["op-node", "magi", "hildr"],
         "required": true,
         "requiresCommonJwtSecret": true,
         "requiresFiles": true
@@ -74,7 +74,8 @@
                 {
                   "serviceId": "consensusClient",
                   "configValues": {
-                    "network": "Mainnet"
+                    "network": "Mainnet",
+                    "chainId": "10"
                   }
                 }
               ]
@@ -97,7 +98,8 @@
                 {
                   "serviceId": "consensusClient",
                   "configValues": {
-                    "network": "Sepolia"
+                    "network": "Sepolia",
+                    "chainId": "11155420"
                   }
                 }
               ]

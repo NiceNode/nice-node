@@ -5,7 +5,8 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "docker.io/chainsafe/lodestar:latest",
+    "imageName": "docker.io/chainsafe/lodestar",
+    "defaultImageTag": "latest",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
@@ -68,10 +69,6 @@
           {
             "value": "Holesky",
             "config": "holesky"
-          },
-          {
-            "value": "Goerli",
-            "config": "goerli"
           },
           {
             "value": "Sepolia",

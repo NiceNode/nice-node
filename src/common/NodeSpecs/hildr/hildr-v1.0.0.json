@@ -1,0 +1,209 @@
+{
+  "specId": "hildr",
+  "version": "1.0.0",
+  "displayName": "Hildr",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "input": {
+      "defaultConfig": {
+        "l1": "",
+        "l1WebSocketUrl": "",
+        "l1BeaconUrl" : "",
+        "l2RpcUrl": "http://host.containers.internal:8547",
+        "l2EngineUrl" : "http://host.containers.internal:8553",
+        "httpPort": "8549",
+        "logLevel": "Debug"
+      },
+      "docker": {
+        "containerVolumePath": "/data",
+        "raw": " ",
+        "forcedRawNodeInput": " --sync-mode full --jwt-file /data/jwtsecret"
+      }
+    },
+    "imageName": "ghcr.io/optimism-java/hildr",
+    "defaultImageTag": "latest-native"
+
+  },
+  "category": "L2/ConsensusClient",
+  "minorityClient": true,
+  "nodeReleasePhase": "beta",
+  "rpcTranslation": "eth-l2-consensus",
+  "systemRequirements": {
+    "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
+    "cpu": {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage": {
+      "minSizeGBs": 30,
+      "ssdRequired": true
+    },
+    "internet": {
+      "minDownloadSpeedMbps": 25,
+      "minUploadSpeedMbps": 10
+    },
+    "docker": {
+      "required": true
+    }
+  },
+  "configTranslation": {
+    "network": {
+      "displayName": "Network",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Optimism Mainnet",
+            "config": ""
+          },
+          {
+            "value": "Optimism Sepolia",
+            "config": ""
+          },
+          {
+            "value": "Base Mainnet",
+            "config": ""
+          },
+          {
+            "value": "Base Sepolia",
+            "config": ""
+          }
+        ]
+      }
+    },
+    "chainId": {
+      "displayName": "Chain ID (Network)",
+      "cliConfigPrefix": "--network ",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "10",
+            "config": "optimism"
+          },
+          {
+            "value": "11155420",
+            "config": "optimism-sepolia"
+          },
+          {
+            "value": "8453",
+            "config": "base"
+          },
+          {
+            "value": "84532",
+            "config": "base-sepolia"
+          }
+        ]
+      }
+    },
+    "l1": {
+      "displayName": "Ethereum *Archival* RPC Endpoint",
+      "cliConfigPrefix": "--l1-rpc-url ",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "defaultValue": ""
+    },
+    "l1WebSocketUrl": {
+      "displayName": "Ethereum *Archival* WebSocket Endpoint",
+      "cliConfigPrefix": "--l1-ws-rpc-url ",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "defaultValue": ""
+    },
+    "l1BeaconUrl": {
+      "displayName": "Ethereum Beacon RPC Endpoint",
+      "cliConfigPrefix": "--l1-beacon-url ",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "defaultValue": ""
+    },
+    "l2RpcUrl": {
+      "displayName": "Optimism RPC Endpoint (local node or provider)",
+      "cliConfigPrefix": "--l2-rpc-url ",
+      "uiControl": {
+        "type": "text"
+      },
+      "defaultValue": "http://host.containers.internal:8547",
+      "addNodeFlow": "advanced",
+      "infoDescription": "engine and eth namespace required"
+    },
+    "l2EngineUrl": {
+      "displayName": "Optimism Engine URL (local node)",
+      "cliConfigPrefix": "--l2-engine-url ",
+      "uiControl": {
+        "type": "text"
+      },
+      "defaultValue": "http://host.containers.internal:8553",
+      "addNodeFlow": "advanced",
+      "infoDescription": "engine and eth namespace required"
+    },
+    "httpPort": {
+      "displayName": "HTTP-RPC server listening port",
+      "cliConfigPrefix": "--rpc-port ",
+      "defaultValue": "8549",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
+    },
+    "logLevel": {
+      "displayName": "Log level",
+      "cliConfigPrefix": "--log-level ",
+      "defaultValue": "Info",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Info",
+            "config": "INFO"
+          },
+          {
+            "value": "Debug",
+            "config": "DEBUG"
+          },
+          {
+            "value": "Warn",
+            "config": "WARN"
+          },
+          {
+            "value": "Error",
+            "config": "ERROR"
+          },
+          {
+            "value": "Trace",
+            "config": "TRACE"
+          }
+        ]
+      }
+    }
+  },
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png",
+  "resources": [
+    {
+      "label": "OP Stack docs",
+      "value": "optimism.io",
+      "link": "https://stack.optimism.io/"
+    },
+    {
+      "label": "Hildr Optimism Java Github",
+      "value": "github.com",
+      "link": "https://github.com/optimism-java/hildr#readme"
+    },
+    {
+      "label": "OP Geth Github",
+      "value": "github.com",
+      "link": "https://github.com/ethereum-optimism/op-geth#readme"
+    }
+  ]
+}

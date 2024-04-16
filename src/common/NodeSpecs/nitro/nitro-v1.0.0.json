@@ -5,20 +5,24 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "docker.io/offchainlabs/nitro-node:v2.0.14-2baa834",
+    "imageName": "docker.io/offchainlabs/nitro-node",
+    "defaultImageTag": "v2.3.3-6a1c1a7",
     "input": {
       "defaultConfig": {
-        "ethMainnetRpcUrl": "",
+        "parentChainRpcUrl": "",
+        "parentChainBeaconRpcUrl": "",
+        "initUrl": "https://snapshot.arbitrum.foundation/arb1/nitro-pruned.tar",
+        "l2ChainId": "42161",
         "httpAddress": "0.0.0.0",
         "httpPort": "8547",
-        "l2ChainId": "42161",
         "httpCorsDomains": "http://localhost",
-        "httpVirtualHosts": "localhost,host.containers.internal"
+        "httpVirtualHosts": "localhost,host.containers.internal",
+        "logLevel": "Info"
       },
       "docker": {
         "containerVolumePath": "/home/user/.arbitrum",
         "raw": "",
-        "forcedRawNodeInput": "--l1.chain-id=1 --init.url=\"https://snapshot.arbitrum.foundation/arb1/nitro-pruned.tar\" --log-level=5"
+        "forcedRawNodeInput": ""
       }
     },
     "dependencies": ["L1/ExecutionClient"]
@@ -46,23 +50,46 @@
     }
   },
   "configTranslation": {
-    "ethMainnetRpcUrl": {
+    "parentChainRpcUrl": {
       "displayName": "Ethereum Mainnet RPC Endpoint",
-      "cliConfigPrefix": "--l1.url=",
+      "cliConfigPrefix": "--parent-chain.connection.url=",
       "defaultValue": "",
       "uiControl": {
         "type": "text"
       },
       "addNodeFlow": "required",
-      "infoDescription": "Local node http://host.containers.internal:8545 or provider"
+      "infoDescription": "Local node http://host.containers.internal:8545 or provider. Parent chain endpoint"
+    },
+    "parentChainBeaconRpcUrl" : {
+      "displayName": "Ethereum Mainnet Beacon RPC Endpoint",
+      "cliConfigPrefix": "--parent-chain.blob-client.beacon-url=",
+      "defaultValue": "",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "infoDescription": "Provider with historical blob API enabled or a local node http://host.containers.internal:5052. Parent chain Beacon endpoint"
+    },
+    "initUrl" : {
+      "displayName": "Network snapshot data URL",
+      "cliConfigPrefix": "--init.url=",
+      "defaultValue": "https://snapshot.arbitrum.foundation/arb1/nitro-pruned.tar",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "advanced",
+      "infoDescription": "Ex: Arb1 https://snapshot.arbitrum.foundation/arb1/nitro-pruned.tar or Sepolia https://snapshot.arbitrum.foundation/sepolia/nitro-pruned.tar",
+      "documentation" : "https://docs.arbitrum.io/node-running/how-tos/running-a-full-node#prerequisites"
     },
     "l2ChainId": {
       "displayName": "Arbitrum L2 Chain ID",
-      "cliConfigPrefix": "--l2.chain-id=",
+      "cliConfigPrefix": "--chain.id=",
       "defaultValue": "42161",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "addNodeFlow": "advanced",
+      "documentation" : "https://docs.arbitrum.io/node-running/node-providers#rpc-endpoints"
     },
     "httpAddress": {
       "displayName": "HTTP-RPC server listening interface",
@@ -106,6 +133,41 @@
         ]
       },
       "defaultValue": "Disabled"
+    },
+    "logLevel": {
+      "displayName": "Log level",
+      "cliConfigPrefix": "--log-level=",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Info",
+            "config": "3"
+          },
+          {
+            "value": "Warn",
+            "config": "2"
+          },
+          {
+            "value": "Error",
+            "config": "1"
+          },
+          {
+            "value": "Trace",
+            "config": "5"
+          },
+          {
+            "value": "Debug",
+            "config": "4"
+          },
+          {
+            "value": "Fatal",
+            "config": "0"
+          }
+        ]
+      },
+      "addNodeFlow": "advanced",
+      "defaultValue": "Info"
     },
     "httpApis": {
       "displayName": "Enabled HTTP APIs",

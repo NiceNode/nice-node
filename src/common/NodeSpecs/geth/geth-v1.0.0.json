@@ -10,7 +10,7 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpCorsDomains": "http://localhost",
-        "webSockets": "Disabled",
+        "webSockets": "Enabled",
         "httpVirtualHosts": "localhost,host.containers.internal",
         "authVirtualHosts": "localhost,host.containers.internal",
         "httpAddress": "0.0.0.0",
@@ -23,7 +23,8 @@
         "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
-    "imageName": "docker.io/ethereum/client-go:stable",
+    "imageName": "docker.io/ethereum/client-go",
+    "defaultImageTag": "stable",
     "binaryDownload": {
       "type": "static",
       "darwin": {
@@ -87,10 +88,6 @@
           {
             "value": "Holesky",
             "config": "--holesky"
-          },
-          {
-            "value": "Goerli",
-            "config": "--goerli"
           },
           {
             "value": "Sepolia",
@@ -268,6 +265,7 @@
       },
       "addNodeFlow": "required",
       "defaultValue": "snap",
+      "hideFromUserAfterStart": true,
       "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
     },
     "p2pPorts": {

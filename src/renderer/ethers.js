@@ -19023,9 +19023,8 @@ class BaseProvider extends Provider {
                       lastBlockNumber = blockNumber;
                     } else {
                       {
-                        const mined = yield this.getTransaction(
-                          transactionHash,
-                        );
+                        const mined =
+                          yield this.getTransaction(transactionHash);
                         if (mined && mined.blockNumber != null) {
                           return;
                         }
@@ -19040,9 +19039,8 @@ class BaseProvider extends Provider {
                         if (done) {
                           return;
                         }
-                        const block = yield this.getBlockWithTransactions(
-                          scannedBlock,
-                        );
+                        const block =
+                          yield this.getBlockWithTransactions(scannedBlock);
                         for (let ti = 0; ti < block.transactions.length; ti++) {
                           const tx = block.transactions[ti];
                           if (tx.hash === transactionHash) {

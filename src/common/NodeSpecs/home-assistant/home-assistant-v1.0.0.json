@@ -1,0 +1,72 @@
+{
+  "specId": "home-assistant",
+  "version": "1.0.0",
+  "displayName": "Home Assistant",
+  "displayTagline": "Local Home Assistant server. [Note] NOT AFFLIATED with Home Assistant or NabuCasa!",
+  "execution": {
+    "executionTypes": ["nodePackage"],
+    "defaultExecutionType": "nodePackage",
+    "services": [
+      {
+        "serviceId": "homeAssistantService",
+        "name": "Home Assistant Service",
+        "nodeOptions": ["home-assistant-service"],
+        "required": true
+      }
+    ]
+  },
+  "category": "utility/automation",
+  "rpcTranslation": "home-assistant",
+  "systemRequirements": {
+    "documentationUrl": "https://www.home-assistant.io/installation/",
+    "cpu": {
+      "cores": 1
+    },
+    "memory": {
+      "minSizeGBs": 2
+    },
+    "storage": {
+      "minSizeGBs": 4
+    },
+    "docker": {
+      "required": true
+    }
+  },
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "Data location",
+      "uiControl": {
+        "type": "filePath",
+        "serviceConfigs": {
+          "services": [
+            {
+              "serviceId": "homeAssistantServer",
+              "configKey": "dataDir"
+            }
+          ]
+        }
+      },
+      "infoDescription": "Data directory for the assistant config (default: \"/config\")"
+    }
+  },
+  "iconUrl": "https://raw.githubusercontent.com/home-assistant/home-assistant.io/current/source/images/favicon-192x192.png",
+  "description": "[Note] This is NOT AFFLIATED in any way with the official Home Assistant or NabuCasa organizations! This offering is open-source, free, and not guarenteed any support by us. Please read our terms and privacy policies on https://nicenode.xyz for more information. To play on this server on the same computer that it is being run, add 'localhost' for the multiplayer server. To add this server on a different computer and on the same network, add your computer's local IP address to the multiplayer server.",
+  "addNodeDescription": "Open source home automation that puts local control and privacy first. Powered by a worldwide community of tinkerers and DIY enthusiasts. Perfect to run on a Raspberry Pi or a local server. [Note] This is NOT AFFLIATED in any way with the official Home Assistant or NabuCasa organizations!",
+  "resources": [
+    {
+      "label": "Website",
+      "value": "home-assistant.io",
+      "link": "https://www.home-assistant.io"
+    },
+    {
+      "label": "Privacy Policy",
+      "value": "home-assistant.io/privacy",
+      "link": "https://www.home-assistant.io/privacy"
+    },
+    {
+      "label": "Security Vulnerabilities and Reporting",
+      "value": "home-assistant.io/security",
+      "link": "https://www.home-assistant.io/security"
+    }
+  ]
+}
