@@ -1,4 +1,3 @@
-import path from 'node:path';
 import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
@@ -6,17 +5,12 @@ const config: StorybookConfig = {
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
-    '@storybook/addon-mdx-gfm',
+    '@storybook/addon-interactions'
   ],
   logLevel: 'debug',
-  // typescript: {
-  //   reactDocgen: 'react-docgen-typescript-plugin',
-  // },
   docs: {
     autodocs: 'tag',
   },
-
   framework: {
     name: '@storybook/react-vite',
     options: {}
