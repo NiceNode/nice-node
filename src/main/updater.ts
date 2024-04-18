@@ -1,7 +1,8 @@
 import sleep from 'await-sleep';
-import { app, autoUpdater, dialog, type BrowserWindow } from 'electron';
+import { app, dialog, type BrowserWindow } from 'electron';
 import { autoUpdateLogger } from './logger';
 
+import { autoUpdater } from './nn-auto-updater/main';
 import { reportEvent } from './events';
 import i18nMain from './i18nMain';
 import { setFullQuitForNextQuit } from './main';
@@ -106,6 +107,8 @@ const initUpdateHandlers = (browserWindow: BrowserWindow) => {
 export const checkForUpdates = (notifyIfNoUpdateAvailable: boolean) => {
   logger.info(`updater.checkForUpdates set to: ${notifyIfNoUpdateAvailable}`);
   notifyUserIfNoUpdateAvailable = notifyIfNoUpdateAvailable;
+  // if linux
+  // call
   autoUpdater.checkForUpdates();
 };
 
