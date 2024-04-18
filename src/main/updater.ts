@@ -1,21 +1,18 @@
 import sleep from 'await-sleep';
-// import { type BrowserWindow, autoUpdater, dialog, FeedURLOptions } from 'electron';
 import { app, autoUpdater, dialog, type BrowserWindow } from 'electron';
-import logger, { autoUpdateLogger } from './logger';
-import log from 'electron-log/main';
-const updateLogger = log.scope('updater');
+import { autoUpdateLogger } from './logger';
 
 import { reportEvent } from './events';
 import i18nMain from './i18nMain';
-// import logger, { autoUpdateLogger } from './logger';
-// import logger from './logger';
-import { getSetIsPreReleaseUpdatesEnabled } from './state/settings';
+// import { getSetIsPreReleaseUpdatesEnabled } from './state/settings';
 
 let notifyUserIfNoUpdateAvailable: boolean;
 
 const t = i18nMain.getFixedT(null, 'updater');
 
-const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
+const logger = autoUpdateLogger;
+
+const initUpdateHandlers = (browserWindow: BrowserWindow) => {
   autoUpdater.on('error', (error) => {
     logger.error('autoUpdater:::::::::error', error);
   });
@@ -97,7 +94,7 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
 //   // autoUpdater.setFeedURL({ url });
 //   // autoUpdater.allowPrerelease = isPreReleaseUpdatesEnabled;
 //   notifyUserIfNoUpdateAvailable = false;
-//   intiUpdateHandlers(mainWindow);
+//   initUpdateHandlers(mainWindow);
 // };
 
 export const checkForUpdates = (notifyIfNoUpdateAvailable: boolean) => {
@@ -113,12 +110,13 @@ export const setAllowPrerelease = (isAllowPrerelease: boolean) => {
 };
 
 export const initialize = (mainWindow: BrowserWindow) => {
-  updateLogger.info('initialize updater');
+  logger.info('initialize updater');
   const host = 'https://update.electronjs.org';
   const publicRepo = 'NiceNode/test-nice-node-updater';
   const currentAppVersion = app.getVersion(); // ex. 5.1.2-alpha
   const feedUrl = `${host}/${publicRepo}/${process.platform}-${process.arch}/${currentAppVersion}`
+  logger.info(`electron.autoUpdater feedUrl set to ${feedUrl}`);
   autoUpdater.setFeedURL({ url: feedUrl });
   notifyUserIfNoUpdateAvailable = false;
-  intiUpdateHandlers(mainWindow);
+  initUpdateHandlers(mainWindow);
 }
