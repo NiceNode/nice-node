@@ -200,6 +200,10 @@ export const fullQuit = () => {
   app.quit();
 };
 
+export const setFullQuitForNextQuit = (_isNextQuitAFullQuit: boolean) => {
+  isFullQuit = _isNextQuitAFullQuit;
+};
+
 // Emitted on app.quit() after all windows have been closed
 app.on('will-quit', (e) => {
   // Remove dev env check to test background. This is to prevent
