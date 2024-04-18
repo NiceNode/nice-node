@@ -84,7 +84,7 @@ const RESOURCES_PATH = app.isPackaged
   : path.join(__dirname, '..', '..', 'assets'); // starting point: .vite/build/main.js
 
 const getAssetPath = (...paths: string[]): string => {
-  logger.log('RESOURCES_PATH: ', RESOURCES_PATH);
+  logger.info('RESOURCES_PATH: ', RESOURCES_PATH);
   return path.join(RESOURCES_PATH, ...paths);
 };
 
@@ -158,7 +158,12 @@ export const createWindow = async () => {
 
   // App auto updates
   updater.initialize(mainWindow);
-  // updater.checkForUpdates(false);
+  // disabled in dev env
+  if (!isDevelopment) {
+    updater.checkForUpdates(false);
+  } else {
+    logger.info('updater.checkForUpdates() skipped. Disabled in development env');
+  }
 
   menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
