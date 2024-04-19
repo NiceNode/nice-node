@@ -6,7 +6,8 @@ import { getNNDirPath } from '../files';
 import { spawnSync } from 'node:child_process';
 import { setFullQuitForNextQuit } from '../main';
 import logger from '../logger';
-import path from 'node:path';
+import { type PackageManager, type PackageType, findPackageManager, findPackageType } from './findPackageManager';
+import { find } from 'highcharts';
 
 const repo = 'NiceNode/test-nice-node-updater';
 // const repo = 'NiceNode/nice-node';
@@ -18,6 +19,9 @@ export const getLatestVersion = async () => {
   // remove prefix 'v' from tag_name
   return data.tag_name.replace(/^v/, '');
 }
+
+let localPackageType: PackageType | null = null;
+let localPackageManager: PackageManager | null = null;
 
 export const checkForUpdates = async (emit: (e: any, args?: any) => void) => {
   // if latest version is greater than current version
@@ -44,16 +48,24 @@ export const checkForUpdates = async (emit: (e: any, args?: any) => void) => {
     const res = await fetch(`https://api.github.com/repos/${repo}/releases/latest`);
     const data = await res.json();
 
+    if(localPackageType === null) {
+      localPackageType = await findPackageType();
+      if(localPackageType === null) {
+        emit('error', new Error('Local supported package type not found. Only deb and rpm currently supported.'));
+        return;
+      }
+    }
+    logger.info(`Looking for release package type : ${localPackageType}`);
+
     // loop over data.assets, check asset.name and parse out the ones we want to show in the UI.
     // get asset.browser_download_url
-    logger.info("Github releases api data: ", data);
     let downloadUrl = '';
     let fileName = '';
     const arch = process.arch === 'x64' ? 'amd64' : 'arm64';
     const releaseNotes = data.body;
     const releaseDate = data.published_at;
     for(const val of data.assets) {
-      if(val.name.endsWith(`${arch}.deb`)) {
+      if(val.name.endsWith(`${arch}.${localPackageType}`)) {
         downloadUrl = val.browser_download_url;
         logger.info(`val.url: ${val.url}`);
         fileName = val.name;
@@ -116,7 +128,7 @@ const spawnSyncLog = (cmd: string, args: string[] = [], env = {}): string =>  {
   return response.stdout.trim()
 }
 
-export const quitAndInstall = () => {
+export const quitAndInstall = async () => {
   logger.info('quitAndInstall called')
   // add quit handler, call quit, install in quitHandler
 
@@ -124,7 +136,41 @@ export const quitAndInstall = () => {
   const sudo = wrapSudo();
   logger.info(`sudo cmd  ${sudo}`);
   const wrapper = /pkexec/i.test(sudo) ? "" : `"`
-  const cmd = ["dpkg", "-i", latestDownloadFilePath, "||", "apt-get", "install", "-f", "-y"]
+  if(localPackageManager === null) {
+    localPackageManager = await findPackageManager();
+    if(localPackageManager === null) {
+      throw new Error('Local supported package manager not found. Only dpkg, yum, dnf and zypper currently supported.');
+    }
+  }
+  logger.info(`Using release package manager : ${localPackageManager}`);
+  let cmd = null;
+  if(localPackageManager === 'dpkg') {
+    cmd = ["dpkg", "-i", latestDownloadFilePath, "||", "apt-get", "install", "-f", "-y"]
+  } else if(localPackageType === 'rpm') {
+    if(localPackageManager === 'dnf' || localPackageManager === 'yum') {
+      cmd = [localPackageManager, "-y", "remove", `'${app.name}'`, ";", localPackageManager, "-y", "install", latestDownloadFilePath]
+    } else {
+      // zypper
+      cmd = [
+        localPackageManager,
+        "remove",
+        "-y",
+        `'${app.name}'`,
+        ";",
+        localPackageManager,
+        "clean",
+        "--all",
+        ";",
+        localPackageManager,
+        "--no-refresh",
+        "install",
+        "--allow-unsigned-rpm",
+        "-y",
+        "-f",
+        latestDownloadFilePath,
+      ]
+    }
+  }
   logger.info(`quitAndInstall cmd: ${cmd.join(" ")}`);
   spawnSyncLog(sudo, [`${wrapper}/bin/bash`, "-c", `'${cmd.join(" ")}'${wrapper}`])
   //if (options.isForceRunAfter) {

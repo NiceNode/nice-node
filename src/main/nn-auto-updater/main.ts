@@ -5,6 +5,9 @@ import { TypedEmitter } from "tiny-typed-emitter"
 
 import { isLinux } from '../platform';
 import * as githubReleases from './githubReleases';
+import { findPackageManager } from './findPackageManager';
+
+findPackageManager();
 
 /**
  * event Event
@@ -25,11 +28,18 @@ export type AppUpdaterEvents = {
   "update-cancelled": () => void
 }
 
+let numTimeCalledConstructor = 0;
+
 export class nnAutoUpdater extends TypedEmitter<AppUpdaterEvents> implements AutoUpdater {
   private readonly nativeUpdater: AutoUpdater = _autoUpdater;
+  private customUpdater: AutoUpdater | null = null;
 
   constructor() {
     console.log("nnAutoUpdater constructor");
+    numTimeCalledConstructor++;
+    if(numTimeCalledConstructor > 1) {
+      throw new Error("nnAutoUpdater constructor called more than once!");
+    }
     super();
   }
 
