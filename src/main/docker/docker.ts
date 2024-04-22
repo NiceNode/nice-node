@@ -4,6 +4,7 @@ import {
   spawn,
 } from 'node:child_process';
 import path from 'node:path';
+import url from 'node:url';
 import * as readline from 'node:readline';
 import { Docker, Options } from 'docker-cli-js';
 
@@ -24,6 +25,9 @@ import * as dockerCompose from './docker-compose';
 //   env: undefined,
 //   stdin: undefined,
 // };
+
+export const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
 
 const options = new Options(
   undefined,

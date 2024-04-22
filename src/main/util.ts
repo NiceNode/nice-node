@@ -1,5 +1,8 @@
 import path from 'node:path';
 import { URL } from 'node:url';
+import url from 'node:url';
+
+export const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 export function resolveHtmlPath(htmlFileName: string) {
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {

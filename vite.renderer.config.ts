@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import svgr from "vite-plugin-svgr";
 
-import { pluginExposeRenderer } from './vite.base.config';
+import { pluginExposeRenderer } from './vite.base.config.js';
 
 console.log("vite.renderer.config.ts");
 
