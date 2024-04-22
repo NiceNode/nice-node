@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import Button from '../Button/Button';
-import {
-  container,
-  pathAndChangeContainer,
-  freeStorageSpaceFontStyle,
-  checkCircleIcon,
-} from './folderInput.css';
-import Input from './Input';
 import { Icon } from '../Icon/Icon';
+import Input from './Input';
+import {
+  checkCircleIcon,
+  container,
+  freeStorageSpaceFontStyle,
+  pathAndChangeContainer,
+} from './folderInput.css';
 
 export interface FolderInputProps {
   /**

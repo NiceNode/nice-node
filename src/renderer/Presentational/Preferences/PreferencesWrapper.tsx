@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Settings } from 'main/state/settings';
-import { useGetSettingsQuery } from '../../state/settingsService';
-import { ModalConfig } from '../ModalManager/modalUtils';
+import type { Settings } from '../../../main/state/settings';
 import electron from '../../electronGlobal';
+import { useGetSettingsQuery } from '../../state/settingsService';
+import type { ModalConfig } from '../ModalManager/modalUtils';
 
-import Preferences, { Preference, ThemeSetting } from './Preferences';
+import Preferences, { type Preference, type ThemeSetting } from './Preferences';
 
 export interface PreferencesWrapperProps {
   modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
@@ -88,7 +88,6 @@ const PreferencesWrapper = ({
     getUserSettings();
     getNiceNodeVersion();
     getLanguageSetting();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangePreference = useCallback(

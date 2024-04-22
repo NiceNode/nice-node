@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import TabItem from '../../renderer/Generics/redesign/TabItem/TabItem';
 

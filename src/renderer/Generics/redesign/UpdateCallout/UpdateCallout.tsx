@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import {
+  buttonContainer,
   container,
-  title,
   description,
   link,
-  buttonContainer,
+  title,
 } from './updateCallout.css';
 
 import Button from '../Button/Button';

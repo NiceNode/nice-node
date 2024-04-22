@@ -1,7 +1,7 @@
-import { StoryFn, Meta } from '@storybook/react';
-import { MenuItem } from '../../renderer/Generics/redesign/MenuItem/MenuItem';
+import type { Meta, StoryFn } from '@storybook/react';
 import { HorizontalLine } from '../../renderer/Generics/redesign/HorizontalLine/HorizontalLine';
 import { Menu } from '../../renderer/Generics/redesign/Menu/Menu';
+import { MenuItem } from '../../renderer/Generics/redesign/MenuItem/MenuItem';
 
 export default {
   title: 'Generic/Menu',

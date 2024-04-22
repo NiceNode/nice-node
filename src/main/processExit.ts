@@ -1,5 +1,5 @@
-import { ChildProcess } from 'child_process';
-import process from 'process';
+import type { ChildProcess } from 'node:child_process';
+import process from 'node:process';
 
 import logger from './logger';
 

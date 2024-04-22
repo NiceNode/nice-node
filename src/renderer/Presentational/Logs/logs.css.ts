@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars, common } from '../../Generics/redesign/theme.css';
+import { common, vars } from '../../Generics/redesign/theme.css';
 
 export const container = style({
   position: 'relative',

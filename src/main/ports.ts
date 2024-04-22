@@ -1,9 +1,10 @@
-import { ConfigValue } from 'common/nodeConfig';
-import Node, { NodeConfig } from '../common/node';
+import type Node from '../common/node';
+import type { NodeConfig } from '../common/node';
+import type { ConfigValue } from '../common/nodeConfig';
+import { NOTIFICATIONS } from './consts/notifications';
 import { httpGet } from './httpReq';
 import { getNodes, getSetPortHasChanged } from './state/nodes';
 import { addNotification } from './state/notifications';
-import { NOTIFICATIONS } from './consts/notifications';
 
 export const getPodmanPortsForNode = (
   node: Node,

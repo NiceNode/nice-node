@@ -1,13 +1,14 @@
+import type Node from '../../common/node';
+import {
+  type NodeId,
+  type NodeStatus,
+  type UserNodes,
+  isDockerNode,
+} from '../../common/node';
+import type { ConfigValuesMap } from '../../common/nodeConfig';
 import { CHANNELS, send } from '../messenger';
 import { didPortsChange } from '../ports';
-import Node, {
-  isDockerNode,
-  NodeId,
-  NodeStatus,
-  UserNodes,
-} from '../../common/node';
 import store from './store';
-import { ConfigValuesMap } from '../../common/nodeConfig';
 
 export const USER_NODES_KEY = 'userNodes';
 const NODES_KEY = 'nodes';
@@ -75,7 +76,7 @@ export const addNode = (newNode: Node) => {
   const { nodes, nodeIds } = userNodes;
   if (nodes[newNode.id]) {
     // 2 nodes have matching uuids, you won the lottery
-    throw new Error(`Unable to add the node. Please try again.`);
+    throw new Error('Unable to add the node. Please try again.');
   }
   nodes[newNode.id] = newNode;
   nodeIds.push(newNode.id);
@@ -176,7 +177,7 @@ export const setDockerNodeStatus = (
 // export const updateNodeProperty = (
 //   nodeId: NodeId,
 //   property: string,
-//   // eslint-disable-next-line
+//
 //   value: any
 // ) => {
 //   store.set(`${USER_NODES_KEY}.${NODES_KEY}.${nodeId}.${property}`, value);

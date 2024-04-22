@@ -1,4 +1,4 @@
-import { style, ComplexStyleRule } from '@vanilla-extract/css';
+import { type ComplexStyleRule, style } from '@vanilla-extract/css';
 import { vars } from './Generics/redesign/theme.css';
 
 export const dragWindowContainer = style({

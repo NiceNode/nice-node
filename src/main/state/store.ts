@@ -1,4 +1,4 @@
-const Store = require('electron-store');
+import Store from 'electron-store';
 
 const store = new Store();
 
@@ -7,7 +7,7 @@ export const setIsStartOnLogin = (isStartOnLogin: boolean): void => {
 };
 
 export const getIsStartOnLogin = (): boolean => {
-  return store.get('isStartOnLogin');
+  return store.get('isStartOnLogin') as boolean;
 };
 
 export const watchIsStartOnLogin = (handler: () => void): void => {

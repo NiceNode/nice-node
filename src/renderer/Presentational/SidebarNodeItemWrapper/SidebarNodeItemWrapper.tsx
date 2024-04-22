@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { NodeStatus, NodePackage } from '../../../common/node';
+import { type NodePackage, NodeStatus } from '../../../common/node';
+import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { getSyncStatus } from '../../Generics/redesign/utils';
 import { useGetExecutionIsSyncingQuery } from '../../state/services';
-import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 
 export type SidebarNodeStatus =
   | 'healthy'
@@ -92,7 +92,7 @@ export const SidebarNodeItemWrapper = ({
   const nodeStatus = {
     stopped: status === 'stopped',
     error: status.includes('error'),
-    synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
+    synchronized: !sIsSyncing && Number.parseFloat(sSyncPercent) > 99.9,
   };
 
   const syncStatus = getSyncStatus(nodeStatus);

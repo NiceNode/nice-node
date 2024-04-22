@@ -3,8 +3,8 @@ import Linking from '../../Generics/redesign/Link/Linking';
 import {
   container,
   contentContainer,
-  contentSection,
   contentMajorTitle,
+  contentSection,
   contentTitle,
 } from './updatePodman.css';
 

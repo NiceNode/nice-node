@@ -1,4 +1,5 @@
-import Node, { NodeId, NodePackage, NodeStatus } from '../../common/node';
+import type Node from '../../common/node';
+import { type NodeId, type NodePackage, NodeStatus } from '../../common/node';
 import logger from '../logger';
 import { registerExitHandler } from '../processExit';
 import { getNodePackage, updateNodePackage } from '../state/nodePackages';

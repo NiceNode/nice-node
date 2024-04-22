@@ -1,16 +1,20 @@
+import ethereumv1 from '../../common/NodeSpecs/ethereum/ethereum-v1.0.0.json';
+import gethv1 from '../../common/NodeSpecs/geth/geth-v1.0.0.json';
+
 import {
+  type UserNodePackages,
+  type UserNodes,
   createNode,
   createNodePackage,
-  UserNodePackages,
-  UserNodes,
 } from '../../common/node';
-import {
+import type {
   NodePackageSpecification,
   NodeSpecification,
 } from '../../common/nodeSpec';
-import gethv1 from '../../common/NodeSpecs/geth/geth-v1.0.0.json';
-import ethereumv1 from '../../common/NodeSpecs/ethereum/ethereum-v1.0.0.json';
-import { NodeLibrary, NodePackageLibrary } from '../../main/state/nodeLibrary';
+import type {
+  NodeLibrary,
+  NodePackageLibrary,
+} from '../../main/state/nodeLibrary';
 
 export const getSystemFreeDiskSpace = (): number => {
   return 2000;
@@ -158,5 +162,7 @@ export const getIsPodmanRunning = () => true;
 
 export const getSystemInfo = () => {};
 export const runBenchmark = () => {};
+
+export const setNativeThemeSetting = () => {};
 
 export const SENTRY_DSN = 'fake_sentry_dsn';

@@ -1,4 +1,5 @@
-import { NodePackageSpecification } from '../../common/nodeSpec';
+import { describe, expect, it } from 'vitest';
+import type { NodePackageSpecification } from '../../common/nodeSpec';
 import { mergePackageAndClientConfigValues } from '../../renderer/Presentational/AddNodeConfiguration/mergePackageAndClientConfigValues';
 
 const nodePackageSpec = {

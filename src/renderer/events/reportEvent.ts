@@ -1,8 +1,8 @@
 import mixpanel from 'mixpanel-browser';
 
-import { MP_PROJECT_ENV, MP_PROJECT_TOKEN } from './environment';
-import { NNEvent } from './events';
 import electron from '../electronGlobal';
+import { MP_PROJECT_ENV, MP_PROJECT_TOKEN } from './environment';
+import type { NNEvent } from './events';
 
 let debugInfo: any;
 const getDebugInfo = async (): Promise<any> => {

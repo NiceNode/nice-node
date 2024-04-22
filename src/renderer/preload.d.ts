@@ -1,23 +1,27 @@
-/* eslint-disable no-unused-vars */
-import {
-  NodeSpecification,
-  NodePackageSpecification,
-} from '../common/nodeSpec';
-import Node, {
+import type Node from '../common/node';
+import type {
   NodeId,
+  NodePackage,
   UserNodePackages,
   UserNodes,
-  NodePackage,
 } from '../common/node';
-import { AddNodePackageNodeService } from '../main/nodePackageManager';
-import { NodeLibrary, NodePackageLibrary } from '../main/state/nodeLibrary';
-import { Settings, ThemeSetting } from '../main/state/settings';
-import { CheckStorageDetails } from '../main/files';
-import { FailSystemRequirementsData } from '../main/minSystemRequirement';
-import { SystemData } from '../main/systemInfo';
-import { ConfigValuesMap } from '../common/nodeConfig';
-import { PodmanDetails } from '../main/podman/details';
-import { Benchmark } from '../main/state/benchmark';
+import type { ConfigValuesMap } from '../common/nodeConfig';
+
+import type {
+  NodePackageSpecification,
+  NodeSpecification,
+} from '../common/nodeSpec';
+import type { CheckStorageDetails } from '../main/files';
+import type { FailSystemRequirementsData } from '../main/minSystemRequirement';
+import type { AddNodePackageNodeService } from '../main/nodePackageManager';
+import type { PodmanDetails } from '../main/podman/details';
+import type { Benchmark } from '../main/state/benchmark';
+import type {
+  NodeLibrary,
+  NodePackageLibrary,
+} from '../main/state/nodeLibrary';
+import type { Settings, ThemeSetting } from '../main/state/settings';
+import type { SystemData } from '../main/systemInfo';
 
 // Since we are using Chrome only in Electron and this is not a web standard yet,
 //  we extend window.performance to include Chrome's memory stats
@@ -30,6 +34,16 @@ interface Performance extends Performance {
     /** The currently active segment of JS heap, in bytes. */
     usedJSHeapSize: number;
   };
+}
+
+declare module './*.js?url' {
+  const value: string;
+  export = value;
+}
+
+declare module '/*.png' {
+  const value: any;
+  export = value;
 }
 
 declare global {
@@ -137,5 +151,3 @@ declare global {
     performance: Performance;
   }
 }
-
-export {};

@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
-import {
-  ConfigValue,
+import type {
+  ConfigKey,
   ConfigTranslation,
   ConfigTranslationControl,
-  ConfigKey,
+  ConfigValue,
 } from '../../../../common/nodeConfig';
+import type { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
 import FolderInput from '../Input/FolderInput';
 import Input from '../Input/Input';
-import Select from '../Select/Select';
 import MultiSelect from '../Select/MultiSelect';
-import { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
+import Select from '../Select/Select';
 import SyncModes from '../SyncModes/SyncModes';
 
 export type SettingProps = {
@@ -74,7 +74,6 @@ const Setting = ({
       );
       setValue(newValue);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentValue]);
 
   const configTranslationControl: ConfigTranslationControl =

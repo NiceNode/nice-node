@@ -1,17 +1,16 @@
-import { getNNDirPath } from '../files';
 import * as arch from '../arch';
-import logger from '../logger';
-import { execAwait } from '../execHelper';
 import { downloadFile } from '../downloadFile';
+import { execAwait } from '../execHelper';
+import { getNNDirPath } from '../files';
+import logger from '../logger';
 import { sendMessageOnDownloadProgress } from './messageFrontEnd';
 import { startOnMac } from './start';
 
 /**
  * Download docker.dmg, install docker, start docker
  */
-// eslint-disable-next-line
 const installOnMac = async (): Promise<any> => {
-  logger.info(`Starting docker install...`);
+  logger.info('Starting docker install...');
   try {
     let downloadUrl;
     if (arch.isArmAnd64bit()) {
@@ -29,13 +28,11 @@ const installOnMac = async (): Promise<any> => {
       getNNDirPath(),
       sendMessageOnDownloadProgress,
     );
-    let stdout;
-    let stderr;
-    // eslint-disable-next-line prefer-const
-    ({ stdout, stderr } = await execAwait(
+
+    const { stdout, stderr } = await execAwait(
       `hdiutil attach "${dockerDmgFilePath}" && /Volumes/Docker/Docker.app/Contents/MacOS/install --accept-license && hdiutil detach /Volumes/Docker`,
       { log: true, sudo: true },
-    ));
+    );
     console.log(
       'sudo hdiutil attach, install, detach stdout, stderr',
       stdout,

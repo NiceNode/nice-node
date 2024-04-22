@@ -1,10 +1,10 @@
-import React from 'react';
+import type React from 'react';
+import defaultGraphic from '../../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 import {
-  contentContainer,
   container,
+  contentContainer,
   graphicsContainer,
 } from './contentWithSideArt.css';
-import defaultGraphic from '../../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
 
 type Props = {
   children: React.ReactNode;

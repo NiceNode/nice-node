@@ -1,4 +1,4 @@
-import { StoryFn, Meta } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 
 import ProgressBar from '../../renderer/Generics/redesign/ProgressBar/ProgressBar';
 import TimedProgressBar from '../../renderer/Generics/redesign/ProgressBar/TimedProgressBar';

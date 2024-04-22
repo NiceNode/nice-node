@@ -1,22 +1,21 @@
-import logger from '../../logger';
+import { reportEvent } from '../../events';
 import { execAwait } from '../../execHelper';
-import { sendMessageOnGrantPermissionToInstallPodman } from '../messageFrontEnd';
+import logger from '../../logger';
 import { getOperatingSystemInfo } from '../../systemInfo';
-import { script as ubuntuInstallScript } from './ubuntuInstallScript';
+import { sendMessageOnGrantPermissionToInstallPodman } from '../messageFrontEnd';
 import { script as debianInstallScript } from './debianInstallScript';
 import { script as fedoraInstallScript } from './fedoraInstallScript';
-import { script as manjaroInstallScript } from './manjaroInstallScript';
 import { script as linuxMintInstallScript } from './linuxMintInstallScript';
-import { reportEvent } from '../../events';
+import { script as manjaroInstallScript } from './manjaroInstallScript';
+import { script as ubuntuInstallScript } from './ubuntuInstallScript';
 
 // const UBUNTU_INSTALL_SCRIPT = 'installOnUbuntuScript';
 /**
  * Download podman-arch-verson.pkg, install podman, start podman
  * @param version example: 4.4.3 (without a v prefix)
  */
-// eslint-disable-next-line
 const installOnLinux = async (): Promise<any> => {
-  logger.info(`Starting podman install on Linux...`);
+  logger.info('Starting podman install on Linux...');
   const { distro, release } = await getOperatingSystemInfo();
   logger.info(
     `Attempting to install Podman on distro and release: ${distro} & ${release} ...`,
@@ -42,14 +41,11 @@ const installOnLinux = async (): Promise<any> => {
     return { error: errorMessage };
   }
   try {
-    let stdout;
-    let stderr;
-    // eslint-disable-next-line prefer-const
     try {
-      ({ stdout, stderr } = await execAwait(installScript, {
+      const { stdout, stderr } = await execAwait(installScript, {
         log: true,
         sudo: true,
-      }));
+      });
       logger.info('Install podman script stdout, stderr', stdout, stderr);
       sendMessageOnGrantPermissionToInstallPodman(true);
     } catch (installErr) {
@@ -59,7 +55,8 @@ const installOnLinux = async (): Promise<any> => {
       //  installErr = "User did not grant permission"
       sendMessageOnGrantPermissionToInstallPodman(false);
       return {
-        error: `Unable to install Podman. User denied granting NiceNode permission.`,
+        error:
+          'Unable to install Podman. User denied granting NiceNode permission.',
       };
     }
 

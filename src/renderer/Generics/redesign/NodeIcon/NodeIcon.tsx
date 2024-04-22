@@ -1,27 +1,27 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  NODE_ICONS,
-  NodeIconId,
   NODE_COLORS,
+  NODE_ICONS,
+  type NodeIconId,
 } from '../../../assets/images/nodeIcons';
+import { Icon } from '../Icon/Icon';
 import {
-  imageStyle,
+  containerStyle,
+  green,
+  hasStatusStyle,
   iconBackground,
+  imageStyle,
   largeStyle,
   mediumStyle,
-  hasStatusStyle,
+  red,
   smallStyle,
   statusStyle,
-  containerStyle,
-  sync,
-  red,
-  green,
-  yellow,
   stopped,
+  sync,
   updating,
+  yellow,
 } from './nodeIcon.css';
-import { Icon } from '../Icon/Icon';
 
 export interface NodeIconProps {
   /**

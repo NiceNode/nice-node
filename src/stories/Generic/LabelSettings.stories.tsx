@@ -1,10 +1,10 @@
-import { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
+import Input from '../../renderer/Generics/redesign/Input/Input';
 import LabelSettings from '../../renderer/Generics/redesign/LabelSetting/LabelSettings';
 import ExternalLink from '../../renderer/Generics/redesign/Link/ExternalLink';
 import Select from '../../renderer/Generics/redesign/Select/Select';
 import { Toggle } from '../../renderer/Generics/redesign/Toggle/Toggle';
-import Input from '../../renderer/Generics/redesign/Input/Input';
 
 export default {
   title: 'Generic/LabelSettings',
