@@ -1,18 +1,18 @@
-import type { Meta } from "@storybook/react";
+import type { Meta } from '@storybook/react';
 
-import { HeaderMetrics } from "../../renderer/Generics/redesign/HeaderMetrics/HeaderMetrics";
+import { HeaderMetrics } from '../../renderer/Generics/redesign/HeaderMetrics/HeaderMetrics';
 
 export default {
-  title: "Generic/HeaderMetrics",
+  title: 'Generic/HeaderMetrics',
   component: HeaderMetrics,
 } as Meta<typeof HeaderMetrics>;
 
 export const Primary = {
   args: {
-    name: "besu",
-    title: "Ethereum node",
-    info: "Non-Validating Node — Ethereum mainnet",
-    screenType: "nodePackage",
+    name: 'besu',
+    title: 'Ethereum node',
+    info: 'Non-Validating Node — Ethereum mainnet',
+    screenType: 'nodePackage',
     status: {
       updating: false,
       initialized: true,

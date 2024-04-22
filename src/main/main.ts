@@ -83,15 +83,15 @@ const isDevelopment =
 export const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 console.log('electron.app.getAppPath(): ', app.getAppPath());
-const preloadPath = path.resolve(app.getAppPath(), '.vite/build/preload.js')
-console.log('preloadPath:', preloadPath)
+const preloadPath = path.resolve(app.getAppPath(), '.vite/build/preload.js');
+console.log('preloadPath:', preloadPath);
 
 // __dirname = package.json dir or app.asar in build. works in dev and built app.
 // electron.app.getAppPath() = ../../__dirname (I think .vite/build/__dirname)
 // const RESOURCES_PATH = app.isPackaged
 //   ? path.join(__dirname)
 //   : path.join(__dirname, '..', '..', 'assets'); // starting point: .vite/build/main.js
-const RESOURCES_PATH = __dirname
+const RESOURCES_PATH = __dirname;
 
 const getAssetPath = (...paths: string[]): string => {
   logger.info('RESOURCES_PATH: ', RESOURCES_PATH);
@@ -172,7 +172,9 @@ export const createWindow = async () => {
   if (!isDevelopment) {
     updater.checkForUpdates(false);
   } else {
-    logger.info('updater.checkForUpdates() skipped. Disabled in development env');
+    logger.info(
+      'updater.checkForUpdates() skipped. Disabled in development env',
+    );
   }
 
   menuBuilder = new MenuBuilder(mainWindow);

@@ -1,11 +1,11 @@
 import sleep from 'await-sleep';
-import { app, dialog, type BrowserWindow } from 'electron';
+import { type BrowserWindow, app, dialog } from 'electron';
 import { autoUpdateLogger } from './logger';
 
-import { autoUpdater } from './nn-auto-updater/main';
 import { reportEvent } from './events';
 import i18nMain from './i18nMain';
 import { setFullQuitForNextQuit } from './main';
+import { autoUpdater } from './nn-auto-updater/main';
 // import { getSetIsPreReleaseUpdatesEnabled } from './state/settings';
 
 let notifyUserIfNoUpdateAvailable: boolean;
@@ -28,7 +28,6 @@ const initUpdateHandlers = (browserWindow: BrowserWindow) => {
     // that an update is downloading starting now.
     // Quick fix to wait for window load before showing update prompt
     // await sleep(5000);
-
   });
 
   autoUpdater.on('update-not-available', () => {
@@ -49,31 +48,33 @@ const initUpdateHandlers = (browserWindow: BrowserWindow) => {
     try {
       const newVersion = args.length > 2 ? args[2] : 'latest version';
       dialog
-      .showMessageBox(browserWindow, {
-        type: 'info',
-        title: t('UpdateAvailable'),
-        message: `${t('UpdateNiceNode')} ${newVersion}.`,
-        buttons: [t('Yes'), t('No')],
-      })
-      .then(async (buttonIndex) => {
-        if (buttonIndex.response === 0) {
-          logger.info('update accepted by user. quit and install.');
-          reportEvent('UpdatedNiceNode');
-          // todo: tell main that full quit incoming
-          setFullQuitForNextQuit(true);
-          autoUpdater.quitAndInstall();
-          dialog.showMessageBox(browserWindow, {
-            type: 'info',
-            title: t('UpdateAvailable'),
-            message: t('DownloadingUpdate'),
-          });
-        } else {
-          logger.info('update denied by user. install will take place on next quit.');
-        }
-      })
-      .catch((err) => {
-        console.error('error in update available dialog: ', err);
-      });
+        .showMessageBox(browserWindow, {
+          type: 'info',
+          title: t('UpdateAvailable'),
+          message: `${t('UpdateNiceNode')} ${newVersion}.`,
+          buttons: [t('Yes'), t('No')],
+        })
+        .then(async (buttonIndex) => {
+          if (buttonIndex.response === 0) {
+            logger.info('update accepted by user. quit and install.');
+            reportEvent('UpdatedNiceNode');
+            // todo: tell main that full quit incoming
+            setFullQuitForNextQuit(true);
+            autoUpdater.quitAndInstall();
+            dialog.showMessageBox(browserWindow, {
+              type: 'info',
+              title: t('UpdateAvailable'),
+              message: t('DownloadingUpdate'),
+            });
+          } else {
+            logger.info(
+              'update denied by user. install will take place on next quit.',
+            );
+          }
+        })
+        .catch((err) => {
+          console.error('error in update available dialog: ', err);
+        });
       // autoUpdater.quitAndInstall();
     } catch (err) {
       logger.error('Error in: autoUpdater.quitAndInstall()');
@@ -123,9 +124,9 @@ export const initialize = (mainWindow: BrowserWindow) => {
   const host = 'https://update.electronjs.org';
   const publicRepo = 'NiceNode/nice-node';
   const currentAppVersion = app.getVersion(); // ex. 5.1.2-alpha
-  const feedUrl = `${host}/${publicRepo}/${process.platform}-${process.arch}/${currentAppVersion}`
+  const feedUrl = `${host}/${publicRepo}/${process.platform}-${process.arch}/${currentAppVersion}`;
   logger.info(`electron.autoUpdater feedUrl set to ${feedUrl}`);
   autoUpdater.setFeedURL({ url: feedUrl });
   notifyUserIfNoUpdateAvailable = false;
   initUpdateHandlers(mainWindow);
-}
+};

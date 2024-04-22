@@ -1,12 +1,12 @@
-import type { Meta } from "@storybook/react";
+import type { Meta } from '@storybook/react';
 
-import { Bubble } from "../../renderer/Generics/redesign/Bubble/Bubble";
+import { Bubble } from '../../renderer/Generics/redesign/Bubble/Bubble';
 
 export default {
-  title: "Generic/Bubble",
+  title: 'Generic/Bubble',
   component: Bubble,
   argTypes: {
-    backgroundColor: { control: "color" },
+    backgroundColor: { control: 'color' },
   },
 } as Meta<typeof Bubble>;
 

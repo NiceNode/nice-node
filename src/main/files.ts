@@ -15,7 +15,6 @@ logger.info(`logs dir: ${app.getPath('logs')}`);
 
 export const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-
 export const getNNDirPath = (): string => {
   // In packaged build...
   // Linux: ~/.config/NiceNode

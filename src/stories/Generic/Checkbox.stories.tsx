@@ -1,12 +1,12 @@
-import type { Meta } from "@storybook/react";
+import type { Meta } from '@storybook/react';
 
-import { Checkbox } from "../../renderer/Generics/redesign/Checkbox/Checkbox";
+import { Checkbox } from '../../renderer/Generics/redesign/Checkbox/Checkbox';
 
 export default {
-  title: "Generic/Checkbox",
+  title: 'Generic/Checkbox',
   component: Checkbox,
   argTypes: {
-    backgroundColor: { control: "color" },
+    backgroundColor: { control: 'color' },
   },
 } as Meta<typeof Checkbox>;
 

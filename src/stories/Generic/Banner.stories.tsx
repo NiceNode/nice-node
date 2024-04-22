@@ -1,12 +1,12 @@
-import type { Meta } from "@storybook/react";
+import type { Meta } from '@storybook/react';
 
-import { Banner } from "../../renderer/Generics/redesign/Banner/Banner";
+import { Banner } from '../../renderer/Generics/redesign/Banner/Banner';
 
 export default {
-  title: "Generic/Banner",
+  title: 'Generic/Banner',
   component: Banner,
   argTypes: {
-    backgroundColor: { control: "color" },
+    backgroundColor: { control: 'color' },
   },
 } as Meta<typeof Banner>;
 

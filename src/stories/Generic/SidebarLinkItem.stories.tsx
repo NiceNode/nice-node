@@ -1,33 +1,33 @@
-import type { Meta } from "@storybook/react";
+import type { Meta } from '@storybook/react';
 
-import { SidebarLinkItem } from "../../renderer/Generics/redesign/SidebarLinkItem/SidebarLinkItem";
+import { SidebarLinkItem } from '../../renderer/Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 
 export default {
-  title: "Generic/SidebarLinkItem",
+  title: 'Generic/SidebarLinkItem',
   component: SidebarLinkItem,
   argTypes: {
-    backgroundColor: { control: "color" },
+    backgroundColor: { control: 'color' },
   },
 } as Meta<typeof SidebarLinkItem>;
 
 export const Notifications = {
   args: {
     count: 4,
-    label: "Notifications",
-    iconId: "bell",
+    label: 'Notifications',
+    iconId: 'bell',
   },
 };
 
 export const Add = {
   args: {
-    label: "Add Node",
-    iconId: "add",
+    label: 'Add Node',
+    iconId: 'add',
   },
 };
 
 export const Preferences = {
   args: {
-    label: "Preferences",
-    iconId: "preferences",
+    label: 'Preferences',
+    iconId: 'preferences',
   },
 };

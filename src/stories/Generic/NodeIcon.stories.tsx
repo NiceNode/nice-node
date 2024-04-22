@@ -1,42 +1,42 @@
-import type { Meta } from "@storybook/react";
+import type { Meta } from '@storybook/react';
 
-import NodeIcon from "../../renderer/Generics/redesign/NodeIcon/NodeIcon";
+import NodeIcon from '../../renderer/Generics/redesign/NodeIcon/NodeIcon';
 
 export default {
-  title: "Generic/NodeIcon",
+  title: 'Generic/NodeIcon',
   component: NodeIcon,
   argTypes: {
-    backgroundColor: { control: "color" },
+    backgroundColor: { control: 'color' },
   },
 } as Meta<typeof NodeIcon>;
 
 export const Default = {
   args: {
-    iconId: "ethereum",
-    size: "small",
+    iconId: 'ethereum',
+    size: 'small',
   },
 };
 
 export const Small = {
   args: {
-    iconId: "ethereum",
-    status: "healthy",
-    size: "small",
+    iconId: 'ethereum',
+    status: 'healthy',
+    size: 'small',
   },
 };
 
 export const Medium = {
   args: {
-    iconId: "ethereum",
-    status: "warning",
-    size: "medium",
+    iconId: 'ethereum',
+    status: 'warning',
+    size: 'medium',
   },
 };
 
 export const Large = {
   args: {
-    iconId: "ethereum",
-    status: "error",
-    size: "large",
+    iconId: 'ethereum',
+    status: 'error',
+    size: 'large',
   },
 };

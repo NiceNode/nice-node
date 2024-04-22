@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from '@storybook/react';
 
-import AddNodeConfiguration from "../../renderer/Presentational/AddNodeConfiguration/AddNodeConfiguration";
+import AddNodeConfiguration from '../../renderer/Presentational/AddNodeConfiguration/AddNodeConfiguration';
 
 export default {
-  title: "Presentational/AddNodeConfiguration",
+  title: 'Presentational/AddNodeConfiguration',
   component: AddNodeConfiguration,
 } as Meta<typeof AddNodeConfiguration>;
 

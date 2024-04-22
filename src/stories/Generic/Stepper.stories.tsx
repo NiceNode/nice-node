@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from '@storybook/react';
 
-import Stepper from "../../renderer/Generics/redesign/Stepper/Stepper";
+import Stepper from '../../renderer/Generics/redesign/Stepper/Stepper';
 
 export default {
-  title: "Generic/Stepper",
+  title: 'Generic/Stepper',
   component: Stepper,
 } as Meta<typeof Stepper>;
 
