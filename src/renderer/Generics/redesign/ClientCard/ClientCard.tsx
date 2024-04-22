@@ -112,7 +112,12 @@ export const ClientCard = (props: ClientProps) => {
         {statusKeys.map((key) => {
           const labelDetails = getLabelDetails(key);
           return (
-            <Label type={labelDetails.color} label={labelDetails.string} />
+            <Label
+              // should only be one tag of (ex) "synchronized" per client
+              key={key}
+              type={labelDetails.color}
+              label={labelDetails.string}
+            />
           );
         })}
       </div>

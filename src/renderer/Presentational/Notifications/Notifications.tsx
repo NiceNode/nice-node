@@ -51,7 +51,11 @@ const Notifications = (props: NotificationsType) => {
         <div>
           {data.map((item) => {
             return (
-              <NotificationItem {...item} onClick={onNotificationItemClick} />
+              <NotificationItem
+                key={item.key}
+                {...item}
+                onClick={onNotificationItemClick}
+              />
             );
           })}
         </div>
