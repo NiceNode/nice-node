@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 import { Icon } from '../Icon/Icon';
 import { checkIcon, copyIcon, copyMessage } from './copyButton.css';
 

@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import Linking from '../../Generics/redesign/Link/Linking';
+import alphaBanner from '../../assets/images/artwork/alphaBanner.svg';
 import {
   container,
   contentContainer,
-  contentSection,
   contentMajorTitle,
+  contentSection,
   contentTitle,
   topBanner,
 } from './alphaBuild.css';
-import alphaBanner from '../../assets/images/artwork/alphaBanner.svg';
 
 const AlphaBuild = () => {
   const { t } = useTranslation();

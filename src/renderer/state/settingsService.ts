@@ -1,8 +1,7 @@
-/* eslint-disable import/no-cycle */
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Settings } from '../../main/state/settings';
+import type { PodmanDetails } from '../../main/podman/details';
+import type { Settings } from '../../main/state/settings';
 import electron from '../electronGlobal';
-import { PodmanDetails } from '../../main/podman/details';
 
 type CustomerErrorType = {
   message: string;
@@ -10,7 +9,6 @@ type CustomerErrorType = {
 
 // Define a service using a base URL and expected endpoints
 // lots of issues in RTKQ github complaining about typescript breaking changes
-// eslint-disable-next-line
 export const RtkqSettingsService: any = createApi({
   reducerPath: 'RtkqSettingsService',
   baseQuery: fakeBaseQuery<CustomerErrorType>(),

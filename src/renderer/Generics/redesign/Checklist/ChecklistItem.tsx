@@ -1,16 +1,16 @@
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
+import { Icon } from '../Icon/Icon';
 import {
-  container,
-  textContainer,
-  checkTitleClass,
-  valueTextClass,
   captionTextClass,
-  successIcon,
-  warningIcon,
+  checkTitleClass,
+  container,
   errorIcon,
   loadingIcon,
+  successIcon,
+  textContainer,
+  valueTextClass,
+  warningIcon,
 } from './checklistItem.css';
-import { Icon } from '../Icon/Icon';
 
 /**
  * checkTitle and status required

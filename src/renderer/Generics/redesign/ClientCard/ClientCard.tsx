@@ -1,23 +1,23 @@
 import { useTranslation } from 'react-i18next';
 import {
   NODE_BACKGROUNDS,
-  NodeBackgroundId,
+  type NodeBackgroundId,
 } from '../../../assets/images/nodeBackgrounds';
+import { Label, type LabelColor } from '../Label/Label';
+import NodeIcon from '../NodeIcon/NodeIcon';
+// import ProgressBar from '../ProgressBar/ProgressBar';
+import type { ClientProps, ClientStatusProps } from '../consts';
 import {
-  container,
-  cardTop,
   cardContent,
+  cardTop,
+  clientBackground,
   clientDetails,
   clientIcon,
+  clientLabels,
   clientTitle,
   clientType,
-  clientLabels,
-  clientBackground,
+  container,
 } from './clientCard.css';
-import NodeIcon from '../NodeIcon/NodeIcon';
-import { Label, LabelColor } from '../Label/Label';
-// import ProgressBar from '../ProgressBar/ProgressBar';
-import { ClientProps, ClientStatusProps } from '../consts';
 // import { common } from '../theme.css';
 
 /**
@@ -112,7 +112,12 @@ export const ClientCard = (props: ClientProps) => {
         {statusKeys.map((key) => {
           const labelDetails = getLabelDetails(key);
           return (
-            <Label type={labelDetails.color} label={labelDetails.string} />
+            <Label
+              // should only be one tag of (ex) "synchronized" per client
+              key={key}
+              type={labelDetails.color}
+              label={labelDetails.string}
+            />
           );
         })}
       </div>

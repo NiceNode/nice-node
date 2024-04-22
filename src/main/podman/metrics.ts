@@ -1,5 +1,5 @@
 import { runCommand } from './podman';
-import { ContainerStats } from './types';
+import type { ContainerStats } from './types';
 
 /**
  * Gets all container metrics from Podman CLI, parses, and formats them
@@ -19,8 +19,8 @@ export const getAllContainerMetrics = async (): Promise<ContainerStats[]> => {
         parsedContainerStats.push({
           ContainerID: containerStats.id,
           Name: containerStats.name,
-          PercCPU: parseFloat(containerStats.cpu_percent),
-          MemPerc: parseFloat(containerStats.mem_percent),
+          PercCPU: Number.parseFloat(containerStats.cpu_percent),
+          MemPerc: Number.parseFloat(containerStats.mem_percent),
         });
       });
     }

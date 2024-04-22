@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import SpecialSelect from '../../renderer/Generics/redesign/SpecialSelect/SpecialSelect';
 

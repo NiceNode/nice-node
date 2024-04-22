@@ -16,6 +16,10 @@ jobs:
         node-version: [20.x]
 
     steps:
+      # https://github.com/electron/forge/issues/2807
+      - if: ${{ matrix.os == 'macos-latest' }}
+        run: python3 -m pip install setuptools
+
       - uses: actions/checkout@v4
       - name: 💚 Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -24,20 +28,18 @@ jobs:
 
       - name: 🧱 Install Dependencies
         run: |
-          npm install
-          # This dependency wasn't needed until suddenly on Dec. 2, 2022
-          npm i dmg-license
-        shell: bash
+          npm ci
 
       - name: 📦 Bundle Application
         env:
+          DEBUG: "*electron*"
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
           MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NO_CODE_SIGNING: true
         run: |
-          npm run package
+          npm run make
           ls -al
 
       - name: 🧪 Run Tests

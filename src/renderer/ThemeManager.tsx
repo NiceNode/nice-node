@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CHANNELS } from '../main/messenger';
-import electron from './electronGlobal';
-import { Settings } from '../main/state/settings';
+import type { Settings } from '../main/state/settings';
 import { darkTheme, lightTheme } from './Generics/redesign/theme.css';
+import type { ThemeSetting } from './Presentational/Preferences/Preferences';
+import electron from './electronGlobal';
+import type { NNEvent } from './events/events';
+import { type ReportEventData, reportEvent } from './events/reportEvent';
 import { useGetSettingsQuery } from './state/settingsService';
-import { ThemeSetting } from './Presentational/Preferences/Preferences';
-import { ReportEventData, reportEvent } from './events/reportEvent';
-import { NNEvent } from './events/events';
 import { background } from './themeManager.css';
 
 type Props = {
@@ -26,7 +27,7 @@ const ThemeManager = ({ children }: Props) => {
     const meta = document.querySelector(
       'meta[name="color-scheme"]',
     ) as MetaElement;
-    meta.content = colorScheme as ThemeSetting;
+    if (meta) meta.content = colorScheme as ThemeSetting;
   };
 
   // Sets the app language based on user or os setting
@@ -56,7 +57,6 @@ const ThemeManager = ({ children }: Props) => {
     console.log('theme: onThemeChange');
     qSettings?.refetch();
     // We don't care if qSettings changes here (and it shouldn't)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -74,7 +74,6 @@ const ThemeManager = ({ children }: Props) => {
       // onChange, retrieve new settings
       console.log('theme: onReportEventMessage', event);
       reportEvent(event, eventData);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [],
   );

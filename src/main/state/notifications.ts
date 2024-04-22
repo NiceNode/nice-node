@@ -1,11 +1,11 @@
-import { NotificationProps } from 'main/consts/notifications';
-import { NotificationItemProps } from 'renderer/Generics/redesign/NotificationItem/NotificationItem';
-import { i18nMain } from '../i18nMain';
-import { send } from '../messenger';
-import store from './store';
-import { getSetIsNotificationsEnabled } from './settings';
+import { Notification } from 'electron';
 
-const { Notification } = require('electron');
+import type { NotificationItemProps } from '../../renderer/Generics/redesign/NotificationItem/NotificationItem';
+import type { NotificationProps } from '../consts/notifications';
+import i18nMain from '../i18nMain';
+import { send } from '../messenger';
+import { getSetIsNotificationsEnabled } from './settings';
+import store from './store';
 
 export const NOTIFICATIONS_KEY = 'notifications';
 
@@ -75,8 +75,8 @@ export const addNotification = (
   variable?: string,
 ) => {
   const notifications = store.get(NOTIFICATIONS_KEY) || [];
-  // eslint-disable-next-line prefer-const
-  let { title, description, status } = notificationObject;
+
+  const { title, description, status } = notificationObject;
 
   if (checkIfNotificationCanBeAdded(notifications, notificationObject)) {
     const translatedTitle = i18nMain.t(`notifications:${title}`);

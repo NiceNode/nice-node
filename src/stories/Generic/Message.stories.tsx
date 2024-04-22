@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import { Message } from '../../renderer/Generics/redesign/Message/Message';
 

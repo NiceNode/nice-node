@@ -1,26 +1,26 @@
 import {
-  useEffect,
-  useCallback,
+  type ReactElement,
   forwardRef,
+  useCallback,
+  useEffect,
   useState,
-  ReactElement,
 } from 'react';
-import { useGetNetworkConnectedQuery } from '../../state/network';
-import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
+import { CHANNELS } from '../../../main/messenger';
+import type { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import electron from '../../electronGlobal';
-import { useGetNotificationsQuery } from '../../state/notificationsService';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { useGetNetworkConnectedQuery } from '../../state/network';
 import {
   selectSelectedNodePackageId,
   selectUserNodePackages,
   updateSelectedNodePackageId,
 } from '../../state/node';
+import { useGetNotificationsQuery } from '../../state/notificationsService';
 import {
-  useGetIsPodmanRunningQuery,
   useGetIsPodmanInstalledQuery,
+  useGetIsPodmanRunningQuery,
 } from '../../state/settingsService';
 import Sidebar from '../Sidebar/Sidebar';
-import { CHANNELS } from '../../../main/messenger';
 
 export interface SidebarWrapperProps {
   children: ReactElement;
@@ -71,7 +71,6 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   const onNotificationChange = useCallback(() => {
     console.log('onNotificationChange');
     qNotifications?.refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

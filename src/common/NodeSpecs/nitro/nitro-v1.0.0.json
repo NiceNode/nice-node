@@ -60,7 +60,7 @@
       "addNodeFlow": "required",
       "infoDescription": "Local node http://host.containers.internal:8545 or provider. Parent chain endpoint"
     },
-    "parentChainBeaconRpcUrl" : {
+    "parentChainBeaconRpcUrl": {
       "displayName": "Ethereum Mainnet Beacon RPC Endpoint",
       "cliConfigPrefix": "--parent-chain.blob-client.beacon-url=",
       "defaultValue": "",
@@ -70,7 +70,7 @@
       "addNodeFlow": "required",
       "infoDescription": "Provider with historical blob API enabled or a local node http://host.containers.internal:5052. Parent chain Beacon endpoint"
     },
-    "initUrl" : {
+    "initUrl": {
       "displayName": "Network snapshot data URL",
       "cliConfigPrefix": "--init.url=",
       "defaultValue": "https://snapshot.arbitrum.foundation/arb1/nitro-pruned.tar",
@@ -79,7 +79,7 @@
       },
       "addNodeFlow": "advanced",
       "infoDescription": "Ex: Arb1 https://snapshot.arbitrum.foundation/arb1/nitro-pruned.tar or Sepolia https://snapshot.arbitrum.foundation/sepolia/nitro-pruned.tar",
-      "documentation" : "https://docs.arbitrum.io/node-running/how-tos/running-a-full-node#prerequisites"
+      "documentation": "https://docs.arbitrum.io/node-running/how-tos/running-a-full-node#prerequisites"
     },
     "l2ChainId": {
       "displayName": "Arbitrum L2 Chain ID",
@@ -89,7 +89,7 @@
         "type": "text"
       },
       "addNodeFlow": "advanced",
-      "documentation" : "https://docs.arbitrum.io/node-running/node-providers#rpc-endpoints"
+      "documentation": "https://docs.arbitrum.io/node-running/node-providers#rpc-endpoints"
     },
     "httpAddress": {
       "displayName": "HTTP-RPC server listening interface",

@@ -153,12 +153,14 @@ export const [lightTheme, vars] = createTheme({
     dangerLink: common.color.red500,
     dangerLinkHover: common.color.red700,
     primaryActive: common.color.purple700,
-    elevation1boxShadow: `0px 1px 2px rgba(0, 0, 0, 0.06)`,
-    elevation2boxShadow: `0px 2px 4px rgba(0, 0, 0, 0.04)`,
-    elevation3boxShadow: `0px 4px 8px rgba(0, 0, 0, 0.14)`,
-    elevation4boxShadow: `0px 8px 16px rgba(0, 0, 0, 0.14)`,
-    elevation5boxShadow: `0px 32px 64px rgba(0, 0, 0, 0.1876), 0px 2px 21px rgba(0, 0, 0, 0.1474)`,
-    elevation6boxShadow: `0px 32px 64px rgba(0, 0, 0, 0.28), 0px 2px 20px rgba(0, 0, 0, 0.22)`,
+    elevation1boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.06)',
+    elevation2boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.04)',
+    elevation3boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.14)',
+    elevation4boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.14)',
+    elevation5boxShadow:
+      '0px 32px 64px rgba(0, 0, 0, 0.1876), 0px 2px 21px rgba(0, 0, 0, 0.1474)',
+    elevation6boxShadow:
+      '0px 32px 64px rgba(0, 0, 0, 0.28), 0px 2px 20px rgba(0, 0, 0, 0.22)',
   },
   components: {
     buttonBoxShadow: `0px 1px 2px ${common.color.black8}`,
@@ -254,12 +256,14 @@ export const darkTheme = createTheme(vars, {
     primaryLinkHover: common.color.purple400,
     dangerLink: common.color.red500,
     dangerLinkHover: common.color.red400,
-    elevation1boxShadow: `0px 1px 2px rgba(0, 0, 0, 0.24)`,
-    elevation2boxShadow: `0px 2px 4px rgba(0, 0, 0, 0.1)`,
-    elevation3boxShadow: `0px 4px 8px rgba(0, 0, 0, 0.26)`,
-    elevation4boxShadow: `0px 8px 16px rgba(0, 0, 0, 0.28)`,
-    elevation5boxShadow: `0px 32px 64px rgba(0, 0, 0, 0.37), 0px 2px 21px rgba(0, 0, 0, 0.37)`,
-    elevation6boxShadow: `0px 32px 64px rgba(0, 0, 0, 0.56), 0px 2px 21px rgba(0, 0, 0, 0.55)`,
+    elevation1boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.24)',
+    elevation2boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+    elevation3boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.26)',
+    elevation4boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.28)',
+    elevation5boxShadow:
+      '0px 32px 64px rgba(0, 0, 0, 0.37), 0px 2px 21px rgba(0, 0, 0, 0.37)',
+    elevation6boxShadow:
+      '0px 32px 64px rgba(0, 0, 0, 0.56), 0px 2px 21px rgba(0, 0, 0, 0.55)',
   },
   components: {
     buttonBoxShadow: '0px 1px 2px rgba(0, 0, 0, 0.24)',

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { setModalState } from '../../state/modal';
+import { Modal } from '../../Generics/redesign/Modal/Modal';
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
-import { modalOnChangeConfig, ModalConfig } from './modalUtils';
+import { setModalState } from '../../state/modal';
 import ResetConfigWrapper from '../ResetConfigModal/ResetConfigWrapper';
+import { type ModalConfig, modalOnChangeConfig } from './modalUtils';
 
 type Props = {
   modalOnClose: () => void;

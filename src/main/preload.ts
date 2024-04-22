@@ -1,14 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
-import {
+import type { NodeId } from '../common/node';
+import type { ConfigValuesMap } from '../common/nodeConfig';
+import type {
   NodePackageSpecification,
   NodeSpecification,
 } from '../common/nodeSpec';
 import { CHANNELS_ARRAY } from './messenger';
-import { NodeId } from '../common/node';
-import { ThemeSetting } from './state/settings';
-import { AddNodePackageNodeService } from './nodePackageManager';
-import { ConfigValuesMap } from '../common/nodeConfig';
+import type { AddNodePackageNodeService } from './nodePackageManager';
+import type { ThemeSetting } from './state/settings';
 
 // todo: when moving from require to imports
 // const isTest = process.env.NODE_ENV === 'test';
@@ -20,7 +20,6 @@ import { ConfigValuesMap } from '../common/nodeConfig';
 contextBridge.exposeInMainWorld('electron', {
   SENTRY_DSN: process.env.SENTRY_DSN,
   ipcRenderer: {
-    // eslint-disable-next-line
     on(channel: string, func: (...args: any[]) => void) {
       const validChannels = CHANNELS_ARRAY;
       if (validChannels.includes(channel)) {
@@ -45,7 +44,7 @@ contextBridge.exposeInMainWorld('electron', {
   getSystemDiskSize: () => ipcRenderer.invoke('getSystemDiskSize'),
   getDebugInfo: () => ipcRenderer.invoke('getDebugInfo'),
   getStoreValue: (key: string) => ipcRenderer.invoke('getStoreValue', key),
-  // eslint-disable-next-line
+
   setStoreValue: (key: string, value: any) =>
     ipcRenderer.invoke('setStoreValue', key, value),
   getGethLogs: () => ipcRenderer.invoke('getGethLogs'),

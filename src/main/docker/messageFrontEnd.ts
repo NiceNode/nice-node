@@ -1,4 +1,4 @@
-import { FileDownloadProgress } from '../downloadFile';
+import type { FileDownloadProgress } from '../downloadFile';
 import { CHANNELS, send } from '../messenger';
 
 export const sendMessageOnDownloadProgress = (

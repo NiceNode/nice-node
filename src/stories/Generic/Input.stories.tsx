@@ -1,4 +1,4 @@
-import { StoryFn, Meta } from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 import FolderInput from '../../renderer/Generics/redesign/Input/FolderInput';
 
 import Input from '../../renderer/Generics/redesign/Input/Input';

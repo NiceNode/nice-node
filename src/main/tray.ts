@@ -1,16 +1,15 @@
-import { Menu, Tray, MenuItem } from 'electron';
+import { Menu, MenuItem, Tray } from 'electron';
 import logger from './logger';
 import { createWindow, fullQuit, getMainWindow } from './main';
-import { getUserNodePackages } from './state/nodePackages';
 import { isLinux, isWindows } from './platform';
 import {
   getNiceNodeMachine,
   startMachineIfCreated,
   stopMachineIfCreated,
 } from './podman/machine';
+import { getUserNodePackages } from './state/nodePackages';
 
 // Can't import from main because of circular dependency
-// eslint-disable-next-line no-underscore-dangle
 let _getAssetPath: (...paths: string[]) => string;
 
 let tray: Tray;

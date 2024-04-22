@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconId } from '../../../assets/images/icons';
+import type { IconId } from '../../../assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import { container } from './headerButton.css';
 
@@ -52,7 +52,6 @@ export const HeaderButton = ({
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/control-has-associated-label
     <div
       className={[container, isToggled ? 'toggled' : ''].join(' ')}
       onKeyDown={handleButtonClick}

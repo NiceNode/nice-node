@@ -11,9 +11,14 @@ jobs:
 
     strategy:
       matrix:
+        # os: [windows-latest, ubuntu-latest]
         os: [macos-latest, windows-latest, ubuntu-latest]
 
     steps:
+      # https://github.com/electron/forge/issues/2807
+      - if: ${{ matrix.os == 'macos-latest' }}
+        run: python3 -m pip install setuptools
+
       - name: Check out Git repository
         uses: actions/checkout@v4
 
@@ -21,33 +26,42 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          # cache: npm
+      - run: npm ci
 
-      - name: npm install
-        run: |
-          npm install
+      # - name: npm install
+      #   run: |
+      #     npm ci
 
-      # This dependency wasn't needed until suddenly on Dec. 2, 2022
-      - name: install dmg-license
-        run: |
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            npm i dmg-license
-          else
-            exit 0
-          fi
-        shell: bash
+      - if: ${{ matrix.os == 'macos-latest' }}
+        name: Import Certs
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.CSC_LINK }}
+          p12-password: ${{ secrets.CSC_KEY_PASSWORD }}
 
-      - name: npm package
+      - name: npm make
         env:
+          # Shows electron forge tools' debug logs
+          # DEBUG: "*electron*"
+
+          # macOS code signing and notarization
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_PROD_CERT_NAME: ${{ secrets.APPLE_PROD_CERT_NAME }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+
+          # App env vars
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
           MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        # cant be parallelized at the moment
+        # https://github.com/electron/forge/pull/3519
         run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            npm run package -- --linux deb AppImage
-          else
-            npm run package
-          fi
-        shell: bash
+          npm run make -- --arch=arm64
+          npm run make -- --arch=x64

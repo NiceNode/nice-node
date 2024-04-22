@@ -7,7 +7,7 @@ export const container = style({
   display: 'flex',
   flexDirection: 'column',
   selectors: {
-    [`&.modal`]: {
+    '&.modal': {
       width: 560,
       height: 'auto',
     },

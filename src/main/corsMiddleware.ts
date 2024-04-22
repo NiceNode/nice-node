@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import type { BrowserWindow } from 'electron';
 
 export const setCorsForNiceNode = (mainWindow: BrowserWindow) => {
   // [Start] Modifies the renderer's Origin header for all outgoing web requests.
@@ -9,7 +9,7 @@ export const setCorsForNiceNode = (mainWindow: BrowserWindow) => {
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
     filter,
     (details, callback) => {
-      details.requestHeaders.Origin = `http://localhost`;
+      details.requestHeaders.Origin = 'http://localhost';
       callback({ requestHeaders: details.requestHeaders });
     },
   );
@@ -25,7 +25,7 @@ export const setCorsForNiceNode = (mainWindow: BrowserWindow) => {
       // Some api servers use lower-case.
       //  Chrome will combine both headers and throw a CORS error for having 2 values.
       //  So just delete the lower-case value
-      delete details.responseHeaders['access-control-allow-origin'];
+      details.responseHeaders['access-control-allow-origin'] = undefined;
 
       callback({ responseHeaders: details.responseHeaders });
     },

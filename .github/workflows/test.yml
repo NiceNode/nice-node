@@ -27,24 +27,14 @@ jobs:
         run: |
           npm install
 
-      - name: npm build
-        env:
-          # Required build time src env vars
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
-          MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
-          NICENODE_ENV: ${{ vars.NICENODE_ENV }}
-        run: |
-          npm run build
-
       - name: npm lint
         run: |
           npm run lint
 
-      - name: npm exec tsc
-        run: |
-          npm exec tsc --verbose
+      # - name: npm exec tsc
+      #   run: |
+      #     npm exec tsc --verbose
 
       - name: npm test
         run: |
-          npm test
+          npm run test

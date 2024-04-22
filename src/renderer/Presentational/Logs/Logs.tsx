@@ -1,30 +1,30 @@
-import React, { SetStateAction, useState, useEffect, useRef } from 'react';
 import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
+import React, { type SetStateAction, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  container,
-  filterContainer,
-  textFilterContainer,
-  typeFilterContainer,
-  timeframeFilterContainer,
-  filterMenu,
-  logsScroller,
-  spacer,
-  clearFilters,
-  noResultsContainer,
-  contentContainer,
-  descriptionFont,
-  titleFont,
-} from './logs.css';
-import { Menu } from '../../Generics/redesign/Menu/Menu';
-import { MenuItem } from '../../Generics/redesign/MenuItem/MenuItem';
-import { LogMessage } from '../../Generics/redesign/LogMessage/LogMessage';
-import Input from '../../Generics/redesign/Input/Input';
+import { useNavigate } from 'react-router-dom';
+import type { LogWithMetadata } from '../../../main/util/nodeLogUtils';
 import Button from '../../Generics/redesign/Button/Button';
 import { ContentHeader } from '../../Generics/redesign/ContentHeader/ContentHeader';
-import { LogWithMetadata } from 'main/util/nodeLogUtils';
 import FloatingButton from '../../Generics/redesign/FloatingButton/FloatingButton';
+import Input from '../../Generics/redesign/Input/Input';
+import { LogMessage } from '../../Generics/redesign/LogMessage/LogMessage';
+import { Menu } from '../../Generics/redesign/Menu/Menu';
+import { MenuItem } from '../../Generics/redesign/MenuItem/MenuItem';
+import {
+  clearFilters,
+  container,
+  contentContainer,
+  descriptionFont,
+  filterContainer,
+  filterMenu,
+  logsScroller,
+  noResultsContainer,
+  spacer,
+  textFilterContainer,
+  timeframeFilterContainer,
+  titleFont,
+  typeFilterContainer,
+} from './logs.css';
 
 export interface LogsProps {
   /**
@@ -149,7 +149,6 @@ export const Logs = ({ sLogs }: LogsProps) => {
       );
     })
     .map((log: LogWithMetadata, index) => (
-      // eslint-disable-next-line react/no-array-index-key
       <React.Fragment key={`${log.timestamp}${log.message}${index}`}>
         <LogMessage {...log} />
       </React.Fragment>
@@ -186,7 +185,6 @@ export const Logs = ({ sLogs }: LogsProps) => {
         setButtonVisible(true);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sLogs]);
 
   const scrollToBottom = () => {

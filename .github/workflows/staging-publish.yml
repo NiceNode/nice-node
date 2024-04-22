@@ -15,16 +15,17 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
-      - name: Install packages for building
+      # https://github.com/electron/forge/issues/2807
+      - if: ${{ matrix.os == 'macos-latest' }}
+        run: python3 -m pip install setuptools
+
+      - if: matrix.os == 'ubuntu-latest'
+        name: Install packages for building
         run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt-get install --no-install-recommends -y rpm libarchive-tools
-          else
-            exit 0
-          fi
+          sudo apt-get install --no-install-recommends -y rpm libarchive-tools
 
       - name: Used variables
         run: |
@@ -38,31 +39,34 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          # cache: npm
+      - run: npm ci
 
-      - name: Install dependencies
-        run: |
-          npm install
+      # - name: Install dependencies
+      #   run: |
+      #     npm ci
 
-      # This dependency wasn't needed until suddenly on Dec. 2, 2022
-      - name: install dmg-license
-        run: |
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            npm i -D dmg-license
-          else
-            exit 0
-          fi
-        shell: bash
+      - if: ${{ matrix.os == 'macos-latest' }}
+        name: Import Certs
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.CSC_LINK }}
+          p12-password: ${{ secrets.CSC_KEY_PASSWORD }}
 
       - name: Publish releases
         env:
-          # These values are used for auto updates signing
+          # Shows electron forge tools' debug logs
+          # DEBUG: "*electron*"
+
+          # macOS code signing and notarization
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_PROD_CERT_NAME: ${{ secrets.APPLE_PROD_CERT_NAME }}
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+
           WIN_CSC_LINK: ${{ secrets.WIN_CSC_BASE64 }}
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD_2 }}
           # CSC_IDENTITY_AUTO_DISCOVERY: false
@@ -72,14 +76,8 @@ jobs:
           MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           # This is used for uploading release assets to github
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          # This is used for publishing snap release assets to snapcraft
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
         run: |
-          npm run postinstall
-          npm run build
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            npm exec electron-builder -- --publish always --win --mac
-          else
-            npm exec electron-builder -- --publish always --linux
-          fi
+          npm run publish -- --arch=x64
+          npm run publish -- --arch=arm64

@@ -1,12 +1,12 @@
 import moment from 'moment';
+import CopyButton from '../CopyButton/CopyButton';
 import {
   container,
-  timestampStyle,
+  copyStyle,
   levelStyle,
   messageStyle,
-  copyStyle,
+  timestampStyle,
 } from './logMessage.css';
-import CopyButton from '../CopyButton/CopyButton';
 
 export interface LogMessageProps {
   /**

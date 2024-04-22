@@ -1,12 +1,13 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from './store';
-import Node, {
-  NodeId,
-  NodePackage,
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import type Node from '../../common/node';
+import {
+  type NodeId,
+  type NodePackage,
   NodeStatus,
-  UserNodePackages,
-  UserNodes,
+  type UserNodePackages,
+  type UserNodes,
 } from '../../common/node';
+import type { RootState } from './store';
 
 // Define a type for the slice state
 export interface NodeState {

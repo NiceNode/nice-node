@@ -1,17 +1,17 @@
-import { useNavigate } from 'react-router-dom';
 import { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
-import { setModalState } from '../../state/modal';
-import { useAppDispatch } from '../../state/hooks';
-import { updateSelectedNodePackageId } from '../../state/node';
-import { NodeId, UserNodePackages } from '../../../common/node';
+import { useNavigate } from 'react-router-dom';
+import type { NodeId, UserNodePackages } from '../../../common/node';
 import { Banner } from '../../Generics/redesign/Banner/Banner';
-import { SidebarNodeItemWrapper } from '../SidebarNodeItemWrapper/SidebarNodeItemWrapper';
+import type { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import { SidebarLinkItem } from '../../Generics/redesign/SidebarLinkItem/SidebarLinkItem';
 import { SidebarTitleItem } from '../../Generics/redesign/SidebarTitleItem/SidebarTitleItem';
-import { container, nodeList, itemList, titleItem } from './sidebar.css';
-import { IconId } from '../../assets/images/icons';
+import type { IconId } from '../../assets/images/icons';
+import { useAppDispatch } from '../../state/hooks';
+import { setModalState } from '../../state/modal';
+import { updateSelectedNodePackageId } from '../../state/node';
+import { SidebarNodeItemWrapper } from '../SidebarNodeItemWrapper/SidebarNodeItemWrapper';
+import { container, itemList, nodeList, titleItem } from './sidebar.css';
 // import { NodeIconId } from '../../assets/images/nodeIcons';
 
 export interface SidebarProps {
@@ -102,12 +102,12 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       updateAvailable,
       offline,
     };
-    Object.keys(bannerProps).forEach((key) => {
-      // eslint-disable-next-line react/destructuring-assignment
+    Object.keys(bannerProps).forEach((key, index) => {
       if (bannerProps[key as keyof typeof bannerProps]) {
         // ^ not sure if this is correct
         banners.push(
           <Banner
+            key={key + index.toString()}
             offline={false}
             updateAvailable={false}
             {...{ [key]: true }}
@@ -118,6 +118,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
     if (!podmanInstalled || podmanStopped) {
       banners.push(
         <Banner
+          key={'podmanInstalledOrStopped'}
           podmanStopped={podmanStopped}
           podmanInstalled={podmanInstalled}
           onClick={onClickBanner}
@@ -150,6 +151,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
             return (
               <SidebarNodeItemWrapper
                 // temp fix
+                key={nodeId}
                 id={node.id}
                 node={node}
                 selected={selectedNodePackageId === node.id}

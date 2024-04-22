@@ -1,5 +1,5 @@
-import { StoryFn, Meta } from '@storybook/react';
-import { NodeIconId } from '../../renderer/assets/images/nodeIcons';
+import type { Meta, StoryFn } from '@storybook/react';
+import type { NodeIconId } from '../../renderer/assets/images/nodeIcons';
 
 import SelectCard from '../../renderer/Generics/redesign/SelectCard/SelectCard';
 
@@ -45,7 +45,7 @@ const clientsCards = [
     iconId: 'geth',
     title: 'Geth',
     info: 'Execution Client',
-    onClick: function () {
+    onClick: () => {
       console.log('hello');
     },
   },
@@ -56,7 +56,7 @@ const clientsCards = [
     title: 'Besu',
     info: 'Execution Client',
     minority: true,
-    onClick: function () {
+    onClick: () => {
       console.log('hello');
     },
   },
@@ -71,7 +71,9 @@ const NetworksTemplate: StoryFn<typeof SelectCard> = () => (
   <>
     {networksCards.map((obj) => {
       const { iconId, ...rest } = obj;
-      return <SelectCard iconId={iconId as NodeIconId} {...rest} />;
+      return (
+        <SelectCard key={iconId} iconId={iconId as NodeIconId} {...rest} />
+      );
     })}
   </>
 );
@@ -80,7 +82,9 @@ const ClientsTemplate: StoryFn<typeof SelectCard> = () => (
   <>
     {clientsCards.map((obj) => {
       const { iconId, ...rest } = obj;
-      return <SelectCard iconId={iconId as NodeIconId} {...rest} />;
+      return (
+        <SelectCard key={iconId} iconId={iconId as NodeIconId} {...rest} />
+      );
     })}
   </>
 );
