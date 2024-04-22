@@ -1,6 +1,6 @@
+import { Modal } from '../../Generics/redesign/Modal/Modal';
 import electron from '../../electronGlobal';
 import UpdatePodman from '../UpdatePodman/UpdatePodman';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
 import { modalRoutes } from './modalUtils';
 
 type Props = {

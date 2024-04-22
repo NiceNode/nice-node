@@ -1,6 +1,6 @@
+import { describe, expect, it } from 'vitest';
 import { parsePodmanLogMetadata } from '../../main/util/nodeLogUtils';
 
-jest.setTimeout(10000);
 describe('Parsing log string testing', () => {
   it('Successfully parses docker log strings with valid timestamps', async () => {
     const logBesu1 =

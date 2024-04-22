@@ -1,15 +1,15 @@
 import {
-  container,
-  messageIcon,
-  textContainer,
-  messageTitle,
-  messageDescription,
   closeContainer,
+  container,
+  messageDescription,
+  messageIcon,
+  messageTitle,
+  textContainer,
 } from './message.css';
 
-import { Icon } from '../Icon/Icon';
+import type { IconId } from '../../../assets/images/icons';
 import { HeaderButton } from '../HeaderButton/HeaderButton';
-import { IconId } from '../../../assets/images/icons';
+import { Icon } from '../Icon/Icon';
 
 const getIconId = (type: string) => {
   let iconId: IconId = 'blank';

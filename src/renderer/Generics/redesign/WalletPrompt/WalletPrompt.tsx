@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import {
-  container,
-  title,
-  description,
-  buttonContainer,
-} from './walletPrompt.css';
 import walletPng from '../../../assets/images/artwork/wallet.png';
+import {
+  buttonContainer,
+  container,
+  description,
+  title,
+} from './walletPrompt.css';
 
 import Button from '../Button/Button';
 

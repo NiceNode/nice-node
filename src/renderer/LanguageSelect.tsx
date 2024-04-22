@@ -1,4 +1,4 @@
-import { SingleValue } from 'react-select';
+import type { SingleValue } from 'react-select';
 import Select from './Generics/redesign/Select/Select';
 
 export interface LanguageSelectProps {

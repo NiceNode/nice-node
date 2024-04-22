@@ -1,17 +1,18 @@
-import { useEffect, useState, useCallback } from 'react';
-import { ModalConfig } from '../ModalManager/modalUtils';
-import { setModalState } from '../../state/modal';
-import Node, { NodeId } from '../../../common/node';
+import { useCallback, useEffect, useState } from 'react';
+import type Node from '../../../common/node';
+import type { NodeId } from '../../../common/node';
 import {
-  ConfigTranslation,
-  ConfigTranslationMap,
-  ConfigValue,
+  type ConfigTranslation,
+  type ConfigTranslationMap,
+  type ConfigValue,
   FilePathControlType,
 } from '../../../common/nodeConfig';
+import type { CategoryConfig } from '../../Generics/redesign/DynamicSettings/DynamicSettings';
 import electron from '../../electronGlobal';
-import { CategoryConfig } from '../../Generics/redesign/DynamicSettings/DynamicSettings';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { setModalState } from '../../state/modal';
 import { selectSelectedNode } from '../../state/node';
+import type { ModalConfig } from '../ModalManager/modalUtils';
 import NodeSettings from './NodeSettings';
 
 export type SettingChangeHandler = (
@@ -95,7 +96,6 @@ const NodeSettingsWrapper = ({
       modalOnChangeConfig({ settingsConfig: newConfig, selectedNode });
       setInitialized(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sCategoryConfigs, sConfigTranslationMap, selectedNode, initialized]);
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { isMac, isWindows } from './platform';
+import { getFailSystemRequirements as linuxGetFailSystemRequirements } from './podman/linux-check';
 import { getFailSystemRequirements as macOsGetFailSystemRequirements } from './podman/podman-desktop/macos-check';
 import { getFailSystemRequirements as winGetFailSystemRequirements } from './podman/podman-desktop/windows-check';
-import { getFailSystemRequirements as linuxGetFailSystemRequirements } from './podman/linux-check';
 
 export type FailSystemRequirements = {
   type:

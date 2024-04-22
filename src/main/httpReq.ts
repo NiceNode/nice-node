@@ -52,7 +52,6 @@ export const httpGet = (
 export const httpGetJson = async (
   url: string,
   isHttp?: boolean,
-  // eslint-disable-next-line
 ): Promise<any> => {
   const response = await httpGet(url, { isHttp });
 
@@ -66,7 +65,7 @@ export const httpGetJson = async (
         const parsedData = JSON.parse(rawData);
         resolve(parsedData);
       } catch (err) {
-        logger.error(`JSON.parse error: `, err);
+        logger.error('JSON.parse error: ', err);
         reject(err);
       }
     });

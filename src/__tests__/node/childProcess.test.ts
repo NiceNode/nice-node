@@ -1,7 +1,11 @@
-import { spawn, SpawnOptions } from 'child_process';
+import { type SpawnOptions, spawn } from 'node:child_process';
+import * as url from 'node:url';
 import sleep from 'await-sleep';
+import { describe, expect, it } from 'vitest';
 
-jest.setTimeout(10000);
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
+// setTimeout(10000);
 describe('Nodejs process testing', () => {
   it('Successfully Kill never ending node process', async () => {
     // spawn child process

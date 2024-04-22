@@ -1,4 +1,4 @@
-import { style, ComplexStyleRule } from '@vanilla-extract/css';
+import { type ComplexStyleRule, style } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
 
 export const container = style({
@@ -23,7 +23,7 @@ export const container = style({
     backgroundColor: vars.components.headerButtonActive,
   },
   selectors: {
-    [`&.toggled`]: {
+    '&.toggled': {
       color: vars.color.primaryActive,
       backgroundColor: vars.components.headerButtonHover,
     },

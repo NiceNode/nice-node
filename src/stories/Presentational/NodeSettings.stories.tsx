@@ -1,5 +1,5 @@
-import { Meta } from '@storybook/react';
-import { ConfigValuesMap } from '../../common/nodeConfig';
+import type { Meta } from '@storybook/react';
+import type { ConfigValuesMap } from '../../common/nodeConfig';
 
 import NodeSettings from '../../renderer/Presentational/NodeSettings/NodeSettings';
 

@@ -17,21 +17,21 @@ export const container = style({
   height: 52,
   width: '100%',
   selectors: {
-    [`&.transparent`]: {
+    '&.transparent': {
       backgroundColor: 'transparent',
       borderBottom: 'none',
     },
-    [`&.center`]: {
+    '&.center': {
       justifyContent: 'center',
     },
-    [`&.manualVisibility`]: {
+    '&.manualVisibility': {
       borderTopLeftRadius: 14,
       borderTopRightRadius: 14,
       height: 40,
       opacity: 0,
       transition: 'opacity 0.1s ease-in-out',
     },
-    [`&.isVisible`]: {
+    '&.isVisible': {
       opacity: 1,
     },
   },
@@ -44,7 +44,7 @@ export const textContainer = style({
   alignItems: 'center',
   textAlign: 'center',
   selectors: {
-    [`&.left`]: {
+    '&.left': {
       marginLeft: 12,
     },
   },

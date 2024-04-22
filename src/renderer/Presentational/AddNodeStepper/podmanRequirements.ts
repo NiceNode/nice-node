@@ -1,4 +1,4 @@
-import { PodmanDetails } from '../../../main/podman/details';
+import type { PodmanDetails } from '../../../main/podman/details';
 
 export const arePodmanRequirementsMet = (
   podmanDetails: PodmanDetails,

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { SystemMonitor as SystemMonitorLabels } from '../../Generics/redesign/SystemMonitor/SystemMonitor';
-import { headerContainer, titleStyle } from './systemMonitor.css';
 import { Benchmarks } from './Benchmarks';
+import { headerContainer, titleStyle } from './systemMonitor.css';
 
 const SystemMonitor = () => {
   const { t } = useTranslation();

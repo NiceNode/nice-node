@@ -1,44 +1,57 @@
-import '@testing-library/jest-dom';
-// import { render } from '@testing-library/react';
+// @vitest-environment happy-dom
+
+import '@vanilla-extract/css/disableRuntimeStyles';
+import {
+  type Mock,
+  afterAll,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
+// import { render } from "@testing-library/react";
 import { render } from './text-utils';
+
+console.log('hello');
 
 import App from '../../renderer/App';
 
-jest.mock('../../renderer/electronGlobal');
+vi.mock('../../renderer/electronGlobal');
 
 type MockedI18N = {
   t: (key: string) => string;
-  changeLanguage: jest.Mock;
-  init: jest.Mock;
+  changeLanguage: Mock;
+  init: Mock;
   use: (plugin: any) => MockedI18N;
 };
 
-jest.mock('@sentry/electron/renderer', () => {
+vi.mock('@sentry/electron/renderer', () => {
   return {
-    init: jest.fn(() => {
+    init: vi.fn(() => {
       return {};
     }),
   };
 });
 
-jest.mock('../../renderer/i18n', () => {
+vi.mock('../../renderer/i18n', () => {
   const i18nMock: MockedI18N = {
     // Mock any other properties or methods if needed
     t: (k: any) => k, // just return the key for simplicity
-    changeLanguage: jest.fn(),
-    init: jest.fn(),
-    use: jest.fn(() => i18nMock), // for chaining .use() calls
+    changeLanguage: vi.fn(),
+    init: vi.fn(),
+    use: vi.fn(() => i18nMock), // for chaining .use() calls
   };
 
   return i18nMock;
 });
 
 // Also mock react-i18next hooks and methods
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: any) => key,
     i18n: {
-      changeLanguage: jest.fn(),
+      changeLanguage: vi.fn(),
     },
   }),
   withTranslation: () => (Component: any) => Component,
@@ -60,7 +73,6 @@ afterAll(() => {
   console.error = originalError;
 });
 
-jest.setTimeout(20000);
 describe('App', () => {
   it('should render', () => {
     expect(render(<App />)).toBeTruthy();

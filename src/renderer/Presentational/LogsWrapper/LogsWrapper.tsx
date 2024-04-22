@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { LogWithMetadata } from '../../../main/util/nodeLogUtils';
+import type { LogWithMetadata } from '../../../main/util/nodeLogUtils';
 import electron from '../../electronGlobal';
 import { useAppSelector } from '../../state/hooks';
 import { selectSelectedNodeId } from '../../state/node';
 
-import { Logs } from '../Logs/Logs';
 import { CHANNELS } from '../../../main/messenger';
+import { Logs } from '../Logs/Logs';
 
 const LogsWrapper = () => {
   const sSelectedNodeId = useAppSelector(selectSelectedNodeId);

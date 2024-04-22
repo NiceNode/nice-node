@@ -1,16 +1,16 @@
-import { useSelector } from 'react-redux';
 import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from '../../state/hooks';
 import { getModalState, setModalState } from '../../state/modal';
-import { modalRoutes } from './modalUtils';
+import { AddNodeModal } from './AddNodeModal';
+import { AlphaBuildModal } from './AlphaBuildModal';
+import FailSystemRequirementsModal from './FailSystemRequirementsModal';
 import { NodeSettingsModal } from './NodeSettingsModal';
 import { PreferencesModal } from './PreferencesModal';
 import { RemoveNodeModal } from './RemoveNodeModal';
 import { ResetConfigModal } from './ResetConfigModal';
-import { AddNodeModal } from './AddNodeModal';
-import { AlphaBuildModal } from './AlphaBuildModal';
-import FailSystemRequirementsModal from './FailSystemRequirementsModal';
+import { modalRoutes } from './modalUtils';
 
 const ModalManager = () => {
   const { isModalOpen, screen } = useSelector(getModalState);

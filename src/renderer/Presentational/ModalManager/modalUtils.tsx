@@ -1,8 +1,12 @@
-import React from 'react';
-import Node, { NodePackage } from 'common/node';
-import { ThemeSetting } from 'main/state/settings';
-import { NodeLibrary, NodePackageLibrary } from 'main/state/nodeLibrary';
-import { ClientSelections } from '../AddNodeConfiguration/AddNodeConfiguration';
+import type React from 'react';
+import type Node from '../../../common/node';
+import type { NodePackage } from '../../../common/node';
+import type {
+  NodeLibrary,
+  NodePackageLibrary,
+} from '../../../main/state/nodeLibrary';
+import type { ThemeSetting } from '../../../main/state/settings';
+import type { ClientSelections } from '../AddNodeConfiguration/AddNodeConfiguration';
 
 export interface ModalConfig {
   node?: string;
@@ -20,7 +24,7 @@ export interface ModalConfig {
   newDataDir?: string;
   nodeLibrary?: NodeLibrary;
   nodePackageLibrary?: NodePackageLibrary;
-  // eslint-disable-next-line
+
   [key: string]: any;
 }
 

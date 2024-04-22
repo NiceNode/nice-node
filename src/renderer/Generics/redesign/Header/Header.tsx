@@ -1,25 +1,25 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { setModalState } from '../../../state/modal';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../../state/hooks';
-import Button, { ButtonProps } from '../Button/Button';
-import { NodeOverviewProps } from '../consts';
-import NodeIcon from '../NodeIcon/NodeIcon';
-import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
+import { setModalState } from '../../../state/modal';
+import Button, { type ButtonProps } from '../Button/Button';
 import { Menu } from '../Menu/Menu';
 import { MenuItem } from '../MenuItem/MenuItem';
+import NodeIcon from '../NodeIcon/NodeIcon';
+import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
+import type { NodeOverviewProps } from '../consts';
 import {
+  buttonContainer,
   container,
   iconContainer,
+  infoStyle,
+  menuButtonContainer,
+  popupContainer,
   textContainer,
   titleContainer,
   titleStyle,
   versionContainer,
-  infoStyle,
-  buttonContainer,
-  popupContainer,
-  menuButtonContainer,
 } from './header.css';
 
 type HeaderProps = {
@@ -123,7 +123,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
             />
             {isCalloutDisplayed && (
               // tabindex hack to keep focus, and allow blur behavior
-              // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+              // biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
               <div className={popupContainer} tabIndex={0}>
                 <UpdateCallout
                   onClick={() => {
@@ -195,8 +195,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
           />
           {isSettingsDisplayed && (
             // tabindex hack to keep focus, and allow blur behavior
-            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-            <div className={popupContainer} tabIndex={0}>
+            <div className={popupContainer}>
               <Menu width={156}>
                 {screenType === 'client' && (
                   <MenuItem

@@ -35,13 +35,13 @@ export const modalContentStyle = style({
   justifyContent: 'space-between',
   // a: { color: 'inherit' },
   selectors: {
-    [`&.addNode`]: {
+    '&.addNode': {
       height: '100%',
     },
-    [`&.nodeSettings`]: {
+    '&.nodeSettings': {
       // maxHeight: 'none',
     },
-    [`&.failSystemRequirements`]: {
+    '&.failSystemRequirements': {
       width: '380px',
     },
   },
@@ -56,7 +56,7 @@ export const modalCloseButton = style({
 export const modalHeaderContainer = style({
   padding: '0px 0px 16px 0px',
   selectors: {
-    [`&.alert`]: {
+    '&.alert': {
       padding: '24px 0px 6px 0px',
     },
   },
@@ -69,16 +69,16 @@ export const titleFont = style({
   paddingBottom: 16,
   flexGrow: 1,
   selectors: {
-    [`&.alert`]: {
+    '&.alert': {
       fontSize: '15px',
       lineHeight: '20px',
       fontWeight: 590,
       paddingBottom: 6,
     },
-    [`&.nodeSettings`]: {
+    '&.nodeSettings': {
       paddingLeft: 32,
     },
-    [`&.failSystemRequirements`]: {
+    '&.failSystemRequirements': {
       fontSize: '20px',
       lineHeight: '24px',
       letterSpacing: '-0.4px',
@@ -94,11 +94,11 @@ export const modalStepperContainer = style({
   justifyContent: 'flex-end',
   gap: 8,
   selectors: {
-    [`&.alert`]: {
+    '&.alert': {
       borderTop: 'none',
       padding: 24,
     },
-    [`&.info`]: {
+    '&.info': {
       borderTop: 'none',
       padding: 24,
     },
@@ -111,19 +111,19 @@ export const modalChildrenContainer = style({
   flex: 1,
   overflow: 'auto',
   selectors: {
-    [`&.alert`]: {
+    '&.alert': {
       padding: '0px 24px',
       overflow: 'hidden',
     },
-    [`&.info`]: {
+    '&.info': {
       padding: 0,
       overflow: 'hidden',
     },
-    [`&.addNode`]: {
+    '&.addNode': {
       overflowY: 'auto',
       overflowX: 'hidden',
     },
-    [`&.nodeSettings`]: {
+    '&.nodeSettings': {
       padding: 0,
       overflowX: 'hidden',
     },

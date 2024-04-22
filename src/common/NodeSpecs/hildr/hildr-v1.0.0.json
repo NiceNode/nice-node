@@ -9,9 +9,9 @@
       "defaultConfig": {
         "l1": "",
         "l1WebSocketUrl": "",
-        "l1BeaconUrl" : "",
+        "l1BeaconUrl": "",
         "l2RpcUrl": "http://host.containers.internal:8547",
-        "l2EngineUrl" : "http://host.containers.internal:8553",
+        "l2EngineUrl": "http://host.containers.internal:8553",
         "httpPort": "8549",
         "logLevel": "Debug"
       },
@@ -23,7 +23,6 @@
     },
     "imageName": "ghcr.io/optimism-java/hildr",
     "defaultImageTag": "latest-native"
-
   },
   "category": "L2/ConsensusClient",
   "minorityClient": true,

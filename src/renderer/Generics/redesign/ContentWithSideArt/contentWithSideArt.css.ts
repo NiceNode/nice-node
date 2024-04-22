@@ -21,7 +21,7 @@ export const contentContainer = style({
   overflow: 'auto',
   padding: '80px 64px',
   selectors: {
-    [`&.modal`]: {
+    '&.modal': {
       padding: 0,
       overflow: 'visible',
     },

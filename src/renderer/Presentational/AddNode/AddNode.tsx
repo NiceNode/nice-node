@@ -1,20 +1,20 @@
-import { useCallback, useEffect, useState, memo } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  container,
-  descriptionFont,
-  sectionFont,
-  titleFont,
-  descriptionContainer,
-} from './addNode.css';
-import { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
+import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
+import SelectCard from '../../Generics/redesign/SelectCard/SelectCard';
+import type { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
+import type { NodeIcons } from '../../assets/images/nodeIcons';
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
-import SelectCard from '../../Generics/redesign/SelectCard/SelectCard';
-import { NodeIcons } from '../../assets/images/nodeIcons';
-import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
+import {
+  container,
+  descriptionContainer,
+  descriptionFont,
+  sectionFont,
+  titleFont,
+} from './addNode.css';
 
 // Other node types are not ready yet
 const nodeOptions = [
@@ -117,7 +117,6 @@ const AddNode = ({
       }
     };
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeNode = useCallback(
@@ -165,9 +164,7 @@ const AddNode = ({
         </div>
       )}
       <div className={descriptionContainer}>
-        <div className={descriptionFont}>
-          <>{t('AddNodeDescription')}</>
-        </div>
+        <div className={descriptionFont}>{t('AddNodeDescription')}</div>
       </div>
       <p className={sectionFont}>{t('Network')}</p>
       <div style={{ width: '100%' }}>

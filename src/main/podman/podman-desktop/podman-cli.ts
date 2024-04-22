@@ -97,7 +97,7 @@ export function execPromise(
     env.PATH = getInstallationPath();
     // if (isWindows()) {
     //   // Escape any whitespaces in command
-    //   // eslint-disable-next-line no-param-reassign
+    //  no-param-reassign
     //   command = `"${command}"`;
     // }
   }

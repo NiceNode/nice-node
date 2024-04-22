@@ -1,11 +1,11 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { NodeSpecification } from '../../../common/nodeSpec';
-import DynamicSettings from '../../Generics/redesign/DynamicSettings/DynamicSettings';
-import {
+import type {
   ConfigTranslationMap,
   ConfigValue,
   ConfigValuesMap,
 } from '../../../common/nodeConfig';
+import type { NodeSpecification } from '../../../common/nodeSpec';
+import DynamicSettings from '../../Generics/redesign/DynamicSettings/DynamicSettings';
 import { initialClientConfigContainer } from './addNodeConfiguration.css';
 import { mergeObjectReducer } from './deepMerge';
 
@@ -101,7 +101,6 @@ const InitialClientConfigs = ({
       onChange(sClientConfigValues);
     }
     // todo: try useCallback in parent component
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sClientConfigValues]);
 
   if (!clientSpecs) {
