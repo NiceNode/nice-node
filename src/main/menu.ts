@@ -73,7 +73,7 @@ export default class MenuBuilder {
   }
 
   buildMenu(): Menu {
-    logger.info('Building menu. Current Lang is : ', i18nMain.language);
+    logger.info(`Building menu. Current Lang is : ${i18nMain.language}`);
     if (
       process.env.NODE_ENV === 'development' ||
       process.env.DEBUG_PROD === 'true'
