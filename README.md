@@ -95,3 +95,9 @@ npm run storybook
 `npx @electron/asar extract app.asar <destfolder>` can be used to determine the contents of asar
 
 `npm run package` followed by `mkdir outAsar` and `npx @electron/asar extract ./out/NiceNode-darwin-arm64/NiceNode.app/Contents/Resources/app.asar outAsar` on macOS
+
+## Debugging update server (macOS and Windows)
+`curl https://update.electronjs.org/NiceNode/nice-node/darwin-arm64/5.2.0-alpha` returns if there is an update detected by the update server. The end of the URL is <platform>-<arch>/<version>.
+
+Also, NiceNode app auto update logs are in ../NiceNode/logs/autoUpdater*.log.
+

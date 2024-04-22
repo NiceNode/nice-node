@@ -168,7 +168,12 @@ export const createWindow = async () => {
 
   // App auto updates
   updater.initialize(mainWindow);
-  updater.checkForUpdates(false);
+  // disabled in dev env
+  if (!isDevelopment) {
+    updater.checkForUpdates(false);
+  } else {
+    logger.info('updater.checkForUpdates() skipped. Disabled in development env');
+  }
 
   menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
@@ -203,6 +208,10 @@ let isFullQuit = false;
 export const fullQuit = () => {
   isFullQuit = true;
   app.quit();
+};
+
+export const setFullQuitForNextQuit = (_isNextQuitAFullQuit: boolean) => {
+  isFullQuit = _isNextQuitAFullQuit;
 };
 
 // Emitted on app.quit() after all windows have been closed

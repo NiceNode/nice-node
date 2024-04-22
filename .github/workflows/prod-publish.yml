@@ -23,6 +23,10 @@ jobs:
         run: |
           sudo apt-get install --no-install-recommends -y rpm libarchive-tools
 
+      # https://github.com/electron/forge/issues/2807
+      - if: ${{ matrix.os == 'macos-latest' }}
+        run: python3 -m pip install setuptools
+
       - name: Used variables
         run: |
           echo "MP_PROJECT_ENV variable : ${{ vars.MP_PROJECT_ENV }}"
@@ -35,11 +39,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          # cache: npm
 
       - name: Install dependencies
         run: |
           npm ci
+
+      - if: ${{ matrix.os == 'macos-latest' }}
+        name: Import Certs
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.CSC_LINK }}
+          p12-password: ${{ secrets.CSC_KEY_PASSWORD }}
 
       - name: Publish releases
         env:
@@ -49,9 +60,9 @@ jobs:
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_PROD_CERT_NAME: ${{ secrets.APPLE_PROD_CERT_NAME }}
-
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+
           WIN_CSC_LINK: ${{ secrets.WIN_CSC_BASE64 }}
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD_2 }}
           # CSC_IDENTITY_AUTO_DISCOVERY: false
@@ -64,5 +75,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
         run: |
-          npm run publish
+          npm run publish -- --arch=x64
+          npm run publish -- --arch=arm64
 
