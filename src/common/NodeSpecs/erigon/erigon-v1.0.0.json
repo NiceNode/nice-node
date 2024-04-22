@@ -131,6 +131,33 @@
       },
       "infoDescription": "Change where the node accepts web socket connections (use comma separated urls) or \"*\" for all"
     },
+    "p2pPorts": {
+      "displayName": "P2P port (UDP and TCP)",
+      "cliConfigPrefix": "--port ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 30303",
+      "defaultValue": "30303"
+    },
+    "enginePort": {
+      "displayName": "Engine JSON-RPC listening port",
+      "cliConfigPrefix": "--authrpc.port ",
+      "defaultValue": "8551",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "The listening port for the Engine API calls for JSON-RPC over HTTP and WebSocket."
+    },
+    "torrentPort": {
+      "displayName": "BitTorrent protocol port",
+      "cliConfigPrefix": "--torrent.port ",
+      "defaultValue": "42069",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "The listening and serving port for BitTorrent."
+    },
     "authVirtualHosts": {
       "displayName": "Engine RPC virtual hostnames list",
       "cliConfigPrefix": "--authrpc.vhosts ",
@@ -166,5 +193,17 @@
   },
   "category": "L1/ExecutionClient",
   "rpcTranslation": "eth-l1",
-  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/erigon-text-logo.png"
+  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/erigon-text-logo.png",
+  "resources": [
+    {
+      "label": "Configuration documentation",
+      "value": "erigon.gitbook.io",
+      "link": "https://erigon.gitbook.io/erigon/advanced-usage/options"
+    },
+    {
+      "label": "Erigon Website",
+      "value": "erigon.tech",
+      "link": "https://erigon.tech/"
+    }
+  ]
 }
