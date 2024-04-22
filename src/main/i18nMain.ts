@@ -10,17 +10,17 @@ import enTranslations from '../../assets/locales/en/translation.json';
 import enUpdater from '../../assets/locales/en/updater.json';
 import enWindowMenu from '../../assets/locales/en/windowMenu.json';
 
-import csTranslations from '../../assets/locales/cs/translation.json';
-import csNotifications from '../../assets/locales/cs/notifications.json';
-import csWindowMenu from '../../assets/locales/cs/windowMenu.json';
-import csUpdater from '../../assets/locales/cs/updater.json';
 import csDialog from '../../assets/locales/cs/dialog.json';
+import csNotifications from '../../assets/locales/cs/notifications.json';
+import csTranslations from '../../assets/locales/cs/translation.json';
+import csUpdater from '../../assets/locales/cs/updater.json';
+import csWindowMenu from '../../assets/locales/cs/windowMenu.json';
 
-import esTranslations from '../../assets/locales/es/translation.json';
-import esNotifications from '../../assets/locales/es/notifications.json';
-import esWindowMenu from '../../assets/locales/es/windowMenu.json';
-import esUpdater from '../../assets/locales/es/updater.json';
 import esDialog from '../../assets/locales/es/dialog.json';
+import esNotifications from '../../assets/locales/es/notifications.json';
+import esTranslations from '../../assets/locales/es/translation.json';
+import esUpdater from '../../assets/locales/es/updater.json';
+import esWindowMenu from '../../assets/locales/es/windowMenu.json';
 
 import zhDialog from '../../assets/locales/zh/dialog.json';
 import zhNotifications from '../../assets/locales/zh/notifications.json';
