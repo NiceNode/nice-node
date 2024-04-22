@@ -5,7 +5,139 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "docker.io/thorax/erigon:latest"
+    "imageName": "docker.io/thorax/erigon",
+    "defaultImageTag": "2.59.3-arm64",
+    "input": {
+      "defaultConfig": {
+        "http": "Enabled",
+        "httpCorsDomains": "http://localhost",
+        "webSockets": "Enabled",
+        "httpVirtualHosts": "localhost,host.containers.internal",
+        "authVirtualHosts": "localhost,host.containers.internal",
+        "httpAddress": "0.0.0.0",
+        "syncMode": "full"
+      },
+      "docker": {
+        "containerVolumePath": "/root/.ethereum",
+        "raw": "",
+        "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret"
+      }
+    }
+  },
+  "configTranslation": {
+    "http": {
+      "displayName": "RPC HTTP connections",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--http"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "infoDescription": "NiceNode requires http connections",
+      "documentation": "https://geth.ethereum.org/docs/rpc/server"
+    },
+    "httpAddress": {
+      "displayName": "HTTP-RPC server listening interface",
+      "cliConfigPrefix": "--http.addr ",
+      "defaultValue": "0.0.0.0",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
+    },
+    "httpCorsDomains": {
+      "displayName": "HTTP-RPC CORS domains",
+      "cliConfigPrefix": "--http.corsdomain ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Change where the node accepts http connections (use comma separated urls)"
+    },
+    "httpVirtualHosts": {
+      "displayName": "Virtual hostnames list",
+      "cliConfigPrefix": "--http.vhosts ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard. Default value (localhost)",
+      "defaultValue": "localhost,host.containers.internal"
+    },
+    "webSockets": {
+      "displayName": "WebSocket JSON-RPC connections",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--ws"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "infoDescription": "Enables or disables the WebSocket JSON-RPC service. Beacon nodes may require websockets. The default is false.",
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+    },
+    "webSocketsPort": {
+      "displayName": "WebSockets JSON-RPC port",
+      "cliConfigPrefix": "--ws.port ",
+      "defaultValue": "8546",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "The port (TCP) on which WebSocket JSON-RPC listens. The default is 8546. You must expose ports appropriately.",
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#websocket-server"
+    },
+    "webSocketAllowedOrigins": {
+      "displayName": "WebSocket-RPC allowed origins",
+      "defaultValue": "http://localhost",
+      "cliConfigPrefix": "--ws.origins ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Change where the node accepts web socket connections (use comma separated urls) or \"*\" for all"
+    },
+    "authVirtualHosts": {
+      "displayName": "Engine RPC virtual hostnames list",
+      "cliConfigPrefix": "--authrpc.vhosts ",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Comma separated list of virtual hostnames from which to accept authentication requests for engine api's (server enforced). Accepts '*' wildcard. Default value (localhost)",
+      "defaultValue": "localhost,host.containers.internal"
+    },
+    "syncMode": {
+      "displayName": "Execution Client Sync Mode",
+      "category": "Syncronization",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "full",
+            "config": "--prune=hrtc",
+            "info": "~800GB / ~2d"
+          },
+          {
+            "value": "archive",
+            "config": "",
+            "info": "~16TB"
+          }
+        ]
+      },
+      "addNodeFlow": "required",
+      "defaultValue": "full",
+      "hideFromUserAfterStart": true,
+      "documentation": "https://geth.ethereum.org/docs/faq#how-does-ethereum-syncing-work"
+    }
   },
   "category": "L1/ExecutionClient",
   "rpcTranslation": "eth-l1",

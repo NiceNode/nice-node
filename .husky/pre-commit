@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+npm run safeFix
 npm run lint
 # npm exec tsc
 npm run package
