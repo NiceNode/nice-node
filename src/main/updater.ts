@@ -121,7 +121,7 @@ export const setAllowPrerelease = (isAllowPrerelease: boolean) => {
 export const initialize = (mainWindow: BrowserWindow) => {
   logger.info('initialize updater');
   const host = 'https://update.electronjs.org';
-  const publicRepo = 'NiceNode/test-nice-node-updater';
+  const publicRepo = 'NiceNode/nice-node';
   const currentAppVersion = app.getVersion(); // ex. 5.1.2-alpha
   const feedUrl = `${host}/${publicRepo}/${process.platform}-${process.arch}/${currentAppVersion}`
   logger.info(`electron.autoUpdater feedUrl set to ${feedUrl}`);

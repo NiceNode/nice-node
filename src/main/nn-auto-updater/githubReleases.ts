@@ -9,8 +9,7 @@ import logger from '../logger';
 import { type PackageManager, type PackageType, findPackageManager, findPackageType } from './findPackageManager';
 import { find } from 'highcharts';
 
-const repo = 'NiceNode/test-nice-node-updater';
-// const repo = 'NiceNode/nice-node';
+const repo = 'NiceNode/nice-node';
 
 let latestDownloadFilePath = '';
 export const getLatestVersion = async () => {
@@ -85,7 +84,7 @@ export const checkForUpdates = async (emit: (e: any, args?: any) => void) => {
     emit('update-downloaded', [{}, releaseNotes, fileName, releaseDate, downloadUrl]);
   // install downloaded and quit
   // {
-  //   url: 'https://api.github.com/repos/NiceNode/test-nice-node-updater/releases/assets/162903620',
+  //   url: 'https://api.github.com/repos/NiceNode/nice-node/releases/assets/162903620',
   //   id: 162903620,
   //   node_id: 'RA_kwDOLvIOVs4JtbZE',
   //   name: 'NiceNode-linux-arm64-5.4.1-alpha.zip',
@@ -97,7 +96,7 @@ export const checkForUpdates = async (emit: (e: any, args?: any) => void) => {
   //   download_count: 0,
   //   created_at: '2024-04-18T17:12:26Z',
   //   updated_at: '2024-04-18T17:12:29Z',
-  //   browser_download_url: 'https://github.com/NiceNode/test-nice-node-updater/releases/download/v5.4.1-alpha/NiceNode-linux-arm64-5.4.1-alpha.zip'
+  //   browser_download_url: 'https://github.com/NiceNode/nice-node/releases/download/v5.4.1-alpha/NiceNode-linux-arm64-5.4.1-alpha.zip'
   // },
     return;
   }
