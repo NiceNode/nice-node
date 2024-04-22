@@ -6,7 +6,7 @@
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
     "imageName": "docker.io/thorax/erigon",
-    "defaultImageTag": "2.59.3-arm64",
+    "defaultImageTag": "2.59.3",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
@@ -15,7 +15,8 @@
         "httpVirtualHosts": "localhost,host.containers.internal",
         "authVirtualHosts": "localhost,host.containers.internal",
         "httpAddress": "0.0.0.0",
-        "syncMode": "full"
+        "syncMode": "full",
+        "network": "Mainnet"
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
@@ -25,6 +26,30 @@
     }
   },
   "configTranslation": {
+    "network": {
+      "displayName": "Network",
+      "cliConfigPrefix": "--chain ",
+      "defaultValue": "Mainnet",
+      "hideFromUserAfterStart": true,
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Mainnet",
+            "config": "mainnet"
+          },
+          {
+            "value": "Holesky",
+            "config": "holesky"
+          },
+          {
+            "value": "Sepolia",
+            "config": "sepolia"
+          }
+        ]
+      },
+      "documentation": "https://docs.nethermind.io/fundamentals/configuration#basic-options"
+    },
     "http": {
       "displayName": "RPC HTTP connections",
       "uiControl": {
