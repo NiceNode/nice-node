@@ -6,6 +6,10 @@ import enGenericComponents from '../../assets/locales/en/genericComponents.json'
 import enSystemRequirements from '../../assets/locales/en/systemRequirements.json';
 import enTranslations from '../../assets/locales/en/translation.json';
 
+import csGenericComponents from '../../assets/locales/cs/genericComponents.json';
+import csSystemRequirements from '../../assets/locales/cs/systemRequirements.json';
+import csTranslations from '../../assets/locales/cs/translation.json';
+
 import esGenericComponents from '../../assets/locales/es/genericComponents.json';
 import esSystemRequirements from '../../assets/locales/es/systemRequirements.json';
 import esTranslations from '../../assets/locales/es/translation.json';
@@ -65,6 +69,11 @@ i18n
         translation: enTranslations,
         systemRequirements: enSystemRequirements,
         genericComponents: enGenericComponents,
+      },
+      cs: {
+        translation: csTranslations,
+        systemRequirements: csSystemRequirements,
+        genericComponents: csGenericComponents,
       },
       es: {
         translation: esTranslations,
