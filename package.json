@@ -50,7 +50,7 @@
     "@testing-library/webdriverio": "^3.2.1",
     "@types/du": "^1.0.3",
     "@types/mixpanel-browser": "^2.47.3",
-    "@types/node": "20.4.5",
+    "@types/node": "20.12.7",
     "@types/pidusage": "^2.0.5",
     "@types/react": "^18.2.74",
     "@types/react-dom": "^18.2.24",
