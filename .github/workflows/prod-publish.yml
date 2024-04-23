@@ -47,7 +47,7 @@ jobs:
 
       - if: ${{ matrix.os == 'macos-latest' }}
         name: Import Certs
-        uses: apple-actions/import-codesign-certs@v2
+        uses: slidoapp/import-codesign-certs@node20
         with:
           p12-file-base64: ${{ secrets.CSC_LINK }}
           p12-password: ${{ secrets.CSC_KEY_PASSWORD }}
