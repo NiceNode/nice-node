@@ -76,6 +76,8 @@ export const getMenuBuilder = () => menuBuilder;
 const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
+const isTest = process.env.NODE_ENV === 'test';
+
 // if (isDevelopment) {
 //   require('electron-debug')();
 // }
@@ -169,7 +171,7 @@ export const createWindow = async () => {
   // App auto updates
   updater.initialize(mainWindow);
   // disabled in dev env
-  if (!isDevelopment) {
+  if (!isDevelopment && !isTest) {
     updater.checkForUpdates(false);
   } else {
     logger.info(
