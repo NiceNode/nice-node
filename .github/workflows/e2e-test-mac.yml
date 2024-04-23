@@ -18,7 +18,7 @@ jobs:
     steps:
       # https://github.com/electron/forge/issues/2807
       - if: ${{ matrix.os == 'macos-latest' }}
-        run: python3 -m pip install setuptools
+        run: python3 -m pip install setuptools --break-system-packages
 
       - uses: actions/checkout@v4
       - name: 💚 Use Node.js ${{ matrix.node-version }}

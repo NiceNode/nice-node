@@ -92,7 +92,7 @@ export const getSystemFreeDiskSpace = async (
   const pathToCheck: string = diskSpacePath || app.getPath('userData');
   // https://github.com/Alex-D/check-disk-space/issues/30
   // @ts-ignore:next-line
-  const diskSpace = await checkDiskSpace.default(pathToCheck);
+  const diskSpace = await checkDiskSpace(pathToCheck);
   console.log('diskSpace: ', diskSpace);
   const freeInGBs = diskSpace.free * 1e-9;
   return freeInGBs;
@@ -116,7 +116,7 @@ export const getNodesDirPathDetails =
 export const getSystemDiskSize = async (): Promise<number> => {
   // https://github.com/Alex-D/check-disk-space/issues/30
   // @ts-ignore:next-line
-  const diskSpace = await checkDiskSpace.default(app.getPath('userData'));
+  const diskSpace = await checkDiskSpace(app.getPath('userData'));
   const sizeInGBs = diskSpace.size * 1e-9;
   return sizeInGBs;
 };

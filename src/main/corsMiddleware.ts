@@ -25,7 +25,8 @@ export const setCorsForNiceNode = (mainWindow: BrowserWindow) => {
       // Some api servers use lower-case.
       //  Chrome will combine both headers and throw a CORS error for having 2 values.
       //  So just delete the lower-case value
-      details.responseHeaders['access-control-allow-origin'] = undefined;
+      // biome-ignore lint/performance/noDelete: <explanation>
+      delete details.responseHeaders['access-control-allow-origin'];
 
       callback({ responseHeaders: details.responseHeaders });
     },

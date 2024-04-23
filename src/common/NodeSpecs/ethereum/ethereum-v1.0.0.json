@@ -10,7 +10,7 @@
       {
         "serviceId": "executionClient",
         "name": "Execution Client",
-        "nodeOptions": ["nethermind", "besu", "geth", "reth"],
+        "nodeOptions": ["nethermind", "besu", "geth", "reth", "erigon"],
         "required": true,
         "requiresCommonJwtSecret": true
       },

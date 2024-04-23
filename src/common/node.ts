@@ -257,6 +257,14 @@ export const getImageTag = (node: Node): string => {
     // defaultImageTag is set in node.spec.execution
     imageTag = defaultImageTag;
   }
+  // temp fix: see https://github.com/ledgerwatch/erigon/issues/10023
+  if (imageName.includes('erigon')) {
+    let archPostfix = '-arm64';
+    if (process.arch === 'x64') {
+      archPostfix = '-amd64';
+    }
+    imageTag = imageTag + archPostfix;
+  }
   return imageTag;
 };
 export default Node;

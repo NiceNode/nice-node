@@ -1,6 +1,6 @@
+// Execution
 import besu from './Besu.png';
 import erigon from './Erigon.png';
-// Execution
 import geth from './Geth.png';
 import nethermind from './Nethermind.png';
 import reth from './Reth.png';
