@@ -1,0 +1,10 @@
+{
+  "LowDiskSpaceTitle": "Málo místa na disku",
+  "LowDiskSpaceDescription": "Místo na disku je menší než 40GB",
+  "InternetConnectionDownTitle": "Nemáte přístup k Internetu",
+  "InternetConnectionDownDescription": "Všechny uzly ovlivněny",
+  "ClosedPortsTitle": "Uzavřené porty",
+  "ClosedPortsDescription": "Porty {{variable}} nemusí být otevřeny ve vaší lokální síti",
+  "UnexpectedPortsOpenTitle": "Nečekaně otevřené porty",
+  "UnexpectedPortsOpenDescription": "Porty {{variable}} jsou otevřené a měly by být uzavřeny ve vaší lokální síti"
+}

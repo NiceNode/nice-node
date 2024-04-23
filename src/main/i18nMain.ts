@@ -10,6 +10,12 @@ import enTranslations from '../../assets/locales/en/translation.json';
 import enUpdater from '../../assets/locales/en/updater.json';
 import enWindowMenu from '../../assets/locales/en/windowMenu.json';
 
+import csDialog from '../../assets/locales/cs/dialog.json';
+import csNotifications from '../../assets/locales/cs/notifications.json';
+import csTranslations from '../../assets/locales/cs/translation.json';
+import csUpdater from '../../assets/locales/cs/updater.json';
+import csWindowMenu from '../../assets/locales/cs/windowMenu.json';
+
 import esDialog from '../../assets/locales/es/dialog.json';
 import esNotifications from '../../assets/locales/es/notifications.json';
 import esTranslations from '../../assets/locales/es/translation.json';
@@ -67,6 +73,13 @@ i18n.use(I18nextCLILanguageDetector).init({
       windowMenu: enWindowMenu,
       updater: enUpdater,
       dialog: enDialog,
+    },
+    cs: {
+      translation: csTranslations,
+      notifications: csNotifications,
+      windowMenu: csWindowMenu,
+      updater: csUpdater,
+      dialog: csDialog,
     },
     es: {
       translation: esTranslations,

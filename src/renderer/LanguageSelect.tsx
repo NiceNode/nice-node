@@ -19,13 +19,14 @@ const LanguageSelect = ({ onChange, language }: LanguageSelectProps) => {
   };
   return (
     // language list, useful for inputting to auto-translators
-    // "es", "de", "fr", "ja", "ru", "vi", "zh"
+    // "es", "cs", "de", "fr", "ja", "ru", "vi", "zh"
     <Select
       value={language}
       options={[
         { label: 'English', value: 'en' },
         { label: 'Español', value: 'es' },
         { label: 'Chinese', value: 'zh' },
+        { label: 'Czech', value: 'cs' },
         { label: 'French', value: 'fr' },
         { label: 'German', value: 'de' },
         { label: 'Japanese', value: 'ja' },
