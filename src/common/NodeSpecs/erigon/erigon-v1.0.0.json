@@ -15,14 +15,45 @@
         "httpVirtualHosts": "localhost,host.containers.internal",
         "authVirtualHosts": "localhost,host.containers.internal",
         "httpAddress": "0.0.0.0",
+        "httpPort": "8545",
         "syncMode": "full",
-        "network": "Mainnet"
+        "network": "Mainnet",
+        "httpApis": [
+          "eth",
+          "net",
+          "web3",
+          "engine",
+          "txpool",
+          "debug",
+          "trace",
+          "erigon"
+        ]
       },
       "docker": {
         "containerVolumePath": "/root/.ethereum",
         "raw": "",
         "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret"
       }
+    }
+  },
+  "systemRequirements": {
+    "documentationUrl": "https://erigon.gitbook.io/erigon/basic-usage/getting-started#hardware-requirements",
+    "cpu": {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 16
+    },
+    "storage": {
+      "minSizeGBs": 1600,
+      "ssdRequired": true
+    },
+    "internet": {
+      "minDownloadSpeedMbps": 25,
+      "minUploadSpeedMbps": 10
+    },
+    "docker": {
+      "required": true
     }
   },
   "configTranslation": {
@@ -67,6 +98,72 @@
       "defaultValue": "Disabled",
       "infoDescription": "NiceNode requires http connections",
       "documentation": "https://geth.ethereum.org/docs/rpc/server"
+    },
+    "httpPort": {
+      "displayName": "HTTP-RPC server listening port",
+      "cliConfigPrefix": "--http.port ",
+      "defaultValue": "8545",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
+    },
+    "httpApis": {
+      "displayName": "Enabled HTTP APIs",
+      "cliConfigPrefix": "--http.api ",
+      "defaultValue": [
+        "eth",
+        "net",
+        "web3",
+        "engine",
+        "txpool",
+        "debug",
+        "trace",
+        "erigon"
+      ],
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "eth",
+            "config": "eth"
+          },
+          {
+            "value": "net",
+            "config": "net"
+          },
+          {
+            "value": "web3",
+            "config": "web3"
+          },
+          {
+            "value": "engine",
+            "config": "engine"
+          },
+          {
+            "value": "txpool",
+            "config": "txpool"
+          },
+          {
+            "value": "debug",
+            "config": "debug"
+          },
+
+          {
+            "value": "trace",
+            "config": "trace"
+          },
+          {
+            "value": "erigon",
+            "config": "erigon"
+          },
+          {
+            "value": "admin",
+            "config": "admin"
+          }
+        ]
+      }
     },
     "httpAddress": {
       "displayName": "HTTP-RPC server listening interface",
