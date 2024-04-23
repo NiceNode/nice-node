@@ -1,17 +1,23 @@
+import {
+  type ChildProcess,
+  type SpawnOptions,
+  spawn,
+} from 'node:child_process';
 import path from 'node:path';
-import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
 import * as readline from 'node:readline';
+import url from 'node:url';
 import { Docker, Options } from 'docker-cli-js';
 
-import logger from '../logger';
-import Node, { NodeStatus } from '../../common/node';
-import { DockerExecution } from '../../common/nodeSpec';
-import { setDockerNodeStatus } from '../state/nodes';
+import type Node from '../../common/node';
+import { NodeStatus } from '../../common/node';
 import { buildCliConfig } from '../../common/nodeConfig';
+import type { DockerExecution } from '../../common/nodeSpec';
+import logger from '../logger';
 import { send } from '../messenger';
-import * as dockerCompose from './docker-compose';
 import { killChildProcess } from '../processExit';
+import { setDockerNodeStatus } from '../state/nodes';
 import { parseDockerLogMetadata } from '../util/nodeLogUtils';
+import * as dockerCompose from './docker-compose';
 // const options = {
 //   machineName: undefined, // uses local docker
 //   currentWorkingDirectory: undefined, // uses current working directory
@@ -19,6 +25,8 @@ import { parseDockerLogMetadata } from '../util/nodeLogUtils';
 //   env: undefined,
 //   stdin: undefined,
 // };
+
+export const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const options = new Options(
   undefined,
@@ -96,14 +104,14 @@ const watchDockerEvents = async () => {
   });
 
   dockerWatchProcess.stderr?.on('data', (data) => {
-    logger.error(`dockerWatchProcess::error:: `, data);
+    logger.error('dockerWatchProcess::error:: ', data);
   });
 
   dockerWatchProcess.on('error', (data) => {
-    logger.error(`dockerWatchProcess::error:: `, data);
+    logger.error('dockerWatchProcess::error:: ', data);
   });
   dockerWatchProcess.on('disconnect', () => {
-    logger.info(`dockerWatchProcess::disconnect::`);
+    logger.info('dockerWatchProcess::disconnect::');
   });
   // todo: restart?
   dockerWatchProcess.on('close', (code) => {
@@ -141,7 +149,7 @@ const watchDockerEvents = async () => {
 //   }
 // ]
 export const getRunningContainers = async () => {
-  const data = await runCommand(`ps --no-trunc`);
+  const data = await runCommand('ps --no-trunc');
   console.log('DOCKER ps -s data: ', data);
   let containers = [];
   if (data?.containerList && Array.isArray(data.containerList)) {
@@ -156,7 +164,7 @@ export const getContainerDetails = async (containerIds: string[]) => {
   );
   let details;
   if (data?.object) {
-    // eslint-disable-next-line prefer-destructuring
+    prefer - destructuring;
     details = data?.object;
   }
   return details;
@@ -238,10 +246,10 @@ export const sendLogsToUI = (node: Node) => {
   }
 
   sendLogsToUIProc.on('error', (data) => {
-    logger.error(`docker.sendLogsToUI::error:: `, data);
+    logger.error('docker.sendLogsToUI::error:: ', data);
   });
   sendLogsToUIProc.on('disconnect', () => {
-    logger.info(`docker.sendLogsToUI::disconnect::`);
+    logger.info('docker.sendLogsToUI::disconnect::');
   });
   // todo: restart?
   sendLogsToUIProc.on('close', (code) => {

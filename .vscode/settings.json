@@ -1,9 +1,6 @@
 {
-  "files.associations": {
-    ".eslintrc": "jsonc",
-    ".prettierrc": "jsonc",
-    ".eslintignore": "ignore"
-  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "biomejs.biome",
   "javascript.validate.enable": false,
   "javascript.format.enable": false,
   "typescript.format.enable": false,
@@ -17,14 +14,5 @@
     "test/**/__snapshots__": true,
     "package-lock.json": true,
     "*.{css,sass,scss}.d.ts": true
-  },
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-  "eslint.validate": [
-    "javascript"
-  ],
-  "eslint.format.enable": false,
-  "prettier.configPath": "package.json"
+  }
 }

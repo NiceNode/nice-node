@@ -1,4 +1,4 @@
-import { ConfigKey, ConfigValuesMap } from './nodeConfig';
+import type { ConfigKey, ConfigValuesMap } from './nodeConfig';
 
 /**
  * "serviceConfigs": {

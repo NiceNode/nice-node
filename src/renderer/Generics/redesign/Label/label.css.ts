@@ -18,38 +18,38 @@ export const container = style({
   flexGrow: 0,
   width: 'fit-content',
   selectors: {
-    [`&.bold`]: {
+    '&.bold': {
       fontWeight: 590,
     },
-    [`&.small`]: {
+    '&.small': {
       padding: '2px 6px',
       gap: '10px',
     },
-    [`&.green`]: {
+    '&.green': {
       background: vars.components.labelGreenBackground,
       color: vars.components.labelGreenFontColor,
     },
-    [`&.red`]: {
+    '&.red': {
       background: vars.components.labelRedBackground,
       color: vars.components.labelRedFontColor,
     },
-    [`&.gray`]: {
+    '&.gray': {
       background: vars.components.labelGrayBackground,
       color: vars.components.labelGrayFontColor,
     },
-    [`&.pink`]: {
+    '&.pink': {
       background: vars.components.labelPinkBackground,
       color: vars.components.labelPinkFontColor,
     },
-    [`&.purple`]: {
+    '&.purple': {
       background: vars.components.labelPurpleBackground,
       color: vars.components.labelPurpleFontColor,
     },
-    [`&.orange`]: {
+    '&.orange': {
       background: vars.components.labelOrangeBackground,
       color: vars.components.labelOrangeFontColor,
     },
-    [`&.pink2`]: {
+    '&.pink2': {
       background: vars.components.labelPink2Background,
       color: vars.components.labelPink2FontColor,
     },

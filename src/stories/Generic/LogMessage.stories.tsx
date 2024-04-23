@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { LogMessage } from '../../renderer/Generics/redesign/LogMessage/LogMessage';
+import type { Meta, StoryObj } from '@storybook/react';
 import FloatingButton from '../../renderer/Generics/redesign/FloatingButton/FloatingButton';
+import { LogMessage } from '../../renderer/Generics/redesign/LogMessage/LogMessage';
 
 export default {
   title: 'Generic/LogMessage',

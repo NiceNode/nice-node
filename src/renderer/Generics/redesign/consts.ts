@@ -1,6 +1,6 @@
-import { NodeBackgroundId } from 'renderer/assets/images/nodeBackgrounds';
-import { NiceNodeRpcTranslation } from 'common/rpcTranslation';
-import { NodeId } from 'common/node';
+import type { NodeId } from '../../../common/node';
+import type { NiceNodeRpcTranslation } from '../../../common/rpcTranslation';
+import type { NodeBackgroundId } from '../../../renderer/assets/images/nodeBackgrounds';
 
 export interface ClientStatusProps {
   running?: boolean;

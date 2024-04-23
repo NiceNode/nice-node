@@ -1,4 +1,4 @@
-import { FileDownloadProgress } from '../downloadFile';
+import type { FileDownloadProgress } from '../downloadFile';
 import { CHANNELS, send } from '../messenger';
 
 export interface IpcMessage {
@@ -7,8 +7,8 @@ export interface IpcMessage {
 }
 
 export class MessageGrantPermissionToInstallPodman {
-  messageId: string = 'isGrantedPermission';
-  value: boolean = false;
+  messageId = 'isGrantedPermission';
+  value = false;
 }
 
 export const sendMessageOnDownloadProgress = (

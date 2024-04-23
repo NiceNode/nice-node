@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 import { SYNC_STATUS } from '../../renderer/Generics/redesign/consts';
 
 import { MetricTypes } from '../../renderer/Generics/redesign/MetricTypes/MetricTypes';

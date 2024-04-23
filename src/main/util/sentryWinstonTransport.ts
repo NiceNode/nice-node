@@ -1,12 +1,8 @@
-/* eslint-disable promise/catch-or-return */
-/* eslint-disable promise/always-return */
-/* eslint-disable max-classes-per-file */
-/* eslint-disable class-methods-use-this */
 /**
  * Code initially taken from https://github.com/aandrewww/winston-transport-sentry-node
  */
 import * as Sentry from '@sentry/electron/main';
-import TransportStream = require('winston-transport');
+import TransportStream from 'winston-transport';
 // import { LEVEL } from 'triple-beam';
 
 enum SentrySeverity {
@@ -57,11 +53,11 @@ export default class SentryTransport extends TransportStream {
   public constructor(opts?: SentryTransportOptions) {
     super(opts);
 
-    this.levelsMap = this.setLevelsMap(opts && opts.levelsMap);
-    this.silent = (opts && opts.silent) || false;
+    this.levelsMap = this.setLevelsMap(opts?.levelsMap);
+    this.silent = opts?.silent || false;
 
     if (!opts || !opts.skipSentryInit) {
-      Sentry.init(SentryTransport.withDefaults((opts && opts.sentry) || {}));
+      Sentry.init(SentryTransport.withDefaults(opts?.sentry || {}));
     }
   }
 
@@ -151,17 +147,16 @@ export default class SentryTransport extends TransportStream {
   private static withDefaults(options: Sentry.ElectronMainOptions) {
     return {
       ...options,
-      dsn: (options && options.dsn) || process.env.SENTRY_DSN || '',
-      serverName:
-        (options && options.serverName) || 'winston-transport-sentry-node',
+      dsn: options?.dsn || process.env.SENTRY_DSN || '',
+      serverName: options?.serverName || 'winston-transport-sentry-node',
       environment:
-        (options && options.environment) ||
+        options?.environment ||
         process.env.SENTRY_ENVIRONMENT ||
         process.env.NODE_ENV ||
         'production',
-      debug: (options && options.debug) || !!process.env.SENTRY_DEBUG || false,
-      sampleRate: (options && options.sampleRate) || 1.0,
-      maxBreadcrumbs: (options && options.maxBreadcrumbs) || 100,
+      debug: options?.debug || !!process.env.SENTRY_DEBUG || false,
+      sampleRate: options?.sampleRate || 1.0,
+      maxBreadcrumbs: options?.maxBreadcrumbs || 100,
     };
   }
 

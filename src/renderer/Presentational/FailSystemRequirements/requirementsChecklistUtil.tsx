@@ -1,11 +1,11 @@
-import { TFunction } from 'i18next';
-import { ReactElement } from 'react';
-import {
+import type { TFunction } from 'i18next';
+import type { ReactElement } from 'react';
+import type {
   FailSystemRequirements,
   FailSystemRequirementsData,
 } from '../../../main/minSystemRequirement';
 
-import { ChecklistItemProps } from '../../Generics/redesign/Checklist/ChecklistItem';
+import type { ChecklistItemProps } from '../../Generics/redesign/Checklist/ChecklistItem';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import { bytesToGB } from '../../utils';
 
@@ -41,16 +41,16 @@ export const makeCheckList = (
       valueText = `System memory: ${bytesToGB(
         failedRequirement.value as number,
       )}GB`;
-      captionText = `Increase your RAM to the required amount.`;
+      captionText = 'Increase your RAM to the required amount.';
     } else if (reqType === 'CpuCores') {
       checkTitle = `Processor has ${failedRequirement.requirement} or more cores`;
       valueText = `${t('processorCoresDescription', {
         cores: failedRequirement.value,
       })}`;
-      captionText = `Mac with a better processor is required.`;
+      captionText = 'Mac with a better processor is required.';
     } else if (reqType === 'VirtualMachinePlatform') {
-      checkTitle = `Virtual Machine Platform Enabled`;
-      valueText = `Currently disabled.`;
+      checkTitle = 'Virtual Machine Platform Enabled';
+      valueText = 'Currently disabled.';
       valueComponent = (
         <>
           <ExternalLink
@@ -60,11 +60,12 @@ export const makeCheckList = (
           />
         </>
       );
-      captionText = `Try following  to enable.`;
+      captionText = 'Try following  to enable.';
     } else if (reqType === 'CpuArch') {
-      checkTitle = `64bit CPU architecture`;
+      checkTitle = '64bit CPU architecture';
       valueText = `CPU architecture: ${failedRequirement.value}`;
-      captionText = `This CPU does not support the 64-bit instruction set. Different processor is required.`;
+      captionText =
+        'This CPU does not support the 64-bit instruction set. Different processor is required.';
     }
 
     const checkListItem: ChecklistItemProps = {

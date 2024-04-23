@@ -1,4 +1,4 @@
-import { ICONS, IconId } from '../../../assets/images/icons';
+import { ICONS, type IconId } from '../../../assets/images/icons';
 
 export interface IconProps {
   /**

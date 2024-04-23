@@ -3,9 +3,8 @@ import * as platform from '../platform';
 import installOnMac from './installOnMac';
 import installOnWindows from './installOnWindows';
 
-// eslint-disable-next-line
 const installDocker = async (): Promise<any> => {
-  logger.info(`Starting docker install...`);
+  logger.info('Starting docker install...');
 
   let result;
   if (platform.isMac()) {

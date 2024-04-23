@@ -12,16 +12,16 @@ export const container = style({
   padding: 24,
   position: 'relative',
   selectors: {
-    [`&.info`]: {
+    '&.info': {
       backgroundColor: vars.components.messageInfoBackground,
     },
-    [`&.warning`]: {
+    '&.warning': {
       backgroundColor: vars.components.messageWarningBackground,
     },
-    [`&.error`]: {
+    '&.error': {
       backgroundColor: vars.components.messageErrorBackground,
     },
-    [`&.success`]: {
+    '&.success': {
       backgroundColor: vars.components.messageSuccessBackground,
     },
   },
@@ -30,16 +30,16 @@ export const container = style({
 export const messageIcon = style({
   width: 28,
   selectors: {
-    [`&.info`]: {
+    '&.info': {
       color: vars.components.messageInfoIcon,
     },
-    [`&.warning`]: {
+    '&.warning': {
       color: vars.components.messageWarningIcon,
     },
-    [`&.error`]: {
+    '&.error': {
       color: vars.components.messageErrorIcon,
     },
-    [`&.success`]: {
+    '&.success': {
       color: vars.components.messageSuccessIcon,
     },
   },

@@ -1,56 +1,62 @@
 import i18n from 'i18next';
 import I18nextCLILanguageDetector from 'i18next-cli-language-detector';
 
-import { getSettings, setLanguage } from './state/settings';
 import { getMenuBuilder } from './main';
+import { getSettings, setLanguage } from './state/settings';
 
-import enTranslations from '../../assets/locales/en/translation.json';
-import enNotifications from '../../assets/locales/en/notifications.json';
-import enWindowMenu from '../../assets/locales/en/windowMenu.json';
-import enUpdater from '../../assets/locales/en/updater.json';
 import enDialog from '../../assets/locales/en/dialog.json';
+import enNotifications from '../../assets/locales/en/notifications.json';
+import enTranslations from '../../assets/locales/en/translation.json';
+import enUpdater from '../../assets/locales/en/updater.json';
+import enWindowMenu from '../../assets/locales/en/windowMenu.json';
 
-import esTranslations from '../../assets/locales/es/translation.json';
-import esNotifications from '../../assets/locales/es/notifications.json';
-import esWindowMenu from '../../assets/locales/es/windowMenu.json';
-import esUpdater from '../../assets/locales/es/updater.json';
+import csDialog from '../../assets/locales/cs/dialog.json';
+import csNotifications from '../../assets/locales/cs/notifications.json';
+import csTranslations from '../../assets/locales/cs/translation.json';
+import csUpdater from '../../assets/locales/cs/updater.json';
+import csWindowMenu from '../../assets/locales/cs/windowMenu.json';
+
 import esDialog from '../../assets/locales/es/dialog.json';
+import esNotifications from '../../assets/locales/es/notifications.json';
+import esTranslations from '../../assets/locales/es/translation.json';
+import esUpdater from '../../assets/locales/es/updater.json';
+import esWindowMenu from '../../assets/locales/es/windowMenu.json';
 
-import zhTranslations from '../../assets/locales/zh/translation.json';
-import zhNotifications from '../../assets/locales/zh/notifications.json';
-import zhWindowMenu from '../../assets/locales/zh/windowMenu.json';
-import zhUpdater from '../../assets/locales/zh/updater.json';
 import zhDialog from '../../assets/locales/zh/dialog.json';
+import zhNotifications from '../../assets/locales/zh/notifications.json';
+import zhTranslations from '../../assets/locales/zh/translation.json';
+import zhUpdater from '../../assets/locales/zh/updater.json';
+import zhWindowMenu from '../../assets/locales/zh/windowMenu.json';
 
-import frTranslations from '../../assets/locales/fr/translation.json';
-import frNotifications from '../../assets/locales/fr/notifications.json';
-import frWindowMenu from '../../assets/locales/fr/windowMenu.json';
-import frUpdater from '../../assets/locales/fr/updater.json';
 import frDialog from '../../assets/locales/fr/dialog.json';
+import frNotifications from '../../assets/locales/fr/notifications.json';
+import frTranslations from '../../assets/locales/fr/translation.json';
+import frUpdater from '../../assets/locales/fr/updater.json';
+import frWindowMenu from '../../assets/locales/fr/windowMenu.json';
 
-import jaTranslations from '../../assets/locales/ja/translation.json';
-import jaNotifications from '../../assets/locales/ja/notifications.json';
-import jaWindowMenu from '../../assets/locales/ja/windowMenu.json';
-import jaUpdater from '../../assets/locales/ja/updater.json';
 import jaDialog from '../../assets/locales/ja/dialog.json';
+import jaNotifications from '../../assets/locales/ja/notifications.json';
+import jaTranslations from '../../assets/locales/ja/translation.json';
+import jaUpdater from '../../assets/locales/ja/updater.json';
+import jaWindowMenu from '../../assets/locales/ja/windowMenu.json';
 
-import deTranslations from '../../assets/locales/de/translation.json';
-import deNotifications from '../../assets/locales/de/notifications.json';
-import deWindowMenu from '../../assets/locales/de/windowMenu.json';
-import deUpdater from '../../assets/locales/de/updater.json';
 import deDialog from '../../assets/locales/de/dialog.json';
+import deNotifications from '../../assets/locales/de/notifications.json';
+import deTranslations from '../../assets/locales/de/translation.json';
+import deUpdater from '../../assets/locales/de/updater.json';
+import deWindowMenu from '../../assets/locales/de/windowMenu.json';
 
-import ruTranslations from '../../assets/locales/ru/translation.json';
-import ruNotifications from '../../assets/locales/ru/notifications.json';
-import ruWindowMenu from '../../assets/locales/ru/windowMenu.json';
-import ruUpdater from '../../assets/locales/ru/updater.json';
 import ruDialog from '../../assets/locales/ru/dialog.json';
+import ruNotifications from '../../assets/locales/ru/notifications.json';
+import ruTranslations from '../../assets/locales/ru/translation.json';
+import ruUpdater from '../../assets/locales/ru/updater.json';
+import ruWindowMenu from '../../assets/locales/ru/windowMenu.json';
 
-import viTranslations from '../../assets/locales/vi/translation.json';
-import viNotifications from '../../assets/locales/vi/notifications.json';
-import viWindowMenu from '../../assets/locales/vi/windowMenu.json';
-import viUpdater from '../../assets/locales/vi/updater.json';
 import viDialog from '../../assets/locales/vi/dialog.json';
+import viNotifications from '../../assets/locales/vi/notifications.json';
+import viTranslations from '../../assets/locales/vi/translation.json';
+import viUpdater from '../../assets/locales/vi/updater.json';
+import viWindowMenu from '../../assets/locales/vi/windowMenu.json';
 
 // Default app language is english
 const ENGLISH_LANGUAGE_CODE = 'en';
@@ -67,6 +73,13 @@ i18n.use(I18nextCLILanguageDetector).init({
       windowMenu: enWindowMenu,
       updater: enUpdater,
       dialog: enDialog,
+    },
+    cs: {
+      translation: csTranslations,
+      notifications: csNotifications,
+      windowMenu: csWindowMenu,
+      updater: csUpdater,
+      dialog: csDialog,
     },
     es: {
       translation: esTranslations,
@@ -158,4 +171,4 @@ export const initialize = () => {
   updateCurrentLanguage(settings.osLanguage, settings.appLanguage);
 };
 
-export const i18nMain = i18n;
+export default i18n;

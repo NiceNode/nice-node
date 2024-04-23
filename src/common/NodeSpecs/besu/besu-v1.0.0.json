@@ -5,11 +5,12 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "docker.io/hyperledger/besu:latest",
+    "imageName": "docker.io/hyperledger/besu",
+    "defaultImageTag": "latest",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "webSockets": "Disabled",
+        "webSockets": "Enabled",
         "httpCorsDomains": "\"http://localhost\"",
         "hostAllowList": "localhost,host.containers.internal",
         "engineRpc": "Enabled",
@@ -106,6 +107,7 @@
       },
       "addNodeFlow": "required",
       "defaultValue": "snap",
+      "hideFromUserAfterStart": true,
       "documentation": "https://besu.hyperledger.org/en/stable/Concepts/Node-Types/"
     },
     "p2pPorts": {

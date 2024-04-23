@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import { Header } from '../../renderer/Generics/redesign/Header/Header';
 

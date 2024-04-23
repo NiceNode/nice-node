@@ -1,28 +1,25 @@
 import path from 'node:path';
 import { app } from 'electron';
+import { reportEvent } from '../../events';
+import { execAwait } from '../../execHelper';
 import { getNNDirPath } from '../../files';
 import logger from '../../logger';
-import { execAwait } from '../../execHelper';
-import { NICENODE_MACHINE_NAME } from '../machine';
 import { PODMAN_LATEST_VERSION } from '../install/install';
-import { reportEvent } from '../../events';
+import { NICENODE_MACHINE_NAME } from '../machine';
 
 /**
  * Uninstall podman from Windows, and remove various configuration files
  */
 const uninstallOnWindows = async (): Promise<boolean | { error: string }> => {
-  logger.info(`Starting Windows specific podman uninstall steps...`);
+  logger.info('Starting Windows specific podman uninstall steps...');
 
   try {
-    let stdout;
-    let stderr;
-
     try {
       // may need to run wsl -t podman-nicenode-machine and wsl --unregister podman-nicenode-machine
       const deleteWslPodmanVm = `wsl --unregister podman-${NICENODE_MACHINE_NAME}`;
-      ({ stdout, stderr } = await execAwait(deleteWslPodmanVm, {
+      const { stdout, stderr } = await execAwait(deleteWslPodmanVm, {
         log: true,
-      }));
+      });
       logger.info(`podman uninstall unregister wsl2 vm ${stdout}, ${stderr}`);
     } catch (err) {
       logger.error(`wsl --unregister podman-nicenode-machine error: ${err}`);
@@ -64,17 +61,16 @@ const uninstallOnWindows = async (): Promise<boolean | { error: string }> => {
     //   getNNDirPath(),
     //   'podman-install-log.txt',
     // );
-    // eslint-disable-next-line prefer-const
-    ({ stdout, stderr } = await execAwait(
+
+    let { stdout, stderr } = await execAwait(
       `Start-Process -FilePath '${podmanExeFilePath}' -ArgumentList "/uninstall -Silent -Quiet" -Wait`,
       { log: true, shell: 'powershell.exe' },
-    ));
+    );
     // todo: report event if fails. Requires podman.exe specific parsing or a clever way to see
     // if the user gave permissions to uninstall
     console.log('podman install stdout, stderr', stdout, stderr);
 
     return true;
-    // eslint-disable-next-line
   } catch (err: any) {
     console.log(err);
     logger.error(err);

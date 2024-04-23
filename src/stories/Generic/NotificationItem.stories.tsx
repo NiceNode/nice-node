@@ -1,4 +1,4 @@
-import { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 
 import { NotificationItem } from '../../renderer/Generics/redesign/NotificationItem/NotificationItem';
 

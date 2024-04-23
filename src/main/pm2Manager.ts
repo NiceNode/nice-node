@@ -1,8 +1,12 @@
-import { promisify } from 'node:util';
-import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
+import {
+  type ChildProcess,
+  type SpawnOptions,
+  spawn,
+} from 'node:child_process';
 import * as readline from 'node:readline';
+import { promisify } from 'node:util';
 
-import Node from '../common/node';
+import type Node from '../common/node';
 import logger from './logger';
 import { send } from './messenger';
 import { killChildProcess } from './processExit';
@@ -104,10 +108,10 @@ export const sendLogsToUI = (node: Node) => {
   });
 
   sendLogsToUIProc.on('error', (data) => {
-    logger.error(`pm2.sendLogsToUI::error:: `, data);
+    logger.error('pm2.sendLogsToUI::error:: ', data);
   });
   sendLogsToUIProc.on('disconnect', () => {
-    logger.info(`pm2.sendLogsToUI::disconnect::`);
+    logger.info('pm2.sendLogsToUI::disconnect::');
   });
   // todo: restart?
   sendLogsToUIProc.on('close', (code) => {

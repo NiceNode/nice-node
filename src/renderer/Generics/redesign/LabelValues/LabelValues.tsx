@@ -1,11 +1,11 @@
+import LineLabelValuesItem, {
+  type LabelValuesSectionProps,
+} from './LabelValuesSection';
 import {
-  titleFont,
   columnContainerStyle,
   columnItemStyle,
+  titleFont,
 } from './labelValues.css';
-import LineLabelValuesItem, {
-  LabelValuesSectionProps,
-} from './LabelValuesSection';
 
 export interface LineLabelValuesProps {
   /**
@@ -36,12 +36,11 @@ const LineLabelValues = ({ title, items, column }: LineLabelValuesProps) => {
     <>
       <div className={titleFont}>{title}</div>
       <div className={columnContainer}>
-        {items &&
-          items.map((item) => (
-            <div className={columnDiv} key={item.sectionTitle}>
-              <LineLabelValuesItem {...item} />
-            </div>
-          ))}
+        {items?.map((item) => (
+          <div className={columnDiv} key={item.sectionTitle}>
+            <LineLabelValuesItem {...item} />
+          </div>
+        ))}
       </div>
     </>
   );

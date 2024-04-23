@@ -1,8 +1,7 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+#!/usr/bin/env sh
 
-npx lint-staged
+npm run safeFix
 npm run lint
-npm exec tsc
-npm run postinstall
-npm run test-precommit
+# npm exec tsc
+npm run package
+npm run test

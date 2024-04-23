@@ -1,40 +1,42 @@
-// eslint must be confusing i18n with main/i18n and errors
-// eslint-disable-next-line import/order
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { initReactI18next } from 'react-i18next';
 
-import enTranslations from '../../assets/locales/en/translation.json';
-import enSystemRequirements from '../../assets/locales/en/systemRequirements.json';
 import enGenericComponents from '../../assets/locales/en/genericComponents.json';
+import enSystemRequirements from '../../assets/locales/en/systemRequirements.json';
+import enTranslations from '../../assets/locales/en/translation.json';
 
-import esTranslations from '../../assets/locales/es/translation.json';
-import esSystemRequirements from '../../assets/locales/es/systemRequirements.json';
+import csGenericComponents from '../../assets/locales/cs/genericComponents.json';
+import csSystemRequirements from '../../assets/locales/cs/systemRequirements.json';
+import csTranslations from '../../assets/locales/cs/translation.json';
+
 import esGenericComponents from '../../assets/locales/es/genericComponents.json';
+import esSystemRequirements from '../../assets/locales/es/systemRequirements.json';
+import esTranslations from '../../assets/locales/es/translation.json';
 
-import deTranslations from '../../assets/locales/de/translation.json';
-import deSystemRequirements from '../../assets/locales/de/systemRequirements.json';
 import deGenericComponents from '../../assets/locales/de/genericComponents.json';
+import deSystemRequirements from '../../assets/locales/de/systemRequirements.json';
+import deTranslations from '../../assets/locales/de/translation.json';
 
-import frTranslations from '../../assets/locales/fr/translation.json';
-import frSystemRequirements from '../../assets/locales/fr/systemRequirements.json';
 import frGenericComponents from '../../assets/locales/fr/genericComponents.json';
+import frSystemRequirements from '../../assets/locales/fr/systemRequirements.json';
+import frTranslations from '../../assets/locales/fr/translation.json';
 
-import jaTranslations from '../../assets/locales/ja/translation.json';
-import jaSystemRequirements from '../../assets/locales/ja/systemRequirements.json';
 import jaGenericComponents from '../../assets/locales/ja/genericComponents.json';
+import jaSystemRequirements from '../../assets/locales/ja/systemRequirements.json';
+import jaTranslations from '../../assets/locales/ja/translation.json';
 
-import ruTranslations from '../../assets/locales/ru/translation.json';
-import ruSystemRequirements from '../../assets/locales/ru/systemRequirements.json';
 import ruGenericComponents from '../../assets/locales/ru/genericComponents.json';
+import ruSystemRequirements from '../../assets/locales/ru/systemRequirements.json';
+import ruTranslations from '../../assets/locales/ru/translation.json';
 
-import viTranslations from '../../assets/locales/vi/translation.json';
-import viSystemRequirements from '../../assets/locales/vi/systemRequirements.json';
 import viGenericComponents from '../../assets/locales/vi/genericComponents.json';
+import viSystemRequirements from '../../assets/locales/vi/systemRequirements.json';
+import viTranslations from '../../assets/locales/vi/translation.json';
 
-import zhTranslations from '../../assets/locales/zh/translation.json';
-import zhSystemRequirements from '../../assets/locales/zh/systemRequirements.json';
 import zhGenericComponents from '../../assets/locales/zh/genericComponents.json';
+import zhSystemRequirements from '../../assets/locales/zh/systemRequirements.json';
+import zhTranslations from '../../assets/locales/zh/translation.json';
 
 // don't want to use this?
 // have a look at the Quick start guide
@@ -67,6 +69,11 @@ i18n
         translation: enTranslations,
         systemRequirements: enSystemRequirements,
         genericComponents: enGenericComponents,
+      },
+      cs: {
+        translation: csTranslations,
+        systemRequirements: csSystemRequirements,
+        genericComponents: csGenericComponents,
       },
       es: {
         translation: esTranslations,

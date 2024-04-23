@@ -1,6 +1,5 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
-import { container, checkbox } from './checkbox.css';
+import { checkbox, container } from './checkbox.css';
 
 export interface CheckboxProps {
   /**

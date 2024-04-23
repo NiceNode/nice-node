@@ -1,18 +1,19 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
-import Button, { ButtonProps } from '../Button/Button';
+import type React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  modalHeaderContainer,
+  type ModalConfig,
+  modalRoutes,
+} from '../../../Presentational/ModalManager/modalUtils';
+import Button, { type ButtonProps } from '../Button/Button';
+import { ContentHeader } from '../ContentHeader/ContentHeader';
+import {
   modalBackdropStyle,
   modalChildrenContainer,
   modalContentStyle,
+  modalHeaderContainer,
   modalStepperContainer,
   titleFont,
 } from './modal.css';
-import {
-  ModalConfig,
-  modalRoutes,
-} from '../../../Presentational/ModalManager/modalUtils';
-import { ContentHeader } from '../ContentHeader/ContentHeader';
 
 type Props = {
   modalType?: 'alert' | 'modal' | 'info';
@@ -99,7 +100,6 @@ export const Modal = ({
       };
     }
     return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

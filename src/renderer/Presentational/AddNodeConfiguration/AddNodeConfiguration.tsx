@@ -1,39 +1,39 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { mergeObjectReducer } from './deepMerge';
-import {
+import type { NodeId } from '../../../common/node';
+import type {
+  NodePackageNodeServiceSpec,
+  NodePackageSpecification,
+  NodeSpecification,
+} from '../../../common/nodeSpec';
+import type {
   NodeLibrary,
   NodePackageLibrary,
 } from '../../../main/state/nodeLibrary';
-import {
-  container,
-  descriptionFont,
-  sectionFont,
-  titleFont,
-  advancedOptionsLink,
-  dataLocationContainer,
-  settingsContainer,
-  horizontalContainer,
-} from './addNodeConfiguration.css';
+import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
+import FolderInput from '../../Generics/redesign/Input/FolderInput';
+import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
+import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import SpecialSelect, {
-  SelectOption,
+  type SelectOption,
 } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
 import electron from '../../electronGlobal';
-import FolderInput from '../../Generics/redesign/Input/FolderInput';
-import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { captionText } from '../PodmanInstallation/podmanInstallation.css';
-import {
-  NodePackageSpecification,
-  NodePackageNodeServiceSpec,
-  NodeSpecification,
-} from '../../../common/nodeSpec';
-import { NodeId } from '../../../common/node';
-import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import InitialClientConfigs, {
-  ClientConfigValues,
+  type ClientConfigValues,
 } from './InitialClientConfigs';
-import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
+import {
+  advancedOptionsLink,
+  container,
+  dataLocationContainer,
+  descriptionFont,
+  horizontalContainer,
+  sectionFont,
+  settingsContainer,
+  titleFont,
+} from './addNodeConfiguration.css';
+import { mergeObjectReducer } from './deepMerge';
 
 export type ClientSelections = {
   [serviceId: string]: SelectOption;
@@ -280,7 +280,6 @@ const AddNodeConfiguration = ({
     if (setClientSelections) {
       setClientSelections(sClientSelections);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeServiceSelection = (
@@ -303,7 +302,6 @@ const AddNodeConfiguration = ({
       });
     }
     // todo: try useCallback in parent component
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     sClientSelections,
     sNodeStorageLocation,
@@ -327,7 +325,7 @@ const AddNodeConfiguration = ({
       )}
       <div>
         <div className={descriptionFont}>
-          <>{addNodeDescription ?? t('AddNodeConfigurationDescription')}</>
+          {addNodeDescription ?? t('AddNodeConfigurationDescription')}
         </div>
         {specId === 'ethereum' && (
           <ExternalLink

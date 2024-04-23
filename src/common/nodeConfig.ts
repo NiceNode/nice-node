@@ -1,4 +1,4 @@
-import { ServiceConfigs } from './nodePackageConfig';
+import type { ServiceConfigs } from './nodePackageConfig';
 
 export const FilePathControlType = 'filePath';
 export type FilePathControl = {

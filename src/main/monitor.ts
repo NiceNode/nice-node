@@ -1,16 +1,16 @@
 import { net } from 'electron';
+import pidusage from 'pidusage';
 // import { getNodesDirPathDetails } from './files';
 
-import { NodeId } from '../common/node';
+import type { NodeId } from '../common/node';
+import { NOTIFICATIONS } from './consts/notifications';
 import logger from './logger';
 import * as storeNodes from './state/nodes';
 import { addNotification } from './state/notifications';
-import { NOTIFICATIONS } from './consts/notifications';
 import { delay } from './util/delay';
 
 const watchProcessPollingInterval = 300000; // 5 minutes
 let monitoringInterval: ReturnType<typeof setTimeout>;
-const pidusage = require('pidusage');
 
 export const getProcessUsageByPid = async (pid: number) => {
   const stats = await pidusage(pid);
@@ -55,7 +55,7 @@ export const checkSystemHardware = async () => {
   // }
   // Is the internet connected?
   if (!net.isOnline()) {
-    warnings.push(`Internet connection may be disconnected.`);
+    warnings.push('Internet connection may be disconnected.');
     addNotification(NOTIFICATIONS.WARNING.CONNECTION_DOWN);
   }
   logger.info(warnings);

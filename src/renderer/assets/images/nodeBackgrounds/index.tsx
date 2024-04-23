@@ -1,16 +1,16 @@
 // Execution
-const geth = require('./Geth.png');
-const erigon = require('./Erigon.png');
-const besu = require('./Besu.png');
-const nethermind = require('./Nethermind.png');
-const reth = require('./Reth.png');
+import besu from './Besu.png';
+import erigon from './Erigon.png';
+import geth from './Geth.png';
+import nethermind from './Nethermind.png';
+import reth from './Reth.png';
 
+import lighthouse from './Lighthouse.png';
+import lodestar from './Lodestar.png';
+import nimbus from './Nimbus.png';
 // Consensus
-const prysm = require('./Prysm.png');
-const lighthouse = require('./Lighthouse.png');
-const teku = require('./Teku.png');
-const lodestar = require('./Lodestar.png');
-const nimbus = require('./Nimbus.png');
+import prysm from './Prysm.png';
+import teku from './Teku.png';
 
 export interface NodeBackgrounds {
   geth?: string;
@@ -26,6 +26,7 @@ export interface NodeBackgrounds {
   'op-geth'?: string;
   'op-node'?: string;
   hildr?: string;
+  magi?: string;
   hubble?: string;
   nitro?: string;
   'itzg-minecraft'?: string;
@@ -46,6 +47,7 @@ export const NODE_BACKGROUNDS: NodeBackgrounds = {
   'op-geth': geth,
   'op-node': nimbus,
   hildr: nimbus,
+  magi: nethermind,
   hubble: lighthouse,
   nitro: teku,
   'itzg-minecraft': geth,

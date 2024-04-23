@@ -9,17 +9,21 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
+        "webSockets": "Enabled",
         "httpCorsDomains": "http://localhost",
         "syncMode": "full",
-        "httpAddress": "0.0.0.0"
+        "httpAddress": "0.0.0.0",
+        "webSocketAddress": "0.0.0.0",
+        "webSocketAllowedOrigins": "http://localhost"
       },
       "docker": {
-        "containerVolumePath": "/root/.local/share/reth/mainnet/db",
+        "containerVolumePath": "/root/.local/share/reth/mainnet",
         "raw": "",
-        "forcedRawNodeInput": "node --color never --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/mainnet/db/jwtsecret --ipcdisable"
+        "forcedRawNodeInput": "node --color never --authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.local/share/reth/mainnet/jwtsecret --ipcdisable"
       }
     },
-    "imageName": "ghcr.io/paradigmxyz/reth"
+    "imageName": "ghcr.io/paradigmxyz/reth",
+    "defaultImageTag": "latest"
   },
   "category": "L1/ExecutionClient",
   "minorityClient": true,
@@ -100,7 +104,7 @@
           }
         ]
       },
-      "defaultValue": "Disabled",
+      "defaultValue": "Enabled",
       "documentation": "https://paradigmxyz.github.io/reth/cli/node.html"
     },
     "webSocketAddress": {
@@ -261,6 +265,7 @@
       },
       "addNodeFlow": "required",
       "defaultValue": "full",
+      "hideFromUserAfterStart": true,
       "documentation": "https://paradigmxyz.github.io/reth/run/pruning.html"
     },
     "httpAddress": {
@@ -331,6 +336,11 @@
     "default": "https://paradigmxyz.github.io/reth"
   },
   "resources": [
+    {
+      "label": "Farcaster",
+      "value": "Reth Warpcast Channel",
+      "link": "https://warpcast.com/~/channel/reth"
+    },
     {
       "label": "Telegram",
       "value": "Join",

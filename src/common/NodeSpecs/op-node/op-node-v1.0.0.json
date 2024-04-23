@@ -21,7 +21,8 @@
         "forcedRawNodeInput": "op-node --syncmode=execution-layer --rpc.addr 0.0.0.0 --l2.jwt-secret /root/.ethereum/jwtsecret"
       }
     },
-    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.7.0"
+    "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node",
+    "defaultImageTag": "v1.7.3"
   },
   "category": "L2/ConsensusClient",
   "rpcTranslation": "eth-l2-consensus",
@@ -86,7 +87,7 @@
           }
         ]
       },
-      "defaultValue": "Enabled",
+      "defaultValue": "Disabled",
       "documentation": "https://github.com/jgresham/superhack/blob/main/README.md#op-node-settings"
     },
     "l1": {

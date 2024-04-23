@@ -20,7 +20,8 @@
         "forcedRawNodeInput": "node --no-warnings build/cli.js start --ip 0.0.0.0 "
       }
     },
-    "imageName": "docker.io/farcasterxyz/hubble:latest"
+    "imageName": "docker.io/farcasterxyz/hubble",
+    "defaultImageTag": "latest"
   },
   "category": "L1/Hub",
   "rpcTranslation": "farcaster-l1",

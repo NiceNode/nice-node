@@ -6,7 +6,7 @@ export const container = style({
   width: 1,
   background: vars.color.font10,
   selectors: {
-    [`&.content`]: {
+    '&.content': {
       margin: '34px 0px',
     },
   },

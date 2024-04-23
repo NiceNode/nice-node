@@ -6,14 +6,14 @@ export const container = style({
   height: 1,
   background: vars.color.font10,
   selectors: {
-    [`&.content`]: {
+    '&.content': {
       margin: '34px 0px',
     },
-    [`&.menu`]: {
+    '&.menu': {
       margin: '4px 0px',
       background: vars.color.font8,
     },
-    [`&.above-tab`]: {
+    '&.above-tab': {
       marginTop: 34,
     },
   },
