@@ -1,0 +1,245 @@
+{
+  "specId": "nitro-orbit",
+  "version": "1.0.0",
+  "displayName": "Arbitrum Nitro Orbit",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "imageName": "docker.io/offchainlabs/nitro-node",
+    "defaultImageTag": "v2.3.3-6a1c1a7",
+    "input": {
+      "defaultConfig": {
+        "parentChainRpcUrl": "",
+        "httpAddress": "0.0.0.0",
+        "httpPort": "8547",
+        "httpCorsDomains": "http://localhost",
+        "httpVirtualHosts": "localhost,host.containers.internal",
+        "logLevel": "Info"
+      },
+      "docker": {
+        "containerVolumePath": "/home/user/.arbitrum",
+        "raw": "",
+        "forcedRawNodeInput": ""
+      }
+    },
+    "dependencies": ["L1/ExecutionClient"]
+  },
+  "category": "Ethereum/L2",
+  "rpcTranslation": "eth-l2",
+  "systemRequirements": {
+    "documentationUrl": "https://docs.arbitrum.io/node-running/how-tos/running-a-full-node#minimum-hardware-configuration",
+    "cpu": {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage": {
+      "minSizeGBs": 1600,
+      "ssdRequired": true
+    },
+    "internet": {
+      "minDownloadSpeedMbps": 25,
+      "minUploadSpeedMbps": 10
+    },
+    "docker": {
+      "required": true
+    }
+  },
+  "configTranslation": {
+    "parentChainRpcUrl": {
+      "displayName": "Ethereum Mainnet RPC Endpoint",
+      "cliConfigPrefix": "--parent-chain.connection.url=",
+      "defaultValue": "",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "infoDescription": "Parent chain endpoint. Eth L1, Arb L2, or other! Local node like http://host.containers.internal:8545 or provider."
+    },
+    "orbitChainInfoJson": {
+      "displayName": "Orbit Chain Info",
+      "cliConfigPrefix": "--chain.info-json=",
+      "defaultValue": "",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "infoDescription": "A JSON string that contains required information about the Orbit chain."
+    },
+    "chainName": {
+      "displayName": "Orbit Chain Name",
+      "cliConfigPrefix": "--chain.name=",
+      "defaultValue": "",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "infoDescription": "It needs to exactly match the chain name used in the chain info JSON string."
+    },
+    "anyTrustChain": {
+      "displayName": "Is the Orbit chain an AnyTrust chain?",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Yes",
+            "config": "--node.data-availability.enable"
+          },
+          {
+            "value": "No"
+          }
+        ]
+      },
+      "addNodeFlow": "required",
+      "defaultValue": "No"
+    },
+    "anyTrustRestAggregatorUrls": {
+      "displayName": "AnyTrust Rest Aggregator Urls",
+      "cliConfigPrefix": "--node.data-availability.rest-aggregator.urls=",
+      "defaultValue": "",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "advanced",
+      "infoDescription": "A list of DAS REST endpoints (comma separated urls)"
+    },
+    "anyTrustRestAggregatorOnlineUrlList": {
+      "displayName": "AnyTrust Rest Aggregator Online Url List",
+      "cliConfigPrefix": "--node.data-availability.rest-aggregator.online-url-list=",
+      "defaultValue": "",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "advanced",
+      "infoDescription": "A url that returns a list of the DAS REST endpoints."
+    },
+    "httpAddress": {
+      "displayName": "HTTP-RPC server listening interface",
+      "cliConfigPrefix": "--http.addr=",
+      "defaultValue": "0.0.0.0",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
+    },
+    "httpPort": {
+      "displayName": "HTTP-RPC server listening port",
+      "cliConfigPrefix": "--http.port=",
+      "defaultValue": "8547",
+      "uiControl": {
+        "type": "text"
+      },
+      "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
+    },
+    "httpVirtualHosts": {
+      "displayName": "HTTP RPC virtual hostnames list",
+      "cliConfigPrefix": "--http.vhosts=",
+      "defaultValue": "localhost,host.containers.internal",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Comma separated list of virtual hostnames from which to accept authentication requests for engine api's (server enforced). Accepts '*' wildcard. Default value (localhost)"
+    },
+    "websockets": {
+      "displayName": "rpc websocket connections (*BeaconNodes may require websocket connections)",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--ws"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled"
+    },
+    "logLevel": {
+      "displayName": "Log level",
+      "cliConfigPrefix": "--log-level=",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Info",
+            "config": "3"
+          },
+          {
+            "value": "Warn",
+            "config": "2"
+          },
+          {
+            "value": "Error",
+            "config": "1"
+          },
+          {
+            "value": "Trace",
+            "config": "5"
+          },
+          {
+            "value": "Debug",
+            "config": "4"
+          },
+          {
+            "value": "Fatal",
+            "config": "0"
+          }
+        ]
+      },
+      "addNodeFlow": "advanced",
+      "defaultValue": "Info"
+    },
+    "httpApis": {
+      "displayName": "Enabled HTTP APIs",
+      "cliConfigPrefix": "--http.api=",
+      "defaultValue": "eth,net,web3,debug",
+      "valuesJoinStr": ",",
+      "uiControl": {
+        "type": "select/multiple",
+        "controlTranslations": [
+          {
+            "value": "eth",
+            "config": "Eth"
+          },
+          {
+            "value": "net",
+            "config": "Net"
+          },
+          {
+            "value": "web3",
+            "config": "Web3"
+          },
+          {
+            "value": "debug",
+            "config": "Debug"
+          },
+
+          {
+            "value": "personal",
+            "config": "Personal"
+          },
+          {
+            "value": "admin",
+            "config": "Admin"
+          }
+        ]
+      }
+    },
+    "httpCorsDomains": {
+      "displayName": "HTTP-RPC CORS domains",
+      "cliConfigPrefix": "--http.corsdomain=",
+      "defaultValue": "*",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Change where the node accepts http connections (use comma separated urls)"
+    }
+  },
+  "documentation": {
+    "default": "https://docs.arbitrum.io/node-running/how-tos/running-an-orbit-node"
+  },
+  "iconUrl": "https://arbitrum.io/wp-content/uploads/2021/08/Arbitrum_Symbol-Full-color-White-background-937x1024.png"
+}
