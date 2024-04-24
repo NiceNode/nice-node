@@ -1,4 +1,4 @@
-import { BrowserWindow, dialog } from 'electron';
+import { BrowserWindow, dialog, shell } from 'electron';
 import { autoUpdater, UpdateInfo } from 'electron-updater';
 import sleep from 'await-sleep';
 
@@ -10,6 +10,7 @@ import { getSetIsPreReleaseUpdatesEnabled } from './state/settings';
 let notifyUserIfNoUpdateAvailable: boolean;
 
 const t = i18nMain.getFixedT(null, 'updater');
+let pMainWindow: any;
 
 const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
   autoUpdater.on('error', (error) => {
@@ -55,14 +56,29 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
 
   autoUpdater.on('update-not-available', () => {
     logger.info('autoUpdater:::::::::update-not-available');
-    if (notifyUserIfNoUpdateAvailable) {
-      dialog.showMessageBox(browserWindow, {
+    // always notify user if no update available to download v6+
+    const downloadUrl = 'https://nicenode.xyz/#download';
+    dialog
+      .showMessageBox(browserWindow, {
         type: 'info',
-        title: t('NoUpdateAvailable'),
-        message: t('NoUpdateAvailable'),
+        title: t('UpdateAvailable'),
+        message: `Please download NiceNode version 6 at ${downloadUrl}. Unfortunately, updates from v5 to v6 are not compatible. Automatic updates will work as normal with v6+.`,
+        buttons: [t('Go to NiceNode downloads'), t('Cancel')],
+      })
+      .then(async (buttonIndex) => {
+        // eslint-disable-next-line promise/always-return
+        if (buttonIndex.response === 0) {
+          logger.info('Go to NiceNode download links accepted by user');
+          shell.openExternal(downloadUrl);
+        } else {
+          logger.info('cancel v6 download dialog');
+        }
+      })
+      .catch((err) => {
+        logger.error(err);
       });
-      notifyUserIfNoUpdateAvailable = false;
-    }
+    // avoid removing var work for deprecated v5
+    console.log(notifyUserIfNoUpdateAvailable);
   });
 
   autoUpdater.on('update-downloaded', () => {
@@ -87,6 +103,7 @@ const intiUpdateHandlers = (browserWindow: BrowserWindow) => {
 };
 
 export const initialize = (mainWindow: BrowserWindow) => {
+  pMainWindow = mainWindow;
   autoUpdater.logger = autoUpdateLogger;
   autoUpdater.autoDownload = false;
   autoUpdater.autoInstallOnAppQuit = false;
@@ -99,7 +116,28 @@ export const initialize = (mainWindow: BrowserWindow) => {
 
 export const checkForUpdates = (notifyIfNoUpdateAvailable: boolean) => {
   notifyUserIfNoUpdateAvailable = notifyIfNoUpdateAvailable;
-  autoUpdater.checkForUpdatesAndNotify();
+  // always notify user if no update available to download v6+
+  const downloadUrl = 'https://nicenode.xyz/#download';
+  dialog
+    .showMessageBox(pMainWindow, {
+      type: 'info',
+      title: t('UpdateAvailable'),
+      message: `Please download NiceNode version 6 at ${downloadUrl}. Unfortunately, updates from v5 to v6 are not compatible. Automatic updates will work as normal with v6+.`,
+      buttons: [t('Go to NiceNode downloads'), t('Cancel')],
+    })
+    .then(async (buttonIndex) => {
+      // eslint-disable-next-line promise/always-return
+      if (buttonIndex.response === 0) {
+        logger.info('Go to NiceNode download links accepted by user');
+        shell.openExternal(downloadUrl);
+      } else {
+        logger.info('cancel v6 download dialog');
+      }
+    })
+    .catch((err) => {
+      logger.error(err);
+    });
+  // autoUpdater.checkForUpdatesAndNotify();
 };
 
 export const setAllowPrerelease = (isAllowPrerelease: boolean) => {
