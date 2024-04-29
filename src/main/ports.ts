@@ -3,9 +3,9 @@ import type { NodeConfig } from '../common/node';
 import type { ConfigValue } from '../common/nodeConfig';
 import { NOTIFICATIONS } from './consts/notifications';
 import { httpGet } from './httpReq';
-import { getNodes, getSetPortHasChanged, getNode } from './state/nodes';
-import { addNotification } from './state/notifications';
 import { getNodePackageByServiceNodeId } from './state/nodePackages';
+import { getNode, getNodes, getSetPortHasChanged } from './state/nodes';
+import { addNotification } from './state/notifications';
 
 export const getPodmanPortsForNode = (
   node: Node,
@@ -126,7 +126,10 @@ export const assignPortsToNode = (node: Node): Node => {
     }
 
     // Use current port, or default if not initialized, converted to a number
-    let assignedPort = Number.parseInt((currentPort || defaultPort) as string, 10);
+    let assignedPort = Number.parseInt(
+      (currentPort || defaultPort) as string,
+      10,
+    );
 
     // Find next available port if the current/default one is in use
     if (usedPorts.includes(assignedPort.toString())) {

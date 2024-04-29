@@ -4,11 +4,11 @@ import {
   spawn,
 } from 'node:child_process';
 import * as readline from 'node:readline';
-import { assignPortsToNode } from '../ports';
 import type Node from '../../common/node';
 import { NodeStatus, getContainerName, getImageTag } from '../../common/node';
 import type { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
 import logger from '../logger';
+import { assignPortsToNode } from '../ports';
 import {
   setDockerNodeStatus as setPodmanNodeStatus,
   updateNode as storeUpdateNode,

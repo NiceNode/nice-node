@@ -5,8 +5,10 @@ import {
 } from '../../../assets/images/nodeBackgrounds';
 import { Label, type LabelColor } from '../Label/Label';
 import NodeIcon from '../NodeIcon/NodeIcon';
+import ProgressBar from '../ProgressBar/ProgressBar';
 // import ProgressBar from '../ProgressBar/ProgressBar';
 import type { ClientProps, ClientStatusProps } from '../consts';
+import { common } from '../theme.css';
 import {
   cardContent,
   cardTop,
@@ -18,8 +20,6 @@ import {
   clientType,
   container,
 } from './clientCard.css';
-import ProgressBar from '../ProgressBar/ProgressBar';
-import { common } from '../theme.css';
 // import { common } from '../theme.css';
 
 /**

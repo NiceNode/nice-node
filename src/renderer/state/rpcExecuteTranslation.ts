@@ -83,7 +83,7 @@ export const executeTranslation = async (
       if (resp) {
         return hexToDecimal(resp);
       }
-        return undefined;
+      return undefined;
     }
     if (rpcCall === 'latestBlock') {
       const resp = await provider.send('eth_getBlockByNumber', [
@@ -97,7 +97,7 @@ export const executeTranslation = async (
       if (resp) {
         return resp;
       }
-        return undefined;
+      return undefined;
     }
   } else if (rpcTranslation === 'eth-l2') {
     if (rpcCall === 'sync') {

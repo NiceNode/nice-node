@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "displayName": "Lodestar",
   "execution": {
-    "executionTypes": [
-      "docker"
-    ],
+    "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
     "imageName": "docker.io/chainsafe/lodestar",
     "defaultImageTag": "latest",
