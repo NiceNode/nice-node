@@ -1,6 +1,6 @@
-import { TFunction } from 'i18next';
-import { ReactElement } from 'react';
-import {
+import type { TFunction } from 'i18next';
+import type { ReactElement } from 'react';
+import type {
   CpuRequirements,
   // DockerRequirements,
   InternetRequirements,
@@ -8,11 +8,10 @@ import {
   StorageRequirements,
 } from '../../../common/systemRequirements';
 
-import { ChecklistItemProps } from '../../Generics/redesign/Checklist/ChecklistItem';
+import type { ChecklistItemProps } from '../../Generics/redesign/Checklist/ChecklistItem';
 import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
 import { bytesToGB } from '../../utils';
-// eslint-disable-next-line import/no-cycle
-import { NodeRequirementsProps } from './NodeRequirements';
+import type { NodeRequirementsProps } from './NodeRequirements';
 import { findSystemStorageDetailsAtALocation } from './nodeStorageUtil';
 
 export const makeCheckList = (
@@ -33,11 +32,9 @@ export const makeCheckList = (
   }
   console.log('nodeLocationStorageDetails', nodeLocationStorageDetails);
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const [nodeReqKey, nodeReqValue] of Object.entries(nodeRequirements)) {
     console.log(`${nodeReqKey}: ${nodeReqValue}`);
     if (nodeReqKey === 'documentationUrl' || nodeReqKey === 'description') {
-      // eslint-disable-next-line no-continue
       continue;
     }
     // title and desc depends on req type

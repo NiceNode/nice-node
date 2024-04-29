@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { ModalConfig } from '../ModalManager/modalUtils';
 import { useAppSelector } from '../../state/hooks';
 import { selectSelectedNodePackage } from '../../state/node';
+import type { ModalConfig } from '../ModalManager/modalUtils';
 import RemoveNode from './RemoveNode';
 
 export interface RemoveNodeWrapperProps {
@@ -21,7 +21,6 @@ const RemoveNodeWrapper = ({ modalOnChangeConfig }: RemoveNodeWrapperProps) => {
       setNodeStorageUsedGBs(undefined);
     }
     modalOnChangeConfig({ selectedNodePackage });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNodePackage]);
 
   return (

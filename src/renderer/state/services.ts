@@ -1,12 +1,11 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { NiceNodeRpcTranslation } from '../../common/rpcTranslation';
+import type { NiceNodeRpcTranslation } from '../../common/rpcTranslation';
 import { ethers } from '../ethers';
 import { executeTranslation } from './rpcExecuteTranslation';
 
 type CustomerErrorType = {
   message: string;
 };
-// eslint-disable-next-line
 type ProviderResponse = any;
 
 type QueryArg = {
@@ -24,7 +23,6 @@ const provider = new ethers.providers.JsonRpcProvider('http://localhost:8547');
 
 // Define a service using a base URL and expected endpoints
 // lots of issues in RTKQ github complaining about typescript breaking changes
-// eslint-disable-next-line
 export const RtkqExecutionWs: any = createApi({
   reducerPath: 'RtkqExecutionWs',
   baseQuery: fakeBaseQuery<CustomerErrorType>(),

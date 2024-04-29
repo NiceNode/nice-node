@@ -1,14 +1,14 @@
+import { createWriteStream } from 'node:fs';
+import { chmod } from 'node:fs/promises';
 import path from 'node:path';
-import { pipeline, Transform } from 'node:stream';
+import { Transform, pipeline } from 'node:stream';
 import { promisify } from 'node:util';
-import { createWriteStream } from 'fs';
-import { chmod } from 'fs/promises';
 import { throttle } from 'throttle-debounce';
 
 import { doesFileOrDirExist } from './files';
+import { httpGet } from './httpReq';
 import logger from './logger';
 import { parseFileNameFromUrl } from './util/parseFileNameFromUrl';
-import { httpGet } from './httpReq';
 
 const streamPipeline = promisify(pipeline);
 
@@ -51,7 +51,7 @@ export const downloadFile = async (
       );
       let totalBytes = 0;
       if (response.headers['content-length']) {
-        totalBytes = parseInt(response.headers['content-length'], 10);
+        totalBytes = Number.parseInt(response.headers['content-length'], 10);
       }
       const fileWriteStream = createWriteStream(fileOutPath);
 

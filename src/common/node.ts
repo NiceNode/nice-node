@@ -1,7 +1,6 @@
-/* eslint-disable max-classes-per-file */
 import { v4 as uuidv4 } from 'uuid';
-import { ConfigValuesMap } from './nodeConfig';
-import {
+import type { ConfigValuesMap } from './nodeConfig';
+import type {
   ExecutionTypes,
   NodePackageSpecification,
   NodeSpecification,
@@ -257,6 +256,14 @@ export const getImageTag = (node: Node): string => {
   } else if (defaultImageTag) {
     // defaultImageTag is set in node.spec.execution
     imageTag = defaultImageTag;
+  }
+  // temp fix: see https://github.com/ledgerwatch/erigon/issues/10023
+  if (imageName.includes('erigon')) {
+    let archPostfix = '-arm64';
+    if (process.arch === 'x64') {
+      archPostfix = '-amd64';
+    }
+    imageTag = imageTag + archPostfix;
   }
   return imageTag;
 };

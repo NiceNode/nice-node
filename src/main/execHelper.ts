@@ -3,7 +3,7 @@ import { exec } from 'node:child_process';
 import logger from './logger';
 // import iconIcns from '../../assets/icon.icns';
 
-const sudo = require('@vscode/sudo-prompt');
+import sudo from '@vscode/sudo-prompt';
 
 const PROCESS_CWD = process.cwd();
 export const execAwait = (

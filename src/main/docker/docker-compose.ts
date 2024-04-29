@@ -1,5 +1,5 @@
-import logger from '../logger';
 import { execAwait } from '../execHelper';
+import logger from '../logger';
 
 const VERSION_COMMAND = 'docker-compose --version';
 

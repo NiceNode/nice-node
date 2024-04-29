@@ -1,9 +1,10 @@
-import { ConfigValue } from 'common/nodeConfig';
-import Node, { NodeConfig } from '../common/node';
+import type Node from '../common/node';
+import type { NodeConfig } from '../common/node';
+import type { ConfigValue } from '../common/nodeConfig';
+import { NOTIFICATIONS } from './consts/notifications';
 import { httpGet } from './httpReq';
 import { getNodes, getSetPortHasChanged, getNode } from './state/nodes';
 import { addNotification } from './state/notifications';
-import { NOTIFICATIONS } from './consts/notifications';
 import { getNodePackageByServiceNodeId } from './state/nodePackages';
 
 export const getPodmanPortsForNode = (
@@ -53,7 +54,7 @@ export const getPodmanPorts = (): {
   let p2pPorts = [] as ConfigValue[];
   let otherPorts = [] as ConfigValue[];
 
-  nodes.forEach((node) => {
+  nodes.forEach((node: any) => {
     const { p2pPorts: nodeP2pPorts, otherPorts: nodeOtherPorts } =
       getPodmanPortsForNode(node);
     p2pPorts = [...p2pPorts, ...nodeP2pPorts];
@@ -125,11 +126,11 @@ export const assignPortsToNode = (node: Node): Node => {
     }
 
     // Use current port, or default if not initialized, converted to a number
-    let assignedPort = parseInt((currentPort || defaultPort) as string, 10);
+    let assignedPort = Number.parseInt((currentPort || defaultPort) as string, 10);
 
     // Find next available port if the current/default one is in use
     if (usedPorts.includes(assignedPort.toString())) {
-      assignedPort = parseInt(
+      assignedPort = Number.parseInt(
         findNextAvailablePort(usedPorts, assignedPort),
         10,
       );
@@ -218,7 +219,7 @@ export const checkPorts = async (
   return new Promise((resolve, reject) => {
     let data = '';
 
-    response.on('data', (chunk) => {
+    response.on('data', (chunk: string) => {
       data += chunk;
     });
 

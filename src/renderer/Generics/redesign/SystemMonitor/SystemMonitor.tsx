@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import si from 'systeminformation';
+import type si from 'systeminformation';
 
 import electron from '../../../electronGlobal';
-import { LabelValuesSectionProps } from '../LabelValues/LabelValuesSection';
 import LabelValues from '../LabelValues/LabelValues';
+import type { LabelValuesSectionProps } from '../LabelValues/LabelValuesSection';
 
 /**
  * Primary UI component for user interaction

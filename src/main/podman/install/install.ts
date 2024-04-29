@@ -1,16 +1,15 @@
 import logger from '../../logger';
 import * as platform from '../../platform';
+import { runCommand } from '../podman';
+import installOnLinux from './installOnLinux';
 import installOnMac from './installOnMac';
 import installOnWindows from './installOnWindows';
-import installOnLinux from './installOnLinux';
-import { runCommand } from '../podman';
 
-export const PODMAN_LATEST_VERSION = '5.0.0';
+export const PODMAN_LATEST_VERSION = '5.0.2';
 export const PODMAN_MIN_VERSION = '4.6.0';
 
-// eslint-disable-next-line
 const installPodman = async (): Promise<any> => {
-  logger.info(`Starting podman install...`);
+  logger.info('Starting podman install...');
 
   let result;
   if (platform.isMac()) {
@@ -38,7 +37,7 @@ export const getInstalledPodmanVersion = async () => {
     const commandOutput = await runCommand('--version');
     const matchedVersion = commandOutput.match(versionRegex);
 
-    if (matchedVersion && matchedVersion[0]) {
+    if (matchedVersion?.[0]) {
       logger.info('getInstalledPodmanVersion: ', matchedVersion[0]);
       // ex: 4.7.1
       version = matchedVersion[0];

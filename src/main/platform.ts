@@ -1,4 +1,4 @@
-import { platform } from 'process';
+import { platform } from 'node:process';
 
 export const isMac = () => {
   return platform === 'darwin';

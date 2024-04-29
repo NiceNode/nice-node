@@ -1,25 +1,25 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Button from '../../Generics/redesign/Button/Button';
+import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import { Menu } from '../../Generics/redesign/Menu/Menu';
 import { MenuItem } from '../../Generics/redesign/MenuItem/MenuItem';
-import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
+import {
+  NotificationItem,
+  type NotificationItemProps,
+} from '../../Generics/redesign/NotificationItem/NotificationItem';
 import { useAppDispatch } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
 import {
-  NotificationItem,
-  NotificationItemProps,
-} from '../../Generics/redesign/NotificationItem/NotificationItem';
-import Button from '../../Generics/redesign/Button/Button';
-import {
-  headerContainer,
-  spacer,
-  titleStyle,
-  emptyContainer,
-  popupContainer,
-  menuButtonContainer,
   contentContainer,
-  titleFont,
   descriptionFont,
+  emptyContainer,
+  headerContainer,
+  menuButtonContainer,
+  popupContainer,
+  spacer,
+  titleFont,
+  titleStyle,
 } from './notifications.css';
 
 export type NotificationsType = {
@@ -51,7 +51,11 @@ const Notifications = (props: NotificationsType) => {
         <div>
           {data.map((item) => {
             return (
-              <NotificationItem {...item} onClick={onNotificationItemClick} />
+              <NotificationItem
+                key={item.key}
+                {...item}
+                onClick={onNotificationItemClick}
+              />
             );
           })}
         </div>
@@ -90,8 +94,7 @@ const Notifications = (props: NotificationsType) => {
           />
           {isSettingsDisplayed && (
             // tabindex hack to keep focus, and allow blur behavior
-            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-            <div className={popupContainer} tabIndex={0}>
+            <div className={popupContainer}>
               <Menu width={208}>
                 <MenuItem
                   iconId="checkdouble"

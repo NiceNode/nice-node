@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FailSystemRequirementsData } from '../../../main/minSystemRequirement';
-import electron from '../../electronGlobal';
+import type { FailSystemRequirementsData } from '../../../main/minSystemRequirement';
 import { Checklist } from '../../Generics/redesign/Checklist/Checklist';
-import { ChecklistItemProps } from '../../Generics/redesign/Checklist/ChecklistItem';
+import type { ChecklistItemProps } from '../../Generics/redesign/Checklist/ChecklistItem';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
+import electron from '../../electronGlobal';
 import { makeCheckList } from '../FailSystemRequirements/requirementsChecklistUtil';
 
 const FailSystemRequirementsModal = ({

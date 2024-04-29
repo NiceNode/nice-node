@@ -1,9 +1,9 @@
 import { CronJob } from 'cron';
-import logger from './logger';
+import type { NodeId, NodeStatus, UserNodePackages } from '../common/node';
 import { reportEvent } from './events';
+import logger from './logger';
 import { getUserNodePackagesWithNodes } from './state/nodePackages';
 import store from './state/store';
-import { NodeId, NodeStatus, UserNodePackages } from '../common/node';
 
 const CRON_ONCE_A_DAY = '0 0 * * *';
 // const CRON_ONCE_A_DAY = '* * * * *'; // one minute for testing

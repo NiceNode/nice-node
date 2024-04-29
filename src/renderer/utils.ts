@@ -1,7 +1,7 @@
-import { NodeSpecification } from '../common/nodeSpec';
-import { NodeLibrary } from '../main/state/nodeLibrary';
+import type { NodeSpecification } from '../common/nodeSpec';
+import type { NodeLibrary } from '../main/state/nodeLibrary';
 
-export const hexToDecimal = (hex: string) => parseInt(hex, 16);
+export const hexToDecimal = (hex: string) => Number.parseInt(hex, 16);
 
 export const safeNumber = (number: number) => {
   if (Number.isNaN(number) || typeof number !== 'number') {

@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Select from '../Generics/redesign/Select/Select';
 
 const StorybookLanguageSelect = () => {
@@ -19,6 +19,7 @@ const StorybookLanguageSelect = () => {
       value={sLang}
       options={[
         { label: 'English', value: 'en' },
+        { label: 'Czech', value: 'cs' },
         { label: 'Chinese', value: 'zh' },
         { label: 'Español', value: 'es' },
         { label: 'French', value: 'fr' },

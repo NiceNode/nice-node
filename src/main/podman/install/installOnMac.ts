@@ -1,22 +1,21 @@
-import { getNNDirPath } from '../../files';
 import * as arch from '../../arch';
-import logger from '../../logger';
-import { execAwait } from '../../execHelper';
 import { downloadFile } from '../../downloadFile';
+import { reportEvent } from '../../events';
+import { execAwait } from '../../execHelper';
+import { getNNDirPath } from '../../files';
+import logger from '../../logger';
 import {
   sendMessageOnDownloadProgress,
   sendMessageOnGrantPermissionToInstallPodman,
 } from '../messageFrontEnd';
 import { startOnMac } from '../start';
-import { reportEvent } from '../../events';
 
 /**
  * Download podman-arch-verson.pkg, install podman, start podman
  * @param version example: 4.4.3 (without a v prefix)
  */
-// eslint-disable-next-line
 const installOnMac = async (version: string): Promise<any> => {
-  logger.info(`Starting podman install...`);
+  logger.info('Starting podman install...');
   try {
     let downloadUrl;
     if (arch.isArmAnd64bit()) {
@@ -34,32 +33,30 @@ const installOnMac = async (version: string): Promise<any> => {
       getNNDirPath(),
       sendMessageOnDownloadProgress,
     );
-    let stdout;
-    let stderr;
     // todo: wrap
-    // eslint-disable-next-line prefer-const
     try {
-      ({ stdout, stderr } = await execAwait(
+      const { stdout, stderr } = await execAwait(
         `installer -pkg "${podmanPkgFilePath}" -target / -verbose`,
         { log: true, sudo: true },
-      ));
+      );
       sendMessageOnGrantPermissionToInstallPodman(true);
+      console.log('sudo installer -pkg stdout, stderr', stdout, stderr);
     } catch (installErr) {
       // if user does not enter their password...
       //  installErr = "User did not grant permission"
       sendMessageOnGrantPermissionToInstallPodman(false);
       return {
-        error: `Unable to install Podman. User denied granting NiceNode permission.`,
+        error:
+          'Unable to install Podman. User denied granting NiceNode permission.',
       };
     }
-    console.log('sudo installer -pkg stdout, stderr', stdout, stderr);
     // start podman app
     await startOnMac();
 
     // todoo: delete pkg
-    ({ stdout, stderr } = await execAwait(`rm "${podmanPkgFilePath}"`, {
+    const { stdout, stderr } = await execAwait(`rm "${podmanPkgFilePath}"`, {
       log: true,
-    }));
+    });
     console.log('rm pkg file stdout, stderr', stdout, stderr);
 
     return true;

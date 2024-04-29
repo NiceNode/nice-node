@@ -1,33 +1,34 @@
-import { spawn, SpawnOptions, ChildProcess } from 'node:child_process';
+import {
+  type ChildProcess,
+  type SpawnOptions,
+  spawn,
+} from 'node:child_process';
 import * as readline from 'node:readline';
 import { assignPortsToNode } from '../ports';
+import type Node from '../../common/node';
+import { NodeStatus, getContainerName, getImageTag } from '../../common/node';
+import type { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
 import logger from '../logger';
-import Node, {
-  NodeStatus,
-  getContainerName,
-  getImageTag,
-} from '../../common/node';
-import { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
 import {
   setDockerNodeStatus as setPodmanNodeStatus,
   updateNode as storeUpdateNode,
 } from '../state/nodes';
 
 import {
-  ConfigTranslationMap,
-  ConfigValuesMap,
+  type ConfigTranslationMap,
+  type ConfigValuesMap,
   buildCliConfig,
 } from '../../common/nodeConfig';
 import { send } from '../messenger';
-import * as metricsPolling from './metricsPolling';
+import { restartNodes } from '../nodePackageManager';
+import { isLinux } from '../platform';
 import { killChildProcess } from '../processExit';
 import { parsePodmanLogMetadata } from '../util/nodeLogUtils';
+import { getNiceNodeMachine } from './machine';
+import * as metricsPolling from './metricsPolling';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
 import { getPodmanEnvWithPath } from './podman-env-path';
-import { getNiceNodeMachine } from './machine';
 import startPodman, { onStartUp } from './start';
-import { isLinux } from '../platform';
-import { restartNodes } from '../nodePackageManager';
 
 let podmanWatchProcess: ChildProcess;
 
@@ -133,14 +134,14 @@ const watchPodmanEvents = async () => {
   });
 
   podmanWatchProcess.stderr?.on('data', (data) => {
-    logger.error(`podmanWatchProcess::stderr::error:: `, data);
+    logger.error('podmanWatchProcess::stderr::error:: ', data);
   });
 
   podmanWatchProcess.on('error', (data) => {
-    logger.error(`podmanWatchProcess::on::error:: `, data);
+    logger.error('podmanWatchProcess::on::error:: ', data);
   });
   podmanWatchProcess.on('disconnect', () => {
-    logger.info(`podmanWatchProcess::disconnect::`);
+    logger.info('podmanWatchProcess::disconnect::');
   });
   // todo: restart?
   podmanWatchProcess.on('close', (code) => {
@@ -178,7 +179,7 @@ const watchPodmanEvents = async () => {
 //   }
 // ]
 export const getRunningContainers = async () => {
-  const data = await runCommand(`ps --no-trunc`);
+  const data = await runCommand('ps --no-trunc');
   // console.log('podman ps -s data: ', data);
   // let containers = [];
   // if (data?.containerList && Array.isArray(data.containerList)) {
@@ -194,7 +195,7 @@ export const getContainerDetails = async (containerIds: string[]) => {
   // console.log('getContainerDetails containerIds: ', data);
   // let details;
   // if (data?.object) {
-  //   // eslint-disable-next-line prefer-destructuring
+  //  prefer-destructuring
   //   details = data?.object;
   // }
   return JSON.parse(data);
@@ -277,10 +278,10 @@ export const sendLogsToUI = (node: Node) => {
   }
 
   sendLogsToUIProc.on('error', (data) => {
-    logger.error(`podman.sendLogsToUI::error:: `, data);
+    logger.error('podman.sendLogsToUI::error:: ', data);
   });
   sendLogsToUIProc.on('disconnect', () => {
-    logger.info(`podman.sendLogsToUI::disconnect::`);
+    logger.info('podman.sendLogsToUI::disconnect::');
   });
   // todo: restart?
   sendLogsToUIProc.on('close', (code) => {
@@ -424,10 +425,8 @@ const createPodmanPortInput = (
 
   // Handle p2p ports
   if (configP2pPortsUdp || p2pPortsUdp || configP2pPortsTcp || p2pPortsTcp) {
-    const p2pUdpValue =
-      configP2pPortsUdp || (p2pPortsUdp && p2pPortsUdp.defaultValue);
-    const p2pTcpValue =
-      configP2pPortsTcp || (p2pPortsTcp && p2pPortsTcp.defaultValue);
+    const p2pUdpValue = configP2pPortsUdp || p2pPortsUdp?.defaultValue;
+    const p2pTcpValue = configP2pPortsTcp || p2pPortsTcp?.defaultValue;
 
     if (p2pTcpValue) {
       result.push(`-p ${p2pTcpValue}:${p2pTcpValue}/tcp`);
@@ -436,7 +435,7 @@ const createPodmanPortInput = (
       result.push(`-p ${p2pUdpValue}:${p2pUdpValue}/udp`);
     }
   } else if (configP2pPorts || p2pPorts) {
-    const p2pValue = configP2pPorts || (p2pPorts && p2pPorts.defaultValue);
+    const p2pValue = configP2pPorts || p2pPorts?.defaultValue;
     if (p2pValue) {
       result.push(`-p ${p2pValue}:${p2pValue}/tcp`);
       result.push(`-p ${p2pValue}:${p2pValue}/udp`);
@@ -444,28 +443,25 @@ const createPodmanPortInput = (
   }
 
   // Handle http port
-  const restPortValue = configHttpPort || (httpPort && httpPort.defaultValue);
+  const restPortValue = configHttpPort || httpPort?.defaultValue;
   if (restPortValue) {
     result.push(`-p ${restPortValue}:${restPortValue}`);
   }
 
   // Handle ws port if it exists
-  const wsPortValue =
-    configWsPort || (webSocketsPort && webSocketsPort.defaultValue);
+  const wsPortValue = configWsPort || webSocketsPort?.defaultValue;
   if (wsPortValue) {
     result.push(`-p ${wsPortValue}:${wsPortValue}`);
   }
 
   // Handle engine port if it exists
-  const enginePortValue =
-    configEnginePort || (enginePort && enginePort.defaultValue);
+  const enginePortValue = configEnginePort || enginePort?.defaultValue;
   if (enginePortValue) {
     result.push(`-p ${enginePortValue}:${enginePortValue}`);
   }
 
   // Handle quic port if it exists (only lighthouse)
-  const quicPortValue =
-    configQuicPortUdp || (quicPortUdp && quicPortUdp.defaultValue);
+  const quicPortValue = configQuicPortUdp || quicPortUdp?.defaultValue;
   if (quicPortValue) {
     result.push(`-p ${quicPortValue}:${quicPortValue}/udp`);
   }
@@ -637,7 +633,7 @@ export const createInitCommand = (node: Node): string => {
   // -d is not used here as this should be short-lived and we want to be blocked
   //  so that we know when to start the node
   const containerName = getContainerName(node);
-  const podmanCommand = `run -q --user 0 --name ${containerName} ${finalPodmanInput} ${imageNameWithTag} ${nodeInput}`;
+  const podmanCommand = `run -q --name ${containerName} ${finalPodmanInput} ${imageNameWithTag} ${nodeInput}`;
   logger.info(`createInitCommand: podman run command ${podmanCommand}`);
   return podmanCommand;
 };
@@ -661,9 +657,15 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
   node.status = NodeStatus.updating;
   storeUpdateNode(node);
 
+  const imageTag = getImageTag(node);
+  // if imageTage is empty, use then imageTag is already included in the imageName (backwards compatability)
+  // We must include the version tag for container registries without 'latest' tag
+  const imageNameWithTag =
+    imageTag !== '' ? `${imageName}:${imageTag}` : imageName;
+
   // todo: only set as updating if there is a new image, otherwise updating
   // will "flash" to the user quickly here
-  await runCommand(`pull ${imageName}`);
+  await runCommand(`pull ${imageNameWithTag}`);
 
   // Set node as starting here
   node.status = NodeStatus.starting;
@@ -692,7 +694,7 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
     } catch (err) {
       logger.error(`Error: Init node command error: ${err}`);
     }
-    logger.info(`Removing container used for init node command`);
+    logger.info('Removing container used for init node command');
     // (stop &) remove possible previous podman container for this node
     try {
       await removePodmanNode(node);

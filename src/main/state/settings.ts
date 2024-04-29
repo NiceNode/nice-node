@@ -4,9 +4,9 @@ import { sendMessageOnThemeChange } from '../docker/messageFrontEnd';
 import logger from '../logger';
 import { getPlatform, isLinux } from '../platform';
 
-import store from './store';
-import { setOpenAtLoginLinux } from '../util/linuxAutostartFile';
 import { setAllowPrerelease } from '../updater';
+import { setOpenAtLoginLinux } from '../util/linuxAutostartFile';
+import store from './store';
 
 // export type Settings = Record<string, string | object | boolean>;
 const SETTINGS_KEY = 'settings';
@@ -91,7 +91,11 @@ export const getSettings = (): Settings => {
 export const setLanguage = (languageCode: string) => {
   logger.info(`Setting language to ${languageCode}`);
   store.set(`${SETTINGS_KEY}.${APP_LANGUAGE_KEY}`, languageCode);
-  logger.info(`App language is ${store.get(SETTINGS_KEY, APP_LANGUAGE_KEY)}`);
+  logger.info(
+    `App language is ${JSON.stringify(
+      store.get(SETTINGS_KEY, APP_LANGUAGE_KEY),
+    )}`,
+  );
 };
 
 export const setNativeThemeSetting = (theme: ThemeSetting) => {

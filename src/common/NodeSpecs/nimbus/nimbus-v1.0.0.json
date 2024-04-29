@@ -12,8 +12,8 @@
         "http": "Enabled",
         "httpPort": "5052",
         "httpHostAddress": "0.0.0.0",
-        "httpCorsDomains": "\"http://localhost\"",
-        "executionEndpoint": "\"http://host.containers.internal\"",
+        "httpCorsDomains": "http://localhost",
+        "executionEndpoint": "http://host.containers.internal",
         "network": "Mainnet"
       },
       "docker": {
@@ -128,6 +128,7 @@
     "httpCorsDomains": {
       "displayName": "HTTP-RPC CORS domains",
       "cliConfigPrefix": "--rest-allow-origin=",
+      "defaultValue": "http://localhost",
       "uiControl": {
         "type": "text"
       },
@@ -145,7 +146,7 @@
     "executionEndpoint": {
       "displayName": "Local execution Engine RPC-JSON API URL",
       "cliConfigPrefix": "--web3-url=",
-      "defaultValue": "\"http://host.containers.internal:8551\"",
+      "defaultValue": "http://host.containers.internal:8551",
       "uiControl": {
         "type": "text"
       },

@@ -1,8 +1,8 @@
-import { Meta } from '@storybook/react';
-import { ConfigValuesMap } from '../../common/nodeConfig';
+import type { Meta } from '@storybook/react';
+import type { ConfigValuesMap } from '../../common/nodeConfig';
 
 import DynamicSettings, {
-  CategoryConfig,
+  type CategoryConfig,
 } from '../../renderer/Generics/redesign/DynamicSettings/DynamicSettings';
 
 export default {

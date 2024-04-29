@@ -1,9 +1,8 @@
+import type { UserNodePackages, UserNodes } from '../common/node';
 import { CHANNELS } from '../main/messenger';
-import { UserNodePackages, UserNodes } from '../common/node';
 import electron from './electronGlobal';
 import { updateUserNodePackages, updateUserNodes } from './state/node';
 
-// eslint-disable-next-line
 export const initialize = async (dispatch: any) => {
   const initUserNodes = await electron.getUserNodes();
   console.log('Fetching initial userNodes');

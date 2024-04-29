@@ -1,6 +1,5 @@
-/* eslint-disable import/no-cycle */
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Settings } from '../../main/state/settings';
+import type { Settings } from '../../main/state/settings';
 import electron from '../electronGlobal';
 
 type CustomerErrorType = {
@@ -9,7 +8,6 @@ type CustomerErrorType = {
 
 // Define a service using a base URL and expected endpoints
 // lots of issues in RTKQ github complaining about typescript breaking changes
-// eslint-disable-next-line
 export const RtkqNotificationsService: any = createApi({
   reducerPath: 'RtkqNotificationsService',
   baseQuery: fakeBaseQuery<CustomerErrorType>(),

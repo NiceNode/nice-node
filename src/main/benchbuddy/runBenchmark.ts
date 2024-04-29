@@ -1,6 +1,6 @@
 import logger from '../logger';
 import { runCommand } from '../podman/podman';
-import { Benchmark, addBenchmark } from '../state/benchmark';
+import { type Benchmark, addBenchmark } from '../state/benchmark';
 
 export const runBenchmark = async () => {
   // run (attached) with json output

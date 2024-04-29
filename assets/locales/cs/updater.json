@@ -1,0 +1,10 @@
+{
+  "UpdateAvailable": "Aktualizace pro NiceNode k dispozici",
+  "DownloadingUpdate": "Stahování NiceNode aktualizace...",
+  "UpdateNiceNode": "Chcete nyní aktualizovat NiceNode? Po stažení aktualizace se NiceNode restartuje. Aktualizovat na verzi",
+  "Yes": "Ano",
+  "No": "Ne",
+  "NoUpdateAvailable": "Nejsou dostupné žádné aktualizace",
+  "ErrorUpdating": "Omlouváme se, došlo k chybě při aktualizaci NiceNode",
+  "UnableToInstallUpdate": "Není možné nainstalovat novou verzi NiceNode. Můžete zkusit stáhnout novou verzi manuálně na {{downloadLink}}"
+}

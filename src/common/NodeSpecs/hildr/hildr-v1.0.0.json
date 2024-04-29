@@ -9,22 +9,24 @@
       "defaultConfig": {
         "l1": "",
         "l1WebSocketUrl": "",
+        "l1BeaconUrl": "",
         "l2RpcUrl": "http://host.containers.internal:8547",
-        "l2EngineUrl" : "http://host.containers.internal:8553",
-        "httpPort": "8549"
+        "l2EngineUrl": "http://host.containers.internal:8553",
+        "httpPort": "8549",
+        "logLevel": "Debug"
       },
       "docker": {
         "containerVolumePath": "/data",
         "raw": " ",
-        "forcedRawNodeInput": "--sync-mode full --jwt-file /data/jwtsecret"
+        "forcedRawNodeInput": " --sync-mode full --jwt-file /data/jwtsecret"
       }
     },
     "imageName": "ghcr.io/optimism-java/hildr",
     "defaultImageTag": "latest-native"
-
   },
   "category": "L2/ConsensusClient",
   "minorityClient": true,
+  "nodeReleasePhase": "beta",
   "rpcTranslation": "eth-l2-consensus",
   "systemRequirements": {
     "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
@@ -54,34 +56,52 @@
         "type": "select/single",
         "controlTranslations": [
           {
-            "value": "Mainnet",
-            "config": " --network optimism"
+            "value": "Optimism Mainnet",
+            "config": ""
           },
           {
-            "value": "Sepolia",
-            "config": " --network optimism-sepolia"
+            "value": "Optimism Sepolia",
+            "config": ""
+          },
+          {
+            "value": "Base Mainnet",
+            "config": ""
+          },
+          {
+            "value": "Base Sepolia",
+            "config": ""
           }
         ]
       }
     },
-    "l1TrustRpc": {
-      "displayName": "Trust the L1 RPC connection",
+    "chainId": {
+      "displayName": "Chain ID (Network)",
+      "cliConfigPrefix": "--network ",
+      "hideFromUserAfterStart": true,
       "uiControl": {
         "type": "select/single",
         "controlTranslations": [
           {
-            "value": "Enabled",
-            "config": "--l1.trustrpc"
+            "value": "10",
+            "config": "optimism"
           },
           {
-            "value": "Disabled"
+            "value": "11155420",
+            "config": "optimism-sepolia"
+          },
+          {
+            "value": "8453",
+            "config": "base"
+          },
+          {
+            "value": "84532",
+            "config": "base-sepolia"
           }
         ]
-      },
-      "defaultValue": "Enabled"
+      }
     },
     "l1": {
-      "displayName": "Ethereum RPC Endpoint (local node or provider)",
+      "displayName": "Ethereum *Archival* RPC Endpoint",
       "cliConfigPrefix": "--l1-rpc-url ",
       "uiControl": {
         "type": "text"
@@ -90,8 +110,17 @@
       "defaultValue": ""
     },
     "l1WebSocketUrl": {
-      "displayName": "Ethereum WebSocket Endpoint (local node or provider)",
+      "displayName": "Ethereum *Archival* WebSocket Endpoint",
       "cliConfigPrefix": "--l1-ws-rpc-url ",
+      "uiControl": {
+        "type": "text"
+      },
+      "addNodeFlow": "required",
+      "defaultValue": ""
+    },
+    "l1BeaconUrl": {
+      "displayName": "Ethereum Beacon RPC Endpoint",
+      "cliConfigPrefix": "--l1-beacon-url ",
       "uiControl": {
         "type": "text"
       },
@@ -126,6 +155,36 @@
         "type": "text"
       },
       "documentation": "https://geth.ethereum.org/docs/rpc/server#http-server"
+    },
+    "logLevel": {
+      "displayName": "Log level",
+      "cliConfigPrefix": "--log-level ",
+      "defaultValue": "Info",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Info",
+            "config": "INFO"
+          },
+          {
+            "value": "Debug",
+            "config": "DEBUG"
+          },
+          {
+            "value": "Warn",
+            "config": "WARN"
+          },
+          {
+            "value": "Error",
+            "config": "ERROR"
+          },
+          {
+            "value": "Trace",
+            "config": "TRACE"
+          }
+        ]
+      }
     }
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png",

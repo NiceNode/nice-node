@@ -1,14 +1,15 @@
-import { CHANNELS, send } from '../messenger';
-import Node, {
+import type Node from '../../common/node';
+import {
+  type NodeId,
+  type NodePackage,
+  type NodeStatus,
+  type UserNodePackages,
   isDockerNode,
-  NodeId,
-  NodePackage,
-  NodeStatus,
-  UserNodePackages,
 } from '../../common/node';
-import store from './store';
-import { ConfigValuesMap } from '../../common/nodeConfig';
+import type { ConfigValuesMap } from '../../common/nodeConfig';
+import { CHANNELS, send } from '../messenger';
 import { getUserNodes } from './nodes';
+import store from './store';
 
 export const USER_NODE_PACKAGES_KEY = 'userNodePackages';
 const NODES_KEY = 'nodes';
@@ -90,7 +91,7 @@ export const addNodePackage = (newNode: NodePackage) => {
   const { nodes, nodeIds } = userNodePackages;
   if (nodes[newNode.id]) {
     // 2 nodes have matching uuids, you won the lottery
-    throw new Error(`Unable to add the node. Please try again.`);
+    throw new Error('Unable to add the node. Please try again.');
   }
   nodes[newNode.id] = newNode;
   nodeIds.push(newNode.id);

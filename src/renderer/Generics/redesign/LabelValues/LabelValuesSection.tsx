@@ -1,10 +1,10 @@
 import React from 'react';
 import ExternalLink from '../Link/ExternalLink';
 import {
-  sectionContainer,
   lineContainer,
   lineKeyText,
   lineValueText,
+  sectionContainer,
   sectionHeaderContainer,
   sectionHeaderText,
 } from './labelValuesSection.css';
@@ -50,15 +50,14 @@ const LabelValuesSection = ({
       <div className={sectionHeaderContainer}>
         <div className={sectionHeaderText}>{sectionTitle}</div>
       </div>
-      {items &&
-        items.map((item) => (
-          <React.Fragment key={item.label + item.value}>
-            <div className={lineContainer}>
-              <div className={lineKeyText}>{item.label}</div>
-              {renderValue(item)}
-            </div>
-          </React.Fragment>
-        ))}
+      {items?.map((item) => (
+        <React.Fragment key={item.label + item.value}>
+          <div className={lineContainer}>
+            <div className={lineKeyText}>{item.label}</div>
+            {renderValue(item)}
+          </div>
+        </React.Fragment>
+      ))}
     </div>
   );
 };

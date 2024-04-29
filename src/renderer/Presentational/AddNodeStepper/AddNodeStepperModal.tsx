@@ -2,21 +2,21 @@
 // Just make sure to always render each child so that children component state isn't cleard
 import { useCallback, useEffect, useState } from 'react';
 
-import { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
-import { ModalConfig } from '../ModalManager/modalUtils';
-import { componentContainer, container } from './addNodeStepper.css';
-import NodeRequirements from '../NodeRequirements/NodeRequirements';
-import { SystemRequirements } from '../../../common/systemRequirements';
-import { mergeSystemRequirements } from './mergeNodeRequirements';
-import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
-import AddNode, { AddNodeValues } from '../AddNode/AddNode';
-import AddNodeConfiguration, {
-  AddNodeConfigurationValues,
-} from '../AddNodeConfiguration/AddNodeConfiguration';
-import {
+import type { SystemRequirements } from '../../../common/systemRequirements';
+import type {
   NodeLibrary,
   NodePackageLibrary,
 } from '../../../main/state/nodeLibrary';
+import type { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
+import AddNode, { type AddNodeValues } from '../AddNode/AddNode';
+import AddNodeConfiguration, {
+  type AddNodeConfigurationValues,
+} from '../AddNodeConfiguration/AddNodeConfiguration';
+import type { ModalConfig } from '../ModalManager/modalUtils';
+import NodeRequirements from '../NodeRequirements/NodeRequirements';
+import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
+import { componentContainer, container } from './addNodeStepper.css';
+import { mergeSystemRequirements } from './mergeNodeRequirements';
 
 export interface AddNodeStepperModalProps {
   modal?: boolean;
@@ -67,7 +67,7 @@ const AddNodeStepperModal = ({
     const { clientSelections, storageLocation } = modalConfig;
     if (nodeLibrary && clientSelections && storageLocation) {
       const reqs: SystemRequirements[] = [];
-      // eslint-disable-next-line
+
       for (const [serviceId, selectOption] of Object.entries(
         clientSelections,
       )) {
@@ -111,7 +111,6 @@ const AddNodeStepperModal = ({
       console.log('AddNodeStepperModal setNode: config', config);
       setNodeConfig(config);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
@@ -122,7 +121,6 @@ const AddNodeStepperModal = ({
       setPodmanInstallDone(true);
       disableSaveButton(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getStepScreen = () => {

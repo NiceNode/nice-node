@@ -1,8 +1,8 @@
-import store from './store';
-import {
+import type {
   NodePackageSpecification,
   NodeSpecification,
 } from '../../common/nodeSpec';
+import store from './store';
 
 type NodeSpecMap = Record<string, NodeSpecification>;
 export type NodeLibrary = NodeSpecMap;

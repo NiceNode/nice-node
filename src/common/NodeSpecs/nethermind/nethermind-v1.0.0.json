@@ -8,7 +8,7 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "webSockets": "Disabled",
+        "webSockets": "Enabled",
         "syncMode": "snap",
         "webSocketsPort": "8546",
         "enginePort": "8551"
@@ -87,7 +87,7 @@
           }
         ]
       },
-      "documentation" : "https://docs.nethermind.io/fundamentals/configuration#basic-options"
+      "documentation": "https://docs.nethermind.io/fundamentals/configuration#basic-options"
     },
     "chainId": {
       "displayName": "Chain ID (Network)",

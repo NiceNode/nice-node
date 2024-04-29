@@ -1,5 +1,19 @@
 /// <reference types="wdio-electron-service" />
 import type { Options } from '@wdio/types';
+import path from 'node:path';
+import process from 'node:process';
+
+console.log("process.arch: ", process.arch);
+const arch = process.arch || 'x64';
+
+let appBinaryPath;
+if (process.platform === 'darwin') {
+  appBinaryPath = `./out/NiceNode-darwin-${arch}/NiceNode.app/Contents/MacOS/nice-node`;
+} else if(process.platform === 'linux') {
+  appBinaryPath = `./out/NiceNode-linux-${arch}/nice-node`
+} else {
+  appBinaryPath = path.join('out', `NiceNode-win32-${arch}`, 'nice-node.exe')
+}
 
 export const config: Options.Testrunner = {
   //
@@ -8,13 +22,6 @@ export const config: Options.Testrunner = {
   // ====================
   // WebdriverIO supports running e2e tests as well as unit and component tests.
   runner: 'local',
-  autoCompileOpts: {
-    autoCompile: true,
-    tsNodeOpts: {
-      project: './test/tsconfig.json',
-      transpileOnly: true,
-    },
-  },
 
   //
   // ==================
@@ -71,10 +78,7 @@ export const config: Options.Testrunner = {
         // See https://github.com/webdriverio-community/wdio-electron-service#appargs
         // for available Electron and Chrome flags
         appArgs: ['--lang=EN'],
-        appBinaryPath:
-          process.platform === 'linux'
-            ? './release/build/linux-unpacked/nice-node'
-            : undefined,
+        appBinaryPath: appBinaryPath
       },
     },
   ],

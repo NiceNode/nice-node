@@ -1,150 +1,124 @@
 {
   "name": "nice-node",
-  "version": "5.0.0-alpha",
+  "version": "6.0.0-alpha",
   "description": "Run a node at home, the easy way.",
   "homepage": "https://nicenode.xyz",
   "productName": "NiceNode",
-  "main": "./src/main/main.ts",
+  "type": "module",
+  "main": ".vite/build/main.js",
   "scripts": {
-    "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
-    "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
-    "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
-    "docs:nodeSpec": "typedoc --plugin typedoc-plugin-markdown --name \"Node Spec examples\" --readme src/common/index.md --entryDocument index.md --out docs src/common/*",
-    "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
-    "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
-    "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
-    "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts",
-    "start-no-reload": "ts-node ./.erb/scripts/check-port-in-use.js && NO_RELOAD=true npm run start:renderer",
-    "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
-    "start-auto-start-node": "ts-node ./.erb/scripts/check-port-in-use.js && cross-env NN_AUTOSTART_NODE=true npm run start:renderer",
-    "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
-    "start:main-no-reload": "cross-env NODE_ENV=development electron -r ts-node/register/transpile-only ./src/main/main.ts",
-    "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
-    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
-    "test": "jest",
-    "test-precommit": "jest --testPathIgnorePatterns geth release/app/dist",
-    "test-dev": "jest  --watch --detectOpenHandles --verbose",
-    "prepare": "husky install",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "biome lint ./src",
+    "safeFix": "biome check --apply ./src",
+    "unsafeFix": "biome check --apply-unsafe ./src",
+    "test": "vitest --run",
+    "testWatch": "vitest --watch",
+    "coverage": "vitest run --coverage",
+    "prepare": "husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "wdio": "cross-env NODE_ENV=test wdio run ./wdio.conf.ts"
+    "wdio": "cross-env NODE_ENV=test wdio run ./wdio.conf.ts",
+    "docs:nodeSpec": "typedoc --plugin typedoc-plugin-markdown --name \"Node Spec examples\" --readme src/common/index.md --entryDocument index.md --out docs src/common/*"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "cross-env NODE_ENV=development eslint --cache"
-    ],
-    "*.json,.{eslintrc,prettierrc}": [
-      "prettier --ignore-path .eslintignore --parser json --write"
-    ],
-    "*.{css,scss}": [
-      "prettier --ignore-path .eslintignore --single-quote --write"
-    ],
-    "*.{html,md,yml}": [
-      "prettier --ignore-path .eslintignore --single-quote --write"
-    ]
+  "devDependencies": {
+    "@biomejs/biome": "^1.7.1",
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-dmg": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
+    "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron-forge/plugin-vite": "^7.4.0",
+    "@electron-forge/publisher-github": "^7.4.0",
+    "@electron-forge/shared-types": "^7.4.0",
+    "@electron/fuses": "^1.8.0",
+    "@storybook/addon-actions": "^8.0.8",
+    "@storybook/addon-essentials": "^8.0.8",
+    "@storybook/addon-interactions": "^8.0.8",
+    "@storybook/addon-links": "^8.0.8",
+    "@storybook/manager-api": "^8.0.8",
+    "@storybook/react": "^8.0.8",
+    "@storybook/react-vite": "^8.0.8",
+    "@storybook/test": "^8.0.8",
+    "@storybook/theming": "^8.0.8",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/webdriverio": "^3.2.1",
+    "@types/du": "^1.0.3",
+    "@types/mixpanel-browser": "^2.47.3",
+    "@types/node": "20.12.7",
+    "@types/pidusage": "^2.0.5",
+    "@types/react": "^18.2.74",
+    "@types/react-dom": "^18.2.24",
+    "@types/throttle-debounce": "^5.0.0",
+    "@types/uuid": "^9.0.3",
+    "@vanilla-extract/vite-plugin": "^4.0.7",
+    "@wdio/cli": "^8.36.0",
+    "@wdio/local-runner": "^8.36.0",
+    "@wdio/mocha-framework": "^8.36.0",
+    "@wdio/spec-reporter": "^8.36.0",
+    "cross-env": "^7.0.3",
+    "electron": "^30.0.1",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-extension-installer": "^1.2.0",
+    "electron-mock-ipc": "^0.3.12",
+    "happy-dom": "^14.7.1",
+    "husky": "^9.0.11",
+    "storybook": "^8.0.8",
+    "ts-node": "^10.9.2",
+    "typedoc": "^0.25.4",
+    "typedoc-plugin-markdown": "^3.17.1",
+    "typescript": "^4.5.4",
+    "vite": "^5.2.10",
+    "vite-plugin-svgr": "^4.2.0",
+    "vitest": "^1.5.0",
+    "wdio-electron-service": "^6.4.1",
+    "wdio-wait-for": "^3.0.11"
   },
-  "build": {
-    "productName": "NiceNode",
-    "appId": "org.jgr.NiceNode",
-    "asar": true,
-    "asarUnpack": "**\\*.{node,dll}",
-    "files": [
-      "dist",
-      "node_modules",
-      "package.json"
-    ],
-    "afterSign": ".erb/scripts/notarize.js",
-    "mac": {
-      "notarize": "false",
-      "target": {
-        "target": "default",
-        "arch": [
-          "arm64",
-          "x64"
-        ]
-      },
-      "type": "distribution",
-      "hardenedRuntime": true,
-      "entitlements": "assets/entitlements.mac.plist",
-      "entitlementsInherit": "assets/entitlements.mac.plist",
-      "gatekeeperAssess": false
-    },
-    "dmg": {
-      "contents": [
-        {
-          "x": 180,
-          "y": 195
-        },
-        {
-          "x": 462,
-          "y": 195,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ],
-      "window": {
-        "width": 640,
-        "height": 432
-      },
-      "icon": "installer.icns",
-      "title": "${productName} ${version} installer"
-    },
-    "win": {
-      "target": [
-        "nsis"
-      ]
-    },
-    "linux": {
-      "target": [
-        "deb",
-        "AppImage",
-        "rpm",
-        "pacman",
-        "dir",
-        "zip"
-      ],
-      "synopsis": "Run a node at home, the easy way.",
-      "description": "By running a node you become part of a global movement to decentralize a world of information. Prevent leaking your personal data to third party nodes. Ensure access when you need it, and don't be censored. Decentralization starts with you. Voice your choice, help your peers.",
-      "category": "Network",
-      "icon": "icons",
-      "maintainer": "NiceNode <johnsgresham@skiff.com>"
-    },
-    "snap": {
-      "base": "core22",
-      "confinement": "classic",
-      "publish": {
-        "provider": "github",
-        "owner": "jgresham",
-        "repo": "nice-node"
-      }
-    },
-    "directories": {
-      "app": "release/app",
-      "buildResources": "assets",
-      "output": "release/build"
-    },
-    "extraResources": [
-      "./assets/**",
-      {
-        "from": "src/common/NodeSpecs",
-        "to": "NodeSpecs"
-      }
-    ],
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "NiceNode",
-        "repo": "nice-node"
-      }
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NiceNode/nice-node.git"
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.2.3",
+    "@sentry/electron": "^4.10.0",
+    "@vanilla-extract/css": "^1.14.2",
+    "@vscode/sudo-prompt": "^9.3.1",
+    "await-sleep": "0.0.1",
+    "check-disk-space": "^3.4.0",
+    "cron": "^3.1.4",
+    "docker-cli-js": "^2.10.0",
+    "dotenv": "^16.0.3",
+    "du": "^1.0.0",
+    "electron-log": "^5.1.2",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^8.1.0",
+    "highcharts": "^11.0.0",
+    "highcharts-react-official": "^3.2.1",
+    "i18next": "^23.11.2",
+    "i18next-browser-languagedetector": "^7.0.1",
+    "i18next-cli-language-detector": "^1.1.8",
+    "iconv-lite": "^0.6.3",
+    "mixpanel-browser": "^2.47.0",
+    "moment": "^2.30.1",
+    "pidusage": "^3.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^14.1.0",
+    "react-redux": "^9.1.1",
+    "react-router-dom": "^6.4.4",
+    "react-select": "^5.8.0",
+    "systeminformation": "^5.21.24",
+    "throttle-debounce": "^5.0.0",
+    "tiny-typed-emitter": "^2.1.0",
+    "update-electron-app": "^3.0.0",
+    "uuid": "^9.0.0",
+    "winston": "^3.13.0",
+    "winston-transport": "^4.7.0"
   },
   "author": {
-    "name": "Johns Gresham",
-    "email": "johnsgresham@skiff.com",
+    "name": "NiceNode LLC",
+    "email": "johns@nicenode.xyz",
     "url": "http://nicenode.xyz"
   },
   "license": "MIT",
@@ -155,238 +129,12 @@
     "web3",
     "local"
   ],
-  "jest": {
-    "testEnvironmentOptions": {
-      "url": "http://localhost/"
-    },
-    "projects": [
-      {
-        "displayName": "renderer tests (react)",
-        "testEnvironment": "jsdom",
-        "testMatch": [
-          "**/__tests__/react/**/*.test.[jt]s?(x)",
-          "**/react/?(*.)+(spec|test).[jt]s?(x)"
-        ],
-        "moduleNameMapper": {
-          "\\.(jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/.erb/mocks/fileMock.js",
-          "\\.svg": "<rootDir>/src/renderer/__mocks__/svg.ts",
-          "(reset.css|.less|.sass|.scss)$": "identity-obj-proxy"
-        },
-        "transform": {
-          "\\.((?<!css.)ts|tsx|js|jsx)$": "ts-jest",
-          "\\.css\\.ts$": "@vanilla-extract/jest-transform"
-        },
-        "moduleFileExtensions": [
-          "js",
-          "jsx",
-          "ts",
-          "tsx",
-          "json"
-        ],
-        "moduleDirectories": [
-          "node_modules",
-          "release/app/node_modules"
-        ],
-        "testPathIgnorePatterns": [
-          "release/app/dist"
-        ],
-        "setupFiles": [
-          "./.erb/scripts/check-build-exists.ts"
-        ]
-      },
-      {
-        "displayName": "main tests (node)",
-        "testEnvironment": "node",
-        "testMatch": [
-          "**/__tests__/node/**/*.test.[jt]s?(x)",
-          "**/node/?(*.)+(spec|test).[jt]s?(x)"
-        ],
-        "transform": {
-          "\\.(ts|js)$": "ts-jest"
-        },
-        "moduleFileExtensions": [
-          "js",
-          "ts",
-          "json"
-        ],
-        "moduleDirectories": [
-          "node_modules",
-          "release/app/node_modules"
-        ],
-        "testPathIgnorePatterns": [
-          "release/app/dist"
-        ],
-        "setupFiles": [
-          "./.erb/scripts/check-build-exists.ts"
-        ]
-      }
-    ]
-  },
-  "devDependencies": {
-    "@babel/core": "^7.22.15",
-    "@babel/preset-env": "^7.23.2",
-    "@babel/preset-react": "^7.22.15",
-    "@babel/preset-typescript": "^7.23.2",
-    "@electron/notarize": "^2.1.0",
-    "@electron/rebuild": "^3.4.1",
-    "@mdx-js/react": "^2.1.5",
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.11",
-    "@storybook/addon-actions": "^7.5.1",
-    "@storybook/addon-essentials": "^7.5.1",
-    "@storybook/addon-interactions": "^7.5.1",
-    "@storybook/addon-links": "^7.5.1",
-    "@storybook/addon-mdx-gfm": "^7.5.3",
-    "@storybook/react": "^7.5.1",
-    "@storybook/react-webpack5": "^7.5.1",
-    "@storybook/testing-library": "^0.2.2",
-    "@svgr/webpack": "^8.0.1",
-    "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
-    "@testing-library/jest-dom": "^6.1.4",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/webdriverio": "^3.2.1",
-    "@types/dockerode": "^3.3.15",
-    "@types/jest": "^29.5.7",
-    "@types/mixpanel-browser": "^2.47.3",
-    "@types/node": "20.4.5",
-    "@types/react": "^18.2.39",
-    "@types/react-dom": "^18.0.9",
-    "@types/react-test-renderer": "^18.0.5",
-    "@types/terser-webpack-plugin": "^5.0.4",
-    "@types/throttle-debounce": "^5.0.0",
-    "@types/uuid": "^9.0.3",
-    "@types/webpack-bundle-analyzer": "^4.6.2",
-    "@types/webpack-env": "^1.18.3",
-    "@typescript-eslint/eslint-plugin": "^5.45.1",
-    "@typescript-eslint/parser": "^5.45.1",
-    "@vanilla-extract/babel-plugin": "^1.2.0",
-    "@vanilla-extract/jest-transform": "^1.0.1",
-    "@vanilla-extract/webpack-plugin": "^2.3.1",
-    "@wdio/cli": "^8.32.3",
-    "@wdio/local-runner": "^8.32.3",
-    "@wdio/mocha-framework": "^8.32.3",
-    "@wdio/spec-reporter": "^8.32.2",
-    "babel-loader": "^9.1.0",
-    "browserslist-config-erb": "^0.0.3",
-    "chalk": "^4.1.2",
-    "concurrently": "^8.2.2",
-    "core-js": "^3.33.0",
-    "cross-env": "^7.0.3",
-    "css-loader": "^6.7.2",
-    "css-minimizer-webpack-plugin": "^5.0.1",
-    "detect-port": "^1.5.1",
-    "electron": "^27.1.3",
-    "electron-builder": "^24.13.3",
-    "electron-devtools-installer": "^3.2.0",
-    "electron-extension-installer": "^1.2.0",
-    "electron-mock-ipc": "^0.3.12",
-    "electronmon": "^2.0.2",
-    "esbuild": "^0.19.5",
-    "eslint": "^8.29.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-erb": "^4.0.3",
-    "eslint-import-resolver-typescript": "^3.5.2",
-    "eslint-import-resolver-webpack": "^0.13.7",
-    "eslint-plugin-compat": "^4.2.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^27.4.2",
-    "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-mocha": "^10.2.0",
-    "eslint-plugin-prettier": "^5.0.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.31.11",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-storybook": "^0.6.15",
-    "file-loader": "^6.2.0",
-    "html-webpack-plugin": "^5.5.0",
-    "husky": "^8.0.2",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "lint-staged": "^14.0.1",
-    "mini-css-extract-plugin": "^2.7.1",
-    "node-abi": "^3.51.0",
-    "prettier": "^3.0.3",
-    "react-docgen-typescript-plugin": "^1.0.5",
-    "react-refresh": "^0.14.0",
-    "react-refresh-typescript": "^2.0.7",
-    "react-test-renderer": "^18.2.0",
-    "rimraf": "^5.0.1",
-    "sass": "^1.67.0",
-    "sass-loader": "^13.2.0",
-    "storybook": "^7.5.1",
-    "style-loader": "^3.3.1",
-    "terser-webpack-plugin": "^5.3.6",
-    "ts-jest": "^29.0.3",
-    "ts-loader": "^9.4.2",
-    "ts-node": "^10.9.2",
-    "typedoc": "^0.25.4",
-    "typedoc-plugin-markdown": "^3.17.1",
-    "typescript": "^5.3.3",
-    "url-loader": "^4.1.1",
-    "wdio-electron-service": "^6.3.1",
-    "wdio-wait-for": "^3.0.11",
-    "webpack": "^5.88.2",
-    "webpack-bundle-analyzer": "^4.9.1",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.11.1",
-    "webpack-merge": "^5.8.0"
-  },
-  "dependencies": {
-    "@reduxjs/toolkit": "^1.9.3",
-    "@sentry/electron": "^4.10.0",
-    "@vanilla-extract/css": "^1.14.0",
-    "@vscode/sudo-prompt": "^9.3.1",
-    "await-sleep": "0.0.1",
-    "check-disk-space": "^3.3.1",
-    "cron": "^3.1.4",
-    "docker-cli-js": "^2.10.0",
-    "dotenv": "^16.0.3",
-    "du": "^1.0.0",
-    "electron-debug": "^3.2.0",
-    "electron-store": "^8.1.0",
-    "electron-updater": "^6.1.8",
-    "highcharts": "^11.0.0",
-    "highcharts-react-official": "^3.2.1",
-    "i18next": "^23.6.0",
-    "i18next-browser-languagedetector": "^7.0.1",
-    "i18next-cli-language-detector": "^1.1.8",
-    "iconv-lite": "^0.6.3",
-    "mixpanel-browser": "^2.47.0",
-    "moment": "^2.30.1",
-    "pidusage": "^3.0.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-i18next": "^13.2.2",
-    "react-redux": "^8.0.5",
-    "react-router-dom": "^6.4.4",
-    "react-select": "^5.8.0",
-    "systeminformation": "^5.21.24",
-    "throttle-debounce": "^5.0.0",
-    "uuid": "^9.0.0",
-    "winston": "^3.8.2"
-  },
   "devEngines": {
     "node": ">=20.x",
     "npm": ">=9.x"
   },
-  "browserslist": [
-    "last 2 chrome versions",
-    "last 2 edge versions",
-    "last 2 firefox versions",
-    "last 2 safari versions"
-  ],
-  "prettier": {
-    "overrides": [
-      {
-        "files": [
-          ".prettierrc",
-          ".eslintrc"
-        ],
-        "options": {
-          "parser": "json"
-        }
-      }
-    ],
-    "singleQuote": true
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NiceNode/nice-node.git"
   }
 }

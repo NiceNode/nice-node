@@ -10,7 +10,7 @@
       "defaultConfig": {
         "http": "Enabled",
         "httpCorsDomains": "http://localhost",
-        "webSockets": "Disabled",
+        "webSockets": "Enabled",
         "httpVirtualHosts": "localhost,host.containers.internal",
         "authVirtualHosts": "localhost,host.containers.internal",
         "httpAddress": "0.0.0.0",
@@ -20,7 +20,7 @@
       "docker": {
         "containerVolumePath": "/root/.ethereum",
         "raw": "",
-        "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
+        "forcedRawNodeInput": "--verbosity 4 --datadir /root/.ethereum --authrpc.jwtsecret /root/.ethereum/jwtsecret --ipcdisable"
       }
     },
     "imageName": "docker.io/ethereum/client-go",

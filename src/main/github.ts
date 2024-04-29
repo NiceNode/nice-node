@@ -1,21 +1,20 @@
-import { BinaryDownload } from '../common/nodeSpec';
-import { httpGetJson } from './httpReq';
-import * as platform from './platform';
+import type { BinaryDownload } from '../common/nodeSpec';
 import * as arch from './arch';
+import { httpGetJson } from './httpReq';
 import logger from './logger';
+import * as platform from './platform';
 
 export const getLatestReleaseUrl = async (binaryDownload: BinaryDownload) => {
-  console.log(`getLatestReleaseUrl`);
+  console.log('getLatestReleaseUrl');
   if (!binaryDownload.latestVersionUrl) {
-    console.log(`No latestVersionUrl found to get latest releases.`);
-    throw new Error(`No latestVersionUrl found to get latest releases.`);
+    console.log('No latestVersionUrl found to get latest releases.');
+    throw new Error('No latestVersionUrl found to get latest releases.');
   }
   const releaseJson = await httpGetJson(binaryDownload.latestVersionUrl);
-  console.log(`getLatestReleaseUrl releaseJson`, releaseJson);
+  console.log('getLatestReleaseUrl releaseJson', releaseJson);
   const platformLowercase = platform.getPlatform();
   const archLowercase = arch.getArch();
   if (Array.isArray(releaseJson?.assets)) {
-    // eslint-disable-next-line
     const matchedAsset = releaseJson?.assets.find((asset: any) => {
       if (typeof asset?.name === 'string') {
         const assetNameLowercase = asset.name.toLowerCase();

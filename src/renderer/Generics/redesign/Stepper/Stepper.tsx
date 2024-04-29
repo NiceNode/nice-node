@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import Button from '../Button/Button';
-import { bottomBar, previousButton, nextButton } from './stepper.css';
+import { bottomBar, nextButton, previousButton } from './stepper.css';
 
 export interface StepperProps {
   step?: number;

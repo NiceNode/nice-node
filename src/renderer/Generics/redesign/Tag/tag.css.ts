@@ -17,15 +17,15 @@ export const container = style({
   flexGrow: 0,
   width: 'fit-content',
   selectors: {
-    [`&.pink`]: {
+    '&.pink': {
       background: vars.components.tagPinkBackground,
       color: vars.components.tagPinkFontColor,
     },
-    [`&.pink2`]: {
+    '&.pink2': {
       background: vars.components.tagPink2Background,
       color: vars.components.tagPink2FontColor,
     },
-    [`&.green`]: {
+    '&.green': {
       background: vars.components.tagGreenBackground,
       color: vars.components.tagGreenFontColor,
     },

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { IconId } from '../../../assets/images/icons';
+import type { IconId } from '../../../assets/images/icons';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { Icon } from '../Icon/Icon';
-import { container, menuItemText, statusDot, selectIcon } from './menuItem.css';
+import { container, menuItemText, selectIcon, statusDot } from './menuItem.css';
 
 export interface MenuItemProps {
   /**
@@ -74,10 +74,9 @@ export const MenuItem = ({
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label
       tabIndex={0}
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
+      // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: <explanation>
       role="button"
       onKeyDown={onClickAction}
       className={[container, `${disabledStyle}`].join(' ')}

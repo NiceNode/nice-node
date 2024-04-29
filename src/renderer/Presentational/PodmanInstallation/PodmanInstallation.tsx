@@ -1,36 +1,36 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from '../../Generics/redesign/Icon/Icon';
-import {
-  captionText,
-  container,
-  descriptionFont,
-  titleFont,
-  learnMore,
-  installContentContainer,
-  installationContainer,
-  installationIcon,
-  installationComplete,
-  installationSteps,
-} from './podmanInstallation.css';
-import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
-import electron from '../../electronGlobal';
+import type { FileDownloadProgress } from '../../../main/downloadFile';
+// import { reportEvent } from '../../events/reportEvent';
+import { CHANNELS } from '../../../main/messenger';
+import type { IpcMessage } from '../../../main/podman/messageFrontEnd';
 import Button from '../../Generics/redesign/Button/Button';
+import { Icon } from '../../Generics/redesign/Icon/Icon';
+import ExternalLink from '../../Generics/redesign/Link/ExternalLink';
+import { Message } from '../../Generics/redesign/Message/Message';
 import ProgressBar from '../../Generics/redesign/ProgressBar/ProgressBar';
-import { FileDownloadProgress } from '../../../main/downloadFile';
-import { bytesToMB } from '../../utils';
 import TimedProgressBar from '../../Generics/redesign/ProgressBar/TimedProgressBar';
+import electron from '../../electronGlobal';
 import {
   useGetIsPodmanInstalledQuery,
   useGetIsPodmanRunningQuery,
   useGetPodmanDetailsQuery,
 } from '../../state/settingsService';
-// import { reportEvent } from '../../events/reportEvent';
-import { CHANNELS } from '../../../main/messenger';
-import { IpcMessage } from '../../../main/podman/messageFrontEnd';
-import { Message } from '../../Generics/redesign/Message/Message';
+import { bytesToMB } from '../../utils';
 import { arePodmanRequirementsMet } from '../AddNodeStepper/podmanRequirements';
+import {
+  captionText,
+  container,
+  descriptionFont,
+  installContentContainer,
+  installationComplete,
+  installationContainer,
+  installationIcon,
+  installationSteps,
+  learnMore,
+  titleFont,
+} from './podmanInstallation.css';
 
 // 6.5(docker), ? min on 2022 MacbookPro 16inch, baseline
 const TOTAL_INSTALL_TIME_SEC = 5 * 60;
@@ -74,7 +74,6 @@ const PodmanInstallation = ({
     // todoo
     if (disableSaveButton) disableSaveButton(true);
     // if (disableSaveButton) disableSaveButton(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   console.log('isPodmanRunning: ', isPodmanRunning);
@@ -187,7 +186,7 @@ const PodmanInstallation = ({
   //   return () => {
   //     qIsPodmanRunning.unsubscribe();
   //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //  react-hooks/exhaustive-deps
   // }, []);
 
   console.log('isPodmanInstalled', isPodmanInstalled);
@@ -199,9 +198,7 @@ const PodmanInstallation = ({
       {type !== 'modal' && (
         <div className={titleFont}>{t('PodmanInstallation')}</div>
       )}
-      <div className={descriptionFont}>
-        <>{t('podmanPurpose')}</>
-      </div>
+      <div className={descriptionFont}>{t('podmanPurpose')}</div>
       <div className={learnMore}>
         <ExternalLink text={t('LearnMorePodman')} url="https://podman.io/" />
       </div>
