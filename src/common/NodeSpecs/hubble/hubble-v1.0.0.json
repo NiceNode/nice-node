@@ -10,12 +10,13 @@
       "defaultConfig": {
         "p2pPorts": "2282",
         "httpPort": "2281",
+        "gRpcPort": "2283",
         "farcasterNetwork": "1",
         "boostrapNode": "/dns/nemes.farcaster.xyz/tcp/2282"
       },
       "docker": {
         "containerVolumePath": "/home/node/app/apps/hubble",
-        "raw": " --user 0",
+        "raw": " --user 0 -p 2283:2283",
         "initNodeCommand": "yarn identity create",
         "forcedRawNodeInput": "node --no-warnings build/cli.js start --ip 0.0.0.0 "
       }
@@ -88,6 +89,15 @@
         "type": "text"
       },
       "infoDescription": "Example value: 2281"
+    },
+    "gRpcPort": {
+      "displayName": "gRPC server listening port",
+      "cliConfigPrefix": "--rpc-port ",
+      "defaultValue": "2283",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Required to perform diff sync via gRPC API sync with the network."
     },
     "boostrapNode": {
       "displayName": "A Farcaster node to boostrap peer discovery",
