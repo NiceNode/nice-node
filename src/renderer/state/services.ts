@@ -50,6 +50,8 @@ export const RtkqExecutionWs: any = createApi({
     getExecutionIsSyncing: builder.query<ProviderResponse, QueryArg>({
       queryFn: async ({ rpcTranslation, httpPort }) => {
         let data;
+        console.log('rpcTranslation!', rpcTranslation);
+        console.log('httpPort!', httpPort);
         try {
           // if (!rpcTranslation.sync) {
           //   console.log('No rpcTranslation found for sync');

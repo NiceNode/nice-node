@@ -59,23 +59,33 @@ const NodePackageScreen = () => {
   const executionNode = selectedNodePackage?.services.find((service) => {
     return service.serviceId === 'executionClient';
   });
+  const nodeId = executionNode?.node.id;
+  const httpPort =
+    nodeId && sUserNodes?.nodes[nodeId]?.config.configValuesMap.httpPort;
+  const rpcTranslation = selectedNodePackage?.spec.rpcTranslation;
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
-    selectedNodePackage?.spec.rpcTranslation,
-    executionNode?.node.config.configValuesMap?.httpPort,
+    {
+      rpcTranslation,
+      httpPort,
+    },
     {
       pollingInterval,
     },
   );
   const qExecutionPeers = useGetExecutionPeersQuery(
-    selectedNodePackage?.spec.rpcTranslation,
-    executionNode?.node.config.configValuesMap?.httpPort,
+    {
+      rpcTranslation,
+      httpPort,
+    },
     {
       pollingInterval,
     },
   );
   const qLatestBlock = useGetExecutionLatestBlockQuery(
-    selectedNodePackage?.spec.rpcTranslation,
-    executionNode?.node.config.configValuesMap?.httpPort,
+    {
+      rpcTranslation,
+      httpPort,
+    },
     {
       pollingInterval,
     },
