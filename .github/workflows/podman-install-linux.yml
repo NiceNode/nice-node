@@ -8,11 +8,12 @@ jobs:
   container-test-job:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         container: [
-          "ubuntu:24",
-          "ubuntu:23",
-          "ubuntu:22",
+          "ubuntu:24.04",
+          "ubuntu:23.10",
+          "ubuntu:22.04",
           "debian:12",
           "fedora:40",
           "fedora:39"
