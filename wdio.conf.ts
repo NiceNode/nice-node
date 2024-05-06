@@ -73,6 +73,9 @@ export const config: Options.Testrunner = {
       browserName: 'electron',
       // Electron service options
       // see https://webdriver.io/docs/wdio-electron-service/#configuration
+      'goog:chromeOptions': {
+        args:['--headless', '--disable-dev-shm-usage', '--no-sandbox', '--disable-gpu', '--window-size=1680,1050']
+      },
       'wdio:electronServiceOptions': {
         // custom application args
         // See https://github.com/webdriverio-community/wdio-electron-service#appargs
@@ -90,7 +93,8 @@ export const config: Options.Testrunner = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevel: 'info',
+  // logLevel: 'info',
+  logLevel: 'debug',
   //
   // Set specific log levels per logger
   // loggers:

@@ -6,7 +6,7 @@ import installOnMac from './installOnMac';
 import installOnWindows from './installOnWindows';
 
 export const PODMAN_LATEST_VERSION = '5.0.2';
-export const PODMAN_MIN_VERSION = '4.6.0';
+export const PODMAN_MIN_VERSION = '4.3.0';
 
 const installPodman = async (): Promise<any> => {
   logger.info('Starting podman install...');

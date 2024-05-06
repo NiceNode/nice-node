@@ -1,0 +1,40 @@
+name: Podman Install on Linux Distros
+on:
+  push:
+    # branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  container-test-job:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        container: [
+          "ubuntu:24",
+          "ubuntu:23",
+          "ubuntu:22",
+          "debian:12",
+          "fedora:40",
+          "fedora:39"
+        ]
+
+    container:
+      image: ${{ matrix.container }}
+      env:
+        NODE_ENV: test
+    steps:
+      - name: print os version details
+        run: cat /etc/os-release
+
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 🧱 Install Dependencies
+        run: |
+          npm ci
+
+      - name: 🧱 Run tests
+        run: |
+          npm run testCi
