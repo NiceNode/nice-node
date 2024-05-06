@@ -16,7 +16,10 @@ jobs:
           "ubuntu:22.04",
           "debian:12",
           "fedora:40",
-          "fedora:39"
+          "fedora:39",
+          "manjarolinux/base",
+          "archlinux:latest",
+          "opensuse/leap:latest"
         ]
 
     container:

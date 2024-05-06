@@ -3,8 +3,8 @@ import { promisify } from 'node:util';
 
 const exec = promisify(execCallback);
 
-export type PackageType = 'deb' | 'rpm';
-export type PackageManager = 'dpkg' | 'dnf' | 'yum' | 'zypper';
+export type PackageType = 'deb' | 'pacman' | 'rpm';
+export type PackageManager = 'dpkg' | 'dnf' | 'pacman' | 'yum' | 'zypper';
 
 interface PackageManagerMap {
   [key: string]: PackageManager;
@@ -17,16 +17,16 @@ interface PackageManagerToTypeMap {
 const packageManagers: PackageManagerMap = {
   'apt-get': 'dpkg', // "deb (apt)",
   dnf: 'dnf', // "rpm (dnf)",
+  pacman: 'pacman',
   yum: 'yum', // "rpm (yum)",
-  // pacman: "pacman",
   zypper: 'zypper', // "rpm (zypper)"
 };
 
 const packageTypes: PackageManagerToTypeMap = {
   'apt-get': 'deb', // "deb (apt)",
   dnf: 'rpm', // "rpm (dnf)",
+  pacman: 'pacman',
   yum: 'rpm', // "rpm (yum)",
-  // pacman: "pacman",
   zypper: 'rpm', // "rpm (zypper)"
 };
 
