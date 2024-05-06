@@ -12,8 +12,6 @@ import { script as dnfInstallScript } from './dnfInstallScript';
 import { script as pacmanInstallScript } from './pacmanInstallScript';
 import { script as yumInstallScript } from './yumInstallScript';
 import { script as zypperInstallScript } from './zypperInstallScript';
-// to be deprecated in the future
-import { script as ubuntu22InstallScript } from './ubuntu22InstallScript';
 
 // const UBUNTU_INSTALL_SCRIPT = 'installOnUbuntuScript';
 /**
@@ -35,10 +33,6 @@ const installOnLinux = async (): Promise<any> => {
   const pkgManager: PackageManager = await findPackageManager();
   if (pkgManager === 'dpkg') {
     installScript = aptInstallScript;
-    // to be deprecated in the future
-    if(distro.includes('buntu') && release.includes('22.')) {
-      installScript = ubuntu22InstallScript;
-    }
   } else if (pkgManager === 'dnf') {
     installScript = dnfInstallScript;
   } else if (pkgManager === 'yum') {

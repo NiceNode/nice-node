@@ -13,13 +13,11 @@ jobs:
         container: [
           "ubuntu:24.04",
           "ubuntu:23.10",
-          "ubuntu:22.04",
           "debian:12",
           "fedora:40",
           "fedora:39",
           "manjarolinux/base",
           "archlinux:latest",
-          "opensuse/tumbleweed:latest"
         ]
 
     container:
