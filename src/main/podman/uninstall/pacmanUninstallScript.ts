@@ -1,1 +1,1 @@
-export const script = 'pacman -Rys podman';
+export const script = 'pacman -Rs podman --noconfirm';
