@@ -104,7 +104,7 @@ describe.sequential('Install and Uninstall Podman', () => {
     const versionAfter = await getInstalledPodmanVersion();
     expect(versionAfter).toMatch(versionRegex);
     expect(versionAfter > PODMAN_MIN_VERSION).toBeTruthy();
-  }, 20000); // 20 seconds timeout
+  }, 180000); // 180 seconds timeout, dnf/apt update can take a while
 
   it('Uninstall is successful and returns true', async () => {
     const versionBefore = await getInstalledPodmanVersion();
