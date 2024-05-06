@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { beforeAll, describe, expect, vi, test } from 'vitest';
 import { isLinux } from '../../main/platform.js';
 import {
   PODMAN_MIN_VERSION,
@@ -85,7 +85,7 @@ beforeAll(async () => {
 const versionRegex = /(\d+\.\d+\.\d+)/;
 
 describe.sequential('Install and Uninstall Podman', () => {
-  it('If pre-installed, uninstall to test install next', async () => {
+  test('If pre-installed, uninstall to test install next', async () => {
     const versionBefore = await getInstalledPodmanVersion();
     if (versionBefore !== undefined) {
       expect(versionBefore).toMatch(versionRegex);
@@ -96,7 +96,8 @@ describe.sequential('Install and Uninstall Podman', () => {
     }
   });
 
-  it('Install is successful and returns true', async () => {
+  // 180 seconds timeout, dnf/apt update can take a while
+  test('Install is successful and returns true', { timeout: 180000 }, async () => {
     const versionBefore = await getInstalledPodmanVersion();
     expect(versionBefore).toBeUndefined();
     const resultInstall = await installOnLinux();
@@ -104,9 +105,9 @@ describe.sequential('Install and Uninstall Podman', () => {
     const versionAfter = await getInstalledPodmanVersion();
     expect(versionAfter).toMatch(versionRegex);
     expect(versionAfter > PODMAN_MIN_VERSION).toBeTruthy();
-  }, 180000); // 180 seconds timeout, dnf/apt update can take a while
+  });
 
-  it('Uninstall is successful and returns true', async () => {
+  test('Uninstall is successful and returns true', async () => {
     const versionBefore = await getInstalledPodmanVersion();
     expect(versionBefore).toMatch(versionRegex);
     expect(versionBefore > PODMAN_MIN_VERSION).toBeTruthy();
