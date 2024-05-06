@@ -8,7 +8,9 @@ import {
 } from '../../nn-auto-updater/findPackageManager.js';
 import { script as aptUninstallScript } from './aptUninstallScript';
 import { script as dnfUninstallScript } from './dnfUninstallScript';
+import { script as pacmanUninstallScript } from './pacmanUninstallScript';
 import { script as yumUninstallScript } from './yumUninstallScript';
+import { script as zypperUninstallScript } from './zypperUninstallScript';
 
 /**
  * Uninstall podman by removing binaries and various configuration files
@@ -28,9 +30,14 @@ const uninstallOnLinux = async (): Promise<boolean | { error: string }> => {
       uninstallScript = aptUninstallScript;
     } else if (pkgManager === 'dnf') {
       uninstallScript = dnfUninstallScript;
+    } else if (pkgManager === 'pacman') {
+      uninstallScript = pacmanUninstallScript;
     } else if (pkgManager === 'yum') {
       uninstallScript = yumUninstallScript;
+    } else if (pkgManager === 'zypper') {
+      uninstallScript = zypperUninstallScript;
     }
+
     const { stdout, stderr } = await execAwait(uninstallScript, {
       log: true,
       sudo: true,

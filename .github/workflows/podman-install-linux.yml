@@ -19,7 +19,7 @@ jobs:
           "fedora:39",
           "manjarolinux/base",
           "archlinux:latest",
-          "opensuse/leap:latest"
+          "opensuse/tumbleweed:latest"
         ]
 
     container:
