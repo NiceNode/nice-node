@@ -15,7 +15,77 @@ describe('Splash screen tests', () => {
     await expect(elAddFirstNodeTitle).toBeDisplayed();
     await expect(elAddFirstNodeTitle).toHaveText('Add your first node');
   });
+
+  it('clicking continue btn should take the user to service and initial node settings screen', async () => {
+    // await browser.pause(3000);
+    // await $('#getStartedBtn').click();
+    // await browser.pause(3000);
+    const alphaModalBtn = (await $('span*=I Understand')).parentElement();
+    await expect(alphaModalBtn).toBeDisplayed();
+    await alphaModalBtn.click();
+    await browser.pause(3000);
+    await $('#stepperNextButton').click();
+    const elAddFirstNodeTitle = await $("#launchAVarNodeTitle");
+    await expect(elAddFirstNodeTitle).toBeDisplayed();
+    await expect(elAddFirstNodeTitle).toHaveText('Launch a Ethereum Node');
+  });
+
+  it('clicking continue btn should take the user to service and node requirements screen', async () => {
+    await $('#stepperNextButton').click();
+    const elAddFirstNodeTitle = await $("#nodeRequirementsTitle");
+    await expect(elAddFirstNodeTitle).toBeDisplayed();
+    await expect(elAddFirstNodeTitle).toHaveText('Node Requirements');
+  });
+
+  let isPodmanIsInstalled = false;
+  // from splash screen, we always show podman screen
+  it('clicking continue btn should take the user to service and node requirements screen', async () => {
+    await $('#stepperNextButton').click();
+    try {
+      // will not be displayed if podman is already installed
+      const elPodmanInstallationTitle = await $("#podmanInstallationTitle");
+      await expect(elPodmanInstallationTitle).toBeDisplayed();
+      await expect(elPodmanInstallationTitle).toHaveText('Podman installation');
+    } catch(e) {
+      const elPodmanInstallCompleteTitle = await $("#podmanInstallCompleteTitle");
+      await expect(elPodmanInstallCompleteTitle).toBeDisplayed();
+      await expect(elPodmanInstallCompleteTitle).toHaveText('Podman installed');
+      isPodmanIsInstalled = true;
+    }
+  });
+
+  if(process.env.OS === 'linux' || isPodmanIsInstalled) {
+    // from splash screen, we always show podman screen
+    it('clicking continue btn should add and start the node', async () => {
+      await browser.pause(2000);
+      await $('#stepperNextButton').click();
+      await browser.pause(2000);
+      // ...
+      await expect(await $('div*=Ethereum Node')).toBeDisplayed();
+      await expect(await $('div*=Syncing')).toBeDisplayed();
+      await expect(await $('span*=Stop')).toBeDisplayed();
+      // await browser.pause(2000);
+      // after docker containers are downloaded and the node is started, the node should be online
+      // await expect(await $('div*=Online')).toBeDisplayed();
+      // await expect(await $('div*=')).toBeDisplayed();
+    }).timeout(120000); // wait 3 minutes for the node to download & start
+
+    it('clicking continue btn should add and start the node', async () => {
+      const stopBtn = (await $('span*=Stop')).parentElement();
+      (await stopBtn).click();
+      // await expect(await $('div*=Stopping')).toBeDisplayed();
+      // ...
+      await expect(await $('div*=Stopped')).toBeDisplayed();
+      await expect(await $('span*=Resume')).toBeDisplayed();
+      // await browser.pause(2000);
+      // after docker containers are downloaded and the node is started, the node should be online
+      // await expect(await $('div*=Online')).toBeDisplayed();
+      // await expect(await $('div*=')).toBeDisplayed();
+    }).timeout(120000); // wait 3 minutes for the node to download & start
+  }
+
 });
+
 
 describe('App build property tests', () => {
   // More Electron api test examples

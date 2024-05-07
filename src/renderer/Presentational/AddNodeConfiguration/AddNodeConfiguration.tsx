@@ -319,7 +319,7 @@ const AddNodeConfiguration = ({
   return (
     <div className={container}>
       {shouldHideTitle !== true && (
-        <div className={titleFont}>
+        <div id="launchAVarNodeTitle" className={titleFont}>
           {t('LaunchAVarNode', { nodeName: displayName })}
         </div>
       )}

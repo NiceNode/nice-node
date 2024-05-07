@@ -196,7 +196,9 @@ const PodmanInstallation = ({
   return (
     <div className={[container, type].join(' ')}>
       {type !== 'modal' && (
-        <div className={titleFont}>{t('PodmanInstallation')}</div>
+        <div id="podmanInstallationTitle" className={titleFont}>
+          {t('PodmanInstallation')}
+        </div>
       )}
       <div className={descriptionFont}>{t('podmanPurpose')}</div>
       <div className={learnMore}>
@@ -258,7 +260,10 @@ const PodmanInstallation = ({
             <div className={installationIcon}>
               <Icon iconId="checkcirclefilled" />
             </div>
-            <div className={installationComplete}>
+            <div
+              id="podmanInstallCompleteTitle"
+              className={installationComplete}
+            >
               {t('PodmanInstallComplete')}
             </div>
             <div className={installationSteps}>
