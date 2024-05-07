@@ -42,7 +42,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // todo: when moving from require to imports
 const isTest = process.env.TEST === 'true';
-if (isTest) {
+if (isTest && process.env.TEST_ENV === 'wdio') {
   logger.info('env.TEST=true... calling import(wdio-electron-service/main)');
   import('wdio-electron-service/main');
 }

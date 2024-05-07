@@ -1,0 +1,57 @@
+name: e2e-tests-ubuntu
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  e2e-build-n-test:
+    environment: staging
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        container: [
+          "ubuntu:24.04",
+          "ubuntu:23.10",
+          "debian:12",
+          # "fedora:40",
+          # "fedora:39",
+          # "manjarolinux/base",
+          # "archlinux:latest",
+        ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: 💚 Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 🧱 Install Dependencies
+        run: |
+          npm ci
+          sudo apt-get install --no-install-recommends -y nodejs npm rpm libarchive-tools
+
+      - name: 📦 Bundle Application
+        env:
+          DEBUG: "*electron*"
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+          MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
+          NICENODE_ENV: ${{ vars.NICENODE_ENV }}
+          NO_CODE_SIGNING: true
+        run: |
+          npm run make
+
+      - name: 🧪 Run Tests
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: npm run wdio
+      - name: 🐛 Debug Build
+        uses: stateful/vscode-server-action@v1
+        if: failure()
+        with:
+          timeout: '120000'

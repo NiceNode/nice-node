@@ -11,8 +11,8 @@ import type { AddNodePackageNodeService } from './nodePackageManager';
 import type { ThemeSetting } from './state/settings';
 
 const isTest = process.env.TEST === 'true';
-if (isTest) {
-  console.log('NODE_ENV=TEST... requiring wdio-electron-service/main');
+if (isTest && process.env.TEST_ENV === 'wdio') {
+  console.log('env.TEST=true... requiring wdio-electron-service/main');
   import('wdio-electron-service/preload');
 }
 
