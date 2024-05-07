@@ -44,6 +44,9 @@ export const modalContentStyle = style({
     '&.failSystemRequirements': {
       width: '380px',
     },
+    '&.podman': {
+      width: '624px',
+    },
   },
 });
 

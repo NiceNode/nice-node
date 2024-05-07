@@ -1,16 +1,17 @@
-import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback } from "react";
+import { useSelector } from "react-redux";
 
-import { useAppDispatch } from '../../state/hooks';
-import { getModalState, setModalState } from '../../state/modal';
-import { AddNodeModal } from './AddNodeModal';
-import { AlphaBuildModal } from './AlphaBuildModal';
-import FailSystemRequirementsModal from './FailSystemRequirementsModal';
-import { NodeSettingsModal } from './NodeSettingsModal';
-import { PreferencesModal } from './PreferencesModal';
-import { RemoveNodeModal } from './RemoveNodeModal';
-import { ResetConfigModal } from './ResetConfigModal';
-import { modalRoutes } from './modalUtils';
+import { useAppDispatch } from "../../state/hooks";
+import { getModalState, setModalState } from "../../state/modal";
+import { AddNodeModal } from "./AddNodeModal";
+import { AlphaBuildModal } from "./AlphaBuildModal";
+import FailSystemRequirementsModal from "./FailSystemRequirementsModal";
+import { NodeSettingsModal } from "./NodeSettingsModal";
+import { PreferencesModal } from "./PreferencesModal";
+import { RemoveNodeModal } from "./RemoveNodeModal";
+import { ResetConfigModal } from "./ResetConfigModal";
+import { PodmanModal } from "./PodmanModal";
+import { modalRoutes } from "./modalUtils";
 
 const ModalManager = () => {
   const { isModalOpen, screen } = useSelector(getModalState);
@@ -40,6 +41,8 @@ const ModalManager = () => {
       return <PreferencesModal modalOnClose={modalOnClose} />;
     case modalRoutes.failSystemRequirements:
       return <FailSystemRequirementsModal modalOnClose={modalOnClose} />;
+    case modalRoutes.podman:
+      return <PodmanModal modalOnClose={modalOnClose} data={screen.data} />;
     case modalRoutes.addValidator:
       return null;
     case modalRoutes.clientVersions:

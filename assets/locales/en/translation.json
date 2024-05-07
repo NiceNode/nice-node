@@ -166,5 +166,10 @@
   "CalculatingDataSize": "(calculating data size...)",
   "KeepNodeData": "Keep node related chain data {{data}}",
   "NoResults": "No results",
-  "TrySearching": "Try searching for another keyword or clear all filters"
+  "TrySearching": "Try searching for another keyword or clear all filters",
+  "RunningOutdatedPodman": "You are running an outdated version of Podman",
+  "CurrentPodman": "Your current Podman installation ({{currentPodmanVersion}}) is incompatible with NiceNode and requires version {{requiredPodmanVersion}} or higher for it to run.",
+  "PodmanIsRequiredComponent": "Podman is a required component for NiceNode to run the many client options. Podman facilitates the running of containers within a virtualised Linux environment and will operate in the background.",
+  "DownloadAndUpdate": "Download and update",
+  "PodmanUpdate": "Podman update"
 }
