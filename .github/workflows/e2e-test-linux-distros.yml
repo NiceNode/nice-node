@@ -1,4 +1,4 @@
-name: e2e-tests-ubuntu
+name: e2e-tests-linux-distros
 
 on:
   pull_request:
