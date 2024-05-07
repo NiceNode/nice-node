@@ -79,7 +79,7 @@ Unit tests with `npm run test`
 ### End-to-end (e2e) tests
 
 For e2e tests, we use webdriver and an electron plugin to automate testing.
-It requires a packaged build to complete the tests.
+**It requires a packaged build to run the tests!**
 
 To run them locally, package the source first (and after making any changes to anything other than `tests`), then run the e2e tests with `wdio`
 

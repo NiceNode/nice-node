@@ -15,6 +15,8 @@ if (process.platform === 'darwin') {
   appBinaryPath = path.join('out', `NiceNode-win32-${arch}`, 'nice-node.exe')
 }
 
+process.env.TEST = 'true';
+
 export const config: Options.Testrunner = {
   //
   // ====================
@@ -73,9 +75,9 @@ export const config: Options.Testrunner = {
       browserName: 'electron',
       // Electron service options
       // see https://webdriver.io/docs/wdio-electron-service/#configuration
-      'goog:chromeOptions': {
-        args:['--headless', '--disable-dev-shm-usage', '--no-sandbox', '--disable-gpu', '--window-size=1680,1050']
-      },
+      // 'goog:chromeOptions': {
+      //   args:['--headless', '--disable-dev-shm-usage', '--no-sandbox', '--disable-gpu', '--window-size=1680,1050']
+      // },
       'wdio:electronServiceOptions': {
         // custom application args
         // See https://github.com/webdriverio-community/wdio-electron-service#appargs

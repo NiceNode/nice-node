@@ -230,7 +230,7 @@ export const getAssetsFolder = (): string => {
     return path.resolve(__dirname, '..', '..', 'assets');
   }
 
-  if (process.env.NODE_ENV === 'test') {
+  if (process.env.TEST === 'true') {
     return 'assets';
   }
 

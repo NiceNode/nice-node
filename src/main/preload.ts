@@ -10,12 +10,11 @@ import { CHANNELS_ARRAY } from './messenger';
 import type { AddNodePackageNodeService } from './nodePackageManager';
 import type { ThemeSetting } from './state/settings';
 
-// todo: when moving from require to imports
-// const isTest = process.env.NODE_ENV === 'test';
-// if (isTest) {
-//   console.log('NODE_ENV=TEST... requiring wdio-electron-service/main');
-//   require('wdio-electron-service/preload');
-// }
+const isTest = process.env.TEST === 'true';
+if (isTest) {
+  console.log('NODE_ENV=TEST... requiring wdio-electron-service/main');
+  import('wdio-electron-service/preload');
+}
 
 contextBridge.exposeInMainWorld('electron', {
   SENTRY_DSN: process.env.SENTRY_DSN,

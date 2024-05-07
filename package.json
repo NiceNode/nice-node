@@ -22,7 +22,7 @@
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "wdio": "cross-env NODE_ENV=test wdio run ./wdio.conf.ts",
+    "wdio": "wdio run ./wdio.conf.ts",
     "docs:nodeSpec": "typedoc --plugin typedoc-plugin-markdown --name \"Node Spec examples\" --readme src/common/index.md --entryDocument index.md --out docs src/common/*"
   },
   "devDependencies": {
