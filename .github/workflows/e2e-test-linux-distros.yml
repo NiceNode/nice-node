@@ -37,23 +37,23 @@ jobs:
 
       - name: 🧱 Install Dependencies
         run: |
-          # sudo apt-get install --no-install-recommends -y nodejs npm rpm libarchive-tools
+          # apt-get install --no-install-recommends -y nodejs npm rpm libarchive-tools
           packagesNeeded=(nodejs npm)
           if [ -x "$(command -v apk)" ];
           then
-              sudo apk add --no-cache "${packagesNeeded[@]}"
+              apk add --no-cache "${packagesNeeded[@]}"
           elif [ -x "$(command -v apt-get)" ];
           then
-              sudo apt-get install --no-install-recommends -y "${packagesNeeded[@]}" rpm libarchive-tools
+              apt-get install --no-install-recommends -y "${packagesNeeded[@]}" rpm libarchive-tools
           elif [ -x "$(command -v dnf)" ];
           then
-              sudo dnf install -y "${packagesNeeded[@]}"
+              dnf install -y "${packagesNeeded[@]}"
           elif [ -x "$(command -v pacman)" ];
           then
-              sudo pacman -S "${packagesNeeded[@]}" --noconfirm
+              pacman -S "${packagesNeeded[@]}" --noconfirm
           elif [ -x "$(command -v zypper)" ];
           then
-              sudo zypper install -y "${packagesNeeded[@]}"
+              zypper install -y "${packagesNeeded[@]}"
           else
               echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: "${packagesNeeded[@]}"">&2;
           fi
