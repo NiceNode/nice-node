@@ -38,12 +38,12 @@ jobs:
       - name: 🧱 Install system dependencies
         run: |
           # Define the packages needed (git req'd by electron forge)
-          packagesNeeded="nodejs npm git zip"
+          packagesNeeded="nodejs npm git zip dpkg fakeroot"
 
           # Determine the package manager and install required packages
           if command -v apt-get > /dev/null 2>&1; then
               apt-get update
-              apt-get install --no-install-recommends -y $packagesNeeded rpm libarchive-tools dpkg fakeroot
+              apt-get install --no-install-recommends -y $packagesNeeded rpm libarchive-tools
           elif command -v dnf > /dev/null 2>&1; then
               dnf install -y $packagesNeeded rpmdevtools
           elif command -v pacman > /dev/null 2>&1; then
