@@ -16,11 +16,11 @@ jobs:
         container: [
           "ubuntu:24.04",
           "ubuntu:23.10",
-          "debian:12"
-          # "fedora:40",
-          # "fedora:39",
-          # "manjarolinux/base",
-          # "archlinux:latest",
+          "debian:12",
+          "fedora:40",
+          "fedora:39",
+          "manjarolinux/base",
+          "archlinux:latest",
         ]
 
     steps:
@@ -32,8 +32,30 @@ jobs:
 
       - name: 🧱 Install Dependencies
         run: |
+          # sudo apt-get install --no-install-recommends -y nodejs npm rpm libarchive-tools
+          packagesNeeded=(nodejs npm)
+          if [ -x "$(command -v apk)" ];
+          then
+              sudo apk add --no-cache "${packagesNeeded[@]}"
+          elif [ -x "$(command -v apt-get)" ];
+          then
+              sudo apt-get install --no-install-recommends -y "${packagesNeeded[@]}" rpm libarchive-tools
+          elif [ -x "$(command -v dnf)" ];
+          then
+              sudo dnf install -y "${packagesNeeded[@]}"
+          elif [ -x "$(command -v pacman)" ];
+          then
+              sudo pacman -S "${packagesNeeded[@]}" --noconfirm
+          elif [ -x "$(command -v zypper)" ];
+          then
+              sudo zypper install -y "${packagesNeeded[@]}"
+          else
+              echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: "${packagesNeeded[@]}"">&2;
+          fi
+
           npm ci
-          sudo apt-get install --no-install-recommends -y nodejs npm rpm libarchive-tools
+
+
 
       - name: 📦 Bundle Application
         env:
