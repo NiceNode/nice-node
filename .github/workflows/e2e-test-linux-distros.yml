@@ -45,7 +45,7 @@ jobs:
               apt-get update
               apt-get install --no-install-recommends -y $packagesNeeded rpm libarchive-tools dpkg fakeroot
           elif command -v dnf > /dev/null 2>&1; then
-              dnf install -y $packagesNeeded rpmbuild
+              dnf install -y $packagesNeeded rpmdevtools
           elif command -v pacman > /dev/null 2>&1; then
               pacman -Syu --noconfirm
               pacman -S --noconfirm $packagesNeeded
