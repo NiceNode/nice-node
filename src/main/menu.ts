@@ -233,8 +233,8 @@ export default class MenuBuilder {
         },
         {
           label: t('CopyConfigurationDetailsToClipboard'),
-          click() {
-            clipboard.writeText(getDebugInfoString());
+          click: async () => {
+            clipboard.writeText(await getDebugInfoString());
           },
         },
         { type: 'separator' },
