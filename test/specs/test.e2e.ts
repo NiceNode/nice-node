@@ -2,6 +2,15 @@ import os from 'node:os';
 /* global $ */
 import { expect } from '@wdio/globals';
 import { browser } from 'wdio-electron-service';
+import { execSync } from 'node:child_process';
+
+// mock('../src/main/execHelper.js', () => {
+//   return {
+//     execAwait: vi.fn((command: string) => {
+//       return execSync(command);
+//     }),
+//   };
+// });
 
 describe('Splash screen tests', () => {
   it('application should open to splash screen with welcome message', async () => {
