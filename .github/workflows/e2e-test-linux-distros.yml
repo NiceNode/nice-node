@@ -71,7 +71,9 @@ jobs:
           npm run make
 
       - name: 🧪 Run Tests
-        run: npm run wdio
+        uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
+        with:
+          run: npm run wdio
 
       - name: 🐛 Debug Build
         uses: stateful/vscode-server-action@v1
