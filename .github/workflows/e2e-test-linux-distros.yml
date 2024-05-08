@@ -38,7 +38,7 @@ jobs:
       - name: 🧱 Install system dependencies
         run: |
           # Define the packages needed (git req'd by electron forge)
-          packagesNeeded="nodejs npm git"
+          packagesNeeded="nodejs npm git zip"
 
           # Determine the package manager and install required packages
           if command -v apt-get > /dev/null 2>&1; then
