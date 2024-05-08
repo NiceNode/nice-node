@@ -8,7 +8,7 @@ describe('Splash screen tests', () => {
     const elWelcome = await $('#welcome');
     await expect(elWelcome).toBeDisplayed();
     await expect(elWelcome).toHaveText(expect.stringContaining('NiceNode'));
-    await browser.pause(2000);
+    await browser.pause(4000);
   });
 
   it('clicking get started btn should take the user to add node screen', async () => {
@@ -16,7 +16,7 @@ describe('Splash screen tests', () => {
     const elAddFirstNodeTitle = await $('#addFirstNodeTitle');
     await expect(elAddFirstNodeTitle).toBeDisplayed();
     await expect(elAddFirstNodeTitle).toHaveText('Add your first node');
-    await browser.pause(2000);
+    await browser.pause(4000);
   });
 
   it('clicking continue btn should take the user to service and initial node settings screen', async () => {
@@ -39,7 +39,7 @@ describe('Splash screen tests', () => {
     const elAddFirstNodeTitle = await $("#nodeRequirementsTitle");
     await expect(elAddFirstNodeTitle).toBeDisplayed();
     await expect(elAddFirstNodeTitle).toHaveText('Node Requirements');
-    await browser.pause(2000);
+    await browser.pause(6000);
   });
 
   let isPodmanIsInstalled = false;
@@ -106,7 +106,7 @@ describe('Splash screen tests', () => {
       await expect(await $('div*=Ethereum Node')).toBeDisplayed();
       await expect(await $('div*=Syncing')).toBeDisplayed();
       await expect(await $('span*=Stop')).toBeDisplayed();
-      // await browser.pause(9000);
+      // await browser.pause(30000);
       // await browser.pause(2000);
       // after docker containers are downloaded and the node is started, the node should be online
       // await expect(await $('div*=Online')).toBeDisplayed();
@@ -116,12 +116,12 @@ describe('Splash screen tests', () => {
     it('clicking stop node btn should stop the node and show resume button', async () => {
       const stopBtn = (await $('span*=Stop')).parentElement();
       (await stopBtn).click();
-      await browser.pause(2000);
+      // await browser.pause(15000);
       // await expect(await $('div*=Stopping')).toBeDisplayed();
       // ...
       await expect(await $('div*=Stopped')).toBeDisplayed();
       await expect(await $('span*=Resume')).toBeDisplayed();
-      await browser.pause(9000);
+      // await browser.pause(15000);
       // await browser.pause(2000);
       // after docker containers are downloaded and the node is started, the node should be online
       // await expect(await $('div*=Online')).toBeDisplayed();
