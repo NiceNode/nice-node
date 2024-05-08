@@ -37,7 +37,7 @@ describe('Splash screen tests', () => {
     await expect(elAddFirstNodeTitle).toHaveText('Node Requirements');
   });
 
-  let isPodmanIsInstalled = false;
+  // let isPodmanIsInstalled = false;
   // from splash screen, we always show podman screen
   it('clicking continue btn should take the user to service and node requirements screen', async () => {
     await $('#stepperNextButton').click();
@@ -50,11 +50,12 @@ describe('Splash screen tests', () => {
       const elPodmanInstallCompleteTitle = await $("#podmanInstallCompleteTitle");
       await expect(elPodmanInstallCompleteTitle).toBeDisplayed();
       await expect(elPodmanInstallCompleteTitle).toHaveText('Podman installed');
-      isPodmanIsInstalled = true;
+      // isPodmanIsInstalled = true;
     }
   });
 
-  if(process.env.OS === 'linux' || isPodmanIsInstalled) {
+  // add if isPodmanIsInstalled, to run locally
+  if(process.env.OS === 'linux' || (process.env.OS === 'darwin' && process.env.CI === 'true')) {
     // from splash screen, we always show podman screen
     it('clicking continue btn should add and start the node', async () => {
       await browser.pause(2000);
