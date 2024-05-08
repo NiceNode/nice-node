@@ -222,6 +222,7 @@ const PodmanInstallation = ({
                 {!sHasStartedDownload ? (
                   <div>
                     <Button
+                      id="downloadAndInstallPodmanBtn"
                       type="primary"
                       label={t('DownloadAndInstall')}
                       onClick={() => {
@@ -276,6 +277,7 @@ const PodmanInstallation = ({
         {isPodmanInstalled && !isPodmanRunning && (
           <>
             <Button
+              id="startPodmanBtn"
               type="primary"
               label={t('StartPodman')}
               onClick={onClickStartPodman}

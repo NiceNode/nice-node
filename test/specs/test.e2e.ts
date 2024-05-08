@@ -1,3 +1,4 @@
+import os from 'node:os';
 /* global $ */
 import { expect } from '@wdio/globals';
 import { browser } from 'wdio-electron-service';
@@ -7,6 +8,7 @@ describe('Splash screen tests', () => {
     const elWelcome = await $('#welcome');
     await expect(elWelcome).toBeDisplayed();
     await expect(elWelcome).toHaveText(expect.stringContaining('NiceNode'));
+    await browser.pause(2000);
   });
 
   it('clicking get started btn should take the user to add node screen', async () => {
@@ -14,6 +16,7 @@ describe('Splash screen tests', () => {
     const elAddFirstNodeTitle = await $('#addFirstNodeTitle');
     await expect(elAddFirstNodeTitle).toBeDisplayed();
     await expect(elAddFirstNodeTitle).toHaveText('Add your first node');
+    await browser.pause(2000);
   });
 
   it('clicking continue btn should take the user to service and initial node settings screen', async () => {
@@ -28,6 +31,7 @@ describe('Splash screen tests', () => {
     const elAddFirstNodeTitle = await $("#launchAVarNodeTitle");
     await expect(elAddFirstNodeTitle).toBeDisplayed();
     await expect(elAddFirstNodeTitle).toHaveText('Launch a Ethereum Node');
+    await browser.pause(2000);
   });
 
   it('clicking continue btn should take the user to service and node requirements screen', async () => {
@@ -35,49 +39,89 @@ describe('Splash screen tests', () => {
     const elAddFirstNodeTitle = await $("#nodeRequirementsTitle");
     await expect(elAddFirstNodeTitle).toBeDisplayed();
     await expect(elAddFirstNodeTitle).toHaveText('Node Requirements');
+    await browser.pause(2000);
   });
 
-  // let isPodmanIsInstalled = false;
+  let isPodmanIsInstalled = false;
   // from splash screen, we always show podman screen
-  it('clicking continue btn should take the user to service and node requirements screen', async () => {
+  it('clicking continue btn should take the user to Podman installation screen', async () => {
     await $('#stepperNextButton').click();
-    try {
-      // will not be displayed if podman is already installed
-      const elPodmanInstallationTitle = await $("#podmanInstallationTitle");
-      await expect(elPodmanInstallationTitle).toBeDisplayed();
-      await expect(elPodmanInstallationTitle).toHaveText('Podman installation');
-    } catch(e) {
-      const elPodmanInstallCompleteTitle = await $("#podmanInstallCompleteTitle");
-      await expect(elPodmanInstallCompleteTitle).toBeDisplayed();
-      await expect(elPodmanInstallCompleteTitle).toHaveText('Podman installed');
-      // isPodmanIsInstalled = true;
+    await browser.pause(3000);
+    const startNodeBtn = await $('#stepperNextButton');
+    const elPodmanInstallationTitle = await $("#podmanInstallationTitle");
+    await expect(elPodmanInstallationTitle).toBeDisplayed();
+    await expect(elPodmanInstallationTitle).toHaveText('Podman installation');
+    if(await startNodeBtn.getAttribute('disabled') === 'true') {
+      // install and or start podman
+      // const elPodmanInstallationTitle = await $("#podmanInstallationTitle");
+      // await expect(elPodmanInstallationTitle).toBeDisplayed();
+      // await expect(elPodmanInstallationTitle).toHaveText('Podman installation');
+    } else {
+      // if enabled, start node
+      // await browser.pause(2000);
+      // const elPodmanInstallCompleteTitle = await $("#podmanInstallCompleteTitle");
+      // await expect(elPodmanInstallCompleteTitle).toBeDisplayed();
+      // await expect(elPodmanInstallCompleteTitle).toHaveText('Podman installed');
+      isPodmanIsInstalled = true;
     }
   });
 
-  // add if isPodmanIsInstalled, to run locally
-  if(process.env.OS === 'linux' || (process.env.OS === 'darwin' && process.env.CI === 'true')) {
+  // uncomment to run locally
+  // process.env.CI = 'true';
+  if(os.platform() === 'linux' || (os.platform() === 'darwin' && process.env.CI === 'true')) {
     // from splash screen, we always show podman screen
     it('clicking continue btn should add and start the node', async () => {
       await browser.pause(2000);
+      if(!isPodmanIsInstalled) {
+        // click install and or start podman button
+        try {
+          if($('#downloadAndInstallPodmanBtn').isDisplayed()) {
+            await $('#downloadAndInstallPodmanBtn').click();
+            const startNodeBtn = await $('#stepperNextButton');
+            await browser.pause(30000); // pauses 30 seconds before checking if podman installed
+            // biome-ignore lint/complexity/useArrowFunction: <explanation>
+            await browser.waitUntil(async function () {
+              const elPodmanInstallCompleteTitle = await $("#podmanInstallCompleteTitle");
+              return elPodmanInstallCompleteTitle.isDisplayed();
+            }, { timeout: 300000 }); // allow 5 min for podman install
+            // start podman may not be shown, should be done automatically, and it is now that NN tries to start on startup
+            // await browser.waitUntil(async () => {
+            //   return (await startNodeBtn.getAttribute('disabled') !== 'true')
+            // })
+            // await browser.pause(50000);
+          }
+        } catch(e) {
+          console.log("no download and install button, moving on to start podman")
+        }
+
+        // if((await $('#startPodmanBtn')).isDisplayed()) {
+        //   await $('#startPodmanBtn').click();
+        //   // await browser.pause(50000);
+        // }
+        // todo: wait for next button to be enabled?
+      }
       await $('#stepperNextButton').click();
       await browser.pause(2000);
-      // ...
+
       await expect(await $('div*=Ethereum Node')).toBeDisplayed();
       await expect(await $('div*=Syncing')).toBeDisplayed();
       await expect(await $('span*=Stop')).toBeDisplayed();
+      // await browser.pause(9000);
       // await browser.pause(2000);
       // after docker containers are downloaded and the node is started, the node should be online
       // await expect(await $('div*=Online')).toBeDisplayed();
       // await expect(await $('div*=')).toBeDisplayed();
     }).timeout(120000); // wait 3 minutes for the node to download & start
 
-    it('clicking continue btn should add and start the node', async () => {
+    it('clicking stop node btn should stop the node and show resume button', async () => {
       const stopBtn = (await $('span*=Stop')).parentElement();
       (await stopBtn).click();
+      await browser.pause(2000);
       // await expect(await $('div*=Stopping')).toBeDisplayed();
       // ...
       await expect(await $('div*=Stopped')).toBeDisplayed();
       await expect(await $('span*=Resume')).toBeDisplayed();
+      await browser.pause(9000);
       // await browser.pause(2000);
       // after docker containers are downloaded and the node is started, the node should be online
       // await expect(await $('div*=Online')).toBeDisplayed();
