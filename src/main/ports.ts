@@ -36,9 +36,12 @@ export const getPodmanPortsForNode = (
   }
 
   return {
-    p2pPorts: [defaultP2pPorts, defaultP2pPortsUdp, defaultP2pPortsTcp, defaultGRpcPort].filter(
-      Boolean,
-    ),
+    p2pPorts: [
+      defaultP2pPorts,
+      defaultP2pPortsUdp,
+      defaultP2pPortsTcp,
+      defaultGRpcPort,
+    ].filter(Boolean),
     otherPorts: [
       defaultHttpPort,
       defaultWebSocketsPort,
