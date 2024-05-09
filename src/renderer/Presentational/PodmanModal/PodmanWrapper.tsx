@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import type { ModalConfig } from "../ModalManager/modalUtils.js";
 import PodmanInstallation from "../PodmanInstallation/PodmanInstallation.tsx";
 
@@ -10,10 +11,16 @@ const PodmanWrapper = ({
   modalOnChangeConfig,
   disableSaveButton,
 }: PodmanWrapperProps) => {
+  const onChangeDockerInstall = useCallback((newValue: string) => {
+    if (newValue === "done") {
+      disableSaveButton(false);
+    }
+  }, []);
+
   return (
     <PodmanInstallation
       disableSaveButton={disableSaveButton}
-      // onChange={onChangeDockerInstall}
+      onChange={onChangeDockerInstall}
     />
   );
 };
