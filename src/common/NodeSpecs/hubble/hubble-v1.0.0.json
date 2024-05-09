@@ -16,7 +16,7 @@
       },
       "docker": {
         "containerVolumePath": "/home/node/app/apps/hubble",
-        "raw": " --user 0 -p 2283:2283",
+        "raw": " --user 0",
         "initNodeCommand": "yarn identity create",
         "forcedRawNodeInput": "node --no-warnings build/cli.js start --ip 0.0.0.0 "
       }
