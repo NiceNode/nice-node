@@ -1,17 +1,17 @@
-import { useTranslation, Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import welcome from '../../../assets/images/artwork/welcome.png';
+import niceNodeIcon from '../../../assets/images/logo/mono.svg';
+import Button from '../Button/Button';
+import Linking from '../Link/Linking';
 import {
   container,
   contentContainer,
-  titleFont,
   descriptionFont,
   iconClass,
   termsContainer,
   termsText,
+  titleFont,
 } from './splash.css';
-import niceNodeIcon from '../../../assets/images/logo/mono.svg';
-import Button from '../Button/Button';
-import welcome from '../../../assets/images/artwork/welcome.png';
-import Linking from '../Link/Linking';
 
 /**
  * icon: ImgHTMLAttributes<HTMLImageElement>.src?: string | undefined
@@ -35,7 +35,9 @@ const Splash = ({ onClickGetStarted }: SplashProps) => {
     >
       <div className={contentContainer}>
         <img className={iconClass} alt="App logo" src={niceNodeIcon} />
-        <div className={titleFont}>{t('WelcomeToNiceNode')}</div>
+        <div id="welcome" className={titleFont}>
+          {t('WelcomeToNiceNode')}
+        </div>
         <div className={descriptionFont}>
           {t('WelcomeToNiceNodeDescription')}
         </div>
@@ -45,6 +47,7 @@ const Splash = ({ onClickGetStarted }: SplashProps) => {
               i18nKey="genericComponents:TermsAgreement"
               components={[
                 <Linking
+                  key="termsLink"
                   url="http://nicenode.xyz/terms"
                   text={g('Terms')}
                   inline
@@ -53,6 +56,7 @@ const Splash = ({ onClickGetStarted }: SplashProps) => {
                   underline={false}
                 />,
                 <Linking
+                  key="privacyLink"
                   url="http://nicenode.xyz/privacy"
                   text={g('Privacy')}
                   inline
@@ -65,6 +69,7 @@ const Splash = ({ onClickGetStarted }: SplashProps) => {
           </div>
         </div>
         <Button
+          id="getStartedBtn"
           label={g('GetStarted')}
           type="primary"
           onClick={onClickGetStarted}

@@ -1,27 +1,27 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  NODE_ICONS,
-  NodeIconId,
   NODE_COLORS,
+  NODE_ICONS,
+  type NodeIconId,
 } from '../../../assets/images/nodeIcons';
+import { Icon } from '../Icon/Icon';
 import {
-  imageStyle,
+  containerStyle,
+  green,
+  hasStatusStyle,
   iconBackground,
+  imageStyle,
   largeStyle,
   mediumStyle,
-  hasStatusStyle,
+  red,
   smallStyle,
   statusStyle,
-  containerStyle,
-  sync,
-  red,
-  green,
-  yellow,
   stopped,
+  sync,
   updating,
+  yellow,
 } from './nodeIcon.css';
-import { Icon } from '../Icon/Icon';
 
 export interface NodeIconProps {
   /**
@@ -36,12 +36,16 @@ export interface NodeIconProps {
    * What size should the icon be?
    */
   size: 'small' | 'medium' | 'large';
+  /**
+   * (optional) Use a URL for an icon instead of a hard-coded, bundled image icon
+   */
+  iconUrl?: string;
 }
 
 /**
  * Primary UI component for user interaction
  */
-const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
+const NodeIcon = ({ iconId, status, size, iconUrl }: NodeIconProps) => {
   const { t: g } = useTranslation('genericComponents');
 
   let sizeStyle = mediumStyle;
@@ -93,7 +97,12 @@ const NodeIcon = ({ iconId, status, size }: NodeIconProps) => {
         style={{ backgroundColor: NODE_COLORS[iconId as NodeIconId] }}
       >
         <img
-          src={NODE_ICONS[iconId as NodeIconId] || undefined}
+          src={
+            NODE_ICONS[iconId as NodeIconId] ||
+            iconUrl ||
+            'https://raw.githubusercontent.com/home-assistant/home-assistant.io/current/source/images/favicon-192x192.png' ||
+            undefined
+          }
           alt={g('NodeIcon')}
           className={imageStyle}
         />

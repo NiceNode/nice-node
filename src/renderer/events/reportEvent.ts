@@ -1,8 +1,8 @@
 import mixpanel from 'mixpanel-browser';
 
-import { MP_PROJECT_ENV, MP_PROJECT_TOKEN } from './environment';
-import { NNEvent } from './events';
 import electron from '../electronGlobal';
+import { MP_PROJECT_ENV, MP_PROJECT_TOKEN } from './environment';
+import type { NNEvent } from './events';
 
 let debugInfo: any;
 const getDebugInfo = async (): Promise<any> => {
@@ -11,31 +11,6 @@ const getDebugInfo = async (): Promise<any> => {
   return debugInfo;
 };
 getDebugInfo();
-
-/**
- * Enable or disable remote event reporting service from in the front-end.
- * NiceNode may still log events locally for future debugging purposes.
- */
-export const setRemoteEventReportingEnabled = (isEnabled: boolean) => {
-  console.log('setIsEventReportingEnabled: ', isEnabled);
-  if (MP_PROJECT_ENV === 'dev') {
-    console.log('No mp function to call because mixpanel is not initialized.');
-    return;
-  }
-
-  if (isEnabled) {
-    mixpanel.opt_in_tracking();
-  } else {
-    mixpanel.opt_out_tracking();
-  }
-  if (mixpanel.has_opted_in_tracking() !== isEnabled) {
-    console.error(
-      `Mismatch between user setting and event reporting service \
-      setting. Service isEnabled:${mixpanel.has_opted_in_tracking()} and \
-      user set isEnabled:${isEnabled}`,
-    );
-  }
-};
 
 export type ReportEventData = {
   [x: string]: string | number | boolean | string[] | any;
@@ -55,6 +30,37 @@ export const reportEvent = async (
   }
   const defaultProperties = await getDebugInfo();
   mixpanel.track(event, { eventData: properties, context: defaultProperties });
+};
+
+/**
+ * Enable or disable remote event reporting service from in the front-end.
+ * NiceNode may still log events locally for future debugging purposes.
+ */
+export const setRemoteEventReportingEnabled = async (isEnabled: boolean) => {
+  console.log('setIsEventReportingEnabled: ', isEnabled);
+  if (MP_PROJECT_ENV === 'dev') {
+    console.log('No mp function to call because mixpanel is not initialized.');
+    return;
+  }
+
+  if (isEnabled) {
+    reportEvent('EnableEventReporting');
+    mixpanel.opt_in_tracking();
+  } else {
+    // This helps us approximate the percent of users who opt out and
+    //  this is the last event that will be reported
+    await reportEvent('DisableEventReporting');
+    setTimeout(() => {
+      mixpanel.opt_out_tracking();
+    }, 10000);
+  }
+  if (mixpanel.has_opted_in_tracking() !== isEnabled) {
+    console.error(
+      `Mismatch between user setting and event reporting service \
+      setting. Service isEnabled:${mixpanel.has_opted_in_tracking()} and \
+      user set isEnabled:${isEnabled}`,
+    );
+  }
 };
 
 export const initialize = async () => {

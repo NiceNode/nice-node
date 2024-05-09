@@ -2,12 +2,12 @@ import moment from 'moment';
 import { NotificationIcon } from '../NotificationIcon/NotificationIcon';
 import {
   container,
+  dateStyle,
   iconContainer,
-  textContainer,
-  titleStyle,
   infoStyle,
   rowContainer,
-  dateStyle,
+  textContainer,
+  titleStyle,
 } from './notificationItem.css';
 
 export type NotificationStatus =
@@ -24,7 +24,6 @@ export interface NotificationItemProps {
   /**
    * Notification key
    */
-  // eslint-disable-next-line react/no-unused-prop-types
   key: string;
   /**
    * Notification title (translated string)

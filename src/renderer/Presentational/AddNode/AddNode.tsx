@@ -1,19 +1,20 @@
-import { useCallback, useEffect, useState, memo } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  container,
-  descriptionFont,
-  sectionFont,
-  titleFont,
-  descriptionContainer,
-} from './addNode.css';
-import { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
+import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
+import SelectCard from '../../Generics/redesign/SelectCard/SelectCard';
+import type { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
+import type { NodeIcons } from '../../assets/images/nodeIcons';
 import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
-import SelectCard from '../../Generics/redesign/SelectCard/SelectCard';
-import { NodeIcons } from '../../assets/images/nodeIcons';
+import {
+  container,
+  descriptionContainer,
+  descriptionFont,
+  sectionFont,
+  titleFont,
+} from './addNode.css';
 
 // Other node types are not ready yet
 const nodeOptions = [
@@ -54,6 +55,23 @@ const nodeOptions = [
   },
 ];
 
+const otherNodeOptions = [
+  {
+    iconId: 'home-assistant',
+    title: 'Home Assistant',
+    value: 'home-assistant',
+    label: 'Home Assistant',
+    info: 'Awaken your home',
+  },
+  {
+    iconId: 'minecraft',
+    title: 'Minecraft Server',
+    value: 'minecraft',
+    label: 'Minecraft Server',
+    info: 'The world is yours for the making',
+  },
+];
+
 let alphaModalRendered = false;
 
 export type AddNodeValues = {
@@ -80,6 +98,7 @@ const AddNode = ({
     nodeConfig?.node || nodeOptions[0],
   );
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
+  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
 
   const dispatch = useAppDispatch();
 
@@ -98,7 +117,6 @@ const AddNode = ({
       }
     };
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeNode = useCallback(
@@ -141,14 +159,14 @@ const AddNode = ({
   return (
     <div className={container}>
       {shouldHideTitle !== true && (
-        <div className={titleFont}>{t('AddYourFirstNode')}</div>
+        <div id="addFirstNodeTitle" className={titleFont}>
+          {t('AddYourFirstNode')}
+        </div>
       )}
       <div className={descriptionContainer}>
-        <div className={descriptionFont}>
-          <>{t('AddNodeDescription')}</>
-        </div>
+        <div className={descriptionFont}>{t('AddNodeDescription')}</div>
       </div>
-      <p className={sectionFont}>Network</p>
+      <p className={sectionFont}>{t('Network')}</p>
       <div style={{ width: '100%' }}>
         {nodeOptions.map((nodeOption) => {
           return (
@@ -163,6 +181,35 @@ const AddNode = ({
           );
         })}
       </div>
+
+      {/* Other options are default hidden by a dropdown */}
+      {/* Todo: this should be named "Show more options" */}
+      <DropdownLink
+        text={`${
+          isOptionsOpen ? t('HideAdvancedOptions') : t('ShowAdvancedOptions')
+        }`}
+        onClick={() => setIsOptionsOpen(!isOptionsOpen)}
+        isDown={!isOptionsOpen}
+      />
+      {isOptionsOpen && (
+        <>
+          <p className={sectionFont}>{t('Other')}</p>
+          <div style={{ width: '100%' }}>
+            {otherNodeOptions.map((nodeOption) => {
+              return (
+                <SelectCard
+                  key={nodeOption.value}
+                  title={nodeOption.title}
+                  iconId={nodeOption.iconId as keyof NodeIcons}
+                  info={nodeOption.info}
+                  onClick={() => onChangeNode(nodeOption)}
+                  isSelected={sSelectedNode?.value === nodeOption.value}
+                />
+              );
+            })}
+          </div>
+        </>
+      )}
 
       {/* <SpecialSelect
         selectedOption={sSelectedNode}

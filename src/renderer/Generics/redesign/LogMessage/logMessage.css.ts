@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars, common } from '../theme.css';
+import { common, vars } from '../theme.css';
 
 export const container = style({
   boxSizing: 'border-box',
@@ -46,13 +46,13 @@ export const levelStyle = style({
   order: 2,
   flexGrow: 0,
   selectors: {
-    [`&.INFO`]: {
+    '&.INFO': {
       color: common.color.blue600,
     },
-    [`&.WARN`]: {
+    '&.WARN': {
       color: common.color.orange500,
     },
-    [`&.ERROR`]: {
+    '&.ERROR': {
       color: common.color.red500,
     },
   },

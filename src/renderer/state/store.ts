@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
-import { RtkqExecutionWs } from './services';
-import { RtkqNodeService } from './nodeService';
-import { RtkqSettingsService } from './settingsService';
-import { RtkqNotificationsService } from './notificationsService';
+import modalReducer from './modal';
 import { RtkqNetwork } from './network';
 import nodeReducer from './node';
-import modalReducer from './modal';
+import { RtkqNodeService } from './nodeService';
+import { RtkqNotificationsService } from './notificationsService';
+import { RtkqExecutionWs } from './services';
+import { RtkqSettingsService } from './settingsService';
 
 export const store = configureStore({
   reducer: {

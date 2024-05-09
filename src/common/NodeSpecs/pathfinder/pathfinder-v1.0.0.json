@@ -5,7 +5,8 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "docker.io/eqlabs/pathfinder:latest",
+    "imageName": "docker.io/eqlabs/pathfinder",
+    "defaultImageTag": "latest",
     "input": {
       "defaultConfig": {
         "eth1ProviderUrl": "http://host.containers.internal:8545"
@@ -40,7 +41,7 @@
         "uiControl": {
           "type": "text"
         },
-        "infoDescription": "This should point to the HTTP RPC endpoint of your Ethereum entry-point, typically a local Ethereum client or a hosted gateway service such as Infura or Cloudflare. Examples: infura: https://goerli.infura.io/v3/<PROJECT_ID>, local EC (nethermind/besu/geth): http://localhost:8545"
+        "infoDescription": "This should point to the HTTP RPC endpoint of your Ethereum entry-point, typically a local Ethereum client or a hosted gateway service such as Infura or Cloudflare. Examples: infura: https://sepolia.infura.io/v3/<PROJECT_ID>, local EC (nethermind/besu/geth): http://localhost:8545"
       }
     }
   },

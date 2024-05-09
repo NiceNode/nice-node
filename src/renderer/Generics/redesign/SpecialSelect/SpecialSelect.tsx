@@ -1,9 +1,12 @@
-/* eslint-disable react/destructuring-assignment */
 // Options replaceable component docs:
 // https://react-select.com/components#Option
 import { useEffect, useState } from 'react';
-import Select, { OptionProps, ValueContainerProps } from 'react-select';
-import SelectCard, { SelectCardProps } from '../SelectCard/SelectCard';
+import Select, {
+  type CSSObjectWithLabel,
+  type OptionProps,
+  type ValueContainerProps,
+} from 'react-select';
+import SelectCard, { type SelectCardProps } from '../SelectCard/SelectCard';
 import { vars } from '../theme.css';
 
 const Option = (props: OptionProps) => {
@@ -77,39 +80,47 @@ const SpecialSelect = ({
           IndicatorsContainer: emptyComponentPlaceholder,
         }}
         styles={{
-          container: (base) => ({
-            ...base,
-            width: '100%',
-          }),
-          control: (base) => ({
-            ...base,
-            backgroundColor: 'inherit',
-            border: 'none',
-            boxShadow: 'none',
-            ':hover': {
+          container: (base) => {
+            return {
+              ...base,
+              width: '100%',
+            } as CSSObjectWithLabel;
+          },
+          control: (base) => {
+            return {
+              ...base,
+              backgroundColor: 'inherit',
               border: 'none',
               boxShadow: 'none',
-            },
-          }),
-          menu: (base) => ({
-            ...base,
-            backgroundColor: vars.color.background,
-            marginTop: 0,
-            borderTop: 0,
-            boxShadow: '0px 14px 16px rgba(0, 0, 0, 0.14)',
-          }),
+              ':hover': {
+                border: 'none',
+                boxShadow: 'none',
+              },
+            } as CSSObjectWithLabel;
+          },
+          menu: (base) => {
+            return {
+              ...base,
+              backgroundColor: vars.color.background,
+              marginTop: 0,
+              borderTop: 0,
+              boxShadow: '0px 14px 16px rgba(0, 0, 0, 0.14)',
+            } as CSSObjectWithLabel;
+          },
           dropdownIndicator: () => ({
             display: 'none',
           }),
-          valueContainer: (base) => ({
-            ...base,
-            padding: 0,
-            // https://github.com/JedWatson/react-select/issues/3995#issuecomment-738470183
-            input: {
-              gridArea: 'auto',
-              height: 0,
-            },
-          }),
+          valueContainer: (base) => {
+            return {
+              ...base,
+              padding: 0,
+              // https://github.com/JedWatson/react-select/issues/3995#issuecomment-738470183
+              input: {
+                gridArea: 'auto',
+                height: 0,
+              },
+            } as CSSObjectWithLabel;
+          },
         }}
       />
     </>

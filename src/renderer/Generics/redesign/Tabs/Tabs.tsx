@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { container, tabsList, tabsContainer, tabContent } from './tabs.css';
-import TabItem from '../TabItem/TabItem';
+import type React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { HorizontalLine } from '../HorizontalLine/HorizontalLine';
+import TabItem from '../TabItem/TabItem';
+import { container, tabContent, tabsContainer, tabsList } from './tabs.css';
 
 export interface TabsProps {
   modal?: boolean;
@@ -59,6 +60,7 @@ export const Tabs = ({ children, id, modal }: TabsProps) => {
       <div className={[tabContent, modalStyle].join(' ')}>
         {children.map((child) => {
           if (child.props.id !== activeTab) return undefined;
+          // biome-ignore lint/correctness/useJsxKeyInIterable: <explanation>
           return child.props.children;
         })}
       </div>

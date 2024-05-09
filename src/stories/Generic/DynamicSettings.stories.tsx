@@ -1,8 +1,8 @@
-import { Meta } from '@storybook/react';
-import { ConfigValuesMap } from '../../common/nodeConfig';
+import type { Meta } from '@storybook/react';
+import type { ConfigValuesMap } from '../../common/nodeConfig';
 
 import DynamicSettings, {
-  CategoryConfig,
+  type CategoryConfig,
 } from '../../renderer/Generics/redesign/DynamicSettings/DynamicSettings';
 
 export default {
@@ -58,7 +58,7 @@ const categoryConfigs: CategoryConfig[] = [
     category: 'Syncronization',
     configTranslationMap: {
       syncMode: {
-        displayName: 'Sync mode',
+        displayName: 'Execution Client Sync Mode',
         category: 'Syncronization',
         cliConfigPrefix: '--sync-mode=',
         uiControl: {

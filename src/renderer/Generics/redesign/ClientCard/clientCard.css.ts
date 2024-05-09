@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars, common } from '../theme.css';
+import { common, vars } from '../theme.css';
 
 export const container = style({
   boxSizing: 'border-box',
@@ -23,7 +23,7 @@ export const cardTop = style({
   position: 'relative',
   backgroundSize: 'cover',
   selectors: {
-    [`&.stopped`]: {
+    '&.stopped': {
       opacity: 0.64,
     },
   },
@@ -62,7 +62,7 @@ export const clientBackground = style({
   transform: 'translate3d(0, 0, 0)',
   background: vars.components.clientCardTopBackground,
   selectors: {
-    [`&.stopped`]: {
+    '&.stopped': {
       background: common.color.white4,
     },
   },

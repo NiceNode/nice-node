@@ -27,7 +27,6 @@ const trimLogHeader = (log: string, client: string) => {
   if (client === 'besu') {
     // Pattern: YYYY-MM-DD HH:mm:ss.SSS±HH:mm | thread-name | INFO/WARN/ERROR  | LoggerName |
     return log.replace(
-      // eslint-disable-next-line no-useless-escape
       /\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}\.\d{3}[+-]\d{2}:\d{2} \| [\w\.\-]+ \| (INFO|WARN|ERROR) {2}\| /,
       '',
     );
@@ -67,7 +66,7 @@ const trimLogHeader = (log: string, client: string) => {
   if (client === 'lodestar-beacon') {
     return (
       log
-        // eslint-disable-next-line no-control-regex
+        // biome-ignore lint/suspicious/noControlCharactersInRegex: <explanation>
         .replace(/\x1b\[[0-9;]*m/g, '')
         .replace(
           /\w{3}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}\s*\[.*?\]\s*(info|warn|error|debug|trace)\s*:\s*/,
@@ -79,7 +78,6 @@ const trimLogHeader = (log: string, client: string) => {
     // Example: 2023-09-21T18:30:10.069472Z  INFO or 2023-09-21T18:35:10.070470Z  WARN
     // Pattern: YYYY-MM-DD HH:mm:ss.SSSSSSZ  INFO/WARN/ERROR
     return log.replace(
-      // eslint-disable-next-line no-useless-escape
       /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z\s+(INFO|WARN|ERROR)/,
       '',
     );
@@ -128,7 +126,12 @@ export const parseLogLevel = (
     }
   }
   const uppercaseLog = log.toUpperCase();
-  if (uppercaseLog.includes('ERROR') || uppercaseLog.includes('ERR')) {
+  if (
+    uppercaseLog.includes('ERROR') ||
+    (uppercaseLog.includes('ERR') &&
+      !uppercaseLog.includes('ERR=NIL') &&
+      !uppercaseLog.includes('ERR=NULL'))
+  ) {
     level = 'ERROR';
   } else if (uppercaseLog.includes('WARN') || uppercaseLog.includes('WRN')) {
     level = 'WARN';

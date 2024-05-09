@@ -7,7 +7,7 @@ export const container = style({
   display: 'flex',
   flexDirection: 'column',
   selectors: {
-    [`&.modal`]: {
+    '&.modal': {
       width: 560,
       height: 'auto',
     },
@@ -18,9 +18,12 @@ export const container = style({
 export const componentContainer = style({
   width: '100%',
   flexGrow: 1,
-  // Overflow hidden keeps the content and art container from growing
+  // Overflow-x hidden keeps the content and art container from growing
   //  more than 100% height and having a scroll
-  overflow: 'hidden',
+  // Overflow visible on y allows select menus to show and not be cut off. It will expand the height of the
+  //  overall container to fit the select menu, however.
+  overflow: 'visible',
+  overflowX: 'hidden',
   boxSizing: 'border-box',
 });
 

@@ -1,6 +1,6 @@
-import { FailSystemRequirements } from '../minSystemRequirement';
-import { getOperatingSystemInfo } from '../systemInfo';
 import logger from '../logger';
+import type { FailSystemRequirements } from '../minSystemRequirement';
+import { getOperatingSystemInfo } from '../systemInfo';
 
 export const getFailSystemRequirements = async (): Promise<
   FailSystemRequirements[]

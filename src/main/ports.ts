@@ -1,9 +1,10 @@
-import { ConfigValue } from 'common/nodeConfig';
-import Node, { NodeConfig } from '../common/node';
+import type Node from '../common/node';
+import type { NodeConfig } from '../common/node';
+import type { ConfigValue } from '../common/nodeConfig';
+import { NOTIFICATIONS } from './consts/notifications';
 import { httpGet } from './httpReq';
 import { getNodes, getSetPortHasChanged } from './state/nodes';
 import { addNotification } from './state/notifications';
-import { NOTIFICATIONS } from './consts/notifications';
 
 export const getPodmanPortsForNode = (
   node: Node,
@@ -26,6 +27,8 @@ export const getPodmanPortsForNode = (
     configValuesMap.p2pPortsTcp || configTranslation.p2pPortsTcp?.defaultValue;
   const defaultEnginePort =
     configValuesMap.enginePort || configTranslation.enginePort?.defaultValue;
+  const defaultGRpcPort =
+    configValuesMap.gRpcPort || configTranslation.gRpcPort?.defaultValue;
 
   // Check if UDP and TCP ports are the same, if yes, push only one value
   if (defaultP2pPortsUdp === defaultP2pPortsTcp) {
@@ -33,9 +36,12 @@ export const getPodmanPortsForNode = (
   }
 
   return {
-    p2pPorts: [defaultP2pPorts, defaultP2pPortsUdp, defaultP2pPortsTcp].filter(
-      Boolean,
-    ),
+    p2pPorts: [
+      defaultP2pPorts,
+      defaultP2pPortsUdp,
+      defaultP2pPortsTcp,
+      defaultGRpcPort,
+    ].filter(Boolean),
     otherPorts: [
       defaultHttpPort,
       defaultWebSocketsPort,
@@ -84,7 +90,7 @@ export const didPortsChange = (
   if (!node || !node.spec || !node.spec.configTranslation) return false;
 
   const baseKeys = ['httpPort', 'enginePort', 'webSocketsPort'];
-  const p2pKeys = ['p2pPortsUdp', 'p2pPortsTcp'];
+  const p2pKeys = ['p2pPortsUdp', 'p2pPortsTcp', 'gRpcPort'];
 
   const hasBaseKeyChanged = baseKeys.some((key) => {
     const objectValue = objectValuesMap.configValuesMap[key];

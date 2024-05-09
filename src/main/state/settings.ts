@@ -4,8 +4,9 @@ import { sendMessageOnThemeChange } from '../docker/messageFrontEnd';
 import logger from '../logger';
 import { getPlatform, isLinux } from '../platform';
 
-import store from './store';
+import { setAllowPrerelease } from '../updater';
 import { setOpenAtLoginLinux } from '../util/linuxAutostartFile';
+import store from './store';
 
 // export type Settings = Record<string, string | object | boolean>;
 const SETTINGS_KEY = 'settings';
@@ -21,6 +22,7 @@ const APP_THEME_SETTING = 'appThemeSetting';
 const APP_IS_OPEN_ON_STARTUP = 'appIsOpenOnStartup';
 const APP_IS_NOTIFICATIONS_ENABLED = 'appIsNotificationsEnabled';
 const APP_IS_EVENT_REPORTING_ENABLED = 'appIsEventReportingEnabled';
+const APP_IS_PRE_RELEASE_UPDATES_ENABLED = 'appIsPreReleaseUpdatesEnabled';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Settings = {
@@ -34,6 +36,7 @@ export type Settings = {
   [APP_IS_OPEN_ON_STARTUP]?: boolean;
   [APP_IS_NOTIFICATIONS_ENABLED]?: boolean;
   [APP_IS_EVENT_REPORTING_ENABLED]?: boolean;
+  [APP_IS_PRE_RELEASE_UPDATES_ENABLED]?: boolean;
 };
 
 /**
@@ -88,7 +91,11 @@ export const getSettings = (): Settings => {
 export const setLanguage = (languageCode: string) => {
   logger.info(`Setting language to ${languageCode}`);
   store.set(`${SETTINGS_KEY}.${APP_LANGUAGE_KEY}`, languageCode);
-  logger.info(`App language is ${store.get(SETTINGS_KEY, APP_LANGUAGE_KEY)}`);
+  logger.info(
+    `App language is ${JSON.stringify(
+      store.get(SETTINGS_KEY, APP_LANGUAGE_KEY),
+    )}`,
+  );
 };
 
 export const setNativeThemeSetting = (theme: ThemeSetting) => {
@@ -165,11 +172,32 @@ export const setIsEventReportingEnabled = (
   );
 };
 
+export const getSetIsPreReleaseUpdatesEnabled = (
+  isPreReleaseUpdatesEnabled?: boolean,
+) => {
+  if (isPreReleaseUpdatesEnabled !== undefined) {
+    logger.info(
+      `Setting isPreReleaseUpdatesEnabled to ${isPreReleaseUpdatesEnabled}`,
+    );
+    store.set(
+      `${SETTINGS_KEY}.${APP_IS_PRE_RELEASE_UPDATES_ENABLED}`,
+      isPreReleaseUpdatesEnabled,
+    );
+    setAllowPrerelease(isPreReleaseUpdatesEnabled);
+  }
+  const savedIsPreReleaseUpdatesEnabled: boolean = store.get(
+    `${SETTINGS_KEY}.${APP_IS_PRE_RELEASE_UPDATES_ENABLED}`,
+  );
+  return savedIsPreReleaseUpdatesEnabled;
+};
+
 // listen to OS theme updates
 nativeTheme.on('updated', () => {
   console.log("nativeTheme.on('updated')");
   const settings = getSettings();
 
+  // bug: nativeTheme.shouldUseDarkColors stays true when OS theme changes to light and
+  // NN is set to dark mode
   console.log(
     'nativeTheme shouldUseDarkColors vs settings.osIsDarkMode',
     nativeTheme.shouldUseDarkColors,

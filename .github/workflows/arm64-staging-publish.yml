@@ -69,7 +69,6 @@ jobs:
             sudo apt-get install --no-install-recommends rpm libarchive-tools
 
             npm install
-            npm run postinstall
             npm run build
             npm exec electron-builder -- --publish always --linux
 

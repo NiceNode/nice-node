@@ -1,9 +1,9 @@
 import {
-  outerDiv,
-  innerDiv,
   captionText,
   cardDownloadingProgressContainer,
   downloadingProgressContainer,
+  innerDiv,
+  outerDiv,
   sectionFont,
 } from './progressBar.css';
 
@@ -40,9 +40,7 @@ const ProgressBar = ({
     : downloadingProgressContainer;
   return (
     <div className={downloadContainer}>
-      <div className={sectionFont}>
-        <>{title}</>
-      </div>
+      <div className={sectionFont}>{title}</div>
       <div className={outerDiv}>
         <div
           style={{ width: `${progressWidth}%`, backgroundColor: color }}

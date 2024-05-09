@@ -5,14 +5,15 @@
   "execution": {
     "executionTypes": ["docker", "binary"],
     "defaultExecutionType": "docker",
-    "imageName": "docker.io/statusim/nimbus-eth2:multiarch-latest",
+    "imageName": "docker.io/statusim/nimbus-eth2",
+    "defaultImageTag": "multiarch-latest",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
         "httpPort": "5052",
         "httpHostAddress": "0.0.0.0",
-        "httpCorsDomains": "\"http://localhost\"",
-        "executionEndpoint": "\"http://host.containers.internal:8551\"",
+        "httpCorsDomains": "http://localhost",
+        "executionEndpoint": "http://host.containers.internal:8551",
         "network": "Mainnet"
       },
       "docker": {
@@ -73,10 +74,6 @@
             "config": "holesky"
           },
           {
-            "value": "Goerli",
-            "config": "goerli"
-          },
-          {
             "value": "Sepolia",
             "config": "sepolia"
           }
@@ -131,6 +128,7 @@
     "httpCorsDomains": {
       "displayName": "HTTP-RPC CORS domains",
       "cliConfigPrefix": "--rest-allow-origin=",
+      "defaultValue": "http://localhost",
       "uiControl": {
         "type": "text"
       },
@@ -148,7 +146,7 @@
     "executionEndpoint": {
       "displayName": "Local execution Engine RPC-JSON API URL",
       "cliConfigPrefix": "--web3-url=",
-      "defaultValue": "\"http://host.containers.internal:8551\"",
+      "defaultValue": "http://host.containers.internal:8551",
       "uiControl": {
         "type": "text"
       },

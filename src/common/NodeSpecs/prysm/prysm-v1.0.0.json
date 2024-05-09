@@ -5,7 +5,8 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "gcr.io/prysmaticlabs/prysm/beacon-chain:stable",
+    "imageName": "gcr.io/prysmaticlabs/prysm/beacon-chain",
+    "defaultImageTag": "stable",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
@@ -68,10 +69,6 @@
           {
             "value": "Holesky",
             "config": "--holesky"
-          },
-          {
-            "value": "Goerli",
-            "config": "--goerli"
           },
           {
             "value": "Sepolia",

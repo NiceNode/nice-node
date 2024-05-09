@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import ReactSelect, {
-  MenuPlacement,
-  MultiValue,
-  SingleValue,
-  StylesConfig,
+  type CSSObjectWithLabel,
+  type MenuPlacement,
+  type MultiValue,
+  type SingleValue,
+  type StylesConfig,
 } from 'react-select';
 import { vars } from '../theme.css';
 
@@ -46,47 +47,59 @@ const MultiSelect = ({
   }, [value, options]);
 
   const customStyles: StylesConfig<any, true> = {
-    control: (styles) => ({
-      ...styles,
-      backgroundColor: vars.color.background,
-      color: vars.color.font,
-      borderColor: vars.color.border,
-      boxShadow: 'none',
-      '&:hover': {
-        borderColor: vars.color.primary,
-        outline: 0,
-        boxShadow: '0 0 0 2px rgba(115, 81, 235, 0.25)',
-      },
-    }),
-    menu: (styles) => ({
-      ...styles,
-      backgroundColor: vars.color.background,
-    }),
-    option: (styles) => ({
-      ...styles,
-      backgroundColor: vars.color.font8,
-      color: vars.color.font85,
-      ':active': {
-        backgroundColor: vars.color.font8,
-      },
-    }),
-    multiValue: (styles) => ({
-      ...styles,
-      backgroundColor: vars.color.font8,
-    }),
-    multiValueLabel: (styles) => ({
-      ...styles,
-      fontSize: 13,
-      color: vars.color.font85,
-    }),
-    multiValueRemove: (styles) => ({
-      ...styles,
-      color: vars.color.font85,
-      ':hover': {
+    control: (styles) => {
+      return {
+        ...styles,
+        backgroundColor: vars.color.background,
+        color: vars.color.font,
+        borderColor: vars.color.border,
+        boxShadow: 'none',
+        '&:hover': {
+          borderColor: vars.color.primary,
+          outline: 0,
+          boxShadow: '0 0 0 2px rgba(115, 81, 235, 0.25)',
+        },
+      } as CSSObjectWithLabel;
+    },
+    menu: (styles) => {
+      return {
+        ...styles,
+        backgroundColor: vars.color.background,
+      } as CSSObjectWithLabel;
+    },
+    option: (styles) => {
+      return {
+        ...styles,
         backgroundColor: vars.color.font8,
         color: vars.color.font85,
-      },
-    }),
+        ':active': {
+          backgroundColor: vars.color.font8,
+        },
+      } as CSSObjectWithLabel;
+    },
+    multiValue: (styles) => {
+      return {
+        ...styles,
+        backgroundColor: vars.color.font8,
+      } as CSSObjectWithLabel;
+    },
+    multiValueLabel: (styles) => {
+      return {
+        ...styles,
+        fontSize: 13,
+        color: vars.color.font85,
+      } as CSSObjectWithLabel;
+    },
+    multiValueRemove: (styles) => {
+      return {
+        ...styles,
+        color: vars.color.font85,
+        ':hover': {
+          backgroundColor: vars.color.font8,
+          color: vars.color.font85,
+        },
+      } as CSSObjectWithLabel;
+    },
   };
 
   return (
@@ -95,7 +108,6 @@ const MultiSelect = ({
         value={sSelectedOptions}
         options={options}
         styles={customStyles}
-        // @ts-ignore
         onChange={(
           newValue: SingleValue<SelectOption> | MultiValue<SelectOption>,
         ) => {

@@ -3,9 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { setModalState } from '../../state/modal';
+import { NodeStatus } from '../../../common/node';
+import Button from '../../Generics/redesign/Button/Button';
+import { HeaderButton } from '../../Generics/redesign/HeaderButton/HeaderButton';
+import type { NodeAction } from '../../Generics/redesign/consts';
+import type { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import electron from '../../electronGlobal';
-import { useAppSelector, useAppDispatch } from '../../state/hooks';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { setModalState } from '../../state/modal';
 import {
   selectIsAvailableForPolling,
   selectSelectedNode,
@@ -17,22 +22,17 @@ import {
   useGetNodeVersionQuery,
 } from '../../state/services';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
-import ContentSingleClient, {
-  SingleNodeContent,
-} from '../ContentSingleClient/ContentSingleClient';
 import { hexToDecimal } from '../../utils';
-import { NodeAction } from '../../Generics/redesign/consts';
-import Button from '../../Generics/redesign/Button/Button';
+import ContentSingleClient, {
+  type SingleNodeContent,
+} from '../ContentSingleClient/ContentSingleClient';
 import {
+  backButtonContainer,
   container,
   contentContainer,
-  titleFont,
   descriptionFont,
-  backButtonContainer,
+  titleFont,
 } from './NodeScreen.css';
-import { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
-import { HeaderButton } from '../../Generics/redesign/HeaderButton/HeaderButton';
-import { NodeStatus } from '../../../common/node';
 
 let alphaModalRendered = false;
 
@@ -45,7 +45,6 @@ const NodeScreen = () => {
   );
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   // we will bring this var back in the future
-  // @ts-ignore: no-unused-variable
   const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>(0);
@@ -95,7 +94,6 @@ const NodeScreen = () => {
   const memoryPercent = selectedNode?.runtime?.usage?.memoryBytes ?? [
     { x: 0, y: 0 },
   ];
-  // eslint-disable-next-line eqeqeq
   // const isHttpEnabled =
   //   selectedNode?.config?.configValuesMap?.http &&
   //   ['Enabled', 'enabled', 'true', true, 1].includes(
@@ -199,7 +197,7 @@ const NodeScreen = () => {
       typeof slotNumber === 'string' &&
       rpcTranslation === 'eth-l1-beacon'
     ) {
-      latestBlockNum = parseFloat(slotNumber);
+      latestBlockNum = Number.parseFloat(slotNumber);
     } else if (rpcTranslation === 'farcaster-l1') {
       latestBlockNum = qLatestBlock.data;
     }
@@ -294,10 +292,10 @@ const NodeScreen = () => {
       return '';
     }
     if (info.includes('Consensus') || info.includes('BeaconNode')) {
-      return `Consensus Client`;
+      return 'Consensus Client';
     }
     if (info.includes('Execution')) {
-      return `Execution Client`;
+      return 'Execution Client';
     }
     return info;
   };
@@ -311,7 +309,7 @@ const NodeScreen = () => {
     let versionString = version;
 
     // Don't match -stable or -<commit-hash> that many nodes use
-    const genericVersionRegex = /v\d+\.\d+\.\d+(-[alpha|beta|edge]+)?/;
+    const genericVersionRegex = /v\d+\.\d+\.\d+(-[alpha|beta|edge]+)?(\.\d+)?/;
     const match = version.match(genericVersionRegex);
 
     if (match) {
@@ -343,6 +341,7 @@ const NodeScreen = () => {
       //  node http api as the source of truth
       // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
       synchronized: sIsSyncing === false && status === NodeStatus.running,
+      updating: status === NodeStatus.updating,
     },
     stats: {
       peers: sPeers,

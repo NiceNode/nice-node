@@ -1,4 +1,4 @@
-import { ServiceConfigs } from './nodePackageConfig';
+import type { ServiceConfigs } from './nodePackageConfig';
 
 export const FilePathControlType = 'filePath';
 export type FilePathControl = {
@@ -14,6 +14,9 @@ export type TextControl = {
 export type SelectTranslation = {
   value: string;
   config?: string;
+
+  // Only used for sync modes for now
+  info?: string;
   // Should only be used by node packages
   serviceConfigs?: ServiceConfigs;
 };
@@ -176,50 +179,3 @@ export const buildCliConfig = ({
   );
   return cliConfigArray;
 };
-// return cliConfigArray.join(" ")
-/// EXAMPLEEEEEEES
-
-// network: // | {
-//     values: ['mainnet', 'goerli', 'ropsten'];
-//     default: 'mainnet';
-//     config: ['--network']; //lighthouse
-//   }
-// |
-// {
-//   displayName: 'Ethereum network';
-//   defaultValue: 'mainnet';
-//   translation: [
-//     //geth
-//     {
-//       value: 'mainnet';
-//       config: ['--mainnet'];
-//     },
-//     {
-//       value: 'kiln';
-//       config: ['--kiln'];
-//     },
-//     {
-//       value: 'goerli';
-//       config: ['--goerli'];
-//     }
-//   ];
-// };
-// syncMode: {
-//   displayName: 'Node sync mode';
-//   defaultValue: 'snap';
-//   translation: [
-//     //geth
-//     {
-//       value: 'snap';
-//       config: ['--syncmode', 'snap'];
-//     },
-//     {
-//       value: 'fast';
-//       config: ['--syncmode', 'fast'];
-//     },
-//     {
-//       value: 'light';
-//       config: ['--syncmode', 'light'];
-//     }
-//   ];
-// };

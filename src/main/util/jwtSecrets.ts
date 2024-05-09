@@ -1,8 +1,6 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-await-in-loop */
+import crypto from 'node:crypto';
 import { open } from 'node:fs/promises';
 import path from 'node:path';
-import crypto from 'node:crypto';
 
 // import { getNNDirPath } from '../files';
 
@@ -15,12 +13,12 @@ import crypto from 'node:crypto';
 export const createJwtSecretAtDirs = async (
   dirPaths: string[],
 ): Promise<boolean> => {
-  const jwtSecret = `0x${crypto.randomBytes(32).toString('hex')}`;
+  const jwtSecret = crypto.randomBytes(32).toString('hex');
   // dirPaths.forEach(async (dirPath) => {
   for (const dirPath of dirPaths) {
     // open file for writing only, fails if the file exists
     // this is not expected to fail so don't catch
-    const jwtSecretFilePath = path.join(dirPath, `jwtsecret`);
+    const jwtSecretFilePath = path.join(dirPath, 'jwtsecret');
     console.log(`jwtsecret: file path opening.. at ${jwtSecretFilePath}`);
     const jwtSecretFileHandle = await open(jwtSecretFilePath, 'wx');
     await jwtSecretFileHandle.writeFile(jwtSecret);

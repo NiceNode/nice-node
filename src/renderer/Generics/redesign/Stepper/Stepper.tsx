@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import Button from '../Button/Button';
-import { bottomBar, previousButton, nextButton } from './stepper.css';
+import { bottomBar, nextButton, previousButton } from './stepper.css';
 
 export interface StepperProps {
   step?: number;
@@ -24,6 +24,7 @@ const Stepper = ({ onChange, step, disabledSaveButton }: StepperProps) => {
       </div>
       <div className={nextButton}>
         <Button
+          id="stepperNextButton"
           label={g('NextStep')}
           type="primary"
           disabled={buttonDisabled}

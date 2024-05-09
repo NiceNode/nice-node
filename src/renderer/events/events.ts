@@ -6,4 +6,8 @@ export type NNEvent =
   | 'InstalledPodman'
   | 'OpenAddNodeModal'
   | 'UpdatedNiceNode'
-  | 'UserCheckForUpdateNN';
+  | 'UserCheckForUpdateNN'
+  | 'DisablePreReleaseUpdates'
+  | 'EnablePreReleaseUpdates'
+  | 'DisableEventReporting'
+  | 'EnableEventReporting';

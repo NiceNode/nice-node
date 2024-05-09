@@ -1,12 +1,11 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NodeIconId } from 'renderer/assets/images/nodeIcons';
-import NodeIcon from '../NodeIcon/NodeIcon';
+import type { NodeIconId } from '../../../assets/images/nodeIcons';
 import { Label } from '../Label/Label';
+import NodeIcon from '../NodeIcon/NodeIcon';
 import {
-  container,
   activeContainer,
+  container,
   descriptionStyle,
   selectedContainer,
   tagStyle,

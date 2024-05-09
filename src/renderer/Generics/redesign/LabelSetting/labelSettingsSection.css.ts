@@ -7,7 +7,7 @@ export const sectionContainer = style({
   alignItems: 'flex-start',
   padding: '8px 0px',
   selectors: {
-    [`&.modal`]: {
+    '&.modal': {
       padding: '0px 0px 8px 0px',
     },
   },
@@ -49,8 +49,12 @@ export const lineContainer = style({
   borderBottom: '1px solid',
   borderColor: vars.color.font10,
   selectors: {
-    [`&.dataDir`]: {
+    '&.dataDir': {
       alignItems: 'unset',
+      flexDirection: 'column',
+    },
+    '&.syncMode': {
+      alignItems: 'flex-start',
       flexDirection: 'column',
     },
   },
@@ -64,6 +68,12 @@ export const labelAndDescriptionContainer = style({
   order: 0,
   flexGrow: 0,
   maxWidth: '68%',
+  selectors: {
+    '&.syncMode': {
+      flexDirection: 'row',
+      gap: 8,
+    },
+  },
 });
 
 export const lineKeyText = style({
@@ -81,8 +91,12 @@ export const lineValueText = style({
   flexGrow: 0,
   maxWidth: 352,
   selectors: {
-    [`&.dataDir`]: {
+    '&.dataDir': {
       maxWidth: 'unset',
+    },
+    '&.syncMode': {
+      maxWidth: 'unset',
+      width: '100%',
     },
   },
 });

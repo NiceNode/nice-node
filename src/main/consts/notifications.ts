@@ -8,7 +8,7 @@ export const TIME = Object.freeze({
   YEAR: 31536000000,
 });
 
-const enum STATUS {
+enum STATUS {
   INFO = 'info',
   COMPLETED = 'completed',
   DOWNLOAD = 'download',

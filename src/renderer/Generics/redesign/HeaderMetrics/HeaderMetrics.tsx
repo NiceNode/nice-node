@@ -1,9 +1,9 @@
 import React from 'react';
-import { MetricStats, MetricTypes } from '../MetricTypes/MetricTypes';
-import { container } from './headerMetrics.css';
+import { type MetricStats, MetricTypes } from '../MetricTypes/MetricTypes';
 import VerticalLine from '../VerticalLine/VerticalLine';
+import type { NodeOverviewProps } from '../consts';
 import { getSyncStatus } from '../utils';
-import { NodeOverviewProps } from '../consts';
+import { container } from './headerMetrics.css';
 
 export const HeaderMetrics = (props: NodeOverviewProps) => {
   const { screenType, status, stats, rpcTranslation } = props;

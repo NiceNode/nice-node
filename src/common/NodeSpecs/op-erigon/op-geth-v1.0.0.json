@@ -8,8 +8,8 @@
     "input": {
       "defaultConfig": {
         "http": "Enabled",
-        "httpPort" : "8547",
-        "enginePort" : "8553",
+        "httpPort": "8547",
+        "enginePort": "8553",
         "httpCorsDomains": "http://localhost",
         "webSockets": "Disabled",
         "httpVirtualHosts": "localhost,host.containers.internal",
@@ -229,7 +229,7 @@
       "uiControl": {
         "type": "text"
       },
-      "infoDescription" : "[New flag / Optional] The historical RPC endpoint. op-erigon queries historical execution data that op-erigon does not support to historical RPC—for example, pre-bedrock executions. For Optimism Goerli Testnet, please set this value to the Legacy Geth endpoint. For more information about legacy geth, refer the Optimism's node operator guide."
+      "infoDescription": "[New flag / Optional] The historical RPC endpoint. op-erigon queries historical execution data that op-erigon does not support to historical RPC—for example, pre-bedrock executions. For Optimism Sepolia Testnet, please set this value to the Legacy Geth endpoint. For more information about legacy geth, refer the Optimism's node operator guide."
     }
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"

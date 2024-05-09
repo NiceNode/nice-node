@@ -1,5 +1,3 @@
-# NiceNode
-
 Run a node at home, the easy way.
 
 Set up an Ethereum node in no-time on every modern computer without any technical knowledge (coming soon).
@@ -13,7 +11,7 @@ For the latest information, visit https://nicenode.xyz
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/k3dpYU4Pn9)
 [![Crowdin](https://badges.crowdin.net/nicenode/localized.svg)](https://crowdin.com/project/nicenode)
 
-<img width="1164" alt="Nice Node Screenshot captioned work in progress" src="https://user-images.githubusercontent.com/3721291/213537206-fa5380f4-af5b-4d81-a07b-ea9072f07b24.png">
+<img width="1164" alt="Application Window Dark" src="https://github.com/NiceNode/nice-node/assets/3721291/835ced91-3a2f-4be6-a30e-11dd025fa20e">
 
 # Development
 
@@ -57,13 +55,37 @@ NICENODE_ENV=development
 To package apps for the local platform:
 
 ```bash
-npm run package
+npm run make
 ```
 
 For a specific platform & architecture:
 
 ```bash
-npm run package -- --linux --arm64
+npm run make -- --platform=linux --arch=arm64
+npm run make -- --arch=x64 --platform=darwin
+```
+arch options include: ia32, x64, armv7l, arm64, mips64el, universal
+
+## Tests
+
+Unit tests with `npm run test`
+
+### Frontend (React) tests
+`npm run test -- --config vite.renderer.config.ts --dir src/__tests__/react`
+
+### Backend (Nodejs) tests
+`npm run test -- --config vite.main.config.ts --dir src/__tests__/node`
+
+### End-to-end (e2e) tests
+
+For e2e tests, we use webdriver and an electron plugin to automate testing.
+**It requires a packaged build to run the tests!**
+
+To run them locally, package the source first (and after making any changes to anything other than `tests`), then run the e2e tests with `wdio`
+
+```bash
+npm run make <your os and arch>
+npm run wdio
 ```
 
 ## Running Storybook
@@ -73,3 +95,15 @@ To run Storybook locally:
 ```bash
 npm run storybook
 ```
+
+
+## Debugging ASAR and contents
+`npx @electron/asar extract app.asar <destfolder>` can be used to determine the contents of asar
+
+`npm run package` followed by `mkdir outAsar` and `npx @electron/asar extract ./out/NiceNode-darwin-arm64/NiceNode.app/Contents/Resources/app.asar outAsar` on macOS
+
+## Debugging update server (macOS and Windows)
+`curl https://update.electronjs.org/NiceNode/nice-node/darwin-arm64/5.2.0-alpha` returns if there is an update detected by the update server. The end of the URL is <platform>-<arch>/<version>.
+
+Also, NiceNode app auto update logs are in ../NiceNode/logs/autoUpdater*.log.
+

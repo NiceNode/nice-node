@@ -1,18 +1,19 @@
 import { spawn } from 'node:child_process';
 
+import { execAwait } from '../execHelper';
 import logger from '../logger';
 import * as platform from '../platform';
-import { execAwait } from '../execHelper';
 
 export const startOnMac = async (): Promise<any> => {
   try {
-    let stdout;
-    let stderr;
     // start docker app
-    // eslint-disable-next-line prefer-const
-    ({ stdout, stderr } = await execAwait(`open /Applications/Docker.app`, {
-      log: true,
-    }));
+
+    const { stdout, stderr } = await execAwait(
+      'open /Applications/Docker.app',
+      {
+        log: true,
+      },
+    );
     console.log('open docker app stdout, stderr', stdout, stderr);
     return true;
   } catch (err) {
@@ -43,7 +44,7 @@ export const startOnWindows = async (): Promise<any> => {
 };
 
 const startDocker = async (): Promise<any> => {
-  logger.info(`Starting docker...`);
+  logger.info('Starting docker...');
 
   let result;
   if (platform.isMac()) {

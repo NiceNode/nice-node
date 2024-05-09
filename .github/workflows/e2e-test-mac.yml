@@ -1,0 +1,53 @@
+name: e2e-tests-mac
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  e2e-build-n-test:
+    environment: staging
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macOS-latest]
+        node-version: [20.x]
+
+    steps:
+      # https://github.com/electron/forge/issues/2807
+      - if: ${{ matrix.os == 'macos-latest' }}
+        run: python3 -m pip install setuptools --break-system-packages
+
+      - uses: actions/checkout@v4
+      - name: 💚 Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 🧱 Install Dependencies
+        run: |
+          npm ci
+
+      - name: 📦 Bundle Application
+        env:
+          DEBUG: "*electron*"
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+          MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
+          NICENODE_ENV: ${{ vars.NICENODE_ENV }}
+          NO_CODE_SIGNING: true
+        run: |
+          npm run make
+          ls -al
+
+      - name: 🧪 Run Tests
+        uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
+        with:
+          run: npm run wdio
+      - name: 🐛 Debug Build
+        uses: stateful/vscode-server-action@v1
+        if: failure()
+        with:
+          timeout: '120000'

@@ -1,0 +1,99 @@
+name: e2e-tests-linux-distros
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  e2e-build-n-test:
+    environment: staging
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        container: [
+          "ubuntu:24.04",
+          "ubuntu:23.10",
+          "debian:12",
+          "fedora:40",
+          "fedora:39",
+          "manjarolinux/base",
+          "archlinux:latest",
+        ]
+    container:
+      image: ${{ matrix.container }}
+      env:
+        NODE_ENV: test
+        TEST: true
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: 💚 Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 🧱 Install system dependencies
+        run: |
+          # Define the packages needed (git req'd by electron forge)
+          packagesNeeded="nodejs npm git zip dpkg fakeroot"
+
+          # Determine the package manager and install required packages
+          if command -v apt-get > /dev/null 2>&1; then
+              apt-get update
+              apt-get install --no-install-recommends -y $packagesNeeded rpm libarchive-tools
+              apt-get install -y \
+                xvfb \
+                zip \
+                wget \
+                ca-certificates \
+                libnss3-dev \
+                libasound2t64 \
+                libxss1 \
+                libappindicator3-1 \
+                libindicator7 \
+                xdg-utils \
+                fonts-liberation \
+                libgbm1
+          elif command -v dnf > /dev/null 2>&1; then
+              dnf install -y $packagesNeeded rpmdevtools
+          elif command -v pacman > /dev/null 2>&1; then
+              pacman -Syu --noconfirm
+              pacman -S --noconfirm $packagesNeeded
+          elif command -v zypper > /dev/null 2>&1; then
+              zypper install -y $packagesNeeded
+          else
+              echo "FAILED TO INSTALL PACKAGES: Package manager not found. You must manually install: $packagesNeeded" >&2
+              exit 1
+          fi
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: 📦 Bundle Application
+        env:
+          DEBUG: "*electron*"
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+          MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
+          NICENODE_ENV: ${{ vars.NICENODE_ENV }}
+          NO_CODE_SIGNING: true
+        run: |
+          npm run make
+
+      - name: Setup virtual display
+        run: |
+          export DISPLAY=':99.0'
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+
+      - name: 🧪 Run Tests
+        run: |
+          npm run wdio
+
+      - name: 🐛 Debug Build
+        uses: stateful/vscode-server-action@v1
+        if: failure()
+        with:
+          timeout: '120000'

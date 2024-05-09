@@ -1,13 +1,13 @@
-import { IconId } from 'renderer/assets/images/icons';
+import type { IconId } from '../../../assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import {
   baseButton,
-  primaryButton,
-  secondaryButton,
+  dangerButton,
+  ghostButton,
   iconLeft,
   iconStyle,
-  ghostButton,
-  dangerButton,
+  primaryButton,
+  secondaryButton,
 } from './button.css';
 
 export interface ButtonProps {
@@ -39,6 +39,10 @@ export interface ButtonProps {
    */
   label?: string;
   onClick?: () => void;
+  /**
+   * id for the <button/> element
+   */
+  id?: string;
 }
 
 const Button = ({

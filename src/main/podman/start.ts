@@ -1,15 +1,15 @@
-/* eslint-disable no-await-in-loop */
+import { execAwait } from '../execHelper';
+import logger from '../logger';
+import * as platform from '../platform';
+import { delay } from '../util/delay';
+import { startMachineIfCreated } from './machine';
+
 import {
   isPodmanInstalled,
   isPodmanRunning,
   isPodmanStarting,
   runCommand as runPodmanCommand,
 } from './podman';
-import { execAwait } from '../execHelper';
-import logger from '../logger';
-import * as platform from '../platform';
-import { startMachineIfCreated } from './machine';
-import { delay } from '../util/delay';
 
 const NICENODE_MACHINE_NAME = 'nicenode-machine';
 
@@ -17,21 +17,21 @@ export const startOnMac = async (): Promise<any> => {
   logger.info('Podman startOnMac...');
   try {
     // Get computer cpu count and total memory size
-    const { stdout } = await execAwait(`sysctl -n hw.ncpu hw.memsize`, {
+    const { stdout } = await execAwait('sysctl -n hw.ncpu hw.memsize', {
       log: true,
     });
     const output = stdout.split('\n'); // get the first line of output
-    let cpuCount = parseInt(output[0], 10); // get the first line of output
+    let cpuCount = Number.parseInt(output[0], 10); // get the first line of output
     // qemu requires extra properties if cpu > 8
     // https://github.com/utmapp/UTM/commit/a358d5c62dccded2e471a67e750e03b3c40fcc43
     cpuCount = cpuCount < 8 ? cpuCount : 8;
-    const memoryBytes = parseInt(output[1], 10); // get the first line of output
+    const memoryBytes = Number.parseInt(output[1], 10); // get the first line of output
     let memoryMBs = Math.floor(memoryBytes / (1024 * 1024));
     // cap vm memory at 60GB, seems there is a qemu limitation around 64GB
     if (memoryMBs > 60000) {
       memoryMBs = 60000;
     }
-    // eslint-disable-next-line prefer-const
+
     // todo: change volumes and disk-size as node storage paths change?
     // todoo: machine ls command
     //          if machine, yay? if not, start?
@@ -64,7 +64,7 @@ export const startOnWindows = async (): Promise<any> => {
   try {
     // the first time podman machine init is called, podman will install windows subsystem
     //  linux v2 and then require a restart
-    // eslint-disable-next-line prefer-const
+
     const isNiceNodeMachineCreated = await startMachineIfCreated();
 
     if (!isNiceNodeMachineCreated) {
@@ -90,12 +90,11 @@ export const startOnWindows = async (): Promise<any> => {
 };
 
 const waitForPodmanToFinishStarting = async (maxTime?: number) => {
-  logger.info(`waitForPodmanToFinishStarting...`);
+  logger.info('waitForPodmanToFinishStarting...');
   const startTime = Date.now();
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     if (await isPodmanRunning()) {
-      logger.info(`waitForPodmanToFinishStarting: Podman is running!`);
+      logger.info('waitForPodmanToFinishStarting: Podman is running!');
       return true;
       // Continue with the rest of the code here
     }
@@ -117,16 +116,16 @@ const waitForPodmanToFinishStarting = async (maxTime?: number) => {
  * the machine. No machine required on Linux.
  */
 const startPodman = async (): Promise<any> => {
-  logger.info(`Starting podman...`);
+  logger.info('Starting podman...');
 
   if (await isPodmanRunning()) {
-    logger.info(`startPodman: Podman is already running.`);
+    logger.info('startPodman: Podman is already running.');
     return true;
   }
   if (await isPodmanStarting()) {
     // todo: wait for Podman to be started
     logger.info(
-      `startPodman: Podman is already starting. Waiting for Podman to be running...`,
+      'startPodman: Podman is already starting. Waiting for Podman to be running...',
     );
     // check every 5 seconds, for a total possible time of 3 minutes
     await waitForPodmanToFinishStarting(3 * 60 * 1000);
@@ -142,7 +141,7 @@ const startPodman = async (): Promise<any> => {
     // Machine not req'd on Linux
     result = { error: 'Unable to start Podman on this operating system.' };
   }
-  logger.info(`Finished starting podman. Result:`, result);
+  logger.info('Finished starting podman. Result:', result);
   return result;
 };
 
@@ -150,7 +149,7 @@ const startPodman = async (): Promise<any> => {
  * If podman is installed, starts podman.
  */
 export const onStartUp = async () => {
-  logger.info(`podman.onStartUp() called`);
+  logger.info('podman.onStartUp() called');
   if (await isPodmanInstalled()) {
     await startPodman();
   }

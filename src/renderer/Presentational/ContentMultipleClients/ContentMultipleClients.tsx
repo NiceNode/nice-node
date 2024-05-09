@@ -1,26 +1,29 @@
-import { useState, useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ClientProps, NodeOverviewProps } from '../../Generics/redesign/consts';
-import { Message } from '../../Generics/redesign/Message/Message';
+import { useNavigate } from 'react-router-dom';
 import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
-import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
-import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
-import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
 import { Header } from '../../Generics/redesign/Header/Header';
+import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
+import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
 import LabelValues from '../../Generics/redesign/LabelValues/LabelValues';
-import {
-  container,
-  sectionTitle,
-  sectionDescription,
-  clientCardsContainer,
-  resourcesContainer,
-  promptContainer,
-} from './contentMultipleClients.css';
+import { Message } from '../../Generics/redesign/Message/Message';
+import { WalletPrompt } from '../../Generics/redesign/WalletPrompt/WalletPrompt';
+import type {
+  ClientProps,
+  NodeOverviewProps,
+} from '../../Generics/redesign/consts';
+import electron from '../../electronGlobal';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodeId } from '../../state/node';
-import { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
-import electron from '../../electronGlobal';
+import type { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
+import {
+  clientCardsContainer,
+  container,
+  promptContainer,
+  resourcesContainer,
+  sectionDescription,
+  sectionTitle,
+} from './contentMultipleClients.css';
 
 const ContentMultipleClients = (props: {
   clients: ClientProps[];
@@ -196,7 +199,6 @@ const ContentMultipleClients = (props: {
       rpcTranslation: 'eth-l1', // todo
     };
     return nodeOverview;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(nodeContent?.status), JSON.stringify(nodeContent?.stats)]);
 
   const handleClientClick = useCallback(

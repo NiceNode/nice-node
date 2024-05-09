@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Settings } from 'main/state/settings';
-import { useGetSettingsQuery } from '../../state/settingsService';
-import { ModalConfig } from '../ModalManager/modalUtils';
+import type { Settings } from '../../../main/state/settings';
 import electron from '../../electronGlobal';
+import { useGetSettingsQuery } from '../../state/settingsService';
+import type { ModalConfig } from '../ModalManager/modalUtils';
 
-import Preferences, { Preference, ThemeSetting } from './Preferences';
+import Preferences, { type Preference, type ThemeSetting } from './Preferences';
 
 export interface PreferencesWrapperProps {
   modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
@@ -20,6 +20,8 @@ const PreferencesWrapper = ({
   const [sIsNotificationsEnabled, setIsNotificationsEnabled] =
     useState<boolean>();
   const [sIsEventReportingEnabled, setIsEventReportingEnabled] =
+    useState<boolean>();
+  const [sIsPreReleaseUpdatesEnabled, setIsPreReleaseUpdatesEnabled] =
     useState<boolean>();
   const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
   const [sLanguageSetting, setLanguageSetting] = useState<string>();
@@ -45,11 +47,14 @@ const PreferencesWrapper = ({
       const isOpenAtStartupSetting = userSettings.appIsOpenOnStartup || false;
       const isEventReportingEnabled =
         userSettings.appIsEventReportingEnabled || false;
+      const isPreReleaseUpdatesEnabled =
+        userSettings.appIsPreReleaseUpdatesEnabled || false;
       setThemeSetting(themeSetting);
       setOsIsDarkMode(osIsDarkMode);
       setIsNotificationsEnabled(notificationsSetting);
       setIsOpenOnStartup(isOpenAtStartupSetting);
       setIsEventReportingEnabled(isEventReportingEnabled);
+      setIsPreReleaseUpdatesEnabled(isPreReleaseUpdatesEnabled);
     };
 
     const getNiceNodeVersion = async () => {
@@ -83,7 +88,6 @@ const PreferencesWrapper = ({
     getUserSettings();
     getNiceNodeVersion();
     getLanguageSetting();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangePreference = useCallback(
@@ -112,6 +116,12 @@ const PreferencesWrapper = ({
         modalOnChangeConfig({
           isEventReportingEnabled,
         });
+      } else if (preference === 'isPreReleaseUpdatesEnabled') {
+        const isPreReleaseUpdatesEnabled = value as boolean;
+        setIsPreReleaseUpdatesEnabled(isPreReleaseUpdatesEnabled);
+        modalOnChangeConfig({
+          isPreReleaseUpdatesEnabled,
+        });
       } else if (preference === 'language') {
         const language = value as string;
         setLanguageSetting(language);
@@ -132,6 +142,7 @@ const PreferencesWrapper = ({
       version={sNiceNodeVersion}
       isNotificationsEnabled={sIsNotificationsEnabled}
       isEventReportingEnabled={sIsEventReportingEnabled}
+      isPreReleaseUpdatesEnabled={sIsPreReleaseUpdatesEnabled}
       language={sLanguageSetting}
       onChange={onChangePreference}
     />

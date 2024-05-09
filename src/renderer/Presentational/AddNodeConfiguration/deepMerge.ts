@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-
 /**
  * Raw code copied from https://github.com/voodoocreation/ts-deepmerge's index.ts file
  * except for the mergeObjectReducer function and comments.
@@ -71,10 +69,10 @@ type TPrimitives =
 type TMerged<T> = [T] extends [Array<any>]
   ? { [K in keyof T]: TMerged<T[K]> }
   : [T] extends [TPrimitives]
-  ? T
-  : [T] extends [object]
-  ? TPartialKeys<{ [K in TAllKeys<T>]: TMerged<TIndexValue<T, K>> }, never>
-  : T;
+    ? T
+    : [T] extends [object]
+      ? TPartialKeys<{ [K in TAllKeys<T>]: TMerged<TIndexValue<T, K>> }, never>
+      : T;
 
 // istanbul ignore next
 const isObject = (obj: any) => {

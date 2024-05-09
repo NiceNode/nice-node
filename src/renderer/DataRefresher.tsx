@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { Settings } from '../main/state/settings';
 import { useAppSelector } from './state/hooks';
 import { selectSelectedNode } from './state/node';
 import { useGetNodeVersionQuery } from './state/services';
 import { useGetSettingsQuery } from './state/settingsService';
-import { Settings } from '../main/state/settings';
 
 const DataRefresher = () => {
   const selectedNode = useAppSelector(selectSelectedNode);
@@ -21,7 +21,6 @@ const DataRefresher = () => {
     );
     qNodeVersion.refetch();
     // RTKQ does not work as a dependency. Will cause an infinite loop if included.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNode]);
 
   // Sets the app language based on user or os setting

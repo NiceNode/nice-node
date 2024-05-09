@@ -3,7 +3,7 @@ import { exec } from 'node:child_process';
 import logger from './logger';
 // import iconIcns from '../../assets/icon.icns';
 
-const sudo = require('@vscode/sudo-prompt');
+import sudo from '@vscode/sudo-prompt';
 
 const PROCESS_CWD = process.cwd();
 export const execAwait = (
@@ -25,7 +25,11 @@ export const execAwait = (
     logger.info(command);
   }
 
-  if (options.sudo) {
+  logger.info(
+    `execHelper process.env.TEST === 'true' skips sudo. TEST= ${process.env.TEST}`,
+  );
+  // todo: remove test check and mock this function
+  if (options.sudo && process.env.TEST !== 'true') {
     const sudoPromptOptions = {
       name: 'NiceNode',
       // icns: iconIcns, // (optional)

@@ -25,7 +25,8 @@
     "architectures": {
       "docker": ["amd64", "arm64"]
     },
-    "imageName": "docker.io/sigp/lighthouse:latest-modern",
+    "imageName": "docker.io/sigp/lighthouse",
+    "defaultImageTag": "latest-modern",
     "binaryDownload": {
       "type": "githubReleases",
       "latestVersionUrl": "https://api.github.com/repos/sigp/lighthouse/releases/latest",
@@ -80,10 +81,6 @@
           {
             "value": "Holesky",
             "config": "holesky"
-          },
-          {
-            "value": "Goerli",
-            "config": "goerli"
           },
           {
             "value": "Sepolia",

@@ -1,41 +1,29 @@
-import {
+import type {
   ConfigTranslation,
   ConfigValuesMap,
 } from '../../../../common/nodeConfig';
-import { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
-import {
+import type { SettingChangeHandler } from '../../../Presentational/NodeSettings/NodeSettingsWrapper';
+import type {
   LabelSettingsItem,
   LabelSettingsSectionProps,
 } from '../LabelSetting/LabelValuesSection';
-import { CategoryConfig } from './DynamicSettings';
+import type { CategoryConfig } from './DynamicSettings';
 import Setting from './Setting';
-
-const getConfigValue = (
-  configTranslation: ConfigTranslation,
-  configKey: string,
-  configValuesMap: ConfigValuesMap,
-) => {
-  let currentValue: string | string[] = configValuesMap?.[configKey];
-  if (currentValue === undefined) {
-    if (configTranslation.niceNodeDefaultValue !== undefined) {
-      currentValue = configTranslation.niceNodeDefaultValue;
-    } else if (configTranslation.defaultValue !== undefined) {
-      currentValue = configTranslation.defaultValue;
-    }
-  }
-  return currentValue;
-};
 
 const convertConfigToLabelSettings = ({
   categoryConfigs,
   configValuesMap,
   isDisabled,
   onChange,
+  required,
+  flow,
 }: {
   categoryConfigs: CategoryConfig[];
   configValuesMap: ConfigValuesMap;
   isDisabled?: boolean;
   onChange?: SettingChangeHandler;
+  required?: boolean;
+  flow?: string;
 }): LabelSettingsSectionProps => {
   // no separate settings sections (Only one for now)
   const section: LabelSettingsSectionProps = {
@@ -56,11 +44,14 @@ const convertConfigToLabelSettings = ({
           const configTranslation: ConfigTranslation =
             configTranslationMap[configKey];
 
-          const currentValue: string | string[] = getConfigValue(
-            configTranslation,
-            configKey,
-            configValuesMap,
-          );
+          const currentValue: string | string[] | undefined =
+            configValuesMap?.[configKey];
+
+          const keyDisabled =
+            (configKey === 'syncMode' || configKey === 'dataStorageFormat') &&
+            flow === 'nodeSettings'
+              ? true
+              : isDisabled;
 
           const settingItem: LabelSettingsItem = {
             key: configKey,
@@ -71,8 +62,9 @@ const convertConfigToLabelSettings = ({
                 configKey={configKey}
                 configTranslation={configTranslation}
                 currentValue={currentValue}
-                isDisabled={isDisabled}
+                isDisabled={keyDisabled}
                 onChange={onChange}
+                required={required}
               />
             ),
           };

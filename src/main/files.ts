@@ -1,17 +1,19 @@
-import { access, mkdir, readFile, rm, chmod } from 'fs/promises';
-import path from 'path';
-import { app } from 'electron';
+import { access, chmod, mkdir, readFile, rm } from 'node:fs/promises';
+import path from 'node:path';
+import url from 'node:url';
 import checkDiskSpace from 'check-disk-space';
 
-// eslint-disable-next-line import/no-cycle
+import { app } from 'electron';
 
 import logger from './logger';
 
-const du = require('du');
+import du from 'du';
 
 logger.info(`App data dir: ${app.getPath('appData')}`);
 logger.info(`User data dir: ${app.getPath('userData')}`);
 logger.info(`logs dir: ${app.getPath('logs')}`);
+
+export const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 export const getNNDirPath = (): string => {
   // In packaged build...
@@ -88,7 +90,10 @@ export const getSystemFreeDiskSpace = async (
   diskSpacePath?: string,
 ): Promise<number> => {
   const pathToCheck: string = diskSpacePath || app.getPath('userData');
+  // https://github.com/Alex-D/check-disk-space/issues/30
+  // @ts-ignore:next-line
   const diskSpace = await checkDiskSpace(pathToCheck);
+  console.log('diskSpace: ', diskSpace);
   const freeInGBs = diskSpace.free * 1e-9;
   return freeInGBs;
 };
@@ -109,6 +114,8 @@ export const getNodesDirPathDetails =
   };
 
 export const getSystemDiskSize = async (): Promise<number> => {
+  // https://github.com/Alex-D/check-disk-space/issues/30
+  // @ts-ignore:next-line
   const diskSpace = await checkDiskSpace(app.getPath('userData'));
   const sizeInGBs = diskSpace.size * 1e-9;
   return sizeInGBs;
@@ -195,11 +202,10 @@ export const getNodeSpecificationsFolder = (): string => {
   //   }`,
   // );
 
-  // eslint-disable-next-line
   if (process.env.NODE_ENV === 'development') {
     return path.resolve(__dirname, '..', 'common', 'NodeSpecs');
   }
-  // eslint-disable-next-line
+
   return path.resolve((process as any).resourcesPath, 'NodeSpecs');
 };
 
@@ -220,10 +226,13 @@ export const getAssetsFolder = (): string => {
     }`,
   );
 
-  // eslint-disable-next-line
   if (process.env.NODE_ENV === 'development') {
     return path.resolve(__dirname, '..', '..', 'assets');
   }
-  // eslint-disable-next-line
+
+  if (process.env.TEST === 'true') {
+    return 'assets';
+  }
+
   return path.resolve((process as any).resourcesPath, 'assets');
 };

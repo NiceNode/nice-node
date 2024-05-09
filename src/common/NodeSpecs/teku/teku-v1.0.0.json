@@ -5,7 +5,8 @@
   "execution": {
     "executionTypes": ["docker"],
     "defaultExecutionType": "docker",
-    "imageName": "docker.io/consensys/teku:latest",
+    "imageName": "docker.io/consensys/teku",
+    "defaultImageTag": "latest",
     "input": {
       "defaultConfig": {
         "http": "Enabled",
@@ -70,10 +71,6 @@
           {
             "value": "Holesky",
             "config": "holesky"
-          },
-          {
-            "value": "Goerli",
-            "config": "goerli"
           },
           {
             "value": "Sepolia",

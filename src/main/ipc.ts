@@ -1,14 +1,28 @@
-import { ipcMain, app } from 'electron';
+import { app, ipcMain } from 'electron';
+import type Node from '../common/node';
+import { type NodeId, type NodePackage, NodeStoppedBy } from '../common/node';
+import type { ConfigValuesMap } from '../common/nodeConfig';
+import type {
+  NodePackageSpecification,
+  NodeSpecification,
+} from '../common/nodeSpec';
+import { runBenchmark } from './benchbuddy/runBenchmark';
 import getDebugInfo from './debug';
 import {
-  getGethLogs,
+  openDialogForNodeDataDir,
+  openDialogForStorageLocation,
+  updateNodeDataDir,
+} from './dialog';
+import {
   getGethErrorLogs,
-  getSystemFreeDiskSpace,
+  getGethLogs,
   getNodesDirPathDetails,
   getSystemDiskSize,
+  getSystemFreeDiskSpace,
 } from './files';
-import store from './state/store';
+import { onUserChangedLanguage } from './i18nMain';
 import logger from './logger';
+import { getFailSystemRequirements } from './minSystemRequirement';
 import {
   checkSystemHardware,
   getMainProcessUsage,
@@ -16,68 +30,54 @@ import {
 } from './monitor';
 import {
   addNode,
+  deleteNodeStorage,
+  getNodeStartCommand,
+  removeNode,
+  resetNodeConfig,
+  sendNodeLogs,
   startNode,
   stopNode,
-  removeNode,
-  deleteNodeStorage,
-  sendNodeLogs,
   stopSendingNodeLogs,
-  getNodeStartCommand,
-  resetNodeConfig,
 } from './nodeManager';
-import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
-import { getUserNodePackages } from './state/nodePackages';
-import Node, { NodeId, NodePackage, NodeStoppedBy } from '../common/node';
-import { ConfigValuesMap } from '../common/nodeConfig';
 import {
-  NodePackageSpecification,
-  NodeSpecification,
-} from '../common/nodeSpec';
-import { isPodmanInstalled, isPodmanRunning } from './podman/podman';
-import installPodman from './podman/install/install';
-// eslint-disable-next-line import/no-cycle
-import {
-  openDialogForNodeDataDir,
-  openDialogForStorageLocation,
-  updateNodeDataDir,
-} from './dialog';
-import { getNodeLibrary, getNodePackageLibrary } from './state/nodeLibrary';
-import {
-  getSetHasSeenAlphaModal,
-  getSetHasSeenSplashscreen,
-  getSettings,
-  setIsOpenOnStartup,
-  getSetIsNotificationsEnabled,
-  setNativeThemeSetting,
-  setThemeSetting,
-  ThemeSetting,
-  setIsEventReportingEnabled,
-} from './state/settings';
-import { getSystemInfo } from './systemInfo';
-import startPodman from './podman/start';
-import {
-  addNotification,
-  getNotifications,
-  removeNotifications,
-  markAllAsRead,
-} from './state/notifications';
-import { getFailSystemRequirements } from './minSystemRequirement';
-import {
-  AddNodePackageNodeService,
+  type AddNodePackageNodeService,
   addNodePackage,
   removeNodePackage,
   startNodePackage,
   stopNodePackage,
 } from './nodePackageManager';
-import { checkPorts } from './ports';
-import { getAppClientId } from './state/eventReporting';
-import { onUserChangedLanguage } from './i18nMain';
 import { getPodmanDetails } from './podman/details';
+import installPodman from './podman/install/install';
+import { isPodmanInstalled, isPodmanRunning } from './podman/podman';
+import startPodman from './podman/start';
 import { updatePodman } from './podman/update';
+import { checkPorts } from './ports';
 import { getBenchmarks } from './state/benchmark';
-import { runBenchmark } from './benchbuddy/runBenchmark';
+import { getAppClientId } from './state/eventReporting';
+import { getNodeLibrary, getNodePackageLibrary } from './state/nodeLibrary';
+import { getUserNodePackages } from './state/nodePackages';
+import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
+import {
+  addNotification,
+  getNotifications,
+  markAllAsRead,
+  removeNotifications,
+} from './state/notifications';
+import {
+  type ThemeSetting,
+  getSetHasSeenAlphaModal,
+  getSetHasSeenSplashscreen,
+  getSetIsNotificationsEnabled,
+  getSetIsPreReleaseUpdatesEnabled,
+  getSettings,
+  setIsEventReportingEnabled,
+  setIsOpenOnStartup,
+  setNativeThemeSetting,
+  setThemeSetting,
+} from './state/settings';
+import store from './state/store';
+import { getSystemInfo } from './systemInfo';
 
-// eslint-disable-next-line import/prefer-default-export
 export const initialize = () => {
   ipcMain.handle(
     'updateNodeLastSyncedBlock',
@@ -97,7 +97,7 @@ export const initialize = () => {
     logger.info(`store.get(key, value): ${key},${value}`);
     return value;
   });
-  // eslint-disable-next-line
+
   ipcMain.handle('setStoreValue', (_event, key: string, value: any) => {
     logger.info(`store.set(key, value): ${key},${value}`);
     return store.set(key, value);
@@ -240,6 +240,12 @@ export const initialize = () => {
     'setIsEventReportingEnabled',
     (_event, isEventReportingEnabled: boolean) => {
       return setIsEventReportingEnabled(isEventReportingEnabled);
+    },
+  );
+  ipcMain.handle(
+    'getSetIsPreReleaseUpdatesEnabled',
+    (_event, isPreReleaseUpdatesEnabled?: boolean) => {
+      return getSetIsPreReleaseUpdatesEnabled(isPreReleaseUpdatesEnabled);
     },
   );
 

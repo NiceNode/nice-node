@@ -1,4 +1,4 @@
-import { arch } from 'process';
+import { arch } from 'node:process';
 
 export const isX86And32bit = () => {
   return arch === 'ia32';

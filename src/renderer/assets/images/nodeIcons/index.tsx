@@ -1,32 +1,37 @@
 import { common } from '../../../Generics/redesign/theme.css';
 
-const ethereum = require('./Logo-Ethereum.png');
+import ethereum from './Logo-Ethereum.png';
 
 // Execution
-const geth = require('./Logo-Geth.png');
-const erigon = require('./Logo-Erigon.png');
-const besu = require('./Logo-Besu.png');
-const nethermind = require('./Logo-Nethermind.png');
-const reth = require('./Logo-Reth.png');
+import besu from './Logo-Besu.png';
+import erigon from './Logo-Erigon.png';
+import geth from './Logo-Geth.png';
+import nethermind from './Logo-Nethermind.png';
+import reth from './Logo-Reth.png';
 
+import lighthouse from './Logo-Lighthouse.png';
+import lodestar from './Logo-Lodestar.png';
+import nimbus from './Logo-Nimbus.png';
 // Consensus
-const prysm = require('./Logo-Prysm.png');
-const lighthouse = require('./Logo-Lighthouse.png');
-const teku = require('./Logo-Teku.png');
-const lodestar = require('./Logo-Lodestar.png');
-const nimbus = require('./Logo-Nimbus.png');
+import prysm from './Logo-Prysm.png';
+import teku from './Logo-Teku.png';
 
+import arbitrum from './Logo-Arbitrum.png';
+import base from './Logo-Base.png';
+import magi from './Logo-Magi.png';
 // L2
-const optimism = require('./Logo-Optimism.png');
-const arbitrum = require('./Logo-Arbitrum.png');
-const base = require('./Logo-Base.png');
-const starknet = require('./Logo-Starknet.png');
-const zkSync = require('./Logo-zkSync.png');
+import optimism from './Logo-Optimism.png';
+import hildr from './Logo-OptimismJava.png';
+import starknet from './Logo-Starknet.png';
+import zkSync from './Logo-zkSync.png';
 
+import farcaster from './Logo-Farcaster.png';
+import livepeer from './Logo-Livepeer.png';
 // Other networks
-const radicle = require('./Logo-Radicle.png');
-const livepeer = require('./Logo-Livepeer.png');
-const farcaster = require('./Logo-Farcaster.png');
+import radicle from './Logo-Radicle.png';
+
+// Other node/server types
+import minecraft from './Logo-Minecraft.png';
 
 export interface NodeIcons {
   geth?: string;
@@ -39,11 +44,11 @@ export interface NodeIcons {
   teku?: string;
   lodestar?: string;
   nimbus?: string;
-  ['prysm-beacon']?: string;
-  ['lighthouse-beacon']?: string;
-  ['teku-beacon']?: string;
-  ['lodestar-beacon']?: string;
-  ['nimbus-beacon']?: string;
+  'prysm-beacon'?: string;
+  'lighthouse-beacon'?: string;
+  'teku-beacon'?: string;
+  'lodestar-beacon'?: string;
+  'nimbus-beacon'?: string;
   ethereum?: string;
   optimism?: string;
   arbitrum?: string;
@@ -52,11 +57,15 @@ export interface NodeIcons {
   zkSync?: string;
   radicle?: string;
   livepeer?: string;
-  ['op-geth']?: string;
-  ['op-node']?: string;
+  'op-geth'?: string;
+  'op-node'?: string;
+  hildr?: string;
+  magi?: string;
   farcaster?: string;
   hubble?: string;
   nitro?: string;
+  minecraft?: string;
+  'itzg-minecraft'?: string;
 }
 
 // Define all icons here
@@ -86,9 +95,13 @@ export const NODE_ICONS: NodeIcons = {
   livepeer,
   'op-geth': optimism,
   'op-node': optimism,
+  hildr,
+  magi,
   farcaster,
   hubble: farcaster,
   nitro: arbitrum,
+  minecraft,
+  'itzg-minecraft': minecraft,
 };
 
 const white = '#FFFFFF';
@@ -112,6 +125,8 @@ export const NODE_COLORS: NodeIcons = {
   optimism: common.color.optimism,
   'op-geth': common.color.optimism,
   'op-node': common.color.optimism,
+  hildr: common.color.optimism,
+  magi: white,
   base: common.color.base,
   ethereum: common.color.ethereum,
   arbitrum: common.color.arbitrum,
@@ -122,6 +137,8 @@ export const NODE_COLORS: NodeIcons = {
   farcaster: common.color.farcaster,
   hubble: common.color.farcaster,
   nitro: common.color.arbitrum,
+  minecraft: common.color.minecraft,
+  'itzg-minecraft': common.color.minecraft,
 };
 
 export type NodeIconId = keyof NodeIcons;

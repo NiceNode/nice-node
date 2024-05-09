@@ -3,7 +3,7 @@
  */
 import * as os from 'node:os';
 import logger from '../../logger';
-import { FailSystemRequirements } from '../../minSystemRequirement';
+import type { FailSystemRequirements } from '../../minSystemRequirement';
 import { execPromise } from './podman-cli';
 
 export const getFailSystemRequirements = async (): Promise<
@@ -16,7 +16,7 @@ export const getFailSystemRequirements = async (): Promise<
   let winBuild;
   if (winRelease.startsWith('10.0.')) {
     const splitRelease = winRelease.split('.');
-    // eslint-disable-next-line prefer-destructuring
+    prefer - destructuring;
     winBuild = splitRelease[2];
   }
   if (!winBuild || Number.parseInt(winBuild, 10) < MIN_BUILD) {

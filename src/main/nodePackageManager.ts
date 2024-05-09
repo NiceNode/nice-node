@@ -1,31 +1,32 @@
-/* eslint-disable no-await-in-loop */
-import path from 'path';
-import { cp } from 'fs/promises';
+import { cp } from 'node:fs/promises';
+import path from 'node:path';
+import type Node from '../common/node';
 import {
+  type NodeId,
+  type NodePackage,
+  type NodeRuntime,
+  type NodeService,
+  NodeStatus,
+  NodeStoppedBy,
+  createNodePackage,
+} from '../common/node';
+import type { ConfigValuesMap } from '../common/nodeConfig';
+import type {
   NodePackageSpecification,
   NodeSpecification,
 } from '../common/nodeSpec';
-import logger from './logger';
-import Node, {
-  createNodePackage,
-  NodeId,
-  NodePackage,
-  NodeRuntime,
-  NodeService,
-  NodeStatus,
-  NodeStoppedBy,
-} from '../common/node';
-import * as nodePackageStore from './state/nodePackages';
-import * as nodeStore from './state/nodes';
 import {
   deleteDisk,
   getNodeSpecificationsFolder,
   getNodesDirPath,
   makeNodeDir,
 } from './files';
+import logger from './logger';
+import { setLastRunningTime } from './node/setLastRunningTime';
 import { addNode, removeNode, startNode, stopNode } from './nodeManager';
+import * as nodePackageStore from './state/nodePackages';
+import * as nodeStore from './state/nodes';
 import { createJwtSecretAtDirs } from './util/jwtSecrets';
-import { ConfigValuesMap } from '../common/nodeConfig';
 
 // Created when adding a node and is used to pair a node spec and config
 // for a specific node package service
@@ -140,12 +141,12 @@ export const startNodePackage = async (nodeId: NodeId) => {
   logger.info(`Starting node ${JSON.stringify(node)}`);
   let nodePackageStatus = NodeStatus.starting;
   node.status = nodePackageStatus;
+  node.lastStartedTimestampMs = Date.now();
   node.stoppedBy = undefined;
   nodePackageStore.updateNodePackage(node);
 
   nodePackageStatus = NodeStatus.running;
-  for (let i = 0; i < node.services.length; i++) {
-    const service = node.services[i];
+  const startPromises = node.services.map(async (service) => {
     try {
       await startNode(service.node.id);
     } catch (e) {
@@ -155,7 +156,15 @@ export const startNodePackage = async (nodeId: NodeId) => {
       // todo: set as partially started?
       // throw e;
     }
+  });
+
+  await Promise.all(startPromises);
+
+  // If all node services start without error, the package is considered running
+  if (nodePackageStatus === NodeStatus.running) {
+    setLastRunningTime(nodeId, 'node');
   }
+
   // set node status
   node.status = nodePackageStatus;
   nodePackageStore.updateNodePackage(node);
@@ -172,6 +181,7 @@ export const stopNodePackage = async (
   logger.info(`Stopping node ${JSON.stringify(node)}`);
   let nodePackageStatus = NodeStatus.stopping;
   node.status = nodePackageStatus;
+  node.lastStoppedTimestampMs = Date.now();
   node.stoppedBy = stoppedBy;
   nodePackageStore.updateNodePackage(node);
 

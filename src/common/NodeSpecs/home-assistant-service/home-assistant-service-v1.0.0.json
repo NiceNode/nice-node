@@ -1,0 +1,68 @@
+{
+  "specId": "home-assistant-service",
+  "version": "1.0.0",
+  "displayName": "Home Assistant",
+  "execution": {
+    "executionTypes": ["docker"],
+    "defaultExecutionType": "docker",
+    "input": {
+      "defaultConfig": {},
+      "docker": {
+        "raw": " -e \"DISABLE_JEMALLOC=true\" --network=host",
+        "containerVolumePath": "/config",
+        "forcedRawNodeInput": ""
+      }
+    },
+    "architectures": {
+      "docker": ["amd64", "arm64"]
+    },
+    "imageName": "ghcr.io/home-assistant/home-assistant",
+    "defaultImageTag": "stable"
+  },
+  "category": "utility/automation",
+  "rpcTranslation": "home-assistant-service",
+  "systemRequirements": {
+    "documentationUrl": "https://www.home-assistant.io/installation/",
+    "cpu": {
+      "cores": 1
+    },
+    "memory": {
+      "minSizeGBs": 2
+    },
+    "storage": {
+      "minSizeGBs": 4
+    },
+    "docker": {
+      "required": true
+    }
+  },
+  "configTranslation": {
+    "dataDir": {
+      "displayName": "Data location",
+      "category": "Storage",
+      "uiControl": {
+        "type": "filePath"
+      }
+    }
+  },
+  "documentation": {
+    "default": "https://www.home-assistant.io"
+  },
+  "resources": [
+    {
+      "label": "Website",
+      "value": "home-assistant.io",
+      "link": "https://www.home-assistant.io"
+    },
+    {
+      "label": "Privacy Policy",
+      "value": "home-assistant.io/privacy",
+      "link": "https://www.home-assistant.io/privacy"
+    },
+    {
+      "label": "Security Vulnerabilities and Reporting",
+      "value": "home-assistant.io/security",
+      "link": "https://www.home-assistant.io/security"
+    }
+  ]
+}
