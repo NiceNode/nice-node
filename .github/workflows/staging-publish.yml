@@ -78,6 +78,8 @@ jobs:
           # This is used for uploading release assets to github
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
+          versionPostfix: '-staging'
+
         run: |
           npm run publish -- --arch=x64
           npm run publish -- --arch=arm64
