@@ -20,7 +20,7 @@ jobs:
     steps:
       # https://github.com/electron/forge/issues/2807
       - if: ${{ matrix.os == 'macos-latest' }}
-        run: python3 -m pip install setuptools
+        run: python3 -m pip install setuptools --break-system-packages
 
       - if: matrix.os == 'ubuntu-latest'
         name: Install packages for building
@@ -48,7 +48,7 @@ jobs:
 
       - if: ${{ matrix.os == 'macos-latest' }}
         name: Import Certs
-        uses: apple-actions/import-codesign-certs@v2
+        uses: slidoapp/import-codesign-certs@node20
         with:
           p12-file-base64: ${{ secrets.CSC_LINK }}
           p12-password: ${{ secrets.CSC_KEY_PASSWORD }}
@@ -77,6 +77,8 @@ jobs:
           NICENODE_ENV: ${{ vars.NICENODE_ENV }}
           # This is used for uploading release assets to github
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+          versionPostfix: '-staging'
 
         run: |
           npm run publish -- --arch=x64

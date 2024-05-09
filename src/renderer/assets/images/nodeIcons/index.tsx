@@ -2,9 +2,9 @@ import { common } from '../../../Generics/redesign/theme.css';
 
 import ethereum from './Logo-Ethereum.png';
 
+// Execution
 import besu from './Logo-Besu.png';
 import erigon from './Logo-Erigon.png';
-// Execution
 import geth from './Logo-Geth.png';
 import nethermind from './Logo-Nethermind.png';
 import reth from './Logo-Reth.png';

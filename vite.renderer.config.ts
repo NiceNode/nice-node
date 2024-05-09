@@ -1,4 +1,4 @@
-import type { ConfigEnv, UserConfig } from 'vite';
+import type { ConfigEnv, PluginOption, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import svgr from "vite-plugin-svgr";
@@ -11,7 +11,14 @@ console.log("vite.renderer.config.ts");
 export default defineConfig((env) => {
   const forgeEnv = env as ConfigEnv<'renderer'>;
   const { root, mode, forgeConfigSelf } = forgeEnv;
-  const name = forgeConfigSelf.name ?? '';
+  const name = forgeConfigSelf?.name ?? '';
+
+  const plugins: PluginOption[] = []
+  if(process.env.NODE_ENV !== 'test') {
+    plugins.push(pluginExposeRenderer(name))
+  }
+  plugins.push(vanillaExtractPlugin(), svgr())
+  console.log("vite.renderer.config.ts plugins: ", plugins);
 
   return {
     root,
@@ -21,7 +28,7 @@ export default defineConfig((env) => {
       outDir: `.vite/renderer/${name}`,
       publicDir: 'assets'
     },
-    plugins: [pluginExposeRenderer(name), vanillaExtractPlugin(), svgr()],
+    plugins,
     resolve: {
       preserveSymlinks: true,
     },

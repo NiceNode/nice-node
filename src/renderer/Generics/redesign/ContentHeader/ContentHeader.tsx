@@ -76,7 +76,9 @@ export const ContentHeader = ({
         <HeaderButton type={leftButtonIconId} onClick={leftButtonOnClick} />
       )}
       <div className={[textContainer, textAlign].join(' ')}>
-        <div className={titleStyle}>{title}</div>
+        <div id="contentHeader" className={titleStyle}>
+          {title}
+        </div>
         <div className={subtitleStyle}>{subtitle}</div>
       </div>
       {textAlign === 'left' && <div className={spacer} />}

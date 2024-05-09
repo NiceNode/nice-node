@@ -41,11 +41,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // todo: when moving from require to imports
-// const isTest = process.env.NODE_ENV === 'test';
-// if (isTest) {
-//   console.log('NODE_ENV=TEST... requiring wdio-electron-service/main');
-//   require('wdio-electron-service/main');
-// }
+const isTest = process.env.TEST === 'true';
+if (isTest && process.env.TEST_ENV === 'wdio') {
+  logger.info('env.TEST=true... calling import(wdio-electron-service/main)');
+  import('wdio-electron-service/main');
+}
 
 // todo: Turned off when switching to ESM modules. Do we need this?
 // https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
@@ -169,7 +169,7 @@ export const createWindow = async () => {
   // App auto updates
   updater.initialize(mainWindow);
   // disabled in dev env
-  if (!isDevelopment) {
+  if (!isDevelopment && !isTest) {
     updater.checkForUpdates(false);
   } else {
     logger.info(

@@ -25,7 +25,11 @@ export const execAwait = (
     logger.info(command);
   }
 
-  if (options.sudo) {
+  logger.info(
+    `execHelper process.env.TEST === 'true' skips sudo. TEST= ${process.env.TEST}`,
+  );
+  // todo: remove test check and mock this function
+  if (options.sudo && process.env.TEST !== 'true') {
     const sudoPromptOptions = {
       name: 'NiceNode',
       // icns: iconIcns, // (optional)

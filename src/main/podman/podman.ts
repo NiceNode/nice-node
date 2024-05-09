@@ -12,6 +12,7 @@ import {
   setDockerNodeStatus as setPodmanNodeStatus,
   updateNode as storeUpdateNode,
 } from '../state/nodes';
+import { config } from './../../../wdio.conf';
 
 import {
   type ConfigTranslationMap,
@@ -410,6 +411,7 @@ const createPodmanPortInput = (
     httpPort,
     webSocketsPort,
     quicPortUdp = undefined,
+    gRpcPort,
   } = configTranslation;
   const {
     p2pPorts: configP2pPorts,
@@ -419,6 +421,7 @@ const createPodmanPortInput = (
     httpPort: configHttpPort,
     webSocketsPort: configWsPort,
     quicPortUdp: configQuicPortUdp,
+    gRpcPort: configGRpcPort,
   } = configValuesMap || {};
   const result = [];
 
@@ -463,6 +466,12 @@ const createPodmanPortInput = (
   const quicPortValue = configQuicPortUdp || quicPortUdp?.defaultValue;
   if (quicPortValue) {
     result.push(`-p ${quicPortValue}:${quicPortValue}/udp`);
+  }
+
+  // Handle grpc port
+  const gRpcPortValue = configGRpcPort || gRpcPort?.defaultValue;
+  if (gRpcPortValue) {
+    result.push(`-p ${gRpcPortValue}:${gRpcPortValue}`);
   }
 
   return result.join(' ');
@@ -632,7 +641,7 @@ export const createInitCommand = (node: Node): string => {
   // -d is not used here as this should be short-lived and we want to be blocked
   //  so that we know when to start the node
   const containerName = getContainerName(node);
-  const podmanCommand = `run -q --user 0 --name ${containerName} ${finalPodmanInput} ${imageNameWithTag} ${nodeInput}`;
+  const podmanCommand = `run -q --name ${containerName} ${finalPodmanInput} ${imageNameWithTag} ${nodeInput}`;
   logger.info(`createInitCommand: podman run command ${podmanCommand}`);
   return podmanCommand;
 };
@@ -656,9 +665,15 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
   node.status = NodeStatus.updating;
   storeUpdateNode(node);
 
+  const imageTag = getImageTag(node);
+  // if imageTage is empty, use then imageTag is already included in the imageName (backwards compatability)
+  // We must include the version tag for container registries without 'latest' tag
+  const imageNameWithTag =
+    imageTag !== '' ? `${imageName}:${imageTag}` : imageName;
+
   // todo: only set as updating if there is a new image, otherwise updating
   // will "flash" to the user quickly here
-  await runCommand(`pull ${imageName}`);
+  await runCommand(`pull ${imageNameWithTag}`);
 
   // Set node as starting here
   node.status = NodeStatus.starting;

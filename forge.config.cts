@@ -11,6 +11,7 @@ import * as path from 'node:path';
 import packageJson from './package.json';
 
 const { version } = packageJson;
+const { versionPostfix } = process.env;
 
 const iconDir = path.resolve('assets', 'icons');
 console.log("forge.config.ts iconDir: ", iconDir);
@@ -25,7 +26,8 @@ const packagerConfig: ForgePackagerOptions = {
       name: 'NiceNode Protocol',
       schemes: ['nice-node'],
     }
-  ]
+  ],
+  appVersion: versionPostfix ? `${version}${versionPostfix}` : version
   // unsure if this is needed below:
   // ignore: [ /stories/, /__tests__/, /.storybook/, /storybook/, /storybook-static/ ],
 };
