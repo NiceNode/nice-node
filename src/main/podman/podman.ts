@@ -1,3 +1,4 @@
+import { config } from './../../../wdio.conf';
 import {
   type ChildProcess,
   type SpawnOptions,
@@ -410,6 +411,7 @@ const createPodmanPortInput = (
     httpPort,
     webSocketsPort,
     quicPortUdp = undefined,
+    gRpcPort,
   } = configTranslation;
   const {
     p2pPorts: configP2pPorts,
@@ -419,6 +421,7 @@ const createPodmanPortInput = (
     httpPort: configHttpPort,
     webSocketsPort: configWsPort,
     quicPortUdp: configQuicPortUdp,
+    gRpcPort: configGRpcPort,
   } = configValuesMap || {};
   const result = [];
 
@@ -463,6 +466,12 @@ const createPodmanPortInput = (
   const quicPortValue = configQuicPortUdp || quicPortUdp?.defaultValue;
   if (quicPortValue) {
     result.push(`-p ${quicPortValue}:${quicPortValue}/udp`);
+  }
+
+  // Handle grpc port
+  const gRpcPortValue = configGRpcPort || gRpcPort?.defaultValue;
+  if (gRpcPortValue) {
+    result.push(`-p ${gRpcPortValue}:${gRpcPortValue}`);
   }
 
   return result.join(' ');
