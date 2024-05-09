@@ -27,16 +27,20 @@ export default async function getDebugInfo() {
   };
 }
 
-const getDebugInfoShort = () => {
+const getDebugInfoShort = async () => {
   let niceNodeVersion = app.getVersion();
 
   if (process.env.NODE_ENV === 'development') {
     niceNodeVersion = `Dev-${niceNodeVersion}`;
   }
 
+  const { distro, release } = await getOperatingSystemInfo();
+
   return {
     platform: getPlatform(),
     platformRelease: os.release(),
+    distro: distro,
+    release: release,
     arch: getArch(),
     totalMemory: os.totalmem(),
     niceNodeVersion,
@@ -52,19 +56,19 @@ export const getDebugInfoString = async () => {
   }
 };
 
-export const getDebugInfoShortString = () => {
+export const getDebugInfoShortString = async () => {
   try {
-    return JSON.stringify(getDebugInfoShort(), null, 2);
+    return JSON.stringify(await getDebugInfoShort(), null, 2);
   } catch (err) {
     return 'No system details.';
   }
 };
 
-export const getGithubIssueProblemURL = () => {
-  const url = new URL('https://github.com/jgresham/nice-node/issues/new');
+export const getGithubIssueProblemURL = async () => {
+  const url = new URL('https://github.com/NiceNode/nice-node/issues/new');
   url.searchParams.set(
     'body',
-    `Problem description\n-\n<!-- Describe your problem on the next line! Thank you -->\n\n\nFor NiceNode developers\n-\n${getDebugInfoShortString()}`,
+    `Problem description\n-\n<!-- Describe your problem on the next line! Thank you -->\n\n\nFor NiceNode developers\n-\n${await getDebugInfoShortString()}`,
   );
 
   return url.toString();

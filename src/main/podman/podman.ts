@@ -1,4 +1,3 @@
-import { config } from './../../../wdio.conf';
 import {
   type ChildProcess,
   type SpawnOptions,
@@ -13,6 +12,7 @@ import {
   setDockerNodeStatus as setPodmanNodeStatus,
   updateNode as storeUpdateNode,
 } from '../state/nodes';
+import { config } from './../../../wdio.conf';
 
 import {
   type ConfigTranslationMap,
