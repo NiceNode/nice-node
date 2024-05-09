@@ -78,6 +78,9 @@ export const config: Options.Testrunner = {
       // 'goog:chromeOptions': {
       //   args:['--headless', '--disable-dev-shm-usage', '--no-sandbox', '--disable-gpu', '--window-size=1680,1050']
       // },
+      'goog:chromeOptions': {
+        args: process.env.CI ? ['headless', 'disable-gpu'] : ['headless', 'disable-gpu']
+      },
       'wdio:electronServiceOptions': {
         // custom application args
         // See https://github.com/webdriverio-community/wdio-electron-service#appargs
