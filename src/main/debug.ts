@@ -3,18 +3,23 @@ import { app } from 'electron';
 
 import { getArch } from './arch';
 import { getPlatform } from './platform';
+import { getOperatingSystemInfo } from './systemInfo.js';
 
-export default function getDebugInfo() {
+export default async function getDebugInfo() {
   let niceNodeVersion = app.getVersion();
 
   if (process.env.NODE_ENV === 'development') {
     niceNodeVersion = `Dev-${niceNodeVersion}`;
   }
 
+  const { distro, release } = await getOperatingSystemInfo();
+
   // todo: make human readable (version)
   return {
     platform: getPlatform(),
     platformRelease: os.release(),
+    distro: distro,
+    release: release,
     arch: getArch(),
     freeMemory: os.freemem(),
     totalMemory: os.totalmem(),
@@ -39,9 +44,9 @@ const getDebugInfoShort = () => {
   };
 };
 
-export const getDebugInfoString = () => {
+export const getDebugInfoString = async () => {
   try {
-    return JSON.stringify(getDebugInfo(), null, 2);
+    return JSON.stringify(await getDebugInfo(), null, 2);
   } catch (err) {
     return 'No system details.';
   }

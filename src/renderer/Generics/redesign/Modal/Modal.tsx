@@ -119,7 +119,10 @@ export const Modal = ({
         >
           {route !== modalRoutes.alphaBuild && (
             <div className={[modalHeaderContainer, modalType].join(' ')}>
-              <span className={[titleFont, modalType, modalStyle].join(' ')}>
+              <span
+                id="modalTitle"
+                className={[titleFont, modalType, modalStyle].join(' ')}
+              >
                 {modalTitle}
               </span>
             </div>
