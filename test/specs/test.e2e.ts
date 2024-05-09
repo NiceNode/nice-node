@@ -111,15 +111,14 @@ describe('Splash screen tests', () => {
       }
       await $('#stepperNextButton').click();
       await browser.pause(2000);
+    }).timeout(120000); // wait 3 minutes for the podman to download (& start)
 
+    it('Ethereum Node screen should be displayed with syncing and stop btn', async () => {
       await expect(await $('div*=Ethereum Node')).toBeDisplayed();
       await expect(await $('div*=Syncing')).toBeDisplayed();
       await expect(await $('span*=Stop')).toBeDisplayed();
-      // await browser.pause(30000);
-      // await browser.pause(2000);
       // after docker containers are downloaded and the node is started, the node should be online
       // await expect(await $('div*=Online')).toBeDisplayed();
-      // await expect(await $('div*=')).toBeDisplayed();
     }).timeout(120000); // wait 3 minutes for the node to download & start
 
     it('clicking stop node btn should stop the node and show resume button', async () => {
