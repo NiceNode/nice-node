@@ -44,6 +44,19 @@ jobs:
           if command -v apt-get > /dev/null 2>&1; then
               apt-get update
               apt-get install --no-install-recommends -y $packagesNeeded rpm libarchive-tools
+              apt-get install -y \
+                xvfb \
+                zip \
+                wget \
+                ca-certificates \
+                libnss3-dev \
+                libasound2t64 \
+                libxss1 \
+                libappindicator3-1 \
+                libindicator7 \
+                xdg-utils \
+                fonts-liberation \
+                libgbm1
           elif command -v dnf > /dev/null 2>&1; then
               dnf install -y $packagesNeeded rpmdevtools
           elif command -v pacman > /dev/null 2>&1; then
@@ -71,9 +84,9 @@ jobs:
           npm run make
 
       - name: 🧪 Run Tests
-        uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
-        with:
-          run: npm run wdio
+        # uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
+        # with:
+        run: npm run wdio
 
       - name: 🐛 Debug Build
         uses: stateful/vscode-server-action@v1
