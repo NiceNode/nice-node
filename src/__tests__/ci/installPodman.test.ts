@@ -106,6 +106,7 @@ describe.sequential('Install and Uninstall Podman', () => {
       const resultInstall = await installOnLinux();
       expect(resultInstall).toEqual(true);
       const versionAfter = await getInstalledPodmanVersion();
+      console.log('======= podman version installed: ', versionAfter);
       expect(versionAfter).toMatch(versionRegex);
       expect(versionAfter > PODMAN_MIN_VERSION).toBeTruthy();
     },
