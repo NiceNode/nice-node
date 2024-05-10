@@ -34,6 +34,21 @@ export const setTrayIcon = (style: 'Default' | 'Alert') => {
   }
 };
 
+const openOrFocusWindow = () => {
+  const mainWindow = getMainWindow();
+  if (mainWindow === null) {
+    // Create a new window if none exists
+    createWindow();
+  } else {
+    // Show and focus on the existing window
+    mainWindow.show();
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore(); // Restore if minimized
+    }
+    mainWindow.focus(); // Focus on the window
+  }
+}
+
 export const setTrayMenu = () => {
   const menuTemplate = [
     // Podman status with start, stop, and delete?
@@ -57,18 +72,14 @@ export const setTrayMenu = () => {
 };
 
 const getOpenNiceNodeMenu = () => {
-  if (getMainWindow() === null) {
-    openNiceNodeMenu = [
-      {
-        label: 'Open NiceNode',
-        click: () => {
-          createWindow(); // app no longer runs in the background
-        },
+  openNiceNodeMenu = [
+    {
+      label: 'Open NiceNode',
+      click: () => {
+        openOrFocusWindow();
       },
-    ];
-  } else {
-    openNiceNodeMenu = [];
-  }
+    },
+  ];
   setTrayMenu();
 };
 
@@ -123,8 +134,8 @@ const getPodmanMenuItem = async () => {
           // stop
           stopMachineIfCreated();
         } else {
+          openOrFocusWindow();
           openPodmanModal();
-          // try to start if any other start
           // startMachineIfCreated();
         }
       },
