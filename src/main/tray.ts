@@ -9,6 +9,7 @@ import {
 } from './podman/machine';
 import { getUserNodePackages } from './state/nodePackages';
 import { openPodmanModal } from './podman/podman.js';
+import { openNodePackageScreen } from './state/nodePackages.js';
 
 // Can't import from main because of circular dependency
 let _getAssetPath: (...paths: string[]) => string;
@@ -92,8 +93,10 @@ const getNodePackageListMenu = () => {
       isAlert = true;
     }
     return {
-      label: `${nodePackage.spec.displayName} Node    ${nodePackage.status}`,
+      label: `${nodePackage.spec.displayName} Node                ${nodePackage.status}`,
       click: () => {
+        openOrFocusWindow();
+        openNodePackageScreen(nodePackage.id);
         logger.info(`clicked on ${nodePackage.spec.displayName}`);
       },
     };

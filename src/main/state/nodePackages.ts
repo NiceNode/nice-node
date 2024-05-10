@@ -196,3 +196,7 @@ export const getUserNodePackagesWithNodes = async () => {
   });
   return userNodePackages;
 };
+
+export const openNodePackageScreen = async(nodeId: NodeId) => {
+  send(CHANNELS.openNodePackageScreen, nodeId);
+}

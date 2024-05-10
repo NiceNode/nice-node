@@ -23,6 +23,8 @@ import {
 } from "../../state/settingsService";
 import Sidebar from "../Sidebar/Sidebar";
 import { setModalState } from "../../state/modal.js";
+import { NodeId } from "src/common/node.js";
+import { useNavigate } from "react-router-dom";
 
 export interface SidebarWrapperProps {
   children: ReactElement;
@@ -32,6 +34,7 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   const sSelectedNodePackageId = useAppSelector(selectSelectedNodePackageId);
   const sUserNodePackages = useAppSelector(selectUserNodePackages);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   // todo: implement a back-off polling strategy which can be "reset"
   const qIsPodmanInstalled = useGetIsPodmanInstalledQuery();
   const isPodmanInstalled = qIsPodmanInstalled?.data;
@@ -94,9 +97,18 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
     );
   }, []);
 
+  const onOpenNodePackageScreen = useCallback((nodeId: NodeId) => {
+    navigate("/main/nodePackage");
+    dispatch(updateSelectedNodePackageId(nodeId));
+  }, []);
+
   useEffect(() => {
     electron.ipcRenderer.on(CHANNELS.notifications, onNotificationChange);
     electron.ipcRenderer.on(CHANNELS.openPodmanModal, onOpenPodmanModal);
+    electron.ipcRenderer.on(
+      CHANNELS.openNodePackageScreen,
+      onOpenNodePackageScreen,
+    );
     return () => {
       electron.ipcRenderer.removeListener(
         CHANNELS.notifications,
@@ -106,8 +118,12 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
         CHANNELS.openPodmanModal,
         onOpenPodmanModal,
       );
+      electron.ipcRenderer.removeListener(
+        CHANNELS.openNodePackageScreen,
+        onOpenNodePackageScreen,
+      );
     };
-  }, [onNotificationChange, onOpenPodmanModal]);
+  }, [onNotificationChange, onOpenPodmanModal, onOpenNodePackageScreen]);
 
   // Default selected node to be the first node
   useEffect(() => {
