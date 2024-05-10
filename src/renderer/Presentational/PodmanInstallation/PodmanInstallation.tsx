@@ -190,9 +190,6 @@ const PodmanInstallation = ({
   //  react-hooks/exhaustive-deps
   // }, []);
 
-  console.log("isPodmanInstalled", isPodmanInstalled);
-  console.log("podmanDetails", podmanDetails);
-
   // listen to podman install messages
   return (
     <div className={[container, type].join(" ")}>

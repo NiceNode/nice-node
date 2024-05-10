@@ -67,7 +67,6 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   };
 
   const onClickStartPodman = async () => {
-    console.log("test");
     await electron.startPodman();
     // todo: verify it is started and changed banner for 5 secs?
     qIsPodmanRunning.refetch();
@@ -83,15 +82,32 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
     qNotifications?.refetch();
   }, []);
 
+  const onOpenPodmanModal = useCallback(() => {
+    dispatch(
+      setModalState({
+        isModalOpen: true,
+        screen: {
+          route: "podman",
+          type: "modal",
+        },
+      }),
+    );
+  }, []);
+
   useEffect(() => {
     electron.ipcRenderer.on(CHANNELS.notifications, onNotificationChange);
+    electron.ipcRenderer.on(CHANNELS.openPodmanModal, onOpenPodmanModal);
     return () => {
       electron.ipcRenderer.removeListener(
         CHANNELS.notifications,
         onNotificationChange,
       );
+      electron.ipcRenderer.removeListener(
+        CHANNELS.openPodmanModal,
+        onOpenPodmanModal,
+      );
     };
-  }, [onNotificationChange]);
+  }, [onNotificationChange, onOpenPodmanModal]);
 
   // Default selected node to be the first node
   useEffect(() => {

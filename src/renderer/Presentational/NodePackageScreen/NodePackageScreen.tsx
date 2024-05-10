@@ -292,7 +292,6 @@ const NodePackageScreen = () => {
                   screen: {
                     route: "podman",
                     type: "modal",
-                    data: { view: "update" },
                   },
                 }),
               );

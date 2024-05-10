@@ -22,6 +22,7 @@ export const CHANNELS = {
   nodeLogs: 'nodeLogs',
   podman: 'podman',
   podmanInstall: 'podmanInstall',
+  openPodmanModal: 'openPodmanModal',
   theme: 'theme',
   notifications: 'notifications',
   reportEvent: 'reportEvent',

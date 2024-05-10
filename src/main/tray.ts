@@ -8,6 +8,7 @@ import {
   stopMachineIfCreated,
 } from './podman/machine';
 import { getUserNodePackages } from './state/nodePackages';
+import { openPodmanModal } from './podman/podman.js';
 
 // Can't import from main because of circular dependency
 let _getAssetPath: (...paths: string[]) => string;
@@ -35,23 +36,19 @@ export const setTrayIcon = (style: 'Default' | 'Alert') => {
 
 export const setTrayMenu = () => {
   const menuTemplate = [
-    // todo: change icon if there are any status errors
+    // Podman status with start, stop, and delete?
     ...nodePackageTrayMenu,
     { type: 'separator' },
-    // todo: show in developer mode
-
-    // todo: add podman status with start, stop, and delete?
+    ...podmanTrayMenu,
+    { type: 'separator' },
     ...openNiceNodeMenu,
     {
-      label: 'Full Quit',
+      label: 'Quit',
       click: () => {
         fullQuit(); // app no longer runs in the background
       },
     },
   ];
-  if (process.env.NODE_ENV === 'development') {
-    menuTemplate.push(...podmanTrayMenu, { type: 'separator' });
-  }
   const contextMenu = Menu.buildFromTemplate(menuTemplate as MenuItem[]);
 
   if (tray) {
@@ -126,8 +123,9 @@ const getPodmanMenuItem = async () => {
           // stop
           stopMachineIfCreated();
         } else {
+          openPodmanModal();
           // try to start if any other start
-          startMachineIfCreated();
+          // startMachineIfCreated();
         }
       },
       type: 'checkbox',

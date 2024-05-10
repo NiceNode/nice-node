@@ -8,15 +8,12 @@ import { type ModalConfig, modalOnChangeConfig } from "./modalUtils.js";
 
 type Props = {
   modalOnClose: () => void;
-  data: { view: string };
 };
 
-export const PodmanModal = ({ modalOnClose, data }: Props) => {
+export const PodmanModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(false);
   const { t } = useTranslation();
-  const modalTitle =
-    data.view === "update" ? "Update Podman" : t("RemoveThisNode");
   const buttonSaveLabel = t("Done");
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {

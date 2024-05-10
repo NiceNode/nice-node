@@ -18,7 +18,6 @@ import {
   type ConfigValuesMap,
   buildCliConfig,
 } from '../../common/nodeConfig';
-import { send } from '../messenger';
 import { restartNodes } from '../nodePackageManager';
 import { isLinux } from '../platform';
 import { killChildProcess } from '../processExit';
@@ -28,6 +27,7 @@ import * as metricsPolling from './metricsPolling';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
 import { getPodmanEnvWithPath } from './podman-env-path';
 import startPodman, { onStartUp } from './start';
+import { send, CHANNELS } from '../messenger.js';
 
 let podmanWatchProcess: ChildProcess;
 
@@ -753,6 +753,10 @@ export const isPodmanStarting = async () => {
   const nnMachine = await getNiceNodeMachine();
   const bIsPodmanStarting = nnMachine?.Starting === true;
   return bIsPodmanStarting;
+};
+
+export const openPodmanModal = async () => {
+  send(CHANNELS.openPodmanModal);
 };
 
 // todoo
