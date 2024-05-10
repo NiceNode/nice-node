@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { ThemeSetting } from '../../../main/state/settings';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
-import electron from '../../electronGlobal';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import type { ThemeSetting } from "../../../main/state/settings";
+import { Modal } from "../../Generics/redesign/Modal/Modal";
+import electron from "../../electronGlobal";
 import {
   reportEvent,
   setRemoteEventReportingEnabled,
-} from '../../events/reportEvent';
-import { useGetSettingsQuery } from '../../state/settingsService';
-import PreferencesWrapper from '../Preferences/PreferencesWrapper';
-import { type ModalConfig, modalOnChangeConfig } from './modalUtils';
+} from "../../events/reportEvent";
+import { useGetSettingsQuery } from "../../state/settingsService";
+import PreferencesWrapper from "../Preferences/PreferencesWrapper";
+import { type ModalConfig, modalOnChangeConfig } from "./modalUtils";
 
 type Props = {
   modalOnClose: () => void;
@@ -22,15 +22,15 @@ interface MetaElement extends HTMLMetaElement {
 export const PreferencesModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const { t } = useTranslation();
-  const modalTitle = t('Preferences');
-  const buttonSaveLabel = t('SaveChanges');
+  const modalTitle = t("Preferences");
+  const buttonSaveLabel = t("SaveChanges");
   const qSettings = useGetSettingsQuery();
 
   const handleColorSchemeChange = (colorScheme: ThemeSetting) => {
     const meta = document.querySelector(
       'meta[name="color-scheme"]',
     ) as MetaElement;
-    const colorValue = colorScheme === 'auto' ? 'light dark' : colorScheme;
+    const colorValue = colorScheme === "auto" ? "light dark" : colorScheme;
     if (meta) meta.content = colorValue as ThemeSetting;
   };
 
@@ -63,9 +63,9 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
         isPreReleaseUpdatesEnabled,
       );
       if (isPreReleaseUpdatesEnabled) {
-        reportEvent('EnablePreReleaseUpdates');
+        reportEvent("EnablePreReleaseUpdates");
       } else {
-        reportEvent('DisablePreReleaseUpdates');
+        reportEvent("DisablePreReleaseUpdates");
       }
     }
     if (language) {
@@ -78,6 +78,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
   return (
     <Modal
       modalTitle={modalTitle}
+      modalStyle="preferences"
       buttonSaveLabel={buttonSaveLabel}
       modalOnSaveConfig={modalOnSaveConfig}
       modalOnClose={modalOnClose}

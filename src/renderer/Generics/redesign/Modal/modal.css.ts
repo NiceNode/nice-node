@@ -47,6 +47,9 @@ export const modalContentStyle = style({
     '&.podman': {
       width: '624px',
     },
+    '&.preferences': {
+      width: '624px',
+    },
   },
 });
 
