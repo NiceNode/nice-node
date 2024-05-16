@@ -1,13 +1,17 @@
 import { reportEvent } from '../../events';
 import { execAwait } from '../../execHelper';
 import logger from '../../logger';
+import {
+  type PackageManager,
+  findPackageManager,
+} from '../../nn-auto-updater/findPackageManager.js';
 import { getOperatingSystemInfo } from '../../systemInfo';
 import { sendMessageOnGrantPermissionToInstallPodman } from '../messageFrontEnd';
-import { script as debianInstallScript } from './debianInstallScript';
-import { script as fedoraInstallScript } from './fedoraInstallScript';
-import { script as linuxMintInstallScript } from './linuxMintInstallScript';
-import { script as manjaroInstallScript } from './manjaroInstallScript';
-import { script as ubuntuInstallScript } from './ubuntuInstallScript';
+import { script as aptInstallScript } from './aptInstallScript';
+import { script as dnfInstallScript } from './dnfInstallScript';
+import { script as pacmanInstallScript } from './pacmanInstallScript';
+import { script as yumInstallScript } from './yumInstallScript';
+import { script as zypperInstallScript } from './zypperInstallScript';
 
 // const UBUNTU_INSTALL_SCRIPT = 'installOnUbuntuScript';
 /**
@@ -17,6 +21,7 @@ import { script as ubuntuInstallScript } from './ubuntuInstallScript';
 const installOnLinux = async (): Promise<any> => {
   logger.info('Starting podman install on Linux...');
   const { distro, release } = await getOperatingSystemInfo();
+  // ex: Ubuntu & 22.04.4 LTS
   logger.info(
     `Attempting to install Podman on distro and release: ${distro} & ${release} ...`,
   );
@@ -25,21 +30,23 @@ const installOnLinux = async (): Promise<any> => {
   let installScript = '';
   // Run "cat /etc/*-release; cat /usr/lib/os-release; cat /etc/openwrt_release" on a Linux Distro
   //  or see https://github.com/sebhildebrandt/systeminformation/blob/master/lib/osinfo.js to determine.
-  if (lcDistro.includes('ubuntu')) {
-    installScript = ubuntuInstallScript;
-  } else if (lcDistro.includes('debian')) {
-    installScript = debianInstallScript;
-  } else if (lcDistro.includes('fedora')) {
-    installScript = fedoraInstallScript;
-  } else if (lcDistro.includes('manjaro') || lcDistro.includes('arch')) {
-    installScript = manjaroInstallScript;
-  } else if (lcDistro.includes('linuxmint')) {
-    installScript = linuxMintInstallScript;
+  const pkgManager: PackageManager = await findPackageManager();
+  if (pkgManager === 'dpkg') {
+    installScript = aptInstallScript;
+  } else if (pkgManager === 'dnf') {
+    installScript = dnfInstallScript;
+  } else if (pkgManager === 'yum') {
+    installScript = yumInstallScript;
+  } else if (pkgManager === 'pacman') {
+    installScript = pacmanInstallScript;
+  } else if (pkgManager === 'zypper') {
+    installScript = zypperInstallScript;
   } else {
     const errorMessage = `Installing Podman is not suported on this distro and release: ${distro} & ${release}`;
     logger.error(errorMessage);
     return { error: errorMessage };
   }
+
   try {
     try {
       const { stdout, stderr } = await execAwait(installScript, {
