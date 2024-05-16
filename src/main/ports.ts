@@ -144,6 +144,8 @@ export const assignPortsToNode = (node: Node): Node => {
       );
     }
 
+    // Add the newly assigned port to the used ports list
+    usedPorts.push(assignedPort.toString());
     // Update the node configuration with the port as a string
     node.config.configValuesMap[portType] = assignedPort.toString();
   });
