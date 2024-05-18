@@ -14,6 +14,7 @@
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
         "executionEndpoint": "http://host.containers.internal:8551",
+        "checkpointSyncUrl": "https://beaconstate.ethstaker.cc",
         "network": "Mainnet"
       },
       "docker": {
@@ -66,7 +67,7 @@
         "controlTranslations": [
           {
             "value": "Mainnet",
-            "config": "mainnet --initial-state=https://beaconstate.ethstaker.cc"
+            "config": "mainnet"
           },
           {
             "value": "Holesky",
@@ -81,10 +82,14 @@
     },
     "checkpointSyncUrl": {
       "displayName": "Trusted checkpoint sync URL",
-      "cliConfigPrefix": "--initial-state=",
+      "cliConfigPrefix": "--checkpoint-sync-url=",
       "uiControl": {
         "type": "text"
-      }
+      },
+      "defaultValue": "https://beaconstate.ethstaker.cc",
+      "hideFromUserAfterStart": true,
+      "addNodeFlow": "advanced",
+      "documentation": "https://docs.teku.consensys.io/get-started/checkpoint-start"
     },
     "p2pPorts": {
       "displayName": "P2P port (UDP and TCP)",
