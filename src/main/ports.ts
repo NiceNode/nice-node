@@ -152,8 +152,6 @@ export const assignPortsToNode = (node: Node): Node => {
 
   if (node.spec.rpcTranslation === 'eth-l1-beacon' && executionService) {
     const executionNode = getNode(executionService.node.id);
-    console.log('nodeStatus', executionNode.status);
-    console.log('nodeInitialized', executionNode.initialized);
     let executionEndpoint = node.config.configValuesMap.executionEndpoint;
     console.log(
       'enginePortTest',
