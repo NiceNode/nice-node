@@ -712,13 +712,14 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
     }
   }
 
+  let updatedNode = { ...node };
   if (node.runtime?.initialized !== true) {
-    node = assignPortsToNode(node);
-    node.runtime.initialized = true;
-    storeUpdateNode(node);
+    updatedNode = assignPortsToNode(updatedNode);
+    updatedNode.runtime.initialized = true;
+    storeUpdateNode(updatedNode);
   }
 
-  const podmanCommand = createRunCommand(node);
+  const podmanCommand = createRunCommand(updatedNode);
   // todo: test if input is empty string
   const runData = await runCommand(podmanCommand);
   // todoo: get containerId by container name?

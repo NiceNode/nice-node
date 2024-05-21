@@ -6,6 +6,7 @@ import { httpGet } from './httpReq';
 import { getNodePackageByServiceNodeId } from './state/nodePackages';
 import { getNode, getNodes, getSetPortHasChanged } from './state/nodes';
 import { addNotification } from './state/notifications';
+import { getNodePackages } from './state/nodePackages';
 
 export const getPodmanPortsForNode = (
   node: Node,
@@ -120,6 +121,8 @@ export const assignPortsToNode = (node: Node): Node => {
   )?.services.find((service) => {
     return service.serviceId === 'executionClient';
   });
+
+  const nodePackages = getNodePackages();
   // Update ports using array methods
   portTypes.forEach((portType) => {
     const defaultPort =
@@ -137,7 +140,10 @@ export const assignPortsToNode = (node: Node): Node => {
     );
 
     // Find next available port if the current/default one is in use
-    if (usedPorts.includes(assignedPort.toString())) {
+    if (
+      nodePackages.length > 1 &&
+      usedPorts.includes(assignedPort.toString())
+    ) {
       assignedPort = Number.parseInt(
         findNextAvailablePort(usedPorts, assignedPort),
         10,
@@ -153,10 +159,6 @@ export const assignPortsToNode = (node: Node): Node => {
   if (node.spec.rpcTranslation === 'eth-l1-beacon' && executionService) {
     const executionNode = getNode(executionService.node.id);
     let executionEndpoint = node.config.configValuesMap.executionEndpoint;
-    console.log(
-      'enginePortTest',
-      executionNode.config.configValuesMap.enginePort,
-    );
 
     // Check if the endpoint is enclosed in quotes
     const isQuoted =
