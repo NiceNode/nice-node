@@ -83,7 +83,7 @@ export const ClientCard = (props: ClientProps) => {
       } else if (stats.highestBlock && stats.currentBlock) {
         progress = stats.currentBlock / stats.highestBlock;
       }
-      const syncPercent = (progress * 100).toFixed(1);
+      // const syncPercent = (progress * 100).toFixed(1);
       const caption = !status.initialized
         ? g('InitialSyncInProgress')
         : g('CatchingUp');
@@ -97,7 +97,8 @@ export const ClientCard = (props: ClientProps) => {
               common.color.geth
             }
             progress={progress}
-            caption={`${caption} (${syncPercent}%)`}
+            caption={`${caption} (rely on logs for now, still a work in progress)`}
+            // caption={`${caption} (${syncPercent}%)`}
           />
         </>
       );
