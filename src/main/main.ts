@@ -251,6 +251,7 @@ app.on('activate', () => {
 const onExit = () => {
   onExitNodeManager();
   monitor.onExit();
+  cronJobs.onExit();
   app.quit(); // todo: remove
 };
 
