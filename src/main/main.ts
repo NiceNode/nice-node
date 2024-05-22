@@ -100,6 +100,19 @@ const getAssetPath = (...paths: string[]): string => {
   return path.join(RESOURCES_PATH, ...paths);
 };
 
+const getTrayPath = (...paths: string[]): string => {
+  return path.join(
+    __dirname,
+    '..',
+    '..',
+    'src',
+    'renderer',
+    'Presentational',
+    'Tray',
+    ...paths,
+  );
+};
+
 export const createWindow = async () => {
   // let name: string;
   // if (windowName === 'log') {
@@ -268,7 +281,7 @@ const initialize = () => {
   monitor.initialize();
   cronJobs.initialize();
   i18nMain.initialize();
-  tray.initialize(getAssetPath);
+  tray.initialize(getAssetPath, getTrayPath);
   console.log('app locale: ', app.getLocale());
   console.log('app LocaleCountryCode: ', app.getLocaleCountryCode());
 };

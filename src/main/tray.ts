@@ -1,4 +1,4 @@
-import { Menu, MenuItem, Tray, dialog } from 'electron';
+import { BrowserWindow, Menu, MenuItem, Tray, dialog } from 'electron';
 import logger from './logger';
 import { createWindow, fullQuit, getMainWindow } from './main';
 import { isLinux, isWindows } from './platform';
@@ -13,10 +13,12 @@ import { openNodePackageScreen } from './state/nodePackages.js';
 
 // Can't import from main because of circular dependency
 let _getAssetPath: (...paths: string[]) => string;
+let _getTrayPath: (...paths: string[]) => string;
 
 let tray: Tray;
+let trayWindow: BrowserWindow | null = null;
 
-// Can get asyncronously updated separately
+// Can get asynchronously updated separately
 let nodePackageTrayMenu: { label: string; click: () => void }[] = [];
 let podmanTrayMenu: MenuItem[] = [];
 let openNiceNodeMenu: { label: string; click: () => void }[] = [];
@@ -48,7 +50,7 @@ const openOrFocusWindow = () => {
     }
     mainWindow.focus(); // Focus on the window
   }
-}
+};
 
 export const setTrayMenu = () => {
   const menuTemplate = [
@@ -63,22 +65,26 @@ export const setTrayMenu = () => {
       click: () => {
         // Show confirmation dialog before quitting
         // TODO: get translated strings for this
-        dialog.showMessageBox({
-          type: 'question',
-          buttons: ['Yes', 'No'],
-          defaultId: 1, // Focus on 'No' by default
-          title: 'Confirm',
-          message: 'Are you sure you want to quit? Nodes will stop syncing.',
-          detail: 'Confirming will close the application.'
-        }).then(result => {
-          if (result.response === 0) { // The 'Yes' button is at index 0
-            fullQuit(); // app no longer runs in the background
-          }
-          // Do nothing if the user selects 'No'
-        }).catch(err => {
-          logger.error('Error showing dialog:', err);
-        });
-      }
+        dialog
+          .showMessageBox({
+            type: 'question',
+            buttons: ['Yes', 'No'],
+            defaultId: 1, // Focus on 'No' by default
+            title: 'Confirm',
+            message: 'Are you sure you want to quit? Nodes will stop syncing.',
+            detail: 'Confirming will close the application.',
+          })
+          .then((result) => {
+            if (result.response === 0) {
+              // The 'Yes' button is at index 0
+              fullQuit(); // app no longer runs in the background
+            }
+            // Do nothing if the user selects 'No'
+          })
+          .catch((err) => {
+            logger.error('Error showing dialog:', err);
+          });
+      },
     },
   ];
   const contextMenu = Menu.buildFromTemplate(menuTemplate as MenuItem[]);
@@ -171,23 +177,82 @@ export const updateTrayMenu = () => {
   getOpenNiceNodeMenu();
 };
 
-export const initialize = (getAssetPath: (...paths: string[]) => string) => {
+function createTrayWindow() {
+  trayWindow = new BrowserWindow({
+    width: 300,
+    height: 100, // Initial height
+    show: false,
+    frame: false,
+    resizable: false,
+    webPreferences: {
+      // preload: _getTrayPath('tray.js'),
+      contextIsolation: false,
+      nodeIntegration: true,
+    },
+  });
+
+  trayWindow.loadURL(`file://${_getTrayPath('tray.html')}`);
+
+  trayWindow.on('blur', () => {
+    if (trayWindow) {
+      trayWindow.hide();
+    }
+  });
+
+  trayWindow.webContents.on('did-finish-load', () => {
+    trayWindow!.webContents
+      .executeJavaScript(`
+      new Promise((resolve) => {
+        const height = document.body.scrollHeight;
+        resolve(height);
+      });
+    `)
+      .then((height: number) => {
+        trayWindow!.setSize(300, height);
+        trayWindow!.webContents.openDevTools();
+      });
+  });
+}
+
+function toggleTrayWindow() {
+  if (trayWindow) {
+    if (trayWindow.isVisible()) {
+      trayWindow.hide();
+    } else {
+      const trayBounds = tray.getBounds();
+      const windowBounds = trayWindow.getBounds();
+      const x = Math.round(
+        trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2,
+      );
+      const y = Math.round(trayBounds.y + trayBounds.height);
+      trayWindow.setPosition(x, y, false);
+      trayWindow.show();
+    }
+  }
+}
+
+export const initialize = (
+  getAssetPath: (...paths: string[]) => string,
+  getTrayPath: (...paths: string[]) => string,
+) => {
   logger.info('tray initializing...');
   _getAssetPath = getAssetPath;
+  _getTrayPath = getTrayPath;
+
   let icon = getAssetPath('icons', 'tray', 'NNIconDefaultInvertedTemplate.png');
   if (isWindows()) {
     icon = getAssetPath('icon.ico');
   }
 
   tray = new Tray(icon);
-  // on windows, show a colored icon, 64x64 default icon seems ok
-  updateTrayMenu();
-  // Update the status of everything in the tray when it is opened
+  createTrayWindow();
+  // updateTrayMenu();
+
   tray.on('click', () => {
     // on windows, default is open/show window on click
     // on mac, default is open menu on click (no code needed)
     // on linux?
-    updateTrayMenu();
+    toggleTrayWindow();
     if (isWindows()) {
       const window = getMainWindow();
       if (window) {
@@ -199,8 +264,10 @@ export const initialize = (getAssetPath: (...paths: string[]) => string) => {
       }
     }
   });
+
   // on windows, the menu opens with a right click (no code needed)
   // also, the 'right-click' event is not triggered on windows
+
   logger.info('tray initialized');
 };
 
