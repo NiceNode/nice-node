@@ -26,7 +26,8 @@ import {
  * Primary UI component for user interaction
  */
 export const ClientCard = (props: ClientProps) => {
-  const { displayName, status, name, nodeType, onClick, stats } = props;
+  const { displayName, packageName, status, name, nodeType, onClick, stats } =
+    props;
 
   const { t: g } = useTranslation('genericComponents');
 
@@ -76,7 +77,10 @@ export const ClientCard = (props: ClientProps) => {
       const label = status.stopped ? g('Stopped') : g('Updating');
       return <Label type="gray" label={label} />;
     }
-    if (stats.currentBlock !== 0 || stats.currentSlot !== 0) {
+    if (
+      packageName === 'ethereum' &&
+      (stats.currentBlock !== 0 || stats.currentSlot !== 0)
+    ) {
       let progress = 0;
       if (stats.highestSlot && stats.currentSlot) {
         progress = stats.currentSlot / stats.highestSlot;
