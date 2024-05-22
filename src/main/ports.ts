@@ -160,6 +160,11 @@ export const assignPortsToNode = (node: Node): Node => {
     const executionNode = getNode(executionService.node.id);
     let executionEndpoint = node.config.configValuesMap.executionEndpoint;
 
+    const regex = /:\d{4}/;
+    if (regex.test(executionEndpoint)) {
+      return;
+    }
+
     // Check if the endpoint is enclosed in quotes
     const isQuoted =
       executionEndpoint.startsWith('"') && executionEndpoint.endsWith('"');
