@@ -124,13 +124,7 @@
     "url": "http://nicenode.xyz"
   },
   "license": "MIT",
-  "keywords": [
-    "ethereum",
-    "node",
-    "blockchain",
-    "web3",
-    "local"
-  ],
+  "keywords": ["ethereum", "node", "blockchain", "web3", "local"],
   "devEngines": {
     "node": ">=20.x",
     "npm": ">=9.x"

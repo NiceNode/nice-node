@@ -8,6 +8,7 @@ import type Node from '../../common/node';
 import { NodeStatus, getContainerName, getImageTag } from '../../common/node';
 import type { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
 import logger from '../logger';
+import { assignPortsToNode } from '../ports';
 import {
   setDockerNodeStatus as setPodmanNodeStatus,
   updateNode as storeUpdateNode,
@@ -711,7 +712,14 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
     }
   }
 
-  const podmanCommand = createRunCommand(node);
+  let updatedNode = { ...node };
+  if (node.runtime?.initialized !== true) {
+    updatedNode = assignPortsToNode(updatedNode);
+    updatedNode.runtime.initialized = true;
+    storeUpdateNode(updatedNode);
+  }
+
+  const podmanCommand = createRunCommand(updatedNode);
   // todo: test if input is empty string
   const runData = await runCommand(podmanCommand);
   // todoo: get containerId by container name?

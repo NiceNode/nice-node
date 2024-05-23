@@ -145,8 +145,9 @@ export const startNodePackage = async (nodeId: NodeId) => {
   node.stoppedBy = undefined;
   nodePackageStore.updateNodePackage(node);
 
-  nodePackageStatus = NodeStatus.running;
-  const startPromises = node.services.map(async (service) => {
+  const isEthereumPackage = node.spec.specId === 'ethereum';
+
+  const startService = async (service: any) => {
     try {
       await startNode(service.node.id);
     } catch (e) {
@@ -156,9 +157,29 @@ export const startNodePackage = async (nodeId: NodeId) => {
       // todo: set as partially started?
       // throw e;
     }
-  });
+  };
 
-  await Promise.all(startPromises);
+  // Make sure Ethereum clients run sequentially so that the correct
+  // engine and other ports can be assigned correctly
+  if (isEthereumPackage) {
+    const executionClient = node.services.find(
+      (service) => service.serviceId === 'executionClient',
+    );
+    const consensusClient = node.services.find(
+      (service) => service.serviceId === 'consensusClient',
+    );
+
+    if (executionClient) {
+      await startService(executionClient);
+    }
+
+    if (consensusClient) {
+      await startService(consensusClient);
+    }
+  } else {
+    const startPromises = node.services.map(startService);
+    await Promise.all(startPromises);
+  }
 
   // If all node services start without error, the package is considered running
   if (nodePackageStatus === NodeStatus.running) {

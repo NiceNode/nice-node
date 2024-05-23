@@ -104,7 +104,9 @@ const NodeSettingsWrapper = ({
     let isWalletSettingsEnabled = false;
     console.log(selectedNode);
     if (selectedNode) {
-      isDisabled = ['running', 'starting'].includes(selectedNode.status);
+      isDisabled = ['updating', 'running', 'starting'].includes(
+        selectedNode.status,
+      );
       configTranslationMap = selectedNode.spec.configTranslation;
       isWalletSettingsEnabled =
         selectedNode.spec.category === 'L1/ExecutionClient';
