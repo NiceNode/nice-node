@@ -81,7 +81,7 @@ export const initialize = async () => {
         nodeSpec.configTranslation = {};
       }
 
-      // 'inject' serviceVersion and dataDir (todo) here. Universal for all nodes.
+      // "inject" serviceVersion and dataDir (todo) here. Universal for all nodes.
       const execution = nodeSpec.execution as PodmanExecution;
       let defaultImageTag = 'latest';
       // if the defaultImageTag is set in the spec use that, otherwise 'latest'
@@ -90,14 +90,13 @@ export const initialize = async () => {
       }
 
       nodeSpec.configTranslation.cliInput = {
-        displayName: `${spec.displayName} CLI Input`,
+        displayName: `${spec.displayName} CLI input`,
         uiControl: {
           type: 'text',
         },
-        defaultValue: ',
+        defaultValue: '',
         addNodeFlow: 'advanced',
-        infoDescription:
-          'Enter any direct CLI input to the node start command.',
+        infoDescription: 'Additional CLI input',
       };
 
       nodeSpec.configTranslation.serviceVersion = {
