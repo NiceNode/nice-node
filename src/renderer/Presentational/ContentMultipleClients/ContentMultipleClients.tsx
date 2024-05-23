@@ -231,6 +231,7 @@ const ContentMultipleClients = (props: {
         {clients.map((client) => {
           return (
             <ClientCard
+              packageName={nodeContent.name}
               key={client.id}
               {...client}
               onClick={() => handleClientClick(client.id)}

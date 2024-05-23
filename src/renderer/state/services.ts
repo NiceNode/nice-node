@@ -8,6 +8,11 @@ type CustomerErrorType = {
 };
 type ProviderResponse = any;
 
+type QueryArg = {
+  rpcTranslation: NiceNodeRpcTranslation;
+  httpPort: string;
+};
+
 // const provider = new ethers.providers.WebSocketProvider('ws://localhost:8546');
 // const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
 // const provider9545 = new ethers.providers.JsonRpcProvider(
@@ -22,16 +27,17 @@ export const RtkqExecutionWs: any = createApi({
   reducerPath: 'RtkqExecutionWs',
   baseQuery: fakeBaseQuery<CustomerErrorType>(),
   endpoints: (builder) => ({
-    getExecutionLatestBlock: builder.query<
-      ProviderResponse,
-      NiceNodeRpcTranslation
-    >({
-      queryFn: async (rpcTranslation) => {
+    getExecutionLatestBlock: builder.query<ProviderResponse, QueryArg>({
+      queryFn: async ({ rpcTranslation, httpPort }) => {
         let data;
         try {
           // data = await provider.send('eth_getBlockByNumber', ['latest', false]);
           console.log('latestBlock rpcTranslation', rpcTranslation);
-          data = await executeTranslation('latestBlock', rpcTranslation);
+          data = await executeTranslation(
+            'latestBlock',
+            rpcTranslation,
+            httpPort,
+          );
           console.log('latestBlock data', data);
         } catch (e) {
           const error = { message: 'Unable to get latestBlock value' };
@@ -41,19 +47,18 @@ export const RtkqExecutionWs: any = createApi({
         return { data };
       },
     }),
-    getExecutionIsSyncing: builder.query<
-      ProviderResponse,
-      NiceNodeRpcTranslation
-    >({
-      queryFn: async (rpcTranslation) => {
+    getExecutionIsSyncing: builder.query<ProviderResponse, QueryArg>({
+      queryFn: async ({ rpcTranslation, httpPort }) => {
         let data;
+        console.log('rpcTranslation!', rpcTranslation);
+        console.log('httpPort!', httpPort);
         try {
           // if (!rpcTranslation.sync) {
           //   console.log('No rpcTranslation found for sync');
           // }
           // data = await provider.send('eth_syncing');
           console.log('sync rpcTranslation', rpcTranslation);
-          data = await executeTranslation('sync', rpcTranslation);
+          data = await executeTranslation('sync', rpcTranslation, httpPort);
           console.log('sync data', data);
         } catch (e) {
           const error = { message: 'Unable to get syncing value' };
@@ -69,12 +74,16 @@ export const RtkqExecutionWs: any = createApi({
         return { data: network };
       },
     }),
-    getNodeVersion: builder.query<ProviderResponse, NiceNodeRpcTranslation>({
-      queryFn: async (rpcTranslation) => {
+    getNodeVersion: builder.query<ProviderResponse, QueryArg>({
+      queryFn: async ({ rpcTranslation, httpPort }) => {
         let data;
         try {
           console.log('clientVersion rpcTranslation', rpcTranslation);
-          data = await executeTranslation('clientVersion', rpcTranslation);
+          data = await executeTranslation(
+            'clientVersion',
+            rpcTranslation,
+            httpPort,
+          );
           console.log('clientVersion data', data);
         } catch (e) {
           const error = { message: 'Unable to get node version.' };
@@ -84,13 +93,13 @@ export const RtkqExecutionWs: any = createApi({
         return { data };
       },
     }),
-    getExecutionPeers: builder.query<ProviderResponse, NiceNodeRpcTranslation>({
-      queryFn: async (rpcTranslation) => {
+    getExecutionPeers: builder.query<ProviderResponse, QueryArg>({
+      queryFn: async ({ rpcTranslation, httpPort }) => {
         let data;
         // let error;
         try {
           console.log('peers rpcTranslation', rpcTranslation);
-          data = await executeTranslation('peers', rpcTranslation);
+          data = await executeTranslation('peers', rpcTranslation, httpPort);
           console.log('peers data', data);
 
           // data = await provider.send('net_peerCount');
