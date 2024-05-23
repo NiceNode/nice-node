@@ -1,38 +1,38 @@
 // import { useTranslation } from 'react-i18next';
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
-import { useTranslation } from "react-i18next";
-import { NodeStatus } from "../../../common/node";
-import Button from "../../Generics/redesign/Button/Button";
-import type { ClientProps, NodeAction } from "../../Generics/redesign/consts";
-import type { NodeBackgroundId } from "../../assets/images/nodeBackgrounds";
-import electron from "../../electronGlobal";
+import { useTranslation } from 'react-i18next';
+import { NodeStatus } from '../../../common/node';
+import Button from '../../Generics/redesign/Button/Button';
+import type { ClientProps, NodeAction } from '../../Generics/redesign/consts';
+import type { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
+import electron from '../../electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
-import { useAppDispatch, useAppSelector } from "../../state/hooks";
-import { setModalState } from "../../state/modal";
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { setModalState } from '../../state/modal';
 import {
   selectIsAvailableForPolling,
   selectSelectedNodePackage,
   selectUserNodes,
-} from "../../state/node";
+} from '../../state/node';
 import {
   useGetExecutionIsSyncingQuery,
   useGetExecutionLatestBlockQuery,
   useGetExecutionPeersQuery,
   useGetNodeVersionQuery,
-} from "../../state/services";
-import { useGetIsPodmanRunningQuery } from "../../state/settingsService";
-import { hexToDecimal } from "../../utils";
-import ContentMultipleClients from "../ContentMultipleClients/ContentMultipleClients";
+} from '../../state/services';
+import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
+import { hexToDecimal } from '../../utils';
+import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
 // import { useGetNetworkConnectedQuery } from './state/network';
-import type { SingleNodeContent } from "../ContentSingleClient/ContentSingleClient";
+import type { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
 import {
   container,
   contentContainer,
   descriptionFont,
   titleFont,
-} from "./NodePackageScreen.css";
+} from './NodePackageScreen.css';
 
 let alphaModalRendered = false;
 
@@ -47,7 +47,7 @@ const NodePackageScreen = () => {
   const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>();
   // we will bring these vars back in the future
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
-  const [sSyncPercent, setSyncPercent] = useState<string>("");
+  const [sSyncPercent, setSyncPercent] = useState<string>('');
   const [sPeers, setPeers] = useState<number>();
   const [sDiskUsed, setDiskUsed] = useState<number>(0);
   const [sCpuPercentUsed, setCpuPercentUsed] = useState<number>(0);
@@ -56,20 +56,36 @@ const NodePackageScreen = () => {
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
+  const executionNode = selectedNodePackage?.services.find((service) => {
+    return service.serviceId === 'executionClient';
+  });
+  const nodeId = executionNode?.node.id;
+  const httpPort =
+    nodeId && sUserNodes?.nodes[nodeId]?.config.configValuesMap.httpPort;
+  const rpcTranslation = selectedNodePackage?.spec.rpcTranslation;
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
-    selectedNodePackage?.spec.rpcTranslation,
+    {
+      rpcTranslation,
+      httpPort,
+    },
     {
       pollingInterval,
     },
   );
   const qExecutionPeers = useGetExecutionPeersQuery(
-    selectedNodePackage?.spec.rpcTranslation,
+    {
+      rpcTranslation,
+      httpPort,
+    },
     {
       pollingInterval,
     },
   );
   const qLatestBlock = useGetExecutionLatestBlockQuery(
-    selectedNodePackage?.spec.rpcTranslation,
+    {
+      rpcTranslation,
+      httpPort,
+    },
     {
       pollingInterval,
     },
@@ -82,7 +98,7 @@ const NodePackageScreen = () => {
     isPodmanRunning = qIsPodmanRunning.data;
   }
   // temporary until network is set at the node package level
-  const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>("");
+  const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
 
   useEffect(() => {
     if (selectedNodePackage?.config?.configValuesMap?.network) {
@@ -90,7 +106,7 @@ const NodePackageScreen = () => {
         selectedNodePackage?.config?.configValuesMap?.network,
       );
     } else {
-      setNetworkNodePackage("");
+      setNetworkNodePackage('');
     }
   }, [selectedNodePackage]);
   // use to show if internet is disconnected
@@ -120,7 +136,7 @@ const NodePackageScreen = () => {
   useEffect(() => {
     if (!sIsAvailableForPolling) {
       // clear all node data when it becomes unavailable to get
-      setSyncPercent("");
+      setSyncPercent('');
       setIsSyncing(undefined);
       setPeers(undefined);
       setLatestBlockNumber(0);
@@ -128,35 +144,35 @@ const NodePackageScreen = () => {
   }, [sIsAvailableForPolling]);
 
   useEffect(() => {
-    console.log("qExecutionIsSyncing: ", qExecutionIsSyncing);
+    console.log('qExecutionIsSyncing: ', qExecutionIsSyncing);
     if (qExecutionIsSyncing.isError) {
-      setSyncPercent("");
+      setSyncPercent('');
       setIsSyncing(undefined);
       return;
     }
     const syncingData = qExecutionIsSyncing.data;
-    if (typeof syncingData === "object") {
-      setSyncPercent(syncingData.syncPercent);
+    if (typeof syncingData === 'object') {
+      setSyncPercent('');
       setIsSyncing(syncingData.isSyncing);
     } else if (syncingData === false) {
       // for nodes that do not have sync percent or other sync data
-      setSyncPercent("");
+      setSyncPercent('');
       setIsSyncing(false);
     } else {
-      setSyncPercent("");
+      setSyncPercent('');
       setIsSyncing(undefined);
     }
   }, [qExecutionIsSyncing]);
 
   useEffect(() => {
-    console.log("qExecutionPeers: ", qExecutionPeers.data);
+    console.log('qExecutionPeers: ', qExecutionPeers.data);
     if (qExecutionPeers.isError) {
       setPeers(undefined);
       return;
     }
-    if (typeof qExecutionPeers.data === "string") {
+    if (typeof qExecutionPeers.data === 'string') {
       setPeers(qExecutionPeers.data);
-    } else if (typeof qExecutionPeers.data === "number") {
+    } else if (typeof qExecutionPeers.data === 'number') {
       setPeers(qExecutionPeers.data.toString());
     } else {
       setPeers(undefined);
@@ -188,14 +204,14 @@ const NodePackageScreen = () => {
     let latestBlockNum = 0;
     if (
       blockNumber &&
-      typeof blockNumber === "string" &&
-      rpcTranslation === "eth-l1"
+      typeof blockNumber === 'string' &&
+      rpcTranslation === 'eth-l1'
     ) {
       latestBlockNum = hexToDecimal(blockNumber);
     } else if (
       slotNumber &&
-      typeof slotNumber === "string" &&
-      rpcTranslation === "eth-l1-beacon"
+      typeof slotNumber === 'string' &&
+      rpcTranslation === 'eth-l1-beacon'
     ) {
       latestBlockNum = Number.parseFloat(slotNumber);
     }
@@ -208,15 +224,15 @@ const NodePackageScreen = () => {
 
   const onNodeAction = useCallback(
     (action: NodeAction) => {
-      console.log("NodeAction for node: ", action, selectedNodePackage);
+      console.log('NodeAction for node: ', action, selectedNodePackage);
       if (selectedNodePackage) {
-        if (action === "start") {
+        if (action === 'start') {
           electron.startNode(selectedNodePackage.id);
-        } else if (action === "stop") {
+        } else if (action === 'stop') {
           electron.stopNode(selectedNodePackage.id);
-        } else if (action === "logs") {
+        } else if (action === 'logs') {
           // show logs
-        } else if (action === "settings") {
+        } else if (action === 'settings') {
           // show settings
         }
       }
@@ -238,11 +254,23 @@ const NodePackageScreen = () => {
     selectedNodePackage?.services.map((service) => {
       const nodeId = service.node.id;
       const node = sUserNodes?.nodes[nodeId];
+      const data = qExecutionIsSyncing?.data;
+      console.log('data', data);
+      const stats =
+        service.serviceName === 'Execution Client'
+          ? {
+              currentBlock: data?.currentBlock || 0,
+              highestBlock: data?.highestBlock || 0,
+            }
+          : {
+              currentSlot: data?.currentSlot || 0,
+              highestSlot: data?.highestSlot || 0,
+            };
       const serviceProps: ClientProps = {
         id: service.node.id,
         name: service.node.spec.specId,
         displayName: service.node.spec.displayName as NodeBackgroundId,
-        version: "",
+        version: '',
         nodeType: service.serviceName,
         status: {
           running:
@@ -252,22 +280,23 @@ const NodePackageScreen = () => {
             node?.status === NodeStatus.stopped ||
             node?.status === NodeStatus.stopping,
           updating: node?.status === NodeStatus.updating,
-          error: node?.status.includes("error"),
+          error: node?.status.includes('error'),
           // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
         },
-        stats: {},
+        stats,
         resources: service.node.spec.resources,
       };
       formattedServices.push(serviceProps);
     });
     setFormattedServices(formattedServices);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNodePackage?.services, sUserNodes]);
 
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {
     dispatch(
       setModalState({
         isModalOpen: true,
-        screen: { route: "alphaBuild", type: "info" },
+        screen: { route: 'alphaBuild', type: 'info' },
       }),
     );
     alphaModalRendered = true;
@@ -278,10 +307,10 @@ const NodePackageScreen = () => {
     return (
       <div className={container}>
         <div className={contentContainer}>
-          <div className={titleFont}>{t("NoActiveNodes")}</div>
-          <div className={descriptionFont}>{t("AddFirstNode")}</div>
+          <div className={titleFont}>{t('NoActiveNodes')}</div>
+          <div className={descriptionFont}>{t('AddFirstNode')}</div>
           <Button
-            label={t("AddNode")}
+            label={t('AddNode')}
             variant="icon-left"
             iconId="add"
             type="primary"
@@ -290,8 +319,8 @@ const NodePackageScreen = () => {
                 setModalState({
                   isModalOpen: true,
                   screen: {
-                    route: "podman",
-                    type: "modal",
+                    route: 'podman',
+                    type: 'modal',
                   },
                 }),
               );
@@ -309,10 +338,10 @@ const NodePackageScreen = () => {
 
   // TODO: make this more flexible for other client specs
   const formatSpec = (info: string | undefined) => {
-    let result = "";
+    let result = '';
     if (info) {
       result = `${info} ${sNetworkNodePackage}`;
-    } else if (sNetworkNodePackage !== "") {
+    } else if (sNetworkNodePackage !== '') {
       result = `${sNetworkNodePackage}`;
     }
     return result;
@@ -320,27 +349,27 @@ const NodePackageScreen = () => {
 
   const formatVersion = (version: string | undefined) => {
     if (!version) {
-      return "";
+      return '';
     }
     return version;
   };
 
-  const clientName = spec.specId.replace("-beacon", "");
+  const clientName = spec.specId.replace('-beacon', '');
   const nodeVersionData =
-    typeof qNodeVersion === "string" ? qNodeVersion : qNodeVersion?.currentData;
+    typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
 
   const nodePackageContent: SingleNodeContent = {
     nodeId: selectedNodePackage.id,
     displayName: spec.displayName,
     name: clientName as NodeBackgroundId,
-    screenType: "client",
+    screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
     version: formatVersion(nodeVersionData), // todo: remove
     info: formatSpec(spec.displayTagline),
     status: {
-      stopped: status === "stopped",
-      error: status.includes("error"),
-      online: status === "running",
+      stopped: status === 'stopped',
+      error: status.includes('error'),
+      online: status === 'running',
       updating: status === NodeStatus.updating,
     },
     stats: {
@@ -389,7 +418,7 @@ export interface ClientProps {
   stats: ClientStatsProps;
 }
    */
-  console.log("passing content to NodePackageScreen: ", nodePackageContent);
+  console.log('passing content to NodePackageScreen: ', nodePackageContent);
 
   // todo: use ContentMultiClient
   // return <ContentSingleClient {...nodeContent} />;

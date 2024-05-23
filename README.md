@@ -70,10 +70,16 @@ arch options include: ia32, x64, armv7l, arm64, mips64el, universal
 
 Unit tests with `npm run test`
 
+### Frontend (React) tests
+`npm run test -- --config vite.renderer.config.ts --dir src/__tests__/react`
+
+### Backend (Nodejs) tests
+`npm run test -- --config vite.main.config.ts --dir src/__tests__/node`
+
 ### End-to-end (e2e) tests
 
 For e2e tests, we use webdriver and an electron plugin to automate testing.
-It requires a packaged build to complete the tests.
+**It requires a packaged build to run the tests!**
 
 To run them locally, package the source first (and after making any changes to anything other than `tests`), then run the e2e tests with `wdio`
 

@@ -28,6 +28,7 @@ import {
   initialize as initNodeManager,
   onExit as onExitNodeManager,
 } from './nodeManager';
+import { isLinux } from './platform';
 import * as power from './power';
 import * as processExit from './processExit';
 import * as systemInfo from './systemInfo';
@@ -41,11 +42,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // todo: when moving from require to imports
-// const isTest = process.env.NODE_ENV === 'test';
-// if (isTest) {
-//   console.log('NODE_ENV=TEST... requiring wdio-electron-service/main');
-//   require('wdio-electron-service/main');
-// }
+const isTest = process.env.TEST === 'true';
+if (isTest && process.env.TEST_ENV === 'wdio') {
+  logger.info('env.TEST=true... calling import(wdio-electron-service/main)');
+  import('wdio-electron-service/main');
+}
 
 // todo: Turned off when switching to ESM modules. Do we need this?
 // https://www.electronforge.io/config/makers/squirrel.windows#handling-startup-events
@@ -75,8 +76,6 @@ export const getMenuBuilder = () => menuBuilder;
 
 const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
-
-const isTest = process.env.NODE_ENV === 'test';
 
 // if (isDevelopment) {
 //   require('electron-debug')();
@@ -131,7 +130,7 @@ export const createWindow = async () => {
 
   const preloadPath = path.join(__dirname, 'preload.js');
   console.log('preloadPath: ', preloadPath);
-  mainWindow = new BrowserWindow({
+  const browserWindowOptions: Electron.BrowserWindowConstructorOptions = {
     titleBarOverlay: true,
     titleBarStyle: 'hiddenInset',
 
@@ -144,13 +143,20 @@ export const createWindow = async () => {
     webPreferences: {
       // contextIsolation: true,
       // sandbox: true,
-      // preload: app.isPackaged
-      //   ? path.join(__dirname, 'preload.js')
-      //   : path.join(__dirname, '../../.vite/build/preload.js'),
       preload: preloadPath,
     },
     vibrancy: process.platform === 'darwin' ? 'sidebar' : undefined,
-  });
+  };
+
+  // Icon set on window is only required on linux
+  // https://www.electronforge.io/guides/create-and-add-icons#linux
+  if (isLinux()) {
+    const iconPath = isDevelopment
+      ? 'assets/icon.png'
+      : '/usr/share/icons/hicolor/256x256/apps/nice-node.png';
+    browserWindowOptions.icon = iconPath;
+  }
+  mainWindow = new BrowserWindow(browserWindowOptions);
 
   console.log(
     'MAIN_WINDOW_VITE_DEV_SERVER_URL: ',
@@ -266,6 +272,7 @@ app.on('activate', () => {
 const onExit = () => {
   onExitNodeManager();
   monitor.onExit();
+  cronJobs.onExit();
   app.quit(); // todo: remove
 };
 

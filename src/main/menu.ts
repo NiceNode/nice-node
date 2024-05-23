@@ -227,14 +227,15 @@ export default class MenuBuilder {
         { type: 'separator' },
         {
           label: t('ReportAProblem'),
-          click() {
-            shell.openExternal(getGithubIssueProblemURL());
+          click: async () => {
+            const url = await getGithubIssueProblemURL();
+            shell.openExternal(url);
           },
         },
         {
           label: t('CopyConfigurationDetailsToClipboard'),
-          click() {
-            clipboard.writeText(getDebugInfoString());
+          click: async () => {
+            clipboard.writeText(await getDebugInfoString());
           },
         },
         { type: 'separator' },
@@ -389,14 +390,15 @@ export default class MenuBuilder {
           },
           {
             label: t('ReportAProblem'),
-            click() {
-              shell.openExternal(getGithubIssueProblemURL());
+            click: async () => {
+              const url = await getGithubIssueProblemURL();
+              shell.openExternal(url);
             },
           },
           {
             label: t('CopyConfigurationDetailsToClipboard'),
-            click() {
-              clipboard.writeText(getDebugInfoString());
+            click: async () => {
+              clipboard.writeText(await getDebugInfoString());
             },
           },
           {

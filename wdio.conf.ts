@@ -15,6 +15,8 @@ if (process.platform === 'darwin') {
   appBinaryPath = path.join('out', `NiceNode-win32-${arch}`, 'nice-node.exe')
 }
 
+process.env.TEST = 'true';
+
 export const config: Options.Testrunner = {
   //
   // ====================
@@ -73,6 +75,15 @@ export const config: Options.Testrunner = {
       browserName: 'electron',
       // Electron service options
       // see https://webdriver.io/docs/wdio-electron-service/#configuration
+      // 'goog:chromeOptions': {
+      //   args:['--headless', '--disable-dev-shm-usage', '--no-sandbox', '--disable-gpu', '--window-size=1680,1050']
+      // },
+      'goog:chromeOptions': {
+        args:['--disable-dev-shm-usage', '--no-sandbox']
+      },
+      // 'goog:chromeOptions': {
+      //   args: process.env.CI ? ['headless', 'disable-gpu'] : ['headless', 'disable-gpu']
+      // },
       'wdio:electronServiceOptions': {
         // custom application args
         // See https://github.com/webdriverio-community/wdio-electron-service#appargs
@@ -90,7 +101,8 @@ export const config: Options.Testrunner = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  logLevel: 'info',
+  // logLevel: 'info',
+  logLevel: 'debug',
   //
   // Set specific log levels per logger
   // loggers:

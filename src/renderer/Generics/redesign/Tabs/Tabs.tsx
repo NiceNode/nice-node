@@ -60,7 +60,6 @@ export const Tabs = ({ children, id, modal }: TabsProps) => {
       <div className={[tabContent, modalStyle].join(' ')}>
         {children.map((child) => {
           if (child.props.id !== activeTab) return undefined;
-          // biome-ignore lint/correctness/useJsxKeyInIterable: <explanation>
           return child.props.children;
         })}
       </div>
