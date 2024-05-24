@@ -36,7 +36,6 @@ jobs:
       - name: 🧪 Run Tests
         run: |
           ls -al
-          chown -R podman:podman .
           chmod -R 777 .
           ls -al
           podman run --rm -v ./:/home/podman/nice-node -u podman podman-fedora-wdio
