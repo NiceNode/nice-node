@@ -5,8 +5,10 @@ import {
 } from '../../../assets/images/nodeBackgrounds';
 import { Label, type LabelColor } from '../Label/Label';
 import NodeIcon from '../NodeIcon/NodeIcon';
+import ProgressBar from '../ProgressBar/ProgressBar';
 // import ProgressBar from '../ProgressBar/ProgressBar';
 import type { ClientProps, ClientStatusProps } from '../consts';
+import { common } from '../theme.css';
 import {
   cardContent,
   cardTop,
@@ -24,7 +26,8 @@ import {
  * Primary UI component for user interaction
  */
 export const ClientCard = (props: ClientProps) => {
-  const { displayName, status, name, nodeType, onClick } = props;
+  const { displayName, packageName, status, name, nodeType, onClick, stats } =
+    props;
 
   const { t: g } = useTranslation('genericComponents');
 
@@ -70,35 +73,42 @@ export const ClientCard = (props: ClientProps) => {
   const isNotSynchronizedAndNotStopped = status.running && !status.stopped;
 
   const renderContents = () => {
-    if (isNotSynchronizedAndNotStopped) {
-      const label = g('Syncing');
-      return <Label type="gray" label={label} />;
-      // const caption = !status.initialized
-      //   ? g('InitialSyncInProgress')
-      //   : g('CatchingUp');
-      // let progress;
-      // if (stats.highestSlot && stats.currentSlot) {
-      //   progress = (stats.currentSlot / stats.highestSlot) * 100;
-      // } else if (stats.highestBlock && stats.currentBlock) {
-      //   progress = (stats.currentBlock / stats.highestBlock) * 100;
-      // }
-      // return (
-      //   <>
-      //     {/* TODO: modify height of the bar for card */}
-      //     <ProgressBar
-      //       card
-      //       color={
-      //         common.color[name.replace('-beacon', '') as NodeBackgroundId] ??
-      //         common.color.geth
-      //       }
-      //       progress={progress}
-      //       caption={`${caption} (progress will be added soon)`}
-      //     />
-      //   </>
-      // );
-    }
     if (status.stopped || status.updating) {
       const label = status.stopped ? g('Stopped') : g('Updating');
+      return <Label type="gray" label={label} />;
+    }
+    if (
+      packageName === 'ethereum' &&
+      (stats.currentBlock !== 0 || stats.currentSlot !== 0)
+    ) {
+      let progress = 0;
+      if (stats.highestSlot && stats.currentSlot) {
+        progress = stats.currentSlot / stats.highestSlot;
+      } else if (stats.highestBlock && stats.currentBlock) {
+        progress = stats.currentBlock / stats.highestBlock;
+      }
+      // const syncPercent = (progress * 100).toFixed(1);
+      const caption = !status.initialized
+        ? g('InitialSyncInProgress')
+        : g('CatchingUp');
+      return (
+        <>
+          {/* TODO: modify height of the bar for card */}
+          <ProgressBar
+            card
+            color={
+              common.color[name.replace('-beacon', '') as NodeBackgroundId] ??
+              common.color.geth
+            }
+            progress={progress}
+            caption={`${caption} (rely on logs for now, still a work in progress)`}
+            // caption={`${caption} (${syncPercent}%)`}
+          />
+        </>
+      );
+    }
+    if (isNotSynchronizedAndNotStopped) {
+      const label = g('Syncing');
       return <Label type="gray" label={label} />;
     }
     const { updating, initialized, ...statusLabels } = status;

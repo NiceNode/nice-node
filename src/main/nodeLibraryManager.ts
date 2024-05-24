@@ -89,6 +89,16 @@ export const initialize = async () => {
         defaultImageTag = execution.defaultImageTag;
       }
 
+      nodeSpec.configTranslation.cliInput = {
+        displayName: `${spec.displayName} CLI input`,
+        uiControl: {
+          type: 'text',
+        },
+        defaultValue: '',
+        addNodeFlow: 'advanced',
+        infoDescription: 'Additional CLI input',
+      };
+
       nodeSpec.configTranslation.serviceVersion = {
         displayName: `${spec.displayName} version`,
         uiControl: {

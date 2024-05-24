@@ -55,6 +55,7 @@ const NodeScreen = () => {
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     selectedNode?.spec.rpcTranslation,
+    selectedNode?.config?.configValuesMap?.httpPort,
     {
       pollingInterval,
     },
@@ -63,12 +64,14 @@ const NodeScreen = () => {
   // const peersPolling = isSelectedNode ? pollingInterval : 0;
   const qExecutionPeers = useGetExecutionPeersQuery(
     selectedNode?.spec.rpcTranslation,
+    selectedNode?.config?.configValuesMap?.httpPort,
     {
       pollingInterval,
     },
   );
   const qLatestBlock = useGetExecutionLatestBlockQuery(
     selectedNode?.spec.rpcTranslation,
+    selectedNode?.config?.configValuesMap?.httpPort,
     {
       pollingInterval,
     },

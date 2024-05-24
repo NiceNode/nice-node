@@ -3,7 +3,9 @@ import type { NodeConfig } from '../common/node';
 import type { ConfigValue } from '../common/nodeConfig';
 import { NOTIFICATIONS } from './consts/notifications';
 import { httpGet } from './httpReq';
-import { getNodes, getSetPortHasChanged } from './state/nodes';
+import { getNodePackageByServiceNodeId } from './state/nodePackages';
+import { getNodePackages } from './state/nodePackages';
+import { getNode, getNodes, getSetPortHasChanged } from './state/nodes';
 import { addNotification } from './state/notifications';
 
 export const getPodmanPortsForNode = (
@@ -58,7 +60,7 @@ export const getPodmanPorts = (): {
   let p2pPorts = [] as ConfigValue[];
   let otherPorts = [] as ConfigValue[];
 
-  nodes.forEach((node) => {
+  nodes.forEach((node: any) => {
     const { p2pPorts: nodeP2pPorts, otherPorts: nodeOtherPorts } =
       getPodmanPortsForNode(node);
     p2pPorts = [...p2pPorts, ...nodeP2pPorts];
@@ -66,6 +68,18 @@ export const getPodmanPorts = (): {
   });
 
   return { p2pPorts, otherPorts };
+};
+
+// Function to dynamically find the next available port
+const findNextAvailablePort = (
+  usedPorts: string[],
+  startingPort: number,
+): string => {
+  let port = startingPort;
+  while (usedPorts.includes(port.toString())) {
+    port++;
+  }
+  return port.toString();
 };
 
 export const getClosedPorts = (
@@ -83,13 +97,98 @@ export const getUnexpectedOpenPorts = (
   return configPorts.filter((port) => openPorts.includes(port));
 };
 
+export const assignPortsToNode = (node: Node): Node => {
+  // Retrieve all used ports and convert them to strings
+  const { p2pPorts: usedP2pPorts, otherPorts: usedOtherPorts } =
+    getPodmanPorts();
+  const usedPorts = [...usedP2pPorts, ...usedOtherPorts].map(
+    (port) => port?.toString() ?? '',
+  );
+
+  // Define the port types to update
+  const portTypes = [
+    'httpPort',
+    'p2pPorts',
+    'enginePort',
+    'p2pPortsUdp',
+    'p2pPortsTcp',
+    'webSocketsPort',
+    'quicPortUdp',
+  ]; // Add other relevant port types
+
+  const executionService = getNodePackageByServiceNodeId(
+    node.id,
+  )?.services.find((service) => {
+    return service.serviceId === 'executionClient';
+  });
+
+  const nodePackages = getNodePackages();
+  // Update ports using array methods
+  portTypes.forEach((portType) => {
+    const defaultPort =
+      node.spec.configTranslation?.[portType]?.defaultValue ?? null;
+    const currentPort = node.config.configValuesMap[portType];
+
+    if (!defaultPort && !currentPort) {
+      return;
+    }
+
+    // Use current port, or default if not initialized, converted to a number
+    let assignedPort = Number.parseInt(
+      (currentPort || defaultPort) as string,
+      10,
+    );
+
+    // Find next available port if the current/default one is in use
+    if (
+      nodePackages.length > 1 &&
+      usedPorts.includes(assignedPort.toString())
+    ) {
+      assignedPort = Number.parseInt(
+        findNextAvailablePort(usedPorts, assignedPort),
+        10,
+      );
+    }
+
+    // Add the newly assigned port to the used ports list
+    usedPorts.push(assignedPort.toString());
+    // Update the node configuration with the port as a string
+    node.config.configValuesMap[portType] = assignedPort.toString();
+  });
+
+  if (node.spec.rpcTranslation === 'eth-l1-beacon' && executionService) {
+    const executionNode = getNode(executionService.node.id);
+    let executionEndpoint = node.config.configValuesMap.executionEndpoint;
+
+    const regex = /:\d{4}/;
+    if (regex.test(executionEndpoint)) {
+      return;
+    }
+
+    // Check if the endpoint is enclosed in quotes
+    const isQuoted =
+      executionEndpoint.startsWith('"') && executionEndpoint.endsWith('"');
+    const portSuffix = `:${executionNode.config.configValuesMap.enginePort}`;
+
+    // Append the port inside the quotes if necessary
+    if (isQuoted) {
+      executionEndpoint = `${executionEndpoint.slice(0, -1) + portSuffix}"`;
+    } else {
+      executionEndpoint += portSuffix;
+    }
+    node.config.configValuesMap.executionEndpoint = executionEndpoint;
+  }
+
+  return node; // Return the updated node without persisting changes
+};
+
 export const didPortsChange = (
   objectValuesMap: NodeConfig,
   node: Node,
 ): boolean => {
   if (!node || !node.spec || !node.spec.configTranslation) return false;
 
-  const baseKeys = ['httpPort', 'enginePort', 'webSocketsPort'];
+  const baseKeys = ['httpPort', 'enginePort', 'webSocketsPort', 'quicPortUdp'];
   const p2pKeys = ['p2pPortsUdp', 'p2pPortsTcp', 'gRpcPort'];
 
   const hasBaseKeyChanged = baseKeys.some((key) => {
@@ -141,7 +240,7 @@ export const checkPorts = async (
   return new Promise((resolve, reject) => {
     let data = '';
 
-    response.on('data', (chunk) => {
+    response.on('data', (chunk: string) => {
       data += chunk;
     });
 
