@@ -78,65 +78,66 @@ describe('Splash screen tests', () => {
   // todo: fix these tests so they can successfully run within a container
   // uncomment to run locally
   // process.env.CI = 'true';
-  // if(os.platform() === 'linux' || (os.platform() === 'darwin' && process.env.CI === 'true')) {
-  //   // from splash screen, we always show podman screen
-  //   it('clicking continue btn should add and start the node', async () => {
-  //     await browser.pause(2000);
-  //     if(!isPodmanIsInstalled) {
-  //       // click install and or start podman button
-  //       try {
-  //         if($('#downloadAndInstallPodmanBtn').isDisplayed()) {
-  //           await $('#downloadAndInstallPodmanBtn').click();
-  //           const startNodeBtn = await $('#stepperNextButton');
-  //           await browser.pause(30000); // pauses 30 seconds before checking if podman installed
-  //           // biome-ignore lint/complexity/useArrowFunction: <explanation>
-  //           await browser.waitUntil(async function () {
-  //             const elPodmanInstallCompleteTitle = await $("#podmanInstallCompleteTitle");
-  //             return elPodmanInstallCompleteTitle.isDisplayed();
-  //           }, { timeout: 300000 }); // allow 5 min for podman install
-  //           // start podman may not be shown, should be done automatically, and it is now that NN tries to start on startup
-  //           // await browser.waitUntil(async () => {
-  //           //   return (await startNodeBtn.getAttribute('disabled') !== 'true')
-  //           // })
-  //           // await browser.pause(50000);
-  //         }
-  //       } catch(e) {
-  //         console.log("no download and install button, moving on to start podman")
-  //       }
+  // || (os.platform() === 'darwin' && process.env.CI === 'true')
+  if(os.platform() === 'linux') {
+    // from splash screen, we always show podman screen
+    it('clicking continue btn should add and start the node', async () => {
+      await browser.pause(2000);
+      if(!isPodmanIsInstalled) {
+        // click install and or start podman button
+        try {
+          if($('#downloadAndInstallPodmanBtn').isDisplayed()) {
+            await $('#downloadAndInstallPodmanBtn').click();
+            const startNodeBtn = await $('#stepperNextButton');
+            await browser.pause(30000); // pauses 30 seconds before checking if podman installed
+            // biome-ignore lint/complexity/useArrowFunction: <explanation>
+            await browser.waitUntil(async function () {
+              const elPodmanInstallCompleteTitle = await $("#podmanInstallCompleteTitle");
+              return elPodmanInstallCompleteTitle.isDisplayed();
+            }, { timeout: 300000 }); // allow 5 min for podman install
+            // start podman may not be shown, should be done automatically, and it is now that NN tries to start on startup
+            // await browser.waitUntil(async () => {
+            //   return (await startNodeBtn.getAttribute('disabled') !== 'true')
+            // })
+            // await browser.pause(50000);
+          }
+        } catch(e) {
+          console.log("no download and install button, moving on to start podman")
+        }
 
-  //       // if((await $('#startPodmanBtn')).isDisplayed()) {
-  //       //   await $('#startPodmanBtn').click();
-  //       //   // await browser.pause(50000);
-  //       // }
-  //       // todo: wait for next button to be enabled?
-  //     }
-  //     await $('#stepperNextButton').click();
-  //     await browser.pause(2000);
-  //   }).timeout(120000); // wait 3 minutes for the podman to download (& start)
+        // if((await $('#startPodmanBtn')).isDisplayed()) {
+        //   await $('#startPodmanBtn').click();
+        //   // await browser.pause(50000);
+        // }
+        // todo: wait for next button to be enabled?
+      }
+      await $('#stepperNextButton').click();
+      await browser.pause(2000);
+    }).timeout(120000); // wait 3 minutes for the podman to download (& start)
 
-  //   it('Ethereum Node screen should be displayed with syncing and stop btn', async () => {
-  //     await expect(await $('div*=Ethereum Node')).toBeDisplayed();
-  //     await expect(await $('div*=Syncing')).toBeDisplayed();
-  //     await expect(await $('span*=Stop')).toBeDisplayed();
-  //     // after docker containers are downloaded and the node is started, the node should be online
-  //     // await expect(await $('div*=Online')).toBeDisplayed();
-  //   }).timeout(120000); // wait 3 minutes for the node to download & start
+    it('Ethereum Node screen should be displayed with syncing and stop btn', async () => {
+      await expect(await $('div*=Ethereum Node')).toBeDisplayed();
+      await expect(await $('div*=Syncing')).toBeDisplayed();
+      await expect(await $('span*=Stop')).toBeDisplayed();
+      // after docker containers are downloaded and the node is started, the node should be online
+      // await expect(await $('div*=Online')).toBeDisplayed();
+    }).timeout(120000); // wait 3 minutes for the node to download & start
 
-  //   it('clicking stop node btn should stop the node and show resume button', async () => {
-  //     const stopBtn = (await $('span*=Stop')).parentElement();
-  //     (await stopBtn).click();
-  //     // await browser.pause(15000);
-  //     // await expect(await $('div*=Stopping')).toBeDisplayed();
-  //     // ...
-  //     await expect(await $('div*=Stopped')).toBeDisplayed();
-  //     await expect(await $('span*=Resume')).toBeDisplayed();
-  //     // await browser.pause(15000);
-  //     // await browser.pause(2000);
-  //     // after docker containers are downloaded and the node is started, the node should be online
-  //     // await expect(await $('div*=Online')).toBeDisplayed();
-  //     // await expect(await $('div*=')).toBeDisplayed();
-  //   }).timeout(120000); // wait 3 minutes for the node to download & start
-  // }
+    it('clicking stop node btn should stop the node and show resume button', async () => {
+      const stopBtn = (await $('span*=Stop')).parentElement();
+      (await stopBtn).click();
+      // await browser.pause(15000);
+      // await expect(await $('div*=Stopping')).toBeDisplayed();
+      // ...
+      await expect(await $('div*=Stopped')).toBeDisplayed();
+      await expect(await $('span*=Resume')).toBeDisplayed();
+      // await browser.pause(15000);
+      // await browser.pause(2000);
+      // after docker containers are downloaded and the node is started, the node should be online
+      // await expect(await $('div*=Online')).toBeDisplayed();
+      // await expect(await $('div*=')).toBeDisplayed();
+    }).timeout(120000); // wait 3 minutes for the node to download & start
+  }
 
 });
 
