@@ -1,9 +1,7 @@
 name: e2e-tests-linux-distros
+# Currently does not work as running podman within a container is not straighforward
 
 on:
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
