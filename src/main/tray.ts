@@ -1,4 +1,12 @@
-import { BrowserWindow, Menu, MenuItem, Tray, dialog } from 'electron';
+import {
+  BrowserWindow,
+  Menu,
+  MenuItem,
+  Tray,
+  dialog,
+  nativeTheme,
+  ipcMain,
+} from 'electron';
 import logger from './logger';
 import { createWindow, fullQuit, getMainWindow } from './main';
 import { isLinux, isWindows } from './platform';
@@ -184,11 +192,13 @@ function createTrayWindow() {
     show: false,
     frame: false,
     resizable: false,
+    transparent: true,
     webPreferences: {
       // preload: _getTrayPath('tray.js'),
       contextIsolation: false,
       nodeIntegration: true,
     },
+    vibrancy: process.platform === 'darwin' ? 'sidebar' : undefined,
   });
 
   trayWindow.loadURL(`file://${_getTrayPath('tray.html')}`);
@@ -197,6 +207,11 @@ function createTrayWindow() {
     if (trayWindow) {
       trayWindow.hide();
     }
+  });
+
+  nativeTheme.on('updated', () => {
+    const theme = nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
+    trayWindow!.webContents.send('set-theme', theme);
   });
 
   trayWindow.webContents.on('did-finish-load', () => {
@@ -270,6 +285,28 @@ export const initialize = (
 
   logger.info('tray initialized');
 };
+
+ipcMain.on('quit-app', (event) => {
+  dialog
+    .showMessageBox({
+      type: 'question',
+      buttons: ['Yes', 'No'],
+      defaultId: 1, // Focus on 'No' by default
+      title: 'Confirm',
+      message: 'Are you sure you want to quit? Nodes will stop syncing.',
+      detail: 'Confirming will close the application.',
+    })
+    .then((result) => {
+      if (result.response === 0) {
+        // The 'Yes' button is at index 0
+        fullQuit(); // app no longer runs in the background
+      }
+      // Do nothing if the user selects 'No'
+    })
+    .catch((err) => {
+      logger.error('Error showing dialog:', err);
+    });
+});
 
 // todo: handle a node status change
 // this could include a new node, removed node, or just a status change

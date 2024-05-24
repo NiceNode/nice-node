@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded', () => {
     { name: 'Podman', status: 'Running', checked: true },
     { separator: true },
     { name: 'Open NiceNode', action: 'show-main-window' },
-    { name: 'Quit', action: 'quit' },
+    { name: 'Quit', action: 'quit-app' },
   ];
 
   const container = document.getElementById('menu-container');
@@ -41,6 +41,21 @@ window.addEventListener('DOMContentLoaded', () => {
       container.appendChild(menuItem);
     }
   });
+
+  ipcRenderer.on('set-theme', (event, theme) => {
+    applyTheme(theme);
+  });
+
+  // Apply theme-based styles
+  const applyTheme = (theme) => {
+    const body = document.body;
+    const menuItems = document.querySelectorAll('.menu-item');
+    if (theme === 'dark') {
+      body.style.color = 'white';
+    } else {
+      body.style.color = 'black';
+    }
+  };
 
   ipcRenderer.on('update-menu', (event, updatedItems) => {
     // Update menu items if necessary
