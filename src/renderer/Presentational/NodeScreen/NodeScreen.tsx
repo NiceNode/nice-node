@@ -54,8 +54,10 @@ const NodeScreen = () => {
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
-    selectedNode?.spec.rpcTranslation,
-    selectedNode?.config?.configValuesMap?.httpPort,
+    {
+      rpcTranslation: selectedNode?.spec.rpcTranslation,
+      httpPort: selectedNode?.config?.configValuesMap?.httpPort,
+    },
     {
       pollingInterval,
     },
@@ -63,15 +65,19 @@ const NodeScreen = () => {
   // const isSelectedNode = selectedNode !== undefined;
   // const peersPolling = isSelectedNode ? pollingInterval : 0;
   const qExecutionPeers = useGetExecutionPeersQuery(
-    selectedNode?.spec.rpcTranslation,
-    selectedNode?.config?.configValuesMap?.httpPort,
+    {
+      rpcTranslation: selectedNode?.spec.rpcTranslation,
+      httpPort: selectedNode?.config?.configValuesMap?.httpPort,
+    },
     {
       pollingInterval,
     },
   );
   const qLatestBlock = useGetExecutionLatestBlockQuery(
-    selectedNode?.spec.rpcTranslation,
-    selectedNode?.config?.configValuesMap?.httpPort,
+    {
+      rpcTranslation: selectedNode?.spec.rpcTranslation,
+      httpPort: selectedNode?.config?.configValuesMap?.httpPort,
+    },
     {
       pollingInterval,
     },
