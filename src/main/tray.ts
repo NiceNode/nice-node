@@ -185,7 +185,7 @@ export const updateTrayMenu = () => {
   getOpenNiceNodeMenu();
 };
 
-function createTrayWindow() {
+function createCustomTrayWindow() {
   trayWindow = new BrowserWindow({
     width: 300,
     height: 100, // Initial height
@@ -215,21 +215,108 @@ function createTrayWindow() {
   });
 
   trayWindow.webContents.on('did-finish-load', () => {
-    trayWindow!.webContents
-      .executeJavaScript(`
-      new Promise((resolve) => {
-        const height = document.body.scrollHeight;
-        resolve(height);
-      });
-    `)
-      .then((height: number) => {
-        trayWindow!.setSize(300, height);
-        trayWindow!.webContents.openDevTools();
+    updateCustomTrayMenu();
+  });
+
+  ipcMain.on('adjust-height', (event, height) => {
+    if (trayWindow) {
+      trayWindow.setSize(300, height);
+    }
+  });
+
+  ipcMain.on('node-package-click', (event, id) => {
+    openOrFocusWindow();
+    openNodePackageScreen(id);
+    logger.info(`clicked on node package with id ${id}`);
+  });
+
+  ipcMain.on('podman-click', async (event) => {
+    const { status } = await getCustomPodmanMenuItem();
+    logger.info('clicked on podman machine');
+    if (status === 'Running' || status === 'Starting') {
+      stopMachineIfCreated();
+    } else {
+      openOrFocusWindow();
+      openPodmanModal();
+    }
+  });
+
+  ipcMain.on('quit-app', (event) => {
+    dialog
+      .showMessageBox({
+        type: 'question',
+        buttons: ['Yes', 'No'],
+        defaultId: 1, // Focus on 'No' by default
+        title: 'Confirm',
+        message: 'Are you sure you want to quit? Nodes will stop syncing.',
+        detail: 'Confirming will close the application.',
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          // The 'Yes' button is at index 0
+          fullQuit(); // app no longer runs in the background
+        }
+        // Do nothing if the user selects 'No'
+      })
+      .catch((err) => {
+        logger.error('Error showing dialog:', err);
       });
   });
 }
 
-function toggleTrayWindow() {
+const getCustomNodePackageListMenu = () => {
+  const userNodes = getUserNodePackages();
+  let isAlert = false;
+  const nodePackageTrayMenu = userNodes.nodeIds.map((nodeId) => {
+    const nodePackage = userNodes.nodes[nodeId];
+    if (nodePackage.status.toLowerCase().includes('error')) {
+      isAlert = true;
+    }
+    return {
+      name: nodePackage.spec.displayName,
+      status: nodePackage.status,
+      id: nodePackage.id,
+    };
+  });
+
+  console.log('getCustomNodePackageListMenu');
+  return { nodePackageTrayMenu, isAlert };
+};
+
+const getCustomPodmanMenuItem = async () => {
+  if (isLinux()) {
+    return { status: 'N/A' };
+  }
+  let status = 'Loading...';
+  try {
+    const podmanMachine = await getNiceNodeMachine();
+    if (podmanMachine) {
+      status = podmanMachine.Running ? 'Running' : 'Stopped';
+      if (podmanMachine.Starting === true) {
+        status = 'Starting';
+      }
+    }
+  } catch (e) {
+    console.error('tray podmanMachine error: ', e);
+    status = 'Not found';
+  }
+  return { status };
+};
+
+export const updateCustomTrayMenu = async () => {
+  const { nodePackageTrayMenu, isAlert } = getCustomNodePackageListMenu();
+  const podmanMenuItem = await getCustomPodmanMenuItem();
+
+  if (trayWindow) {
+    trayWindow.webContents.send('update-menu', {
+      nodePackageTrayMenu,
+      podmanMenuItem,
+    });
+  }
+  setTrayIcon(isAlert ? 'Alert' : 'Default');
+};
+
+function toggleCustomTrayWindow() {
   if (trayWindow) {
     if (trayWindow.isVisible()) {
       trayWindow.hide();
@@ -260,14 +347,15 @@ export const initialize = (
   }
 
   tray = new Tray(icon);
-  createTrayWindow();
+  createCustomTrayWindow();
   // updateTrayMenu();
 
   tray.on('click', () => {
     // on windows, default is open/show window on click
     // on mac, default is open menu on click (no code needed)
     // on linux?
-    toggleTrayWindow();
+    toggleCustomTrayWindow();
+    updateCustomTrayMenu();
     if (isWindows()) {
       const window = getMainWindow();
       if (window) {
@@ -285,28 +373,6 @@ export const initialize = (
 
   logger.info('tray initialized');
 };
-
-ipcMain.on('quit-app', (event) => {
-  dialog
-    .showMessageBox({
-      type: 'question',
-      buttons: ['Yes', 'No'],
-      defaultId: 1, // Focus on 'No' by default
-      title: 'Confirm',
-      message: 'Are you sure you want to quit? Nodes will stop syncing.',
-      detail: 'Confirming will close the application.',
-    })
-    .then((result) => {
-      if (result.response === 0) {
-        // The 'Yes' button is at index 0
-        fullQuit(); // app no longer runs in the background
-      }
-      // Do nothing if the user selects 'No'
-    })
-    .catch((err) => {
-      logger.error('Error showing dialog:', err);
-    });
-});
 
 // todo: handle a node status change
 // this could include a new node, removed node, or just a status change
