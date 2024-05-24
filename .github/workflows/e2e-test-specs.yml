@@ -30,9 +30,11 @@ jobs:
           NICENODE_ENV: test
           NO_CODE_SIGNING: true
         run: |
+          ls -al
           podman build -t podman-fedora-wdio -f ./test/podman-fedora-wdio.dockerfile .
 
       - name: 🧪 Run Tests
         run: |
+          ls -al
           podman run --rm -v ./:/home/podman/nice-node -u podman podman-fedora-wdio
 
