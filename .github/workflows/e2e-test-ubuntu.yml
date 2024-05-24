@@ -25,7 +25,7 @@ jobs:
       - name: 🧱 Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends -y rpm libarchive-tools
+          sudo apt-get install --no-install-recommends -y rpm libarchive-tools podman
           npm ci
 
       - name: 📦 Bundle Application
