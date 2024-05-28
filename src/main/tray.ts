@@ -187,7 +187,7 @@ export const updateTrayMenu = () => {
 
 function createCustomTrayWindow() {
   trayWindow = new BrowserWindow({
-    width: 300,
+    // width: 277,
     height: 100, // Initial height
     show: false,
     frame: false,
@@ -348,6 +348,7 @@ export const initialize = (
 
   tray = new Tray(icon);
   createCustomTrayWindow();
+  trayWindow!.webContents.openDevTools();
   // updateTrayMenu();
 
   tray.on('click', () => {

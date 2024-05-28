@@ -144,6 +144,7 @@ export const startNodePackage = async (nodeId: NodeId) => {
   node.lastStartedTimestampMs = Date.now();
   node.stoppedBy = undefined;
   nodePackageStore.updateNodePackage(node);
+  let allServicesStarted = true;
 
   const isEthereumPackage = node.spec.specId === 'ethereum';
 
@@ -153,6 +154,7 @@ export const startNodePackage = async (nodeId: NodeId) => {
     } catch (e) {
       logger.error(`Unable to start node service: ${JSON.stringify(service)}`);
       nodePackageStatus = NodeStatus.errorStarting;
+      allServicesStarted = false;
       // try to start all services, or stop other services?
       // todo: set as partially started?
       // throw e;
@@ -182,7 +184,8 @@ export const startNodePackage = async (nodeId: NodeId) => {
   }
 
   // If all node services start without error, the package is considered running
-  if (nodePackageStatus === NodeStatus.running) {
+  if (allServicesStarted) {
+    nodePackageStatus = NodeStatus.running;
     setLastRunningTime(nodeId, 'node');
   }
 

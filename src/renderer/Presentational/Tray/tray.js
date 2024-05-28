@@ -10,12 +10,16 @@ ipcRenderer.on(
         action: () => ipcRenderer.send('node-package-click', item.id),
       })),
       { separator: true },
-      {
-        name: 'Podman',
-        status: podmanMenuItem.status,
-        action: () => ipcRenderer.send('podman-click'),
-      },
-      { separator: true },
+      ...(podmanMenuItem.status !== 'Running'
+        ? [
+            {
+              name: 'Podman',
+              status: podmanMenuItem.status,
+              action: () => ipcRenderer.send('podman-click'),
+            },
+            { separator: true },
+          ]
+        : []),
       {
         name: 'Open NiceNode',
         action: () => ipcRenderer.send('show-main-window'),
