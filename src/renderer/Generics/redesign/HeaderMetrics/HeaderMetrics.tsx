@@ -1,5 +1,5 @@
 import React from 'react';
-import { type MetricStats, MetricTypes } from '../MetricTypes/MetricTypes';
+import { type MetricStats, MetricTypes } from '../MetricTypes/MetricTypes.js';
 import VerticalLine from '../VerticalLine/VerticalLine';
 import type { NodeOverviewProps } from '../consts';
 import { getSyncStatus } from '../utils';
