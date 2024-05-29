@@ -25,10 +25,15 @@ const testsForEachNode = async () => {
     it('Ethereum Node should have all hardware statistic usage > 0', async () => {
       // wait 20 seconds for stats to be set
       const memUsageElement = await $('#memoryUsagePercentValue');
-      await browser.waitUntil(async () => await memUsageElement.getText() > '0.01%', {timeout: 30000});
-      await browser.waitUntil(async () => await memUsageElement.getText() > '0.01%', {timeout: 20000});
-      await browser.waitUntil(async () => await memUsageElement.getText() > '0.01%', {timeout: 20000});
-    }).timeout(120000);
+      const cpuLoadElement = await $('#cpuLoadValue');
+      const diskUsageElement = await $('#diskUsageGBsValue');
+      await browser.waitUntil(async () => Number.parseFloat(await memUsageElement.getText()) > 1, {timeout: 30000});
+      await browser.waitUntil(async () => Number.parseFloat(await cpuLoadElement.getText()) > 1, {timeout: 20000});
+      await browser.waitUntil(async () => {
+        console.log("Waiting for disk usage to be > 1 GB...")
+        return Number.parseFloat(await diskUsageElement.getText()) > 1
+      }, { timeout: 5*60*1000, interval: 15000 }); // give 5 minutes to download 1 GB
+    }).timeout(10*60*1000); // 10 minutes
 
     it('clicking stop node btn should stop the node and show resume button', async () => {
       const stopBtn = (await $('span*=Stop')).parentElement();

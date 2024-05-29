@@ -1,0 +1,45 @@
+name: eth-nodes-sync-tests-ubuntu
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  e2e-build-n-test:
+    environment: staging
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+        node-version: [20.x]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: 💚 Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 🧱 Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y podman
+          npm ci
+
+      - name: 📦 Bundle Application
+        env:
+          DEBUG: "*electron*"
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          MP_PROJECT_TOKEN: ${{ secrets.MP_PROJECT_TOKEN }}
+          MP_PROJECT_ENV: ${{ vars.MP_PROJECT_ENV }}
+          NICENODE_ENV: ${{ vars.NICENODE_ENV }}
+          NO_CODE_SIGNING: true
+        run: |
+          npm run package -- --arch=x64
+
+      - name: 🧪 Run Tests
+        uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
+        with:
+          run: npm run e2eEthNodeSpecs
