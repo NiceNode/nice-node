@@ -30,9 +30,9 @@
         ]
       },
       "docker": {
-        "containerVolumePath": "/root/.ethereum",
+        "containerVolumePath": "/root/.local/share/erigon",
         "raw": "",
-        "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret"
+        "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --datadir /root/.local/share/erigon --authrpc.jwtsecret /root/.local/share/erigon/jwtsecret"
       }
     }
   },
