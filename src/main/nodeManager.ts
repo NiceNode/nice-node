@@ -94,7 +94,9 @@ export const getNodeStartCommand = (nodeId: NodeId): string => {
       const dockerNode = node;
       console.log('creating node start command');
       // startPodmanNode(dockerNode);
-      const startCommand = `podman ${createRunCommand(dockerNode)}`;
+      const startCommand = `podman --cgroup-manager=cgroupfs ${createRunCommand(
+        dockerNode,
+      )}`;
       console.log('created node start command', startCommand);
 
       return startCommand;

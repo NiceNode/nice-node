@@ -42,5 +42,4 @@ jobs:
       - name: 🧪 Run Tests
         uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
         with:
-          # systemd prefix fix: https://github.com/containers/podman/issues/8965#issuecomment-760883285
-          run: systemd-run --scope --user npm run e2eEthNodeSpecs
+          run: npm run e2eEthNodeSpecs
