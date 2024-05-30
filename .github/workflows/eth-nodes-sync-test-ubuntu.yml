@@ -1,9 +1,9 @@
 name: eth-nodes-sync-tests-ubuntu
 
 on:
-  pull_request:
-    branches:
-      - main
+  # pull_request:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 jobs:
