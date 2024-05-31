@@ -86,7 +86,7 @@
     },
     "p2pPortsTcp": {
       "displayName": "P2P listening port (TCP)",
-      "cliConfigPrefix": "--tcp-port=",
+      "cliConfigPrefix": "--p2p-tcp-port=",
       "uiControl": {
         "type": "text"
       },
@@ -96,7 +96,7 @@
     },
     "p2pPortsUdp": {
       "displayName": "P2P discovery port (UDP)",
-      "cliConfigPrefix": "--udp-port=",
+      "cliConfigPrefix": "--p2p-udp-port=",
       "uiControl": {
         "type": "text"
       },

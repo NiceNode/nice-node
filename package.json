@@ -23,6 +23,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "wdio": "cross-env TEST_ENV=wdio NODE_ENV=test wdio run ./wdio.conf.ts",
+    "e2eEthNodeSpecs": "cross-env TEST_ENV=wdio NODE_ENV=test wdio run ./wdioEthNodeSpecs.conf.ts",
     "docs:nodeSpec": "typedoc --plugin typedoc-plugin-markdown --name \"Node Spec examples\" --readme src/common/index.md --entryDocument index.md --out docs src/common/*"
   },
   "devDependencies": {

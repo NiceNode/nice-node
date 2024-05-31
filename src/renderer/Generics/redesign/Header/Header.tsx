@@ -182,6 +182,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
           }}
         >
           <Button
+            id="nodeSettingsBtn"
             iconId="settings"
             variant="icon"
             size="small"
@@ -212,6 +213,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                 )}
                 {screenType === 'nodePackage' && (
                   <MenuItem
+                    id="removeNodeMenuItem"
                     text={g('RemoveNode')}
                     onClick={() => {
                       dispatch(
