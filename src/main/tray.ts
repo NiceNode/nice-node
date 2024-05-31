@@ -205,7 +205,7 @@ function createCustomTrayWindow() {
 
   trayWindow.on('blur', () => {
     if (trayWindow) {
-      // trayWindow.hide();
+      trayWindow.hide();
     }
   });
 
@@ -239,6 +239,11 @@ function createCustomTrayWindow() {
       openOrFocusWindow();
       openPodmanModal();
     }
+  });
+
+  ipcMain.on('show-main-window', async (event) => {
+    logger.info('clicked on show-main-window');
+    openOrFocusWindow();
   });
 
   ipcMain.on('quit-app', (event) => {
@@ -304,9 +309,16 @@ const getCustomPodmanMenuItem = async () => {
   return { status };
 };
 
-const readSVGContent = async (filePath) => {
+const svgCache = new Map<string, string>();
+
+const readSVGContent = async (filePath: string) => {
+  if (svgCache.has(filePath)) {
+    return svgCache.get(filePath);
+  }
+
   try {
     const data = await fs.readFile(filePath, 'utf8');
+    svgCache.set(filePath, data);
     return data;
   } catch (error) {
     console.error(`Error reading file from path ${filePath}`, error);
