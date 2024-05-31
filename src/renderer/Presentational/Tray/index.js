@@ -1,5 +1,38 @@
 const { ipcRenderer } = require('electron');
 
+const getIconKey = (status) => {
+  let icon = 'syncing';
+  if (status === 'running' || status === 'starting') {
+    icon = 'syncing';
+  } else if (
+    status === 'notInstalled' ||
+    status === 'notRunning' ||
+    status === 'isOutdated'
+  ) {
+    icon = 'error';
+  } else {
+    icon = status;
+  }
+  return icon;
+};
+
+const getStatusText = (status) => {
+  let text = status;
+  console.log('status', status);
+  switch (status) {
+    case 'notInstalled':
+      text = 'Not Installed';
+      break;
+    case 'notRunning':
+      text = 'Not Running';
+      break;
+    case 'isOutdated':
+      text = 'Update Now';
+      break;
+  }
+  return text;
+};
+
 ipcRenderer.on(
   'update-menu',
   (event, { nodePackageTrayMenu, podmanMenuItem, statusIcons }) => {
@@ -10,7 +43,7 @@ ipcRenderer.on(
         action: () => ipcRenderer.send('node-package-click', item.id),
       })),
       { separator: true },
-      ...(podmanMenuItem.status !== 'Running'
+      ...(podmanMenuItem.status !== 'isRunning'
         ? [
             {
               name: 'Podman',
@@ -55,16 +88,13 @@ ipcRenderer.on(
           statusIconContainer.className = 'menu-status-icon';
 
           const statusIcon = document.createElement('div');
-          const icon =
-            item.status === 'running' || item.status === 'starting'
-              ? 'syncing'
-              : item.status;
-          statusIcon.innerHTML = statusIcons[icon] || statusIcons['default'];
+          statusIcon.innerHTML =
+            statusIcons[getIconKey(item.status)] || statusIcons['default'];
           statusIcon.className = 'status-icon';
 
           const statusText = document.createElement('div');
           statusText.className = 'menu-status';
-          statusText.textContent = item.status;
+          statusText.textContent = getStatusText(item.status);
 
           statusIconContainer.appendChild(statusIcon);
           statusContainer.appendChild(statusIconContainer);

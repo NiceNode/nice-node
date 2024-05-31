@@ -19,6 +19,7 @@ import { getUserNodePackages } from './state/nodePackages';
 import { openPodmanModal } from './podman/podman.js';
 import { openNodePackageScreen } from './state/nodePackages.js';
 import fs from 'node:fs/promises';
+import { getPodmanDetails } from './podman/details.js';
 
 // Can't import from main because of circular dependency
 let _getAssetPath: (...paths: string[]) => string;
@@ -297,10 +298,24 @@ const getCustomPodmanMenuItem = async () => {
   try {
     const podmanMachine = await getNiceNodeMachine();
     if (podmanMachine) {
-      status = podmanMachine.Running ? 'Running' : 'Stopped';
-      if (podmanMachine.Starting === true) {
-        status = 'Starting';
+      const podmanDetails = await getPodmanDetails();
+      switch (true) {
+        case !podmanDetails.isInstalled:
+          status = 'notInstalled';
+          break;
+        case podmanDetails.isOutdated:
+          status = 'isOutdated';
+          break;
+        case !podmanDetails.isRunning:
+          status = 'notRunning';
+          break;
+        case podmanDetails.isRunning:
+          status = 'isRunning';
+          break;
+        default:
+          status = 'isRunning';
       }
+      status = 'notRunning';
     }
   } catch (e) {
     console.error('tray podmanMachine error: ', e);
@@ -399,6 +414,7 @@ export const initialize = (
     // on linux?
     toggleCustomTrayWindow();
     updateCustomTrayMenu();
+    // updateTrayMenu();
     if (isWindows()) {
       const window = getMainWindow();
       if (window) {
