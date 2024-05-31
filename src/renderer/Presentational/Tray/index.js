@@ -55,8 +55,11 @@ ipcRenderer.on(
           statusIconContainer.className = 'menu-status-icon';
 
           const statusIcon = document.createElement('div');
-          statusIcon.innerHTML =
-            statusIcons[item.status] || statusIcons['default'];
+          const icon =
+            item.status === 'running' || item.status === 'starting'
+              ? 'syncing'
+              : item.status;
+          statusIcon.innerHTML = statusIcons[icon] || statusIcons['default'];
           statusIcon.className = 'status-icon';
 
           const statusText = document.createElement('div');

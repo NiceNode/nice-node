@@ -328,6 +328,9 @@ export const updateCustomTrayMenu = async () => {
     syncing: await readSVGContent(
       _getAssetPath('icons', 'tray', 'status', 'syncing.svg'),
     ),
+    default: await readSVGContent(
+      _getAssetPath('icons', 'tray', 'status', 'syncing.svg'),
+    ),
     stopped: await readSVGContent(
       _getAssetPath('icons', 'tray', 'status', 'stopped.svg'),
     ),
