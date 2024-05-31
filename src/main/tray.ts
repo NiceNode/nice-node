@@ -294,7 +294,7 @@ const getCustomPodmanMenuItem = async () => {
   if (isLinux()) {
     return { status: 'N/A' };
   }
-  let status = 'Loading...';
+  let status = 'notInstalled';
   try {
     const podmanMachine = await getNiceNodeMachine();
     if (podmanMachine) {
@@ -315,7 +315,6 @@ const getCustomPodmanMenuItem = async () => {
         default:
           status = 'isRunning';
       }
-      status = 'notRunning';
     }
   } catch (e) {
     console.error('tray podmanMachine error: ', e);

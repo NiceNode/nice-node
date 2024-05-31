@@ -1,36 +1,30 @@
 const { ipcRenderer } = require('electron');
 
 const getIconKey = (status) => {
-  let icon = 'syncing';
-  if (status === 'running' || status === 'starting') {
-    icon = 'syncing';
-  } else if (
-    status === 'notInstalled' ||
-    status === 'notRunning' ||
-    status === 'isOutdated'
-  ) {
-    icon = 'error';
-  } else {
-    icon = status;
+  switch (status) {
+    case 'running':
+    case 'starting':
+      return 'syncing';
+    case 'notInstalled':
+    case 'notRunning':
+    case 'isOutdated':
+      return 'error';
+    default:
+      return status;
   }
-  return icon;
 };
 
 const getStatusText = (status) => {
-  let text = status;
-  console.log('status', status);
   switch (status) {
     case 'notInstalled':
-      text = 'Not Installed';
-      break;
+      return 'Not Installed';
     case 'notRunning':
-      text = 'Not Running';
-      break;
+      return 'Not Running';
     case 'isOutdated':
-      text = 'Update Now';
-      break;
+      return 'Update Now';
+    default:
+      return status;
   }
-  return text;
 };
 
 ipcRenderer.on(
