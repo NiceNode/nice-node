@@ -45,7 +45,7 @@ export const Banner = ({
   const [iconId, setIconId] = useState<IconId>('blank');
   const [title, setTitle] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [isClicked, setIsClicked] = useState<boolean>(false);
+  // const [isClicked, setIsClicked] = useState<boolean>(false);
   const { t: g } = useTranslation('genericComponents');
 
   useEffect(() => {
@@ -69,11 +69,11 @@ export const Banner = ({
   }, [offline, updateAvailable, podmanStopped, podmanInstalled]);
 
   const onClickBanner = () => {
-    if (isClicked || offline) {
+    if (offline) {
       return;
     }
 
-    setIsClicked(true);
+    // setIsClicked(true);
 
     if (!podmanInstalled) {
       setDescription(g('PodmanInstalling'));
