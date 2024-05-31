@@ -39,6 +39,10 @@ ipcRenderer.on(
         const menuItem = document.createElement('div');
         menuItem.className = 'menu-item';
 
+        if (item.status === 'stopped') {
+          menuItem.classList.add('stopped');
+        }
+
         const nameSpan = document.createElement('span');
         nameSpan.textContent = item.name;
         menuItem.appendChild(nameSpan);
