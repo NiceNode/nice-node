@@ -18,6 +18,7 @@ import {
 import { getUserNodePackages } from './state/nodePackages';
 import { openPodmanModal } from './podman/podman.js';
 import { openNodePackageScreen } from './state/nodePackages.js';
+import fs from 'node:fs/promises';
 
 // Can't import from main because of circular dependency
 let _getAssetPath: (...paths: string[]) => string;
@@ -194,18 +195,17 @@ function createCustomTrayWindow() {
     resizable: false,
     transparent: true,
     webPreferences: {
-      // preload: _getTrayPath('tray.js'),
       contextIsolation: false,
       nodeIntegration: true,
     },
     vibrancy: process.platform === 'darwin' ? 'sidebar' : undefined,
   });
 
-  trayWindow.loadURL(`file://${_getTrayPath('tray.html')}`);
+  trayWindow.loadURL(`file://${_getTrayPath('index.html')}`);
 
   trayWindow.on('blur', () => {
     if (trayWindow) {
-      trayWindow.hide();
+      // trayWindow.hide();
     }
   });
 
@@ -273,7 +273,8 @@ const getCustomNodePackageListMenu = () => {
       isAlert = true;
     }
     return {
-      name: nodePackage.spec.displayName,
+      //TODO: localization
+      name: `${nodePackage.spec.displayName} Node`,
       status: nodePackage.status,
       id: nodePackage.id,
     };
@@ -303,14 +304,40 @@ const getCustomPodmanMenuItem = async () => {
   return { status };
 };
 
+const readSVGContent = async (filePath) => {
+  try {
+    const data = await fs.readFile(filePath, 'utf8');
+    return data;
+  } catch (error) {
+    console.error(`Error reading file from path ${filePath}`, error);
+    return '';
+  }
+};
+
 export const updateCustomTrayMenu = async () => {
   const { nodePackageTrayMenu, isAlert } = getCustomNodePackageListMenu();
   const podmanMenuItem = await getCustomPodmanMenuItem();
+
+  const statusIcons = {
+    synced: await readSVGContent(
+      _getAssetPath('icons', 'tray', 'status', 'synced.svg'),
+    ),
+    error: await readSVGContent(
+      _getAssetPath('icons', 'tray', 'status', 'error.svg'),
+    ),
+    syncing: await readSVGContent(
+      _getAssetPath('icons', 'tray', 'status', 'syncing.svg'),
+    ),
+    stopped: await readSVGContent(
+      _getAssetPath('icons', 'tray', 'status', 'stopped.svg'),
+    ),
+  };
 
   if (trayWindow) {
     trayWindow.webContents.send('update-menu', {
       nodePackageTrayMenu,
       podmanMenuItem,
+      statusIcons,
     });
   }
   setTrayIcon(isAlert ? 'Alert' : 'Default');

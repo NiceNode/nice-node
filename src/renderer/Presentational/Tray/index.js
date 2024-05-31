@@ -2,7 +2,7 @@ const { ipcRenderer } = require('electron');
 
 ipcRenderer.on(
   'update-menu',
-  (event, { nodePackageTrayMenu, podmanMenuItem }) => {
+  (event, { nodePackageTrayMenu, podmanMenuItem, statusIcons }) => {
     const menuItems = [
       ...nodePackageTrayMenu.map((item) => ({
         name: item.name,
@@ -44,9 +44,25 @@ ipcRenderer.on(
         menuItem.appendChild(nameSpan);
 
         if (item.status) {
-          const statusSpan = document.createElement('span');
-          statusSpan.textContent = item.status;
-          menuItem.appendChild(statusSpan);
+          const statusContainer = document.createElement('div');
+          statusContainer.className = 'menu-status-container';
+
+          const statusIconContainer = document.createElement('div');
+          statusIconContainer.className = 'menu-status-icon';
+
+          const statusIcon = document.createElement('div');
+          statusIcon.innerHTML =
+            statusIcons[item.status] || statusIcons['default'];
+          statusIcon.className = 'status-icon';
+
+          const statusText = document.createElement('div');
+          statusText.className = 'menu-status';
+          statusText.textContent = item.status;
+
+          statusIconContainer.appendChild(statusIcon);
+          statusContainer.appendChild(statusIconContainer);
+          statusContainer.appendChild(statusText);
+          menuItem.appendChild(statusContainer);
         }
 
         menuItem.addEventListener('click', item.action);
@@ -67,9 +83,11 @@ const applyTheme = (theme) => {
   const body = document.body;
   const menuItems = document.querySelectorAll('.menu-item');
   if (theme === 'dark') {
-    body.style.color = 'white';
+    body.classList.add('dark');
+    body.classList.remove('light');
   } else {
-    body.style.color = 'black';
+    body.classList.add('light');
+    body.classList.remove('dark');
   }
 };
 
