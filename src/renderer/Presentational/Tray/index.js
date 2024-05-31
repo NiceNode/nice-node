@@ -5,6 +5,10 @@ const getIconKey = (status) => {
     case 'running':
     case 'starting':
       return 'syncing';
+    //TODO: consider camelcased strings
+    case 'error running':
+    case 'error starting':
+    case 'error stopping':
     case 'notInstalled':
     case 'notRunning':
     case 'isOutdated':
