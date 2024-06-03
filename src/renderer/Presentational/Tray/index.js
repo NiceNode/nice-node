@@ -87,7 +87,7 @@ ipcRenderer.on(
 
           const statusIcon = document.createElement('div');
           statusIcon.innerHTML =
-            statusIcons[getIconKey(item.status)] || statusIcons['default'];
+            statusIcons[getIconKey(item.status)] || statusIcons.default;
           statusIcon.className = 'status-icon';
 
           const statusText = document.createElement('div');

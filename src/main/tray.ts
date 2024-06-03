@@ -213,7 +213,7 @@ function createCustomTrayWindow() {
 
   nativeTheme.on('updated', () => {
     const theme = nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
-    trayWindow!.webContents.send('set-theme', theme);
+    trayWindow?.webContents.send('set-theme', theme);
   });
 
   trayWindow.webContents.on('did-finish-load', () => {
@@ -435,7 +435,10 @@ export const initialize = (
 
   tray = new Tray(icon);
   createCustomTrayWindow();
-  trayWindow!.webContents.openDevTools();
+
+  if (process.env.NODE_ENV === 'development') {
+    trayWindow?.webContents.openDevTools();
+  }
   // updateTrayMenu();
 
   tray.on('click', () => {
