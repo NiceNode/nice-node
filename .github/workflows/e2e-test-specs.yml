@@ -1,0 +1,42 @@
+name: e2e-tests-specs
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  e2e-build-n-test:
+    environment: staging
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: 🧱 Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y podman
+
+      - name: 📦 Bundle Application
+        env:
+          DEBUG: "*electron*"
+          SENTRY_DSN: fake-token
+          MP_PROJECT_TOKEN: fake-token
+          MP_PROJECT_ENV: dev
+          NICENODE_ENV: test
+          NO_CODE_SIGNING: true
+        run: |
+          ls -al
+          podman build -t podman-fedora-wdio -f ./test/podman-fedora-wdio.dockerfile .
+
+      - name: 🧪 Run Tests
+        run: |
+          ls -al
+          chmod -R 777 .
+          ls -al
+          podman run --rm -v ./:/home/podman/nice-node -u podman podman-fedora-wdio
+

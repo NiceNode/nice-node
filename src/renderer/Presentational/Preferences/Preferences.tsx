@@ -225,10 +225,8 @@ const Preferences = ({
               sectionTitle: '',
               items: [
                 {
-                  label: t('SendErrorReports'),
-                  description: `${t('SendErrorReportsDescription')} (${
-                    import.meta.env.MP_PROJECT_ENV
-                  })`,
+                  label: t('SendEventReports'),
+                  description: `${t('SendEventReportsDescription')}`,
                   value: (
                     <Toggle
                       onText={t('Enabled')}
@@ -241,6 +239,7 @@ const Preferences = ({
                       }}
                     />
                   ),
+                  learnMoreLink: 'https://impact.nicenode.xyz',
                 },
               ],
             },
@@ -278,6 +277,7 @@ const Preferences = ({
       </div>
       <div className={versionContainer}>
         {t('YouAreRunningNiceNode')} {version} {import.meta.env.NICENODE_ENV}
+        {import.meta.env.MP_PROJECT_ENV}
       </div>
     </div>
   );

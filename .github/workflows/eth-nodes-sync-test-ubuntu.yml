@@ -1,9 +1,9 @@
-name: e2e-tests-ubuntu
+name: eth-nodes-sync-tests-ubuntu
 
 on:
-  pull_request:
-    branches:
-      - main
+  # pull_request:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 jobs:
@@ -42,10 +42,4 @@ jobs:
       - name: 🧪 Run Tests
         uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
         with:
-          run: npm run wdio
-
-      - name: 🐛 Debug Build
-        uses: stateful/vscode-server-action@v1
-        if: failure()
-        with:
-          timeout: '120000'
+          run: npm run e2eEthNodeSpecs

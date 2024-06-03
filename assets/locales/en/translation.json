@@ -72,6 +72,8 @@
   "DetailsForYourNew": "Details for your new wallet network",
   "DesktopNotifications": "Desktop notifications",
   "Privacy": "Privacy",
+  "SendEventReports": "Send event reports",
+  "SendEventReportsDescription": "Enable to help measure app impact and client diversity shown at https://impact.nicenode.xyz",
   "SendErrorReports": "Send error reports",
   "SendErrorReportsDescription": "Enabled by default in alpha releases to fix bugs and improve the app.",
   "PreReleaseUpdates": "Pre-release Updates",

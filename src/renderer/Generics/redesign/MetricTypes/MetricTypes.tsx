@@ -212,7 +212,9 @@ export const MetricTypes = ({
       <div className={iconContainer}>{iconComponent}</div>
       <div className={textContainer}>
         <div className={titleContainer}>
-          <div className={titleStyle}>{titleText}</div>
+          <div id={`${statsType}Value`} className={titleStyle}>
+            {titleText}
+          </div>
           <div className={labelStyle}>{labelText}</div>
         </div>
         <div className={infoStyle}>{info}</div>

@@ -64,7 +64,10 @@ export const SidebarNodeItemWrapper = ({
 
   const pollingInterval = 0;
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
-    node.spec.rpcTranslation,
+    {
+      rpcTranslation: node.spec.rpcTranslation,
+      httpPort: node?.config?.configValuesMap?.httpPort,
+    },
     {
       pollingInterval,
     },
