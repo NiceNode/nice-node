@@ -1,12 +1,12 @@
-import type React from "react";
-import type Node from "../../../common/node";
-import type { NodePackage } from "../../../common/node";
+import type React from 'react';
+import type Node from '../../../common/node';
+import type { NodePackage } from '../../../common/node';
 import type {
   NodeLibrary,
   NodePackageLibrary,
-} from "../../../main/state/nodeLibrary";
-import type { ThemeSetting } from "../../../main/state/settings";
-import type { ClientSelections } from "../AddNodeConfiguration/AddNodeConfiguration";
+} from '../../../main/state/nodeLibrary';
+import type { ThemeSetting } from '../../../main/state/settings';
+import type { ClientSelections } from '../AddNodeConfiguration/AddNodeConfiguration';
 
 export interface ModalConfig {
   node?: string;
@@ -29,18 +29,18 @@ export interface ModalConfig {
 }
 
 export const modalRoutes = Object.freeze({
-  addNode: "addNode",
-  nodeSettings: "nodeSettings",
-  preferences: "preferences",
-  addValidator: "addValidator",
-  clientVersions: "clientVersions",
-  stopNode: "stopNode",
-  removeNode: "removeNode",
-  resetConfig: "resetConfig",
-  updateUnavailable: "updateUnavailable",
-  failSystemRequirements: "failSystemRequirements",
-  alphaBuild: "alphaBuild",
-  podman: "podman",
+  addNode: 'addNode',
+  nodeSettings: 'nodeSettings',
+  preferences: 'preferences',
+  addValidator: 'addValidator',
+  clientVersions: 'clientVersions',
+  stopNode: 'stopNode',
+  removeNode: 'removeNode',
+  resetConfig: 'resetConfig',
+  updateUnavailable: 'updateUnavailable',
+  failSystemRequirements: 'failSystemRequirements',
+  alphaBuild: 'alphaBuild',
+  podman: 'podman',
 });
 
 /* Use this to change config settings, saved temporarily in the modal file with backend apis until it's saved by modalOnSaveConfig
@@ -55,7 +55,7 @@ export const modalOnChangeConfig = async (
   modalOnSaveConfig?: (newConfig: ModalConfig) => Promise<void>,
 ) => {
   if (!setModalConfig || !modalConfig) {
-    throw new Error("modal config is not defined");
+    throw new Error('modal config is not defined');
   }
 
   let updatedConfig = {};
@@ -74,7 +74,7 @@ export const modalOnChangeConfig = async (
   //   };
   // }
   console.log(
-    "modalOnChangeConfig: config, modalConfig, updatedConfig",
+    'modalOnChangeConfig: config, modalConfig, updatedConfig',
     config,
     modalConfig,
     updatedConfig,

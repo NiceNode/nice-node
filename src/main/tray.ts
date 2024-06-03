@@ -1,25 +1,26 @@
+import fs from 'node:fs/promises';
 import {
   BrowserWindow,
   Menu,
   MenuItem,
   Tray,
   dialog,
-  nativeTheme,
   ipcMain,
+  nativeTheme,
+  screen,
 } from 'electron';
 import logger from './logger';
 import { createWindow, fullQuit, getMainWindow } from './main';
 import { isLinux, isWindows } from './platform';
+import { getPodmanDetails } from './podman/details.js';
 import {
   getNiceNodeMachine,
   startMachineIfCreated,
   stopMachineIfCreated,
 } from './podman/machine';
-import { getUserNodePackages } from './state/nodePackages';
 import { openPodmanModal } from './podman/podman.js';
+import { getUserNodePackages } from './state/nodePackages';
 import { openNodePackageScreen } from './state/nodePackages.js';
-import fs from 'node:fs/promises';
-import { getPodmanDetails } from './podman/details.js';
 
 // Can't import from main because of circular dependency
 let _getAssetPath: (...paths: string[]) => string;
@@ -373,19 +374,49 @@ export const updateCustomTrayMenu = async () => {
 };
 
 function toggleCustomTrayWindow() {
-  if (trayWindow) {
-    if (trayWindow.isVisible()) {
-      trayWindow.hide();
-    } else {
-      const trayBounds = tray.getBounds();
-      const windowBounds = trayWindow.getBounds();
-      const x = Math.round(
+  if (trayWindow.isVisible()) {
+    trayWindow.hide();
+  } else {
+    const trayBounds = tray.getBounds(); // Get the bounds of the tray icon
+    const windowBounds = trayWindow.getBounds();
+    let x;
+    let y;
+
+    if (process.platform === 'darwin') {
+      x = Math.round(
         trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2,
       );
-      const y = Math.round(trayBounds.y + trayBounds.height);
-      trayWindow.setPosition(x, y, false);
-      trayWindow.show();
+      y = Math.round(trayBounds.y + trayBounds.height);
+    } else if (process.platform === 'win32') {
+      const display = screen.getPrimaryDisplay(); // Get the primary display details
+      const workArea = display.workArea;
+      x = Math.round(
+        trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2,
+      );
+
+      // Check if taskbar is at the bottom or the top
+      if (workArea.y < trayBounds.y) {
+        y = Math.round(trayBounds.y - windowBounds.height); // Taskbar is at the bottom
+      } else {
+        y = Math.round(trayBounds.y + trayBounds.height); // Taskbar is at the top
+      }
+    } else {
+      // Assume Linux behaves like Windows in this context
+      // This could require adjustments based on the Linux distro and environment
+      const display = screen.getPrimaryDisplay();
+      const workArea = display.workArea;
+      x = Math.round(
+        trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2,
+      );
+      y =
+        workArea.y < trayBounds.y
+          ? Math.round(trayBounds.y - windowBounds.height)
+          : Math.round(trayBounds.y + trayBounds.height);
     }
+
+    trayWindow.setPosition(x, y, false);
+    trayWindow.show();
+    trayWindow.focus();
   }
 }
 

@@ -4,27 +4,27 @@ import {
   useCallback,
   useEffect,
   useState,
-} from "react";
-import { CHANNELS } from "../../../main/messenger";
-import type { NotificationItemProps } from "../../Generics/redesign/NotificationItem/NotificationItem";
-import electron from "../../electronGlobal";
-import { useAppDispatch, useAppSelector } from "../../state/hooks";
-import { useGetNetworkConnectedQuery } from "../../state/network";
+} from 'react';
+import { useNavigate } from 'react-router-dom';
+import type { NodeId } from 'src/common/node.js';
+import { CHANNELS } from '../../../main/messenger';
+import type { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
+import electron from '../../electronGlobal';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { setModalState } from '../../state/modal.js';
+import { useGetNetworkConnectedQuery } from '../../state/network';
 import {
   selectSelectedNodePackageId,
   selectUserNodePackages,
   updateSelectedNodePackageId,
-} from "../../state/node";
-import { useGetNotificationsQuery } from "../../state/notificationsService";
+} from '../../state/node';
+import { useGetNotificationsQuery } from '../../state/notificationsService';
 import {
   useGetIsPodmanInstalledQuery,
   useGetIsPodmanRunningQuery,
   useGetPodmanDetailsQuery,
-} from "../../state/settingsService";
-import Sidebar from "../Sidebar/Sidebar";
-import { setModalState } from "../../state/modal.js";
-import { NodeId } from "src/common/node.js";
-import { useNavigate } from "react-router-dom";
+} from '../../state/settingsService';
+import Sidebar from '../Sidebar/Sidebar';
 
 export interface SidebarWrapperProps {
   children: ReactElement;
@@ -48,7 +48,7 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
     pollingInterval: 15000,
   });
   const podmanDetails = qPodmanDetails?.data;
-  const [platform, setPlatform] = useState<string>("");
+  const [platform, setPlatform] = useState<string>('');
   // default to docker is running while data is being fetched, so
   //  the user isn't falsely warned
   let isPodmanRunning = true;
@@ -61,9 +61,9 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
       setModalState({
         isModalOpen: true,
         screen: {
-          route: "podman",
-          type: "modal",
-          data: { view: "update" },
+          route: 'podman',
+          type: 'modal',
+          data: { view: 'update' },
         },
       }),
     );
@@ -81,7 +81,7 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
 
   // subscribes to a channel which notifies when dark mode settings change
   const onNotificationChange = useCallback(() => {
-    console.log("onNotificationChange");
+    console.log('onNotificationChange');
     qNotifications?.refetch();
   }, []);
 
@@ -90,15 +90,15 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
       setModalState({
         isModalOpen: true,
         screen: {
-          route: "podman",
-          type: "modal",
+          route: 'podman',
+          type: 'modal',
         },
       }),
     );
   }, []);
 
   const onOpenNodePackageScreen = useCallback((nodeId: NodeId) => {
-    navigate("/main/nodePackage");
+    navigate('/main/nodePackage');
     dispatch(updateSelectedNodePackageId(nodeId));
   }, []);
 
@@ -140,7 +140,7 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   useEffect(() => {
     const asyncData = async () => {
       const userSettings = await electron.getSettings();
-      setPlatform(userSettings.osPlatform || "");
+      setPlatform(userSettings.osPlatform || '');
     };
     asyncData();
   }, []);
@@ -150,7 +150,7 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
       platform={platform}
       ref={ref}
       notifications={notifications}
-      offline={qNetwork.status === "rejected"}
+      offline={qNetwork.status === 'rejected'}
       updateAvailable={podmanDetails?.isOutdated || false}
       podmanInstalled={isPodmanInstalled}
       podmanStopped={!isPodmanRunning}

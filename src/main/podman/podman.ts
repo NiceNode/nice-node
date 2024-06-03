@@ -20,6 +20,7 @@ import {
   type ConfigValuesMap,
   buildCliConfig,
 } from '../../common/nodeConfig';
+import { CHANNELS, send } from '../messenger.js';
 import { restartNodes } from '../nodePackageManager';
 import { isLinux } from '../platform';
 import { killChildProcess } from '../processExit';
@@ -29,7 +30,6 @@ import * as metricsPolling from './metricsPolling';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
 import { getPodmanEnvWithPath } from './podman-env-path';
 import startPodman, { onStartUp } from './start';
-import { send, CHANNELS } from '../messenger.js';
 
 let podmanWatchProcess: ChildProcess;
 
