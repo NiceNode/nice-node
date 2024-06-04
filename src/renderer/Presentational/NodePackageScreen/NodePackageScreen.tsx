@@ -318,10 +318,7 @@ const NodePackageScreen = () => {
               dispatch(
                 setModalState({
                   isModalOpen: true,
-                  screen: {
-                    route: 'podman',
-                    type: 'modal',
-                  },
+                  screen: { route: 'addNode', type: 'modal' },
                 }),
               );
             }}

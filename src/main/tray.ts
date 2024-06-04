@@ -436,9 +436,9 @@ export const initialize = (
   tray = new Tray(icon);
   createCustomTrayWindow();
 
-  if (process.env.NODE_ENV === 'development') {
-    trayWindow?.webContents.openDevTools();
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  //   trayWindow?.webContents.openDevTools();
+  // }
   // updateTrayMenu();
 
   tray.on('click', () => {
