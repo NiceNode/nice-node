@@ -24,7 +24,6 @@ import { openNodePackageScreen } from './state/nodePackages.js';
 
 // Can't import from main because of circular dependency
 let _getAssetPath: (...paths: string[]) => string;
-let _getTrayPath: (...paths: string[]) => string;
 
 let tray: Tray;
 let trayWindow: BrowserWindow | null = null;
@@ -203,7 +202,7 @@ function createCustomTrayWindow() {
     vibrancy: process.platform === 'darwin' ? 'sidebar' : undefined,
   });
 
-  trayWindow.loadURL(`file://${_getTrayPath('index.html')}`);
+  trayWindow.loadURL(`file://${_getAssetPath('trayIndex.html')}`);
 
   trayWindow.on('blur', () => {
     if (trayWindow) {
@@ -420,13 +419,9 @@ function toggleCustomTrayWindow() {
   }
 }
 
-export const initialize = (
-  getAssetPath: (...paths: string[]) => string,
-  getTrayPath: (...paths: string[]) => string,
-) => {
+export const initialize = (getAssetPath: (...paths: string[]) => string) => {
   logger.info('tray initializing...');
   _getAssetPath = getAssetPath;
-  _getTrayPath = getTrayPath;
 
   let icon = getAssetPath('icons', 'tray', 'NNIconDefaultInvertedTemplate.png');
   if (isWindows()) {
