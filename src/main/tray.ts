@@ -9,8 +9,10 @@ import {
   nativeTheme,
   screen,
 } from 'electron';
+import { NodeStoppedBy } from '../common/node.js';
 import logger from './logger';
 import { createWindow, fullQuit, getMainWindow } from './main';
+import { stopAllNodePackages } from './nodePackageManager.js';
 import { isLinux, isWindows } from './platform';
 import { getPodmanDetails } from './podman/details.js';
 import {
@@ -84,9 +86,11 @@ export const setTrayMenu = () => {
             message: 'Are you sure you want to quit? Nodes will stop syncing.',
             detail: 'Confirming will close the application.',
           })
-          .then((result) => {
+          .then(async (result) => {
             if (result.response === 0) {
               // The 'Yes' button is at index 0
+              await stopAllNodePackages(NodeStoppedBy.shutdown);
+              await stopMachineIfCreated();
               fullQuit(); // app no longer runs in the background
             }
             // Do nothing if the user selects 'No'
@@ -257,9 +261,11 @@ function createCustomTrayWindow() {
         message: 'Are you sure you want to quit? Nodes will stop syncing.',
         detail: 'Confirming will close the application.',
       })
-      .then((result) => {
+      .then(async (result) => {
         if (result.response === 0) {
           // The 'Yes' button is at index 0
+          await stopAllNodePackages(NodeStoppedBy.shutdown);
+          await stopMachineIfCreated();
           fullQuit(); // app no longer runs in the background
         }
         // Do nothing if the user selects 'No'
