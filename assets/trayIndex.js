@@ -40,7 +40,7 @@ ipcRenderer.on(
         status: item.status,
         action: () => ipcRenderer.send('node-package-click', item.id),
       })),
-      { separator: true },
+      ...(nodePackageTrayMenu.length >= 1 ? [{ separator: true }] : []),
       ...(podmanMenuItem.status !== 'isRunning'
         ? [
             {
