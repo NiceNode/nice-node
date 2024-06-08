@@ -17,7 +17,7 @@ import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import { componentContainer, container } from './addNodeStepper.css';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
-import { mergeObjectReducer } from '../AddNodeConfiguration/deepMerge.js';
+import { mergeObjectReducerWithReset } from '../AddNodeConfiguration/deepMerge.js';
 
 export interface AddNodeStepperModalProps {
   modal?: boolean;
@@ -46,7 +46,7 @@ const AddNodeStepperModal = ({
   const [sNodeRequirements, setNodeRequirements] =
     useState<SystemRequirements>();
   const [tempConfigValues, setTemporaryClientConfigValues] = useReducer(
-    mergeObjectReducer,
+    mergeObjectReducerWithReset,
     {},
   );
 
