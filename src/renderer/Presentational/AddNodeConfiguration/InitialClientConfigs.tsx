@@ -139,7 +139,7 @@ const InitialClientConfigs = ({
       {Object.keys(sClientConfigTranslations).map((clientId: string) => {
         const clientConfigTranslation = sClientConfigTranslations[clientId];
         const singleClientConfigValues =
-          tempConfigValues[clientSpecs[0].specId] ||
+          tempConfigValues[clientId] ||
           (sClientConfigValues as ConfigValuesMap)[clientId] ||
           {};
 
