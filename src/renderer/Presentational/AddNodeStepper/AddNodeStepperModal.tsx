@@ -49,6 +49,7 @@ const AddNodeStepperModal = ({
     mergeObjectReducerWithReset,
     {},
   );
+  const [selectedNode, setSelectedNode] = useState<string>('');
 
   const onChangeAddNodeConfiguration = (
     newValue: AddNodeConfigurationValues,
@@ -113,11 +114,14 @@ const AddNodeStepperModal = ({
       });
       // clear step 1 (client selections) when user changes node (package)
       setEthereumNodeConfig(undefined);
-      setTemporaryClientConfigValues({ payload: { reset: true } });
+      setSelectedNode(nodeSelectOption.value);
+      if (selectedNode !== nodeSelectOption.value) {
+        setTemporaryClientConfigValues({ payload: { reset: true } });
+      }
       console.log('AddNodeStepperModal setNode: config', config);
       setNodeConfig(config);
     },
-    [],
+    [selectedNode],
   );
 
   const onChangeDockerInstall = useCallback((newValue: string) => {
