@@ -1,5 +1,7 @@
 /**
  * Based from WinCheck in podman-desktop repo src/extensions/podman/podman-install
+ * https://github.com/containers/podman-desktop/blob/main/extensions/podman/src/podman-install.ts#L555
+ * and from microsoft docs at https://learn.microsoft.com/en-us/windows/wsl/install#prerequisites
  */
 import * as os from 'node:os';
 import logger from '../../logger';
@@ -11,12 +13,11 @@ export const getFailSystemRequirements = async (): Promise<
 > => {
   const failedRequirements: FailSystemRequirements[] = [];
 
-  const MIN_BUILD = 18362;
+  const MIN_BUILD = 19041;
   const winRelease = os.release();
   let winBuild;
   if (winRelease.startsWith('10.0.')) {
     const splitRelease = winRelease.split('.');
-    prefer - destructuring;
     winBuild = splitRelease[2];
   }
   if (!winBuild || Number.parseInt(winBuild, 10) < MIN_BUILD) {
