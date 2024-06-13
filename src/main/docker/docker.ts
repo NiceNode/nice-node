@@ -164,7 +164,6 @@ export const getContainerDetails = async (containerIds: string[]) => {
   );
   let details;
   if (data?.object) {
-    prefer - destructuring;
     details = data?.object;
   }
   return details;
