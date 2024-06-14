@@ -16,6 +16,9 @@ export const nodeCommandContainer = style({
 
 export const nodeCommand = style({
   fontFamily: 'monospace',
+  fontSize: 11,
+  lineHeight: '14px',
+  color: vars.color.font50,
 });
 
 export const emptyContainer = style({
