@@ -1,6 +1,6 @@
 // This component could be made into a Generic "FullScreenStepper" component
 // Just make sure to always render each child so that children component state isn't cleard
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useReducer } from 'react';
 
 import type { SystemRequirements } from '../../../common/systemRequirements';
 import type {
@@ -18,6 +18,7 @@ import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import { componentContainer, container } from './addNodeStepper.css';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
+import { mergeObjectReducerWithReset } from '../AddNodeConfiguration/deepMerge.js';
 
 import type { NodePackageSpecification } from '../../../common/nodeSpec';
 import type { AddNodePackageNodeService } from '../../../main/nodePackageManager';
@@ -51,6 +52,11 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const [sNodeRequirements, setEthereumNodeRequirements] =
     useState<SystemRequirements>();
   const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>();
+  const [tempConfigValues, setTemporaryClientConfigValues] = useReducer(
+    mergeObjectReducerWithReset,
+    {},
+  );
+  const [selectedNode, setSelectedNode] = useState<string>('');
 
   // Load ALL node spec's when AddNodeStepper is created
   //  This can later be optimized to only retrieve NodeSpecs as needed
@@ -84,6 +90,10 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         if (sNodeLibrary) {
           nodeReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
         }
+      }
+      setSelectedNode(newValue);
+      if (selectedNode !== newValue) {
+        setTemporaryClientConfigValues({ payload: { reset: true } });
       }
       try {
         if (nodeReqs) {
@@ -261,6 +271,8 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
             nodePackageLibrary={sNodePackageLibrary}
             nodeId={sNode?.node?.value}
             onChange={onChangeAddNodeConfiguration}
+            tempConfigValues={tempConfigValues}
+            setTemporaryClientConfigValues={setTemporaryClientConfigValues}
           />
         );
         stepImage = step1;
