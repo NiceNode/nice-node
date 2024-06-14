@@ -72,7 +72,7 @@
   "DetailsForYourNew": "Details for your new wallet network",
   "DesktopNotifications": "Desktop notifications",
   "Privacy": "Privacy",
-  "SendErrorEventReports": "Send error & event reports",
+  "SendErrorEventReports": "Send error and event reports",
   "SendErrorEventReportsDescription": "Enable to send error reports and events to help measure impact & client diversity shown at https://impact.nicenode.xyz/. Restart for changes to take effect.",
   "SendErrorReports": "Send error reports",
   "SendErrorReportsDescription": "Enabled by default in alpha releases to fix bugs and improve the app.",
