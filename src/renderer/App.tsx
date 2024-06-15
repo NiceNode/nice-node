@@ -30,17 +30,21 @@ import { initialize as initializeIpcListeners } from './ipc';
 import './reset.css';
 import { useAppDispatch } from './state/hooks';
 
-const userSettings = await electron.getSettings();
-if (
-  userSettings.appIsEventReportingEnabled === null ||
-  userSettings.appIsEventReportingEnabled
-) {
-  Sentry.init({
-    dsn: electron.SENTRY_DSN,
-    debug: true,
-  });
+async function initializeSentry() {
+  const userSettings = await electron.getSettings();
+  if (
+    userSettings.appIsEventReportingEnabled === null ||
+    userSettings.appIsEventReportingEnabled
+  ) {
+    Sentry.init({
+      dsn: electron.SENTRY_DSN,
+      debug: true,
+    });
+  }
+  reportEvent('OpenApp');
 }
-reportEvent('OpenApp');
+
+initializeSentry();
 
 const WindowContainer = ({ children }: { children: React.ReactNode }) => {
   return (
