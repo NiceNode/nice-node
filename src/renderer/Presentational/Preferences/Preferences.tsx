@@ -225,8 +225,8 @@ const Preferences = ({
               sectionTitle: '',
               items: [
                 {
-                  label: t('SendEventReports'),
-                  description: `${t('SendEventReportsDescription')}`,
+                  label: t('SendErrorEventReports'),
+                  description: `${t('SendErrorEventReportsDescription')}`,
                   value: (
                     <Toggle
                       onText={t('Enabled')}

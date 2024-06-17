@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/electron/main';
 import { app } from 'electron';
 import { createLogger, format, transports } from 'winston';
 import SentryTransport from './util/sentryWinstonTransport';
+import store from './state/store.js';
 
 // import DailyRotateFile from 'winston-daily-rotate-file';
 
@@ -89,9 +90,10 @@ export const autoUpdateLogger = createLogger({
 //
 // If we're not in production then log to the `console` with the format:
 // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
+const errorEventReporting = store.get('settings.appIsEventReportingEnabled');
 if (
-  process.env.NODE_ENV === 'production' ||
-  process.env.NODE_ENV === 'staging'
+  (errorEventReporting === null || errorEventReporting) &&
+  (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging')
 ) {
   logger.add(
     new SentryTransport({
