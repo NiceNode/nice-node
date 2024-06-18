@@ -31,14 +31,14 @@ import {
 import { isLinux } from './platform';
 import * as power from './power';
 import * as processExit from './processExit';
+import {
+  APP_IS_EVENT_REPORTING_ENABLED,
+  SETTINGS_KEY,
+} from './state/settings.js';
+import store from './state/store.js';
 import * as systemInfo from './systemInfo';
 import * as tray from './tray';
 import * as updater from './updater';
-import {
-  SETTINGS_KEY,
-  APP_IS_EVENT_REPORTING_ENABLED,
-} from './state/settings.js';
-import store from './state/store.js';
 
 if (process.env.NODE_ENV === 'development') {
   dotenv.config();

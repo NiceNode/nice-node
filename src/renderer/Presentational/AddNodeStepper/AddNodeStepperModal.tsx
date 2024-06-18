@@ -1,6 +1,6 @@
 // This component could be made into a Generic "FullScreenStepper" component
 // Just make sure to always render each child so that children component state isn't cleard
-import { useCallback, useEffect, useState, useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 
 import type { SystemRequirements } from '../../../common/systemRequirements';
 import type {
@@ -12,12 +12,12 @@ import AddNode, { type AddNodeValues } from '../AddNode/AddNode';
 import AddNodeConfiguration, {
   type AddNodeConfigurationValues,
 } from '../AddNodeConfiguration/AddNodeConfiguration';
+import { mergeObjectReducerWithReset } from '../AddNodeConfiguration/deepMerge.js';
 import type { ModalConfig } from '../ModalManager/modalUtils';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import { componentContainer, container } from './addNodeStepper.css';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
-import { mergeObjectReducerWithReset } from '../AddNodeConfiguration/deepMerge.js';
 
 export interface AddNodeStepperModalProps {
   modal?: boolean;

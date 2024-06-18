@@ -1,6 +1,6 @@
 // This component could be made into a Generic "FullScreenStepper" component
 // Just make sure to always render each child so that children component state isn't cleard
-import { useCallback, useEffect, useState, useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 
 import type { SystemRequirements } from '../../../common/systemRequirements';
 import type {
@@ -14,11 +14,11 @@ import { reportEvent } from '../../events/reportEvent';
 import { useAppDispatch } from '../../state/hooks';
 import { updateSelectedNodePackageId } from '../../state/node';
 import AddNode, { type AddNodeValues } from '../AddNode/AddNode';
+import { mergeObjectReducerWithReset } from '../AddNodeConfiguration/deepMerge.js';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
 import { componentContainer, container } from './addNodeStepper.css';
 import { mergeSystemRequirements } from './mergeNodeRequirements';
-import { mergeObjectReducerWithReset } from '../AddNodeConfiguration/deepMerge.js';
 
 import type { NodePackageSpecification } from '../../../common/nodeSpec';
 import type { AddNodePackageNodeService } from '../../../main/nodePackageManager';
