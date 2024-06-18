@@ -22,7 +22,7 @@
       }
     },
     "imageName": "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node",
-    "defaultImageTag": "v1.7.5"
+    "defaultImageTag": "v1.7.7"
   },
   "category": "L2/ConsensusClient",
   "rpcTranslation": "eth-l2-consensus",
