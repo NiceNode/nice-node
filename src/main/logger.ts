@@ -2,8 +2,8 @@ import path from 'node:path';
 import * as Sentry from '@sentry/electron/main';
 import { app } from 'electron';
 import { createLogger, format, transports } from 'winston';
-import SentryTransport from './util/sentryWinstonTransport';
 import store from './state/store.js';
+import SentryTransport from './util/sentryWinstonTransport';
 
 // import DailyRotateFile from 'winston-daily-rotate-file';
 
