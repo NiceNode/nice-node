@@ -27,7 +27,6 @@
   },
   "category": "L1/ExecutionClient",
   "minorityClient": true,
-  "nodeReleasePhase": "beta",
   "rpcTranslation": "eth-l1",
   "systemRequirements": {
     "documentationUrl": "https://paradigmxyz.github.io/reth/installation/installation.html#hardware-requirements",
