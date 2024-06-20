@@ -100,7 +100,7 @@ export const updateLocalNodeAndPackageLibrary = async () => {
   try {
     const promises = [getCartridgePackages(), getCartridges()];
     // fetch in parallel
-    const [cartridges, cartridgePackages] = await Promise.all(promises);
+    const [cartridgePackages, cartridges] = await Promise.all(promises);
     logger.info(
       `cartridgePackages from HTTP API: ${JSON.stringify(cartridgePackages)}`,
     );
