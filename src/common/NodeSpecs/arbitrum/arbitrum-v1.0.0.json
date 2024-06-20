@@ -18,7 +18,7 @@
   "category": "Ethereum/L2",
   "rpcTranslation": "eth-l1",
   "systemRequirements": {
-    "documentationUrl": "https://geth.arbitrum.org/docs/interface/hardware",
+    "documentationUrl": "https://docs.arbitrum.io/run-arbitrum-node/run-full-node#minimum-hardware-configuration",
     "cpu": {
       "cores": 4
     },
