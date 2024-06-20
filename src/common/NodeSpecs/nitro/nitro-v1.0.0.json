@@ -30,7 +30,7 @@
   "category": "Ethereum/L2",
   "rpcTranslation": "eth-l2",
   "systemRequirements": {
-    "documentationUrl": "https://docs.arbitrum.io/node-running/how-tos/running-a-full-node#minimum-hardware-configuration",
+    "documentationUrl": "https://docs.arbitrum.io/node-running/how-tos/running-an-orbit-node#prerequisites",
     "cpu": {
       "cores": 4
     },
