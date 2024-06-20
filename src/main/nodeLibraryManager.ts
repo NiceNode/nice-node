@@ -39,6 +39,7 @@ import type {
   NodeSpecification,
   DockerExecution as PodmanExecution,
 } from '../common/nodeSpec';
+import { httpGetJson } from './httpReq.js';
 import logger from './logger';
 import {
   type NodeLibrary,
@@ -48,32 +49,102 @@ import {
 } from './state/nodeLibrary';
 
 export const initialize = async () => {
+  await updateLocalNodeAndPackageLibrary();
+};
+
+// todo: use user defined url if available
+const getCartridgePackages = async (): Promise<NodeSpecification[]> => {
+  // const cartridgePackagesApiURL = 'http://localhost:3000/api/cartridgePackage'
+  // const isHttp = true;
+  const cartridgePackagesApiURL =
+    'https://api.nicenode.xyz/api/cartridgePackage';
+  const isHttp = false;
+  const cartridgePackages: NodeSpecification[] = (
+    await httpGetJson(cartridgePackagesApiURL, isHttp)
+  ).data;
+  // simple validation (only for nicenode api, not user defined api)
+  const isEthereumPackageFound = cartridgePackages.find(
+    (spec) => spec.specId === 'ethereum',
+  );
+  if (!isEthereumPackageFound) {
+    throw new Error('Ethereum package not found in the cartridge packages API');
+  }
+  return cartridgePackages;
+};
+
+const getCartridges = async (): Promise<NodeSpecification[]> => {
+  // const cartridgesApiURL = 'http://localhost:3000/api/cartridge'
+  // const isHttp = true;
+  const cartridgesApiURL = 'https://api.nicenode.xyz/api/cartridge';
+  const isHttp = false;
+  const cartridges: NodeSpecification[] = (
+    await httpGetJson(cartridgesApiURL, isHttp)
+  ).data;
+  // simple validation (only for nicenode api, not user defined api)
+  const isGethFound = cartridges.find((spec) => spec.specId === 'geth');
+  if (!isGethFound) {
+    throw new Error('Geth cartridge not found in the cartridge packages API');
+  }
+  return cartridges;
+};
+
+// Updates the local electron store with the latest node and package library (aka cartridges)
+// Should be called this after user clicks add node, but before showing the previous values
+export const updateLocalNodeAndPackageLibrary = async () => {
   // parse spec json for latest versions
   // update the store with the latest versions
-  const nodeSpecBySpecId: NodeLibrary = {};
-  const specs = [
-    besuv1,
-    nethermindv1,
-    erigonv1,
-    gethv1,
-    rethv1,
-    lodestarv1,
-    nimbusv1,
-    tekuv1,
-    lighthousev1,
-    prysmv1,
-    arbitrumv1,
-    nitrov1,
-    pathfinderv1,
-    opGethv1,
-    opNodev1,
-    hildrv1,
-    magiv1,
-    hubblev1,
-    itzgMinecraftv1,
-    homeAssistantServicev1,
-  ];
+  // get specs from APIs, fallback to files
 
+  let specs: NodeSpecification[] = [];
+  let packageSpecs: NodeSpecification[] = [];
+  try {
+    const promises = [getCartridgePackages(), getCartridges()];
+    // fetch in parallel
+    const [cartridges, cartridgePackages] = await Promise.all(promises);
+    logger.info(
+      `cartridgePackages from HTTP API: ${JSON.stringify(cartridgePackages)}`,
+    );
+    logger.info(`cartridges from HTTP API: ${JSON.stringify(cartridges)}`);
+    specs = cartridges;
+    packageSpecs = cartridgePackages;
+  } catch (e) {
+    logger.error(e);
+    logger.error(
+      'Failed to fetch cartridges from API, falling back to local files',
+    );
+    packageSpecs = [
+      ethereumv1,
+      farcasterv1,
+      arbitrumv1,
+      optimismv1,
+      basev1,
+      minecraftv1,
+      homeAssistantv1,
+    ];
+    specs = [
+      besuv1,
+      nethermindv1,
+      erigonv1,
+      gethv1,
+      rethv1,
+      lodestarv1,
+      nimbusv1,
+      tekuv1,
+      lighthousev1,
+      prysmv1,
+      arbitrumv1,
+      nitrov1,
+      pathfinderv1,
+      opGethv1,
+      opNodev1,
+      hildrv1,
+      magiv1,
+      hubblev1,
+      itzgMinecraftv1,
+      homeAssistantServicev1,
+    ];
+  }
+  const nodeSpecBySpecId: NodeLibrary = {};
   specs.forEach((spec) => {
     try {
       const nodeSpec: NodeSpecification = spec as NodeSpecification;
@@ -119,15 +190,6 @@ export const initialize = async () => {
   updateNodeLibrary(nodeSpecBySpecId);
 
   const nodePackageSpecBySpecId: NodePackageLibrary = {};
-  const packageSpecs = [
-    ethereumv1,
-    farcasterv1,
-    arbitrumv1,
-    optimismv1,
-    basev1,
-    minecraftv1,
-    homeAssistantv1,
-  ];
   packageSpecs.forEach((spec) => {
     try {
       nodePackageSpecBySpecId[spec.specId] = spec as NodePackageSpecification;
