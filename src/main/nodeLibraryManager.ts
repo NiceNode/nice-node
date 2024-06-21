@@ -34,6 +34,8 @@ import nitrov1 from '../common/NodeSpecs/nitro/nitro-v1.0.0.json';
 import homeAssistantServicev1 from '../common/NodeSpecs/home-assistant-service/home-assistant-service-v1.0.0.json';
 import itzgMinecraftv1 from '../common/NodeSpecs/itzg-minecraft/itzg-minecraft-v1.0.0.json';
 
+import type { NodeId } from '../common/node.js';
+import type Node from '../common/node.js';
 import type {
   NodePackageSpecification,
   NodeSpecification,
@@ -47,6 +49,7 @@ import {
   updateNodeLibrary,
   updateNodePackageLibrary,
 } from './state/nodeLibrary';
+import { getNode, updateNode } from './state/nodes.js';
 
 export const initialize = async () => {
   await updateLocalNodeAndPackageLibrary();
@@ -86,6 +89,21 @@ const getCartridges = async (): Promise<NodeSpecification[]> => {
     throw new Error('Geth cartridge not found in the cartridge packages API');
   }
   return cartridges;
+};
+
+const getCartridge = async (
+  cartridgeId: string,
+): Promise<NodeSpecification> => {
+  const cartridgesApiURL = `http://localhost:3000/api/cartridge/${cartridgeId}`;
+  const isHttp = true;
+  // const cartridgesApiURL = `https://api.nicenode.xyz/api/cartridge/${cartridgeId}`;
+  // const isHttp = false;
+  const response = await httpGetJson(cartridgesApiURL, isHttp);
+  if (response.error) {
+    throw Error(response.error);
+  }
+  const cartridge: NodeSpecification = response.data;
+  return cartridge;
 };
 
 // Updates the local electron store with the latest node and package library (aka cartridges)
@@ -200,4 +218,43 @@ export const updateLocalNodeAndPackageLibrary = async () => {
   // console.log('nodePackageSpecBySpecId: ', nodePackageSpecBySpecId);
 
   return updateNodePackageLibrary(nodePackageSpecBySpecId);
+};
+
+/**
+ *
+ * @param nodeId
+ * @returns true if there is an update
+ */
+export const checkForCartridgeUpdate = async (
+  nodeId: NodeId,
+): Promise<boolean> => {
+  // get node
+  // using node.url, fetch the latest version
+  // compare to node.spec.version
+  // if newer, update node.updateAvailable = true
+  const node: Node = getNode(nodeId);
+  if (node) {
+    const latestCartridge = await getCartridge(node.spec.specId);
+    logger.info(
+      `checkForCartridgeUpdate: latestCartridge: ${JSON.stringify(
+        latestCartridge,
+      )}`,
+    );
+    if (node.spec.version < latestCartridge.version) {
+      logger.info(
+        `checkForCartridgeUpdate: Node ${node.spec.displayName} has an update available`,
+      );
+      node.updateAvailable = true;
+      updateNode(node);
+      return true;
+    }
+    logger.info(
+      `checkForCartridgeUpdate: Node ${node.spec.displayName} does NOT have an update available`,
+    );
+  } else {
+    logger.error(`checkForCartridgeUpdate: Node ${nodeId} not found`);
+  }
+  node.updateAvailable = false;
+  updateNode(node);
+  return false; // throw
 };

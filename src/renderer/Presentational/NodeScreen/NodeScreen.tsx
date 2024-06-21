@@ -15,6 +15,7 @@ import {
   selectIsAvailableForPolling,
   selectSelectedNode,
 } from '../../state/node';
+import node from '../../state/node.js';
 import {
   useGetExecutionIsSyncingQuery,
   useGetExecutionLatestBlockQuery,
@@ -351,6 +352,7 @@ const NodeScreen = () => {
       // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
       synchronized: sIsSyncing === false && status === NodeStatus.running,
       updating: status === NodeStatus.updating,
+      updateAvailable: selectedNode.updateAvailable,
     },
     stats: {
       peers: sPeers,

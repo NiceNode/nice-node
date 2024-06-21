@@ -77,6 +77,7 @@ type Node = {
   lastStartedTimestampMs?: number;
   lastStoppedTimestampMs?: number;
   stoppedBy?: NodeStoppedBy;
+  updateAvailable?: boolean;
 };
 type NodeMap = Record<string, Node>;
 export type UserNodes = {

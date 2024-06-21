@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import electron from '../../../electronGlobal.js';
 import { useAppDispatch } from '../../../state/hooks';
 import { setModalState } from '../../../state/modal';
 import Button, { type ButtonProps } from '../Button/Button';
@@ -31,6 +32,7 @@ type HeaderProps = {
  */
 export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
   const {
+    nodeId,
     name,
     displayName,
     title,
@@ -199,17 +201,28 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
             <div className={popupContainer}>
               <Menu width={156}>
                 {screenType === 'client' && (
-                  <MenuItem
-                    text={g('NodeSettings')}
-                    onClick={() => {
-                      dispatch(
-                        setModalState({
-                          isModalOpen: true,
-                          screen: { route: 'nodeSettings', type: 'modal' },
-                        }),
-                      );
-                    }}
-                  />
+                  <>
+                    <MenuItem
+                      text={g('NodeSettings')}
+                      onClick={() => {
+                        dispatch(
+                          setModalState({
+                            isModalOpen: true,
+                            screen: { route: 'nodeSettings', type: 'modal' },
+                          }),
+                        );
+                      }}
+                    />
+                    <MenuItem
+                      text={g('CheckForUpdates')}
+                      onClick={async () => {
+                        // dispatch checkForUpdates, show loading icon?, then show success or error in-line?
+                        const isUpdateAvailable =
+                          await electron.checkForCartridgeUpdate(nodeId);
+                        console.log('isUpdateAvailable:', isUpdateAvailable);
+                      }}
+                    />
+                  </>
                 )}
                 {screenType === 'nodePackage' && (
                   <MenuItem
