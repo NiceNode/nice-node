@@ -6,7 +6,7 @@ All available [Node Specs on Github](https://github.com/NiceNode/nice-node/tree/
 
 ## Node Package Spec example
 
-The top level specificiation
+The top level specification
 
 ```json
 {
@@ -157,8 +157,8 @@ The top level specificiation
     }
   },
   "iconUrl": "https://ethereum.png",
-  "addNodeDescription": "Running a full etherum node is a two part story. Choosing minority clients are important for the health of the network.",
-  "description": "An Ethereum node holds a copy of the Ethereum blockchain and verifies the validity of every block, keeps it up-to-date with new blocks and thelps others to download and update their own copies of the chain. In the case of Ethereum a node consists of two parts: the execution client and the consensus client. These two clients work together to verify Ethereum's state. The execution client listens to new transactions broadcasted in the network, executes them in EVM, and holds the latest state and database of all current Ethereum data. The consensus client runs the Proof-of-Stake consensus algorithm, which enables the network to achieve agreement based on validated data from the execution client.  A non-validating node does not get financial rewards but there are many benefits of running a node for any Ethereum user to consider, including privacy, security, reduced reliance on third-party servers, censorship resistance and improved health and decentralization of the network.",
+  "addNodeDescription": "Running a full etherum node is a two part story. Choosing minority clients is important for the health of the network.",
+  "description": "An Ethereum node holds a copy of the Ethereum blockchain and verifies the validity of every block, keeps it up-to-date with new blocks and helps others to download and update their own copies of the chain. In the case of Ethereum a node consists of two parts: the execution client and the consensus client. These two clients work together to verify Ethereum's state. The execution client listens to new transactions broadcasted in the network, executes them in EVM, and holds the latest state and database of all current Ethereum data. The consensus client runs the Proof-of-Stake consensus algorithm, which enables the network to achieve agreement based on validated data from the execution client.  A non-validating node does not get financial rewards but there are many benefits of running a node for any Ethereum user to consider, including privacy, security, reduced reliance on third-party servers, censorship resistance and improved health and decentralization of the network.",
   "resources": [
     {
       "label": "Run your own node",
@@ -176,7 +176,7 @@ The top level specificiation
 
 ## Node (Service) Spec example
 
-The bottom level specificiation
+The bottom level specification
 
 ::: info
 Ignore references to binary (not currently supported)
