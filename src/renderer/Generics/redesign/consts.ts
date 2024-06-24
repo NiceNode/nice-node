@@ -56,6 +56,7 @@ export interface NodeOverviewProps {
   stats: ClientStatsProps;
   onAction?: (action: NodeAction) => void;
   description?: string;
+  documentation?: { default?: string; docker?: string; binary?: string; releaseNotesUrl?: string };
 }
 
 export interface SyncStatusProps {

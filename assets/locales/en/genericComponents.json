@@ -101,6 +101,8 @@
   "InstallUpdate": "Install Update",
   "Skip": "Skip",
   "ViewReleaseNotes": "View release notes",
+  "ViewNamedReleaseNotes": "View {{name}} release notes",
+  "ViewDetailedChanges": "View detailed changes...",
   "InitialSyncInProgress": "Initial sync in progress...",
   "NodeSettings": "Node Settings...",
   "RemoveNode": "Remove Node...",

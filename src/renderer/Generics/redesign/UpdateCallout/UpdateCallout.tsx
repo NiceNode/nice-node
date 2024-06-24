@@ -9,31 +9,53 @@ import {
 
 import Button from '../Button/Button';
 import ExternalLink from '../Link/ExternalLink';
+import InternalLink from '../Link/InternalLink.js';
 
 export interface UpdateCalloutProps {
   onClick: () => void;
+  serviceName: string;
+  releaseNotesUrl?: string;
+  onClickShowChanges?: () => void;
 }
 
-export const UpdateCallout = ({ onClick }: UpdateCalloutProps) => {
+export const UpdateCallout = ({
+  onClick,
+  serviceName,
+  releaseNotesUrl,
+  onClickShowChanges,
+}: UpdateCalloutProps) => {
   const { t: g } = useTranslation('genericComponents');
   const onInstallClick = () => {
     onClick();
     console.log('install action!');
   };
+  console.log('UpdateCallout releaseNotesUrl', releaseNotesUrl);
   return (
     <div className={container}>
-      <div className={title}>{g('UpdateClientDescription')}</div>
+      <div className={title}>{g('UpdateClient')}</div>
       <div className={description}>
         {g('UpdateClientDescription', {
-          client: 'test',
+          client: serviceName,
         })}
       </div>
-      <div className={link}>
-        <ExternalLink
-          text={g('ViewReleaseNotes')}
-          url="https://docs.docker.com/desktop/#download-and-install"
-        />
-      </div>
+      {releaseNotesUrl && (
+        <div className={link}>
+          <ExternalLink
+            text={g('ViewNamedReleaseNotes', {
+              name: serviceName,
+            })}
+            url={releaseNotesUrl}
+          />
+        </div>
+      )}
+      {onClickShowChanges && (
+        <div className={link}>
+          <InternalLink
+            text={g('ViewDetailedChanges')}
+            onClick={onClickShowChanges}
+          />
+        </div>
+      )}
       <div className={buttonContainer}>
         <Button
           type="primary"

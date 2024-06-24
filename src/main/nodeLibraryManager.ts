@@ -57,11 +57,11 @@ export const initialize = async () => {
 
 // todo: use user defined url if available
 const getCartridgePackages = async (): Promise<NodeSpecification[]> => {
-  // const cartridgePackagesApiURL = 'http://localhost:3000/api/cartridgePackage'
-  // const isHttp = true;
-  const cartridgePackagesApiURL =
-    'https://api.nicenode.xyz/api/cartridgePackage';
-  const isHttp = false;
+  const cartridgePackagesApiURL = 'http://localhost:3000/api/cartridgePackage'
+  const isHttp = true;
+  // const cartridgePackagesApiURL =
+  //   'https://api.nicenode.xyz/api/cartridgePackage';
+  // const isHttp = false;
   const cartridgePackages: NodeSpecification[] = (
     await httpGetJson(cartridgePackagesApiURL, isHttp)
   ).data;
@@ -76,10 +76,10 @@ const getCartridgePackages = async (): Promise<NodeSpecification[]> => {
 };
 
 const getCartridges = async (): Promise<NodeSpecification[]> => {
-  // const cartridgesApiURL = 'http://localhost:3000/api/cartridge'
-  // const isHttp = true;
-  const cartridgesApiURL = 'https://api.nicenode.xyz/api/cartridge';
-  const isHttp = false;
+  const cartridgesApiURL = 'http://localhost:3000/api/cartridge'
+  const isHttp = true;
+  // const cartridgesApiURL = 'https://api.nicenode.xyz/api/cartridge';
+  // const isHttp = false;
   const cartridges: NodeSpecification[] = (
     await httpGetJson(cartridgesApiURL, isHttp)
   ).data;

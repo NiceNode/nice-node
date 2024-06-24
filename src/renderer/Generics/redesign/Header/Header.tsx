@@ -41,6 +41,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
     status,
     version,
     onAction,
+    documentation,
   } = nodeOverview;
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
@@ -128,6 +129,13 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
               // biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
               <div className={popupContainer} tabIndex={0}>
                 <UpdateCallout
+                  // todo: pass http link to container release notes
+                  // todo: pass modal link for cartridge changes
+                  serviceName={displayName || name}
+                  releaseNotesUrl={documentation?.releaseNotesUrl}
+                  onClickShowChanges={() => {
+                    console.log('show change modal');
+                  }}
                   onClick={() => {
                     setIsCalloutDisplayed(false);
                     console.log('clicked!');

@@ -367,6 +367,7 @@ const NodeScreen = () => {
       diskTotal: sTotalDiskSize,
     },
     onAction: onNodeAction,
+    documentation: spec.documentation,
   };
 
   return (
