@@ -22,6 +22,8 @@ import {
   titleStyle,
   versionContainer,
 } from './header.css';
+import { modalRoutes } from '../../../Presentational/ModalManager/modalUtils.js';
+import { NodeSpecification } from '../../../../common/nodeSpec.js';
 
 type HeaderProps = {
   nodeOverview: NodeOverviewProps;
@@ -135,6 +137,15 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                   releaseNotesUrl={documentation?.releaseNotesUrl}
                   onClickShowChanges={() => {
                     console.log('show change modal');
+                    dispatch(
+                      setModalState({
+                        isModalOpen: true,
+                        screen: {
+                          route: modalRoutes.cartridgeUpdate,
+                          type: 'modal',
+                        },
+                      }),
+                    );
                   }}
                   onClick={() => {
                     setIsCalloutDisplayed(false);
@@ -225,8 +236,8 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                       text={g('CheckForUpdates')}
                       onClick={async () => {
                         // dispatch checkForUpdates, show loading icon?, then show success or error in-line?
-                        const isUpdateAvailable =
-                          await electron.checkForCartridgeUpdate(nodeId);
+                        const isUpdateAvailable: NodeSpecification | undefined =
+                          await electron.getCheckForCartridgeUpdate(nodeId);
                         console.log('isUpdateAvailable:', isUpdateAvailable);
                       }}
                     />

@@ -10,6 +10,12 @@ import {
 import Button from '../Button/Button';
 import ExternalLink from '../Link/ExternalLink';
 import InternalLink from '../Link/InternalLink.js';
+import { useAppSelector } from '../../../state/hooks.js';
+import { selectSelectedNode } from '../../../state/node.js';
+import { useEffect, useState } from 'react';
+import { NodeSpecification } from '../../../../common/nodeSpec.js';
+import electron from '../../../electronGlobal.js';
+import type Node from '../../../../common/node.js';
 
 export interface UpdateCalloutProps {
   onClick: () => void;
@@ -25,6 +31,32 @@ export const UpdateCallout = ({
   onClickShowChanges,
 }: UpdateCalloutProps) => {
   const { t: g } = useTranslation('genericComponents');
+  const sSelectedNode = useAppSelector(selectSelectedNode);
+  const [selectedNode, setSelectedNode] = useState<Node | undefined>(
+    sSelectedNode,
+  );
+  const [sLatestCartridge, setLatestCartridge] = useState<
+    NodeSpecification | undefined
+  >();
+  const [sChangeMessage, setChangeMessage] = useState<string>();
+
+  const getAndSetLatestCartridge = async () => {
+    const latestCartridgeIfNewerAvailable: NodeSpecification | undefined =
+      await electron.getCheckForCartridgeUpdate(selectedNode?.id);
+    if (latestCartridgeIfNewerAvailable) {
+      setLatestCartridge(latestCartridgeIfNewerAvailable);
+    }
+  };
+
+  useEffect(() => {
+    getAndSetLatestCartridge();
+  }, [selectedNode]);
+
+  useEffect(() => {
+    const changeMessage = gen(); // todo: spec tool gen func
+    setChangeMessage(changeMessage);
+  }, [sLatestCartridge]);
+
   const onInstallClick = () => {
     onClick();
     console.log('install action!');

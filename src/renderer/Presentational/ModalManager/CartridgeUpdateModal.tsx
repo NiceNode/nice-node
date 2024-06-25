@@ -1,17 +1,19 @@
+import { useState } from 'react';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
-import electron from '../../electronGlobal';
 import CartridgeUpdate from '../CartridgeUpdate/CartridgeUpdate.js';
 import { modalRoutes } from './modalUtils';
+import { type ModalConfig, modalOnChangeConfig } from './modalUtils';
 
 type Props = {
   modalOnClose: () => void;
 };
 
 export const CartridgeUpdateModal = ({ modalOnClose }: Props) => {
+  const [modalConfig, setModalConfig] = useState<ModalConfig>({});
+
   const buttonSaveLabel = 'I Understand';
 
   const modalOnSaveConfig = async () => {
-    // await electron.getSetHasSeenAlphaModal(true);
     console.log('close update changes!');
     modalOnClose();
   };
@@ -26,7 +28,17 @@ export const CartridgeUpdateModal = ({ modalOnClose }: Props) => {
       modalOnClose={modalOnClose}
       modalOnCancel={modalOnClose}
     >
-      <CartridgeUpdate />
+      <CartridgeUpdate
+        modalOnChangeConfig={(config, save) => {
+          modalOnChangeConfig(
+            config,
+            modalConfig,
+            setModalConfig,
+            save,
+            modalOnSaveConfig,
+          );
+        }}
+      />
     </Modal>
   );
 };

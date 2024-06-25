@@ -28,7 +28,7 @@ import {
   getMainProcessUsage,
   updateNodeLastSyncedBlock,
 } from './monitor';
-import { checkForCartridgeUpdate } from './nodeLibraryManager.js';
+import { getCheckForCartridgeUpdate } from './nodeLibraryManager.js';
 import {
   addNode,
   deleteNodeStorage,
@@ -201,8 +201,8 @@ export const initialize = () => {
   // Node library
   ipcMain.handle('getNodeLibrary', getNodeLibrary);
   ipcMain.handle('getNodePackageLibrary', getNodePackageLibrary);
-  ipcMain.handle('checkForCartridgeUpdate', (_event, nodeId: NodeId) => {
-    return checkForCartridgeUpdate(nodeId);
+  ipcMain.handle('getCheckForCartridgeUpdate', (_event, nodeId: NodeId) => {
+    return getCheckForCartridgeUpdate(nodeId);
   });
 
   // Podman

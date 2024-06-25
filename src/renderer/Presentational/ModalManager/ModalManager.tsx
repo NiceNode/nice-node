@@ -11,6 +11,7 @@ import { PreferencesModal } from './PreferencesModal';
 import { RemoveNodeModal } from './RemoveNodeModal';
 import { ResetConfigModal } from './ResetConfigModal';
 import { modalRoutes } from './modalUtils';
+import { CartridgeUpdateModal } from './CartridgeUpdateModal.js';
 
 const ModalManager = () => {
   const { isModalOpen, screen } = useSelector(getModalState);
@@ -34,6 +35,8 @@ const ModalManager = () => {
     // Modals
     case modalRoutes.addNode:
       return <AddNodeModal modalOnClose={modalOnClose} />;
+    case modalRoutes.cartridgeUpdate:
+      return <CartridgeUpdateModal modalOnClose={modalOnClose} />;
     case modalRoutes.nodeSettings:
       return <NodeSettingsModal modalOnClose={modalOnClose} />;
     case modalRoutes.preferences:

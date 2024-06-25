@@ -223,38 +223,39 @@ export const updateLocalNodeAndPackageLibrary = async () => {
 /**
  *
  * @param nodeId
- * @returns true if there is an update
+ * @returns latest cartridge if there is a new version, or undefined if
+ * there is no update
  */
-export const checkForCartridgeUpdate = async (
+export const getCheckForCartridgeUpdate = async (
   nodeId: NodeId,
-): Promise<boolean> => {
+): Promise<NodeSpecification | undefined> => {
   // get node
   // using node.url, fetch the latest version
   // compare to node.spec.version
   // if newer, update node.updateAvailable = true
   const node: Node = getNode(nodeId);
   if (node) {
-    const latestCartridge = await getCartridge(node.spec.specId);
+    const latestCartridge: NodeSpecification = await getCartridge(node.spec.specId);
     logger.info(
-      `checkForCartridgeUpdate: latestCartridge: ${JSON.stringify(
+      `getCheckForCartridgeUpdate: latestCartridge: ${JSON.stringify(
         latestCartridge,
       )}`,
     );
     if (node.spec.version < latestCartridge.version) {
       logger.info(
-        `checkForCartridgeUpdate: Node ${node.spec.displayName} has an update available`,
+        `getCheckForCartridgeUpdate: Node ${node.spec.displayName} has an update available`,
       );
       node.updateAvailable = true;
       updateNode(node);
-      return true;
+      return latestCartridge;
     }
     logger.info(
-      `checkForCartridgeUpdate: Node ${node.spec.displayName} does NOT have an update available`,
+      `getCheckForCartridgeUpdate: Node ${node.spec.displayName} does NOT have an update available`,
     );
   } else {
-    logger.error(`checkForCartridgeUpdate: Node ${nodeId} not found`);
+    logger.error(`getCheckForCartridgeUpdate: Node ${nodeId} not found`);
   }
   node.updateAvailable = false;
   updateNode(node);
-  return false; // throw
+  return undefined; // throw
 };

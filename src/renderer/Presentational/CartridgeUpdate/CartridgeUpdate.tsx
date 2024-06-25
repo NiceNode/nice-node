@@ -35,4 +35,4 @@ const CartridgeUpdate = ({ message }: { message: string }) => {
   );
 };
 
-export default AlphaBuild;
+export default CartridgeUpdate;
