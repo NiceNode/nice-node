@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import type { NodeSpecification } from '../../../../common/nodeSpec.js';
+import { modalRoutes } from '../../../Presentational/ModalManager/modalUtils.js';
 import electron from '../../../electronGlobal.js';
 import { useAppDispatch } from '../../../state/hooks';
 import { setModalState } from '../../../state/modal';
@@ -22,8 +24,6 @@ import {
   titleStyle,
   versionContainer,
 } from './header.css';
-import { modalRoutes } from '../../../Presentational/ModalManager/modalUtils.js';
-import { NodeSpecification } from '../../../../common/nodeSpec.js';
 
 type HeaderProps = {
   nodeOverview: NodeOverviewProps;

@@ -57,7 +57,7 @@ export const initialize = async () => {
 
 // todo: use user defined url if available
 const getCartridgePackages = async (): Promise<NodeSpecification[]> => {
-  const cartridgePackagesApiURL = 'http://localhost:3000/api/cartridgePackage'
+  const cartridgePackagesApiURL = 'http://localhost:3000/api/cartridgePackage';
   const isHttp = true;
   // const cartridgePackagesApiURL =
   //   'https://api.nicenode.xyz/api/cartridgePackage';
@@ -76,7 +76,7 @@ const getCartridgePackages = async (): Promise<NodeSpecification[]> => {
 };
 
 const getCartridges = async (): Promise<NodeSpecification[]> => {
-  const cartridgesApiURL = 'http://localhost:3000/api/cartridge'
+  const cartridgesApiURL = 'http://localhost:3000/api/cartridge';
   const isHttp = true;
   // const cartridgesApiURL = 'https://api.nicenode.xyz/api/cartridge';
   // const isHttp = false;
@@ -235,7 +235,9 @@ export const getCheckForCartridgeUpdate = async (
   // if newer, update node.updateAvailable = true
   const node: Node = getNode(nodeId);
   if (node) {
-    const latestCartridge: NodeSpecification = await getCartridge(node.spec.specId);
+    const latestCartridge: NodeSpecification = await getCartridge(
+      node.spec.specId,
+    );
     logger.info(
       `getCheckForCartridgeUpdate: latestCartridge: ${JSON.stringify(
         latestCartridge,

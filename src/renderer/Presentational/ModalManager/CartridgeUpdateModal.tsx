@@ -11,7 +11,7 @@ type Props = {
 export const CartridgeUpdateModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
 
-  const buttonSaveLabel = 'I Understand';
+  const buttonSaveLabel = 'Close';
 
   const modalOnSaveConfig = async () => {
     console.log('close update changes!');
@@ -21,10 +21,13 @@ export const CartridgeUpdateModal = ({ modalOnClose }: Props) => {
   return (
     <Modal
       route={modalRoutes.cartridgeUpdate}
-      modalType="info"
+      modalTitle={'Controller Changes'}
+      modalType="modal"
+      modalStyle="controllerUpdate" // adds scrolling to the modal content
       backButtonEnabled={false}
       buttonSaveLabel={buttonSaveLabel}
       modalOnSaveConfig={modalOnSaveConfig}
+      buttonSaveType="secondary"
       modalOnClose={modalOnClose}
       modalOnCancel={modalOnClose}
     >

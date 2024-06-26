@@ -5,13 +5,13 @@ import { useAppDispatch } from '../../state/hooks';
 import { getModalState, setModalState } from '../../state/modal';
 import { AddNodeModal } from './AddNodeModal';
 import { AlphaBuildModal } from './AlphaBuildModal';
+import { CartridgeUpdateModal } from './CartridgeUpdateModal.js';
 import FailSystemRequirementsModal from './FailSystemRequirementsModal';
 import { NodeSettingsModal } from './NodeSettingsModal';
 import { PreferencesModal } from './PreferencesModal';
 import { RemoveNodeModal } from './RemoveNodeModal';
 import { ResetConfigModal } from './ResetConfigModal';
 import { modalRoutes } from './modalUtils';
-import { CartridgeUpdateModal } from './CartridgeUpdateModal.js';
 
 const ModalManager = () => {
   const { isModalOpen, screen } = useSelector(getModalState);

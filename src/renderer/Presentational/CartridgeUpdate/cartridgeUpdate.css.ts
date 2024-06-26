@@ -4,7 +4,7 @@ import { common } from '../../Generics/redesign/theme.css';
 export const container = style({
   display: 'flex',
   flexDirection: 'column',
-  width: 380,
+  width: 624,
 });
 
 export const topBanner = style({
