@@ -40,6 +40,7 @@ import {
   stopNode,
   stopSendingNodeLogs,
 } from './nodeManager';
+import { applyNodeUpdate } from './nodeManager.js';
 import {
   type AddNodePackageNodeService,
   addNodePackage,
@@ -203,6 +204,9 @@ export const initialize = () => {
   ipcMain.handle('getNodePackageLibrary', getNodePackageLibrary);
   ipcMain.handle('getCheckForCartridgeUpdate', (_event, nodeId: NodeId) => {
     return getCheckForCartridgeUpdate(nodeId);
+  });
+  ipcMain.handle('applyNodeUpdate', (_event, nodeId: NodeId) => {
+    return applyNodeUpdate(nodeId);
   });
 
   // Podman

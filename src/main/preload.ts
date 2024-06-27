@@ -7,7 +7,6 @@ import type {
   NodeSpecification,
 } from '../common/nodeSpec';
 import { CHANNELS_ARRAY } from './messenger';
-import { getCheckForCartridgeUpdate } from './nodeLibraryManager.js';
 import type { AddNodePackageNodeService } from './nodePackageManager';
 import type { ThemeSetting } from './state/settings';
 
@@ -125,6 +124,8 @@ contextBridge.exposeInMainWorld('electron', {
   getNodePackageLibrary: () => ipcRenderer.invoke('getNodePackageLibrary'),
   getCheckForCartridgeUpdate: (nodeId: NodeId) =>
     ipcRenderer.invoke('getCheckForCartridgeUpdate', nodeId),
+  applyNodeUpdate: (nodeId: NodeId) =>
+    ipcRenderer.invoke('applyNodeUpdate', nodeId),
 
   // Podman
   getIsPodmanInstalled: () => ipcRenderer.invoke('getIsPodmanInstalled'),

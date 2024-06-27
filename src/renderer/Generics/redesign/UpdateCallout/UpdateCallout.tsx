@@ -12,14 +12,14 @@ import ExternalLink from '../Link/ExternalLink';
 import InternalLink from '../Link/InternalLink.js';
 
 export interface UpdateCalloutProps {
-  onClick: () => void;
+  onClickInstallUpdate: () => void;
   serviceName: string;
   releaseNotesUrl?: string;
   onClickShowChanges?: () => void;
 }
 
 export const UpdateCallout = ({
-  onClick,
+  onClickInstallUpdate,
   serviceName,
   releaseNotesUrl,
   onClickShowChanges,
@@ -27,8 +27,8 @@ export const UpdateCallout = ({
   const { t: g } = useTranslation('genericComponents');
 
   const onInstallClick = () => {
-    onClick();
-    console.log('install action!');
+    onClickInstallUpdate();
+    console.log('install update clicked!');
   };
   console.log('UpdateCallout releaseNotesUrl', releaseNotesUrl);
   return (

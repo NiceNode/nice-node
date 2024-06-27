@@ -7,16 +7,19 @@ import {
   createNode,
   isDockerNode,
 } from '../common/node';
+import { calcNewControllerConfig } from '../common/node-spec-tool/updateActiveControllerConfig.js';
 import type {
   ConfigTranslationMap,
   ConfigValuesMap,
 } from '../common/nodeConfig';
 
 import type { NodeSpecification } from '../common/nodeSpec';
+import { NOTIFICATIONS } from './consts/notifications.js';
 import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
 import logger from './logger';
 import { setLastRunningTime } from './node/setLastRunningTime';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
+import { getCheckForCartridgeUpdate } from './nodeLibraryManager.js';
 import {
   createRunCommand,
   sendLogsToUI as dockerSendLogsToUI,
@@ -32,6 +35,8 @@ import { checkNodePortsAndNotify } from './ports';
 import { getNodeLibrary } from './state/nodeLibrary';
 import * as nodeStore from './state/nodes';
 import { getSetPortHasChanged } from './state/nodes';
+import { getNode } from './state/nodes.js';
+import { addNotification } from './state/notifications.js';
 
 export const addNode = async (
   nodeSpec: NodeSpecification,
@@ -267,6 +272,72 @@ const compareSpecsAndUpdate = (
       node.spec.configTranslation = nodeLibraryConfigTranslation;
     }
   }
+};
+
+/**
+ * Node status must be stopped
+ * Calls calcNewControllerConfig to get the new config, then updates the node.spec to newSpec.
+ * Todo: restart the node if it was running before the update
+ * @param nodeId
+ * @param newSpec
+ */
+export const applyNodeUpdate = async (nodeId: NodeId): Promise<boolean> => {
+  // todo: could put this check after stopping?
+  const newSpec = await getCheckForCartridgeUpdate(nodeId);
+  const node = getNode(nodeId);
+  if (newSpec === undefined) {
+    logger.error('Unable to update node. No newer controller found.');
+    addNotification(
+      NOTIFICATIONS.WARNING.NODE_UPDATE_ERROR,
+      `No update found for Node ${node.spec.displayName}.`,
+    );
+    return false;
+  }
+  const isRunningBeforeUpdate = node.status === NodeStatus.running;
+  if (node.status !== NodeStatus.stopped) {
+    await stopNode(nodeId, NodeStoppedBy.nodeUpdate);
+  }
+  if (
+    node.status !== NodeStatus.stopped &&
+    node.status !== NodeStatus.errorStopping
+  ) {
+    addNotification(
+      NOTIFICATIONS.WARNING.NODE_UPDATE_ERROR,
+      `Unable to stop Node ${node.spec.displayName} before updating.`,
+    );
+    throw new Error(
+      'Unable to stop node before updating. Node is not stopped or is not error stopping.',
+    );
+  }
+
+  node.status = NodeStatus.updating;
+  nodeStore.updateNode(node);
+
+  // Get the new config - removes unsupported config values, etc.
+  const newConfigValuesMap = calcNewControllerConfig(
+    newSpec,
+    node.config.configValuesMap,
+  );
+  node.config.configValuesMap = newConfigValuesMap;
+  node.spec = newSpec;
+  node.updateAvailable = false;
+  if (!isRunningBeforeUpdate) {
+    node.status = NodeStatus.stopped;
+  }
+  nodeStore.updateNode(node);
+
+  // Successful update notification
+  addNotification(
+    NOTIFICATIONS.COMPLETED.NODE_UPDATED,
+    `Node ${node.spec.displayName} has been updated successfully.`,
+  );
+
+  if (isRunningBeforeUpdate) {
+    // todo: wait to see if successful before creating notification?
+    startNode(nodeId);
+  }
+
+  return true;
 };
 
 /**

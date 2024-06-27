@@ -147,9 +147,9 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                       }),
                     );
                   }}
-                  onClick={() => {
+                  onClickInstallUpdate={() => {
                     setIsCalloutDisplayed(false);
-                    console.log('clicked!');
+                    electron.applyNodeUpdate(nodeId);
                   }}
                 />
               </div>

@@ -45,6 +45,12 @@ export const NOTIFICATIONS = Object.freeze({
       status: STATUS.COMPLETED,
       limit: 0,
     },
+    NODE_UPDATED: {
+      title: 'Node Update Completed',
+      description: 'Node update was completed successfully.',
+      status: STATUS.COMPLETED,
+      limit: 0,
+    },
   },
   DOWNLOAD: {
     UPDATE_AVAILABLE: {
@@ -76,6 +82,12 @@ export const NOTIFICATIONS = Object.freeze({
     UNEXPECTED_PORTS_OPEN: {
       title: 'UnexpectedPortsOpenTitle',
       description: 'UnexpectedPortsOpenDescription',
+      status: STATUS.WARNING,
+      limit: 0,
+    },
+    NODE_UPDATE_ERROR: {
+      title: 'Node Update Error',
+      description: 'A error occurred while updating the node',
       status: STATUS.WARNING,
       limit: 0,
     },
