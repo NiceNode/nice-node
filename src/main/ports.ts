@@ -114,6 +114,7 @@ export const assignPortsToNode = (node: Node): Node => {
     'p2pPortsTcp',
     'webSocketsPort',
     'quicPortUdp',
+    'quicPort',
   ]; // Add other relevant port types
 
   const executionService = getNodePackageByServiceNodeId(
@@ -188,7 +189,13 @@ export const didPortsChange = (
 ): boolean => {
   if (!node || !node.spec || !node.spec.configTranslation) return false;
 
-  const baseKeys = ['httpPort', 'enginePort', 'webSocketsPort', 'quicPortUdp'];
+  const baseKeys = [
+    'httpPort',
+    'enginePort',
+    'webSocketsPort',
+    'quicPortUdp',
+    'quicPort',
+  ];
   const p2pKeys = ['p2pPortsUdp', 'p2pPortsTcp', 'gRpcPort'];
 
   const hasBaseKeyChanged = baseKeys.some((key) => {

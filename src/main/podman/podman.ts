@@ -412,6 +412,7 @@ const createPodmanPortInput = (
     httpPort,
     webSocketsPort,
     quicPortUdp = undefined,
+    quicPort = undefined,
     gRpcPort,
   } = configTranslation;
   const {
@@ -422,6 +423,7 @@ const createPodmanPortInput = (
     httpPort: configHttpPort,
     webSocketsPort: configWsPort,
     quicPortUdp: configQuicPortUdp,
+    quicPort: configQuicPort,
     gRpcPort: configGRpcPort,
   } = configValuesMap || {};
   const result = [];
@@ -464,9 +466,14 @@ const createPodmanPortInput = (
   }
 
   // Handle quic port if it exists (only lighthouse)
-  const quicPortValue = configQuicPortUdp || quicPortUdp?.defaultValue;
+  const quicPortUdpValue = configQuicPortUdp || quicPortUdp?.defaultValue;
+  if (quicPortUdpValue) {
+    result.push(`-p ${quicPortUdpValue}:${quicPortUdpValue}/udp`);
+  }
+
+  const quicPortValue = configQuicPort || quicPort?.defaultValue;
   if (quicPortValue) {
-    result.push(`-p ${quicPortValue}:${quicPortValue}/udp`);
+    result.push(`-p ${quicPortValue}:${quicPortValue}`);
   }
 
   // Handle grpc port

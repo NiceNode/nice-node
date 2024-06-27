@@ -13,7 +13,7 @@
         "websockets": "Enabled",
         "executionEndpoint": "http://host.containers.internal",
         "network": "Mainnet",
-        "quicPort": "Enabled",
+        "quic": "Enabled",
         "quicPortUdp": "9001"
       },
       "docker": {
@@ -114,7 +114,7 @@
       "infoDescription": "NiceNode requires http connections",
       "documentation": "https://lighthouse-book.sigmaprime.io/api-bn.html#starting-the-server"
     },
-    "quicPort": {
+    "quic": {
       "displayName": "QUIC Connections",
       "uiControl": {
         "type": "select/single",
