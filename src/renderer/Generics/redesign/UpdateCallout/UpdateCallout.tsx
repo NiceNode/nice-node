@@ -33,9 +33,11 @@ export const UpdateCallout = ({
   console.log('UpdateCallout releaseNotesUrl', releaseNotesUrl);
   return (
     <div className={container}>
-      <div className={title}>{g('UpdateClient')}</div>
+      <div className={title}>
+        {g('UpdateNamedClient', { client: serviceName })}
+      </div>
       <div className={description}>
-        {g('UpdateClientDescription', {
+        {g('UpdateStopClient', {
           client: serviceName,
         })}
       </div>
@@ -65,7 +67,7 @@ export const UpdateCallout = ({
           size="small"
           onClick={onInstallClick}
         />
-        <Button wide label={g('Skip')} size="small" onClick={onClick} />
+        {/* <Button wide label={g('Skip')} size="small" onClick={onClick} /> */}
       </div>
     </div>
   );

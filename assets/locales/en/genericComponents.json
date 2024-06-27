@@ -97,6 +97,8 @@
   "SetUp": "Set up",
   "SkipForNow": "Skip for now",
   "UpdateClient": "Update your client",
+  "UpdateNamedClient": "Update {{client}}",
+  "UpdateStopClient": "{{client}} will stop momentarily.",
   "UpdateClientDescription": "{{client}} has been downloaded and is ready to install.",
   "InstallUpdate": "Install Update",
   "Skip": "Skip",

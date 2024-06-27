@@ -40,7 +40,7 @@ export const calcUserSpecDiff = (
   }
   if (oldSpecExecution.defaultImageTag !== newSpecExecution.defaultImageTag) {
     diffs.push({
-      message: `Version: ${oldSpecExecution.defaultImageTag} -> ${newSpecExecution.defaultImageTag}`,
+      message: `${newSpec.displayName} Version: ${oldSpecExecution.defaultImageTag} -> ${newSpecExecution.defaultImageTag}`,
     });
   }
   /////// [end] Execution
