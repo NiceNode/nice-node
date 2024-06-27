@@ -17,6 +17,7 @@ import { reportEvent } from './events';
 import i18nMain from './i18nMain';
 import logger from './logger';
 import { getFailSystemRequirements } from './minSystemRequirement';
+import { updateLocalNodeAndPackageLibrary } from './nodeLibraryManager.js';
 import { removeAllNodePackages } from './nodePackageManager';
 import nuclearUninstall from './nuclearUninstall';
 import uninstallPodman from './podman/uninstall/uninstall';
@@ -285,6 +286,12 @@ export default class MenuBuilder {
             checkForPodmanUpdate();
           },
         },
+        {
+          label: t('Check for Node Updates'),
+          click() {
+            updateLocalNodeAndPackageLibrary();
+          },
+        },
       ],
     };
 
@@ -447,6 +454,12 @@ export default class MenuBuilder {
             label: t('Update Podman'),
             click() {
               checkForPodmanUpdate();
+            },
+          },
+          {
+            label: t('Check for Node Updates'),
+            click() {
+              updateLocalNodeAndPackageLibrary();
             },
           },
         ],

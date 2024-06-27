@@ -273,12 +273,12 @@
           {
             "value": "full",
             "config": "--prune=hrtc",
-            "info": "~800GB / ~2d"
+            "info": "~2TB / ~2d"
           },
           {
             "value": "archive",
             "config": "",
-            "info": "~16TB"
+            "info": "~3.5TB"
           }
         ]
       },
