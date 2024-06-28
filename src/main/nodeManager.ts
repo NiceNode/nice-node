@@ -7,6 +7,7 @@ import {
   createNode,
   isDockerNode,
 } from '../common/node';
+import { injectDefaultControllerConfig } from '../common/node-spec-tool/injectDefaultControllerConfig.js';
 import { calcNewControllerConfig } from '../common/node-spec-tool/updateActiveControllerConfig.js';
 import type {
   ConfigTranslationMap,
@@ -312,6 +313,9 @@ export const applyNodeUpdate = async (nodeId: NodeId): Promise<boolean> => {
 
   node.status = NodeStatus.updating;
   nodeStore.updateNode(node);
+
+  // This should always be run before calcNewControllerConfig
+  injectDefaultControllerConfig(newSpec);
 
   // Get the new config - removes unsupported config values, etc.
   const newConfigValuesMap = calcNewControllerConfig(

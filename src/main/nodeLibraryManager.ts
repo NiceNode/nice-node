@@ -34,6 +34,7 @@ import nitrov1 from '../common/NodeSpecs/nitro/nitro-v1.0.0.json';
 import homeAssistantServicev1 from '../common/NodeSpecs/home-assistant-service/home-assistant-service-v1.0.0.json';
 import itzgMinecraftv1 from '../common/NodeSpecs/itzg-minecraft/itzg-minecraft-v1.0.0.json';
 
+import { injectDefaultControllerConfig } from '../common/node-spec-tool/injectDefaultControllerConfig.js';
 import type { NodeId } from '../common/node.js';
 import type Node from '../common/node.js';
 import type {
@@ -170,34 +171,8 @@ export const updateLocalNodeAndPackageLibrary = async () => {
         nodeSpec.configTranslation = {};
       }
 
-      // "inject" serviceVersion and dataDir (todo) here. Universal for all nodes.
-      const execution = nodeSpec.execution as PodmanExecution;
-      let defaultImageTag = 'latest';
-      // if the defaultImageTag is set in the spec use that, otherwise 'latest'
-      if (execution.defaultImageTag !== undefined) {
-        defaultImageTag = execution.defaultImageTag;
-      }
-
-      nodeSpec.configTranslation.cliInput = {
-        displayName: `${spec.displayName} CLI input`,
-        uiControl: {
-          type: 'text',
-        },
-        defaultValue: '',
-        addNodeFlow: 'advanced',
-        infoDescription: 'Additional CLI input',
-      };
-
-      nodeSpec.configTranslation.serviceVersion = {
-        displayName: `${spec.displayName} version`,
-        uiControl: {
-          type: 'text',
-        },
-        defaultValue: defaultImageTag,
-        addNodeFlow: 'advanced',
-        infoDescription:
-          'Caution Advised! Example value: latest, v1.0.0, stable. Consult service documentation for available versions.',
-      };
+      // "inject" cliInput, serviceVersion, etc here. Universal for all nodes. dataDir (todo?)
+      injectDefaultControllerConfig(nodeSpec);
 
       nodeSpecBySpecId[spec.specId] = nodeSpec;
     } catch (err) {

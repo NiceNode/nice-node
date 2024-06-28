@@ -16,6 +16,10 @@ import type { NodeSpecification } from '../nodeSpec.js';
     //      if it is not in the options, delete the key from the config.
     // If the key exists but the type changes, delete the key from the config. (should we do?)
 
+    // Special cases: `serviceVersion` is updated to the spec's execution.defaultImageTag
+
+    This function should be run AFTER injectDefaultControllerConfig() is called on the newSpec.
+
     // Todo: New required config? notify user after or before update?
  * @param newSpec
  * @param currentControllerConfig

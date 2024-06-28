@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { injectDefaultControllerConfig } from '../../../common/node-spec-tool/injectDefaultControllerConfig.js';
 import {
   type UserSpecDiff,
   calcUserSpecDiff,
@@ -49,6 +50,9 @@ const CartridgeUpdate = () => {
   useEffect(() => {
     let newSpecDiffs;
     if (selectedNode?.spec && sLatestCartridge) {
+      // This should always be run before calcUserSpecDiff
+      //  otherwise default config not included in the newSpec will show as removed
+      injectDefaultControllerConfig(sLatestCartridge);
       newSpecDiffs = calcUserSpecDiff(selectedNode?.spec, sLatestCartridge);
     }
     setUserSpecDiffs(newSpecDiffs);
