@@ -21,7 +21,7 @@ export const CartridgeUpdateModal = ({ modalOnClose }: Props) => {
   return (
     <Modal
       route={modalRoutes.cartridgeUpdate}
-      modalTitle={'Controller Changes'}
+      modalTitle={'Update Changes'}
       modalType="modal"
       modalStyle="controllerUpdate" // adds scrolling to the modal content
       backButtonEnabled={false}

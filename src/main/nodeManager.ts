@@ -285,32 +285,34 @@ const compareSpecsAndUpdate = (
 export const applyNodeUpdate = async (nodeId: NodeId): Promise<boolean> => {
   // todo: could put this check after stopping?
   const newSpec = await getCheckForCartridgeUpdate(nodeId);
-  const node = getNode(nodeId);
+  let node = getNode(nodeId);
   if (newSpec === undefined) {
     logger.error('Unable to update node. No newer controller found.');
     addNotification(
-      NOTIFICATIONS.WARNING.NODE_UPDATE_ERROR,
-      `No update found for Node ${node.spec.displayName}.`,
+      NOTIFICATIONS.WARNING.CLIENT_UPDATE_ERROR,
+      node.spec.displayName,
     );
     return false;
   }
   const isRunningBeforeUpdate = node.status === NodeStatus.running;
   if (node.status !== NodeStatus.stopped) {
     await stopNode(nodeId, NodeStoppedBy.nodeUpdate);
+    node = getNode(nodeId);
   }
   if (
     node.status !== NodeStatus.stopped &&
     node.status !== NodeStatus.errorStopping
   ) {
     addNotification(
-      NOTIFICATIONS.WARNING.NODE_UPDATE_ERROR,
-      `Unable to stop Node ${node.spec.displayName} before updating.`,
+      NOTIFICATIONS.WARNING.CLIENT_UPDATE_ERROR,
+      node.spec.displayName,
     );
     throw new Error(
       'Unable to stop node before updating. Node is not stopped or is not error stopping.',
     );
   }
 
+  node = getNode(nodeId);
   node.status = NodeStatus.updating;
   nodeStore.updateNode(node);
 
@@ -332,8 +334,8 @@ export const applyNodeUpdate = async (nodeId: NodeId): Promise<boolean> => {
 
   // Successful update notification
   addNotification(
-    NOTIFICATIONS.COMPLETED.NODE_UPDATED,
-    `Node ${node.spec.displayName} has been updated successfully.`,
+    NOTIFICATIONS.COMPLETED.CLIENT_UPDATED,
+    node.spec.displayName,
   );
 
   if (isRunningBeforeUpdate) {

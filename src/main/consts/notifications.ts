@@ -40,23 +40,9 @@ export const NOTIFICATIONS = Object.freeze({
   },
   COMPLETED: {
     CLIENT_UPDATED: {
-      title: 'Client successfuly updated',
-      description: 'consensus client',
+      title: 'ClientSuccessfulyUpdatedTitle',
+      description: 'ClientSuccessfulyUpdatedDescription',
       status: STATUS.COMPLETED,
-      limit: 0,
-    },
-    NODE_UPDATED: {
-      title: 'Node Update Completed',
-      description: 'Node update was completed successfully.',
-      status: STATUS.COMPLETED,
-      limit: 0,
-    },
-  },
-  DOWNLOAD: {
-    UPDATE_AVAILABLE: {
-      title: 'Client successfuly updated',
-      description: 'consensus client',
-      status: STATUS.DOWNLOAD,
       limit: 0,
     },
   },
@@ -85,9 +71,9 @@ export const NOTIFICATIONS = Object.freeze({
       status: STATUS.WARNING,
       limit: 0,
     },
-    NODE_UPDATE_ERROR: {
-      title: 'Node Update Error',
-      description: 'A error occurred while updating the node',
+    CLIENT_UPDATE_ERROR: {
+      title: 'ClientUpdateErrorTitle',
+      description: 'ClientUpdateErrorDescription',
       status: STATUS.WARNING,
       limit: 0,
     },

@@ -333,5 +333,10 @@
       "defaultValue": "localhost,host.containers.internal"
     }
   },
+  "documentation": {
+    "default": "https://geth.ethereum.org/",
+    "docker": "https://geth.ethereum.org/docs/getting-started/installing-geth#docker-container",
+    "releaseNotesUrl": "https://github.com/ethereum/go-ethereum/releases"
+  },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/geth-logo.png"
 }

@@ -117,7 +117,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
             }}
           >
             <Button
-              label={g('UpdateAvailable')}
+              label={g('Update')}
               type="primary"
               iconId="down"
               variant="icon-right"
@@ -236,6 +236,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                       text={g('CheckForUpdates')}
                       onClick={async () => {
                         // dispatch checkForUpdates, show loading icon?, then show success or error in-line?
+                        setIsSettingsDisplayed(false);
                         const isUpdateAvailable: NodeSpecification | undefined =
                           await electron.getCheckForCartridgeUpdate(nodeId);
                         console.log('isUpdateAvailable:', isUpdateAvailable);

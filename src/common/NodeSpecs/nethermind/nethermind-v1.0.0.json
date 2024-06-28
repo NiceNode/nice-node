@@ -303,7 +303,8 @@
         "type": "text"
       },
       "infoDescription": "Set to lower number to use less bandwidth",
-      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/configuration/network"
+      "documentation": "https://docs.nethermind.io/nethermind/ethereum-client/configuration/network",
+      "releaseNotesUrl": "https://github.com/NethermindEth/nethermind/releases"
     }
   },
   "documentation": {
