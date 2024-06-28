@@ -1,4 +1,6 @@
 {
+  "macOSTitle": "MacOS version is at least {{minVersion}} to run Podman 5.0",
+  "macOSDescription": "MacOS version: {{version}}",
   "processorCoresTitle": "Processor has {{minCores}} cores or more",
   "processorCoresDescription": "Processor cores: {{cores}}",
   "memorySizeTitle": "At least {{minSize}}GB of system memory (RAM)",

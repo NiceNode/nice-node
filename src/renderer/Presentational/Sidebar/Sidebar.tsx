@@ -75,56 +75,29 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       },
     ];
 
-    // const nodeListObject = { nodeService: [], validator: [], singleClients: [] };
-    // sUserNodes?.nodeIds.forEach((nodeId: NodeId) => {
-    //   const node = sUserNodes.nodes[nodeId];
-    //   // TODO: add validator logic here eventually
-    //   if (
-    //     node.spec.category === 'L1/ExecutionClient' ||
-    //     node.spec.category === 'L1/ConsensusClient/BeaconNode'
-    //   ) {
-    //     nodeListObject.nodeService.push(node);
-    //   } else {
-    //     nodeListObject.singleClients.push(node);
-    //   }
-    // });
+    const bannerConfigs = [
+      { key: 'offline', condition: offline, props: { offline: true } },
+      {
+        key: 'updateAvailable',
+        condition: updateAvailable,
+        props: { updateAvailable: true, onClick: onClickInstallPodman },
+      },
+      {
+        key: 'podmanNotInstalled',
+        condition: !podmanInstalled,
+        props: { podmanInstalled: false, onClick: onClickInstallPodman },
+      },
+      {
+        key: 'podmanStopped',
+        condition: podmanInstalled && podmanStopped,
+        props: { podmanStopped: true, onClick: onClickStartPodman },
+      },
+    ];
 
-    const onClickBanner = () => {
-      if (podmanInstalled) {
-        onClickStartPodman();
-      } else {
-        onClickInstallPodman();
-      }
-    };
+    const banners = bannerConfigs
+      .filter((config) => config.condition)
+      .map((config) => <Banner key={config.key} {...config.props} />);
 
-    const banners = [];
-    const bannerProps = {
-      updateAvailable,
-      offline,
-    };
-    Object.keys(bannerProps).forEach((key, index) => {
-      if (bannerProps[key as keyof typeof bannerProps]) {
-        // ^ not sure if this is correct
-        banners.push(
-          <Banner
-            key={key + index.toString()}
-            offline={false}
-            updateAvailable={false}
-            {...{ [key]: true }}
-          />,
-        );
-      }
-    });
-    if (!podmanInstalled || podmanStopped) {
-      banners.push(
-        <Banner
-          key={'podmanInstalledOrStopped'}
-          podmanStopped={podmanStopped}
-          podmanInstalled={podmanInstalled}
-          onClick={onClickBanner}
-        />,
-      );
-    }
     const navigate = useNavigate();
 
     return (

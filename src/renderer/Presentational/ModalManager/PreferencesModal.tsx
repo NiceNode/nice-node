@@ -78,6 +78,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
   return (
     <Modal
       modalTitle={modalTitle}
+      modalStyle="preferences"
       buttonSaveLabel={buttonSaveLabel}
       modalOnSaveConfig={modalOnSaveConfig}
       modalOnClose={modalOnClose}

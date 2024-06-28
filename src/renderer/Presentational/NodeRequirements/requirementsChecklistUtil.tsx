@@ -14,6 +14,23 @@ import { bytesToGB } from '../../utils';
 import type { NodeRequirementsProps } from './NodeRequirements';
 import { findSystemStorageDetailsAtALocation } from './nodeStorageUtil';
 
+const isVersionHigher = (currentVersion: string, targetVersion: string) => {
+  const parseVersion = (version: string) => version.split('.').map(Number);
+
+  const current = parseVersion(currentVersion);
+  const target = parseVersion(targetVersion);
+
+  for (let i = 0; i < Math.max(current.length, target.length); i++) {
+    const currentPart = current[i] || 0;
+    const targetPart = target[i] || 0;
+    if (currentPart > targetPart) return true;
+    if (currentPart < targetPart) return false;
+  }
+  return false;
+};
+
+const TARGET_MACOS_VERSION = '13.0.0';
+
 export const makeCheckList = (
   { nodeRequirements, systemData, nodeStorageLocation }: NodeRequirementsProps,
   t: TFunction,
@@ -32,6 +49,23 @@ export const makeCheckList = (
   }
   console.log('nodeLocationStorageDetails', nodeLocationStorageDetails);
 
+  if (systemData?.os?.platform === 'darwin') {
+    const checkListItem: ChecklistItemProps = {
+      checkTitle: t('macOSTitle', {
+        minVersion: TARGET_MACOS_VERSION,
+      }),
+      valueText: t('macOSDescription', {
+        version: systemData?.os?.release,
+      }),
+      status: '',
+    };
+    if (isVersionHigher(systemData?.os?.release, TARGET_MACOS_VERSION)) {
+      checkListItem.status = 'complete';
+    } else {
+      checkListItem.status = 'error';
+    }
+    newChecklistItems.push(checkListItem);
+  }
   for (const [nodeReqKey, nodeReqValue] of Object.entries(nodeRequirements)) {
     console.log(`${nodeReqKey}: ${nodeReqValue}`);
     if (nodeReqKey === 'documentationUrl' || nodeReqKey === 'description') {

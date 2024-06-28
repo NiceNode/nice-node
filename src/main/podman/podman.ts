@@ -20,7 +20,7 @@ import {
   type ConfigValuesMap,
   buildCliConfig,
 } from '../../common/nodeConfig';
-import { send } from '../messenger';
+import { CHANNELS, send } from '../messenger.js';
 import { restartNodes } from '../nodePackageManager';
 import { isLinux } from '../platform';
 import { killChildProcess } from '../processExit';
@@ -777,6 +777,10 @@ export const isPodmanStarting = async () => {
   const nnMachine = await getNiceNodeMachine();
   const bIsPodmanStarting = nnMachine?.Starting === true;
   return bIsPodmanStarting;
+};
+
+export const openPodmanModal = async () => {
+  send(CHANNELS.openPodmanModal);
 };
 
 // todoo

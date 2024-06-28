@@ -80,3 +80,8 @@ export const installationSteps = style({
   lineHeight: '14px',
   color: vars.color.font50,
 });
+
+export const messageContainer = style({
+  marginBottom: 16,
+  width: '100%',
+});

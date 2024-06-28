@@ -31,6 +31,7 @@ import {
   learnMore,
   titleFont,
 } from './podmanInstallation.css';
+import { messageContainer } from './podmanInstallation.css.js';
 
 // 6.5(docker), ? min on 2022 MacbookPro 16inch, baseline
 const TOTAL_INSTALL_TIME_SEC = 5 * 60;
@@ -189,9 +190,6 @@ const PodmanInstallation = ({
   //  react-hooks/exhaustive-deps
   // }, []);
 
-  console.log('isPodmanInstalled', isPodmanInstalled);
-  console.log('podmanDetails', podmanDetails);
-
   // listen to podman install messages
   return (
     <div className={[container, type].join(' ')}>
@@ -200,21 +198,24 @@ const PodmanInstallation = ({
           {t('PodmanInstallation')}
         </div>
       )}
+      {podmanDetails?.isOutdated && (
+        <div className={messageContainer}>
+          <Message
+            description={t('CurrentPodman', {
+              currentPodmanVersion: podmanDetails?.installedVersion,
+              requiredPodmanVersion: podmanDetails?.minimumVersionRequired,
+            })}
+            title={t('RunningOutdatedPodman')}
+            type="warning"
+          />
+        </div>
+      )}
       <div className={descriptionFont}>{t('podmanPurpose')}</div>
       <div className={learnMore}>
         <ExternalLink text={t('LearnMorePodman')} url="https://podman.io/" />
       </div>
       {/* Podman is not installed */}
       <div className={installContentContainer}>
-        {podmanDetails?.isOutdated && (
-          <div style={{ marginBottom: 32 }}>
-            <Message
-              description={t('PodmanUpdateRequiredDescription')}
-              title={t('Podman update required')}
-              type="info"
-            />
-          </div>
-        )}
         {(!isPodmanInstalled || podmanDetails?.isOutdated) && (
           <>
             {!sDownloadComplete && !sInstallComplete && (
@@ -224,7 +225,11 @@ const PodmanInstallation = ({
                     <Button
                       id="downloadAndInstallPodmanBtn"
                       type="primary"
-                      label={t('DownloadAndInstall')}
+                      label={
+                        podmanDetails?.isOutdated
+                          ? t('DownloadAndUpdate')
+                          : t('DownloadAndInstall')
+                      }
                       onClick={() => {
                         if (isPodmanInstalled && podmanDetails?.isOutdated) {
                           onClickUpdatePodman();
@@ -261,10 +266,7 @@ const PodmanInstallation = ({
             <div className={installationIcon}>
               <Icon iconId="checkcirclefilled" />
             </div>
-            <div
-              id="podmanInstallCompleteTitle"
-              className={installationComplete}
-            >
+            <div className={installationComplete}>
               {t('PodmanInstallComplete')}
             </div>
             <div className={installationSteps}>
@@ -274,16 +276,18 @@ const PodmanInstallation = ({
           </div>
         )}
         {/* Podman is installed but not running */}
-        {isPodmanInstalled && !isPodmanRunning && (
-          <>
-            <Button
-              id="startPodmanBtn"
-              type="primary"
-              label={t('StartPodman')}
-              onClick={onClickStartPodman}
-            />
-          </>
-        )}
+        {isPodmanInstalled &&
+          !isPodmanRunning &&
+          !podmanDetails?.isOutdated && (
+            <>
+              <Button
+                id="startPodmanBtn"
+                type="primary"
+                label={t('StartPodman')}
+                onClick={onClickStartPodman}
+              />
+            </>
+          )}
         {sDidUserGrantPermissionToInstallPodman === false && (
           <p>{t('PodmanIsRequired')}</p>
         )}
