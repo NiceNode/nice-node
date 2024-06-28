@@ -52,17 +52,27 @@ import {
 } from './state/nodeLibrary';
 import { getNode, updateNode } from './state/nodes.js';
 
+// let cartridgeApiURL = `http://localhost:3000/api`;
+let cartridgeApiURL = 'https://api.nicenode.xyz/api';
+let isCartridgeApiHttp = false;
+if (process.env.CONTROLLER_API_URL) {
+  cartridgeApiURL = process.env.CONTROLLER_API_URL;
+}
+if (
+  process.env.CONTROLLER_API_URL_IS_HTTP ||
+  cartridgeApiURL.includes('localhost')
+) {
+  isCartridgeApiHttp = true;
+}
+
 export const initialize = async () => {
   await updateLocalNodeAndPackageLibrary();
 };
 
 // todo: use user defined url if available
 const getCartridgePackages = async (): Promise<NodeSpecification[]> => {
-  // const cartridgePackagesApiURL = 'http://localhost:3000/api/cartridgePackage';
-  // const isHttp = true;
-  const cartridgePackagesApiURL =
-    'https://api.nicenode.xyz/api/cartridgePackage';
-  const isHttp = false;
+  const cartridgePackagesApiURL = `${cartridgeApiURL}/cartridgePackage`;
+  const isHttp = isCartridgeApiHttp;
   const cartridgePackages: NodeSpecification[] = (
     await httpGetJson(cartridgePackagesApiURL, isHttp)
   ).data;
@@ -77,10 +87,8 @@ const getCartridgePackages = async (): Promise<NodeSpecification[]> => {
 };
 
 const getCartridges = async (): Promise<NodeSpecification[]> => {
-  // const cartridgesApiURL = 'http://localhost:3000/api/cartridge';
-  // const isHttp = true;
-  const cartridgesApiURL = 'https://api.nicenode.xyz/api/cartridge';
-  const isHttp = false;
+  const cartridgesApiURL = `${cartridgeApiURL}/cartridge`;
+  const isHttp = isCartridgeApiHttp;
   const cartridges: NodeSpecification[] = (
     await httpGetJson(cartridgesApiURL, isHttp)
   ).data;
@@ -95,10 +103,8 @@ const getCartridges = async (): Promise<NodeSpecification[]> => {
 const getCartridge = async (
   cartridgeId: string,
 ): Promise<NodeSpecification> => {
-  // const cartridgesApiURL = `http://localhost:3000/api/cartridge/${cartridgeId}`;
-  // const isHttp = true;
-  const cartridgesApiURL = `https://api.nicenode.xyz/api/cartridge/${cartridgeId}`;
-  const isHttp = false;
+  const cartridgesApiURL = `${cartridgeApiURL}/cartridge/${cartridgeId}`;
+  const isHttp = isCartridgeApiHttp;
   const response = await httpGetJson(cartridgesApiURL, isHttp);
   if (response.error) {
     throw Error(response.error);
