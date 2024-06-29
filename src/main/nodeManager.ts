@@ -107,9 +107,8 @@ export const getNodeStartCommand = (nodeId: NodeId): string => {
 
 export const startNode = async (nodeId: NodeId) => {
   const node = nodeStore.getNode(nodeId);
-  if (!node) {
-    throw new Error(`Unable to start node ${nodeId}. Node not found.`);
-  }
+  if (!node) throw new Error(`Unable to start node ${nodeId}. Node not found.`);
+
   logger.info(`Starting node ${JSON.stringify(node)}`);
   node.status = NodeStatus.starting;
   node.lastStartedTimestampMs = Date.now();
@@ -118,30 +117,24 @@ export const startNode = async (nodeId: NodeId) => {
 
   try {
     if (isDockerNode(node)) {
-      const dockerNode = node;
-      // startPodmanNode(dockerNode);
-      const containerIds = await startPodmanNode(dockerNode);
-      dockerNode.runtime.processIds = containerIds;
-      dockerNode.status = NodeStatus.running;
+      const containerIds = await startPodmanNode(node);
+      node.runtime.processIds = containerIds;
+      node.status = NodeStatus.running;
       setLastRunningTime(nodeId, 'nodeService');
-      if (getSetPortHasChanged(dockerNode)) {
-        checkNodePortsAndNotify(dockerNode);
-      }
-      nodeStore.updateNode(dockerNode);
+      if (getSetPortHasChanged(node)) checkNodePortsAndNotify(node);
     }
   } catch (err) {
     logger.error(err);
     node.status = NodeStatus.errorStarting;
+  } finally {
     nodeStore.updateNode(node);
-    throw err;
   }
 };
 
 export const stopNode = async (nodeId: NodeId, stoppedBy: NodeStoppedBy) => {
   const node = nodeStore.getNode(nodeId);
-  if (!node) {
-    throw new Error(`Unable to stop node ${nodeId}. Node not found.`);
-  }
+  if (!node) throw new Error(`Unable to stop node ${nodeId}. Node not found.`);
+
   logger.info(`Stopping node ${JSON.stringify(node)}`);
   node.status = NodeStatus.stopping;
   node.lastStoppedTimestampMs = Date.now();
@@ -150,14 +143,12 @@ export const stopNode = async (nodeId: NodeId, stoppedBy: NodeStoppedBy) => {
 
   try {
     if (isDockerNode(node)) {
-      const containerIds = await stopPodmanNode(node);
-      logger.info(`${containerIds} stopped`);
+      await stopPodmanNode(node);
       node.status = NodeStatus.stopped;
-      nodeStore.updateNode(node);
     }
+  } catch (err) {
+    logger.error(err);
   } finally {
-    // don't catch the error, but mark node as stopped
-    // todoo: fix this, but for testing it is useful
     node.status = NodeStatus.stopped;
     nodeStore.updateNode(node);
   }

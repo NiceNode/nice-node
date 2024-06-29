@@ -187,7 +187,7 @@ const NodePackageScreen = () => {
       return;
     }
 
-    const updateNodeLSB = async (latestBlockNum: number) => {
+    const updateNodeLastSyncedBlock = async (latestBlockNum: number) => {
       if (!selectedNodePackage) {
         return;
       }
@@ -219,7 +219,7 @@ const NodePackageScreen = () => {
     const syncedBlock =
       latestBlockNum > savedSyncedBlock ? latestBlockNum : savedSyncedBlock;
     setLatestBlockNumber(syncedBlock);
-    updateNodeLSB(syncedBlock);
+    updateNodeLastSyncedBlock(syncedBlock);
   }, [qLatestBlock, selectedNodePackage]);
 
   const onNodeAction = useCallback(
