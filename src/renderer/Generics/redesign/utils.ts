@@ -18,6 +18,7 @@ export const getStatusObject = (status: NodeStatus) => ({
 
 export const getSyncStatus = (status: ClientStatusProps) => {
   let syncStatus;
+  // console.log('getSyncStatus', status);
   switch (true) {
     // find worst cases first
     case status.error:
@@ -25,6 +26,9 @@ export const getSyncStatus = (status: ClientStatusProps) => {
       break;
     case status.updating:
       syncStatus = SYNC_STATUS.UPDATING;
+      break;
+    case status.starting:
+      syncStatus = SYNC_STATUS.STARTING;
       break;
     case status.stopping:
       syncStatus = SYNC_STATUS.STOPPING;

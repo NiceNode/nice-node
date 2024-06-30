@@ -40,6 +40,7 @@ export interface MetricTypesProps {
 }
 
 const getStatusDetails = (statusValue: string, t: any) => {
+  // console.log('statusValue', statusValue);
   switch (statusValue) {
     case SYNC_STATUS.UPDATING:
       return {
@@ -58,6 +59,13 @@ const getStatusDetails = (statusValue: string, t: any) => {
       return { color: red, title: t('Error'), label: t('ErrorOccurred') };
     case SYNC_STATUS.NO_NETWORK:
       return { color: red, title: t('Offline'), label: t('NoNetwork') };
+    case SYNC_STATUS.STARTING:
+      return {
+        color: sync,
+        title: t('Starting'),
+        label: t('InProgress'),
+        iconId: 'syncing',
+      };
     case SYNC_STATUS.CATCHING_UP:
       return {
         color: sync,

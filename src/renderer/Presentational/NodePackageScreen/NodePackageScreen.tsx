@@ -316,6 +316,7 @@ const NodePackageScreen = () => {
   }
 
   const { status, spec } = selectedNodePackage;
+  // console.log('nodePackageStatus', status);
   // todo: get node type, single or multi-service
   // parse node details from selectedNodePackage => SingleNodeContent
   // todo: add stop/start ability?
