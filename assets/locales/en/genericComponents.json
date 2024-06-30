@@ -48,6 +48,7 @@
   "CatchingUp": "Catching up...",
   "InProgress": "In progress...",
   "Stopped": "Stopped",
+  "Stopping": "Stopping",
   "CurrentlyOffline": "Currently offline",
   "PleaseReconnect": "Please reconnect to the internet",
   "PodmanIsNotInstalled": "Podman is not installed",

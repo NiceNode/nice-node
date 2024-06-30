@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
 import { useTranslation } from 'react-i18next';
-import { NodeStatus } from '../../../common/node';
 import Button from '../../Generics/redesign/Button/Button';
 import type { ClientProps, NodeAction } from '../../Generics/redesign/consts';
 import type { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
@@ -33,6 +32,7 @@ import {
   descriptionFont,
   titleFont,
 } from './NodePackageScreen.css';
+import { getStatusObject } from '../../Generics/redesign/utils.js';
 
 let alphaModalRendered = false;
 
@@ -249,47 +249,34 @@ const NodePackageScreen = () => {
   }, []);
 
   useEffect(() => {
-    // format for presentation
-    const formattedServices: ClientProps[] = [];
-    selectedNodePackage?.services.map((service) => {
-      const nodeId = service.node.id;
-      const node = sUserNodes?.nodes[nodeId];
-      const data = qExecutionIsSyncing?.data;
-      console.log('data', data);
-      const stats =
-        service.serviceName === 'Execution Client'
-          ? {
-              currentBlock: data?.currentBlock || 0,
-              highestBlock: data?.highestBlock || 0,
-            }
-          : {
-              currentSlot: data?.currentSlot || 0,
-              highestSlot: data?.highestSlot || 0,
-            };
-      const serviceProps: ClientProps = {
-        id: service.node.id,
-        name: service.node.spec.specId,
-        displayName: service.node.spec.displayName as NodeBackgroundId,
-        version: '',
-        nodeType: service.serviceName,
-        status: {
-          running:
-            node?.status === NodeStatus.running ||
-            node?.status === NodeStatus.starting,
-          stopped:
-            node?.status === NodeStatus.stopped ||
-            node?.status === NodeStatus.stopping,
-          updating: node?.status === NodeStatus.updating,
-          error: node?.status.includes('error'),
-          // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
-        },
-        stats,
-        resources: service.node.spec.resources,
-      };
-      formattedServices.push(serviceProps);
-    });
+    const formattedServices: ClientProps[] =
+      selectedNodePackage?.services.map((service) => {
+        const nodeId = service.node.id;
+        const node = sUserNodes?.nodes[nodeId];
+        const data = qExecutionIsSyncing?.data;
+        const stats =
+          service.serviceName === 'Execution Client'
+            ? {
+                currentBlock: data?.currentBlock || 0,
+                highestBlock: data?.highestBlock || 0,
+              }
+            : {
+                currentSlot: data?.currentSlot || 0,
+                highestSlot: data?.highestSlot || 0,
+              };
+        console.log('nodeStatus', node?.status);
+        return {
+          id: service.node.id,
+          name: service.node.spec.specId,
+          displayName: service.node.spec.displayName as NodeBackgroundId,
+          version: '',
+          nodeType: service.serviceName,
+          status: getStatusObject(node?.status),
+          stats,
+          resources: service.node.spec.resources,
+        };
+      }) ?? [];
     setFormattedServices(formattedServices);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNodePackage?.services, sUserNodes]);
 
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {
@@ -363,12 +350,7 @@ const NodePackageScreen = () => {
     rpcTranslation: spec.rpcTranslation,
     version: formatVersion(nodeVersionData), // todo: remove
     info: formatSpec(spec.displayTagline),
-    status: {
-      stopped: status === 'stopped',
-      error: status.includes('error'),
-      online: status === 'running',
-      updating: status === NodeStatus.updating,
-    },
+    status: getStatusObject(status),
     stats: {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,

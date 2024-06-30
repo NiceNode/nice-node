@@ -2,8 +2,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import { NodeStatus } from '../../../common/node';
 import Button from '../../Generics/redesign/Button/Button';
 import { HeaderButton } from '../../Generics/redesign/HeaderButton/HeaderButton';
 import type { NodeAction } from '../../Generics/redesign/consts';
@@ -33,6 +31,7 @@ import {
   descriptionFont,
   titleFont,
 } from './NodeScreen.css';
+import { getStatusObject } from '../../Generics/redesign/utils.js';
 
 let alphaModalRendered = false;
 
@@ -343,15 +342,7 @@ const NodeScreen = () => {
       spec.category,
       // selectedNode?.config?.configValuesMap?.network ?? '',
     ),
-    status: {
-      stopped: status === NodeStatus.stopped,
-      error: status.includes('error'),
-      // Until sync percent is calculated accurately, just use the sync status returned from the
-      //  node http api as the source of truth
-      // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
-      synchronized: sIsSyncing === false && status === NodeStatus.running,
-      updating: status === NodeStatus.updating,
-    },
+    status: getStatusObject(status),
     stats: {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,

@@ -81,4 +81,5 @@ export const SYNC_STATUS = Object.freeze({
   NO_NETWORK: 'noNetwork',
   ONLINE: 'online',
   STOPPED: 'stopped',
+  STOPPING: 'stopping',
 });
