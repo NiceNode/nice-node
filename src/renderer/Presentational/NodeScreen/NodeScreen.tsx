@@ -331,6 +331,7 @@ const NodeScreen = () => {
   const nodeVersionData =
     typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
 
+  // console.log('singleNodeStatus', status);
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
     displayName: selectedNode.spec.displayName,

@@ -33,6 +33,7 @@ import {
   titleFont,
 } from './NodePackageScreen.css';
 import { getStatusObject } from '../../Generics/redesign/utils.js';
+import { NodeStatus } from '../../../common/node.js';
 
 let alphaModalRendered = false;
 
@@ -278,6 +279,27 @@ const NodePackageScreen = () => {
       }) ?? [];
     setFormattedServices(formattedServices);
   }, [selectedNodePackage?.services, sUserNodes]);
+
+  // Check and stop the NodePackage if all services are stopped
+  useEffect(() => {
+    const checkAndStopNodePackage = async () => {
+      if (selectedNodePackage?.status === NodeStatus.running) {
+        let allServicesStopped = true;
+        for (const service of selectedNodePackage.services) {
+          const nodeId = service.node.id;
+          const nodeStatus = sUserNodes?.nodes[nodeId]?.status;
+          if (nodeStatus !== NodeStatus.stopped) {
+            allServicesStopped = false;
+            break;
+          }
+        }
+        if (allServicesStopped) {
+          await electron.stopNodePackage(selectedNodePackage.id);
+        }
+      }
+    };
+    checkAndStopNodePackage();
+  }, [selectedNodePackage, sUserNodes]);
 
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {
     dispatch(
