@@ -114,6 +114,10 @@ declare global {
       // Node library
       getNodeLibrary(): NodeLibrary;
       getNodePackageLibrary(): NodePackageLibrary;
+      getCheckForControllerUpdate(
+        nodeId: NodeId,
+      ): NodeSpecification | undefined;
+      applyNodeUpdate(nodeId: NodeId): boolean;
 
       // Podman
       getIsPodmanInstalled(): boolean;

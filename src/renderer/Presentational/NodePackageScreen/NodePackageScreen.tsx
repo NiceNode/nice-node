@@ -379,6 +379,7 @@ const NodePackageScreen = () => {
     onAction: onNodeAction,
     description: spec.description,
     resources: spec.resources,
+    documentation: spec.documentation,
   };
 
   /**

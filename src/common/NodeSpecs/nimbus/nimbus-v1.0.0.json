@@ -165,7 +165,8 @@
   },
   "documentation": {
     "default": "https://nimbus.guide/",
-    "docker": "https://nimbus.guide/docker.html"
+    "docker": "https://nimbus.guide/docker.html",
+    "releaseNotesUrl": "https://github.com/status-im/nimbus-eth2/releases"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/nimbus-logo-text.png",
   "resources": [

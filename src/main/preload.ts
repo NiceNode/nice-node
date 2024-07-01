@@ -122,6 +122,10 @@ contextBridge.exposeInMainWorld('electron', {
   // Node library
   getNodeLibrary: () => ipcRenderer.invoke('getNodeLibrary'),
   getNodePackageLibrary: () => ipcRenderer.invoke('getNodePackageLibrary'),
+  getCheckForControllerUpdate: (nodeId: NodeId) =>
+    ipcRenderer.invoke('getCheckForControllerUpdate', nodeId),
+  applyNodeUpdate: (nodeId: NodeId) =>
+    ipcRenderer.invoke('applyNodeUpdate', nodeId),
 
   // Podman
   getIsPodmanInstalled: () => ipcRenderer.invoke('getIsPodmanInstalled'),

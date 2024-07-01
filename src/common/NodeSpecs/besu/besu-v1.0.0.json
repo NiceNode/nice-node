@@ -410,12 +410,14 @@
         "type": "text"
       },
       "infoDescription": "Set to lower number to use less bandwidth",
-      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#max-peers"
+      "documentation": "https://besu.hyperledger.org/public-networks/reference/cli/options#max-peers",
+      "releaseNotesUrl": "https://github.com/NethermindEth/nethermind/releases"
     }
   },
   "documentation": {
     "default": "https://besu.hyperledger.org/en/stable/",
-    "docker": "https://besu.hyperledger.org/en/stable/HowTo/Get-Started/Installation-Options/Run-Docker-Image/"
+    "docker": "https://besu.hyperledger.org/en/stable/HowTo/Get-Started/Installation-Options/Run-Docker-Image/",
+    "releaseNotesUrl": "https://github.com/hyperledger/besu/releases"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/besu-text-logo.png",
   "resources": [

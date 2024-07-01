@@ -105,7 +105,12 @@ export type NodeSpecification = {
   //  (ex. peers, syncing, latest block num, etc.)
   iconUrl?: string;
   category?: string;
-  documentation?: { default?: string; docker?: string; binary?: string };
+  documentation?: {
+    default?: string;
+    docker?: string;
+    binary?: string;
+    releaseNotesUrl?: string;
+  };
   resources?: LabelValuesSectionItemsProps[];
 };
 
@@ -141,7 +146,12 @@ export type NodePackageSpecification = {
   //  (ex. peers, syncing, latest block num, etc.)
   iconUrl?: string;
   category?: string;
-  documentation?: { default?: string; docker?: string; binary?: string };
+  documentation?: {
+    default?: string;
+    docker?: string;
+    binary?: string;
+    releaseNotesUrl?: string;
+  };
   addNodeDescription?: string;
   description?: string;
   resources?: LabelValuesSectionItemsProps[];

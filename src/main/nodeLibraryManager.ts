@@ -34,6 +34,9 @@ import nitrov1 from '../common/NodeSpecs/nitro/nitro-v1.0.0.json';
 import homeAssistantServicev1 from '../common/NodeSpecs/home-assistant-service/home-assistant-service-v1.0.0.json';
 import itzgMinecraftv1 from '../common/NodeSpecs/itzg-minecraft/itzg-minecraft-v1.0.0.json';
 
+import { injectDefaultControllerConfig } from '../common/node-spec-tool/injectDefaultControllerConfig.js';
+import type { NodeId } from '../common/node.js';
+import type Node from '../common/node.js';
 import type {
   NodePackageSpecification,
   NodeSpecification,
@@ -47,48 +50,72 @@ import {
   updateNodeLibrary,
   updateNodePackageLibrary,
 } from './state/nodeLibrary';
+import { getNode, updateNode } from './state/nodes.js';
+
+// let controllerApiURL = `http://localhost:3000/api`;
+let controllerApiURL = 'https://api.nicenode.xyz/api';
+let isControllerApiHttp = false;
+if (process.env.CONTROLLER_API_URL) {
+  controllerApiURL = process.env.CONTROLLER_API_URL;
+}
+if (
+  process.env.CONTROLLER_API_URL_IS_HTTP ||
+  controllerApiURL.includes('localhost')
+) {
+  isControllerApiHttp = true;
+}
 
 export const initialize = async () => {
   await updateLocalNodeAndPackageLibrary();
 };
 
 // todo: use user defined url if available
-const getCartridgePackages = async (): Promise<NodeSpecification[]> => {
-  // const cartridgePackagesApiURL = 'http://localhost:3000/api/cartridgePackage'
-  // const isHttp = true;
-  const cartridgePackagesApiURL =
-    'https://api.nicenode.xyz/api/cartridgePackage';
-  const isHttp = false;
-  const cartridgePackages: NodeSpecification[] = (
-    await httpGetJson(cartridgePackagesApiURL, isHttp)
+const getControllerPackages = async (): Promise<NodeSpecification[]> => {
+  const controllerPackagesApiURL = `${controllerApiURL}/controllerPackage`;
+  const isHttp = isControllerApiHttp;
+  const controllerPackages: NodeSpecification[] = (
+    await httpGetJson(controllerPackagesApiURL, isHttp)
   ).data;
   // simple validation (only for nicenode api, not user defined api)
-  const isEthereumPackageFound = cartridgePackages.find(
+  const isEthereumPackageFound = controllerPackages.find(
     (spec) => spec.specId === 'ethereum',
   );
   if (!isEthereumPackageFound) {
-    throw new Error('Ethereum package not found in the cartridge packages API');
+    throw new Error(
+      'Ethereum package not found in the controller packages API',
+    );
   }
-  return cartridgePackages;
+  return controllerPackages;
 };
 
-const getCartridges = async (): Promise<NodeSpecification[]> => {
-  // const cartridgesApiURL = 'http://localhost:3000/api/cartridge'
-  // const isHttp = true;
-  const cartridgesApiURL = 'https://api.nicenode.xyz/api/cartridge';
-  const isHttp = false;
-  const cartridges: NodeSpecification[] = (
-    await httpGetJson(cartridgesApiURL, isHttp)
+const getControllers = async (): Promise<NodeSpecification[]> => {
+  const controllersApiURL = `${controllerApiURL}/controller`;
+  const isHttp = isControllerApiHttp;
+  const controllers: NodeSpecification[] = (
+    await httpGetJson(controllersApiURL, isHttp)
   ).data;
   // simple validation (only for nicenode api, not user defined api)
-  const isGethFound = cartridges.find((spec) => spec.specId === 'geth');
+  const isGethFound = controllers.find((spec) => spec.specId === 'geth');
   if (!isGethFound) {
-    throw new Error('Geth cartridge not found in the cartridge packages API');
+    throw new Error('Geth controller not found in the controller packages API');
   }
-  return cartridges;
+  return controllers;
 };
 
-// Updates the local electron store with the latest node and package library (aka cartridges)
+const getController = async (
+  controllerId: string,
+): Promise<NodeSpecification> => {
+  const controllersApiURL = `${controllerApiURL}/controller/${controllerId}`;
+  const isHttp = isControllerApiHttp;
+  const response = await httpGetJson(controllersApiURL, isHttp);
+  if (response.error) {
+    throw Error(response.error);
+  }
+  const controller: NodeSpecification = response.data;
+  return controller;
+};
+
+// Updates the local electron store with the latest node and package library (aka controllers)
 // Should be called this after user clicks add node, but before showing the previous values
 export const updateLocalNodeAndPackageLibrary = async () => {
   // parse spec json for latest versions
@@ -98,19 +125,19 @@ export const updateLocalNodeAndPackageLibrary = async () => {
   let specs: NodeSpecification[] = [];
   let packageSpecs: NodeSpecification[] = [];
   try {
-    const promises = [getCartridgePackages(), getCartridges()];
+    const promises = [getControllerPackages(), getControllers()];
     // fetch in parallel
-    const [cartridgePackages, cartridges] = await Promise.all(promises);
+    const [controllerPackages, controllers] = await Promise.all(promises);
     logger.info(
-      `cartridgePackages from HTTP API: ${JSON.stringify(cartridgePackages)}`,
+      `controllerPackages from HTTP API: ${JSON.stringify(controllerPackages)}`,
     );
-    logger.info(`cartridges from HTTP API: ${JSON.stringify(cartridges)}`);
-    specs = cartridges;
-    packageSpecs = cartridgePackages;
+    logger.info(`controllers from HTTP API: ${JSON.stringify(controllers)}`);
+    specs = controllers;
+    packageSpecs = controllerPackages;
   } catch (e) {
     logger.error(e);
     logger.error(
-      'Failed to fetch cartridges from API, falling back to local files',
+      'Failed to fetch controllers from API, falling back to local files',
     );
     packageSpecs = [
       ethereumv1,
@@ -152,34 +179,8 @@ export const updateLocalNodeAndPackageLibrary = async () => {
         nodeSpec.configTranslation = {};
       }
 
-      // "inject" serviceVersion and dataDir (todo) here. Universal for all nodes.
-      const execution = nodeSpec.execution as PodmanExecution;
-      let defaultImageTag = 'latest';
-      // if the defaultImageTag is set in the spec use that, otherwise 'latest'
-      if (execution.defaultImageTag !== undefined) {
-        defaultImageTag = execution.defaultImageTag;
-      }
-
-      nodeSpec.configTranslation.cliInput = {
-        displayName: `${spec.displayName} CLI input`,
-        uiControl: {
-          type: 'text',
-        },
-        defaultValue: '',
-        addNodeFlow: 'advanced',
-        infoDescription: 'Additional CLI input',
-      };
-
-      nodeSpec.configTranslation.serviceVersion = {
-        displayName: `${spec.displayName} version`,
-        uiControl: {
-          type: 'text',
-        },
-        defaultValue: defaultImageTag,
-        addNodeFlow: 'advanced',
-        infoDescription:
-          'Caution Advised! Example value: latest, v1.0.0, stable. Consult service documentation for available versions.',
-      };
+      // "inject" cliInput, serviceVersion, etc here. Universal for all nodes. dataDir (todo?)
+      injectDefaultControllerConfig(nodeSpec);
 
       nodeSpecBySpecId[spec.specId] = nodeSpec;
     } catch (err) {
@@ -200,4 +201,46 @@ export const updateLocalNodeAndPackageLibrary = async () => {
   // console.log('nodePackageSpecBySpecId: ', nodePackageSpecBySpecId);
 
   return updateNodePackageLibrary(nodePackageSpecBySpecId);
+};
+
+/**
+ *
+ * @param nodeId
+ * @returns latest controller if there is a new version, or undefined if
+ * there is no update
+ */
+export const getCheckForControllerUpdate = async (
+  nodeId: NodeId,
+): Promise<NodeSpecification | undefined> => {
+  // get node
+  // using node.url, fetch the latest version
+  // compare to node.spec.version
+  // if newer, update node.updateAvailable = true
+  const node: Node = getNode(nodeId);
+  if (node) {
+    const latestController: NodeSpecification = await getController(
+      node.spec.specId,
+    );
+    logger.info(
+      `getCheckForControllerUpdate: latestController: ${JSON.stringify(
+        latestController,
+      )}`,
+    );
+    if (node.spec.version < latestController.version) {
+      logger.info(
+        `getCheckForControllerUpdate: Node ${node.spec.displayName} has an update available`,
+      );
+      node.updateAvailable = true;
+      updateNode(node);
+      return latestController;
+    }
+    logger.info(
+      `getCheckForControllerUpdate: Node ${node.spec.displayName} does NOT have an update available`,
+    );
+  } else {
+    logger.error(`getCheckForControllerUpdate: Node ${nodeId} not found`);
+  }
+  node.updateAvailable = false;
+  updateNode(node);
+  return undefined; // throw
 };

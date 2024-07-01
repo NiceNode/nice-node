@@ -163,7 +163,8 @@
   },
   "documentation": {
     "default": "https://docs.teku.consensys.net/en/stable/",
-    "docker": "https://docs.teku.consensys.net/en/stable/HowTo/Get-Started/Installation-Options/Run-Docker-Image/"
+    "docker": "https://docs.teku.consensys.net/en/stable/HowTo/Get-Started/Installation-Options/Run-Docker-Image/",
+    "releaseNotesUrl": "https://github.com/ConsenSys/teku/releases"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/teku-logo.png",
   "resources": [

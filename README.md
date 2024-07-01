@@ -46,6 +46,7 @@ SENTRY_DSN=fake-token
 MP_PROJECT_TOKEN=fake-token
 MP_PROJECT_ENV=dev
 NICENODE_ENV=development
+CONTROLLER_API_URL=http://localhost:3000/api
 ```
 
 `SENTRY_DSN` and `MP_PROJECT_TOKEN` should be fake unless testing. Contact Johns, @jgresham, if you want to test new error or event reporting code.

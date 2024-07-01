@@ -34,6 +34,7 @@ export enum NodeStoppedBy {
   user = 'user',
   shutdown = 'shutdown',
   podmanUpdate = 'podmanUpdate',
+  nodeUpdate = 'nodeUpdate',
 }
 
 export type NodeConfig = {
@@ -77,6 +78,7 @@ type Node = {
   lastStartedTimestampMs?: number;
   lastStoppedTimestampMs?: number;
   stoppedBy?: NodeStoppedBy;
+  updateAvailable?: boolean;
 };
 type NodeMap = Record<string, Node>;
 export type UserNodes = {
@@ -267,4 +269,5 @@ export const getImageTag = (node: Node): string => {
   }
   return imageTag;
 };
+
 export default Node;

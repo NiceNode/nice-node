@@ -199,7 +199,8 @@
   },
   "documentation": {
     "default": "https://lighthouse-book.sigmaprime.io/intro.html",
-    "docker": "https://lighthouse-book.sigmaprime.io/docker.html"
+    "docker": "https://lighthouse-book.sigmaprime.io/docker.html",
+    "releaseNotesUrl": "https://github.com/sigp/lighthouse/releases"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/lighthouse-logo.png",
   "resources": [
