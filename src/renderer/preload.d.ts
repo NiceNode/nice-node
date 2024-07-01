@@ -114,7 +114,9 @@ declare global {
       // Node library
       getNodeLibrary(): NodeLibrary;
       getNodePackageLibrary(): NodePackageLibrary;
-      getCheckForCartridgeUpdate(nodeId: NodeId): NodeSpecification | undefined;
+      getCheckForControllerUpdate(
+        nodeId: NodeId,
+      ): NodeSpecification | undefined;
       applyNodeUpdate(nodeId: NodeId): boolean;
 
       // Podman

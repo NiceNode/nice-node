@@ -28,7 +28,7 @@ import {
   getMainProcessUsage,
   updateNodeLastSyncedBlock,
 } from './monitor';
-import { getCheckForCartridgeUpdate } from './nodeLibraryManager.js';
+import { getCheckForControllerUpdate } from './nodeLibraryManager.js';
 import {
   addNode,
   deleteNodeStorage,
@@ -202,8 +202,8 @@ export const initialize = () => {
   // Node library
   ipcMain.handle('getNodeLibrary', getNodeLibrary);
   ipcMain.handle('getNodePackageLibrary', getNodePackageLibrary);
-  ipcMain.handle('getCheckForCartridgeUpdate', (_event, nodeId: NodeId) => {
-    return getCheckForCartridgeUpdate(nodeId);
+  ipcMain.handle('getCheckForControllerUpdate', (_event, nodeId: NodeId) => {
+    return getCheckForControllerUpdate(nodeId);
   });
   ipcMain.handle('applyNodeUpdate', (_event, nodeId: NodeId) => {
     return applyNodeUpdate(nodeId);

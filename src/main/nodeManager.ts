@@ -20,7 +20,7 @@ import { deleteDisk, getNodesDirPath, makeNodeDir } from './files';
 import logger from './logger';
 import { setLastRunningTime } from './node/setLastRunningTime';
 import { initialize as initNodeLibrary } from './nodeLibraryManager';
-import { getCheckForCartridgeUpdate } from './nodeLibraryManager.js';
+import { getCheckForControllerUpdate } from './nodeLibraryManager.js';
 import {
   createRunCommand,
   sendLogsToUI as dockerSendLogsToUI,
@@ -284,7 +284,7 @@ const compareSpecsAndUpdate = (
  */
 export const applyNodeUpdate = async (nodeId: NodeId): Promise<boolean> => {
   // todo: could put this check after stopping?
-  const newSpec = await getCheckForCartridgeUpdate(nodeId);
+  const newSpec = await getCheckForControllerUpdate(nodeId);
   let node = getNode(nodeId);
   if (newSpec === undefined) {
     logger.error('Unable to update node. No newer controller found.');

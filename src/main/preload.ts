@@ -122,8 +122,8 @@ contextBridge.exposeInMainWorld('electron', {
   // Node library
   getNodeLibrary: () => ipcRenderer.invoke('getNodeLibrary'),
   getNodePackageLibrary: () => ipcRenderer.invoke('getNodePackageLibrary'),
-  getCheckForCartridgeUpdate: (nodeId: NodeId) =>
-    ipcRenderer.invoke('getCheckForCartridgeUpdate', nodeId),
+  getCheckForControllerUpdate: (nodeId: NodeId) =>
+    ipcRenderer.invoke('getCheckForControllerUpdate', nodeId),
   applyNodeUpdate: (nodeId: NodeId) =>
     ipcRenderer.invoke('applyNodeUpdate', nodeId),
 

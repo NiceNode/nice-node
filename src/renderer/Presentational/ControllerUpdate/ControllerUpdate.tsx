@@ -19,15 +19,15 @@ import {
   contentSection,
   contentTitle,
   topBanner,
-} from './cartridgeUpdate.css';
+} from './controllerUpdate.css';
 
-const CartridgeUpdate = () => {
+const ControllerUpdate = () => {
   const { t } = useTranslation();
   const sSelectedNode = useAppSelector(selectSelectedNode);
   const [selectedNode, setSelectedNode] = useState<Node | undefined>(
     sSelectedNode,
   );
-  const [sLatestCartridge, setLatestCartridge] = useState<
+  const [sLatestController, setLatestController] = useState<
     NodeSpecification | undefined
   >();
   const [sChangeMessage, setChangeMessage] = useState<string>();
@@ -35,28 +35,28 @@ const CartridgeUpdate = () => {
     UserSpecDiff[] | undefined
   >();
 
-  const getAndSetLatestCartridge = async () => {
-    const latestCartridgeIfNewerAvailable: NodeSpecification | undefined =
-      await electron.getCheckForCartridgeUpdate(selectedNode?.id);
-    if (latestCartridgeIfNewerAvailable) {
-      setLatestCartridge(latestCartridgeIfNewerAvailable);
+  const getAndSetLatestController = async () => {
+    const latestControllerIfNewerAvailable: NodeSpecification | undefined =
+      await electron.getCheckForControllerUpdate(selectedNode?.id);
+    if (latestControllerIfNewerAvailable) {
+      setLatestController(latestControllerIfNewerAvailable);
     }
   };
 
   useEffect(() => {
-    getAndSetLatestCartridge();
+    getAndSetLatestController();
   }, [selectedNode]);
 
   useEffect(() => {
     let newSpecDiffs;
-    if (selectedNode?.spec && sLatestCartridge) {
+    if (selectedNode?.spec && sLatestController) {
       // This should always be run before calcUserSpecDiff
       //  otherwise default config not included in the newSpec will show as removed
-      injectDefaultControllerConfig(sLatestCartridge);
-      newSpecDiffs = calcUserSpecDiff(selectedNode?.spec, sLatestCartridge);
+      injectDefaultControllerConfig(sLatestController);
+      newSpecDiffs = calcUserSpecDiff(selectedNode?.spec, sLatestController);
     }
     setUserSpecDiffs(newSpecDiffs);
-  }, [sLatestCartridge]);
+  }, [sLatestController]);
 
   return (
     <div className={container}>
@@ -73,4 +73,4 @@ const CartridgeUpdate = () => {
   );
 };
 
-export default CartridgeUpdate;
+export default ControllerUpdate;

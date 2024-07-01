@@ -5,7 +5,7 @@ import { useAppDispatch } from '../../state/hooks';
 import { getModalState, setModalState } from '../../state/modal';
 import { AddNodeModal } from './AddNodeModal';
 import { AlphaBuildModal } from './AlphaBuildModal';
-import { CartridgeUpdateModal } from './CartridgeUpdateModal.js';
+import { ControllerUpdateModal } from './ControllerUpdateModal.js';
 import FailSystemRequirementsModal from './FailSystemRequirementsModal';
 import { NodeSettingsModal } from './NodeSettingsModal';
 import { PreferencesModal } from './PreferencesModal';
@@ -35,8 +35,8 @@ const ModalManager = () => {
     // Modals
     case modalRoutes.addNode:
       return <AddNodeModal modalOnClose={modalOnClose} />;
-    case modalRoutes.cartridgeUpdate:
-      return <CartridgeUpdateModal modalOnClose={modalOnClose} />;
+    case modalRoutes.controllerUpdate:
+      return <ControllerUpdateModal modalOnClose={modalOnClose} />;
     case modalRoutes.nodeSettings:
       return <NodeSettingsModal modalOnClose={modalOnClose} />;
     case modalRoutes.preferences:

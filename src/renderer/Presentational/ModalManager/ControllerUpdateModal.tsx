@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal } from '../../Generics/redesign/Modal/Modal';
-import CartridgeUpdate from '../CartridgeUpdate/CartridgeUpdate.js';
+import ControllerUpdate from '../ControllerUpdate/ControllerUpdate.js';
 import { modalRoutes } from './modalUtils';
 import { type ModalConfig, modalOnChangeConfig } from './modalUtils';
 
@@ -8,7 +8,7 @@ type Props = {
   modalOnClose: () => void;
 };
 
-export const CartridgeUpdateModal = ({ modalOnClose }: Props) => {
+export const ControllerUpdateModal = ({ modalOnClose }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
 
   const buttonSaveLabel = 'Close';
@@ -20,7 +20,7 @@ export const CartridgeUpdateModal = ({ modalOnClose }: Props) => {
 
   return (
     <Modal
-      route={modalRoutes.cartridgeUpdate}
+      route={modalRoutes.controllerUpdate}
       modalTitle={'Update Changes'}
       modalType="modal"
       modalStyle="controllerUpdate" // adds scrolling to the modal content
@@ -31,7 +31,7 @@ export const CartridgeUpdateModal = ({ modalOnClose }: Props) => {
       modalOnClose={modalOnClose}
       modalOnCancel={modalOnClose}
     >
-      <CartridgeUpdate
+      <ControllerUpdate
         modalOnChangeConfig={(config, save) => {
           modalOnChangeConfig(
             config,

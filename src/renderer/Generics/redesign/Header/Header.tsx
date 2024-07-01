@@ -132,7 +132,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
               <div className={popupContainer} tabIndex={0}>
                 <UpdateCallout
                   // todo: pass http link to container release notes
-                  // todo: pass modal link for cartridge changes
+                  // todo: pass modal link for controller changes
                   serviceName={displayName || name}
                   releaseNotesUrl={documentation?.releaseNotesUrl}
                   onClickShowChanges={() => {
@@ -141,7 +141,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                       setModalState({
                         isModalOpen: true,
                         screen: {
-                          route: modalRoutes.cartridgeUpdate,
+                          route: modalRoutes.controllerUpdate,
                           type: 'modal',
                         },
                       }),
@@ -238,7 +238,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                         // dispatch checkForUpdates, show loading icon?, then show success or error in-line?
                         setIsSettingsDisplayed(false);
                         const isUpdateAvailable: NodeSpecification | undefined =
-                          await electron.getCheckForCartridgeUpdate(nodeId);
+                          await electron.getCheckForControllerUpdate(nodeId);
                         console.log('isUpdateAvailable:', isUpdateAvailable);
                       }}
                     />
