@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Modal } from '../../Generics/redesign/Modal/Modal';
+import { Modal } from '../../Generics/redesign/Modal/Modal.js';
 import ControllerUpdate from '../ControllerUpdate/ControllerUpdate.js';
-import { modalRoutes } from './modalUtils';
-import { type ModalConfig, modalOnChangeConfig } from './modalUtils';
+import { modalRoutes } from './modalUtils.js';
+import { type ModalConfig, modalOnChangeConfig } from './modalUtils.js';
 
 type Props = {
   modalOnClose: () => void;

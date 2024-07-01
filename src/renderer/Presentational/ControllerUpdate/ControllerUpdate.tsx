@@ -7,7 +7,7 @@ import {
 } from '../../../common/node-spec-tool/specDiff.js';
 import type Node from '../../../common/node.js';
 import type { NodeSpecification } from '../../../common/nodeSpec.js';
-import Linking from '../../Generics/redesign/Link/Linking';
+import Linking from '../../Generics/redesign/Link/Linking.js';
 import alphaBanner from '../../assets/images/artwork/alphaBanner.svg';
 import electron from '../../electronGlobal.js';
 import { useAppSelector } from '../../state/hooks.js';
@@ -19,7 +19,7 @@ import {
   contentSection,
   contentTitle,
   topBanner,
-} from './controllerUpdate.css';
+} from './controllerUpdate.css.js';
 
 const ControllerUpdate = () => {
   const { t } = useTranslation();
