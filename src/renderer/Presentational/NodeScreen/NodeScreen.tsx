@@ -331,6 +331,7 @@ const NodeScreen = () => {
   const nodeVersionData =
     typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
 
+  const syncData = { isSyncing: sIsSyncing, peers: sPeers };
   // console.log('singleNodeStatus', status);
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
@@ -343,7 +344,7 @@ const NodeScreen = () => {
       spec.category,
       // selectedNode?.config?.configValuesMap?.network ?? '',
     ),
-    status: getStatusObject(status),
+    status: getStatusObject(status, syncData),
     stats: {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,

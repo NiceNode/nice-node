@@ -34,6 +34,7 @@ import {
 } from './NodePackageScreen.css';
 import { getStatusObject } from '../../Generics/redesign/utils.js';
 import { NodeStatus } from '../../../common/node.js';
+import moment from 'moment';
 
 let alphaModalRendered = false;
 
@@ -365,6 +366,18 @@ const NodePackageScreen = () => {
   const nodeVersionData =
     typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
 
+  const now = moment();
+  const minutesPassedSinceLastRun = now.diff(
+    moment(selectedNodePackage?.lastRunningTimestampMs),
+    'minutes',
+  );
+  const syncData = {
+    isSyncing: sIsSyncing, //synchronized, improve this to check all services
+    peers: sPeers, //lowPeerCount
+    minutesPassedSinceLastRun, //lowPeerCount
+  };
+
+  console.log('syncData', syncData);
   const nodePackageContent: SingleNodeContent = {
     nodeId: selectedNodePackage.id,
     displayName: spec.displayName,
@@ -373,7 +386,7 @@ const NodePackageScreen = () => {
     rpcTranslation: spec.rpcTranslation,
     version: formatVersion(nodeVersionData), // todo: remove
     info: formatSpec(spec.displayTagline),
-    status: getStatusObject(status),
+    status: getStatusObject(status, syncData),
     stats: {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,
@@ -385,6 +398,8 @@ const NodePackageScreen = () => {
     description: spec.description,
     resources: spec.resources,
   };
+
+  console.log('nodePackageScreen', nodePackageContent.status);
 
   /**
    * export interface ClientStatusProps {

@@ -1,19 +1,26 @@
 import { type ClientStatusProps, SYNC_STATUS } from './consts';
 import { NodeStatus } from '../../../common/node.js';
 
-export const getStatusObject = (status: NodeStatus) => ({
+export const getStatusObject = (
+  status: NodeStatus = NodeStatus.unknown,
+  syncData: {
+    isSyncing: boolean;
+    peers: number;
+    minutesPassedSinceLastRun: number;
+  },
+) => ({
   starting: status === NodeStatus.starting,
   running: status === NodeStatus.running,
   stopping: status === NodeStatus.stopping,
   stopped: status === NodeStatus.stopped,
   updating: status === NodeStatus.updating,
   error: status.includes('error'),
+  synchronized: syncData?.isSyncing === false && status === NodeStatus.running,
+  lowPeerCount: syncData?.peers < 5 && syncData?.minutesPassedSinceLastRun > 20,
   // initialized: status === NodeStatus.initialized,
-  // synchronized: status === NodeStatus.synchronized,
   // blocksBehind: status === NodeStatus.blocksBehind,
   // catchingUp: status === NodeStatus.catchingUp,
   // noConnection: status === NodeStatus.noConnection,
-  // lowPeerCount: status === NodeStatus.lowPeerCount,
 });
 
 export const getSyncStatus = (status: ClientStatusProps) => {
