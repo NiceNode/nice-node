@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { NodeStatus } from '../../../common/node';
 import Button from '../../Generics/redesign/Button/Button';
+import CopyButton from '../../Generics/redesign/CopyButton/CopyButton.js';
 import { HeaderButton } from '../../Generics/redesign/HeaderButton/HeaderButton';
 import type { NodeAction } from '../../Generics/redesign/consts';
 import type { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
@@ -27,6 +28,7 @@ import { hexToDecimal } from '../../utils';
 import ContentSingleClient, {
   type SingleNodeContent,
 } from '../ContentSingleClient/ContentSingleClient';
+import { DevMode } from '../DevMode/DevMode.js';
 import {
   backButtonContainer,
   container,
@@ -384,6 +386,21 @@ const NodeScreen = () => {
         nodeOverview={nodeContent}
         isPodmanRunning={isPodmanRunning}
       />
+      <p>Controller version: {spec?.version}</p>
+      <DevMode>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <span>Active Controller Json</span>
+          <CopyButton data={JSON.stringify(selectedNode, null, 2)} />
+        </div>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <span>Controller Config Json</span>
+          <CopyButton data={JSON.stringify(selectedNode.config, null, 2)} />
+        </div>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <span>Controller Json</span>
+          <CopyButton data={JSON.stringify(selectedNode.spec, null, 2)} />
+        </div>
+      </DevMode>
     </>
   );
 };

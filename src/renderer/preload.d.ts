@@ -141,6 +141,7 @@ declare global {
       getSetIsPreReleaseUpdatesEnabled(
         isPreReleaseUpdatesEnabled?: boolean,
       ): void;
+      getSetIsDeveloperModeEnabled(isDeveloperModeEnabled?: boolean): void;
 
       // Notifications
       getNotifications(): any;

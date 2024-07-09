@@ -166,6 +166,9 @@ contextBridge.exposeInMainWorld('electron', {
       isPreReleaseUpdatesEnabled,
     );
   },
+  getSetIsDeveloperModeEnabled: (isDeveloperModeEnabled?: boolean) => {
+    ipcRenderer.invoke('getSetIsDeveloperModeEnabled', isDeveloperModeEnabled);
+  },
 
   // Notifications
   getNotifications: () => ipcRenderer.invoke('getNotifications'),

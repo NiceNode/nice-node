@@ -77,6 +77,7 @@ import {
   setNativeThemeSetting,
   setThemeSetting,
 } from './state/settings';
+import { getSetIsDeveloperModeEnabled } from './state/settings.js';
 import store from './state/store';
 import { getSystemInfo } from './systemInfo';
 
@@ -254,6 +255,12 @@ export const initialize = () => {
     'getSetIsPreReleaseUpdatesEnabled',
     (_event, isPreReleaseUpdatesEnabled?: boolean) => {
       return getSetIsPreReleaseUpdatesEnabled(isPreReleaseUpdatesEnabled);
+    },
+  );
+  ipcMain.handle(
+    'getSetIsDeveloperModeEnabled',
+    (_event, isDeveloperModeEnabled?: boolean) => {
+      return getSetIsDeveloperModeEnabled(isDeveloperModeEnabled);
     },
   );
 
