@@ -7,6 +7,7 @@ export const getStatusObject = (
     isSyncing: boolean;
     peers: number;
     minutesPassedSinceLastRun: number;
+    offline: boolean;
   },
 ) => ({
   starting: status === NodeStatus.starting,
@@ -16,11 +17,14 @@ export const getStatusObject = (
   updating: status === NodeStatus.updating,
   error: status.includes('error'),
   synchronized: syncData?.isSyncing === false && status === NodeStatus.running,
-  lowPeerCount: syncData?.peers < 5 && syncData?.minutesPassedSinceLastRun > 20,
+  lowPeerCount:
+    syncData?.peers < 5 &&
+    syncData?.minutesPassedSinceLastRun > 20 &&
+    status === NodeStatus.running,
+  noConnection: syncData?.offline && status === NodeStatus.running,
   // initialized: status === NodeStatus.initialized,
   // blocksBehind: status === NodeStatus.blocksBehind,
   // catchingUp: status === NodeStatus.catchingUp,
-  // noConnection: status === NodeStatus.noConnection,
 });
 
 export const getSyncStatus = (status: ClientStatusProps) => {
@@ -30,6 +34,12 @@ export const getSyncStatus = (status: ClientStatusProps) => {
     // find worst cases first
     case status.error:
       syncStatus = SYNC_STATUS.ERROR;
+      break;
+    case status.noConnection:
+      syncStatus = SYNC_STATUS.NO_NETWORK;
+      break;
+    case status.lowPeerCount:
+      syncStatus = SYNC_STATUS.LOW_PEER_COUNT;
       break;
     case status.updating:
       syncStatus = SYNC_STATUS.UPDATING;
@@ -43,9 +53,6 @@ export const getSyncStatus = (status: ClientStatusProps) => {
     case status.stopped:
       syncStatus = SYNC_STATUS.STOPPED;
       break;
-    case status.noConnection:
-      syncStatus = SYNC_STATUS.NO_NETWORK;
-      break;
     case status.online:
       syncStatus = SYNC_STATUS.ONLINE;
       break;
@@ -57,9 +64,6 @@ export const getSyncStatus = (status: ClientStatusProps) => {
       break;
     case !status.initialized && !status.synchronized && !status.blocksBehind:
       syncStatus = SYNC_STATUS.INITIALIZING;
-      break;
-    case status.lowPeerCount:
-      syncStatus = SYNC_STATUS.LOW_PEER_COUNT;
       break;
     case status.synchronized:
       syncStatus = SYNC_STATUS.SYNCHRONIZED;

@@ -21,10 +21,10 @@ import {
   useGetExecutionPeersQuery,
   useGetNodeVersionQuery,
 } from '../../state/services';
+import { useGetNetworkConnectedQuery } from '../../state/network';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import { hexToDecimal } from '../../utils';
 import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
-// import { useGetNetworkConnectedQuery } from './state/network';
 import type { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
 import {
   container,
@@ -101,6 +101,9 @@ const NodePackageScreen = () => {
   }
   // temporary until network is set at the node package level
   const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
+  const qNetwork = useGetNetworkConnectedQuery(null, {
+    pollingInterval: 30000,
+  });
 
   useEffect(() => {
     if (selectedNodePackage?.config?.configValuesMap?.network) {
@@ -375,6 +378,7 @@ const NodePackageScreen = () => {
     isSyncing: sIsSyncing, //synchronized, improve this to check all services
     peers: sPeers, //lowPeerCount
     minutesPassedSinceLastRun, //lowPeerCount
+    offline: qNetwork.status === 'rejected', //noConnection
   };
 
   console.log('syncData', syncData);
