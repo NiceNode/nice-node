@@ -84,7 +84,7 @@ export const SYNC_STATUS = Object.freeze({
   SYNCHRONIZED: 'synchronized',
   LOW_PEER_COUNT: 'lowPeerCount',
   BLOCKS_BEHIND: 'blocksBehind',
-  NO_NETWORK: 'noNetwork',
+  NO_CONNECTION: 'noConnection',
   ONLINE: 'online',
   STOPPED: 'stopped',
   STOPPING: 'stopping',

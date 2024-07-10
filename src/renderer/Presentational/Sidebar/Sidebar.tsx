@@ -154,6 +154,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
                 key={nodeId}
                 id={node.id}
                 node={node}
+                offline={offline}
                 selected={selectedNodePackageId === node.id}
                 onClick={() => {
                   navigate('/main/nodePackage');

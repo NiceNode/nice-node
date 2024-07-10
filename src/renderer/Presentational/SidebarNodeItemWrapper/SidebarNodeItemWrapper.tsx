@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { type NodePackage, NodeStatus } from '../../../common/node';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
-import { getSyncStatus } from '../../Generics/redesign/utils';
+import { getSyncStatus, getStatusObject } from '../../Generics/redesign/utils';
 import { useGetExecutionIsSyncingQuery } from '../../state/services';
 
 export type SidebarNodeStatus =
@@ -26,6 +26,7 @@ const NODE_SIDEBAR_STATUS_MAP: Record<string, SidebarNodeStatus> = {
   running: 'healthy',
   stopping: 'healthy',
   stopped: 'stopped',
+  [NodeStatus.noConnection]: 'error',
   [NodeStatus.errorRunning]: 'error',
   [NodeStatus.errorStarting]: 'error',
   [NodeStatus.errorStopping]: 'error',
@@ -42,6 +43,7 @@ export interface SidebarNodeItemWrapperProps {
    * What's the status?
    */
   status?: SidebarNodeStatus;
+  offline?: boolean;
   /**
    * Optional click handler
    */
@@ -58,6 +60,7 @@ export const SidebarNodeItemWrapper = ({
   selected,
   id,
   node,
+  offline,
 }: SidebarNodeItemWrapperProps) => {
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   const [sSyncPercent, setSyncPercent] = useState<string>('');
@@ -92,14 +95,13 @@ export const SidebarNodeItemWrapper = ({
 
   const { spec, status } = node;
 
-  const nodeStatus = {
-    stopped: status === 'stopped',
-    error: status.includes('error'),
-    synchronized: !sIsSyncing && Number.parseFloat(sSyncPercent) > 99.9,
+  const syncData = {
+    isSyncing: sIsSyncing,
+    offline,
   };
 
-  const syncStatus = getSyncStatus(nodeStatus);
-  const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[syncStatus];
+  const nodeStatus = getStatusObject(status, syncData);
+  const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[getSyncStatus(nodeStatus)];
 
   return (
     <SidebarNodeItem
