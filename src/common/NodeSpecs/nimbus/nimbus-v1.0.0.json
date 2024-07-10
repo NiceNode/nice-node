@@ -13,7 +13,7 @@
         "httpPort": "5052",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "http://localhost",
-        "executionEndpoint": "http://host.containers.internal:8551",
+        "executionEndpoint": "http://host.containers.internal",
         "network": "Mainnet"
       },
       "docker": {
@@ -165,7 +165,8 @@
   },
   "documentation": {
     "default": "https://nimbus.guide/",
-    "docker": "https://nimbus.guide/docker.html"
+    "docker": "https://nimbus.guide/docker.html",
+    "releaseNotesUrl": "https://github.com/status-im/nimbus-eth2/releases"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/nimbus-logo-text.png",
   "resources": [

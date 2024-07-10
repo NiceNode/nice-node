@@ -13,7 +13,7 @@
         "httpPort": "3500",
         "httpHostAddress": "0.0.0.0",
         "httpCorsDomains": "\"http://localhost\"",
-        "executionEndpoint": "http://host.containers.internal:8551",
+        "executionEndpoint": "http://host.containers.internal",
         "network": "Mainnet"
       },
       "docker": {
@@ -86,7 +86,34 @@
     },
     "p2pPortsTcp": {
       "displayName": "P2P listening port (TCP)",
-      "cliConfigPrefix": "--tcp-port=",
+      "cliConfigPrefix": "--p2p-tcp-port=",
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 13000",
+      "defaultValue": "13000",
+      "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters"
+    },
+    "quic": {
+      "displayName": "QUIC Connections",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--enable-quic"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters"
+    },
+    "quicPort": {
+      "displayName": "QUIC port",
+      "cliConfigPrefix": ["p2p-quic-port="],
       "uiControl": {
         "type": "text"
       },
@@ -96,7 +123,7 @@
     },
     "p2pPortsUdp": {
       "displayName": "P2P discovery port (UDP)",
-      "cliConfigPrefix": "--udp-port=",
+      "cliConfigPrefix": "--p2p-udp-port=",
       "uiControl": {
         "type": "text"
       },
@@ -149,7 +176,8 @@
   },
   "documentation": {
     "default": "https://docs.prylabs.network/docs/getting-started",
-    "docker": "https://docs.prylabs.network/docs/install/install-with-docker/"
+    "docker": "https://docs.prylabs.network/docs/install/install-with-docker/",
+    "releaseNotesUrl": "https://github.com/prysmaticlabs/prysm/releases"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/prysm-logo.png",
   "resources": [

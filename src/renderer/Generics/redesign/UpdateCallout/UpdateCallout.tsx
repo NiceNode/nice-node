@@ -9,31 +9,56 @@ import {
 
 import Button from '../Button/Button';
 import ExternalLink from '../Link/ExternalLink';
+import InternalLink from '../Link/InternalLink.js';
 
 export interface UpdateCalloutProps {
-  onClick: () => void;
+  onClickInstallUpdate: () => void;
+  serviceName: string;
+  releaseNotesUrl?: string;
+  onClickShowChanges?: () => void;
 }
 
-export const UpdateCallout = ({ onClick }: UpdateCalloutProps) => {
+export const UpdateCallout = ({
+  onClickInstallUpdate,
+  serviceName,
+  releaseNotesUrl,
+  onClickShowChanges,
+}: UpdateCalloutProps) => {
   const { t: g } = useTranslation('genericComponents');
+
   const onInstallClick = () => {
-    onClick();
-    console.log('install action!');
+    onClickInstallUpdate();
+    console.log('install update clicked!');
   };
+  console.log('UpdateCallout releaseNotesUrl', releaseNotesUrl);
   return (
     <div className={container}>
-      <div className={title}>{g('UpdateClientDescription')}</div>
+      <div className={title}>
+        {g('UpdateNamedClient', { client: serviceName })}
+      </div>
       <div className={description}>
-        {g('UpdateClientDescription', {
-          client: 'test',
+        {g('UpdateStopClient', {
+          client: serviceName,
         })}
       </div>
-      <div className={link}>
-        <ExternalLink
-          text={g('ViewReleaseNotes')}
-          url="https://docs.docker.com/desktop/#download-and-install"
-        />
-      </div>
+      {releaseNotesUrl && (
+        <div className={link}>
+          <ExternalLink
+            text={g('ViewNamedReleaseNotes', {
+              name: serviceName,
+            })}
+            url={releaseNotesUrl}
+          />
+        </div>
+      )}
+      {onClickShowChanges && (
+        <div className={link}>
+          <InternalLink
+            text={g('ViewDetailedChanges')}
+            onClick={onClickShowChanges}
+          />
+        </div>
+      )}
       <div className={buttonContainer}>
         <Button
           type="primary"
@@ -42,7 +67,7 @@ export const UpdateCallout = ({ onClick }: UpdateCalloutProps) => {
           size="small"
           onClick={onInstallClick}
         />
-        <Button wide label={g('Skip')} size="small" onClick={onClick} />
+        {/* <Button wide label={g('Skip')} size="small" onClick={onClick} /> */}
       </div>
     </div>
   );

@@ -20,6 +20,7 @@ export type ClientConfigTranslations = {
 };
 
 export interface InitialClientConfigsProps {
+  tempConfigValues: ConfigValuesMap;
   clientSpecs: NodeSpecification[];
   required?: boolean;
   disableSaveButton?: (value: boolean) => void;
@@ -27,6 +28,7 @@ export interface InitialClientConfigsProps {
 }
 
 const InitialClientConfigs = ({
+  tempConfigValues,
   clientSpecs,
   required = false,
   disableSaveButton = () => {},
@@ -137,7 +139,9 @@ const InitialClientConfigs = ({
       {Object.keys(sClientConfigTranslations).map((clientId: string) => {
         const clientConfigTranslation = sClientConfigTranslations[clientId];
         const singleClientConfigValues =
-          (sClientConfigValues as ConfigValuesMap)[clientId] || {};
+          tempConfigValues[clientId] ||
+          (sClientConfigValues as ConfigValuesMap)[clientId] ||
+          {};
 
         return (
           <React.Fragment key={clientId}>

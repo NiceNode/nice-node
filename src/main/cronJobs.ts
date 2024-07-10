@@ -2,10 +2,13 @@ import { CronJob } from 'cron';
 import type { NodeId, NodeStatus, UserNodePackages } from '../common/node';
 import { reportEvent } from './events';
 import logger from './logger';
+import { setLastRunningTime } from './node/setLastRunningTime';
+import { updateLocalNodeAndPackageLibrary } from './nodeLibraryManager.js';
 import { getUserNodePackagesWithNodes } from './state/nodePackages';
 import store from './state/store';
 
 const CRON_ONCE_A_DAY = '0 0 * * *';
+const CRON_EVERY_HOUR = '0 * * * *';
 // const CRON_ONCE_A_DAY = '* * * * *'; // one minute for testing
 
 type NodeReportData = {
@@ -104,12 +107,51 @@ const dailyReportJob = new CronJob(CRON_ONCE_A_DAY, async () => {
   logger.info('End cron dailyReportJob.');
 });
 
+const updateNodesLastRunningTimeFunc = async () => {
+  const userNodePackages = await getUserNodePackagesWithNodes();
+  const waitForPromises: Promise<void>[] = [];
+  userNodePackages?.nodeIds.forEach((nodeId: NodeId) => {
+    const nodePackage = userNodePackages.nodes[nodeId];
+    waitForPromises.push(setLastRunningTime(nodePackage.id, 'node'));
+    nodePackage.services.forEach((service) => {
+      const nodeId: NodeId = service.node.id;
+      waitForPromises.push(setLastRunningTime(nodeId, 'nodeService'));
+    });
+  });
+  await Promise.all(waitForPromises);
+};
+
+const hourlyNodesNodesLastRunningTimeJob = new CronJob(
+  CRON_EVERY_HOUR,
+  async () => {
+    logger.info('Running cron hourlyNodesNodesLastRunningTimeJob...');
+    await updateNodesLastRunningTimeFunc();
+    logger.info('End cron hourlyNodesNodesLastRunningTimeJob.');
+  },
+);
+
+// Run once everyday at midnight in the user's local timezone
+const dailyNodeUpdateCheck = new CronJob(CRON_ONCE_A_DAY, async () => {
+  logger.info('Running cron dailyNodeUpdateCheck...');
+  await updateLocalNodeAndPackageLibrary();
+  logger.info('End cron dailyNodeUpdateCheck.');
+});
+
+export const onExit = () => {
+  // Stop cron jobs on app exit
+  dailyReportJob.stop();
+  hourlyNodesNodesLastRunningTimeJob.stop();
+};
+
 export const initialize = () => {
   // Start the cron jobs and then run some for a first time now
   dailyReportJob.start();
+  hourlyNodesNodesLastRunningTimeJob.start();
+  dailyNodeUpdateCheck.start();
   // Wait 30 seconds for front end to load
   // todo: send report events from backend
   setTimeout(() => {
     dailyReportFunc();
+    updateNodesLastRunningTimeFunc();
   }, 30000); // 30 seconds
 };

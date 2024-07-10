@@ -8,6 +8,7 @@ import type Node from '../../common/node';
 import { NodeStatus, getContainerName, getImageTag } from '../../common/node';
 import type { DockerExecution as PodmanExecution } from '../../common/nodeSpec';
 import logger from '../logger';
+import { assignPortsToNode } from '../ports';
 import {
   setDockerNodeStatus as setPodmanNodeStatus,
   updateNode as storeUpdateNode,
@@ -411,6 +412,7 @@ const createPodmanPortInput = (
     httpPort,
     webSocketsPort,
     quicPortUdp = undefined,
+    quicPort = undefined,
     gRpcPort,
   } = configTranslation;
   const {
@@ -421,6 +423,7 @@ const createPodmanPortInput = (
     httpPort: configHttpPort,
     webSocketsPort: configWsPort,
     quicPortUdp: configQuicPortUdp,
+    quicPort: configQuicPort,
     gRpcPort: configGRpcPort,
   } = configValuesMap || {};
   const result = [];
@@ -463,9 +466,14 @@ const createPodmanPortInput = (
   }
 
   // Handle quic port if it exists (only lighthouse)
-  const quicPortValue = configQuicPortUdp || quicPortUdp?.defaultValue;
+  const quicPortUdpValue = configQuicPortUdp || quicPortUdp?.defaultValue;
+  if (quicPortUdpValue) {
+    result.push(`-p ${quicPortUdpValue}:${quicPortUdpValue}/udp`);
+  }
+
+  const quicPortValue = configQuicPort || quicPort?.defaultValue;
   if (quicPortValue) {
-    result.push(`-p ${quicPortValue}:${quicPortValue}/udp`);
+    result.push(`-p ${quicPortValue}:${quicPortValue}`);
   }
 
   // Handle grpc port
@@ -711,7 +719,14 @@ export const startPodmanNode = async (node: Node): Promise<string[]> => {
     }
   }
 
-  const podmanCommand = createRunCommand(node);
+  let updatedNode = { ...node };
+  if (node.runtime?.initialized !== true) {
+    updatedNode = assignPortsToNode(updatedNode);
+    updatedNode.runtime.initialized = true;
+    storeUpdateNode(updatedNode);
+  }
+
+  const podmanCommand = createRunCommand(updatedNode);
   // todo: test if input is empty string
   const runData = await runCommand(podmanCommand);
   // todoo: get containerId by container name?

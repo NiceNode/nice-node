@@ -42,7 +42,7 @@ export const config: Options.Testrunner = {
   // will be called from there.
   //
   // specs: [['./test/specs/**/*.ts'], ['./test/specs/**/*.ts']],
-  specs: ['./test/specs/**/*.ts'],
+  specs: ['./test/specs/ci/**/*.ts'],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -101,8 +101,8 @@ export const config: Options.Testrunner = {
   // Define all options that are relevant for the WebdriverIO instance here
   //
   // Level of logging verbosity: trace | debug | info | warn | error | silent
-  // logLevel: 'info',
-  logLevel: 'debug',
+  logLevel: 'info',
+  // logLevel: 'debug',
   //
   // Set specific log levels per logger
   // loggers:

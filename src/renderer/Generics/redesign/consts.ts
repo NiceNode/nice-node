@@ -32,6 +32,7 @@ export interface ClientStatsProps {
 
 export interface ClientProps {
   id: NodeId;
+  packageName: string;
   displayName: string;
   name: NodeBackgroundId | string;
   version: string;
@@ -55,6 +56,12 @@ export interface NodeOverviewProps {
   stats: ClientStatsProps;
   onAction?: (action: NodeAction) => void;
   description?: string;
+  documentation?: {
+    default?: string;
+    docker?: string;
+    binary?: string;
+    releaseNotesUrl?: string;
+  };
 }
 
 export interface SyncStatusProps {

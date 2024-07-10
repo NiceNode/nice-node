@@ -9,7 +9,7 @@ import { setOpenAtLoginLinux } from '../util/linuxAutostartFile';
 import store from './store';
 
 // export type Settings = Record<string, string | object | boolean>;
-const SETTINGS_KEY = 'settings';
+export const SETTINGS_KEY = 'settings';
 const OS_PLATFORM_KEY = 'osPlatform';
 const OS_ARCHITECTURE = 'osArchitecture';
 const OS_LANGUAGE_KEY = 'osLanguage';
@@ -21,8 +21,9 @@ const APP_HAS_SEEN_ALPHA_MODAL = 'appHasSeenAlphaModal';
 const APP_THEME_SETTING = 'appThemeSetting';
 const APP_IS_OPEN_ON_STARTUP = 'appIsOpenOnStartup';
 const APP_IS_NOTIFICATIONS_ENABLED = 'appIsNotificationsEnabled';
-const APP_IS_EVENT_REPORTING_ENABLED = 'appIsEventReportingEnabled';
+export const APP_IS_EVENT_REPORTING_ENABLED = 'appIsEventReportingEnabled';
 const APP_IS_PRE_RELEASE_UPDATES_ENABLED = 'appIsPreReleaseUpdatesEnabled';
+export const APP_IS_DEVELOPER_MODE_ENABLED = 'appIsDeveloperModeEnabled';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
 export type Settings = {
@@ -37,6 +38,7 @@ export type Settings = {
   [APP_IS_NOTIFICATIONS_ENABLED]?: boolean;
   [APP_IS_EVENT_REPORTING_ENABLED]?: boolean;
   [APP_IS_PRE_RELEASE_UPDATES_ENABLED]?: boolean;
+  [APP_IS_DEVELOPER_MODE_ENABLED]?: boolean;
 };
 
 /**
@@ -189,6 +191,22 @@ export const getSetIsPreReleaseUpdatesEnabled = (
     `${SETTINGS_KEY}.${APP_IS_PRE_RELEASE_UPDATES_ENABLED}`,
   );
   return savedIsPreReleaseUpdatesEnabled;
+};
+
+export const getSetIsDeveloperModeEnabled = (
+  isDeveloperModeEnabled?: boolean,
+) => {
+  if (isDeveloperModeEnabled !== undefined) {
+    logger.info(`Setting isDeveloperModeEnabled to ${isDeveloperModeEnabled}`);
+    store.set(
+      `${SETTINGS_KEY}.${APP_IS_DEVELOPER_MODE_ENABLED}`,
+      isDeveloperModeEnabled,
+    );
+  }
+  const savedIsDeveloperModeEnabled: boolean = store.get(
+    `${SETTINGS_KEY}.${APP_IS_DEVELOPER_MODE_ENABLED}`,
+  );
+  return savedIsDeveloperModeEnabled;
 };
 
 // listen to OS theme updates

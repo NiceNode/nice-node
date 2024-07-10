@@ -3,6 +3,12 @@ import https from 'node:https';
 
 import logger from './logger';
 
+/**
+ *
+ * @param url
+ * @param options isHttp should be true if the url is http, false if https
+ * @returns
+ */
 export const httpGet = (
   url: string,
   options?: {

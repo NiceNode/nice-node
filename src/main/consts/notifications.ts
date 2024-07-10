@@ -40,17 +40,9 @@ export const NOTIFICATIONS = Object.freeze({
   },
   COMPLETED: {
     CLIENT_UPDATED: {
-      title: 'Client successfuly updated',
-      description: 'consensus client',
+      title: 'ClientSuccessfulyUpdatedTitle',
+      description: 'ClientSuccessfulyUpdatedDescription',
       status: STATUS.COMPLETED,
-      limit: 0,
-    },
-  },
-  DOWNLOAD: {
-    UPDATE_AVAILABLE: {
-      title: 'Client successfuly updated',
-      description: 'consensus client',
-      status: STATUS.DOWNLOAD,
       limit: 0,
     },
   },
@@ -76,6 +68,12 @@ export const NOTIFICATIONS = Object.freeze({
     UNEXPECTED_PORTS_OPEN: {
       title: 'UnexpectedPortsOpenTitle',
       description: 'UnexpectedPortsOpenDescription',
+      status: STATUS.WARNING,
+      limit: 0,
+    },
+    CLIENT_UPDATE_ERROR: {
+      title: 'ClientUpdateErrorTitle',
+      description: 'ClientUpdateErrorDescription',
       status: STATUS.WARNING,
       limit: 0,
     },

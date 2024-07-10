@@ -35,6 +35,7 @@ export type Preference =
   | 'isNotificationsEnabled'
   | 'isEventReportingEnabled'
   | 'isPreReleaseUpdatesEnabled'
+  | 'isDeveloperModeEnabled'
   | 'language';
 export interface PreferencesProps {
   themeSetting?: ThemeSetting;
@@ -43,6 +44,7 @@ export interface PreferencesProps {
   isNotificationsEnabled?: boolean;
   isEventReportingEnabled?: boolean;
   isPreReleaseUpdatesEnabled?: boolean;
+  isDeveloperModeEnabled?: boolean;
   version?: string;
   language?: string;
   onChange?: (preference: Preference, value: unknown) => void;
@@ -55,6 +57,7 @@ const Preferences = ({
   isNotificationsEnabled,
   isEventReportingEnabled,
   isPreReleaseUpdatesEnabled,
+  isDeveloperModeEnabled,
   version,
   language,
   onChange,
@@ -225,10 +228,8 @@ const Preferences = ({
               sectionTitle: '',
               items: [
                 {
-                  label: t('SendErrorReports'),
-                  description: `${t('SendErrorReportsDescription')} (${
-                    import.meta.env.MP_PROJECT_ENV
-                  })`,
+                  label: t('SendErrorEventReports'),
+                  description: `${t('SendErrorEventReportsDescription')}`,
                   value: (
                     <Toggle
                       onText={t('Enabled')}
@@ -241,6 +242,7 @@ const Preferences = ({
                       }}
                     />
                   ),
+                  learnMoreLink: 'https://impact.nicenode.xyz',
                 },
               ],
             },
@@ -271,6 +273,24 @@ const Preferences = ({
                     />
                   ),
                 },
+                {
+                  label: `${t('Developer mode')}`,
+                  description: t(
+                    'Show developer information throuhout the app marked by  👷',
+                  ),
+                  value: (
+                    <Toggle
+                      onText={t('Enabled')}
+                      offText={t('Disabled')}
+                      checked={isDeveloperModeEnabled}
+                      onChange={(newValue) => {
+                        if (onChange) {
+                          onChange('isDeveloperModeEnabled', newValue);
+                        }
+                      }}
+                    />
+                  ),
+                },
               ],
             },
           ]}
@@ -278,6 +298,7 @@ const Preferences = ({
       </div>
       <div className={versionContainer}>
         {t('YouAreRunningNiceNode')} {version} {import.meta.env.NICENODE_ENV}
+        {import.meta.env.MP_PROJECT_ENV}
       </div>
     </div>
   );

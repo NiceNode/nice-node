@@ -30,9 +30,9 @@
         ]
       },
       "docker": {
-        "containerVolumePath": "/root/.ethereum",
+        "containerVolumePath": "/root/.local/share/erigon",
         "raw": "",
-        "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --authrpc.jwtsecret /root/.ethereum/jwtsecret"
+        "forcedRawNodeInput": "--authrpc.addr 0.0.0.0 --datadir /root/.local/share/erigon --authrpc.jwtsecret /root/.local/share/erigon/jwtsecret"
       }
     }
   },
@@ -273,12 +273,12 @@
           {
             "value": "full",
             "config": "--prune=hrtc",
-            "info": "~800GB / ~2d"
+            "info": "~2TB / ~2d"
           },
           {
             "value": "archive",
             "config": "",
-            "info": "~16TB"
+            "info": "~3.5TB"
           }
         ]
       },
@@ -290,6 +290,10 @@
   },
   "category": "L1/ExecutionClient",
   "rpcTranslation": "eth-l1",
+  "documentation": {
+    "default": "https://erigon.tech/",
+    "releaseNotesUrl": "https://github.com/ledgerwatch/erigon/releases"
+  },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/erigon-text-logo.png",
   "resources": [
     {
