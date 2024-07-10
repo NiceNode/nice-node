@@ -290,6 +290,10 @@
   },
   "category": "L1/ExecutionClient",
   "rpcTranslation": "eth-l1",
+  "documentation": {
+    "default": "https://erigon.tech/",
+    "releaseNotesUrl": "https://github.com/ledgerwatch/erigon/releases"
+  },
   "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/erigon-text-logo.png",
   "resources": [
     {

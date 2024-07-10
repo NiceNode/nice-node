@@ -176,7 +176,8 @@
   },
   "documentation": {
     "default": "https://docs.prylabs.network/docs/getting-started",
-    "docker": "https://docs.prylabs.network/docs/install/install-with-docker/"
+    "docker": "https://docs.prylabs.network/docs/install/install-with-docker/",
+    "releaseNotesUrl": "https://github.com/prysmaticlabs/prysm/releases"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/prysm-logo.png",
   "resources": [

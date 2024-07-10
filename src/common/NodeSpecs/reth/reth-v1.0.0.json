@@ -332,7 +332,8 @@
     }
   },
   "documentation": {
-    "default": "https://paradigmxyz.github.io/reth"
+    "default": "https://paradigmxyz.github.io/reth",
+    "releaseNotesUrl": "https://github.com/paradigmxyz/reth/releases"
   },
   "resources": [
     {

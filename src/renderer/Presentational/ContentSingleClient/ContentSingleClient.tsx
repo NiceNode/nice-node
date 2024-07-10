@@ -59,6 +59,12 @@ export type SingleNodeContent = {
   onAction?: (action: NodeAction) => void;
   description?: string;
   resources?: LabelValuesSectionItemsProps[];
+  documentation?: {
+    default?: string;
+    docker?: string;
+    binary?: string;
+    releaseNotesUrl?: string;
+  };
 };
 
 type ContentSingleClientProps = {
@@ -90,6 +96,7 @@ const ContentSingleClient = ({
   const { tabsData, name } = nodeOverview;
   const { t } = useTranslation();
 
+  console.log('singleclient documentation', nodeOverview.documentation);
   return (
     <>
       {/* todo: fix temp type casting */}

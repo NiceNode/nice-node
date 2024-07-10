@@ -197,6 +197,7 @@ const ContentMultipleClients = (props: {
       description: nodeContent.description ?? '',
       onAction,
       rpcTranslation: 'eth-l1', // todo
+      releaseNotesUrl: nodeContent.documentation?.releaseNotesUrl,
     };
     return nodeOverview;
   }, [JSON.stringify(nodeContent?.status), JSON.stringify(nodeContent?.stats)]);
