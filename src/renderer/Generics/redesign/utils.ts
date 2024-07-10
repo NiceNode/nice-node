@@ -8,6 +8,7 @@ export const getStatusObject = (
     peers: number;
     minutesPassedSinceLastRun: number;
     offline: boolean;
+    updateAvailable: boolean;
   },
 ) => ({
   starting: status === NodeStatus.starting,
@@ -15,6 +16,7 @@ export const getStatusObject = (
   stopping: status === NodeStatus.stopping,
   stopped: status === NodeStatus.stopped,
   updating: status === NodeStatus.updating,
+  updateAvailable: syncData?.updateAvailable,
   error: status.includes('error'),
   synchronized: syncData?.isSyncing === false && status === NodeStatus.running,
   lowPeerCount:

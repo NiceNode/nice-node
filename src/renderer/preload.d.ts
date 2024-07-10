@@ -114,6 +114,10 @@ declare global {
       // Node library
       getNodeLibrary(): NodeLibrary;
       getNodePackageLibrary(): NodePackageLibrary;
+      getCheckForControllerUpdate(
+        nodeId: NodeId,
+      ): NodeSpecification | undefined;
+      applyNodeUpdate(nodeId: NodeId): boolean;
 
       // Podman
       getIsPodmanInstalled(): boolean;
@@ -137,6 +141,7 @@ declare global {
       getSetIsPreReleaseUpdatesEnabled(
         isPreReleaseUpdatesEnabled?: boolean,
       ): void;
+      getSetIsDeveloperModeEnabled(isDeveloperModeEnabled?: boolean): void;
 
       // Notifications
       getNotifications(): any;
