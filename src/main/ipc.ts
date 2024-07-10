@@ -28,6 +28,7 @@ import {
   getMainProcessUsage,
   updateNodeLastSyncedBlock,
 } from './monitor';
+import { getCheckForControllerUpdate } from './nodeLibraryManager.js';
 import {
   addNode,
   deleteNodeStorage,
@@ -39,6 +40,7 @@ import {
   stopNode,
   stopSendingNodeLogs,
 } from './nodeManager';
+import { applyNodeUpdate } from './nodeManager.js';
 import {
   type AddNodePackageNodeService,
   addNodePackage,
@@ -75,6 +77,7 @@ import {
   setNativeThemeSetting,
   setThemeSetting,
 } from './state/settings';
+import { getSetIsDeveloperModeEnabled } from './state/settings.js';
 import store from './state/store';
 import { getSystemInfo } from './systemInfo';
 
@@ -200,6 +203,12 @@ export const initialize = () => {
   // Node library
   ipcMain.handle('getNodeLibrary', getNodeLibrary);
   ipcMain.handle('getNodePackageLibrary', getNodePackageLibrary);
+  ipcMain.handle('getCheckForControllerUpdate', (_event, nodeId: NodeId) => {
+    return getCheckForControllerUpdate(nodeId);
+  });
+  ipcMain.handle('applyNodeUpdate', (_event, nodeId: NodeId) => {
+    return applyNodeUpdate(nodeId);
+  });
 
   // Podman
   ipcMain.handle('getIsPodmanInstalled', isPodmanInstalled);
@@ -246,6 +255,12 @@ export const initialize = () => {
     'getSetIsPreReleaseUpdatesEnabled',
     (_event, isPreReleaseUpdatesEnabled?: boolean) => {
       return getSetIsPreReleaseUpdatesEnabled(isPreReleaseUpdatesEnabled);
+    },
+  );
+  ipcMain.handle(
+    'getSetIsDeveloperModeEnabled',
+    (_event, isDeveloperModeEnabled?: boolean) => {
+      return getSetIsDeveloperModeEnabled(isDeveloperModeEnabled);
     },
   );
 

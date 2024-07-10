@@ -94,6 +94,33 @@
       "defaultValue": "13000",
       "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters"
     },
+    "quic": {
+      "displayName": "QUIC Connections",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Enabled",
+            "config": "--enable-quic"
+          },
+          {
+            "value": "Disabled"
+          }
+        ]
+      },
+      "defaultValue": "Disabled",
+      "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters"
+    },
+    "quicPort": {
+      "displayName": "QUIC port",
+      "cliConfigPrefix": ["p2p-quic-port="],
+      "uiControl": {
+        "type": "text"
+      },
+      "infoDescription": "Example value: 13000",
+      "defaultValue": "13000",
+      "documentation": "https://docs.prylabs.network/docs/prysm-usage/parameters"
+    },
     "p2pPortsUdp": {
       "displayName": "P2P discovery port (UDP)",
       "cliConfigPrefix": "--p2p-udp-port=",
@@ -149,7 +176,8 @@
   },
   "documentation": {
     "default": "https://docs.prylabs.network/docs/getting-started",
-    "docker": "https://docs.prylabs.network/docs/install/install-with-docker/"
+    "docker": "https://docs.prylabs.network/docs/install/install-with-docker/",
+    "releaseNotesUrl": "https://github.com/prysmaticlabs/prysm/releases"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/prysm-logo.png",
   "resources": [

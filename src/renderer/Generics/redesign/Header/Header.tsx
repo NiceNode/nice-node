@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import type { NodeSpecification } from '../../../../common/nodeSpec.js';
+import { modalRoutes } from '../../../Presentational/ModalManager/modalUtils.js';
+import electron from '../../../electronGlobal.js';
 import { useAppDispatch } from '../../../state/hooks';
 import { setModalState } from '../../../state/modal';
 import Button, { type ButtonProps } from '../Button/Button';
@@ -31,6 +34,7 @@ type HeaderProps = {
  */
 export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
   const {
+    nodeId,
     name,
     displayName,
     title,
@@ -39,6 +43,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
     status,
     version,
     onAction,
+    documentation,
   } = nodeOverview;
 
   const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
@@ -112,7 +117,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
             }}
           >
             <Button
-              label={g('UpdateAvailable')}
+              label={g('Update')}
               type="primary"
               iconId="down"
               variant="icon-right"
@@ -126,9 +131,25 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
               // biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
               <div className={popupContainer} tabIndex={0}>
                 <UpdateCallout
-                  onClick={() => {
+                  // todo: pass http link to container release notes
+                  // todo: pass modal link for controller changes
+                  serviceName={displayName || name}
+                  releaseNotesUrl={documentation?.releaseNotesUrl}
+                  onClickShowChanges={() => {
+                    console.log('show change modal');
+                    dispatch(
+                      setModalState({
+                        isModalOpen: true,
+                        screen: {
+                          route: modalRoutes.controllerUpdate,
+                          type: 'modal',
+                        },
+                      }),
+                    );
+                  }}
+                  onClickInstallUpdate={() => {
                     setIsCalloutDisplayed(false);
-                    console.log('clicked!');
+                    electron.applyNodeUpdate(nodeId);
                   }}
                 />
               </div>
@@ -199,17 +220,29 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
             <div className={popupContainer}>
               <Menu width={156}>
                 {screenType === 'client' && (
-                  <MenuItem
-                    text={g('NodeSettings')}
-                    onClick={() => {
-                      dispatch(
-                        setModalState({
-                          isModalOpen: true,
-                          screen: { route: 'nodeSettings', type: 'modal' },
-                        }),
-                      );
-                    }}
-                  />
+                  <>
+                    <MenuItem
+                      text={g('NodeSettings')}
+                      onClick={() => {
+                        dispatch(
+                          setModalState({
+                            isModalOpen: true,
+                            screen: { route: 'nodeSettings', type: 'modal' },
+                          }),
+                        );
+                      }}
+                    />
+                    <MenuItem
+                      text={g('CheckForUpdates')}
+                      onClick={async () => {
+                        // dispatch checkForUpdates, show loading icon?, then show success or error in-line?
+                        setIsSettingsDisplayed(false);
+                        const isUpdateAvailable: NodeSpecification | undefined =
+                          await electron.getCheckForControllerUpdate(nodeId);
+                        console.log('isUpdateAvailable:', isUpdateAvailable);
+                      }}
+                    />
+                  </>
                 )}
                 {screenType === 'nodePackage' && (
                   <MenuItem

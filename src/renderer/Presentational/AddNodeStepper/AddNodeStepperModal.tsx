@@ -1,6 +1,6 @@
 // This component could be made into a Generic "FullScreenStepper" component
 // Just make sure to always render each child so that children component state isn't cleard
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 
 import type { SystemRequirements } from '../../../common/systemRequirements';
 import type {
@@ -12,6 +12,7 @@ import AddNode, { type AddNodeValues } from '../AddNode/AddNode';
 import AddNodeConfiguration, {
   type AddNodeConfigurationValues,
 } from '../AddNodeConfiguration/AddNodeConfiguration';
+import { mergeObjectReducerWithReset } from '../AddNodeConfiguration/deepMerge.js';
 import type { ModalConfig } from '../ModalManager/modalUtils';
 import NodeRequirements from '../NodeRequirements/NodeRequirements';
 import PodmanInstallation from '../PodmanInstallation/PodmanInstallation';
@@ -44,6 +45,11 @@ const AddNodeStepperModal = ({
     useState<AddNodeConfigurationValues>();
   const [sNodeRequirements, setNodeRequirements] =
     useState<SystemRequirements>();
+  const [tempConfigValues, setTemporaryClientConfigValues] = useReducer(
+    mergeObjectReducerWithReset,
+    {},
+  );
+  const [selectedNode, setSelectedNode] = useState<string>('');
 
   const onChangeAddNodeConfiguration = (
     newValue: AddNodeConfigurationValues,
@@ -108,10 +114,14 @@ const AddNodeStepperModal = ({
       });
       // clear step 1 (client selections) when user changes node (package)
       setEthereumNodeConfig(undefined);
+      setSelectedNode(nodeSelectOption.value);
+      if (selectedNode !== nodeSelectOption.value) {
+        setTemporaryClientConfigValues({ payload: { reset: true } });
+      }
       console.log('AddNodeStepperModal setNode: config', config);
       setNodeConfig(config);
     },
-    [],
+    [selectedNode],
   );
 
   const onChangeDockerInstall = useCallback((newValue: string) => {
@@ -141,6 +151,8 @@ const AddNodeStepperModal = ({
             onChange={onChangeAddNodeConfiguration}
             disableSaveButton={disableSaveButton}
             shouldHideTitle
+            tempConfigValues={tempConfigValues}
+            setTemporaryClientConfigValues={setTemporaryClientConfigValues}
           />
         );
         break;

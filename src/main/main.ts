@@ -31,11 +31,14 @@ import {
 import { isLinux } from './platform';
 import * as power from './power';
 import * as processExit from './processExit';
+import {
+  APP_IS_EVENT_REPORTING_ENABLED,
+  SETTINGS_KEY,
+} from './state/settings.js';
+import store from './state/store.js';
 import * as systemInfo from './systemInfo';
 import * as tray from './tray';
 import * as updater from './updater';
-import { resolveHtmlPath } from './util';
-import { fixPathEnvVar } from './util/fixPathEnvVar';
 
 if (process.env.NODE_ENV === 'development') {
   dotenv.config();
@@ -57,12 +60,18 @@ if (isTest && process.env.TEST_ENV === 'wdio') {
 // fixPathEnvVar();
 logger.info(`NICENODE_ENV: ${process.env.NICENODE_ENV}`);
 logger.info(`MP_PROJECT_ENV: ${process.env.MP_PROJECT_ENV}`);
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  maxBreadcrumbs: 50,
-  debug: process.env.NODE_ENV === 'development',
-  environment: process.env.NICENODE_ENV || 'development',
-});
+
+const errorEventReporting = store.get(
+  `${SETTINGS_KEY}.${APP_IS_EVENT_REPORTING_ENABLED}`,
+);
+if (errorEventReporting === null || errorEventReporting) {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    maxBreadcrumbs: 50,
+    debug: process.env.NODE_ENV === 'development',
+    environment: process.env.NICENODE_ENV || 'development',
+  });
+}
 
 let mainWindow: BrowserWindow | null = null;
 export const getMainWindow = () => mainWindow;

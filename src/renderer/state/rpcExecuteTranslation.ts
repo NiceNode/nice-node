@@ -249,7 +249,7 @@ export const executeTranslation = async (
       // const resp = await StarkNetClient.request('starknet_syncing', []);
       const resp = await callJsonRpc('starknet_syncing', []);
       // StarkNetClient.re
-      console.log('starkent syncing resp: ', resp);
+      console.log('starknet syncing resp: ', resp);
       // const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/syncing`);
       if (resp?.data?.is_syncing !== undefined) {
         let syncPercent;

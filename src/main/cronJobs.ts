@@ -3,6 +3,7 @@ import type { NodeId, NodeStatus, UserNodePackages } from '../common/node';
 import { reportEvent } from './events';
 import logger from './logger';
 import { setLastRunningTime } from './node/setLastRunningTime';
+import { updateLocalNodeAndPackageLibrary } from './nodeLibraryManager.js';
 import { getUserNodePackagesWithNodes } from './state/nodePackages';
 import store from './state/store';
 
@@ -129,6 +130,13 @@ const hourlyNodesNodesLastRunningTimeJob = new CronJob(
   },
 );
 
+// Run once everyday at midnight in the user's local timezone
+const dailyNodeUpdateCheck = new CronJob(CRON_ONCE_A_DAY, async () => {
+  logger.info('Running cron dailyNodeUpdateCheck...');
+  await updateLocalNodeAndPackageLibrary();
+  logger.info('End cron dailyNodeUpdateCheck.');
+});
+
 export const onExit = () => {
   // Stop cron jobs on app exit
   dailyReportJob.stop();
@@ -139,6 +147,7 @@ export const initialize = () => {
   // Start the cron jobs and then run some for a first time now
   dailyReportJob.start();
   hourlyNodesNodesLastRunningTimeJob.start();
+  dailyNodeUpdateCheck.start();
   // Wait 30 seconds for front end to load
   // todo: send report events from backend
   setTimeout(() => {
