@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import type { NodeId } from 'src/common/node.js';
 import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 import { Header } from '../../Generics/redesign/Header/Header';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
@@ -58,20 +59,17 @@ const ContentMultipleClients = (props: {
     onDismissClick();
   }, [onDismissClick]);
 
-  const onAction = useCallback(
-    (action: any) => {
-      // todo: handle nodeContent.nodeId undefined error
-      if (!nodeContent?.nodeId) {
-        return;
-      }
-      if (action === 'start') {
-        electron.startNodePackage(nodeContent?.nodeId);
-      } else if (action === 'stop') {
-        electron.stopNodePackage(nodeContent?.nodeId);
-      }
-    },
-    [nodeContent],
-  );
+  const onAction = useCallback((action: any, nodeId: NodeId) => {
+    // todo: handle nodeContent.nodeId undefined error
+    if (!nodeId) {
+      return;
+    }
+    if (action === 'start') {
+      electron.startNodePackage(nodeId);
+    } else if (action === 'stop') {
+      electron.stopNodePackage(nodeId);
+    }
+  }, []);
 
   const clClient = clients.find((client) => client.nodeType === 'consensus');
   const elClient = clients.find((client) => client.nodeType === 'execution');
@@ -189,6 +187,7 @@ const ContentMultipleClients = (props: {
     }
     const nodeOverview: NodeOverviewProps = {
       name: nodeContent.name,
+      nodeId: nodeContent.nodeId,
       title: `${nodeContent.displayName} ${t('Node')}`,
       info: nodeContent.info ?? '',
       screenType: 'nodePackage',
@@ -200,7 +199,11 @@ const ContentMultipleClients = (props: {
       releaseNotesUrl: nodeContent.documentation?.releaseNotesUrl,
     };
     return nodeOverview;
-  }, [JSON.stringify(nodeContent?.status), JSON.stringify(nodeContent?.stats)]);
+  }, [
+    JSON.stringify(nodeContent?.nodeId),
+    JSON.stringify(nodeContent?.status),
+    JSON.stringify(nodeContent?.stats),
+  ]);
 
   const handleClientClick = useCallback(
     (clientId: string | undefined) => {

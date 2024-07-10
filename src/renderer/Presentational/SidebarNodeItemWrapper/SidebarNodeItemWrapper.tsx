@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { type NodePackage, NodeStatus } from '../../../common/node';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
-import { getSyncStatus, getStatusObject } from '../../Generics/redesign/utils';
+import { getStatusObject, getSyncStatus } from '../../Generics/redesign/utils';
 import { useGetExecutionIsSyncingQuery } from '../../state/services';
 
 export type SidebarNodeStatus =

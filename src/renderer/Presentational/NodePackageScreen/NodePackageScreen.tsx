@@ -1,15 +1,19 @@
 // import { useTranslation } from 'react-i18next';
 
+import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
 import { useTranslation } from 'react-i18next';
+import { NodeStatus } from '../../../common/node.js';
 import Button from '../../Generics/redesign/Button/Button';
 import type { ClientProps, NodeAction } from '../../Generics/redesign/consts';
+import { getStatusObject } from '../../Generics/redesign/utils.js';
 import type { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import electron from '../../electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
+import { useGetNetworkConnectedQuery } from '../../state/network';
 import {
   selectIsAvailableForPolling,
   selectSelectedNodePackage,
@@ -21,7 +25,6 @@ import {
   useGetExecutionPeersQuery,
   useGetNodeVersionQuery,
 } from '../../state/services';
-import { useGetNetworkConnectedQuery } from '../../state/network';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import { hexToDecimal } from '../../utils';
 import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
@@ -32,9 +35,6 @@ import {
   descriptionFont,
   titleFont,
 } from './NodePackageScreen.css';
-import { getStatusObject } from '../../Generics/redesign/utils.js';
-import { NodeStatus } from '../../../common/node.js';
-import moment from 'moment';
 
 let alphaModalRendered = false;
 

@@ -58,14 +58,14 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
     label: g('Resume'),
     iconId: 'play',
     onClick: () => {
-      if (onAction) onAction('start');
+      if (onAction) onAction('start', nodeId);
     },
   };
   const stopButtonProps: ButtonProps = {
     label: g('Stop'),
     iconId: 'stop',
     onClick: () => {
-      if (onAction) onAction('stop');
+      if (onAction) onAction('stop', nodeId);
     },
   };
   let startStopButtonProps: ButtonProps;
