@@ -42,9 +42,10 @@ const NodeScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const selectedNode = useAppSelector(selectSelectedNode);
-  const qNodeVersion = useGetNodeVersionQuery(
-    selectedNode?.spec.rpcTranslation,
-  );
+  const qNodeVersion = useGetNodeVersionQuery({
+    rpcTranslation: selectedNode?.spec.rpcTranslation,
+    httpPort: selectedNode?.config?.configValuesMap?.httpPort,
+  });
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   // we will bring this var back in the future
   const [sSyncPercent, setSyncPercent] = useState<string>('');
