@@ -42,10 +42,6 @@ const NodeScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const selectedNode = useAppSelector(selectSelectedNode);
-  const qNodeVersion = useGetNodeVersionQuery({
-    rpcTranslation: selectedNode?.spec.rpcTranslation,
-    httpPort: selectedNode?.config?.configValuesMap?.httpPort,
-  });
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
   // we will bring this var back in the future
   const [sSyncPercent, setSyncPercent] = useState<string>('');
@@ -56,6 +52,15 @@ const NodeScreen = () => {
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
+  const qNodeVersion = useGetNodeVersionQuery(
+    {
+      rpcTranslation: selectedNode?.spec.rpcTranslation,
+      httpPort: selectedNode?.config?.configValuesMap?.httpPort,
+    },
+    {
+      pollingInterval, //TODO: modify this to stop once we know version
+    },
+  );
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     {
       rpcTranslation: selectedNode?.spec.rpcTranslation,
@@ -332,6 +337,8 @@ const NodeScreen = () => {
   };
 
   const clientName = spec.specId.replace('-beacon', '');
+
+  //TODO: save existing node version data so that users can see even when node is stopped?
   const nodeVersionData =
     typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
 
@@ -341,18 +348,19 @@ const NodeScreen = () => {
     updateAvailable: selectedNode.updateAvailable,
   };
   // console.log('singleNodeStatus', status);
+  const statusObject = getStatusObject(status, syncData);
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
     displayName: selectedNode.spec.displayName,
     name: clientName as NodeBackgroundId,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
-    version: formatVersion(nodeVersionData),
+    version: statusObject.stopped ? '' : formatVersion(nodeVersionData),
     info: formatSpec(
       spec.category,
       // selectedNode?.config?.configValuesMap?.network ?? '',
     ),
-    status: getStatusObject(status, syncData),
+    status: statusObject,
     stats: {
       peers: sPeers,
       currentBlock: sLatestBlockNumber,
