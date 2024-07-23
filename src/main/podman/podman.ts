@@ -485,7 +485,7 @@ const createPodmanPortInput = (
   return result.join(' ');
 };
 
-const creatEnvInput = (input: string) => {
+const buildEnvInput = (input: string) => {
   if (!input) {
     return '';
   }
@@ -571,7 +571,7 @@ export const createRunCommand = (node: Node): string => {
   });
   nodeInput += ` ${cliConfigInput}`;
 
-  const envConfigInput = creatEnvInput(node.config.configValuesMap.envInput);
+  const envConfigInput = buildEnvInput(node.config.configValuesMap.envInput);
 
   const imageTag = getImageTag(node);
   // if imageTage is empty, use then imageTag is already included in the imageName (backwards compatability)
