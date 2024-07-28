@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { NodePackageLibrary } from '../../../main/state/nodeLibrary.js';
 import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import SelectCard from '../../Generics/redesign/SelectCard/SelectCard';
 import type { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
@@ -18,61 +19,61 @@ import {
 
 // Other node types are not ready yet
 // todo: dynamic node options
-const nodeOptions = [
-  {
-    iconId: 'ethereum',
-    title: 'Ethereum',
-    value: 'ethereum',
-    label: 'Ethereum',
-    info: 'The world computer',
-  },
-  {
-    iconId: 'base',
-    title: 'Base',
-    value: 'base',
-    label: 'Base',
-    info: 'A secure and low-cost Ethereum Layer 2 built on the OP stack',
-  },
-  {
-    iconId: 'optimism',
-    title: 'Optimism',
-    value: 'optimism',
-    label: 'Optimism',
-    info: 'Ethereum, scaled. Built by the OP Collective',
-  },
-  {
-    iconId: 'farcaster',
-    title: 'Farcaster',
-    value: 'farcaster',
-    label: 'Farcaster',
-    info: 'A protocol for decentralized social apps',
-  },
-  {
-    iconId: 'arbitrum',
-    title: 'Arbitrum One',
-    value: 'arbitrum',
-    label: 'Arbitrum One',
-    info: 'Welcome to the future of Ethereum',
-  },
-];
+// const nodeOptions = [
+//   {
+//     iconId: 'ethereum',
+//     title: 'Ethereum',
+//     value: 'ethereum',
+//     label: 'Ethereum',
+//     info: 'The world computer',
+//   },
+//   {
+//     iconId: 'base',
+//     title: 'Base',
+//     value: 'base',
+//     label: 'Base',
+//     info: 'A secure and low-cost Ethereum Layer 2 built on the OP stack',
+//   },
+//   {
+//     iconId: 'optimism',
+//     title: 'Optimism',
+//     value: 'optimism',
+//     label: 'Optimism',
+//     info: 'Ethereum, scaled. Built by the OP Collective',
+//   },
+//   {
+//     iconId: 'farcaster',
+//     title: 'Farcaster',
+//     value: 'farcaster',
+//     label: 'Farcaster',
+//     info: 'A protocol for decentralized social apps',
+//   },
+//   {
+//     iconId: 'arbitrum',
+//     title: 'Arbitrum One',
+//     value: 'arbitrum',
+//     label: 'Arbitrum One',
+//     info: 'Welcome to the future of Ethereum',
+//   },
+// ];
 
-// todo: dynamic node options
-const otherNodeOptions = [
-  {
-    iconId: 'home-assistant',
-    title: 'Home Assistant',
-    value: 'home-assistant',
-    label: 'Home Assistant',
-    info: 'Awaken your home',
-  },
-  {
-    iconId: 'minecraft',
-    title: 'Minecraft Server',
-    value: 'minecraft',
-    label: 'Minecraft Server',
-    info: 'The world is yours for the making',
-  },
-];
+// // todo: dynamic node options
+// const otherNodeOptions = [
+//   {
+//     iconId: 'home-assistant',
+//     title: 'Home Assistant',
+//     value: 'home-assistant',
+//     label: 'Home Assistant',
+//     info: 'Awaken your home',
+//   },
+//   {
+//     iconId: 'minecraft',
+//     title: 'Minecraft Server',
+//     value: 'minecraft',
+//     label: 'Minecraft Server',
+//     info: 'The world is yours for the making',
+//   },
+// ];
 
 let alphaModalRendered = false;
 
@@ -87,6 +88,7 @@ export interface AddNodeProps {
   nodeConfig?: AddNodeValues;
   setNode?: (nodeSelection: SelectOption, object: AddNodeValues) => void;
   shouldHideTitle?: boolean;
+  nodePackageLibrary?: NodePackageLibrary;
 }
 
 const AddNode = ({
@@ -94,10 +96,13 @@ const AddNode = ({
   setNode,
   onChange,
   shouldHideTitle,
+  nodePackageLibrary,
 }: AddNodeProps) => {
   const { t } = useTranslation();
   const [sSelectedNode, setSelectedNode] = useState<SelectOption>(
-    nodeConfig?.node || nodeOptions[0],
+    // todo: do this [0] for splash screen, and do it on a useEffect here
+    // and test splash screen
+    nodeConfig?.node || nodePackageLibrary?.[0],
   );
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
@@ -170,19 +175,28 @@ const AddNode = ({
       </div>
       <p className={sectionFont}>{t('Network')}</p>
       <div style={{ width: '100%' }}>
-        {nodeOptions.map((nodeOption) => {
-          return (
-            <SelectCard
-              key={nodeOption.value}
-              title={nodeOption.title}
-              // iconUrl={nodeOption.iconUrl}
-              iconId={nodeOption.iconId as keyof NodeIcons}
-              info={nodeOption.info}
-              onClick={() => onChangeNode(nodeOption)}
-              isSelected={sSelectedNode?.value === nodeOption.value}
-            />
-          );
-        })}
+        {nodePackageLibrary &&
+          Object.keys(nodePackageLibrary).map((nodePackageId) => {
+            const nodeOption = nodePackageLibrary[nodePackageId];
+            if (
+              nodeOption?.category.includes('utility') ||
+              nodeOption?.category.includes('gaming')
+            ) {
+              return null;
+            }
+            nodeOption.value = nodeOption.specId; // backwards compatibility for select.value
+            return (
+              <SelectCard
+                key={nodeOption.specId}
+                title={nodeOption.displayName}
+                iconUrl={nodeOption.iconUrl}
+                iconId={nodeOption.specId as keyof NodeIcons}
+                info={nodeOption.displayTagline}
+                onClick={() => onChangeNode(nodeOption)}
+                isSelected={sSelectedNode?.specId === nodeOption.specId}
+              />
+            );
+          })}
       </div>
 
       {/* Other options are default hidden by a dropdown */}
@@ -198,7 +212,27 @@ const AddNode = ({
         <>
           <p className={sectionFont}>{t('Other')}</p>
           <div style={{ width: '100%' }}>
-            {otherNodeOptions.map((nodeOption) => {
+            {nodePackageLibrary &&
+              Object.keys(nodePackageLibrary).map((nodePackageId) => {
+                const nodeOption = nodePackageLibrary[nodePackageId];
+                if (
+                  nodeOption?.category.includes('utility') ||
+                  nodeOption?.category.includes('gaming')
+                ) {
+                  return (
+                    <SelectCard
+                      key={nodeOption.specId}
+                      title={nodeOption.displayName}
+                      iconUrl={nodeOption.iconUrl}
+                      iconId={nodeOption.specId as keyof NodeIcons}
+                      info={nodeOption.displayTagline}
+                      onClick={() => onChangeNode(nodeOption)}
+                      isSelected={sSelectedNode?.specId === nodeOption.specId}
+                    />
+                  );
+                }
+              })}
+            {/* {otherNodeOptions.map((nodeOption) => {
               return (
                 <SelectCard
                   key={nodeOption.value}
@@ -210,7 +244,7 @@ const AddNode = ({
                   isSelected={sSelectedNode?.value === nodeOption.value}
                 />
               );
-            })}
+            })} */}
           </div>
         </>
       )}

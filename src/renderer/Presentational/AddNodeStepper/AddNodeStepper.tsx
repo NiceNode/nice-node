@@ -261,7 +261,12 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
     let stepImage = step1;
     switch (sStep) {
       case 0:
-        stepScreen = <AddNode onChange={onChangeAddNode} />;
+        stepScreen = (
+          <AddNode
+            onChange={onChangeAddNode}
+            nodePackageLibrary={sNodePackageLibrary}
+          />
+        );
         stepImage = step1;
         break;
       case 1:

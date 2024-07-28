@@ -138,13 +138,18 @@ const AddNodeStepperModal = ({
     switch (step) {
       case 0:
         stepScreen = (
-          <AddNode nodeConfig={sNodeConfig} setNode={setNode} shouldHideTitle />
+          <AddNode
+            nodeConfig={sNodeConfig}
+            setNode={setNode}
+            shouldHideTitle
+            nodePackageLibrary={nodePackageLibrary}
+          />
         );
         break;
       case 1:
         stepScreen = (
           <AddNodeConfiguration
-            nodeId={sNodeConfig?.node?.value}
+            nodeId={sNodeConfig?.node?.specId}
             nodeLibrary={nodeLibrary}
             nodePackageLibrary={nodePackageLibrary}
             nodeStorageLocation={sEthereumNodeConfig?.storageLocation}
