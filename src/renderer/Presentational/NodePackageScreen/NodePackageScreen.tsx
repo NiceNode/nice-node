@@ -76,7 +76,7 @@ const NodePackageScreen = () => {
   const qConsensusIsSyncing = useGetExecutionIsSyncingQuery(
     {
       rpcTranslation: 'eth-l1-beacon',
-      consensusHttpPort,
+      httpPort: consensusHttpPort,
     },
     {
       pollingInterval,
@@ -85,7 +85,7 @@ const NodePackageScreen = () => {
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     {
       rpcTranslation,
-      executionHttpPort,
+      httpPort: executionHttpPort,
     },
     {
       pollingInterval,
@@ -94,7 +94,7 @@ const NodePackageScreen = () => {
   const qExecutionPeers = useGetExecutionPeersQuery(
     {
       rpcTranslation,
-      executionHttpPort,
+      httpPort: executionHttpPort,
     },
     {
       pollingInterval,
@@ -103,7 +103,7 @@ const NodePackageScreen = () => {
   const qLatestBlock = useGetExecutionLatestBlockQuery(
     {
       rpcTranslation,
-      executionHttpPort,
+      httpPort: executionHttpPort,
     },
     {
       pollingInterval,
