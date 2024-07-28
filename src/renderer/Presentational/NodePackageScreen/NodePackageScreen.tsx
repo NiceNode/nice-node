@@ -172,9 +172,9 @@ const NodePackageScreen = () => {
     const consensusSyncingData = qConsensusIsSyncing?.data;
 
     if (typeof executionSyncingData === 'object') {
-      const isSyncing = consensusSyncingData
-        ? executionSyncingData.isSyncing || consensusSyncingData.isSyncing
-        : executionSyncingData.isSyncing;
+      const isSyncing = !!(
+        executionSyncingData.isSyncing || consensusSyncingData?.isSyncing
+      );
       setSyncPercent('');
       setIsSyncing(isSyncing);
     } else if (executionSyncingData === false) {
