@@ -173,7 +173,7 @@ const NodePackageScreen = () => {
 
     if (typeof executionSyncingData === 'object') {
       const isSyncing = consensusSyncingData
-        ? executionSyncingData.isSyncing && consensusSyncingData.isSyncing
+        ? executionSyncingData.isSyncing || consensusSyncingData.isSyncing
         : executionSyncingData.isSyncing;
       setSyncPercent('');
       setIsSyncing(isSyncing);
