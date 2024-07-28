@@ -38,6 +38,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
     name,
     displayName,
     title,
+    iconUrl,
     info,
     screenType,
     status,
@@ -93,7 +94,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
   return (
     <div className={container}>
       <div className={iconContainer}>
-        <NodeIcon iconId={name} size="large" />
+        <NodeIcon iconId={name} size="large" iconUrl={iconUrl} />
       </div>
       <div className={textContainer}>
         <div className={titleContainer}>

@@ -17,6 +17,7 @@ import {
 } from './addNode.css';
 
 // Other node types are not ready yet
+// todo: dynamic node options
 const nodeOptions = [
   {
     iconId: 'ethereum',
@@ -55,6 +56,7 @@ const nodeOptions = [
   },
 ];
 
+// todo: dynamic node options
 const otherNodeOptions = [
   {
     iconId: 'home-assistant',
@@ -173,6 +175,7 @@ const AddNode = ({
             <SelectCard
               key={nodeOption.value}
               title={nodeOption.title}
+              // iconUrl={nodeOption.iconUrl}
               iconId={nodeOption.iconId as keyof NodeIcons}
               info={nodeOption.info}
               onClick={() => onChangeNode(nodeOption)}
@@ -200,6 +203,7 @@ const AddNode = ({
                 <SelectCard
                   key={nodeOption.value}
                   title={nodeOption.title}
+                  // iconUrl={nodeOption.iconUrl}
                   iconId={nodeOption.iconId as keyof NodeIcons}
                   info={nodeOption.info}
                   onClick={() => onChangeNode(nodeOption)}

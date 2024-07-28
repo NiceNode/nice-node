@@ -57,6 +57,7 @@ let controllerApiURL = 'https://api.nicenode.xyz/api';
 let isControllerApiHttp = false;
 if (process.env.CONTROLLER_API_URL) {
   controllerApiURL = process.env.CONTROLLER_API_URL;
+  console.log('controllerApiURL: ', controllerApiURL);
 }
 if (
   process.env.CONTROLLER_API_URL_IS_HTTP ||
