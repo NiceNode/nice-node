@@ -23,7 +23,6 @@ import {
   useGetExecutionIsSyncingQuery,
   useGetExecutionLatestBlockQuery,
   useGetExecutionPeersQuery,
-  useGetNodeVersionQuery,
 } from '../../state/services';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import { hexToDecimal } from '../../utils';
@@ -43,9 +42,6 @@ const NodePackageScreen = () => {
   const dispatch = useAppDispatch();
   const selectedNodePackage = useAppSelector(selectSelectedNodePackage);
   const sUserNodes = useAppSelector(selectUserNodes);
-  const qNodeVersion = useGetNodeVersionQuery(
-    selectedNodePackage?.spec.rpcTranslation,
-  );
   const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>();
   // we will bring these vars back in the future
   const [sIsSyncing, setIsSyncing] = useState<boolean>();
@@ -167,20 +163,21 @@ const NodePackageScreen = () => {
 
   useEffect(() => {
     console.log('qExecutionIsSyncing: ', qExecutionIsSyncing);
-    if (qExecutionIsSyncing.isError || qConsensusIsSyncing.isError) {
+    if (qExecutionIsSyncing.isError || qConsensusIsSyncing?.isError) {
       setSyncPercent('');
       setIsSyncing(undefined);
       return;
     }
-    const syncingData = qExecutionIsSyncing.data;
-    const consensusSyncingData = qConsensusIsSyncing.data;
-    console.log('executionLogs', syncingData);
-    console.log('consensusLogs', consensusSyncingData);
+    const executionSyncingData = qExecutionIsSyncing.data;
+    const consensusSyncingData = qConsensusIsSyncing?.data;
 
-    if (typeof syncingData === 'object') {
+    if (typeof executionSyncingData === 'object') {
+      const isSyncing = consensusSyncingData
+        ? executionSyncingData.isSyncing && consensusSyncingData.isSyncing
+        : executionSyncingData.isSyncing;
       setSyncPercent('');
-      setIsSyncing(syncingData.isSyncing);
-    } else if (syncingData === false) {
+      setIsSyncing(isSyncing);
+    } else if (executionSyncingData === false) {
       // for nodes that do not have sync percent or other sync data
       setSyncPercent('');
       setIsSyncing(false);
@@ -379,17 +376,7 @@ const NodePackageScreen = () => {
     return result;
   };
 
-  const formatVersion = (version: string | undefined) => {
-    if (!version) {
-      return '';
-    }
-    return version;
-  };
-
   const clientName = spec.specId.replace('-beacon', '');
-  const nodeVersionData =
-    typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
-
   const now = moment();
   const minutesPassedSinceLastRun = now.diff(
     moment(selectedNodePackage?.lastRunningTimestampMs),
@@ -409,7 +396,6 @@ const NodePackageScreen = () => {
     name: clientName as NodeBackgroundId,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
-    version: formatVersion(nodeVersionData), // todo: remove
     info: formatSpec(spec.displayTagline),
     status: getStatusObject(status, syncData),
     stats: {
