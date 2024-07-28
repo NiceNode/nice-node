@@ -85,8 +85,12 @@ export const SidebarNodeItemWrapper = ({
     }
     const syncingData = qExecutionIsSyncing.data;
     if (typeof syncingData === 'object') {
-      setSyncPercent(syncingData.syncPercent);
+      setSyncPercent('');
       setIsSyncing(syncingData.isSyncing);
+    } else if (syncingData === false) {
+      // for nodes that do not have sync percent or other sync data
+      setSyncPercent('');
+      setIsSyncing(false);
     } else {
       setSyncPercent('');
       setIsSyncing(undefined);

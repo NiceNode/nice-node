@@ -61,14 +61,31 @@ const NodePackageScreen = () => {
   const executionNode = selectedNodePackage?.services.find((service) => {
     return service.serviceId === 'executionClient';
   });
-  const nodeId = executionNode?.node.id;
-  const httpPort =
-    nodeId && sUserNodes?.nodes[nodeId]?.config.configValuesMap.httpPort;
+  const consensusNode = selectedNodePackage?.services.find((service) => {
+    return service.serviceId === 'consensusClient';
+  });
+  const executionNodeId = executionNode?.node.id;
+  const consensusNodeId = consensusNode?.node.id;
+  const executionHttpPort =
+    executionNodeId &&
+    sUserNodes?.nodes[executionNodeId]?.config.configValuesMap.httpPort;
+  const consensusHttpPort =
+    consensusNodeId &&
+    sUserNodes?.nodes[consensusNodeId]?.config.configValuesMap.httpPort;
   const rpcTranslation = selectedNodePackage?.spec.rpcTranslation;
+  const qConsensusIsSyncing = useGetExecutionIsSyncingQuery(
+    {
+      rpcTranslation: 'eth-l1-beacon',
+      consensusHttpPort,
+    },
+    {
+      pollingInterval,
+    },
+  );
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     {
       rpcTranslation,
-      httpPort,
+      executionHttpPort,
     },
     {
       pollingInterval,
@@ -77,7 +94,7 @@ const NodePackageScreen = () => {
   const qExecutionPeers = useGetExecutionPeersQuery(
     {
       rpcTranslation,
-      httpPort,
+      executionHttpPort,
     },
     {
       pollingInterval,
@@ -86,7 +103,7 @@ const NodePackageScreen = () => {
   const qLatestBlock = useGetExecutionLatestBlockQuery(
     {
       rpcTranslation,
-      httpPort,
+      executionHttpPort,
     },
     {
       pollingInterval,
@@ -150,12 +167,16 @@ const NodePackageScreen = () => {
 
   useEffect(() => {
     console.log('qExecutionIsSyncing: ', qExecutionIsSyncing);
-    if (qExecutionIsSyncing.isError) {
+    if (qExecutionIsSyncing.isError || qConsensusIsSyncing.isError) {
       setSyncPercent('');
       setIsSyncing(undefined);
       return;
     }
     const syncingData = qExecutionIsSyncing.data;
+    const consensusSyncingData = qConsensusIsSyncing.data;
+    console.log('executionLogs', syncingData);
+    console.log('consensusLogs', consensusSyncingData);
+
     if (typeof syncingData === 'object') {
       setSyncPercent('');
       setIsSyncing(syncingData.isSyncing);
@@ -167,7 +188,7 @@ const NodePackageScreen = () => {
       setSyncPercent('');
       setIsSyncing(undefined);
     }
-  }, [qExecutionIsSyncing]);
+  }, [qExecutionIsSyncing, qConsensusIsSyncing]);
 
   useEffect(() => {
     console.log('qExecutionPeers: ', qExecutionPeers.data);
