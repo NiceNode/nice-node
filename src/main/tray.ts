@@ -13,13 +13,9 @@ import { NodeStoppedBy } from '../common/node.js';
 import logger from './logger';
 import { createWindow, fullQuit, getMainWindow } from './main';
 import { stopAllNodePackages } from './nodePackageManager.js';
-import { isLinux, isWindows } from './platform';
+import { isLinux, isWindows, isMac } from './platform';
 import { getPodmanDetails } from './podman/details.js';
-import {
-  getNiceNodeMachine,
-  startMachineIfCreated,
-  stopMachineIfCreated,
-} from './podman/machine';
+import { getNiceNodeMachine, stopMachineIfCreated } from './podman/machine';
 import { openPodmanModal } from './podman/podman.js';
 import { getUserNodePackages } from './state/nodePackages';
 import { openNodePackageScreen } from './state/nodePackages.js';
@@ -203,7 +199,7 @@ function createCustomTrayWindow() {
       contextIsolation: false,
       nodeIntegration: true,
     },
-    vibrancy: process.platform === 'darwin' ? 'sidebar' : undefined,
+    vibrancy: isMac() ? 'sidebar' : undefined,
   });
 
   trayWindow.loadURL(`file://${_getAssetPath('trayIndex.html')}`);
@@ -387,12 +383,12 @@ function toggleCustomTrayWindow() {
     let x;
     let y;
 
-    if (process.platform === 'darwin') {
+    if (isMac()) {
       x = Math.round(
         trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2,
       );
       y = Math.round(trayBounds.y + trayBounds.height);
-    } else if (process.platform === 'win32') {
+    } else if (isWindows()) {
       const display = screen.getPrimaryDisplay(); // Get the primary display details
       const workArea = display.workArea;
       x = Math.round(
@@ -435,20 +431,23 @@ export const initialize = (getAssetPath: (...paths: string[]) => string) => {
   }
 
   tray = new Tray(icon);
-  createCustomTrayWindow();
-
-  // if (process.env.NODE_ENV === 'development') {
-  //   trayWindow?.webContents.openDevTools();
-  // }
-  // updateTrayMenu();
+  if (isMac()) {
+    createCustomTrayWindow();
+  } else {
+    updateTrayMenu();
+  }
 
   tray.on('click', () => {
     // on windows, default is open/show window on click
     // on mac, default is open menu on click (no code needed)
     // on linux?
-    toggleCustomTrayWindow();
-    updateCustomTrayMenu();
-    // updateTrayMenu();
+    if (isMac()) {
+      toggleCustomTrayWindow();
+      updateCustomTrayMenu();
+    } else {
+      updateTrayMenu();
+    }
+
     if (isWindows()) {
       const window = getMainWindow();
       if (window) {
