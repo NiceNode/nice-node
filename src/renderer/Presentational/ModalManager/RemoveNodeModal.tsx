@@ -16,7 +16,7 @@ export const RemoveNodeModal = ({ modalOnClose }: Props) => {
   const { t } = useTranslation();
   const modalTitle = t('RemoveThisNode');
   const buttonSaveLabel = t('RemoveNode');
-  const buttonRemovingLabel = t('RemovingNode');
+  const buttonRemovingLabel = t('Removing node...');
   const buttonSaveType = 'danger';
 
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {

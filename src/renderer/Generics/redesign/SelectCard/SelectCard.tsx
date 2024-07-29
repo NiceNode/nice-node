@@ -86,8 +86,6 @@ const SelectCard = ({
     releaseLabel = g('Alpha');
   }
 
-  console.log('SELECT CARD iconUrl: ', iconUrl);
-
   return (
     <div
       className={activeContainer}

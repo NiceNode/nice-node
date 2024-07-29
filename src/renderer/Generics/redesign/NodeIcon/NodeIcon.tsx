@@ -98,8 +98,8 @@ const NodeIcon = ({ iconId, status, size, iconUrl }: NodeIconProps) => {
       >
         <img
           src={
-            iconUrl
-            // NODE_ICONS[iconId as NodeIconId] || iconUrl || undefined
+            // Just iconUrl isn't backwards compatible, but will be used now
+            NODE_ICONS[iconId as NodeIconId] || iconUrl || undefined
           }
           alt={g('NodeIcon')}
           className={imageStyle}

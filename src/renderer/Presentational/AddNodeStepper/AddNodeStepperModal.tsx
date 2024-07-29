@@ -78,7 +78,7 @@ const AddNodeStepperModal = ({
         clientSelections,
       )) {
         console.log(`${serviceId}: ${selectOption}`);
-        const clientId = selectOption.value;
+        const clientId = selectOption.specId;
         if (nodeLibrary?.[clientId]?.systemRequirements) {
           reqs.push(
             nodeLibrary[clientId].systemRequirements as SystemRequirements,
@@ -106,16 +106,16 @@ const AddNodeStepperModal = ({
       const config = { ...nodeConfig, node: nodeSelectOption };
       console.log('AddNodeStepperModal calling modalOnChangeConfig()', {
         ...modalConfig,
-        node: nodeSelectOption.value,
+        node: nodeSelectOption.specId,
       });
       modalOnChangeConfig({
         ...nodeConfig,
-        node: nodeSelectOption.value,
+        node: nodeSelectOption.specId,
       });
       // clear step 1 (client selections) when user changes node (package)
       setEthereumNodeConfig(undefined);
-      setSelectedNode(nodeSelectOption.value);
-      if (selectedNode !== nodeSelectOption.value) {
+      setSelectedNode(nodeSelectOption.specId);
+      if (selectedNode !== nodeSelectOption.specId) {
         setTemporaryClientConfigValues({ payload: { reset: true } });
       }
       console.log('AddNodeStepperModal setNode: config', config);

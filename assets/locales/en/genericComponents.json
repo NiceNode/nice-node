@@ -109,7 +109,7 @@
   "InitialSyncInProgress": "Initial sync in progress...",
   "NodeSettings": "Node Settings...",
   "RemoveNode": "Remove Node...",
-  "RemovingNode": "Removing node...",
+  "Removing node...": "Removing node...",
   "ErrorOccurred": "Error occurred",
   "DataLocation": "Data location",
   "AvailableDiskSpace": "{{space}}GB available disk space",

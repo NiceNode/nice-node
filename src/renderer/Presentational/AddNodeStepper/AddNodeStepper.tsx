@@ -86,9 +86,9 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       let nodeReqs;
 
       if (newValue?.node) {
-        const ecValue = newValue?.node.value;
-        if (sNodeLibrary) {
-          nodeReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
+        const newNodeSpecId = newValue?.node.specId;
+        if (sNodePackageLibrary) {
+          nodeReqs = sNodePackageLibrary?.[newNodeSpecId]?.systemRequirements;
         }
       }
       setSelectedNode(newValue);
@@ -107,19 +107,19 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         console.error(e);
       }
     },
-    [sNodeLibrary],
+    [sNodePackageLibrary],
   );
 
   const addNodes = async () => {
     // Mostly duplicate code with AddNodeModal.modalOnSaveConfig()
     let nodePackageSpec: NodePackageSpecification;
-    if (sNodePackageLibrary && sNode?.node?.value) {
-      nodePackageSpec = sNodePackageLibrary?.[sNode?.node?.value];
+    if (sNodePackageLibrary && sNode?.node?.specId) {
+      nodePackageSpec = sNodePackageLibrary?.[sNode?.node?.specId];
     } else {
       console.error(
         'nodePackageLibrary, node: ',
         sNodePackageLibrary,
-        sNode?.node?.value,
+        sNode?.node?.specId,
       );
       throw new Error('No Node Package Spec found for the selected node');
     }
@@ -274,7 +274,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
           <AddNodeConfiguration
             nodeLibrary={sNodeLibrary}
             nodePackageLibrary={sNodePackageLibrary}
-            nodeId={sNode?.node?.value}
+            nodeId={sNode?.node?.specId}
             onChange={onChangeAddNodeConfiguration}
             tempConfigValues={tempConfigValues}
             setTemporaryClientConfigValues={setTemporaryClientConfigValues}
