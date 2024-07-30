@@ -13,7 +13,7 @@ import { NodeStoppedBy } from '../common/node.js';
 import logger from './logger';
 import { createWindow, fullQuit, getMainWindow } from './main';
 import { stopAllNodePackages } from './nodePackageManager.js';
-import { isLinux, isWindows, isMac } from './platform';
+import { isLinux, isMac, isWindows } from './platform';
 import { getPodmanDetails } from './podman/details.js';
 import { getNiceNodeMachine, stopMachineIfCreated } from './podman/machine';
 import { openPodmanModal } from './podman/podman.js';
