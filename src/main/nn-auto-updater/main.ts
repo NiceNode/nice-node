@@ -86,7 +86,11 @@ export class nnAutoUpdater
     if (isLinux()) {
       console.log('nnAutoUpdater setFeedURL in linux!');
     } else {
-      this.nativeUpdater.setFeedURL(options);
+      try {
+        this.nativeUpdater.setFeedURL(options);
+      } catch (e) {
+        console.error('Error in setFeedURL: ', e);
+      }
     }
   }
 }
