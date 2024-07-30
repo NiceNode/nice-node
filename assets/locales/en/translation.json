@@ -6,6 +6,7 @@
   "AddNode": "Add Node",
   "StopeNodeToChangeSettings": "The node must be stopped to make changes",
   "RemoveNode": "Remove node",
+  "RemovingNode": "Removing node...",
   "RemoveThisNode": "Remove this node",
   "Install Docker": "Install Docker",
   "Type": "Type",
