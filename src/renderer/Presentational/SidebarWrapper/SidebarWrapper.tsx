@@ -24,6 +24,7 @@ import {
   useGetIsPodmanRunningQuery,
   useGetPodmanDetailsQuery,
 } from '../../state/settingsService';
+import { modalRoutes } from '../ModalManager/modalUtils.js';
 import Sidebar from '../Sidebar/Sidebar';
 
 export interface SidebarWrapperProps {
@@ -61,7 +62,7 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
       setModalState({
         isModalOpen: true,
         screen: {
-          route: 'podman',
+          route: modalRoutes.podman,
           type: 'modal',
           data: { view: 'update' },
         },
@@ -90,7 +91,7 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
       setModalState({
         isModalOpen: true,
         screen: {
-          route: 'podman',
+          route: modalRoutes.podman,
           type: 'modal',
         },
       }),
