@@ -53,6 +53,8 @@ export interface AddNodeConfigurationProps {
   nodeStorageLocation?: string;
   shouldHideTitle?: boolean;
   disableSaveButton?: (value: boolean) => void;
+  setTemporaryClientConfigValues?: (value: any) => void;
+  tempConfigValues?: ClientConfigValues;
 }
 
 const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
@@ -75,6 +77,8 @@ const AddNodeConfiguration = ({
   shouldHideTitle,
   onChange,
   disableSaveButton,
+  setTemporaryClientConfigValues,
+  tempConfigValues,
 }: AddNodeConfigurationProps) => {
   const { t } = useTranslation();
   const [sNodePackageSpec, setNodePackageSpec] =
@@ -99,6 +103,20 @@ const AddNodeConfiguration = ({
   );
   const [sNodePackageConfigValues, dispatchNodePackageConfigValues] =
     useReducer(mergeObjectReducer, {});
+
+  const onChangeClientConfigValues = (value: any) => {
+    dispatchClientConfigValues(value);
+    setTemporaryClientConfigValues({
+      payload: value,
+    });
+  };
+
+  const onChangeNodePackageConfigValues = (value: any) => {
+    dispatchNodePackageConfigValues(value);
+    setTemporaryClientConfigValues({
+      payload: value,
+    });
+  };
 
   const [
     sNodeStorageLocationFreeStorageGBs,
@@ -229,11 +247,22 @@ const AddNodeConfiguration = ({
         (service: NodePackageNodeServiceSpec) => {
           clients.push(service);
 
-          // Set the pre-selected client as the first for each service
-          const option = service.nodeOptions[0];
+          const firstNodeOption = service.nodeOptions[0];
+          const previousSelection =
+            tempConfigValues.clientSelections?.[service.serviceId];
+
           const nodeSpec =
-            typeof option === 'string' ? nodeLibrary?.[option] : option;
-          if (nodeSpec) {
+            typeof firstNodeOption === 'string'
+              ? nodeLibrary?.[firstNodeOption]
+              : firstNodeOption;
+
+          if (
+            previousSelection &&
+            nodeSpec &&
+            previousSelection.value !== nodeSpec.specId
+          ) {
+            clientSelections[service.serviceId] = previousSelection;
+          } else if (nodeSpec) {
             clientSelections[service.serviceId] =
               nodeSpecToSelectOption(nodeSpec);
           }
@@ -263,7 +292,10 @@ const AddNodeConfiguration = ({
       const defaultNodesStorageDetails =
         await electron.getNodesDefaultStorageLocation();
       console.log('defaultNodesStorageDetails', defaultNodesStorageDetails);
-      setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
+      setNodeStorageLocation(
+        tempConfigValues?.storageLocation ||
+          defaultNodesStorageDetails.folderPath,
+      );
       if (onChange) {
         onChange({
           clientSelections: sClientSelections,
@@ -288,7 +320,14 @@ const AddNodeConfiguration = ({
   ) => {
     if (!newSelection) return;
     console.log('new selected client: ', newSelection);
-    setClientSelections({ ...sClientSelections, [serviceId]: newSelection });
+    const updatedSelections = {
+      ...sClientSelections,
+      [serviceId]: newSelection,
+    };
+    setClientSelections(updatedSelections);
+    setTemporaryClientConfigValues({
+      payload: { clientSelections: updatedSelections },
+    });
   };
 
   useEffect(() => {
@@ -378,6 +417,11 @@ const AddNodeConfiguration = ({
                     storageLocation: storageLocationDetails.folderPath,
                   });
                 }
+                setTemporaryClientConfigValues({
+                  payload: {
+                    storageLocation: storageLocationDetails.folderPath,
+                  },
+                });
                 setNodeStorageLocationFreeStorageGBs(
                   storageLocationDetails.freeStorageGBs,
                 );
@@ -395,19 +439,21 @@ const AddNodeConfiguration = ({
         {/* Initial node package settings, required */}
         {requiredNodePackageSpecs.length > 0 && (
           <InitialClientConfigs
+            tempConfigValues={tempConfigValues}
             clientSpecs={requiredNodePackageSpecs}
             required
             disableSaveButton={disableSaveButton}
-            onChange={dispatchNodePackageConfigValues}
+            onChange={onChangeNodePackageConfigValues}
           />
         )}
         {/* Initial client settings, required */}
         {requiredClientSpecs.length > 0 && (
           <InitialClientConfigs
+            tempConfigValues={tempConfigValues}
             clientSpecs={requiredClientSpecs}
             required
             disableSaveButton={disableSaveButton}
-            onChange={dispatchClientConfigValues}
+            onChange={onChangeClientConfigValues}
           />
         )}
         {sIsAdvancedOptionsOpen && (
@@ -415,16 +461,18 @@ const AddNodeConfiguration = ({
             {/* Initial node package settings, advanced */}
             {advancedNodePackageSpecs.length > 0 && (
               <InitialClientConfigs
+                tempConfigValues={tempConfigValues}
                 clientSpecs={advancedNodePackageSpecs}
-                onChange={dispatchNodePackageConfigValues}
+                onChange={onChangeNodePackageConfigValues}
               />
             )}
 
             {/* Initial client settings, advanced */}
             {advancedClientSpecs.length > 0 && (
               <InitialClientConfigs
+                tempConfigValues={tempConfigValues}
                 clientSpecs={advancedClientSpecs}
-                onChange={dispatchClientConfigValues}
+                onChange={onChangeClientConfigValues}
               />
             )}
           </>

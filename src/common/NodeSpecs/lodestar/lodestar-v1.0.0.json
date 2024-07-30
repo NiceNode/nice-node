@@ -158,7 +158,8 @@
   },
   "documentation": {
     "default": "https://chainsafe.github.io/lodestar/",
-    "docker": "https://chainsafe.github.io/lodestar/installation/#install-with-docker"
+    "docker": "https://chainsafe.github.io/lodestar/installation/#install-with-docker",
+    "releaseNotesUrl": "https://github.com/ChainSafe/lodestar/releases"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/lodestar-logo-text.png",
   "resources": [

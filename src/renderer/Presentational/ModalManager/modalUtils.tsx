@@ -34,6 +34,7 @@ export const modalRoutes = Object.freeze({
   preferences: 'preferences',
   addValidator: 'addValidator',
   clientVersions: 'clientVersions',
+  controllerUpdate: 'controllerUpdate',
   stopNode: 'stopNode',
   removeNode: 'removeNode',
   resetConfig: 'resetConfig',

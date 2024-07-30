@@ -35,6 +35,7 @@ export type Preference =
   | 'isNotificationsEnabled'
   | 'isEventReportingEnabled'
   | 'isPreReleaseUpdatesEnabled'
+  | 'isDeveloperModeEnabled'
   | 'language';
 export interface PreferencesProps {
   themeSetting?: ThemeSetting;
@@ -43,6 +44,7 @@ export interface PreferencesProps {
   isNotificationsEnabled?: boolean;
   isEventReportingEnabled?: boolean;
   isPreReleaseUpdatesEnabled?: boolean;
+  isDeveloperModeEnabled?: boolean;
   version?: string;
   language?: string;
   onChange?: (preference: Preference, value: unknown) => void;
@@ -55,6 +57,7 @@ const Preferences = ({
   isNotificationsEnabled,
   isEventReportingEnabled,
   isPreReleaseUpdatesEnabled,
+  isDeveloperModeEnabled,
   version,
   language,
   onChange,
@@ -225,8 +228,8 @@ const Preferences = ({
               sectionTitle: '',
               items: [
                 {
-                  label: t('SendEventReports'),
-                  description: `${t('SendEventReportsDescription')}`,
+                  label: t('SendErrorEventReports'),
+                  description: `${t('SendErrorEventReportsDescription')}`,
                   value: (
                     <Toggle
                       onText={t('Enabled')}
@@ -265,6 +268,24 @@ const Preferences = ({
                       onChange={(newValue) => {
                         if (onChange) {
                           onChange('isPreReleaseUpdatesEnabled', newValue);
+                        }
+                      }}
+                    />
+                  ),
+                },
+                {
+                  label: `${t('Developer mode')}`,
+                  description: t(
+                    'Show developer information throuhout the app marked by  👷',
+                  ),
+                  value: (
+                    <Toggle
+                      onText={t('Enabled')}
+                      offText={t('Disabled')}
+                      checked={isDeveloperModeEnabled}
+                      onChange={(newValue) => {
+                        if (onChange) {
+                          onChange('isDeveloperModeEnabled', newValue);
                         }
                       }}
                     />

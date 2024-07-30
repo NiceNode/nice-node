@@ -13,7 +13,7 @@
         "websockets": "Enabled",
         "executionEndpoint": "http://host.containers.internal",
         "network": "Mainnet",
-        "quicPort": "Enabled",
+        "quic": "Enabled",
         "quicPortUdp": "9001"
       },
       "docker": {
@@ -114,7 +114,7 @@
       "infoDescription": "NiceNode requires http connections",
       "documentation": "https://lighthouse-book.sigmaprime.io/api-bn.html#starting-the-server"
     },
-    "quicPort": {
+    "quic": {
       "displayName": "QUIC Connections",
       "uiControl": {
         "type": "select/single",
@@ -199,7 +199,8 @@
   },
   "documentation": {
     "default": "https://lighthouse-book.sigmaprime.io/intro.html",
-    "docker": "https://lighthouse-book.sigmaprime.io/docker.html"
+    "docker": "https://lighthouse-book.sigmaprime.io/docker.html",
+    "releaseNotesUrl": "https://github.com/sigp/lighthouse/releases"
   },
   "iconUrl": "https://clientdiversity.org/assets/img/consensus-clients/lighthouse-logo.png",
   "resources": [

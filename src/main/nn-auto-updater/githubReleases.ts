@@ -1,7 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { arch, platform } from 'node:process';
 import { app } from 'electron';
-import { find } from 'highcharts';
 import { downloadFile } from '../downloadFile';
 import { getNNDirPath } from '../files';
 import logger from '../logger';

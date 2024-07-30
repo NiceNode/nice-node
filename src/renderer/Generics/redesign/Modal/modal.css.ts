@@ -89,6 +89,9 @@ export const titleFont = style({
       lineHeight: '24px',
       letterSpacing: '-0.4px',
     },
+    '&.controllerUpdate': {
+      paddingLeft: 32,
+    },
   },
 });
 
@@ -131,6 +134,10 @@ export const modalChildrenContainer = style({
     },
     '&.nodeSettings': {
       padding: 0,
+      overflowX: 'hidden',
+    },
+    '&.controllerUpdate': {
+      overflowY: 'auto',
       overflowX: 'hidden',
     },
   },

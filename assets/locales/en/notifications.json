@@ -1,4 +1,8 @@
 {
+  "ClientSuccessfulyUpdatedTitle": "Client successfully updated",
+  "ClientSuccessfulyUpdatedDescription": "{{variable}} has been updated",
+  "ClientUpdateErrorTitle": "Client update error",
+  "ClientUpdateErrorDescription": "An error occurred while updating {{variable}}",
   "LowDiskSpaceTitle": "Low disk space",
   "LowDiskSpaceDescription": "Disk space is lower than 40GB",
   "InternetConnectionDownTitle": "Internet connection down",

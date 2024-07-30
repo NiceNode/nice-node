@@ -192,4 +192,14 @@ export const mergeObjectReducer = (state: object, action: object) => {
   return merge(state, action);
 };
 
+export const mergeObjectReducerWithReset = (
+  state: object,
+  action: { type?: string; payload?: { reset?: boolean } & object },
+) => {
+  if (action.payload?.reset) {
+    return {};
+  }
+  return merge(state, action.payload || {});
+};
+
 export default merge;
