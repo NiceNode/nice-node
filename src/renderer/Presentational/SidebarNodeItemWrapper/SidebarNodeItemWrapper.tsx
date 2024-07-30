@@ -107,6 +107,7 @@ export const SidebarNodeItemWrapper = ({
       key={spec.specId || id}
       iconId={spec.specId?.replace('-beacon', '')}
       title={spec.displayName}
+      iconUrl={spec.iconUrl}
       info={node?.config?.configValuesMap?.network ?? 'Mainnet'}
       status={sidebarStatus}
       selected={selected}

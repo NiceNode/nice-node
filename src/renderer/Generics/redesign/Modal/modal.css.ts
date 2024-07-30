@@ -131,6 +131,7 @@ export const modalChildrenContainer = style({
     '&.addNode': {
       overflowY: 'auto',
       overflowX: 'hidden',
+      scrollbarGutter: 'stable', // reserves space for scrollbar
     },
     '&.nodeSettings': {
       padding: 0,

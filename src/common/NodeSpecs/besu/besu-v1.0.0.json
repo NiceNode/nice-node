@@ -419,7 +419,7 @@
     "docker": "https://besu.hyperledger.org/en/stable/HowTo/Get-Started/Installation-Options/Run-Docker-Image/",
     "releaseNotesUrl": "https://github.com/hyperledger/besu/releases"
   },
-  "iconUrl": "https://clientdiversity.org/assets/img/execution-clients/besu-text-logo.png",
+  "iconUrl": "https://pub-9f2dc808c3d748eabde036c3d3465ee6.r2.dev/besu.png",
   "resources": [
     {
       "label": "Twitter",
