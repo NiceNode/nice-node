@@ -35,6 +35,7 @@ export interface ClientProps {
   packageName: string;
   displayName: string;
   name: NodeBackgroundId | string;
+  iconUrl?: string;
   version: string;
   nodeType: string;
   status: ClientStatusProps;

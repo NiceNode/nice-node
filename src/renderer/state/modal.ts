@@ -5,6 +5,7 @@ import type { RootState } from './store';
 export interface ModalScreen {
   route: string | undefined;
   type: 'alert' | 'modal' | 'info' | undefined;
+  data?: Record<string, unknown>;
 }
 
 // Define a type for the slice state

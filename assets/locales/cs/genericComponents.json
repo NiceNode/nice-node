@@ -103,7 +103,6 @@
   "InitialSyncInProgress": "Probíhá počáteční synchronizace...",
   "NodeSettings": "Nastavení Uzlu...",
   "RemoveNode": "Odstranit Uzel...",
-  "RemovingNode": "Odstraňování Uzlu...",
   "ErrorOccurred": "Došlo k chybě",
   "DataLocation": "Umístění dat",
   "AvailableDiskSpace": "{{space}}GB dostupného místa na disku",

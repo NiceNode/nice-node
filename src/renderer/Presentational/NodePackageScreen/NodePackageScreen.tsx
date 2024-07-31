@@ -299,6 +299,7 @@ const NodePackageScreen = () => {
         console.log('nodeStatus', node?.status);
         return {
           id: service.node.id,
+          iconUrl: service.node.spec.iconUrl,
           name: service.node.spec.specId,
           displayName: service.node.spec.displayName as NodeBackgroundId,
           version: '',
@@ -403,6 +404,7 @@ const NodePackageScreen = () => {
     nodeId: selectedNodePackage.id,
     displayName: spec.displayName,
     name: clientName as NodeBackgroundId,
+    iconUrl: spec.iconUrl,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
     info: formatSpec(spec.displayTagline),

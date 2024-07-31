@@ -63,6 +63,7 @@ const nodeSpecToSelectOption = (nodeSpec: NodeSpecification) => {
     value: nodeSpec.specId,
     label: nodeSpec.displayName,
     title: nodeSpec.displayName,
+    iconUrl: nodeSpec.iconUrl,
     info: nodeSpec.displayTagline ?? '',
     minority: nodeSpec.minorityClient ?? false,
     releasePhase: nodeSpec.nodeReleasePhase,
