@@ -295,6 +295,7 @@ const NodePackageScreen = () => {
     info ? `${info} ${sNetworkNodePackage}` : sNetworkNodePackage || '';
 
   const clientName = spec.specId.replace('-beacon', '');
+
   const now = moment();
   const minutesPassedSinceLastRun = now.diff(
     moment(selectedNodePackage?.lastRunningTimestampMs),
@@ -308,6 +309,12 @@ const NodePackageScreen = () => {
         qConsensusIsSyncing?.data?.isSyncing ||
         false;
 
+  const peers = qExecutionPeers.isError
+    ? undefined
+    : typeof qExecutionPeers.data === 'number'
+      ? qExecutionPeers.data
+      : 0;
+
   if (
     isSyncing === false &&
     selectedNodePackage?.status === NodeStatus.running &&
@@ -320,11 +327,7 @@ const NodePackageScreen = () => {
 
   const syncData = {
     isSyncing,
-    peers: qExecutionPeers.isError
-      ? undefined
-      : typeof qExecutionPeers.data === 'number'
-        ? qExecutionPeers.data
-        : 0,
+    peers,
     minutesPassedSinceLastRun,
     offline: qNetwork.status === 'rejected',
     updateAvailable: false,

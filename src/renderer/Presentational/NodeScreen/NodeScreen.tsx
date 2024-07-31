@@ -75,6 +75,9 @@ const NodeScreen = () => {
     },
     { pollingInterval },
   );
+  const qNetwork = useGetNetworkConnectedQuery(null, {
+    pollingInterval: 30000,
+  });
   const qLatestBlock = useGetExecutionLatestBlockQuery(
     {
       rpcTranslation: selectedNode?.spec.rpcTranslation,
@@ -86,9 +89,6 @@ const NodeScreen = () => {
     pollingInterval: 15000,
   });
   const isPodmanRunning = !qIsPodmanRunning?.fetching && qIsPodmanRunning?.data;
-  const qNetwork = useGetNetworkConnectedQuery(null, {
-    pollingInterval: 30000,
-  });
 
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
@@ -285,25 +285,25 @@ const NodeScreen = () => {
   const nodeVersionData =
     typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
 
+  const isSyncing = qExecutionIsSyncing.isError
+    ? undefined
+    : qExecutionIsSyncing?.data?.isSyncing;
+  const peers = qExecutionPeers.isError
+    ? undefined
+    : typeof qExecutionPeers.data === 'number'
+      ? qExecutionPeers.data
+      : typeof qExecutionPeers.data === 'string'
+        ? Number.parseInt(qExecutionPeers.data, 10) || 0
+        : 0;
   const now = moment();
   const minutesPassedSinceLastRun = now.diff(
     moment(selectedNode?.lastRunningTimestampMs),
     'minutes',
   );
-  const isSyncing = qExecutionIsSyncing.isError
-    ? undefined
-    : qExecutionIsSyncing?.data?.isSyncing;
-  false;
 
   const syncData = {
-    isSyncing: isSyncing,
-    peers: qExecutionPeers.isError
-      ? undefined
-      : typeof qExecutionPeers.data === 'number'
-        ? qExecutionPeers.data
-        : typeof qExecutionPeers.data === 'string'
-          ? Number.parseInt(qExecutionPeers.data, 10) || 0
-          : 0,
+    isSyncing,
+    peers,
     updateAvailable: selectedNode.updateAvailable,
     minutesPassedSinceLastRun,
     offline: qNetwork.status === 'rejected',

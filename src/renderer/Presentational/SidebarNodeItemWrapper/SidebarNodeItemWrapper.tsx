@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
+import moment from 'moment';
 import { type NodePackage, NodeStatus } from '../../../common/node';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { getStatusObject, getSyncStatus } from '../../Generics/redesign/utils';
-import { useGetExecutionIsSyncingQuery } from '../../state/services';
+import {
+  useGetExecutionIsSyncingQuery,
+  useGetExecutionPeersQuery,
+} from '../../state/services';
+import { useGetNetworkConnectedQuery } from '../../state/network';
 
 export type SidebarNodeStatus =
   | 'healthy'
@@ -30,6 +35,7 @@ const NODE_SIDEBAR_STATUS_MAP: Record<string, SidebarNodeStatus> = {
   [NodeStatus.errorRunning]: 'error',
   [NodeStatus.errorStarting]: 'error',
   [NodeStatus.errorStopping]: 'error',
+  catchingUp: 'sync',
   unknown: 'error',
   error: 'error',
 };
@@ -62,46 +68,47 @@ export const SidebarNodeItemWrapper = ({
   node,
   offline,
 }: SidebarNodeItemWrapperProps) => {
-  const [sIsSyncing, setIsSyncing] = useState<boolean>();
-  const [sSyncPercent, setSyncPercent] = useState<string>('');
-
   const pollingInterval = 0;
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     {
-      rpcTranslation: node.spec.rpcTranslation,
+      rpcTranslation: node?.spec.rpcTranslation,
       httpPort: node?.config?.configValuesMap?.httpPort,
     },
-    {
-      pollingInterval,
-    },
+    { pollingInterval },
   );
-
-  useEffect(() => {
-    console.log('qExecutionIsSyncing: ', qExecutionIsSyncing);
-    if (qExecutionIsSyncing.isError) {
-      setSyncPercent('');
-      setIsSyncing(undefined);
-      return;
-    }
-    const syncingData = qExecutionIsSyncing.data;
-    if (typeof syncingData === 'object') {
-      setSyncPercent('');
-      setIsSyncing(syncingData.isSyncing);
-    } else if (syncingData === false) {
-      // for nodes that do not have sync percent or other sync data
-      setSyncPercent('');
-      setIsSyncing(false);
-    } else {
-      setSyncPercent('');
-      setIsSyncing(undefined);
-    }
-  }, [qExecutionIsSyncing]);
+  const qExecutionPeers = useGetExecutionPeersQuery(
+    {
+      rpcTranslation: node?.spec.rpcTranslation,
+      httpPort: node?.config?.configValuesMap?.httpPort,
+    },
+    { pollingInterval },
+  );
 
   const { spec, status } = node;
 
+  const isSyncing = qExecutionIsSyncing.isError
+    ? undefined
+    : qExecutionIsSyncing?.data?.isSyncing;
+  const peers = qExecutionPeers.isError
+    ? undefined
+    : typeof qExecutionPeers.data === 'number'
+      ? qExecutionPeers.data
+      : typeof qExecutionPeers.data === 'string'
+        ? Number.parseInt(qExecutionPeers.data, 10) || 0
+        : 0;
+  const now = moment();
+  const minutesPassedSinceLastRun = now.diff(
+    moment(node?.lastRunningTimestampMs),
+    'minutes',
+  );
+
   const syncData = {
-    isSyncing: sIsSyncing,
+    isSyncing,
+    peers,
+    updateAvailable: node.updateAvailable,
+    minutesPassedSinceLastRun,
     offline,
+    initialSyncFinished: node?.initialSyncFinished || false,
   };
 
   const nodeStatus = getStatusObject(status, syncData);
