@@ -177,6 +177,15 @@ const NodePackageScreen = () => {
       );
       setSyncPercent('');
       setIsSyncing(isSyncing);
+      if (
+        !isSyncing &&
+        selectedNodePackage?.status === NodeStatus.running &&
+        selectedNodePackage?.initialSyncFinished === undefined
+      ) {
+        electron.updateNodePackage(selectedNodePackage.id, {
+          initialSyncFinished: true,
+        });
+      }
     } else if (executionSyncingData === false) {
       // for nodes that do not have sync percent or other sync data
       setSyncPercent('');

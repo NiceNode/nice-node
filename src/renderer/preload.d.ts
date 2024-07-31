@@ -81,6 +81,7 @@ declare global {
       getUserNodePackages(): UserNodePackages;
       startNodePackage(nodeId: NodeId): void;
       stopNodePackage(nodeId: NodeId): void;
+      updateNodePackage(nodeId: NodeId, propertiesToUpdate: any): Node;
       removeNodePackage(
         nodeId: NodeId,
         options: { isDeleteStorage: boolean },

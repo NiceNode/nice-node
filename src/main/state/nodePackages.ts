@@ -99,18 +99,21 @@ export const addNodePackage = (newNode: NodePackage) => {
   return newNode;
 };
 
-export const updateNodeProperties = (
+export const updateNodePackageProperties = (
   nodeId: NodeId,
   propertiesToUpdate: any,
 ) => {
-  console.log('updateNodeProperties: propertiesToUpdate', propertiesToUpdate);
+  console.log(
+    'updateNodePackageProperties: propertiesToUpdate',
+    propertiesToUpdate,
+  );
   const node = getNodePackage(nodeId);
   const newNode = {
     ...node,
     ...propertiesToUpdate,
   };
   console.log(
-    'updateNodeProperties: newNode propertiesToUpdate',
+    'updateNodePackageProperties: newNode propertiesToUpdate',
     newNode,
     propertiesToUpdate,
   );
@@ -124,14 +127,14 @@ export const updateNodeProperties = (
  * @param newConfig
  * @returns updated Node
  */
-export const updateNodeConfig = (
+export const updateNodePackageConfig = (
   nodeId: NodeId,
   newConfig: ConfigValuesMap,
 ) => {
-  console.log('updateNodeProperties: propertiesToUpdate', newConfig);
+  console.log('updateNodePackageProperties: propertiesToUpdate', newConfig);
   // todo: could add some validation on the config key and values with the
   //  those detailed in the node spec
-  return updateNodeProperties(nodeId, { config: newConfig });
+  return updateNodePackageProperties(nodeId, { config: newConfig });
 };
 
 // todo: put a lock on anything that changes nodes array

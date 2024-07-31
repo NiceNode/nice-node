@@ -57,7 +57,10 @@ import { checkPorts } from './ports';
 import { getBenchmarks } from './state/benchmark';
 import { getAppClientId } from './state/eventReporting';
 import { getNodeLibrary, getNodePackageLibrary } from './state/nodeLibrary';
-import { getUserNodePackages } from './state/nodePackages';
+import {
+  getUserNodePackages,
+  updateNodePackageProperties,
+} from './state/nodePackages';
 import { getNodes, getUserNodes, updateNodeProperties } from './state/nodes';
 import {
   addNotification,
@@ -145,6 +148,12 @@ export const initialize = () => {
   ipcMain.handle('stopNodePackage', (_event, nodeId: NodeId) => {
     return stopNodePackage(nodeId, NodeStoppedBy.user);
   });
+  ipcMain.handle(
+    'updateNodePackage',
+    (_event, nodeId: NodeId, propertiesToUpdate: any) => {
+      return updateNodePackageProperties(nodeId, propertiesToUpdate);
+    },
+  );
   ipcMain.handle(
     'addNode',
     (_event, nodeSpec: NodeSpecification, storageLocation?: string) => {
