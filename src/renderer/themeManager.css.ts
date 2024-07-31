@@ -3,9 +3,9 @@ import { vars } from './Generics/redesign/theme.css';
 
 export const background = style({
   background: vars.color.background,
-  selectors: {
-    '&.darwin': {
-      background: 'none',
-    },
-  },
+  // selectors: {
+  //   '&.darwin': {
+  //     background: 'none',
+  //   },
+  // },
 });
