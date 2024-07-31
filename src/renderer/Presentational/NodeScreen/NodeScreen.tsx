@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-
+import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../Generics/redesign/Button/Button';
@@ -15,7 +15,6 @@ import {
   selectIsAvailableForPolling,
   selectSelectedNode,
 } from '../../state/node';
-import node from '../../state/node.js';
 import {
   useGetExecutionIsSyncingQuery,
   useGetExecutionLatestBlockQuery,
@@ -23,6 +22,7 @@ import {
   useGetNodeVersionQuery,
 } from '../../state/services';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
+import { useGetNetworkConnectedQuery } from '../../state/network';
 import { hexToDecimal } from '../../utils';
 import ContentSingleClient, {
   type SingleNodeContent,
@@ -41,34 +41,30 @@ let alphaModalRendered = false;
 const NodeScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const selectedNode = useAppSelector(selectSelectedNode);
-  const [sIsSyncing, setIsSyncing] = useState<boolean>();
-  // we will bring this var back in the future
-  const [sSyncPercent, setSyncPercent] = useState<string>('');
-  const [sPeers, setPeers] = useState<number>();
+  const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
+
   const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>(0);
   const [sTotalDiskSize, setTotalDiskSize] = useState<number>(0);
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
-  const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
+
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
+
   const qNodeVersion = useGetNodeVersionQuery(
     {
       rpcTranslation: selectedNode?.spec.rpcTranslation,
       httpPort: selectedNode?.config?.configValuesMap?.httpPort,
     },
-    {
-      pollingInterval, //TODO: modify this to stop once we know version
-    },
+    { pollingInterval }, //TODO: modify this to stop once we know version
   );
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     {
       rpcTranslation: selectedNode?.spec.rpcTranslation,
       httpPort: selectedNode?.config?.configValuesMap?.httpPort,
     },
-    {
-      pollingInterval,
-    },
+    { pollingInterval },
   );
   // const isSelectedNode = selectedNode !== undefined;
   // const peersPolling = isSelectedNode ? pollingInterval : 0;
@@ -77,26 +73,22 @@ const NodeScreen = () => {
       rpcTranslation: selectedNode?.spec.rpcTranslation,
       httpPort: selectedNode?.config?.configValuesMap?.httpPort,
     },
-    {
-      pollingInterval,
-    },
+    { pollingInterval },
   );
   const qLatestBlock = useGetExecutionLatestBlockQuery(
     {
       rpcTranslation: selectedNode?.spec.rpcTranslation,
       httpPort: selectedNode?.config?.configValuesMap?.httpPort,
     },
-    {
-      pollingInterval,
-    },
+    { pollingInterval },
   );
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
-  let isPodmanRunning = true;
-  if (qIsPodmanRunning && !qIsPodmanRunning.fetching) {
-    isPodmanRunning = qIsPodmanRunning.data;
-  }
+  const isPodmanRunning = !qIsPodmanRunning?.fetching && qIsPodmanRunning?.data;
+  const qNetwork = useGetNetworkConnectedQuery(null, {
+    pollingInterval: 30000,
+  });
 
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
@@ -139,52 +131,6 @@ const NodeScreen = () => {
   }, []);
 
   useEffect(() => {
-    if (!sIsAvailableForPolling) {
-      // clear all node data when it becomes unavailable to get
-      setSyncPercent('');
-      setIsSyncing(undefined);
-      setPeers(undefined);
-      setLatestBlockNumber(0);
-    }
-  }, [sIsAvailableForPolling]);
-
-  useEffect(() => {
-    console.log('qExecutionIsSyncing: ', qExecutionIsSyncing);
-    if (qExecutionIsSyncing.isError) {
-      setSyncPercent('');
-      setIsSyncing(undefined);
-      return;
-    }
-    const syncingData = qExecutionIsSyncing.data;
-    if (typeof syncingData === 'object') {
-      setSyncPercent(syncingData.syncPercent);
-      setIsSyncing(syncingData.isSyncing);
-    } else if (syncingData === false) {
-      // light client geth, it is done syncing if data is false
-      setSyncPercent('');
-      setIsSyncing(false);
-    } else {
-      setSyncPercent('');
-      setIsSyncing(undefined);
-    }
-  }, [qExecutionIsSyncing]);
-
-  useEffect(() => {
-    console.log('qExecutionPeers: ', qExecutionPeers.data);
-    if (qExecutionPeers.isError) {
-      setPeers(undefined);
-      return;
-    }
-    if (typeof qExecutionPeers.data === 'string') {
-      setPeers(qExecutionPeers.data);
-    } else if (typeof qExecutionPeers.data === 'number') {
-      setPeers(qExecutionPeers.data.toString());
-    } else {
-      setPeers(undefined);
-    }
-  }, [qExecutionPeers]);
-
-  useEffect(() => {
     const savedSyncedBlock = selectedNode?.runtime?.usage?.syncedBlock || 0;
     if (qLatestBlock.isError) {
       setLatestBlockNumber(savedSyncedBlock);
@@ -192,9 +138,7 @@ const NodeScreen = () => {
     }
 
     const updateNodeLSB = async (latestBlockNum: number) => {
-      if (!selectedNode) {
-        return;
-      }
+      if (!selectedNode) return;
       await electron.updateNodeLastSyncedBlock(selectedNode.id, latestBlockNum);
     };
 
@@ -263,7 +207,6 @@ const NodeScreen = () => {
   //     };
   //   },
   // });
-  const dispatch = useAppDispatch();
 
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {
     dispatch(
@@ -342,10 +285,29 @@ const NodeScreen = () => {
   const nodeVersionData =
     typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
 
+  const now = moment();
+  const minutesPassedSinceLastRun = now.diff(
+    moment(selectedNode?.lastRunningTimestampMs),
+    'minutes',
+  );
+  const isSyncing = qExecutionIsSyncing.isError
+    ? undefined
+    : qExecutionIsSyncing?.data?.isSyncing;
+  false;
+
   const syncData = {
-    isSyncing: sIsSyncing,
-    peers: sPeers,
+    isSyncing: isSyncing,
+    peers: qExecutionPeers.isError
+      ? undefined
+      : typeof qExecutionPeers.data === 'number'
+        ? qExecutionPeers.data
+        : typeof qExecutionPeers.data === 'string'
+          ? Number.parseInt(qExecutionPeers.data, 10) || 0
+          : 0,
     updateAvailable: selectedNode.updateAvailable,
+    minutesPassedSinceLastRun,
+    offline: qNetwork.status === 'rejected',
+    initialSyncFinished: selectedNode?.initialSyncFinished || false,
   };
   // console.log('singleNodeStatus', status);
   const statusObject = getStatusObject(status, syncData);
@@ -363,7 +325,7 @@ const NodeScreen = () => {
     ),
     status: statusObject,
     stats: {
-      peers: sPeers,
+      peers: syncData.peers,
       currentBlock: sLatestBlockNumber,
       diskUsageGBs: diskUsed,
     },
