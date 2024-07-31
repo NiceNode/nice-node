@@ -95,7 +95,7 @@ export const ClientCard = (props: ClientProps) => {
       } else if (stats.highestBlock && stats.currentBlock) {
         progress = stats.currentBlock / stats.highestBlock;
       }
-      const caption = !status.initialized
+      const caption = !status.catchingUp
         ? g('InitialSyncInProgress')
         : g('CatchingUp');
       return (

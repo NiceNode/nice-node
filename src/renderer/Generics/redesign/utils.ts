@@ -9,25 +9,32 @@ export const getStatusObject = (
     minutesPassedSinceLastRun: number;
     offline: boolean;
     updateAvailable: boolean;
+    initialSyncFinished: boolean;
   },
-) => ({
-  starting: status === NodeStatus.starting,
-  running: status === NodeStatus.running,
-  stopping: status === NodeStatus.stopping,
-  stopped: status === NodeStatus.stopped,
-  updating: status === NodeStatus.updating,
-  updateAvailable: syncData?.updateAvailable,
-  error: status.includes('error'),
-  synchronized: syncData?.isSyncing === false && status === NodeStatus.running,
-  lowPeerCount:
-    syncData?.peers < 5 &&
-    syncData?.minutesPassedSinceLastRun > 20 &&
-    status === NodeStatus.running,
-  noConnection: syncData?.offline && status === NodeStatus.running,
-  // initialized: status === NodeStatus.initialized,
-  // blocksBehind: status === NodeStatus.blocksBehind,
-  // catchingUp: status === NodeStatus.catchingUp,
-});
+) => {
+  // console.log('Status in getStatusObject:', status);
+  // console.log('SyncData in getStatusObject:', syncData);
+
+  return {
+    starting: status === NodeStatus.starting,
+    running: status === NodeStatus.running,
+    stopping: status === NodeStatus.stopping,
+    stopped: status === NodeStatus.stopped,
+    updating: status === NodeStatus.updating,
+    updateAvailable: syncData?.updateAvailable,
+    error: status.includes('error'),
+    synchronized:
+      syncData?.isSyncing === false && status === NodeStatus.running,
+    lowPeerCount:
+      syncData?.peers < 5 &&
+      syncData?.minutesPassedSinceLastRun > 20 &&
+      status === NodeStatus.running,
+    noConnection: syncData?.offline && status === NodeStatus.running,
+    catchingUp: status === NodeStatus.running && syncData?.initialSyncFinished,
+    // initialized: status === NodeStatus.initialized,
+    // blocksBehind: status === NodeStatus.blocksBehind,
+  };
+};
 
 export const getSyncStatus = (status: ClientStatusProps) => {
   let syncStatus;
@@ -42,6 +49,9 @@ export const getSyncStatus = (status: ClientStatusProps) => {
       break;
     case status.lowPeerCount:
       syncStatus = SYNC_STATUS.LOW_PEER_COUNT;
+      break;
+    case status.catchingUp:
+      syncStatus = SYNC_STATUS.CATCHING_UP;
       break;
     case status.updating:
       syncStatus = SYNC_STATUS.UPDATING;
@@ -60,9 +70,6 @@ export const getSyncStatus = (status: ClientStatusProps) => {
       break;
     case status.blocksBehind:
       syncStatus = SYNC_STATUS.BLOCKS_BEHIND;
-      break;
-    case status.initialized && !status.synchronized && !status.blocksBehind:
-      syncStatus = SYNC_STATUS.CATCHING_UP;
       break;
     case !status.initialized && !status.synchronized && !status.blocksBehind:
       syncStatus = SYNC_STATUS.INITIALIZING;

@@ -44,9 +44,6 @@ const NodePackageScreen = () => {
   const sUserNodes = useAppSelector(selectUserNodes);
   const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>();
   // we will bring these vars back in the future
-  const [sIsSyncing, setIsSyncing] = useState<boolean>();
-  const [sSyncPercent, setSyncPercent] = useState<string>('');
-  const [sPeers, setPeers] = useState<number>();
   const [sDiskUsed, setDiskUsed] = useState<number>(0);
   const [sCpuPercentUsed, setCpuPercentUsed] = useState<number>(0);
   const [sMemoryUsagePercent, setMemoryUsagePercent] = useState<number>(0);
@@ -150,66 +147,6 @@ const NodePackageScreen = () => {
     setCpuPercentUsed(cpuPercent);
     setMemoryUsagePercent(memoryPercent);
   }, [selectedNodePackage?.services, sUserNodes]);
-
-  useEffect(() => {
-    if (!sIsAvailableForPolling) {
-      // clear all node data when it becomes unavailable to get
-      setSyncPercent('');
-      setIsSyncing(undefined);
-      setPeers(undefined);
-      setLatestBlockNumber(0);
-    }
-  }, [sIsAvailableForPolling]);
-
-  useEffect(() => {
-    console.log('qExecutionIsSyncing: ', qExecutionIsSyncing);
-    if (qExecutionIsSyncing.isError || qConsensusIsSyncing?.isError) {
-      setSyncPercent('');
-      setIsSyncing(undefined);
-      return;
-    }
-    const executionSyncingData = qExecutionIsSyncing.data;
-    const consensusSyncingData = qConsensusIsSyncing?.data;
-
-    if (typeof executionSyncingData === 'object') {
-      const isSyncing = !!(
-        executionSyncingData.isSyncing || consensusSyncingData?.isSyncing
-      );
-      setSyncPercent('');
-      setIsSyncing(isSyncing);
-      if (
-        !isSyncing &&
-        selectedNodePackage?.status === NodeStatus.running &&
-        selectedNodePackage?.initialSyncFinished === undefined
-      ) {
-        electron.updateNodePackage(selectedNodePackage.id, {
-          initialSyncFinished: true,
-        });
-      }
-    } else if (executionSyncingData === false) {
-      // for nodes that do not have sync percent or other sync data
-      setSyncPercent('');
-      setIsSyncing(false);
-    } else {
-      setSyncPercent('');
-      setIsSyncing(undefined);
-    }
-  }, [qExecutionIsSyncing, qConsensusIsSyncing]);
-
-  useEffect(() => {
-    console.log('qExecutionPeers: ', qExecutionPeers.data);
-    if (qExecutionPeers.isError) {
-      setPeers(undefined);
-      return;
-    }
-    if (typeof qExecutionPeers.data === 'string') {
-      setPeers(qExecutionPeers.data);
-    } else if (typeof qExecutionPeers.data === 'number') {
-      setPeers(qExecutionPeers.data.toString());
-    } else {
-      setPeers(undefined);
-    }
-  }, [qExecutionPeers]);
 
   useEffect(() => {
     const savedSyncedBlock =
@@ -392,14 +329,44 @@ const NodePackageScreen = () => {
     moment(selectedNodePackage?.lastRunningTimestampMs),
     'minutes',
   );
+
+  const isSyncing =
+    qExecutionIsSyncing.isError || qConsensusIsSyncing?.isError
+      ? undefined
+      : qExecutionIsSyncing?.data?.isSyncing ||
+        qConsensusIsSyncing?.data?.isSyncing ||
+        false;
+
+  if (
+    isSyncing === false &&
+    selectedNodePackage?.status === NodeStatus.running &&
+    selectedNodePackage?.initialSyncFinished === undefined
+  ) {
+    electron.updateNodePackage(selectedNodePackage.id, {
+      initialSyncFinished: true,
+    });
+  }
+
   const syncData = {
-    isSyncing: sIsSyncing, //synchronized, improve this to check all services
-    peers: sPeers, //lowPeerCount
-    minutesPassedSinceLastRun, //lowPeerCount
-    offline: qNetwork.status === 'rejected', //noConnection
+    isSyncing,
+    peers: qExecutionPeers.isError
+      ? undefined
+      : typeof qExecutionPeers.data === 'number'
+        ? qExecutionPeers.data
+        : 0,
+    minutesPassedSinceLastRun,
+    offline: qNetwork.status === 'rejected',
+    updateAvailable: false,
+    initialSyncFinished: selectedNodePackage?.initialSyncFinished || false,
   };
 
-  console.log('syncData', syncData);
+  // console.log('qExecutionIsSyncing:', qExecutionIsSyncing);
+  // console.log('qConsensusIsSyncing:', qConsensusIsSyncing);
+  // console.log('qExecutionPeers:', qExecutionPeers);
+  // console.log('qNetwork:', qNetwork);
+  // console.log('SyncData:', syncData);
+
+  // console.log('syncData', syncData);
   const nodePackageContent: SingleNodeContent = {
     nodeId: selectedNodePackage.id,
     displayName: spec.displayName,
@@ -410,7 +377,7 @@ const NodePackageScreen = () => {
     info: formatSpec(spec.displayTagline),
     status: getStatusObject(status, syncData),
     stats: {
-      peers: sPeers,
+      peers: syncData.peers,
       currentBlock: sLatestBlockNumber,
       diskUsageGBs: sDiskUsed,
       memoryUsagePercent: sMemoryUsagePercent,
