@@ -42,21 +42,24 @@ const NodePackageScreen = () => {
   const dispatch = useAppDispatch();
   const selectedNodePackage = useAppSelector(selectSelectedNodePackage);
   const sUserNodes = useAppSelector(selectUserNodes);
-  const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>();
-  // we will bring these vars back in the future
+  const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>(
+    [],
+  );
   const [sDiskUsed, setDiskUsed] = useState<number>(0);
   const [sCpuPercentUsed, setCpuPercentUsed] = useState<number>(0);
   const [sMemoryUsagePercent, setMemoryUsagePercent] = useState<number>(0);
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
+  const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
-  const executionNode = selectedNodePackage?.services.find((service) => {
-    return service.serviceId === 'executionClient';
-  });
-  const consensusNode = selectedNodePackage?.services.find((service) => {
-    return service.serviceId === 'consensusClient';
-  });
+
+  const executionNode = selectedNodePackage?.services.find(
+    (service) => service.serviceId === 'executionClient',
+  );
+  const consensusNode = selectedNodePackage?.services.find(
+    (service) => service.serviceId === 'consensusClient',
+  );
   const executionNodeId = executionNode?.node.id;
   const consensusNodeId = consensusNode?.node.id;
   const executionHttpPort =
@@ -66,51 +69,28 @@ const NodePackageScreen = () => {
     consensusNodeId &&
     sUserNodes?.nodes[consensusNodeId]?.config.configValuesMap.httpPort;
   const rpcTranslation = selectedNodePackage?.spec.rpcTranslation;
+
   const qConsensusIsSyncing = useGetExecutionIsSyncingQuery(
-    {
-      rpcTranslation: 'eth-l1-beacon',
-      httpPort: consensusHttpPort,
-    },
-    {
-      pollingInterval,
-    },
+    { rpcTranslation: 'eth-l1-beacon', httpPort: consensusHttpPort },
+    { pollingInterval },
   );
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
-    {
-      rpcTranslation,
-      httpPort: executionHttpPort,
-    },
-    {
-      pollingInterval,
-    },
+    { rpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
   );
   const qExecutionPeers = useGetExecutionPeersQuery(
-    {
-      rpcTranslation,
-      httpPort: executionHttpPort,
-    },
-    {
-      pollingInterval,
-    },
+    { rpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
   );
   const qLatestBlock = useGetExecutionLatestBlockQuery(
-    {
-      rpcTranslation,
-      httpPort: executionHttpPort,
-    },
-    {
-      pollingInterval,
-    },
+    { rpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
   );
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
-  let isPodmanRunning = true;
-  if (qIsPodmanRunning && !qIsPodmanRunning.fetching) {
-    isPodmanRunning = qIsPodmanRunning.data;
-  }
+  const isPodmanRunning = !qIsPodmanRunning?.fetching && qIsPodmanRunning?.data;
   // temporary until network is set at the node package level
-  const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
   const qNetwork = useGetNetworkConnectedQuery(null, {
     pollingInterval: 30000,
   });
@@ -253,15 +233,13 @@ const NodePackageScreen = () => {
   useEffect(() => {
     const checkAndStopNodePackage = async () => {
       if (selectedNodePackage?.status === NodeStatus.running) {
-        let allServicesStopped = true;
-        for (const service of selectedNodePackage.services) {
-          const nodeId = service.node.id;
-          const nodeStatus = sUserNodes?.nodes[nodeId]?.status;
-          if (nodeStatus !== NodeStatus.stopped) {
-            allServicesStopped = false;
-            break;
-          }
-        }
+        const allServicesStopped = selectedNodePackage.services.every(
+          (service) => {
+            const nodeId = service.node.id;
+            const nodeStatus = sUserNodes?.nodes[nodeId]?.status;
+            return nodeStatus === NodeStatus.stopped;
+          },
+        );
         if (allServicesStopped) {
           await electron.stopNodePackage(selectedNodePackage.id);
         }
@@ -313,15 +291,8 @@ const NodePackageScreen = () => {
   // todo: add stop/start ability?
 
   // TODO: make this more flexible for other client specs
-  const formatSpec = (info: string | undefined) => {
-    let result = '';
-    if (info) {
-      result = `${info} ${sNetworkNodePackage}`;
-    } else if (sNetworkNodePackage !== '') {
-      result = `${sNetworkNodePackage}`;
-    }
-    return result;
-  };
+  const formatSpec = (info: string | undefined) =>
+    info ? `${info} ${sNetworkNodePackage}` : sNetworkNodePackage || '';
 
   const clientName = spec.specId.replace('-beacon', '');
   const now = moment();
