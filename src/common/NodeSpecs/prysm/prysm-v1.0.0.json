@@ -113,7 +113,7 @@
     },
     "quicPort": {
       "displayName": "QUIC port",
-      "cliConfigPrefix": ["p2p-quic-port="],
+      "cliConfigPrefix": ["--p2p-quic-port="],
       "uiControl": {
         "type": "text"
       },

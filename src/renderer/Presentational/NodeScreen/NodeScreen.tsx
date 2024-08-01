@@ -339,6 +339,7 @@ const NodeScreen = () => {
     nodeId: selectedNode.id,
     displayName: selectedNode.spec.displayName,
     name: clientName as NodeBackgroundId,
+    iconUrl: spec.iconUrl,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
     version: formatVersion(nodeVersionData),

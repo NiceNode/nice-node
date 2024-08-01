@@ -26,8 +26,16 @@ import {
  * Primary UI component for user interaction
  */
 export const ClientCard = (props: ClientProps) => {
-  const { displayName, packageName, status, name, nodeType, onClick, stats } =
-    props;
+  const {
+    displayName,
+    packageName,
+    status,
+    name,
+    nodeType,
+    onClick,
+    stats,
+    iconUrl,
+  } = props;
 
   const { t: g } = useTranslation('genericComponents');
 
@@ -163,7 +171,11 @@ export const ClientCard = (props: ClientProps) => {
         <div className={[clientBackground, `${stoppedStyle}`].join(' ')}>
           <div className={clientDetails}>
             <div className={clientIcon}>
-              <NodeIcon iconId={name.replace('-beacon', '')} size="medium" />
+              <NodeIcon
+                iconId={name.replace('-beacon', '')}
+                size="medium"
+                iconUrl={iconUrl}
+              />
             </div>
             <div className={clientTitle}>{displayName}</div>
           </div>

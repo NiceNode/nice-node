@@ -6,6 +6,7 @@
   "AddNode": "Přidat Uzel",
   "StopeNodeToChangeSettings": "Uzel musí být zastaven pro provedení změn",
   "RemoveNode": "Odstranit uzel",
+  "RemovingNode": "Odstraňování Uzlu...",
   "RemoveThisNode": "Odstranit tento uzel",
   "Install Docker": "Nainstalovat Docker",
   "Type": "Typ",

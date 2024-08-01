@@ -23,7 +23,11 @@ export interface SelectCardProps {
    */
   info?: string;
   /**
-   * Which icon?
+   * Icon URL
+   */
+  iconUrl?: string;
+  /**
+   * Which icon? (deprecating)
    */
   iconId: NodeIconId;
   /**
@@ -50,6 +54,7 @@ export interface SelectCardProps {
 const SelectCard = ({
   onClick,
   title,
+  iconUrl,
   info,
   iconId,
   minority = false,
@@ -93,7 +98,7 @@ const SelectCard = ({
       tabIndex={0}
     >
       <div className={containerStyles.join(' ')}>
-        <NodeIcon iconId={iconId} size="medium" />
+        <NodeIcon iconId={iconId} size="medium" iconUrl={iconUrl} />
         <div className={textContainer}>
           {/* TODO: Fix height to 60px */}
           <div className={titleStyle}>{title}</div>

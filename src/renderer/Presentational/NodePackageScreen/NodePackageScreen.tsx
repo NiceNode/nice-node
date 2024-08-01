@@ -270,6 +270,7 @@ const NodePackageScreen = () => {
         id: service.node.id,
         name: service.node.spec.specId,
         displayName: service.node.spec.displayName as NodeBackgroundId,
+        iconUrl: service.node.spec.iconUrl,
         version: '',
         nodeType: service.serviceName,
         status: {
@@ -359,6 +360,7 @@ const NodePackageScreen = () => {
     nodeId: selectedNodePackage.id,
     displayName: spec.displayName,
     name: clientName as NodeBackgroundId,
+    iconUrl: spec.iconUrl,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
     version: formatVersion(nodeVersionData), // todo: remove
