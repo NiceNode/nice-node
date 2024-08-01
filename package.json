@@ -1,6 +1,6 @@
 {
   "name": "nice-node",
-  "version": "6.2.1-alpha",
+  "version": "6.3.0-alpha",
   "description": "Run a node at home, the easy way.",
   "homepage": "https://nicenode.xyz",
   "productName": "NiceNode",
@@ -65,7 +65,7 @@
     "@wdio/mocha-framework": "^8.36.1",
     "@wdio/spec-reporter": "^8.36.1",
     "cross-env": "^7.0.3",
-    "electron": "^30.0.1",
+    "electron": "^31.3.1",
     "electron-devtools-installer": "^3.2.0",
     "electron-extension-installer": "^1.2.0",
     "electron-mock-ipc": "^0.3.12",
@@ -96,7 +96,7 @@
     "electron-log": "^5.1.2",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
-    "highcharts": "^11.0.0",
+    "highcharts": "^11.4.3",
     "highcharts-react-official": "^3.2.1",
     "i18next": "^23.11.2",
     "i18next-browser-languagedetector": "^7.0.1",
@@ -125,7 +125,13 @@
     "url": "http://nicenode.xyz"
   },
   "license": "MIT",
-  "keywords": ["ethereum", "node", "blockchain", "web3", "local"],
+  "keywords": [
+    "ethereum",
+    "node",
+    "blockchain",
+    "web3",
+    "local"
+  ],
   "devEngines": {
     "node": ">=20.x",
     "npm": ">=9.x"
