@@ -77,8 +77,11 @@ const AddNodeStepperModal = ({
       for (const [serviceId, selectOption] of Object.entries(
         clientSelections,
       )) {
-        console.log(`${serviceId}: ${selectOption}`);
-        const clientId = selectOption.specId;
+        console.log(
+          `merging reqs. serviceId, selectOption: ${serviceId}`,
+          selectOption,
+        );
+        const clientId = selectOption.value;
         if (nodeLibrary?.[clientId]?.systemRequirements) {
           reqs.push(
             nodeLibrary[clientId].systemRequirements as SystemRequirements,
