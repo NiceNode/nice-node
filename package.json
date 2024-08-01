@@ -96,7 +96,7 @@
     "electron-log": "^5.1.2",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
-    "highcharts": "^11.4.3",
+    "highcharts": "^11.4.6",
     "highcharts-react-official": "^3.2.1",
     "i18next": "^23.11.2",
     "i18next-browser-languagedetector": "^7.0.1",
