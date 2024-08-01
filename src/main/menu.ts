@@ -1,3 +1,4 @@
+import path from 'node:path';
 import {
   type BrowserWindow,
   Menu,
@@ -231,6 +232,17 @@ export default class MenuBuilder {
           click: async () => {
             const url = await getGithubIssueProblemURL();
             shell.openExternal(url);
+          },
+        },
+        {
+          label: t('OpenLogs'),
+          click: async () => {
+            const logFolderPath = path.join(app.getPath('userData'), 'logs');
+            shell.openPath(logFolderPath).then((result) => {
+              if (result) {
+                console.error('Error opening log folder:', result);
+              }
+            });
           },
         },
         {

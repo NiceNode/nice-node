@@ -8,6 +8,7 @@ import { AlphaBuildModal } from './AlphaBuildModal';
 import { ControllerUpdateModal } from './ControllerUpdateModal.js';
 import FailSystemRequirementsModal from './FailSystemRequirementsModal';
 import { NodeSettingsModal } from './NodeSettingsModal';
+import { PodmanModal } from './PodmanModal';
 import { PreferencesModal } from './PreferencesModal';
 import { RemoveNodeModal } from './RemoveNodeModal';
 import { ResetConfigModal } from './ResetConfigModal';
@@ -43,6 +44,8 @@ const ModalManager = () => {
       return <PreferencesModal modalOnClose={modalOnClose} />;
     case modalRoutes.failSystemRequirements:
       return <FailSystemRequirementsModal modalOnClose={modalOnClose} />;
+    case modalRoutes.podman:
+      return <PodmanModal modalOnClose={modalOnClose} data={screen.data} />;
     case modalRoutes.addValidator:
       return null;
     case modalRoutes.clientVersions:

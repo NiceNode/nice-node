@@ -44,6 +44,12 @@ export const modalContentStyle = style({
     '&.failSystemRequirements': {
       width: '380px',
     },
+    '&.podman': {
+      width: '624px',
+    },
+    '&.preferences': {
+      width: '624px',
+    },
   },
 });
 
@@ -125,6 +131,7 @@ export const modalChildrenContainer = style({
     '&.addNode': {
       overflowY: 'auto',
       overflowX: 'hidden',
+      scrollbarGutter: 'stable', // reserves space for scrollbar
     },
     '&.nodeSettings': {
       padding: 0,

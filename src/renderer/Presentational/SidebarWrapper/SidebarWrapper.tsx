@@ -5,10 +5,13 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
+import type { NodeId } from 'src/common/node.js';
 import { CHANNELS } from '../../../main/messenger';
 import type { NotificationItemProps } from '../../Generics/redesign/NotificationItem/NotificationItem';
 import electron from '../../electronGlobal';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { setModalState } from '../../state/modal.js';
 import { useGetNetworkConnectedQuery } from '../../state/network';
 import {
   selectSelectedNodePackageId,
@@ -19,7 +22,9 @@ import { useGetNotificationsQuery } from '../../state/notificationsService';
 import {
   useGetIsPodmanInstalledQuery,
   useGetIsPodmanRunningQuery,
+  useGetPodmanDetailsQuery,
 } from '../../state/settingsService';
+import { modalRoutes } from '../ModalManager/modalUtils.js';
 import Sidebar from '../Sidebar/Sidebar';
 
 export interface SidebarWrapperProps {
@@ -30,6 +35,7 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   const sSelectedNodePackageId = useAppSelector(selectSelectedNodePackageId);
   const sUserNodePackages = useAppSelector(selectUserNodePackages);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   // todo: implement a back-off polling strategy which can be "reset"
   const qIsPodmanInstalled = useGetIsPodmanInstalledQuery();
   const isPodmanInstalled = qIsPodmanInstalled?.data;
@@ -39,6 +45,10 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   const qNetwork = useGetNetworkConnectedQuery(null, {
     pollingInterval: 30000,
   });
+  const qPodmanDetails = useGetPodmanDetailsQuery(null, {
+    pollingInterval: 15000,
+  });
+  const podmanDetails = qPodmanDetails?.data;
   const [platform, setPlatform] = useState<string>('');
   // default to docker is running while data is being fetched, so
   //  the user isn't falsely warned
@@ -48,13 +58,16 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   const onClickInstallPodman = async () => {
-    console.log('install podman');
-    const installResult = await electron.installPodman();
-    qIsPodmanInstalled.refetch();
-    qIsPodmanRunning.refetch();
-    if (installResult && !installResult.error) {
-      console.log('podman installed, do something');
-    }
+    dispatch(
+      setModalState({
+        isModalOpen: true,
+        screen: {
+          route: modalRoutes.podman,
+          type: 'modal',
+          data: { view: 'update' },
+        },
+      }),
+    );
   };
 
   const onClickStartPodman = async () => {
@@ -73,15 +86,45 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
     qNotifications?.refetch();
   }, []);
 
+  const onOpenPodmanModal = useCallback(() => {
+    dispatch(
+      setModalState({
+        isModalOpen: true,
+        screen: {
+          route: modalRoutes.podman,
+          type: 'modal',
+        },
+      }),
+    );
+  }, []);
+
+  const onOpenNodePackageScreen = useCallback((nodeId: NodeId) => {
+    navigate('/main/nodePackage');
+    dispatch(updateSelectedNodePackageId(nodeId));
+  }, []);
+
   useEffect(() => {
     electron.ipcRenderer.on(CHANNELS.notifications, onNotificationChange);
+    electron.ipcRenderer.on(CHANNELS.openPodmanModal, onOpenPodmanModal);
+    electron.ipcRenderer.on(
+      CHANNELS.openNodePackageScreen,
+      onOpenNodePackageScreen,
+    );
     return () => {
       electron.ipcRenderer.removeListener(
         CHANNELS.notifications,
         onNotificationChange,
       );
+      electron.ipcRenderer.removeListener(
+        CHANNELS.openPodmanModal,
+        onOpenPodmanModal,
+      );
+      electron.ipcRenderer.removeListener(
+        CHANNELS.openNodePackageScreen,
+        onOpenNodePackageScreen,
+      );
     };
-  }, [onNotificationChange]);
+  }, [onNotificationChange, onOpenPodmanModal, onOpenNodePackageScreen]);
 
   // Default selected node to be the first node
   useEffect(() => {
@@ -109,7 +152,7 @@ export const SidebarWrapper = forwardRef<HTMLDivElement>((_, ref) => {
       ref={ref}
       notifications={notifications}
       offline={qNetwork.status === 'rejected'}
-      updateAvailable={false}
+      updateAvailable={podmanDetails?.isOutdated || false}
       podmanInstalled={isPodmanInstalled}
       podmanStopped={!isPodmanRunning}
       sUserNodePackages={sUserNodePackages}

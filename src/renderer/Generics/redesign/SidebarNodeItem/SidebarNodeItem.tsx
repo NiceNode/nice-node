@@ -47,6 +47,7 @@ export interface SidebarNodeItemProps {
 export const SidebarNodeItem = ({
   onClick,
   title,
+  iconUrl,
   info,
   iconId,
   status,
@@ -78,7 +79,12 @@ export const SidebarNodeItem = ({
       tabIndex={0}
     >
       <div className={iconContainer}>
-        <NodeIcon iconId={iconId} status={status} size="small" />
+        <NodeIcon
+          iconId={iconId}
+          status={status}
+          size="small"
+          iconUrl={iconUrl}
+        />
       </div>
       <div className={textContainer}>
         <div className={titleStyle}>{title}</div>
