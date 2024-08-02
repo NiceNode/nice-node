@@ -71,14 +71,14 @@ export const SidebarNodeItemWrapper = ({
   const pollingInterval = 0;
 
   const { spec, status, config } = node;
-  const { syncData } = getNodeData(
-    spec.rpcTranslation,
-    config.configValuesMap?.httpPort,
+  const { syncData } = getNodeData({
+    rpcTranslation: spec.rpcTranslation,
+    httpPort: config.configValuesMap?.httpPort,
     pollingInterval,
     lastRunningTimestampMs,
     updateAvailable,
     initialSyncFinished,
-  );
+  });
 
   const nodeStatus = getStatusObject(status, syncData);
   const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[getSyncStatus(nodeStatus)];
