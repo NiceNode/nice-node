@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNodeQueries } from './useNodeQueries';
 import { getSyncData } from '../utils.js';
+import { useGetExecutionLatestBlockQuery } from '../state/services.js';
 
 type NodePollingData = {
   qExecutionIsSyncing: any;
@@ -21,6 +22,10 @@ export const useNodePolling = (
     rpcTranslation,
     httpPort,
     pollingInterval,
+  );
+  const qLatestBlock = useGetExecutionLatestBlockQuery(
+    { rpcTranslation, httpPort },
+    { pollingInterval },
   );
   const [syncData, setSyncData] = useState(null);
 
@@ -45,5 +50,5 @@ export const useNodePolling = (
     initialSyncFinished,
   ]);
 
-  return { qExecutionIsSyncing, qExecutionPeers, syncData };
+  return { qExecutionIsSyncing, qExecutionPeers, qLatestBlock, syncData };
 };
