@@ -73,23 +73,23 @@ const NodePackageScreen = () => {
     qExecutionIsSyncing,
     qLatestBlock,
     syncData: executionSyncData,
-  } = getNodeData({
+  } = getNodeData(
     rpcTranslation,
-    httpPort: executionHttpPort,
+    executionHttpPort,
     pollingInterval,
     lastRunningTimestampMs,
     updateAvailable,
     initialSyncFinished,
-  });
+  );
 
-  const { syncData: consensusSyncData } = getNodeData({
-    rpcTranslation: consensusNode?.node?.spec?.rpcTranslation,
-    httpPort: consensusHttpPort,
+  const { syncData: consensusSyncData } = getNodeData(
+    consensusNode?.node?.spec?.rpcTranslation,
+    consensusHttpPort,
     pollingInterval,
     lastRunningTimestampMs,
     updateAvailable,
     initialSyncFinished,
-  });
+  );
   const { qIsPodmanRunning } = appData;
   const isPodmanRunning = !qIsPodmanRunning?.fetching && qIsPodmanRunning?.data;
 

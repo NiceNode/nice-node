@@ -3,17 +3,17 @@ import { useNodePolling } from '../hooks/useNodePolling.js';
 import { useAppPolling } from '../hooks/useAppPolling.js';
 
 type AppContextType = {
-  getNodeData: (params: {
-    rpcTranslation: string;
-    httpPort: string;
-    pollingInterval: number;
-    lastRunningTimestampMs: number;
-    updateAvailable: boolean;
-    initialSyncFinished: boolean;
-  }) => {
+  getNodeData: (
+    rpcTranslation: string,
+    httpPort: string,
+    pollingInterval: number,
+    lastRunningTimestampMs: number,
+    updateAvailable: boolean,
+    initialSyncFinished: boolean,
+  ) => {
+    qLatestBlock: any;
     qExecutionIsSyncing: any;
     qExecutionPeers: any;
-    qLatestBlock: any;
     syncData: any;
   };
   appData: {
@@ -33,21 +33,14 @@ export const AppProvider: React.FC<{
 
   const value = useMemo(
     () => ({
-      getNodeData: ({
-        rpcTranslation,
-        httpPort,
-        pollingInterval,
-        lastRunningTimestampMs,
-        updateAvailable,
-        initialSyncFinished,
-      }: {
-        rpcTranslation: string;
-        httpPort: string;
-        pollingInterval: number;
-        lastRunningTimestampMs: number;
-        updateAvailable: boolean;
-        initialSyncFinished: boolean;
-      }) => {
+      getNodeData: (
+        rpcTranslation: string,
+        httpPort: string,
+        pollingInterval: number,
+        lastRunningTimestampMs: number,
+        updateAvailable: boolean,
+        initialSyncFinished: boolean,
+      ) => {
         const { qExecutionIsSyncing, qExecutionPeers, qLatestBlock, syncData } =
           useNodePolling(
             rpcTranslation,
