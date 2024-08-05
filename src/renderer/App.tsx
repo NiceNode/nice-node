@@ -29,7 +29,6 @@ import { reportEvent } from './events/reportEvent';
 import { initialize as initializeIpcListeners } from './ipc';
 import './reset.css';
 import { useAppDispatch } from './state/hooks';
-import { AppProvider } from './context/AppContext.js';
 
 async function initializeSentry() {
   const userSettings = await electron.getSettings();
@@ -156,70 +155,63 @@ export default function App() {
     console.log('User has not seen the splash screen yet');
   }
 
-  const appPollingIntervals = {
-    network: 30000,
-    podman: 30000,
-  };
-
   return (
     <ThemeManager>
-      <AppProvider appPollingIntervals={appPollingIntervals}>
-        <MemoryRouter initialEntries={[initialPage]}>
-          <ModalManager />
-          <Routes>
-            <Route path="/">
+      <MemoryRouter initialEntries={[initialPage]}>
+        <ModalManager />
+        <Routes>
+          <Route path="/">
+            <Route
+              index
+              path="/setup"
+              element={
+                <WindowContainer>
+                  <NodeSetup />
+                </WindowContainer>
+              }
+            />
+            <Route path="/main" element={<Main platform={platform} />}>
               <Route
-                index
-                path="/setup"
+                path="/main/nodePackage"
                 element={
-                  <WindowContainer>
-                    <NodeSetup />
-                  </WindowContainer>
+                  <div className={contentContainer}>
+                    <NodePackageScreen />
+                  </div>
                 }
               />
-              <Route path="/main" element={<Main platform={platform} />}>
-                <Route
-                  path="/main/nodePackage"
-                  element={
-                    <div className={contentContainer}>
-                      <NodePackageScreen />
-                    </div>
-                  }
-                />
-                <Route
-                  path="/main/node"
-                  element={
-                    <div className={contentContainer}>
-                      <NodeScreen />
-                    </div>
-                  }
-                />
-                <Route path="/main/node/logs" element={<LogsWrapper />} />
-                <Route
-                  path="/main/notification"
-                  element={
-                    <div className={contentContainer}>
-                      <NotificationsWrapper />
-                    </div>
-                  }
-                />
-                <Route
-                  path="/main/system"
-                  element={
-                    <div className={contentContainer}>
-                      <System />
-                    </div>
-                  }
-                />
-              </Route>
-              {/* Using path="*"" means "match anything", so this route
+              <Route
+                path="/main/node"
+                element={
+                  <div className={contentContainer}>
+                    <NodeScreen />
+                  </div>
+                }
+              />
+              <Route path="/main/node/logs" element={<LogsWrapper />} />
+              <Route
+                path="/main/notification"
+                element={
+                  <div className={contentContainer}>
+                    <NotificationsWrapper />
+                  </div>
+                }
+              />
+              <Route
+                path="/main/system"
+                element={
+                  <div className={contentContainer}>
+                    <System />
+                  </div>
+                }
+              />
+            </Route>
+            {/* Using path="*"" means "match anything", so this route
             acts like a catch-all for URLs that we don't have explicit
             routes for. */}
-              {/* <Route path="*" element={<NoMatch />} /> */}
-            </Route>
-          </Routes>
-        </MemoryRouter>
-      </AppProvider>
+            {/* <Route path="*" element={<NoMatch />} /> */}
+          </Route>
+        </Routes>
+      </MemoryRouter>
     </ThemeManager>
   );
 }

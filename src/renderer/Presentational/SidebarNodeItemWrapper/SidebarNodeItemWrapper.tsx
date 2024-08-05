@@ -1,8 +1,13 @@
+import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { type NodePackage, NodeStatus } from '../../../common/node';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { getStatusObject, getSyncStatus } from '../../Generics/redesign/utils';
-import { useAppContext } from '../../context/AppContext.js';
+import {
+  useGetExecutionIsSyncingQuery,
+  useGetExecutionPeersQuery,
+} from '../../state/services';
+import { useGetNetworkConnectedQuery } from '../../state/network';
 
 export type SidebarNodeStatus =
   | 'healthy'
@@ -63,22 +68,48 @@ export const SidebarNodeItemWrapper = ({
   node,
   offline,
 }: SidebarNodeItemWrapperProps) => {
-  const { getNodeData } = useAppContext();
-
-  const lastRunningTimestampMs = node?.lastRunningTimestampMs;
-  const updateAvailable = node?.updateAvailable;
-  const initialSyncFinished = node?.initialSyncFinished;
   const pollingInterval = 0;
-
-  const { spec, status, config } = node;
-  const { syncData } = getNodeData(
-    spec.rpcTranslation,
-    config.configValuesMap?.httpPort,
-    pollingInterval,
-    lastRunningTimestampMs,
-    updateAvailable,
-    initialSyncFinished,
+  const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
+    {
+      rpcTranslation: node?.spec.rpcTranslation,
+      httpPort: node?.config?.configValuesMap?.httpPort,
+    },
+    { pollingInterval },
   );
+  const qExecutionPeers = useGetExecutionPeersQuery(
+    {
+      rpcTranslation: node?.spec.rpcTranslation,
+      httpPort: node?.config?.configValuesMap?.httpPort,
+    },
+    { pollingInterval },
+  );
+
+  const { spec, status } = node;
+
+  const isSyncing = qExecutionIsSyncing.isError
+    ? undefined
+    : qExecutionIsSyncing?.data?.isSyncing;
+  const peers = qExecutionPeers.isError
+    ? undefined
+    : typeof qExecutionPeers.data === 'number'
+      ? qExecutionPeers.data
+      : typeof qExecutionPeers.data === 'string'
+        ? Number.parseInt(qExecutionPeers.data, 10) || 0
+        : 0;
+  const now = moment();
+  const minutesPassedSinceLastRun = now.diff(
+    moment(node?.lastRunningTimestampMs),
+    'minutes',
+  );
+
+  const syncData = {
+    isSyncing,
+    peers,
+    updateAvailable: node.updateAvailable,
+    minutesPassedSinceLastRun,
+    offline,
+    initialSyncFinished: node?.initialSyncFinished || false,
+  };
 
   const nodeStatus = getStatusObject(status, syncData);
   const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[getSyncStatus(nodeStatus)];
