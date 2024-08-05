@@ -1,5 +1,6 @@
 // import { useTranslation } from 'react-i18next';
 
+import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
 import { useTranslation } from 'react-i18next';
@@ -12,11 +13,18 @@ import electron from '../../electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
+import { useGetNetworkConnectedQuery } from '../../state/network';
 import {
   selectIsAvailableForPolling,
   selectSelectedNodePackage,
   selectUserNodes,
 } from '../../state/node';
+import {
+  useGetExecutionIsSyncingQuery,
+  useGetExecutionLatestBlockQuery,
+  useGetExecutionPeersQuery,
+} from '../../state/services';
+import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import { hexToDecimal } from '../../utils';
 import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
 import type { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
@@ -26,14 +34,12 @@ import {
   descriptionFont,
   titleFont,
 } from './NodePackageScreen.css';
-import { useAppContext } from '../../context/AppContext.js';
 
 let alphaModalRendered = false;
 
 const NodePackageScreen = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { getNodeData, appData } = useAppContext();
   const selectedNodePackage = useAppSelector(selectSelectedNodePackage);
   const sUserNodes = useAppSelector(selectUserNodes);
   const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>(
@@ -54,7 +60,6 @@ const NodePackageScreen = () => {
   const consensusNode = selectedNodePackage?.services.find(
     (service) => service.serviceId === 'consensusClient',
   );
-
   const executionNodeId = executionNode?.node.id;
   const consensusNodeId = consensusNode?.node.id;
   const executionHttpPort =
@@ -65,33 +70,30 @@ const NodePackageScreen = () => {
     sUserNodes?.nodes[consensusNodeId]?.config.configValuesMap.httpPort;
   const rpcTranslation = selectedNodePackage?.spec.rpcTranslation;
 
-  const lastRunningTimestampMs = selectedNodePackage?.lastRunningTimestampMs;
-  const updateAvailable = selectedNodePackage?.updateAvailable;
-  const initialSyncFinished = selectedNodePackage?.initialSyncFinished;
-
-  const {
-    qExecutionIsSyncing,
-    qLatestBlock,
-    syncData: executionSyncData,
-  } = getNodeData(
-    rpcTranslation,
-    executionHttpPort,
-    pollingInterval,
-    lastRunningTimestampMs,
-    updateAvailable,
-    initialSyncFinished,
+  const qConsensusIsSyncing = useGetExecutionIsSyncingQuery(
+    { rpcTranslation: 'eth-l1-beacon', httpPort: consensusHttpPort },
+    { pollingInterval },
   );
-
-  const { syncData: consensusSyncData } = getNodeData(
-    consensusNode?.node?.spec?.rpcTranslation,
-    consensusHttpPort,
-    pollingInterval,
-    lastRunningTimestampMs,
-    updateAvailable,
-    initialSyncFinished,
+  const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
+    { rpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
   );
-  const { qIsPodmanRunning } = appData;
+  const qExecutionPeers = useGetExecutionPeersQuery(
+    { rpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
+  );
+  const qLatestBlock = useGetExecutionLatestBlockQuery(
+    { rpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
+  );
+  const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
+    pollingInterval: 15000,
+  });
   const isPodmanRunning = !qIsPodmanRunning?.fetching && qIsPodmanRunning?.data;
+  // temporary until network is set at the node package level
+  const qNetwork = useGetNetworkConnectedQuery(null, {
+    pollingInterval: 30000,
+  });
 
   useEffect(() => {
     if (selectedNodePackage?.config?.configValuesMap?.network) {
@@ -283,7 +285,6 @@ const NodePackageScreen = () => {
   }
 
   const { status, spec } = selectedNodePackage;
-
   // console.log('nodePackageStatus', status);
   // todo: get node type, single or multi-service
   // parse node details from selectedNodePackage => SingleNodeContent
@@ -295,21 +296,51 @@ const NodePackageScreen = () => {
 
   const clientName = spec.specId.replace('-beacon', '');
 
-  const nodePackageSyncData = {
-    ...executionSyncData,
-    isSyncing: executionSyncData?.isSyncing || consensusSyncData?.isSyncing,
-  };
+  const now = moment();
+  const minutesPassedSinceLastRun = now.diff(
+    moment(selectedNodePackage?.lastRunningTimestampMs),
+    'minutes',
+  );
+
+  const isSyncing =
+    qExecutionIsSyncing.isError || qConsensusIsSyncing?.isError
+      ? undefined
+      : qExecutionIsSyncing?.data?.isSyncing ||
+        qConsensusIsSyncing?.data?.isSyncing ||
+        false;
+
+  const peers = qExecutionPeers.isError
+    ? undefined
+    : typeof qExecutionPeers.data === 'number'
+      ? qExecutionPeers.data
+      : 0;
 
   if (
-    !nodePackageSyncData.isSyncing &&
-    status === NodeStatus.running &&
-    initialSyncFinished === undefined
+    isSyncing === false &&
+    selectedNodePackage?.status === NodeStatus.running &&
+    selectedNodePackage?.initialSyncFinished === undefined
   ) {
     electron.updateNodePackage(selectedNodePackage.id, {
       initialSyncFinished: true,
     });
   }
 
+  const syncData = {
+    isSyncing,
+    peers,
+    minutesPassedSinceLastRun,
+    offline: qNetwork.status === 'rejected',
+    updateAvailable: false,
+    initialSyncFinished: selectedNodePackage?.initialSyncFinished || false,
+  };
+
+  // console.log('qExecutionIsSyncing:', qExecutionIsSyncing);
+  // console.log('qConsensusIsSyncing:', qConsensusIsSyncing);
+  // console.log('qExecutionPeers:', qExecutionPeers);
+  // console.log('qNetwork:', qNetwork);
+  // console.log('SyncData:', syncData);
+
+  // console.log('syncData', syncData);
   const nodePackageContent: SingleNodeContent = {
     nodeId: selectedNodePackage.id,
     displayName: spec.displayName,
@@ -318,8 +349,9 @@ const NodePackageScreen = () => {
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
     info: formatSpec(spec.displayTagline),
-    status: getStatusObject(status, nodePackageSyncData),
+    status: getStatusObject(status, syncData),
     stats: {
+      peers: syncData.peers,
       currentBlock: sLatestBlockNumber,
       diskUsageGBs: sDiskUsed,
       memoryUsagePercent: sMemoryUsagePercent,

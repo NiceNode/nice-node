@@ -11,7 +11,6 @@ type AppContextType = {
     updateAvailable: boolean,
     initialSyncFinished: boolean,
   ) => {
-    qLatestBlock: any;
     qExecutionIsSyncing: any;
     qExecutionPeers: any;
     syncData: any;
@@ -41,7 +40,7 @@ export const AppProvider: React.FC<{
         updateAvailable: boolean,
         initialSyncFinished: boolean,
       ) => {
-        const { qExecutionIsSyncing, qExecutionPeers, qLatestBlock, syncData } =
+        const { qExecutionIsSyncing, qExecutionPeers, syncData } =
           useNodePolling(
             rpcTranslation,
             httpPort,
@@ -53,7 +52,6 @@ export const AppProvider: React.FC<{
           );
 
         return {
-          qLatestBlock,
           qExecutionIsSyncing,
           qExecutionPeers,
           syncData,
