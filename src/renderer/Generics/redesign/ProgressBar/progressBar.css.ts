@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
 
 export const outerDiv = style({
-  height: 20,
+  height: 16,
   width: '100%',
   borderWidth: 1,
   borderStyle: 'solid',

@@ -16,6 +16,8 @@ export interface ProgressBarProps {
   caption?: string;
   color?: string;
   card?: boolean;
+  outerStyle?: React.CSSProperties;
+  innerStyle?: React.CSSProperties;
 }
 
 const ProgressBar = ({
@@ -24,6 +26,8 @@ const ProgressBar = ({
   caption,
   color,
   card,
+  outerStyle,
+  innerStyle,
 }: ProgressBarProps) => {
   let progressWidth = 0;
   if (progress) {
@@ -41,9 +45,13 @@ const ProgressBar = ({
   return (
     <div className={downloadContainer}>
       <div className={sectionFont}>{title}</div>
-      <div className={outerDiv}>
+      <div className={outerDiv} style={outerStyle}>
         <div
-          style={{ width: `${progressWidth}%`, backgroundColor: color }}
+          style={{
+            ...innerStyle,
+            width: `${progressWidth}%`,
+            backgroundColor: color,
+          }}
           className={innerDiv}
         />
       </div>{' '}
