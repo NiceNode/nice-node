@@ -57,7 +57,7 @@ const getStatusDetails = (statusValue: string, t: any) => {
       return { color: yellow, title: t('Online'), label: t('LowPeerCount') };
     case SYNC_STATUS.ERROR:
       return { color: red, title: t('Error'), label: t('ErrorOccurred') };
-    case SYNC_STATUS.NO_NETWORK:
+    case SYNC_STATUS.NO_CONNECTION:
       return { color: red, title: t('Offline'), label: t('NoNetwork') };
     case SYNC_STATUS.STARTING:
       return {

@@ -16,21 +16,23 @@ export const getStatusObject = (
   // console.log('SyncData in getStatusObject:', syncData);
 
   return {
-    starting: status === NodeStatus.starting,
-    running: status === NodeStatus.running,
-    stopping: status === NodeStatus.stopping,
-    stopped: status === NodeStatus.stopped,
-    updating: status === NodeStatus.updating,
+    [SYNC_STATUS.STARTING]: status === NodeStatus.starting,
+    [SYNC_STATUS.RUNNING]: status === NodeStatus.running,
+    [SYNC_STATUS.STOPPING]: status === NodeStatus.stopping,
+    [SYNC_STATUS.STOPPED]: status === NodeStatus.stopped,
+    [SYNC_STATUS.UPDATING]: status === NodeStatus.updating,
     updateAvailable: syncData?.updateAvailable,
-    error: status.includes('error'),
-    synchronized:
+    [SYNC_STATUS.ERROR]: status.includes('error'),
+    [SYNC_STATUS.SYNCHRONIZED]:
       syncData?.isSyncing === false && status === NodeStatus.running,
-    lowPeerCount:
+    [SYNC_STATUS.LOW_PEER_COUNT]:
       syncData?.peers < 5 &&
       syncData?.minutesPassedSinceLastRun > 20 &&
       status === NodeStatus.running,
-    noConnection: syncData?.offline && status === NodeStatus.running,
-    catchingUp: status === NodeStatus.running && syncData?.initialSyncFinished,
+    [SYNC_STATUS.NO_CONNECTION]:
+      syncData?.offline && status === NodeStatus.running,
+    [SYNC_STATUS.CATCHING_UP]:
+      status === NodeStatus.running && syncData?.initialSyncFinished,
     // initialized: status === NodeStatus.initialized,
     // blocksBehind: status === NodeStatus.blocksBehind,
   };
@@ -45,7 +47,7 @@ export const getSyncStatus = (status: ClientStatusProps) => {
       syncStatus = SYNC_STATUS.ERROR;
       break;
     case status.noConnection:
-      syncStatus = SYNC_STATUS.NO_NETWORK;
+      syncStatus = SYNC_STATUS.NO_CONNECTION;
       break;
     case status.lowPeerCount:
       syncStatus = SYNC_STATUS.LOW_PEER_COUNT;
@@ -70,9 +72,6 @@ export const getSyncStatus = (status: ClientStatusProps) => {
       break;
     case status.blocksBehind:
       syncStatus = SYNC_STATUS.BLOCKS_BEHIND;
-      break;
-    case !status.initialized && !status.synchronized && !status.blocksBehind:
-      syncStatus = SYNC_STATUS.INITIALIZING;
       break;
     case status.synchronized:
       syncStatus = SYNC_STATUS.SYNCHRONIZED;

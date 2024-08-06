@@ -17,27 +17,36 @@ export type SidebarNodeStatus =
   | 'stopped'
   | 'updating';
 
+const STATUS_HEALTHY: SidebarNodeStatus = 'healthy';
+const STATUS_WARNING: SidebarNodeStatus = 'warning';
+const STATUS_ERROR: SidebarNodeStatus = 'error';
+const STATUS_SYNC: SidebarNodeStatus = 'sync';
+const STATUS_STOPPED: SidebarNodeStatus = 'stopped';
+const STATUS_UPDATING: SidebarNodeStatus = 'updating';
+
 const NODE_SIDEBAR_STATUS_MAP: Record<string, SidebarNodeStatus> = {
-  created: 'stopped',
-  initializing: 'sync',
-  [NodeStatus.checkingForUpdates]: 'updating',
-  downloading: 'updating',
-  downloaded: 'stopped',
-  [NodeStatus.errorDownloading]: 'error',
-  updating: 'updating',
-  extracting: 'updating',
-  [NodeStatus.readyToStart]: 'stopped',
-  starting: 'sync',
-  running: 'sync',
-  stopping: 'sync',
-  stopped: 'stopped',
-  [NodeStatus.noConnection]: 'error',
-  [NodeStatus.errorRunning]: 'error',
-  [NodeStatus.errorStarting]: 'error',
-  [NodeStatus.errorStopping]: 'error',
-  catchingUp: 'sync',
-  unknown: 'error',
-  error: 'error',
+  created: STATUS_STOPPED,
+  initializing: STATUS_SYNC,
+  [NodeStatus.checkingForUpdates]: STATUS_UPDATING,
+  downloading: STATUS_UPDATING,
+  downloaded: STATUS_STOPPED,
+  [NodeStatus.errorDownloading]: STATUS_ERROR,
+  updating: STATUS_UPDATING,
+  extracting: STATUS_UPDATING,
+  [NodeStatus.readyToStart]: STATUS_STOPPED,
+  starting: STATUS_SYNC,
+  running: STATUS_SYNC,
+  stopping: STATUS_SYNC,
+  stopped: STATUS_STOPPED,
+  lowPeerCount: STATUS_WARNING,
+  synchronized: STATUS_HEALTHY,
+  noConnection: STATUS_ERROR,
+  [NodeStatus.errorRunning]: STATUS_ERROR,
+  [NodeStatus.errorStarting]: STATUS_ERROR,
+  [NodeStatus.errorStopping]: STATUS_ERROR,
+  catchingUp: STATUS_SYNC,
+  unknown: STATUS_ERROR,
+  error: STATUS_ERROR,
 };
 
 export interface SidebarNodeItemWrapperProps {

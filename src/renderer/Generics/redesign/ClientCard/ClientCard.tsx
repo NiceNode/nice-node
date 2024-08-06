@@ -21,6 +21,7 @@ import {
   container,
 } from './clientCard.css';
 // import { common } from '../theme.css';
+import { SYNC_STATUS } from '../consts.js';
 
 /**
  * Primary UI component for user interaction
@@ -45,19 +46,19 @@ export const ClientCard = (props: ClientProps) => {
       string: '',
     };
     switch (label) {
-      case 'synchronized':
+      case SYNC_STATUS.SYNCHRONIZED:
         labelDetails.color = 'green';
         labelDetails.string = g('Synchronized');
         break;
-      case 'blocksBehind':
+      case SYNC_STATUS.BLOCKS_BEHIND:
         labelDetails.color = 'orange';
         labelDetails.string = g('BlocksBehind');
         break;
-      case 'lowPeerCount':
+      case SYNC_STATUS.LOW_PEER_COUNT:
         labelDetails.color = 'orange';
         labelDetails.string = g('LowPeerCount');
         break;
-      case 'noConnection':
+      case SYNC_STATUS.NO_CONNECTION:
         labelDetails.color = 'red';
         labelDetails.string = g('NoConnection');
         break;

@@ -72,7 +72,7 @@ export interface SyncStatusProps {
   SYNCHRONIZED: string;
   LOW_PEER_COUNT: string;
   BLOCKS_BEHIND: string;
-  NO_NETWORK: string;
+  NO_CONNECTION: string;
   ONLINE: string;
   STOPPED: string;
 }
