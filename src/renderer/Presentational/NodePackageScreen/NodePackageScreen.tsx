@@ -1,6 +1,5 @@
 // import { useTranslation } from 'react-i18next';
 
-import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
 import { useTranslation } from 'react-i18next';
@@ -34,6 +33,7 @@ import {
   descriptionFont,
   titleFont,
 } from './NodePackageScreen.css';
+import { getSyncData } from '../../utils.js';
 
 let alphaModalRendered = false;
 
@@ -71,7 +71,10 @@ const NodePackageScreen = () => {
   const rpcTranslation = selectedNodePackage?.spec.rpcTranslation;
 
   const qConsensusIsSyncing = useGetExecutionIsSyncingQuery(
-    { rpcTranslation: 'eth-l1-beacon', httpPort: consensusHttpPort },
+    {
+      rpcTranslation: consensusNode?.node?.spec?.rpcTranslation,
+      httpPort: consensusHttpPort,
+    },
     { pollingInterval },
   );
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
@@ -296,27 +299,26 @@ const NodePackageScreen = () => {
 
   const clientName = spec.specId.replace('-beacon', '');
 
-  const now = moment();
-  const minutesPassedSinceLastRun = now.diff(
-    moment(selectedNodePackage?.lastRunningTimestampMs),
-    'minutes',
+  const executionSyncData = getSyncData(
+    qExecutionIsSyncing,
+    qExecutionPeers,
+    qNetwork.status === 'rejected',
+    selectedNodePackage?.lastRunningTimestampMsl,
+    false,
+    selectedNodePackage?.initialSyncFinished,
   );
 
-  const isSyncing =
-    qExecutionIsSyncing.isError || qConsensusIsSyncing?.isError
-      ? undefined
-      : qExecutionIsSyncing?.data?.isSyncing ||
-        qConsensusIsSyncing?.data?.isSyncing ||
-        false;
-
-  const peers = qExecutionPeers.isError
+  const consensusIsSyncing = qConsensusIsSyncing?.isError
     ? undefined
-    : typeof qExecutionPeers.data === 'number'
-      ? qExecutionPeers.data
-      : 0;
+    : qConsensusIsSyncing?.data?.isSyncing || false;
+
+  const nodePackageSyncData = {
+    ...executionSyncData,
+    isSyncing: executionSyncData?.isSyncing || consensusIsSyncing,
+  };
 
   if (
-    isSyncing === false &&
+    !nodePackageSyncData.isSyncing &&
     selectedNodePackage?.status === NodeStatus.running &&
     selectedNodePackage?.initialSyncFinished === undefined
   ) {
@@ -325,22 +327,6 @@ const NodePackageScreen = () => {
     });
   }
 
-  const syncData = {
-    isSyncing,
-    peers,
-    minutesPassedSinceLastRun,
-    offline: qNetwork.status === 'rejected',
-    updateAvailable: false,
-    initialSyncFinished: selectedNodePackage?.initialSyncFinished || false,
-  };
-
-  // console.log('qExecutionIsSyncing:', qExecutionIsSyncing);
-  // console.log('qConsensusIsSyncing:', qConsensusIsSyncing);
-  // console.log('qExecutionPeers:', qExecutionPeers);
-  // console.log('qNetwork:', qNetwork);
-  // console.log('SyncData:', syncData);
-
-  // console.log('syncData', syncData);
   const nodePackageContent: SingleNodeContent = {
     nodeId: selectedNodePackage.id,
     displayName: spec.displayName,
@@ -349,9 +335,9 @@ const NodePackageScreen = () => {
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
     info: formatSpec(spec.displayTagline),
-    status: getStatusObject(status, syncData),
+    status: getStatusObject(status, nodePackageSyncData),
     stats: {
-      peers: syncData.peers,
+      peers: nodePackageSyncData.peers,
       currentBlock: sLatestBlockNumber,
       diskUsageGBs: sDiskUsed,
       memoryUsagePercent: sMemoryUsagePercent,

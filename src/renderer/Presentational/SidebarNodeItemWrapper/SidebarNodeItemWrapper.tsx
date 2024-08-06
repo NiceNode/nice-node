@@ -7,7 +7,7 @@ import {
   useGetExecutionIsSyncingQuery,
   useGetExecutionPeersQuery,
 } from '../../state/services';
-import { useGetNetworkConnectedQuery } from '../../state/network';
+import { getSyncData } from '../../utils.js';
 
 export type SidebarNodeStatus =
   | 'healthy'
@@ -86,30 +86,14 @@ export const SidebarNodeItemWrapper = ({
 
   const { spec, status } = node;
 
-  const isSyncing = qExecutionIsSyncing.isError
-    ? undefined
-    : qExecutionIsSyncing?.data?.isSyncing;
-  const peers = qExecutionPeers.isError
-    ? undefined
-    : typeof qExecutionPeers.data === 'number'
-      ? qExecutionPeers.data
-      : typeof qExecutionPeers.data === 'string'
-        ? Number.parseInt(qExecutionPeers.data, 10) || 0
-        : 0;
-  const now = moment();
-  const minutesPassedSinceLastRun = now.diff(
-    moment(node?.lastRunningTimestampMs),
-    'minutes',
-  );
-
-  const syncData = {
-    isSyncing,
-    peers,
-    updateAvailable: node.updateAvailable,
-    minutesPassedSinceLastRun,
+  const syncData = getSyncData(
+    qExecutionIsSyncing,
+    qExecutionPeers,
     offline,
-    initialSyncFinished: node?.initialSyncFinished || false,
-  };
+    node?.lastRunningTimestampMs,
+    node.updateAvailable,
+    node?.initialSyncFinished,
+  );
 
   const nodeStatus = getStatusObject(status, syncData);
   const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[getSyncStatus(nodeStatus)];

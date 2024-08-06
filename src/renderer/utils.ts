@@ -1,5 +1,6 @@
 import type { NodeSpecification } from '../common/nodeSpec';
 import type { NodeLibrary } from '../main/state/nodeLibrary';
+import moment from 'moment';
 
 export const hexToDecimal = (hex: string) => Number.parseInt(hex, 16);
 
@@ -78,4 +79,40 @@ export const categorizeNodeLibrary = (
     }
   });
   return catgorized;
+};
+
+export const getSyncData = (
+  qExecutionIsSyncing: { isError: any; data: { isSyncing: any } },
+  qExecutionPeers: { isError: any; data: string },
+  offline: boolean,
+  lastRunningTimestampMs: moment.MomentInput,
+  updateAvailable: any,
+  initialSyncFinished: any,
+) => {
+  const isSyncing = qExecutionIsSyncing.isError
+    ? undefined
+    : qExecutionIsSyncing?.data?.isSyncing;
+
+  const peers = qExecutionPeers.isError
+    ? undefined
+    : typeof qExecutionPeers.data === 'number'
+      ? qExecutionPeers.data
+      : typeof qExecutionPeers.data === 'string'
+        ? Number.parseInt(qExecutionPeers.data, 10) || 0
+        : 0;
+
+  const now = moment();
+  const minutesPassedSinceLastRun = now.diff(
+    moment(lastRunningTimestampMs),
+    'minutes',
+  );
+
+  return {
+    isSyncing,
+    peers,
+    updateAvailable,
+    minutesPassedSinceLastRun,
+    offline,
+    initialSyncFinished: initialSyncFinished || false,
+  };
 };

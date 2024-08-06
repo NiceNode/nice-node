@@ -35,6 +35,7 @@ import {
   descriptionFont,
   titleFont,
 } from './NodeScreen.css';
+import { getSyncData } from '../../utils.js';
 
 let alphaModalRendered = false;
 
@@ -285,30 +286,15 @@ const NodeScreen = () => {
   const nodeVersionData =
     typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
 
-  const isSyncing = qExecutionIsSyncing.isError
-    ? undefined
-    : qExecutionIsSyncing?.data?.isSyncing;
-  const peers = qExecutionPeers.isError
-    ? undefined
-    : typeof qExecutionPeers.data === 'number'
-      ? qExecutionPeers.data
-      : typeof qExecutionPeers.data === 'string'
-        ? Number.parseInt(qExecutionPeers.data, 10) || 0
-        : 0;
-  const now = moment();
-  const minutesPassedSinceLastRun = now.diff(
-    moment(selectedNode?.lastRunningTimestampMs),
-    'minutes',
+  const syncData = getSyncData(
+    qExecutionIsSyncing,
+    qExecutionPeers,
+    qNetwork.status === 'rejected',
+    selectedNode?.lastRunningTimestampMs,
+    selectedNode.updateAvailable,
+    selectedNode?.initialSyncFinished,
   );
 
-  const syncData = {
-    isSyncing,
-    peers,
-    updateAvailable: selectedNode.updateAvailable,
-    minutesPassedSinceLastRun,
-    offline: qNetwork.status === 'rejected',
-    initialSyncFinished: selectedNode?.initialSyncFinished || false,
-  };
   // console.log('singleNodeStatus', status);
   const statusObject = getStatusObject(status, syncData);
   const nodeContent: SingleNodeContent = {
