@@ -23,6 +23,18 @@ export const injectDefaultControllerConfig = (nodeSpec: NodeSpecification) => {
     nodeSpec.configTranslation = {};
   }
 
+  if (!nodeSpec.configTranslation.envInput) {
+    nodeSpec.configTranslation.envInput = {
+      displayName: `${nodeSpec.displayName} ENV input`,
+      uiControl: {
+        type: 'text',
+      },
+      defaultValue: '',
+      addNodeFlow: 'advanced',
+      infoDescription: 'Additional ENV input, comma separated',
+    };
+  }
+
   if (!nodeSpec.configTranslation.cliInput) {
     nodeSpec.configTranslation.cliInput = {
       displayName: `${nodeSpec.displayName} CLI input`,
