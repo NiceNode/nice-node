@@ -10,14 +10,14 @@ import {
 import { getSyncData } from '../../utils.js';
 
 export type SidebarNodeStatus =
-  | 'healthy'
+  | 'online'
   | 'warning'
   | 'error'
   | 'sync'
   | 'stopped'
   | 'updating';
 
-const STATUS_HEALTHY: SidebarNodeStatus = 'healthy';
+const STATUS_ONLINE: SidebarNodeStatus = 'online';
 const STATUS_WARNING: SidebarNodeStatus = 'warning';
 const STATUS_ERROR: SidebarNodeStatus = 'error';
 const STATUS_SYNC: SidebarNodeStatus = 'sync';
@@ -39,7 +39,7 @@ const NODE_SIDEBAR_STATUS_MAP: Record<string, SidebarNodeStatus> = {
   stopping: STATUS_SYNC,
   stopped: STATUS_STOPPED,
   lowPeerCount: STATUS_WARNING,
-  synchronized: STATUS_HEALTHY,
+  synchronized: STATUS_ONLINE,
   noConnection: STATUS_ERROR,
   [NodeStatus.errorRunning]: STATUS_ERROR,
   [NodeStatus.errorStarting]: STATUS_ERROR,

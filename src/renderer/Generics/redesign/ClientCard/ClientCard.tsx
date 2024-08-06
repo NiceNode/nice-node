@@ -82,8 +82,29 @@ export const ClientCard = (props: ClientProps) => {
   const isNotSynchronizedAndNotStopped = status.running && !status.stopped;
 
   const renderContents = () => {
-    if (status.stopped || status.updating) {
-      const label = status.stopped ? g('Stopped') : g('Updating');
+    if (
+      status.stopped ||
+      status.updating ||
+      status.stopping ||
+      status.starting
+    ) {
+      let label;
+      switch (true) {
+        case status.stopped:
+          label = g('Stopped');
+          break;
+        case status.updating:
+          label = g('Updating');
+          break;
+        case status.stopping:
+          label = g('Stopping');
+          break;
+        case status.starting:
+          label = g('Starting');
+          break;
+        default:
+          label = '';
+      }
       return <Label type="gray" label={label} />;
     }
     if (

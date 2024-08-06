@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import type { NiceNodeRpcTranslation } from '../../../../common/rpcTranslation';
-import type { IconId } from '../../../assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import { SYNC_STATUS } from '../consts';
 import {
@@ -156,9 +155,10 @@ export const MetricTypes = ({
   rpcTranslation,
 }: MetricTypesProps) => {
   const { t: g } = useTranslation('genericComponents');
+  const isStatusStatsType = statsType === 'status';
 
   let details = {};
-  if (statsType === 'status') {
+  if (isStatusStatsType) {
     details = getStatusDetails(statsValue as string, g);
   } else if (statsType) {
     details = getStatsDetails(
@@ -174,12 +174,12 @@ export const MetricTypes = ({
   return (
     <div className={container}>
       <div className={iconContainer}>
-        {statsType === 'status' && (
+        {isStatusStatsType && (
           <div className={[statusStyle, color].join(' ')}>
             <Icon iconId={iconId} />
           </div>
         )}
-        {statsType !== 'status' && <Icon iconId={iconId} />}
+        {!isStatusStatsType && <Icon iconId={iconId} />}
       </div>
       <div className={textContainer}>
         <div className={titleContainer}>
