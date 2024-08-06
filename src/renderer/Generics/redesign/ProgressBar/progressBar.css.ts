@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '../theme.css';
 
 export const outerDiv = style({
-  height: 16,
+  height: 20,
   width: '100%',
   borderWidth: 1,
   borderStyle: 'solid',
@@ -23,7 +23,7 @@ export const sectionFont = style({
 });
 
 export const captionText = style({
-  paddingTop: 4,
+  paddingTop: 8,
   fontSize: 11,
   lineHeight: '14px',
   color: vars.color.font50,

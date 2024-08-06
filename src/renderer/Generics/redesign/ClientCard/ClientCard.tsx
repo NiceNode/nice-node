@@ -79,7 +79,6 @@ export const ClientCard = (props: ClientProps) => {
   //   (stats.highestBlock &&
   //     stats.currentBlock &&
   //     stats.highestBlock - stats.currentBlock > 10);
-  const isNotSynchronizedAndNotStopped = status.running && !status.stopped;
 
   const renderContents = () => {
     if (
@@ -130,15 +129,11 @@ export const ClientCard = (props: ClientProps) => {
               common.color.geth
             }
             progress={progress}
-            caption={`${caption} (rely on logs for now, still a work in progress)`}
+            caption={`${caption} (rely on logs for now, WIP)`}
             // caption={`${caption} (${syncPercent}%)`}
           />
         </>
       );
-    }
-    if (isNotSynchronizedAndNotStopped) {
-      const label = g('Syncing');
-      return <Label type="gray" label={label} />;
     }
     const { updating, initialized, ...statusLabels } = status;
     // Get all node statuses that are true
@@ -185,7 +180,7 @@ export const ClientCard = (props: ClientProps) => {
             NODE_BACKGROUNDS[name.replace('-beacon', '') as NodeBackgroundId] ??
             NODE_BACKGROUNDS.nimbus
           })`,
-          // height: isNotSynchronizedAndNotStopped ? 166 : 186,
+          height: status.running && !status.synchronized ? 166 : 186,
         }}
         className={[cardTop, `${stoppedStyle}`].join(' ')}
       >

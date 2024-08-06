@@ -52,7 +52,7 @@ export const clientTitle = style({
 });
 
 export const cardContent = style({
-  padding: 20,
+  padding: 24,
 });
 
 export const clientBackground = style({

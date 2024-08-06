@@ -80,6 +80,7 @@ export interface SyncStatusProps {
 export const SYNC_STATUS = Object.freeze({
   ERROR: 'error',
   UPDATING: 'updating',
+  RUNNING: 'running',
   INITIALIZING: 'initializing',
   CATCHING_UP: 'catchingUp',
   SYNCHRONIZED: 'synchronized',
