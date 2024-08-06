@@ -175,7 +175,7 @@ export const [lightTheme, vars] = createTheme({
     bannerBoxShadow: `0px 1px 1px ${common.color.black10}, inset 0px 1px 0px ${common.color.white25}`,
     sidebarBorder: `${common.color.black10}`,
     sidebarMacBorder: `${common.color.black25}`,
-    sidebarBackground: 'rgba(255, 255, 255, 0.84)',
+    sidebarBackground: 'rgba(232, 233, 233, 0.84)',
     clientCardBackground: common.color.white100,
     clientCardTopBackground: common.color.black4,
     clientCardTopBackgroundHover: common.color.black10,

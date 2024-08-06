@@ -10,6 +10,7 @@ export const outerDiv = style({
   borderRadius: 4,
   boxSizing: 'border-box',
   overflow: 'hidden',
+  background: vars.color.font8,
 });
 
 export const innerDiv = style({
