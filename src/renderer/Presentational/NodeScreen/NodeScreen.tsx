@@ -297,6 +297,7 @@ const NodeScreen = () => {
 
   // console.log('singleNodeStatus', status);
   const statusObject = getStatusObject(status, syncData);
+  console.log('statusObject', statusObject);
   const nodeContent: SingleNodeContent = {
     nodeId: selectedNode.id,
     displayName: selectedNode.spec.displayName,

@@ -73,6 +73,9 @@ export const getSyncStatus = (status: ClientStatusProps) => {
     case status.blocksBehind:
       syncStatus = SYNC_STATUS.BLOCKS_BEHIND;
       break;
+    case status.running:
+      syncStatus = SYNC_STATUS.INITIALIZING;
+      break;
     case status.synchronized:
       syncStatus = SYNC_STATUS.SYNCHRONIZED;
       break;
@@ -80,5 +83,6 @@ export const getSyncStatus = (status: ClientStatusProps) => {
       syncStatus = SYNC_STATUS.ERROR;
       break;
   }
+  // console.log('syncStatus', syncStatus);
   return syncStatus;
 };
