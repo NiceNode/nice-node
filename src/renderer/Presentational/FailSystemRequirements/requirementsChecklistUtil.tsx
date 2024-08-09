@@ -27,7 +27,7 @@ export const makeCheckList = (
     //    if minSpeed doesn't meet
     let checkTitle = '';
     let valueText = '';
-    let valueComponent: ReactElement = <></>;
+    let valueComponent: ReactElement = null;
     let captionText = '';
     const status = 'incomplete';
     if (reqType === 'OS') {
