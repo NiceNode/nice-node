@@ -146,9 +146,7 @@ export const MetricTypes = ({
         if (statsValue === undefined) {
           titleText = `${0}`;
         } else if (typeof statsValue === 'string') {
-          titleText = `${(
-            Number.parseInt(statsValue, 10) || 0
-          ).toLocaleString()}`;
+          titleText = `${(Number.parseInt(statsValue, 10) || 0).toLocaleString()}`;
         } else {
           titleText = `${statsValue.toLocaleString()}`;
         }
