@@ -25,6 +25,7 @@ import {
 } from '../../state/services';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import { hexToDecimal } from '../../utils';
+import { getSyncData } from '../../utils.js';
 import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
 import type { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
 import {
@@ -33,7 +34,6 @@ import {
   descriptionFont,
   titleFont,
 } from './NodePackageScreen.css';
-import { getSyncData } from '../../utils.js';
 
 let alphaModalRendered = false;
 
@@ -69,7 +69,16 @@ const NodePackageScreen = () => {
     consensusNodeId &&
     sUserNodes?.nodes[consensusNodeId]?.config.configValuesMap.httpPort;
   const rpcTranslation = selectedNodePackage?.spec.rpcTranslation;
-
+  const isEthereumNodePackage =
+    selectedNodePackage?.spec?.specId === 'ethereum';
+  const qPublicExecutionLatestBlock = useGetExecutionLatestBlockQuery(
+    {
+      rpcTranslation,
+      httpPort: executionHttpPort,
+      url: 'https://ethereum-rpc.publicnode.com',
+    },
+    { pollingInterval },
+  );
   const qConsensusIsSyncing = useGetExecutionIsSyncingQuery(
     {
       rpcTranslation: consensusNode?.node?.spec?.rpcTranslation,
@@ -85,8 +94,15 @@ const NodePackageScreen = () => {
     { rpcTranslation, httpPort: executionHttpPort },
     { pollingInterval },
   );
-  const qLatestBlock = useGetExecutionLatestBlockQuery(
+  const qExecutionLatestBlock = useGetExecutionLatestBlockQuery(
     { rpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
+  );
+  const qConsensusLatestBlock = useGetExecutionLatestBlockQuery(
+    {
+      rpcTranslation: consensusNode?.node?.spec?.rpcTranslation,
+      httpPort: consensusHttpPort,
+    },
     { pollingInterval },
   );
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
@@ -134,7 +150,7 @@ const NodePackageScreen = () => {
   useEffect(() => {
     const savedSyncedBlock =
       selectedNodePackage?.runtime?.usage?.syncedBlock || 0;
-    if (qLatestBlock.isError) {
+    if (qExecutionLatestBlock.isError) {
       setLatestBlockNumber(savedSyncedBlock);
       return;
     }
@@ -149,8 +165,10 @@ const NodePackageScreen = () => {
       );
     };
 
-    const blockNumber = qLatestBlock?.data?.number;
-    const slotNumber = qLatestBlock?.data?.header?.message?.slot;
+    const blockNumber = isEthereumNodePackage
+      ? qExecutionLatestBlock?.data
+      : qExecutionLatestBlock?.data?.number;
+    const slotNumber = qExecutionLatestBlock?.data?.header?.message?.slot;
     const rpcTranslation = selectedNodePackage?.spec?.rpcTranslation;
 
     let latestBlockNum = 0;
@@ -172,7 +190,7 @@ const NodePackageScreen = () => {
       latestBlockNum > savedSyncedBlock ? latestBlockNum : savedSyncedBlock;
     setLatestBlockNumber(syncedBlock);
     updateNodeLastSyncedBlock(syncedBlock);
-  }, [qLatestBlock, selectedNodePackage]);
+  }, [qExecutionLatestBlock, selectedNodePackage]);
 
   const onNodeAction = useCallback(
     (action: NodeAction) => {
@@ -312,13 +330,40 @@ const NodePackageScreen = () => {
     ? undefined
     : qConsensusIsSyncing?.data?.isSyncing || false;
 
-  const nodePackageSyncData = {
-    ...executionSyncData,
-    isSyncing: executionSyncData?.isSyncing || consensusIsSyncing,
+  const executionLatestBlockNumber = qExecutionLatestBlock?.data;
+  const isSynced = (executionBlockNumber: number, otherBlockNumber: number) => {
+    return Math.abs(executionBlockNumber - otherBlockNumber) < 120; // ~30 minutes of blocks, should be fairly close to be considered synced
   };
 
+  const isEthereumNodePackageSynced = () => {
+    return (
+      // Check if the execution block is close to the execution block contained within the consensus block
+      isSynced(
+        executionLatestBlockNumber,
+        qConsensusLatestBlock?.data?.message?.body?.execution_payload
+          ?.block_number,
+      ) ||
+      // If not, check if our execution block number is close to the public node that is already synced
+      isSynced(executionLatestBlockNumber, qPublicExecutionLatestBlock?.data)
+    );
+  };
+
+  const isSyncing =
+    executionSyncData?.isSyncing ||
+    consensusIsSyncing ||
+    (isEthereumNodePackage && !isEthereumNodePackageSynced);
+
+  const nodePackageSyncData = {
+    ...executionSyncData,
+    isSyncing,
+  };
+
+  console.log('nodePackage1', qExecutionIsSyncing);
+  console.log('nodePackage2', qConsensusIsSyncing);
+  console.log('nodePackage3', nodePackageSyncData);
+
   if (
-    !nodePackageSyncData.isSyncing &&
+    nodePackageSyncData.isSyncing === false &&
     selectedNodePackage?.status === NodeStatus.running &&
     selectedNodePackage?.initialSyncFinished === undefined
   ) {
@@ -326,6 +371,8 @@ const NodePackageScreen = () => {
       initialSyncFinished: true,
     });
   }
+
+  console.log('statusObject', getStatusObject(status, nodePackageSyncData));
 
   const nodePackageContent: SingleNodeContent = {
     nodeId: selectedNodePackage.id,

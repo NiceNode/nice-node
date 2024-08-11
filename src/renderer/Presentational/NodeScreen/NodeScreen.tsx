@@ -1,6 +1,6 @@
-import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../Generics/redesign/Button/Button';
 import CopyButton from '../../Generics/redesign/CopyButton/CopyButton.js';
@@ -11,6 +11,7 @@ import type { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import electron from '../../electronGlobal';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
+import { useGetNetworkConnectedQuery } from '../../state/network';
 import {
   selectIsAvailableForPolling,
   selectSelectedNode,
@@ -22,8 +23,8 @@ import {
   useGetNodeVersionQuery,
 } from '../../state/services';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
-import { useGetNetworkConnectedQuery } from '../../state/network';
 import { hexToDecimal } from '../../utils';
+import { getSyncData } from '../../utils.js';
 import ContentSingleClient, {
   type SingleNodeContent,
 } from '../ContentSingleClient/ContentSingleClient';
@@ -35,7 +36,6 @@ import {
   descriptionFont,
   titleFont,
 } from './NodeScreen.css';
-import { getSyncData } from '../../utils.js';
 
 let alphaModalRendered = false;
 
@@ -168,7 +168,7 @@ const NodeScreen = () => {
       latestBlockNum > savedSyncedBlock ? latestBlockNum : savedSyncedBlock;
     setLatestBlockNumber(syncedBlock);
     updateNodeLSB(syncedBlock);
-  }, [qLatestBlock, selectedNode]);
+  }, [qExecutionIsSyncing, qLatestBlock, selectedNode]);
 
   const onNodeAction = useCallback(
     (action: NodeAction) => {

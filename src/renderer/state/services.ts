@@ -11,6 +11,7 @@ type ProviderResponse = any;
 type QueryArg = {
   rpcTranslation: NiceNodeRpcTranslation;
   httpPort: string;
+  url?: string;
 };
 
 // const provider = new ethers.providers.WebSocketProvider('ws://localhost:8546');
@@ -28,8 +29,12 @@ export const RtkqExecutionWs: any = createApi({
   baseQuery: fakeBaseQuery<CustomerErrorType>(),
   endpoints: (builder) => ({
     getExecutionLatestBlock: builder.query<ProviderResponse, QueryArg>({
-      queryFn: async ({ rpcTranslation, httpPort }) => {
+      queryFn: async ({ rpcTranslation, httpPort, url = undefined }) => {
         let data;
+        // stop remote execution query IF not Ethereum node, we need a cleaner way to do this
+        if (rpcTranslation !== 'eth-l1' && url) {
+          return undefined;
+        }
         try {
           // data = await provider.send('eth_getBlockByNumber', ['latest', false]);
           console.log('latestBlock rpcTranslation', rpcTranslation);
@@ -37,6 +42,7 @@ export const RtkqExecutionWs: any = createApi({
             'latestBlock',
             rpcTranslation,
             httpPort,
+            url,
           );
           console.log('latestBlock data', data);
         } catch (e) {

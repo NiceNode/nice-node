@@ -1,6 +1,6 @@
+import moment from 'moment';
 import type { NodeSpecification } from '../common/nodeSpec';
 import type { NodeLibrary } from '../main/state/nodeLibrary';
-import moment from 'moment';
 
 export const hexToDecimal = (hex: string) => Number.parseInt(hex, 16);
 

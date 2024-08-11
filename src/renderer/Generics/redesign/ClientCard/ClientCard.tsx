@@ -8,6 +8,8 @@ import NodeIcon from '../NodeIcon/NodeIcon';
 import ProgressBar from '../ProgressBar/ProgressBar';
 // import ProgressBar from '../ProgressBar/ProgressBar';
 import type { ClientProps, ClientStatusProps } from '../consts';
+// import { common } from '../theme.css';
+import { SYNC_STATUS } from '../consts.js';
 import { common } from '../theme.css';
 import {
   cardContent,
@@ -20,8 +22,6 @@ import {
   clientType,
   container,
 } from './clientCard.css';
-// import { common } from '../theme.css';
-import { SYNC_STATUS } from '../consts.js';
 
 /**
  * Primary UI component for user interaction

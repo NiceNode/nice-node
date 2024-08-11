@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
 import { type NodePackage, NodeStatus } from '../../../common/node';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { getStatusObject, getSyncStatus } from '../../Generics/redesign/utils';
