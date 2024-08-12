@@ -330,12 +330,14 @@ const NodePackageScreen = () => {
     ? undefined
     : qConsensusIsSyncing?.data?.isSyncing || false;
 
-  const executionLatestBlockNumber = qExecutionLatestBlock?.data;
-  const isSynced = (executionBlockNumber: number, otherBlockNumber: number) => {
-    return Math.abs(executionBlockNumber - otherBlockNumber) < 120; // ~30 minutes of blocks, should be fairly close to be considered synced
-  };
-
   const isEthereumNodePackageSynced = () => {
+    const isSynced = (
+      executionBlockNumber: number,
+      otherBlockNumber: number,
+    ) => {
+      return Math.abs(executionBlockNumber - otherBlockNumber) < 120; // ~30 minutes of blocks, should be fairly close to be considered synced
+    };
+    const executionLatestBlockNumber = qExecutionLatestBlock?.data;
     return (
       // Check if the execution block is close to the execution block contained within the consensus block
       isSynced(

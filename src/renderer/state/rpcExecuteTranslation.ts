@@ -82,7 +82,7 @@ export const executeTranslation = async (
       const currentBlock = parsed.currentBlock || 0;
 
       return {
-        isSyncing: highestBlock - currentBlock < 64,
+        isSyncing: highestBlock - currentBlock < 30,
         currentBlock,
         highestBlock,
       };
