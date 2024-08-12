@@ -225,7 +225,6 @@ const NodePackageScreen = () => {
           id: nodeId,
           spec,
           lastRunningTimestampMsl,
-          status,
           initialSyncFinished,
         } = service.node;
         const node = sUserNodes?.nodes[nodeId];
@@ -252,7 +251,7 @@ const NodePackageScreen = () => {
               currentSlot: qConsensusIsSyncing?.data?.currentSlot || 0,
               highestSlot: qConsensusIsSyncing?.data?.highestSlot || 0,
             };
-        console.log('nodeStatus', getStatusObject(status, syncData));
+        console.log('nodeStatus', getStatusObject(node.status, syncData));
         return {
           id: nodeId,
           iconUrl: spec.iconUrl,
