@@ -16,7 +16,9 @@ export const getStatusObject = (
   // console.log('SyncData in getStatusObject:', syncData);
 
   return {
-    [SYNC_STATUS.STARTING]: status === NodeStatus.starting,
+    [SYNC_STATUS.REMOVING]: status === NodeStatus.removing,
+    [SYNC_STATUS.STARTING]:
+      status === NodeStatus.starting || status === NodeStatus.created,
     [SYNC_STATUS.RUNNING]: status === NodeStatus.running,
     [SYNC_STATUS.STOPPING]: status === NodeStatus.stopping,
     [SYNC_STATUS.STOPPED]: status === NodeStatus.stopped,
@@ -52,6 +54,9 @@ export const getSyncStatus = (status: ClientStatusProps) => {
     case status.lowPeerCount:
       syncStatus = SYNC_STATUS.LOW_PEER_COUNT;
       break;
+    case status.removing:
+      syncStatus = SYNC_STATUS.REMOVING;
+      break;
     case status.catchingUp:
       syncStatus = SYNC_STATUS.CATCHING_UP;
       break;
@@ -80,7 +85,7 @@ export const getSyncStatus = (status: ClientStatusProps) => {
       syncStatus = SYNC_STATUS.SYNCHRONIZED;
       break;
     default:
-      syncStatus = SYNC_STATUS.ERROR;
+      syncStatus = SYNC_STATUS.STARTING;
       break;
   }
   // console.log('syncStatus', syncStatus);

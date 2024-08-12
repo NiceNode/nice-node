@@ -14,6 +14,7 @@ export interface ClientStatusProps {
   online?: boolean;
   stopped?: boolean;
   error?: boolean;
+  removing?: boolean;
 }
 
 export interface ClientStatsProps {
@@ -75,6 +76,7 @@ export interface SyncStatusProps {
   NO_CONNECTION: string;
   ONLINE: string;
   STOPPED: string;
+  REMOVING: string;
 }
 
 export const SYNC_STATUS = Object.freeze({
@@ -91,4 +93,5 @@ export const SYNC_STATUS = Object.freeze({
   STOPPED: 'stopped',
   STOPPING: 'stopping',
   STARTING: 'starting',
+  REMOVING: 'removing',
 });

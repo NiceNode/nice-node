@@ -79,6 +79,8 @@ const getStatusDetails = (statusValue: string, t: any) => {
         label: t('InProgress'),
         iconId: 'syncing',
       };
+    case SYNC_STATUS.REMOVING:
+      return { color: stopped, title: t('Removing'), iconId: 'syncing' };
     case SYNC_STATUS.STOPPING:
       return { color: stopped, title: t('Stopping'), iconId: 'syncing' };
     case SYNC_STATUS.STOPPED:

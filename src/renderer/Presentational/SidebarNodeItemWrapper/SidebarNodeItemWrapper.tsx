@@ -37,6 +37,7 @@ const NODE_SIDEBAR_STATUS_MAP: Record<string, SidebarNodeStatus> = {
   starting: STATUS_SYNC,
   running: STATUS_SYNC,
   stopping: STATUS_SYNC,
+  removing: STATUS_SYNC,
   stopped: STATUS_STOPPED,
   lowPeerCount: STATUS_WARNING,
   synchronized: STATUS_ONLINE,

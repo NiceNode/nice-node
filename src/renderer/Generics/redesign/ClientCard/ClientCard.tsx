@@ -85,10 +85,14 @@ export const ClientCard = (props: ClientProps) => {
       status.stopped ||
       status.updating ||
       status.stopping ||
-      status.starting
+      status.starting ||
+      status.removing
     ) {
       let label;
       switch (true) {
+        case status.removing:
+          label = g('Removing');
+          break;
         case status.stopped:
           label = g('Stopped');
           break;

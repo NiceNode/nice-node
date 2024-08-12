@@ -195,6 +195,8 @@ export const removeNode = async (
     );
   }
   const node = nodeStore.getNode(nodeId);
+  node.status = NodeStatus.removing;
+  nodeStore.updateNode(node);
 
   // if docker, remove container
   if (isDockerNode(node)) {

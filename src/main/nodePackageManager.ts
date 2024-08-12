@@ -233,6 +233,8 @@ export const removeNodePackage = async (
     );
   }
   const node = nodePackageStore.getNodePackage(nodeId);
+  node.status = NodeStatus.removing;
+  nodePackageStore.updateNodePackage(node);
   for (let i = 0; i < node.services.length; i++) {
     const service = node.services[i];
     try {

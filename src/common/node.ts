@@ -22,6 +22,7 @@ export enum NodeStatus {
   running = 'running',
   stopping = 'stopping',
   stopped = 'stopped',
+  removing = 'removing',
   errorRunning = 'error running',
   errorStarting = 'error starting',
   errorStopping = 'error stopping',
