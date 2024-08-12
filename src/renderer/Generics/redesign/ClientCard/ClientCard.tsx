@@ -111,6 +111,7 @@ export const ClientCard = (props: ClientProps) => {
       return <Label type="gray" label={label} />;
     }
     if (
+      !status.synchronized &&
       packageName === 'ethereum' &&
       (stats.currentBlock !== 0 || stats.currentSlot !== 0)
     ) {
