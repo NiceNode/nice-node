@@ -110,18 +110,20 @@ export const executeTranslation = async (
     const beaconBaseUrl = `http://localhost:${httpPort}`;
     if (rpcCall === 'sync') {
       const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/syncing`);
-      console.log('resp', resp);
-      if (resp?.data?.is_syncing !== undefined) {
-        let syncPercent;
-        if (resp.data.is_syncing) {
-          const syncRatio =
-            Number.parseInt(resp.data.head_slot, 10) /
-            (Number.parseInt(resp.data.sync_distance, 10) +
-              Number.parseInt(resp.data.head_slot, 10));
-          syncPercent = (syncRatio * 100).toFixed(1);
-        }
+      if (!resp) return { isSyncing: false, currentSlot: 0, highestSlot: 0 };
 
-        return { isSyncing: resp.data.is_syncing, syncPercent };
+      if (resp?.data) {
+        const {
+          is_syncing: isSyncing = false,
+          head_slot: highestSlot = 0,
+          sync_distance = 0,
+        } = resp.data;
+        const currentSlot = highestSlot - sync_distance;
+        return {
+          isSyncing,
+          currentSlot,
+          highestSlot,
+        };
       }
     } else if (rpcCall === 'peers') {
       const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/peer_count`);

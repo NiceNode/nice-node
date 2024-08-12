@@ -221,30 +221,48 @@ const NodePackageScreen = () => {
   useEffect(() => {
     const formattedServices: ClientProps[] =
       selectedNodePackage?.services.map((service) => {
-        const nodeId = service.node.id;
+        const {
+          id: nodeId,
+          spec,
+          lastRunningTimestampMsl,
+          status,
+          initialSyncFinished,
+        } = service.node;
         const node = sUserNodes?.nodes[nodeId];
-        const data = qExecutionIsSyncing?.data;
-        const stats =
-          service.serviceName === 'Execution Client'
-            ? {
-                currentBlock: data?.currentBlock || 0,
-                highestBlock: data?.highestBlock || 0,
-              }
-            : {
-                currentSlot: data?.currentSlot || 0,
-                highestSlot: data?.highestSlot || 0,
-              };
-        console.log('nodeStatus', node?.status);
+        const isExecutionClient = service.serviceId === 'executionClient';
+        const syncDataSource = isExecutionClient
+          ? qExecutionIsSyncing
+          : qConsensusIsSyncing;
+
+        const syncData = getSyncData(
+          syncDataSource,
+          qExecutionPeers,
+          qNetwork.status === 'rejected',
+          lastRunningTimestampMsl,
+          false,
+          initialSyncFinished,
+        );
+
+        const stats = isExecutionClient
+          ? {
+              currentBlock: qExecutionIsSyncing?.data?.currentBlock || 0,
+              highestBlock: qExecutionIsSyncing?.data?.highestBlock || 0,
+            }
+          : {
+              currentSlot: qConsensusIsSyncing?.data?.currentSlot || 0,
+              highestSlot: qConsensusIsSyncing?.data?.highestSlot || 0,
+            };
+        console.log('nodeStatus', getStatusObject(status, syncData));
         return {
-          id: service.node.id,
-          iconUrl: service.node.spec.iconUrl,
-          name: service.node.spec.specId,
-          displayName: service.node.spec.displayName as NodeBackgroundId,
+          id: nodeId,
+          iconUrl: spec.iconUrl,
+          name: spec.specId,
+          displayName: spec.displayName as NodeBackgroundId,
           version: '',
           nodeType: service.serviceName,
-          status: getStatusObject(node?.status),
+          status: getStatusObject(status, syncData),
           stats,
-          resources: service.node.spec.resources,
+          resources: spec.resources,
         };
       }) ?? [];
     setFormattedServices(formattedServices);
