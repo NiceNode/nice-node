@@ -116,13 +116,17 @@ export const executeTranslation = async (
         const {
           is_syncing: isSyncing = false,
           head_slot: highestSlot = 0,
-          sync_distance = 0,
+          sync_distance: syncDistance = 0,
         } = resp.data;
-        const currentSlot = highestSlot - sync_distance;
+
+        const highestSlotNumber = Number(highestSlot);
+        const syncDistanceNumber = Number(syncDistance);
+        const currentSlot = highestSlotNumber - syncDistanceNumber;
+
         return {
           isSyncing,
           currentSlot,
-          highestSlot,
+          highestSlot: highestSlotNumber,
         };
       }
     } else if (rpcCall === 'peers') {

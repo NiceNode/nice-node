@@ -111,7 +111,6 @@ export const ClientCard = (props: ClientProps) => {
       return <Label type="gray" label={label} />;
     }
     if (
-      !status.synchronized &&
       packageName === 'ethereum' &&
       (stats.currentBlock !== 0 || stats.currentSlot !== 0)
     ) {
@@ -133,7 +132,7 @@ export const ClientCard = (props: ClientProps) => {
               common.color[name.replace('-beacon', '') as NodeBackgroundId] ??
               common.color.geth
             }
-            progress={progress}
+            progress={progress * 100}
             caption={`${caption} (rely on logs for now, WIP)`}
             outerStyle={{ height: '20px' }}
             innerStyle={{ height: '20px' }}

@@ -370,7 +370,7 @@ const NodePackageScreen = () => {
   const isSyncing =
     executionSyncData?.isSyncing ||
     consensusIsSyncing ||
-    (isEthereumNodePackage && !isEthereumNodePackageSynced);
+    (isEthereumNodePackage && !isEthereumNodePackageSynced());
 
   const nodePackageSyncData = {
     ...executionSyncData,
