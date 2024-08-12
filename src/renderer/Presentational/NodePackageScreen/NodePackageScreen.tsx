@@ -260,7 +260,7 @@ const NodePackageScreen = () => {
           displayName: spec.displayName as NodeBackgroundId,
           version: '',
           nodeType: service.serviceName,
-          status: getStatusObject(status, syncData),
+          status: getStatusObject(node?.status, syncData),
           stats,
           resources: spec.resources,
         };
