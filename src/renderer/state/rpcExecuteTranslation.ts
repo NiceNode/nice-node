@@ -64,25 +64,36 @@ export const executeTranslation = async (
     // use provider
     if (rpcCall === 'sync') {
       const resp = await provider.send('eth_syncing');
-      if (!resp) return { isSyncing: false, currentBlock: 0, highestBlock: 0 };
+      let isSyncing = true; // Default to true unless explicitly set to false
+      let highestBlock = 0;
+      let currentBlock = 0;
 
-      const parsed = Object.fromEntries(
-        Object.entries(resp).map(([key, value]) => {
-          if (typeof value === 'number') {
-            return [key, value];
-          }
-          if (typeof value === 'string') {
-            return [key, Number.parseInt(value)];
-          }
-          return [key, undefined];
-        }),
-      );
+      if (resp !== undefined) {
+        if (resp === false) {
+          isSyncing = false;
+        } else {
+          const parsed = Object.fromEntries(
+            Object.entries(resp).map(([key, value]) => {
+              if (typeof value === 'number') {
+                return [key, value];
+              }
+              if (typeof value === 'string') {
+                return [key, Number.parseInt(value)];
+              }
+              return [key, undefined];
+            }),
+          );
 
-      const highestBlock = parsed.highestBlock || 0;
-      const currentBlock = parsed.currentBlock || 0;
+          highestBlock = parsed.highestBlock || 0;
+          currentBlock = parsed.currentBlock || 0;
+
+          // Set isSyncing based on whether the current block is less than the highest block
+          isSyncing = currentBlock < highestBlock;
+        }
+      }
 
       return {
-        isSyncing: highestBlock - currentBlock < 30,
+        isSyncing,
         currentBlock,
         highestBlock,
       };
