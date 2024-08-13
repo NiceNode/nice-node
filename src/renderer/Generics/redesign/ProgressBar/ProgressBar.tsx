@@ -69,7 +69,7 @@ const ProgressBar = ({
               className={percentTextClass}
               style={{
                 color: isLeftPosition ? 'white' : color,
-                left: isLeftPosition ? 'auto' : `${progressWidth * 2.5 + 10}px`, // Adjust position dynamically
+                left: isLeftPosition ? 'auto' : `${progressWidth * 2.5 + 10}px`, // TODO: come up with a better way to do this
                 transform: isLeftPosition
                   ? 'translateX(0) translateY(-50%)'
                   : '', // Handle position
