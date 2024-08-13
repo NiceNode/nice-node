@@ -87,8 +87,12 @@ export const executeTranslation = async (
           highestBlock = parsed.highestBlock || 0;
           currentBlock = parsed.currentBlock || 0;
 
-          // Set isSyncing based on whether the current block is less than the highest block
-          isSyncing = currentBlock < highestBlock;
+          if (highestBlock === 0) {
+            isSyncing = true;
+          } else {
+            // Set isSyncing to false if within 30 blocks, true otherwise
+            isSyncing = highestBlock - currentBlock >= 30;
+          }
         }
       }
 
