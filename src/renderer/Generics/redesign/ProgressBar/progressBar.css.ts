@@ -13,6 +13,20 @@ export const outerDiv = style({
   background: vars.color.font8,
 });
 
+export const percentTextLeft = style({
+  position: 'absolute',
+  top: '45%',
+  right: 5,
+  transform: 'translateY(-50%)',
+});
+
+export const percentTextRight = style({
+  position: 'absolute',
+  left: 5,
+  top: '45%',
+  transform: 'translateY(-50%)',
+});
+
 export const innerDiv = style({
   height: 16,
   backgroundColor: vars.components.progressBarBackground,

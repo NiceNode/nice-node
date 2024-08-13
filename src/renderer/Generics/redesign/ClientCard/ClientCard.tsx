@@ -134,7 +134,8 @@ export const ClientCard = (props: ClientProps) => {
               common.color.geth
             }
             progress={progress * 100}
-            caption={`${caption} (rely on logs for now, WIP)`}
+            showPercent
+            caption={caption}
             outerStyle={{ height: '20px' }}
             innerStyle={{ height: '20px' }}
             // caption={`${caption} (${syncPercent}%)`}
