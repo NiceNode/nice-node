@@ -147,20 +147,18 @@ const NodeScreen = () => {
     const slotNumber = qLatestBlock?.data?.header?.message?.slot;
     const rpcTranslation = selectedNode?.spec?.rpcTranslation;
 
+    const currentBlock =
+      qExecutionIsSyncing?.data?.currentBlock ||
+      qExecutionIsSyncing?.data?.currentSlot;
+
     let latestBlockNum = 0;
-    if (
-      blockNumber &&
-      typeof blockNumber === 'string' &&
-      rpcTranslation === 'eth-l1'
-    ) {
-      latestBlockNum = hexToDecimal(blockNumber);
-    } else if (
-      slotNumber &&
-      typeof slotNumber === 'string' &&
-      rpcTranslation === 'eth-l1-beacon'
-    ) {
-      latestBlockNum = Number.parseFloat(slotNumber);
-    } else if (rpcTranslation === 'farcaster-l1') {
+
+    if (typeof currentBlock === 'string') {
+      latestBlockNum = currentBlock.startsWith('0x')
+        ? hexToDecimal(currentBlock)
+        : Number.parseFloat(currentBlock);
+    }
+    if (rpcTranslation === 'farcaster-l1') {
       latestBlockNum = qLatestBlock.data;
     }
 
