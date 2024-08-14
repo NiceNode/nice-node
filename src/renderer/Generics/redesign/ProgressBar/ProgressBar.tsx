@@ -75,7 +75,7 @@ const ProgressBar = ({
                   : '', // Handle position
               }}
             >
-              {Math.round(progress)}%
+              {Math.floor(progress)}%
             </span>
           )}
         </div>
