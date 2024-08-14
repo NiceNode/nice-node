@@ -154,9 +154,12 @@ const NodeScreen = () => {
     let latestBlockNum = 0;
 
     if (typeof currentBlock === 'string') {
-      latestBlockNum = currentBlock.startsWith('0x')
-        ? hexToDecimal(currentBlock)
-        : Number.parseFloat(currentBlock);
+      latestBlockNum =
+        currentBlock.slice(0, 2) === '0x'
+          ? hexToDecimal(currentBlock)
+          : Number.parseFloat(currentBlock);
+    } else if (typeof currentBlock === 'number') {
+      latestBlockNum = currentBlock;
     }
     if (rpcTranslation === 'farcaster-l1') {
       latestBlockNum = qLatestBlock.data;
