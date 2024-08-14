@@ -228,8 +228,9 @@ const NodePackageScreen = () => {
           initialSyncFinished,
         } = service.node;
         const node = sUserNodes?.nodes[nodeId];
-        const isExecutionClient = service.serviceId === 'executionClient';
-        const syncDataSource = isExecutionClient
+        // support other non-ethereum services
+        const isNotConsensusClient = service.serviceId !== 'consensusClient';
+        const syncDataSource = isNotConsensusClient
           ? qExecutionIsSyncing
           : qConsensusIsSyncing;
 
@@ -242,7 +243,7 @@ const NodePackageScreen = () => {
           initialSyncFinished,
         );
 
-        const stats = isExecutionClient
+        const stats = isNotConsensusClient
           ? {
               currentBlock: qExecutionIsSyncing?.data?.currentBlock || 0,
               highestBlock: qExecutionIsSyncing?.data?.highestBlock || 0,
@@ -251,7 +252,7 @@ const NodePackageScreen = () => {
               currentSlot: qConsensusIsSyncing?.data?.currentSlot || 0,
               highestSlot: qConsensusIsSyncing?.data?.highestSlot || 0,
             };
-        console.log('nodeStatus', getStatusObject(node.status, syncData));
+        console.log('nodeStatus', getStatusObject(node?.status, syncData));
         return {
           id: nodeId,
           iconUrl: spec.iconUrl,
