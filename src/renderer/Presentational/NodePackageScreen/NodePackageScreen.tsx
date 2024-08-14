@@ -224,7 +224,7 @@ const NodePackageScreen = () => {
         const {
           id: nodeId,
           spec,
-          lastRunningTimestampMsl,
+          lastRunningTimestampMs,
           initialSyncFinished,
         } = service.node;
         const node = sUserNodes?.nodes[nodeId];
@@ -238,7 +238,7 @@ const NodePackageScreen = () => {
           syncDataSource,
           qExecutionPeers,
           qNetwork.status === 'rejected',
-          lastRunningTimestampMsl,
+          lastRunningTimestampMs,
           false,
           initialSyncFinished,
         );
@@ -323,7 +323,8 @@ const NodePackageScreen = () => {
     );
   }
 
-  const { status, spec } = selectedNodePackage;
+  const { id, status, spec, lastRunningTimestampMs, initialSyncFinished } =
+    selectedNodePackage;
   // console.log('nodePackageStatus', status);
   // todo: get node type, single or multi-service
   // parse node details from selectedNodePackage => SingleNodeContent
@@ -339,9 +340,9 @@ const NodePackageScreen = () => {
     qExecutionIsSyncing,
     qExecutionPeers,
     qNetwork.status === 'rejected',
-    selectedNodePackage?.lastRunningTimestampMsl,
+    lastRunningTimestampMs,
     false,
-    selectedNodePackage?.initialSyncFinished,
+    initialSyncFinished,
   );
 
   const consensusIsSyncing = qConsensusIsSyncing?.isError
@@ -368,14 +369,14 @@ const NodePackageScreen = () => {
     );
   };
 
-  const isSyncing =
+  const isNodePackageSyncing =
     executionSyncData?.isSyncing ||
     consensusIsSyncing ||
     (isEthereumNodePackage && !isEthereumNodePackageSynced());
 
   const nodePackageSyncData = {
     ...executionSyncData,
-    isSyncing,
+    isSyncing: isNodePackageSyncing,
   };
 
   console.log('nodePackage1', qExecutionIsSyncing);
@@ -384,10 +385,10 @@ const NodePackageScreen = () => {
 
   if (
     nodePackageSyncData.isSyncing === false &&
-    selectedNodePackage?.status === NodeStatus.running &&
-    selectedNodePackage?.initialSyncFinished === undefined
+    status === NodeStatus.running &&
+    initialSyncFinished === undefined
   ) {
-    electron.updateNodePackage(selectedNodePackage.id, {
+    electron.updateNodePackage(id, {
       initialSyncFinished: true,
     });
   }
@@ -395,7 +396,7 @@ const NodePackageScreen = () => {
   console.log('statusObject', getStatusObject(status, nodePackageSyncData));
 
   const nodePackageContent: SingleNodeContent = {
-    nodeId: selectedNodePackage.id,
+    nodeId: id,
     displayName: spec.displayName,
     name: clientName as NodeBackgroundId,
     iconUrl: spec.iconUrl,

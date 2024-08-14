@@ -4,9 +4,9 @@ import {
   downloadingProgressContainer,
   innerDiv,
   outerDiv,
-  sectionFont,
   percentTextLeft,
   percentTextRight,
+  sectionFont,
 } from './progressBar.css';
 
 export interface ProgressBarProps {
