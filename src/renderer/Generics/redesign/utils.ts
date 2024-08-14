@@ -78,11 +78,11 @@ export const getSyncStatus = (status: ClientStatusProps) => {
     case status.blocksBehind:
       syncStatus = SYNC_STATUS.BLOCKS_BEHIND;
       break;
-    case status.running:
-      syncStatus = SYNC_STATUS.INITIALIZING;
-      break;
     case status.synchronized:
       syncStatus = SYNC_STATUS.SYNCHRONIZED;
+      break;
+    case status.running:
+      syncStatus = SYNC_STATUS.INITIALIZING;
       break;
     default:
       syncStatus = SYNC_STATUS.STARTING;

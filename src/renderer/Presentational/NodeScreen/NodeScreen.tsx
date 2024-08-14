@@ -49,7 +49,9 @@ const NodeScreen = () => {
   const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>(0);
   const [sTotalDiskSize, setTotalDiskSize] = useState<number>(0);
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
-  const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
+  const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(
+    selectedNode?.runtime?.usage?.syncedBlock || 0,
+  );
 
   const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
 
@@ -143,10 +145,6 @@ const NodeScreen = () => {
       await electron.updateNodeLastSyncedBlock(selectedNode.id, latestBlockNum);
     };
 
-    const blockNumber = qLatestBlock?.data?.number;
-    const slotNumber = qLatestBlock?.data?.header?.message?.slot;
-    const rpcTranslation = selectedNode?.spec?.rpcTranslation;
-
     const currentBlock =
       qExecutionIsSyncing?.data?.currentBlock ||
       qExecutionIsSyncing?.data?.currentSlot;
@@ -161,7 +159,7 @@ const NodeScreen = () => {
     } else if (typeof currentBlock === 'number') {
       latestBlockNum = currentBlock;
     }
-    if (rpcTranslation === 'farcaster-l1') {
+    if (selectedNode?.spec?.rpcTranslation === 'farcaster-l1') {
       latestBlockNum = qLatestBlock.data;
     }
 
