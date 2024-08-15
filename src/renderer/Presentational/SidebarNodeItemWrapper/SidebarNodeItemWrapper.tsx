@@ -11,8 +11,8 @@ import {
 } from '../../state/node';
 import {
   useGetExecutionIsSyncingQuery,
-  useGetExecutionPeersQuery,
   useGetExecutionLatestBlockQuery,
+  useGetExecutionPeersQuery,
 } from '../../state/services';
 import { getSyncData } from '../../utils.js';
 
