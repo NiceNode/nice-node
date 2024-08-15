@@ -35,7 +35,9 @@ export const getStatusObject = (
       syncData?.offline &&
       (status === NodeStatus.running || status === 'error starting'),
     [SYNC_STATUS.CATCHING_UP]:
-      status === NodeStatus.running && syncData?.initialSyncFinished,
+      syncData?.isSyncing === true &&
+      status === NodeStatus.running &&
+      syncData?.initialSyncFinished,
     // initialized: status === NodeStatus.initialized,
     // blocksBehind: status === NodeStatus.blocksBehind,
   };
