@@ -118,8 +118,8 @@ const ContentMultipleClients = (props: {
       );
     }
     if (
-      !clClient?.status.initialized &&
-      !elClient?.status.initialized &&
+      // !clClient?.status.initialized &&
+      // !elClient?.status.initialized &&
       !synchronized &&
       !initialSyncMessageDismissed
     ) {

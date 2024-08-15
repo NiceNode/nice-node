@@ -111,6 +111,7 @@ export const ClientCard = (props: ClientProps) => {
       return <Label type="gray" label={label} />;
     }
     if (
+      !status.noConnection &&
       !status.synchronized &&
       packageName === 'ethereum' &&
       (stats.currentBlock !== 0 || stats.currentSlot !== 0)
@@ -143,7 +144,7 @@ export const ClientCard = (props: ClientProps) => {
         </>
       );
     }
-    const { updating, running, ...statusLabels } = status;
+    const { updating, running, error, ...statusLabels } = status;
     // Get all node statuses that are true
     const statusKeys = Object.keys(statusLabels).filter((k: string) => {
       const statusKey = k as keyof ClientStatusProps;
@@ -188,7 +189,11 @@ export const ClientCard = (props: ClientProps) => {
             NODE_BACKGROUNDS[name.replace('-beacon', '') as NodeBackgroundId] ??
             NODE_BACKGROUNDS.nimbus
           })`,
-          height: status.running && !status.synchronized ? 166 : 186,
+          height:
+            (status.running && !status.synchronized) ||
+            (status.error && !status.noConnection)
+              ? 166
+              : 186,
         }}
         className={[cardTop, `${stoppedStyle}`].join(' ')}
       >

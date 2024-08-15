@@ -68,39 +68,40 @@ const NodePackageScreen = () => {
   const consensusHttpPort =
     consensusNodeId &&
     sUserNodes?.nodes[consensusNodeId]?.config.configValuesMap.httpPort;
-  const rpcTranslation = selectedNodePackage?.spec.rpcTranslation;
   const isEthereumNodePackage =
     selectedNodePackage?.spec?.specId === 'ethereum';
+  const executionRpcTranslation = executionNode?.node?.spec?.rpcTranslation;
+  const consensusRpcTranslation = consensusNode?.node?.spec?.rpcTranslation;
   const qPublicExecutionLatestBlock = useGetExecutionLatestBlockQuery(
     {
-      rpcTranslation,
+      rpcTranslation: executionRpcTranslation,
       httpPort: executionHttpPort,
       url: 'https://ethereum-rpc.publicnode.com',
     },
     { pollingInterval },
   );
+  const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
+    { rpcTranslation: executionRpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
+  );
+  const qExecutionPeers = useGetExecutionPeersQuery(
+    { rpcTranslation: executionRpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
+  );
+  const qExecutionLatestBlock = useGetExecutionLatestBlockQuery(
+    { rpcTranslation: executionRpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
+  );
   const qConsensusIsSyncing = useGetExecutionIsSyncingQuery(
     {
-      rpcTranslation: consensusNode?.node?.spec?.rpcTranslation,
+      rpcTranslation: consensusRpcTranslation,
       httpPort: consensusHttpPort,
     },
     { pollingInterval },
   );
-  const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
-    { rpcTranslation, httpPort: executionHttpPort },
-    { pollingInterval },
-  );
-  const qExecutionPeers = useGetExecutionPeersQuery(
-    { rpcTranslation, httpPort: executionHttpPort },
-    { pollingInterval },
-  );
-  const qExecutionLatestBlock = useGetExecutionLatestBlockQuery(
-    { rpcTranslation, httpPort: executionHttpPort },
-    { pollingInterval },
-  );
   const qConsensusLatestBlock = useGetExecutionLatestBlockQuery(
     {
-      rpcTranslation: consensusNode?.node?.spec?.rpcTranslation,
+      rpcTranslation: consensusRpcTranslation,
       httpPort: consensusHttpPort,
     },
     { pollingInterval },

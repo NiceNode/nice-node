@@ -3,9 +3,16 @@ import { useEffect, useState } from 'react';
 import { type NodePackage, NodeStatus } from '../../../common/node';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { getStatusObject, getSyncStatus } from '../../Generics/redesign/utils';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import {
+  selectIsAvailableForPolling,
+  selectSelectedNodePackage,
+  selectUserNodes,
+} from '../../state/node';
 import {
   useGetExecutionIsSyncingQuery,
   useGetExecutionPeersQuery,
+  useGetExecutionLatestBlockQuery,
 } from '../../state/services';
 import { getSyncData } from '../../utils.js';
 
@@ -79,33 +86,105 @@ export const SidebarNodeItemWrapper = ({
   offline,
 }: SidebarNodeItemWrapperProps) => {
   const pollingInterval = 0;
-  const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
+  const sUserNodes = useAppSelector(selectUserNodes);
+  const executionNode = node?.services.find(
+    (service) => service.serviceId === 'executionClient',
+  );
+  const consensusNode = node?.services.find(
+    (service) => service.serviceId === 'consensusClient',
+  );
+  const executionNodeId = executionNode?.node.id;
+  const consensusNodeId = consensusNode?.node.id;
+  const executionHttpPort =
+    executionNodeId &&
+    sUserNodes?.nodes[executionNodeId]?.config.configValuesMap.httpPort;
+  const consensusHttpPort =
+    consensusNodeId &&
+    sUserNodes?.nodes[consensusNodeId]?.config.configValuesMap.httpPort;
+  const isEthereumNodePackage = node?.spec?.specId === 'ethereum';
+  const executionRpcTranslation = executionNode?.node?.spec?.rpcTranslation;
+  const consensusRpcTranslation = consensusNode?.node?.spec?.rpcTranslation;
+  const qPublicExecutionLatestBlock = useGetExecutionLatestBlockQuery(
     {
-      rpcTranslation: node?.spec.rpcTranslation,
-      httpPort: node?.config?.configValuesMap?.httpPort,
+      rpcTranslation: executionRpcTranslation,
+      httpPort: executionHttpPort,
+      url: 'https://ethereum-rpc.publicnode.com',
     },
+    { pollingInterval },
+  );
+  const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
+    { rpcTranslation: executionRpcTranslation, httpPort: executionHttpPort },
     { pollingInterval },
   );
   const qExecutionPeers = useGetExecutionPeersQuery(
+    { rpcTranslation: executionRpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
+  );
+  const qExecutionLatestBlock = useGetExecutionLatestBlockQuery(
+    { rpcTranslation: executionRpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
+  );
+  const qConsensusIsSyncing = useGetExecutionIsSyncingQuery(
     {
-      rpcTranslation: node?.spec.rpcTranslation,
-      httpPort: node?.config?.configValuesMap?.httpPort,
+      rpcTranslation: consensusRpcTranslation,
+      httpPort: consensusHttpPort,
+    },
+    { pollingInterval },
+  );
+  const qConsensusLatestBlock = useGetExecutionLatestBlockQuery(
+    {
+      rpcTranslation: consensusRpcTranslation,
+      httpPort: consensusHttpPort,
     },
     { pollingInterval },
   );
 
-  const { spec, status } = node;
+  const { spec, status, lastRunningTimestampMs, initialSyncFinished } = node;
 
-  const syncData = getSyncData(
+  const executionSyncData = getSyncData(
     qExecutionIsSyncing,
     qExecutionPeers,
     offline,
-    node?.lastRunningTimestampMs,
-    node.updateAvailable,
-    node?.initialSyncFinished,
+    lastRunningTimestampMs,
+    false,
+    initialSyncFinished,
   );
 
-  const nodeStatus = getStatusObject(status, syncData);
+  const consensusIsSyncing = qConsensusIsSyncing?.isError
+    ? undefined
+    : qConsensusIsSyncing?.data?.isSyncing || false;
+
+  const isEthereumNodePackageSynced = () => {
+    const isSynced = (
+      executionBlockNumber: number,
+      otherBlockNumber: number,
+    ) => {
+      return Math.abs(executionBlockNumber - otherBlockNumber) < 120; // ~30 minutes of blocks, should be fairly close to be considered synced
+    };
+    const executionLatestBlockNumber = qExecutionLatestBlock?.data;
+    return (
+      // Check if the execution block is close to the execution block contained within the consensus block
+      isSynced(
+        executionLatestBlockNumber,
+        qConsensusLatestBlock?.data?.message?.body?.execution_payload
+          ?.block_number,
+      ) ||
+      // If not, check if our execution block number is close to the public node that is already synced
+      isSynced(executionLatestBlockNumber, qPublicExecutionLatestBlock?.data)
+    );
+  };
+
+  const isNodePackageSyncing =
+    executionSyncData?.isSyncing ||
+    consensusIsSyncing ||
+    (isEthereumNodePackage && !isEthereumNodePackageSynced());
+
+  const nodePackageSyncData = {
+    ...executionSyncData,
+    isSyncing: isNodePackageSyncing,
+  };
+
+  const nodeStatus = getStatusObject(status, nodePackageSyncData);
   const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[getSyncStatus(nodeStatus)];
 
   return (

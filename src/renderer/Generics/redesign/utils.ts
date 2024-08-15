@@ -12,7 +12,7 @@ export const getStatusObject = (
     initialSyncFinished: boolean;
   },
 ) => {
-  // console.log('Status in getStatusObject:', status);
+  console.log('Status in getStatusObject:', status);
   // console.log('SyncData in getStatusObject:', syncData);
 
   return {
@@ -32,7 +32,8 @@ export const getStatusObject = (
       syncData?.minutesPassedSinceLastRun > 20 &&
       status === NodeStatus.running,
     [SYNC_STATUS.NO_CONNECTION]:
-      syncData?.offline && status === NodeStatus.running,
+      syncData?.offline &&
+      (status === NodeStatus.running || status === 'error starting'),
     [SYNC_STATUS.CATCHING_UP]:
       status === NodeStatus.running && syncData?.initialSyncFinished,
     // initialized: status === NodeStatus.initialized,
