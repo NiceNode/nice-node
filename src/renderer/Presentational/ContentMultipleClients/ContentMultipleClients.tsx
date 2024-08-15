@@ -71,8 +71,12 @@ const ContentMultipleClients = (props: {
     }
   }, []);
 
-  const clClient = clients.find((client) => client.nodeType === 'consensus');
-  const elClient = clients.find((client) => client.nodeType === 'execution');
+  const elClient = clients.find(
+    (client) => client.serviceId === 'executionClient',
+  );
+  const clClient = clients.find(
+    (client) => client.serviceId === 'consensusClient',
+  );
 
   const resourceData = useMemo(() => {
     const resourceData: { title: string; items: any[] } = {
