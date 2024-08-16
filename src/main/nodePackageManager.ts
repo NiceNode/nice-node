@@ -155,7 +155,8 @@ export const startNodePackage = async (nodeId: NodeId) => {
     }
   };
 
-  if (node.spec.specId === 'ethereum') {
+  if (node.services.length === 2) {
+    //TODO: support clients that don't have the following serviceIds
     const executionClient = node.services.find(
       (s) => s.serviceId === 'executionClient',
     );
