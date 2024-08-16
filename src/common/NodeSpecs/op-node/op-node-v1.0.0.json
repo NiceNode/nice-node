@@ -9,7 +9,7 @@
       "defaultConfig": {
         "l1": "",
         "l1Beacon": "",
-        "l2": "http://host.containers.internal:8553",
+        "executionEndpoint": "http://host.containers.internal",
         "l1TrustRpc": "Enabled",
         "httpPort": "8549",
         "p2pPorts": "9222",
@@ -110,13 +110,13 @@
       "defaultValue": "",
       "infoDescription": "Provider with historical blob API enabled or a local node http://host.containers.internal:5052"
     },
-    "l2": {
+    "executionEndpoint": {
       "displayName": "Optimism RPC Endpoint (local node or provider)",
       "cliConfigPrefix": "--l2 ",
       "uiControl": {
         "type": "text"
       },
-      "defaultValue": "http://host.containers.internal:8553",
+      "defaultValue": "http://host.containers.internal",
       "addNodeFlow": "advanced",
       "infoDescription": "engine and eth namespace required",
       "documentation": "https://github.com/jgresham/superhack/blob/main/README.md#op-node-settings"

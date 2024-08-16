@@ -157,7 +157,11 @@ export const assignPortsToNode = (node: Node): Node => {
     node.config.configValuesMap[portType] = assignedPort.toString();
   });
 
-  if (node.spec.rpcTranslation === 'eth-l1-beacon' && executionService) {
+  if (
+    (node.spec.rpcTranslation === 'eth-l1-beacon' ||
+      node.spec.rpcTranslation === 'eth-l2-consensus') &&
+    executionService
+  ) {
     const executionNode = getNode(executionService.node.id);
     let executionEndpoint = node.config.configValuesMap.executionEndpoint;
 
