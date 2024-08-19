@@ -69,9 +69,15 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
       if (onAction) onAction('stop', nodeId);
     },
   };
+  const stoppingButtonProps: ButtonProps = {
+    label: g('Stopping...'),
+    iconId: 'sync',
+  };
   let startStopButtonProps: ButtonProps;
   if (status.error) {
     startStopButtonProps = startButtonProps; // show both buttons in case of error
+  } else if (status.stopping) {
+    startStopButtonProps = stoppingButtonProps;
   } else if (status.stopped) {
     startStopButtonProps = startButtonProps;
   } else {
@@ -176,7 +182,10 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
             {...startStopButtonProps}
             variant="icon-left"
             size="small"
-            disabled={isPodmanRunning === false}
+            disabled={
+              isPodmanRunning === false ||
+              startStopButtonProps.iconId === 'sync'
+            }
             type={
               startStopButtonProps.iconId === 'play' ? 'primary' : 'secondary'
             }

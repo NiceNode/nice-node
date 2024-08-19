@@ -51,6 +51,7 @@
   "Starting": "Starting",
   "Stopped": "Stopped",
   "Stopping": "Stopping",
+  "Stopping...": "Stopping...",
   "Removing": "Removing",
   "CurrentlyOffline": "Currently offline",
   "PleaseReconnect": "Please reconnect to the internet",
