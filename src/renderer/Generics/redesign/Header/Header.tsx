@@ -69,15 +69,15 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
       if (onAction) onAction('stop', nodeId);
     },
   };
-  const stoppingButtonProps: ButtonProps = {
-    label: g('Stopping...'),
+  const transitionButtonProps: ButtonProps = {
+    label: status.stopping ? g('Stopping...') : g('Starting...'),
     iconId: 'sync',
   };
   let startStopButtonProps: ButtonProps;
   if (status.error) {
     startStopButtonProps = startButtonProps; // show both buttons in case of error
-  } else if (status.stopping) {
-    startStopButtonProps = stoppingButtonProps;
+  } else if (status.stopping || status.starting) {
+    startStopButtonProps = transitionButtonProps;
   } else if (status.stopped) {
     startStopButtonProps = startButtonProps;
   } else {
