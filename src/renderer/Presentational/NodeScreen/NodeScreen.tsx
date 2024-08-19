@@ -340,8 +340,8 @@ const NodeScreen = () => {
         nodeOverview={nodeContent}
         isPodmanRunning={isPodmanRunning}
       />
-      <p>Controller version: {spec?.version}</p>
       <DevMode>
+        <p>Controller version: {spec?.version}</p>
         <div style={{ display: 'flex', gap: '10px' }}>
           <span>Active Controller Json</span>
           <CopyButton data={JSON.stringify(selectedNode, null, 2)} />
