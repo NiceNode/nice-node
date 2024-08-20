@@ -4,7 +4,6 @@ import { common, vars } from '../theme.css';
 export const container = style({
   boxSizing: 'border-box',
   cursor: 'pointer',
-  width: '50%',
   height: 280,
   background: vars.components.clientCardBackground,
   border: vars.components.clientCardBorder,

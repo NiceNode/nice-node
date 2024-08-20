@@ -36,6 +36,7 @@ export const ClientCard = (props: ClientProps) => {
     onClick,
     stats,
     iconUrl,
+    single,
   } = props;
 
   const { t: g } = useTranslation('genericComponents');
@@ -171,6 +172,7 @@ export const ClientCard = (props: ClientProps) => {
   return (
     <div
       className={container}
+      style={{ width: single ? '100%' : '50%' }}
       onClick={() => {
         if (onClick) {
           onClick();
