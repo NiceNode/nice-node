@@ -30,6 +30,7 @@ export const inputContainer = style({
     pointerEvents: 'none',
     filter: 'none',
     opacity: '0.5',
+    cursor: 'not-allowed',
   },
   cursor: 'pointer',
 });

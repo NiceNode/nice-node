@@ -17,6 +17,7 @@ export const baseButton = style({
   ':disabled': {
     color: vars.color.fontDisabled,
     background: vars.color.backgroundDisabled,
+    cursor: 'not-allowed',
   },
   fontWeight: 500,
   fontSize: 13,

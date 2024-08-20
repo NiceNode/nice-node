@@ -30,5 +30,6 @@ export const checkbox = style({
     pointerEvents: 'none',
     filter: 'none',
     opacity: '0.5',
+    cursor: 'not-allowed',
   },
 });

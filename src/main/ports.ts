@@ -163,25 +163,23 @@ export const assignPortsToNode = (node: Node): Node => {
     executionService
   ) {
     const executionNode = getNode(executionService.node.id);
-    let executionEndpoint = node.config.configValuesMap.executionEndpoint;
+    const endpointKey =
+      node.spec.rpcTranslation === 'eth-l1-beacon'
+        ? 'executionEndpoint'
+        : 'l2executionEndpoint';
+    let executionEndpoint = node.config.configValuesMap[endpointKey];
 
-    const regex = /:\d{4}/;
-    if (regex.test(executionEndpoint)) {
-      return;
+    if (!/:\d{4}/.test(executionEndpoint)) {
+      const portSuffix = `:${executionNode.config.configValuesMap.enginePort}`;
+      const isQuoted =
+        executionEndpoint.startsWith('"') && executionEndpoint.endsWith('"');
+
+      executionEndpoint = isQuoted
+        ? `${executionEndpoint.slice(0, -1)}${portSuffix}"`
+        : `${executionEndpoint}${portSuffix}`;
+
+      node.config.configValuesMap[endpointKey] = executionEndpoint;
     }
-
-    // Check if the endpoint is enclosed in quotes
-    const isQuoted =
-      executionEndpoint.startsWith('"') && executionEndpoint.endsWith('"');
-    const portSuffix = `:${executionNode.config.configValuesMap.enginePort}`;
-
-    // Append the port inside the quotes if necessary
-    if (isQuoted) {
-      executionEndpoint = `${executionEndpoint.slice(0, -1) + portSuffix}"`;
-    } else {
-      executionEndpoint += portSuffix;
-    }
-    node.config.configValuesMap.executionEndpoint = executionEndpoint;
   }
 
   return node; // Return the updated node without persisting changes
