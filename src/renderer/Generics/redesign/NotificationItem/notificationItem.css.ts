@@ -8,8 +8,6 @@ export const container = style({
   padding: '16px 0px 16px 10px',
   gap: '12px',
   width: 'auto',
-  cursor: 'pointer',
-  userSelect: 'none',
   borderBottom: vars.components.clientCardBorder,
 });
 
