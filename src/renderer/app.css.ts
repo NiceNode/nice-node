@@ -41,11 +41,11 @@ export const borderLeft = style({
   backgroundColor: vars.components.sidebarBackground,
   width: 3,
   height: '100%',
-  // selectors: {
-  //   '&.darwin': {
-  //     backgroundColor: 'transparent',
-  //   },
-  // },
+  selectors: {
+    '&.darwin': {
+      backgroundColor: 'transparent',
+    },
+  },
 });
 
 export const borderCenter = style({
@@ -59,11 +59,11 @@ export const borderCenterLine = style({
   backgroundColor: vars.components.sidebarBorder,
   height: '100%',
   width: 1,
-  // selectors: {
-  //   '&.darwin': {
-  //     backgroundColor: vars.components.sidebarMacBorder,
-  //   },
-  // },
+  selectors: {
+    '&.darwin': {
+      backgroundColor: vars.components.sidebarMacBorder,
+    },
+  },
 });
 
 export const borderRight = style({
