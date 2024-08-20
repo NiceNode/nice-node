@@ -65,7 +65,7 @@
     "@wdio/mocha-framework": "^8.36.1",
     "@wdio/spec-reporter": "^8.36.1",
     "cross-env": "^7.0.3",
-    "electron": "^31.3.1",
+    "electron": "^32.0.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-extension-installer": "^1.2.0",
     "electron-mock-ipc": "^0.3.12",
