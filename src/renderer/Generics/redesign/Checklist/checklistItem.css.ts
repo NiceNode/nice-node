@@ -56,6 +56,10 @@ export const successIcon = style({
   height: 16,
 });
 
+export const infoIcon = style({
+  color: vars.color.font40,
+});
+
 export const warningIcon = style({
   color: common.color.yellow,
 });

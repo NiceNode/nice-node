@@ -5,6 +5,7 @@ import {
   checkTitleClass,
   container,
   errorIcon,
+  infoIcon,
   loadingIcon,
   successIcon,
   textContainer,
@@ -58,7 +59,7 @@ const ChecklistItem = ({
     );
   } else if (status === 'information') {
     statusIcon = (
-      <span>
+      <span className={infoIcon}>
         <Icon iconId="infocirclefilled" />
       </span>
     );
