@@ -37,27 +37,33 @@ export const Tabs = ({ children, id, modal }: TabsProps) => {
   }
 
   const modalStyle = modal ? 'modal' : '';
+  const moreThanSingleTab = children.length > 1;
 
   return (
     <div className={container}>
-      <div className={[tabsContainer, modalStyle].join(' ')}>
-        <ol className={[tabsList, modalStyle].join(' ')}>
-          {children.map((child) => {
-            const childId = child.props.id;
+      {moreThanSingleTab && (
+        <div className={[tabsContainer, modalStyle].join(' ')}>
+          <ol className={[tabsList, modalStyle].join(' ')}>
+            {children.map((child) => {
+              const childId = child.props.id;
 
-            return (
-              <TabItem
-                activeTabId={activeTab}
-                key={childId}
-                label={childId}
-                onClickTabItem={onClickTabItem}
-              />
-            );
-          })}
-        </ol>
-        <HorizontalLine />
-      </div>
-      <div className={[tabContent, modalStyle].join(' ')}>
+              return (
+                <TabItem
+                  activeTabId={activeTab}
+                  key={childId}
+                  label={childId}
+                  onClickTabItem={onClickTabItem}
+                />
+              );
+            })}
+          </ol>
+          <HorizontalLine />
+        </div>
+      )}
+      <div
+        className={[tabContent, modalStyle].join(' ')}
+        style={{ paddingTop: moreThanSingleTab ? undefined : 0 }}
+      >
         {children.map((child) => {
           if (child.props.id !== activeTab) return undefined;
           return child.props.children;
