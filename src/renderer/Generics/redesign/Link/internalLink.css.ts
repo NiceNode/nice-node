@@ -2,11 +2,11 @@ import { style } from '@vanilla-extract/css';
 import { common, vars } from '../theme.css';
 
 export const linkText = style({
-  color: vars.color.primary,
+  color: vars.color.primaryLink,
   letterSpacing: '-0.08px',
   textDecoration: 'none',
   ':hover': {
-    color: vars.color.primaryHover,
+    color: vars.color.primaryLinkHover,
     textDecoration: 'none',
   },
   ':link': {
