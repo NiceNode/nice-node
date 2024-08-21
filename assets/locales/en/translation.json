@@ -145,6 +145,8 @@
   "loadingDotDotDot": "loading...",
   "Preferences": "Preferences",
   "ShowAdvancedOptions": "Show advanced options",
+  "ShowOtherNodeTypes": "Show other node types",
+  "HideOtherNodeTypes": "Hide other node types",
   "SaveChanges": "Save changes",
   "Continue": "Continue",
   "Back": "Back",

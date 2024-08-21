@@ -168,14 +168,13 @@ const AddNode = ({
       {/* Todo: this should be named "Show more options" */}
       <DropdownLink
         text={`${
-          isOptionsOpen ? t('HideAdvancedOptions') : t('ShowAdvancedOptions')
+          isOptionsOpen ? t('HideOtherNodeTypes') : t('ShowOtherNodeTypes')
         }`}
         onClick={() => setIsOptionsOpen(!isOptionsOpen)}
         isDown={!isOptionsOpen}
       />
       {isOptionsOpen && (
         <>
-          <p className={sectionFont}>{t('Other')}</p>
           <div style={{ width: '100%' }}>
             {nodePackageLibrary &&
               Object.keys(nodePackageLibrary).map((nodePackageId) => {
