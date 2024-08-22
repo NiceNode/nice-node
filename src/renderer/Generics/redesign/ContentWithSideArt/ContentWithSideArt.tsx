@@ -1,5 +1,7 @@
 import type React from 'react';
-import defaultGraphic from '../../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
+import { useTheme } from '../../../ThemeManager.js';
+import onboarding1Dm from '../../../assets/images/artwork/onboarding-01-Dm.png';
+import onboarding1Lm from '../../../assets/images/artwork/onboarding-01-Lm.png';
 import {
   container,
   contentContainer,
@@ -14,6 +16,8 @@ type Props = {
 
 const ContentWithSideArt = ({ children, graphic, modal }: Props) => {
   const modalStyle = modal ? 'modal' : '';
+  const { isDarkTheme } = useTheme();
+  const defaultImage = isDarkTheme ? onboarding1Dm : onboarding1Lm;
   return (
     <div className={container}>
       <div className={[contentContainer, modalStyle].join(' ')}>{children}</div>
@@ -22,7 +26,7 @@ const ContentWithSideArt = ({ children, graphic, modal }: Props) => {
       {!modal && (
         <div
           className={graphicsContainer}
-          style={{ backgroundImage: `url(${graphic ?? defaultGraphic})` }}
+          style={{ backgroundImage: `url(${graphic ?? defaultImage})` }}
         />
       )}
     </div>

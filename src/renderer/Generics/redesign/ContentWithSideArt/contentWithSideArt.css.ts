@@ -8,7 +8,8 @@ export const container = style({
 });
 
 export const graphicsContainer = style({
-  minWidth: 250, // min-width works with flexGrow: 1 on the content
+  minWidth: 380, // min-width works with flexGrow: 1 on the content
+  backgroundSize: 'cover',
   '@media': {
     'screen and (max-width: 980px)': {
       display: 'none',

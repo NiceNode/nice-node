@@ -228,6 +228,7 @@ export const [lightTheme, vars] = createTheme({
     contentHeaderSubtitle: common.color.black50,
     filterBackground: common.color.white100,
     progressBarBackground: common.color.purple500,
+    alphaBannerBackground: common.color.pink100,
   },
 });
 
@@ -333,5 +334,6 @@ export const darkTheme = createTheme(vars, {
     contentHeaderSubtitle: common.color.white50,
     filterBackground: common.color.osMac,
     progressBarBackground: common.color.purple600,
+    alphaBannerBackground: 'rgba(255, 255, 255, 0.1)',
   },
 });
