@@ -1,5 +1,6 @@
 {
   "AboutSecondsRemaining": "About {{seconds}} seconds remaining",
+  "AboutMinutesAndSecondsRemaining": "{{minutes}} minutes and {{remainingSeconds}} seconds remaining",
   "CheckForUpdates": "Check for updates...",
   "Confirm": "Confirm",
   "FinishingUp": "Finishing up...",
