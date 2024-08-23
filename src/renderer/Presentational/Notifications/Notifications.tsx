@@ -123,7 +123,13 @@ const Notifications = (props: NotificationsType) => {
                     dispatch(
                       setModalState({
                         isModalOpen: true,
-                        screen: { route: 'preferences', type: 'modal' },
+                        screen: {
+                          route: 'preferences',
+                          type: 'modal',
+                          data: {
+                            deeplink: 'notifications',
+                          },
+                        },
                       }),
                     );
                   }}

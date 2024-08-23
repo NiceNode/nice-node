@@ -22,7 +22,7 @@ const ModalManager = () => {
     dispatch(
       setModalState({
         isModalOpen: false,
-        screen: { route: undefined, type: undefined },
+        screen: { route: undefined, type: undefined, data: undefined },
       }),
     );
   }, [dispatch]);
@@ -41,7 +41,9 @@ const ModalManager = () => {
     case modalRoutes.nodeSettings:
       return <NodeSettingsModal modalOnClose={modalOnClose} />;
     case modalRoutes.preferences:
-      return <PreferencesModal modalOnClose={modalOnClose} />;
+      return (
+        <PreferencesModal modalOnClose={modalOnClose} data={screen.data} />
+      );
     case modalRoutes.failSystemRequirements:
       return <FailSystemRequirementsModal modalOnClose={modalOnClose} />;
     case modalRoutes.podman:

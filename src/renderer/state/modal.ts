@@ -20,6 +20,7 @@ export const initialState: ModalState = {
   screen: {
     route: undefined,
     type: undefined,
+    data: undefined,
   },
 };
 

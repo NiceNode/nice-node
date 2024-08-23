@@ -192,7 +192,9 @@ const Preferences = ({
         />
       </div>
       <div className={preferenceSection}>
-        <div className={sectionTitle}>{t('Notifications')}</div>
+        <div id="notifications" className={sectionTitle}>
+          {t('Notifications')}
+        </div>
         <HorizontalLine />
         <LineLabelSettings
           items={[
