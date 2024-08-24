@@ -123,14 +123,23 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
             <Button
               label={g('Update')}
               type="primary"
-              iconId="down"
-              variant="icon-right"
               size="small"
               onClick={() => {
-                setIsCalloutDisplayed(true);
+                dispatch(
+                  setModalState({
+                    isModalOpen: true,
+                    screen: {
+                      route: modalRoutes.update,
+                      type: 'modal',
+                      data: {
+                        deeplink: 'update',
+                      },
+                    },
+                  }),
+                );
               }}
             />
-            {isCalloutDisplayed && (
+            {/* {isCalloutDisplayed && (
               // tabindex hack to keep focus, and allow blur behavior
               // biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
               <div className={popupContainer} tabIndex={0}>
@@ -157,7 +166,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                   }}
                 />
               </div>
-            )}
+            )} */}
           </div>
         )}
         {/* In case of the status being an error, we should show both start & stop buttons so the user can try
@@ -247,6 +256,18 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                         const isUpdateAvailable: NodeSpecification | undefined =
                           await electron.getCheckForControllerUpdate(nodeId);
                         console.log('isUpdateAvailable:', isUpdateAvailable);
+                        dispatch(
+                          setModalState({
+                            isModalOpen: true,
+                            screen: {
+                              route: modalRoutes.update,
+                              type: 'modal',
+                              data: {
+                                deeplink: 'check',
+                              },
+                            },
+                          }),
+                        );
                       }}
                     />
                   </>

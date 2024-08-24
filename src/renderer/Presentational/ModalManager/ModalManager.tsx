@@ -11,6 +11,7 @@ import { NodeSettingsModal } from './NodeSettingsModal';
 import { PodmanModal } from './PodmanModal';
 import { PreferencesModal } from './PreferencesModal';
 import { RemoveNodeModal } from './RemoveNodeModal';
+import { UpdateModal } from './UpdateModal';
 import { ResetConfigModal } from './ResetConfigModal';
 import { modalRoutes } from './modalUtils';
 
@@ -38,6 +39,8 @@ const ModalManager = () => {
       return <AddNodeModal modalOnClose={modalOnClose} />;
     case modalRoutes.controllerUpdate:
       return <ControllerUpdateModal modalOnClose={modalOnClose} />;
+    case modalRoutes.update:
+      return <UpdateModal modalOnClose={modalOnClose} data={screen.data} />;
     case modalRoutes.nodeSettings:
       return <NodeSettingsModal modalOnClose={modalOnClose} />;
     case modalRoutes.preferences:
