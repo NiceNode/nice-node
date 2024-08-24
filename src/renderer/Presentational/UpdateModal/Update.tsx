@@ -50,17 +50,28 @@ const Update = ({
   const status = (() => {
     switch (updateStatus) {
       case 'checking':
-        return t('Checking for updates...');
+        return t('CheckingForUpdates');
       case 'latestVersion':
-        return t('You are running the latest version');
+        return t('RunningLatestVersion');
       case 'successfullyUpdated':
-        return t('Successfully updated');
+        return t('SuccessfullyUpdated');
       default:
         return '';
     }
   })();
 
-  const buttonLabel = t('Close');
+  const buttonLabel = (() => {
+    switch (updateStatus) {
+      case 'checking':
+        return t('Cancel');
+      case 'latestVersion':
+        return t('Close');
+      case 'successfullyUpdated':
+        return t('Done');
+      default:
+        return '';
+    }
+  })();
 
   return (
     <div className={container}>
