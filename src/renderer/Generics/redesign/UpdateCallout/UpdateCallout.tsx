@@ -16,6 +16,7 @@ export interface UpdateCalloutProps {
   serviceName: string;
   releaseNotesUrl?: string;
   onClickShowChanges?: () => void;
+  onClose?: () => void;
 }
 
 export const UpdateCallout = ({
@@ -23,6 +24,7 @@ export const UpdateCallout = ({
   serviceName,
   releaseNotesUrl,
   onClickShowChanges,
+  onClose,
 }: UpdateCalloutProps) => {
   const { t: g } = useTranslation('genericComponents');
 
@@ -60,6 +62,13 @@ export const UpdateCallout = ({
         </div>
       )}
       <div className={buttonContainer}>
+        <Button
+          type="secondary"
+          wide
+          label={g('Skip')}
+          size="small"
+          onClick={onClose}
+        />
         <Button
           type="primary"
           wide

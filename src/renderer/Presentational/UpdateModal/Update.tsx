@@ -90,6 +90,7 @@ const Update = ({
               }),
             );
           }}
+          onClose={modalOnClose}
           onClickInstallUpdate={onUpdate}
         />
       ) : (
