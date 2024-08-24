@@ -3,37 +3,55 @@ import { useAppSelector } from '../../state/hooks';
 import { selectSelectedNodePackage } from '../../state/node';
 import type { ModalConfig } from '../ModalManager/modalUtils';
 import Update from './Update';
+import type { NodeOverviewProps } from '../../Generics/redesign/consts.js';
+import electron from '../../../renderer/electronGlobal.js';
 
 export interface UpdateWrapperProps {
-  modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
   modalOnClose: () => void;
   deeplink: string;
+  nodeOverview: NodeOverviewProps;
 }
 
 const UpdateWrapper = ({
-  modalOnChangeConfig,
   modalOnClose,
   deeplink,
+  nodeOverview,
 }: UpdateWrapperProps) => {
-  const selectedNodePackage = useAppSelector(selectSelectedNodePackage);
-  // const [sNodeStorageUsedGBs, setNodeStorageUsedGBs] = useState<number>();
+  const [updateStatus, setUpdateStatus] = useState<string>('checking');
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   console.log(selectSelectedNodePackage);
-  //   if (selectedNodePackage?.runtime?.usage?.diskGBs) {
-  //     const nodeStorageGBs = selectedNodePackage?.runtime?.usage?.diskGBs[0]?.y;
-  //     setNodeStorageUsedGBs(nodeStorageGBs);
-  //   } else {
-  //     setNodeStorageUsedGBs(undefined);
-  //   }
-  //   modalOnChangeConfig({ selectedNodePackage });
-  // }, [selectedNodePackage]);
+  const isUpdateAvailable = async () => {
+    const isAvailable = await electron.getCheckForControllerUpdate(
+      nodeOverview.nodeId,
+    );
+    setTimeout(() => {
+      setUpdateStatus(isAvailable ? 'updateAvailable' : 'latestVersion');
+    }, 1000);
+  };
+
+  useEffect(() => {
+    console.log('deeplink', deeplink);
+    if (deeplink === 'update') {
+      setUpdateStatus('updateAvailable');
+    } else if (deeplink === 'check') {
+      isUpdateAvailable();
+    }
+  }, [deeplink]);
+
+  const handleUpdate = async () => {
+    setIsUpdating(true);
+    await electron.applyNodeUpdate(nodeOverview.nodeId);
+    setIsUpdating(false);
+    setUpdateStatus('successfullyUpdated');
+  };
 
   return (
     <Update
-      deeplink={deeplink}
+      updateStatus={updateStatus}
+      isUpdating={isUpdating}
+      onUpdate={handleUpdate}
       modalOnClose={modalOnClose}
-      modalOnChangeConfig={modalOnChangeConfig}
+      nodeOverview={nodeOverview}
     />
   );
 };

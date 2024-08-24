@@ -10,7 +10,6 @@ import Button, { type ButtonProps } from '../Button/Button';
 import { Menu } from '../Menu/Menu';
 import { MenuItem } from '../MenuItem/MenuItem';
 import NodeIcon from '../NodeIcon/NodeIcon';
-import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
 import type { NodeOverviewProps } from '../consts';
 import {
   buttonContainer,
@@ -44,10 +43,8 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
     status,
     version,
     onAction,
-    documentation,
   } = nodeOverview;
 
-  const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
   const [isSettingsDisplayed, setIsSettingsDisplayed] =
     useState<boolean>(false);
 
@@ -112,16 +109,9 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
       </div>
       <div className={buttonContainer}>
         {status.updateAvailable && (
-          <div
-            className={menuButtonContainer}
-            onBlur={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget)) {
-                setIsCalloutDisplayed(false);
-              }
-            }}
-          >
+          <div className={menuButtonContainer}>
             <Button
-              label={g('Update')}
+              label={g('UpdateAvailable')}
               type="primary"
               size="small"
               onClick={() => {
@@ -133,40 +123,13 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                       type: 'modal',
                       data: {
                         deeplink: 'update',
+                        nodeOverview,
                       },
                     },
                   }),
                 );
               }}
             />
-            {/* {isCalloutDisplayed && (
-              // tabindex hack to keep focus, and allow blur behavior
-              // biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
-              <div className={popupContainer} tabIndex={0}>
-                <UpdateCallout
-                  // todo: pass http link to container release notes
-                  // todo: pass modal link for controller changes
-                  serviceName={displayName || name}
-                  releaseNotesUrl={documentation?.releaseNotesUrl}
-                  onClickShowChanges={() => {
-                    console.log('show change modal');
-                    dispatch(
-                      setModalState({
-                        isModalOpen: true,
-                        screen: {
-                          route: modalRoutes.controllerUpdate,
-                          type: 'modal',
-                        },
-                      }),
-                    );
-                  }}
-                  onClickInstallUpdate={() => {
-                    setIsCalloutDisplayed(false);
-                    electron.applyNodeUpdate(nodeId);
-                  }}
-                />
-              </div>
-            )} */}
           </div>
         )}
         {/* In case of the status being an error, we should show both start & stop buttons so the user can try
@@ -264,6 +227,7 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                               type: 'modal',
                               data: {
                                 deeplink: 'check',
+                                nodeOverview,
                               },
                             },
                           }),

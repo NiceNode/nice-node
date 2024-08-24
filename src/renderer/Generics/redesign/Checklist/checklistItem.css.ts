@@ -74,6 +74,8 @@ export const loadingIcon = style({
   animationName: rotate,
   animationDuration: '3s',
   animationIterationCount: 'infinite',
+  width: 16,
+  height: 16,
 });
 
 export const errorIcon = style({

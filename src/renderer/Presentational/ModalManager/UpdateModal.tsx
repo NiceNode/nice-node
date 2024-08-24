@@ -15,7 +15,7 @@ type Props = {
 export const UpdateModal = ({ modalOnClose, data }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const { t } = useTranslation();
-
+  const { deeplink, nodeOverview } = data;
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
     modalOnClose();
   };
@@ -30,7 +30,8 @@ export const UpdateModal = ({ modalOnClose, data }: Props) => {
       modalOnCancel={modalOnClose}
     >
       <UpdateWrapper
-        deeplink={data?.deeplink}
+        deeplink={deeplink}
+        nodeOverview={nodeOverview}
         modalOnClose={modalOnClose}
         modalOnChangeConfig={(config, save) => {
           modalOnChangeConfig(

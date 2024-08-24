@@ -3,16 +3,8 @@ import { vars } from '../theme.css';
 
 // required to export even if not using in a component
 export const container = style({
-  boxSizing: 'border-box',
-  borderRadius: 5,
-  width: 292,
-  height: 160,
-  padding: 16,
   position: 'relative',
   overflow: 'hidden',
-  border: vars.components.menuBorder,
-  boxShadow: vars.color.elevation4boxShadow,
-  backgroundColor: vars.components.menuBackground,
 });
 
 export const title = style({

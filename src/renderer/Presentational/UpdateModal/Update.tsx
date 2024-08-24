@@ -14,56 +14,102 @@ import {
 import { UpdateCallout } from '../../Generics/redesign/UpdateCallout/UpdateCallout.js';
 import Button from '../../Generics/redesign/Button/Button.js';
 import { Icon } from '../../Generics/redesign/Icon/Icon.js';
+import type { NodeOverviewProps } from '../../Generics/redesign/consts.js';
+import { useAppDispatch } from '../../state/hooks.js';
+import { setModalState } from '../..//state/modal.js';
+import { modalRoutes } from '../ModalManager/modalUtils.js';
 
 export interface UpdateProps {
-  deeplink?: string;
-  modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
-  modalOnClose: () => void;
+  updateStatus: string; // The current status of the update process
+  isUpdating: boolean; // A flag indicating whether an update is in progress
+  onUpdate: () => void; // A callback function to initiate the update process
+  modalOnClose: () => void; // A callback function to close the modal
+  nodeOverview: NodeOverviewProps; // The overview details of the node being updated
 }
 
 const Update = ({
   updateStatus,
-  modalOnChangeConfig,
+  isUpdating,
+  onUpdate,
+  nodeOverview,
   modalOnClose,
-  deeplink,
 }: UpdateProps) => {
-  const [view, setView] = useState<string>(deeplink);
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const { name, displayName, documentation } = nodeOverview;
 
-  const UpdateStatus = () => {
-    const iconClass = successIcon;
-    const iconId = 'checkcirclefilled';
-    const status = 'Checking for updates...';
-    const buttonLabel = 'Close';
-    return (
-      <div className={statusContainer}>
-        <div className={statusIcon}>
-          <div className={iconClass}>
-            <Icon iconId={iconId} />
+  // Define the icon, status message, and button label based on the current update status
+  const iconClass =
+    updateStatus === 'checking'
+      ? loadingIcon
+      : updateStatus === 'latestVersion' ||
+          updateStatus === 'successfullyUpdated'
+        ? successIcon
+        : null;
+
+  const status = (() => {
+    switch (updateStatus) {
+      case 'checking':
+        return t('Checking for updates...');
+      case 'latestVersion':
+        return t('You are running the latest version');
+      case 'successfullyUpdated':
+        return t('Successfully updated');
+      default:
+        return '';
+    }
+  })();
+
+  const buttonLabel = t('Close');
+
+  return (
+    <div className={container}>
+      {updateStatus === 'updateAvailable' ? (
+        <UpdateCallout
+          serviceName={displayName || name}
+          releaseNotesUrl={documentation?.releaseNotesUrl}
+          onClickShowChanges={() => {
+            dispatch(
+              setModalState({
+                isModalOpen: true,
+                screen: {
+                  route: modalRoutes.controllerUpdate,
+                  type: 'modal',
+                },
+              }),
+            );
+          }}
+          onClickInstallUpdate={onUpdate}
+        />
+      ) : (
+        <div className={statusContainer}>
+          {iconClass && (
+            <div className={statusIcon}>
+              <div className={iconClass}>
+                <Icon
+                  iconId={
+                    updateStatus === 'checking'
+                      ? 'spinnerendless'
+                      : 'checkcirclefilled'
+                  }
+                />
+              </div>
+            </div>
+          )}
+          <div className={statusText}>{status}</div>
+          <div className={statusButton}>
+            <Button
+              type={'secondary'}
+              size={'small'}
+              label={buttonLabel}
+              wide={true}
+              onClick={modalOnClose}
+            />
           </div>
         </div>
-        <div className={statusText}>{status}</div>
-        <div className={statusButton}>
-          <Button
-            type={'secondary'}
-            size={'small'}
-            label={buttonLabel}
-            wide={true}
-            onClick={modalOnClose}
-          />
-        </div>
-      </div>
-    );
-  };
-
-  let test = null;
-  if (view === 'check') {
-    test = UpdateStatus();
-  } else if (view === 'update') {
-    test = <div>test</div>;
-  }
-
-  return <div className={container}>{test}</div>;
+      )}
+    </div>
+  );
 };
 
 export default Update;

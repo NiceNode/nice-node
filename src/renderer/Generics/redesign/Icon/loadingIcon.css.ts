@@ -14,5 +14,6 @@ export const loadingIcon = style({
   // todo: more generic fix height to icon size
   // since a container span is rotating, not the icon directly,
   // this has to be the same height of the icon
-  height: '16px',
+  height: 16,
+  width: 16,
 });
