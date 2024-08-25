@@ -102,8 +102,18 @@ export const Modal = ({
     return () => {};
   }, []);
 
+  const handleBackdropClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      // Check if the click target is the backdrop itself
+      if (event.target === event.currentTarget) {
+        modalOnClose();
+      }
+    },
+    [modalOnClose],
+  );
+
   return (
-    <div className={modalBackdropStyle}>
+    <div className={modalBackdropStyle} onClick={handleBackdropClick}>
       <div className={[modalContentStyle, modalStyle].join(' ')}>
         {modalType === 'modal' && (
           <ContentHeader
