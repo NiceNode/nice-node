@@ -386,6 +386,7 @@ const NodePackageScreen = () => {
   const nodePackageSyncData = {
     ...executionSyncData,
     isSyncing: isNodePackageSyncing,
+    updateAvailable: false,
   };
 
   console.log('nodePackage1', executionSyncData);
