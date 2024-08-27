@@ -52,10 +52,11 @@ const NodePackageScreen = () => {
   const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
-  const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
+  // const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
+  const pollingInterval = 15000;
 
   const executionNode = selectedNodePackage?.services.find(
-    (service) => service.serviceId === 'executionClient',
+    (service) => service.serviceId !== 'consensusClient',
   );
   const consensusNode = selectedNodePackage?.services.find(
     (service) => service.serviceId === 'consensusClient',
@@ -97,6 +98,10 @@ const NodePackageScreen = () => {
       rpcTranslation: consensusRpcTranslation,
       httpPort: consensusHttpPort,
     },
+    { pollingInterval },
+  );
+  const qConsensusPeers = useGetExecutionPeersQuery(
+    { rpcTranslation: consensusRpcTranslation, httpPort: consensusHttpPort },
     { pollingInterval },
   );
   const qConsensusLatestBlock = useGetExecutionLatestBlockQuery(
@@ -219,30 +224,42 @@ const NodePackageScreen = () => {
     setAlphaModal();
   }, []);
 
+  const getSyncDataForService = useCallback(
+    (service: any) => {
+      const isNotConsensusClient = service.serviceId !== 'consensusClient';
+      const syncingQuery = isNotConsensusClient
+        ? qExecutionIsSyncing
+        : qConsensusIsSyncing;
+      const peersQuery = isNotConsensusClient
+        ? qExecutionPeers
+        : qConsensusPeers;
+
+      return getSyncData(
+        syncingQuery,
+        peersQuery,
+        qNetwork.status === 'rejected',
+        service.node.lastRunningTimestampMs,
+        service.node.updateAvailable,
+        service.node.initialSyncFinished,
+      );
+    },
+    [
+      qExecutionIsSyncing,
+      qConsensusIsSyncing,
+      qExecutionPeers,
+      qConsensusPeers,
+      qNetwork.status,
+    ],
+  );
+
   useEffect(() => {
     const formattedServices: ClientProps[] =
       selectedNodePackage?.services.map((service) => {
-        const {
-          id: nodeId,
-          spec,
-          lastRunningTimestampMs,
-          initialSyncFinished,
-        } = service.node;
+        const { id: nodeId, spec } = service.node;
         const node = sUserNodes?.nodes[nodeId];
         // support other non-ethereum services
         const isNotConsensusClient = service.serviceId !== 'consensusClient';
-        const syncDataSource = isNotConsensusClient
-          ? qExecutionIsSyncing
-          : qConsensusIsSyncing;
-
-        const syncData = getSyncData(
-          syncDataSource,
-          qExecutionPeers,
-          qNetwork.status === 'rejected',
-          lastRunningTimestampMs,
-          false,
-          initialSyncFinished,
-        );
+        const syncData = getSyncDataForService(service);
 
         const stats = isNotConsensusClient
           ? {
@@ -338,18 +355,12 @@ const NodePackageScreen = () => {
 
   const clientName = spec.specId.replace('-beacon', '');
 
-  const executionSyncData = getSyncData(
-    qExecutionIsSyncing,
-    qExecutionPeers,
-    qNetwork.status === 'rejected',
-    lastRunningTimestampMs,
-    false,
-    initialSyncFinished,
-  );
-
-  const consensusIsSyncing = qConsensusIsSyncing?.isError
-    ? undefined
-    : qConsensusIsSyncing?.data?.isSyncing || false;
+  const executionSyncData = executionNode
+    ? getSyncDataForService(executionNode)
+    : undefined;
+  const consensusSyncData = consensusNode
+    ? getSyncDataForService(consensusNode)
+    : undefined;
 
   const isEthereumNodePackageSynced = () => {
     const isSynced = (
@@ -373,7 +384,7 @@ const NodePackageScreen = () => {
 
   const isNodePackageSyncing =
     executionSyncData?.isSyncing ||
-    consensusIsSyncing ||
+    consensusSyncData?.isSyncing ||
     (isEthereumNodePackage && !isEthereumNodePackageSynced());
 
   const nodePackageSyncData = {
