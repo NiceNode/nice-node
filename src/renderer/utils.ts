@@ -107,23 +107,23 @@ export const getSyncDataForServiceAndNode = (
 };
 
 export const getSyncData = (
-  qExecutionIsSyncing: { isError: any; data: { isSyncing: any } },
-  qExecutionPeers: { isError: any; data: string },
+  qIsSyncing: { isError: any; data: { isSyncing: any } },
+  qPeers: { isError: any; data: string },
   offline: boolean,
   lastRunningTimestampMs: moment.MomentInput,
   updateAvailable: any,
   initialSyncFinished: any,
 ) => {
-  const isSyncing = qExecutionIsSyncing.isError
+  const isSyncing = qIsSyncing.isError
     ? undefined
-    : qExecutionIsSyncing?.data?.isSyncing;
+    : qIsSyncing?.data?.isSyncing;
 
-  const peers = qExecutionPeers.isError
+  const peers = qPeers.isError
     ? undefined
-    : typeof qExecutionPeers.data === 'number'
-      ? qExecutionPeers.data
-      : typeof qExecutionPeers.data === 'string'
-        ? Number.parseInt(qExecutionPeers.data, 10) || 0
+    : typeof qPeers.data === 'number'
+      ? qPeers.data
+      : typeof qPeers.data === 'string'
+        ? Number.parseInt(qPeers.data, 10) || 0
         : 0;
 
   const now = moment();
