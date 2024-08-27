@@ -81,6 +81,31 @@ export const categorizeNodeLibrary = (
   return catgorized;
 };
 
+export const getSyncDataForServiceAndNode = (
+  service: any,
+  node: any,
+  qExecutionIsSyncing: any,
+  qConsensusIsSyncing: any,
+  qExecutionPeers: any,
+  qConsensusPeers: any,
+  networkStatus: string | boolean,
+) => {
+  const isNotConsensusClient = service.serviceId !== 'consensusClient';
+  const syncingQuery = isNotConsensusClient
+    ? qExecutionIsSyncing
+    : qConsensusIsSyncing;
+  const peersQuery = isNotConsensusClient ? qExecutionPeers : qConsensusPeers;
+
+  return getSyncData(
+    syncingQuery,
+    peersQuery,
+    networkStatus === 'rejected' || networkStatus === true,
+    node.lastRunningTimestampMs,
+    node.updateAvailable,
+    node.initialSyncFinished,
+  );
+};
+
 export const getSyncData = (
   qExecutionIsSyncing: { isError: any; data: { isSyncing: any } },
   qExecutionPeers: { isError: any; data: string },

@@ -25,7 +25,7 @@ import {
 } from '../../state/services';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
 import { hexToDecimal } from '../../utils';
-import { getSyncData } from '../../utils.js';
+import { getSyncDataForServiceAndNode } from '../../utils.js';
 import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
 import type { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
 import {
@@ -55,24 +55,24 @@ const NodePackageScreen = () => {
   // const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
   const pollingInterval = 15000;
 
-  const executionNode = selectedNodePackage?.services.find(
+  const executionService = selectedNodePackage?.services.find(
     (service) => service.serviceId !== 'consensusClient',
   );
-  const consensusNode = selectedNodePackage?.services.find(
+  const consensusService = selectedNodePackage?.services.find(
     (service) => service.serviceId === 'consensusClient',
   );
-  const executionNodeId = executionNode?.node.id;
-  const consensusNodeId = consensusNode?.node.id;
+  const executionServiceId = executionService?.node.id;
+  const consensusServiceId = consensusService?.node.id;
+  const executionNode = sUserNodes?.nodes[executionServiceId];
+  const consensusNode = sUserNodes?.nodes[consensusServiceId];
   const executionHttpPort =
-    executionNodeId &&
-    sUserNodes?.nodes[executionNodeId]?.config.configValuesMap.httpPort;
+    executionServiceId && executionNode?.config.configValuesMap.httpPort;
   const consensusHttpPort =
-    consensusNodeId &&
-    sUserNodes?.nodes[consensusNodeId]?.config.configValuesMap.httpPort;
+    consensusServiceId && consensusNode?.config.configValuesMap.httpPort;
   const isEthereumNodePackage =
     selectedNodePackage?.spec?.specId === 'ethereum';
-  const executionRpcTranslation = executionNode?.node?.spec?.rpcTranslation;
-  const consensusRpcTranslation = consensusNode?.node?.spec?.rpcTranslation;
+  const executionRpcTranslation = executionService?.node?.spec?.rpcTranslation;
+  const consensusRpcTranslation = consensusService?.node?.spec?.rpcTranslation;
   const qPublicExecutionLatestBlock = useGetExecutionLatestBlockQuery(
     {
       rpcTranslation: executionRpcTranslation,
@@ -225,22 +225,15 @@ const NodePackageScreen = () => {
   }, []);
 
   const getSyncDataForService = useCallback(
-    (service: any) => {
-      const isNotConsensusClient = service.serviceId !== 'consensusClient';
-      const syncingQuery = isNotConsensusClient
-        ? qExecutionIsSyncing
-        : qConsensusIsSyncing;
-      const peersQuery = isNotConsensusClient
-        ? qExecutionPeers
-        : qConsensusPeers;
-
-      return getSyncData(
-        syncingQuery,
-        peersQuery,
-        qNetwork.status === 'rejected',
-        service.node.lastRunningTimestampMs,
-        service.node.updateAvailable,
-        service.node.initialSyncFinished,
+    (service: any, node: any) => {
+      return getSyncDataForServiceAndNode(
+        service,
+        node,
+        qExecutionIsSyncing,
+        qConsensusIsSyncing,
+        qExecutionPeers,
+        qConsensusPeers,
+        qNetwork.status,
       );
     },
     [
@@ -257,9 +250,11 @@ const NodePackageScreen = () => {
       selectedNodePackage?.services.map((service) => {
         const { id: nodeId, spec } = service.node;
         const node = sUserNodes?.nodes[nodeId];
+        if (!node) return null;
+        console.log('nodeWee', node);
         // support other non-ethereum services
         const isNotConsensusClient = service.serviceId !== 'consensusClient';
-        const syncData = getSyncDataForService(service);
+        const syncData = getSyncDataForService(service, node);
 
         const stats = isNotConsensusClient
           ? {
@@ -342,8 +337,7 @@ const NodePackageScreen = () => {
     );
   }
 
-  const { id, status, spec, lastRunningTimestampMs, initialSyncFinished } =
-    selectedNodePackage;
+  const { id, status, spec, initialSyncFinished } = selectedNodePackage;
   // console.log('nodePackageStatus', status);
   // todo: get node type, single or multi-service
   // parse node details from selectedNodePackage => SingleNodeContent
@@ -355,12 +349,14 @@ const NodePackageScreen = () => {
 
   const clientName = spec.specId.replace('-beacon', '');
 
-  const executionSyncData = executionNode
-    ? getSyncDataForService(executionNode)
-    : undefined;
-  const consensusSyncData = consensusNode
-    ? getSyncDataForService(consensusNode)
-    : undefined;
+  const executionSyncData =
+    executionService && executionNode
+      ? getSyncDataForService(executionService, executionNode)
+      : undefined;
+  const consensusSyncData =
+    consensusService && consensusNode
+      ? getSyncDataForService(consensusService, consensusNode)
+      : undefined;
 
   const isEthereumNodePackageSynced = () => {
     const isSynced = (
@@ -392,8 +388,8 @@ const NodePackageScreen = () => {
     isSyncing: isNodePackageSyncing,
   };
 
-  console.log('nodePackage1', qExecutionIsSyncing);
-  console.log('nodePackage2', qConsensusIsSyncing);
+  console.log('nodePackage1', executionSyncData);
+  console.log('nodePackage2', consensusSyncData);
   console.log('nodePackage3', nodePackageSyncData);
 
   if (

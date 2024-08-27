@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { type NodePackage, NodeStatus } from '../../../common/node';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { getStatusObject, getSyncStatus } from '../../Generics/redesign/utils';
@@ -14,7 +14,7 @@ import {
   useGetExecutionLatestBlockQuery,
   useGetExecutionPeersQuery,
 } from '../../state/services';
-import { getSyncData } from '../../utils.js';
+import { getSyncDataForServiceAndNode } from '../../utils.js';
 
 export type SidebarNodeStatus =
   | 'online'
@@ -85,25 +85,25 @@ export const SidebarNodeItemWrapper = ({
   node,
   offline,
 }: SidebarNodeItemWrapperProps) => {
-  const pollingInterval = 0;
+  const pollingInterval = 15000;
   const sUserNodes = useAppSelector(selectUserNodes);
-  const executionNode = node?.services.find(
-    (service) => service.serviceId === 'executionClient',
+  const executionService = node?.services.find(
+    (service: { serviceId: string }) => service.serviceId === 'executionClient',
   );
-  const consensusNode = node?.services.find(
-    (service) => service.serviceId === 'consensusClient',
+  const consensusService = node?.services.find(
+    (service: { serviceId: string }) => service.serviceId === 'consensusClient',
   );
-  const executionNodeId = executionNode?.node.id;
-  const consensusNodeId = consensusNode?.node.id;
+  const executionServiceId = executionService?.node.id;
+  const consensusServiceId = consensusService?.node.id;
+  const executionNode = sUserNodes?.nodes[executionServiceId];
+  const consensusNode = sUserNodes?.nodes[consensusServiceId];
   const executionHttpPort =
-    executionNodeId &&
-    sUserNodes?.nodes[executionNodeId]?.config.configValuesMap.httpPort;
+    executionServiceId && executionNode?.config.configValuesMap.httpPort;
   const consensusHttpPort =
-    consensusNodeId &&
-    sUserNodes?.nodes[consensusNodeId]?.config.configValuesMap.httpPort;
+    consensusServiceId && consensusNode?.config.configValuesMap.httpPort;
   const isEthereumNodePackage = node?.spec?.specId === 'ethereum';
-  const executionRpcTranslation = executionNode?.node?.spec?.rpcTranslation;
-  const consensusRpcTranslation = consensusNode?.node?.spec?.rpcTranslation;
+  const executionRpcTranslation = executionService?.node?.spec?.rpcTranslation;
+  const consensusRpcTranslation = consensusService?.node?.spec?.rpcTranslation;
   const qPublicExecutionLatestBlock = useGetExecutionLatestBlockQuery(
     {
       rpcTranslation: executionRpcTranslation,
@@ -131,6 +131,10 @@ export const SidebarNodeItemWrapper = ({
     },
     { pollingInterval },
   );
+  const qConsensusPeers = useGetExecutionPeersQuery(
+    { rpcTranslation: consensusRpcTranslation, httpPort: consensusHttpPort },
+    { pollingInterval },
+  );
   const qConsensusLatestBlock = useGetExecutionLatestBlockQuery(
     {
       rpcTranslation: consensusRpcTranslation,
@@ -139,20 +143,37 @@ export const SidebarNodeItemWrapper = ({
     { pollingInterval },
   );
 
-  const { spec, status, lastRunningTimestampMs, initialSyncFinished } = node;
+  const { spec, status } = node;
 
-  const executionSyncData = getSyncData(
-    qExecutionIsSyncing,
-    qExecutionPeers,
-    offline,
-    lastRunningTimestampMs,
-    false,
-    initialSyncFinished,
+  const getSyncDataForService = useCallback(
+    (service: any, node: any) => {
+      return getSyncDataForServiceAndNode(
+        service,
+        node,
+        qExecutionIsSyncing,
+        qConsensusIsSyncing,
+        qExecutionPeers,
+        qConsensusPeers,
+        offline,
+      );
+    },
+    [
+      qExecutionIsSyncing,
+      qConsensusIsSyncing,
+      qExecutionPeers,
+      qConsensusPeers,
+      offline,
+    ],
   );
 
-  const consensusIsSyncing = qConsensusIsSyncing?.isError
-    ? undefined
-    : qConsensusIsSyncing?.data?.isSyncing || false;
+  const executionSyncData =
+    executionService && executionNode
+      ? getSyncDataForService(executionService, executionNode)
+      : undefined;
+  const consensusSyncData =
+    consensusService && consensusNode
+      ? getSyncDataForService(consensusService, consensusNode)
+      : undefined;
 
   const isEthereumNodePackageSynced = () => {
     const isSynced = (
@@ -176,7 +197,7 @@ export const SidebarNodeItemWrapper = ({
 
   const isNodePackageSyncing =
     executionSyncData?.isSyncing ||
-    consensusIsSyncing ||
+    consensusSyncData?.isSyncing ||
     (isEthereumNodePackage && !isEthereumNodePackageSynced());
 
   const nodePackageSyncData = {

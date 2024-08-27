@@ -32,6 +32,9 @@ const ContentMultipleClients = (props: {
   isPodmanRunning: boolean;
 }) => {
   const { clients, nodeContent, isPodmanRunning } = props;
+  if (clients.length === 0 || !nodeContent) {
+    return null; // or return a placeholder component
+  }
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -72,10 +75,10 @@ const ContentMultipleClients = (props: {
   }, []);
 
   const elClient = clients.find(
-    (client) => client.serviceId === 'executionClient',
+    (client) => client?.serviceId === 'executionClient',
   );
   const clClient = clients.find(
-    (client) => client.serviceId === 'consensusClient',
+    (client) => client?.serviceId === 'consensusClient',
   );
 
   const resourceData = useMemo(() => {
@@ -238,6 +241,7 @@ const ContentMultipleClients = (props: {
       </div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
+          if (!client || !client.id) return null;
           return (
             <ClientCard
               packageName={nodeContent.name}
