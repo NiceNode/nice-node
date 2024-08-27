@@ -88,4 +88,5 @@ export const clientLabels = style({
   flexDirection: 'row',
   alignItems: 'flex-start',
   gap: 4,
+  marginBottom: 12,
 });

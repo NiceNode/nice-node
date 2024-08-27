@@ -53,7 +53,7 @@ const ProgressBar = ({
 
   return (
     <div className={downloadContainer}>
-      <div className={sectionFont}>{title}</div>
+      {title && <div className={sectionFont}>{title}</div>}
       <div className={outerDiv} style={outerStyle}>
         <div
           style={{

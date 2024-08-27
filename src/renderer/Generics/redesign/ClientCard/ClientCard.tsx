@@ -111,61 +111,101 @@ export const ClientCard = (props: ClientProps) => {
       }
       return <Label type="gray" label={label} />;
     }
-    if (
-      !status.noConnection &&
-      !status.synchronized &&
-      packageName === 'ethereum' &&
-      (stats.currentBlock !== 0 || stats.currentSlot !== 0)
-    ) {
+    const { updating, running, error, ...statusLabels } = status;
+    const statusKeys = Object.keys(statusLabels).filter((k: string) => {
+      const statusKey = k as keyof ClientStatusProps;
+      return status[statusKey] === true;
+    });
+
+    // Helper function to calculate progress
+    const calculateProgress = () => {
       let progress = 0;
       if (stats.highestSlot && stats.currentSlot) {
         progress = stats.currentSlot / stats.highestSlot;
       } else if (stats.highestBlock && stats.currentBlock) {
         progress = stats.currentBlock / stats.highestBlock;
       }
-      const caption = !status.catchingUp
-        ? g('InitialSyncInProgress')
-        : g('CatchingUp');
-      return (
-        <>
-          {/* TODO: modify height of the bar for card */}
-          <ProgressBar
-            card
-            color={
-              common.color[name.replace('-beacon', '') as NodeBackgroundId] ??
-              common.color.geth
-            }
-            progress={progress * 100}
-            showPercent
-            caption={caption}
-            outerStyle={{ height: '20px' }}
-            innerStyle={{ height: '20px' }}
-            // caption={`${caption} (${syncPercent}%)`}
-          />
-        </>
-      );
-    }
-    const { updating, running, error, ...statusLabels } = status;
-    // Get all node statuses that are true
-    const statusKeys = Object.keys(statusLabels).filter((k: string) => {
-      const statusKey = k as keyof ClientStatusProps;
-      return status[statusKey] === true;
-    });
+      return progress * 100;
+    };
+
     return (
-      <div className={clientLabels}>
-        {statusKeys.map((key) => {
-          const labelDetails = getLabelDetails(key);
-          return (
-            <Label
-              // should only be one tag of (ex) "synchronized" per client
-              key={key}
-              type={labelDetails.color}
-              label={labelDetails.string}
+      <>
+        {statusKeys.length > 0 && (
+          <div className={clientLabels}>
+            {statusKeys.map((key) => {
+              const labelDetails = getLabelDetails(key);
+              return (
+                <Label
+                  key={key}
+                  type={labelDetails.color}
+                  label={labelDetails.string}
+                />
+              );
+            })}
+          </div>
+        )}
+        {!status.noConnection &&
+          !status.synchronized &&
+          packageName === 'ethereum' &&
+          (stats.currentBlock !== 0 || stats.currentSlot !== 0) && (
+            <ProgressBar
+              card
+              color={
+                common.color[name.replace('-beacon', '') as NodeBackgroundId] ??
+                common.color.geth
+              }
+              progress={calculateProgress()}
+              showPercent
+              caption={
+                !status.catchingUp
+                  ? g('InitialSyncInProgress')
+                  : g('CatchingUp')
+              }
+              outerStyle={{ height: '20px' }}
+              innerStyle={{ height: '20px' }}
             />
-          );
-        })}
-      </div>
+          )}
+      </>
     );
+  };
+
+  const calculateCardHeight = () => {
+    if (
+      status.stopped ||
+      status.updating ||
+      status.stopping ||
+      status.starting ||
+      status.removing
+    ) {
+      return 186; // Height for single label states
+    }
+
+    const showSyncProgress =
+      !status.noConnection &&
+      !status.synchronized &&
+      packageName === 'ethereum' &&
+      (stats.currentBlock !== 0 || stats.currentSlot !== 0);
+
+    const hasStatusLabels = Object.keys(status).some(
+      (key) =>
+        key !== 'updating' &&
+        key !== 'running' &&
+        key !== 'error' &&
+        status[key as keyof ClientStatusProps],
+    );
+
+    if (showSyncProgress && hasStatusLabels) {
+      return 132; // Height when both sync progress and labels are shown
+    }
+
+    if (
+      (status.running && !status.synchronized) ||
+      (status.error && !status.noConnection)
+    ) {
+      return 166; // Original condition for 166px height
+    }
+
+    return 186; // Default height
   };
 
   const stoppedStyle = status.stopped ? 'stopped' : '';
@@ -191,11 +231,7 @@ export const ClientCard = (props: ClientProps) => {
             NODE_BACKGROUNDS[name.replace('-beacon', '') as NodeBackgroundId] ??
             NODE_BACKGROUNDS.nimbus
           })`,
-          height:
-            (status.running && !status.synchronized) ||
-            (status.error && !status.noConnection)
-              ? 166
-              : 186,
+          height: calculateCardHeight(),
         }}
         className={[cardTop, `${stoppedStyle}`].join(' ')}
       >
