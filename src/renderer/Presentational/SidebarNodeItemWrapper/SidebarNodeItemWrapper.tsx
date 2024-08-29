@@ -198,6 +198,8 @@ export const SidebarNodeItemWrapper = ({
   const isNodePackageSyncing =
     executionSyncData?.isSyncing ||
     consensusSyncData?.isSyncing ||
+    (executionSyncData?.isSyncing === undefined &&
+      consensusSyncData?.isSyncing === undefined) ||
     (isEthereumNodePackage && !isEthereumNodePackageSynced());
 
   const nodePackageSyncData = {

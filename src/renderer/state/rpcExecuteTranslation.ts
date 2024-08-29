@@ -167,19 +167,44 @@ export const executeTranslation = async (
   } else if (rpcTranslation === 'eth-l2') {
     if (rpcCall === 'sync') {
       const resp = await provider.send('eth_syncing');
-      let isSyncing;
-      let syncPercent;
-      if (resp) {
-        if (typeof resp === 'object') {
-          const syncRatio = resp.currentBlock / resp.highestBlock;
-          syncPercent = (syncRatio * 100).toFixed(1);
-          isSyncing = true;
-        } else if (resp === false) {
-          // light client geth, it is done syncing if data is false
+      let isSyncing = true; // Default to true unless explicitly set to false
+      let highestBlock = 0;
+      let currentBlock = 0;
+
+      //TODO: customize the following logic depending on the rollup
+      if (resp !== undefined) {
+        if (resp === false) {
           isSyncing = false;
+        } else {
+          const parsed = Object.fromEntries(
+            Object.entries(resp).map(([key, value]) => {
+              if (typeof value === 'number') {
+                return [key, value];
+              }
+              if (typeof value === 'string') {
+                return [key, Number.parseInt(value)];
+              }
+              return [key, undefined];
+            }),
+          );
+
+          highestBlock = parsed.highestBlock || 0;
+          currentBlock = parsed.currentBlock || 0;
+
+          if (highestBlock === 0) {
+            isSyncing = true;
+          } else {
+            // Set isSyncing to false if within 30 blocks, true otherwise
+            isSyncing = highestBlock - currentBlock >= 30;
+          }
         }
       }
-      return { isSyncing, syncPercent };
+
+      return {
+        isSyncing,
+        currentBlock,
+        highestBlock,
+      };
     }
     if (rpcCall === 'peers') {
       const resp = await provider.send('net_peerCount');
@@ -214,20 +239,26 @@ export const executeTranslation = async (
     // use provider
     if (rpcCall === 'sync') {
       const resp = await provider.send('eth_syncing');
-      let isSyncing;
-      let currentSlot;
-      let highestSlot;
-      if (resp) {
-        if (typeof resp === 'object') {
-          currentSlot = Number.parseInt(resp.currentSlot, 10);
-          highestSlot = Number.parseInt(resp.highestSlot, 10);
-          isSyncing = true;
-        } else if (resp === false) {
-          // light client geth, it is done syncing if data is false
-          isSyncing = false;
-        }
+      // const resp = await provider.send('optimism_syncStatus');
+      if (!resp) return { isSyncing: false, currentSlot: 0, highestSlot: 0 };
+
+      if (resp?.data) {
+        const {
+          is_syncing: isSyncing = false,
+          head_slot: highestSlot = 0,
+          sync_distance: syncDistance = 0,
+        } = resp.data;
+
+        const highestSlotNumber = Number(highestSlot);
+        const syncDistanceNumber = Number(syncDistance);
+        const currentSlot = highestSlotNumber - syncDistanceNumber;
+
+        return {
+          isSyncing,
+          currentSlot,
+          highestSlot: highestSlotNumber,
+        };
       }
-      return { isSyncing, currentSlot, highestSlot };
     }
     if (rpcCall === 'peers') {
       const resp = await provider.send('net_peerCount');

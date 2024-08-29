@@ -60,11 +60,11 @@ export const getSyncStatus = (status: ClientStatusProps) => {
     case status.removing:
       syncStatus = SYNC_STATUS.REMOVING;
       break;
-    case status.catchingUp:
-      syncStatus = SYNC_STATUS.CATCHING_UP;
-      break;
     case status.updating:
       syncStatus = SYNC_STATUS.UPDATING;
+      break;
+    case status.catchingUp:
+      syncStatus = SYNC_STATUS.CATCHING_UP;
       break;
     case status.starting:
       syncStatus = SYNC_STATUS.STARTING;

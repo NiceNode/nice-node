@@ -179,9 +179,10 @@ const NodePackageScreen = () => {
 
     let latestBlockNum = 0;
     if (
-      blockNumber &&
-      typeof blockNumber === 'string' &&
-      rpcTranslation === 'eth-l1'
+      (blockNumber &&
+        typeof blockNumber === 'string' &&
+        rpcTranslation === 'eth-l1') ||
+      rpcTranslation === 'eth-l2'
     ) {
       latestBlockNum = hexToDecimal(blockNumber);
     } else if (
@@ -381,6 +382,8 @@ const NodePackageScreen = () => {
   const isNodePackageSyncing =
     executionSyncData?.isSyncing ||
     consensusSyncData?.isSyncing ||
+    (executionSyncData?.isSyncing === undefined &&
+      consensusSyncData?.isSyncing === undefined) ||
     (isEthereumNodePackage && !isEthereumNodePackageSynced());
 
   const nodePackageSyncData = {

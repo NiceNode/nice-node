@@ -146,7 +146,6 @@ export const ClientCard = (props: ClientProps) => {
         )}
         {!status.noConnection &&
           !status.synchronized &&
-          packageName === 'ethereum' &&
           (stats.currentBlock !== 0 || stats.currentSlot !== 0) && (
             <ProgressBar
               card
