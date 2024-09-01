@@ -62,7 +62,7 @@
     "@vanilla-extract/vite-plugin": "^4.0.9",
     "@wdio/cli": "^8.36.1",
     "@wdio/local-runner": "^8.36.1",
-    "@wdio/mocha-framework": "^8.36.1",
+    "@wdio/mocha-framework": "^9.0.6",
     "@wdio/spec-reporter": "^8.36.1",
     "cross-env": "^7.0.3",
     "electron": "^32.0.0",
