@@ -63,7 +63,7 @@
     "@wdio/cli": "^8.36.1",
     "@wdio/local-runner": "^8.36.1",
     "@wdio/mocha-framework": "^8.36.1",
-    "@wdio/spec-reporter": "^8.36.1",
+    "@wdio/spec-reporter": "^9.0.7",
     "cross-env": "^7.0.3",
     "electron": "^32.0.0",
     "electron-devtools-installer": "^3.2.0",
