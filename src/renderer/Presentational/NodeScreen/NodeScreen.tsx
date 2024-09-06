@@ -66,6 +66,7 @@ const NodeScreen = () => {
     {
       rpcTranslation: selectedNode?.spec.rpcTranslation,
       httpPort: selectedNode?.config?.configValuesMap?.httpPort,
+      specId: selectedNode?.spec.specId,
     },
     { pollingInterval },
   );
@@ -75,6 +76,7 @@ const NodeScreen = () => {
     {
       rpcTranslation: selectedNode?.spec.rpcTranslation,
       httpPort: selectedNode?.config?.configValuesMap?.httpPort,
+      specId: selectedNode?.spec.specId,
     },
     { pollingInterval },
   );

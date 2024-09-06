@@ -288,11 +288,19 @@ export const executeTranslation = async ({
       }
     }
     if (rpcCall === 'peers') {
+      if (specId === 'op-node') {
+        const resp = await provider.send('opp2p_peers', [true]);
+        return resp?.totalConnected || 0;
+      }
       const resp = await provider.send('net_peerCount');
       if (resp) {
         return hexToDecimal(resp);
       }
     } else if (rpcCall === 'latestBlock') {
+      if (specId === 'op-node') {
+        const resp = await provider.send('optimism_syncStatus', []);
+        return resp?.unsafe_l2.number || 0;
+      }
       const resp = await provider.send('eth_getBlockByNumber', [
         'latest',
         true,

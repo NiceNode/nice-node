@@ -107,7 +107,7 @@ export const RtkqExecutionWs: any = createApi({
       },
     }),
     getExecutionPeers: builder.query<ProviderResponse, QueryArg>({
-      queryFn: async ({ rpcTranslation, httpPort }) => {
+      queryFn: async ({ rpcTranslation, httpPort, specId }) => {
         let data;
         // let error;
         try {
@@ -116,6 +116,7 @@ export const RtkqExecutionWs: any = createApi({
             rpcCall: 'peers',
             rpcTranslation,
             httpPort,
+            specId,
           });
           console.log('peers data', data);
 
