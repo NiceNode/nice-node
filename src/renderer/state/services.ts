@@ -12,6 +12,7 @@ type QueryArg = {
   rpcTranslation: NiceNodeRpcTranslation;
   httpPort: string;
   url?: string;
+  specId?: string;
 };
 
 // const provider = new ethers.providers.WebSocketProvider('ws://localhost:8546');
@@ -38,12 +39,12 @@ export const RtkqExecutionWs: any = createApi({
         try {
           // data = await provider.send('eth_getBlockByNumber', ['latest', false]);
           console.log('latestBlock rpcTranslation', rpcTranslation);
-          data = await executeTranslation(
-            'latestBlock',
+          data = await executeTranslation({
+            rpcCall: 'latestBlock',
             rpcTranslation,
             httpPort,
             url,
-          );
+          });
           console.log('latestBlock data', data);
         } catch (e) {
           const error = { message: 'Unable to get latestBlock value' };
@@ -54,17 +55,23 @@ export const RtkqExecutionWs: any = createApi({
       },
     }),
     getExecutionIsSyncing: builder.query<ProviderResponse, QueryArg>({
-      queryFn: async ({ rpcTranslation, httpPort }) => {
+      queryFn: async ({ rpcTranslation, httpPort, specId = undefined }) => {
         let data;
         console.log('rpcTranslation!', rpcTranslation);
         console.log('httpPort!', httpPort);
+        console.log('specIdpassed', specId);
         try {
           // if (!rpcTranslation.sync) {
           //   console.log('No rpcTranslation found for sync');
           // }
           // data = await provider.send('eth_syncing');
           console.log('sync rpcTranslation', rpcTranslation);
-          data = await executeTranslation('sync', rpcTranslation, httpPort);
+          data = await executeTranslation({
+            rpcCall: 'sync',
+            rpcTranslation,
+            httpPort,
+            specId,
+          });
           console.log('sync data', data);
         } catch (e) {
           const error = { message: 'Unable to get syncing value' };
@@ -85,11 +92,11 @@ export const RtkqExecutionWs: any = createApi({
         let data;
         try {
           console.log('clientVersion rpcTranslation', rpcTranslation);
-          data = await executeTranslation(
-            'clientVersion',
+          data = await executeTranslation({
+            rpcCall: 'clientVersion',
             rpcTranslation,
             httpPort,
-          );
+          });
           console.log('clientVersion data', data);
         } catch (e) {
           const error = { message: 'Unable to get node version.' };
@@ -105,7 +112,11 @@ export const RtkqExecutionWs: any = createApi({
         // let error;
         try {
           console.log('peers rpcTranslation', rpcTranslation);
-          data = await executeTranslation('peers', rpcTranslation, httpPort);
+          data = await executeTranslation({
+            rpcCall: 'peers',
+            rpcTranslation,
+            httpPort,
+          });
           console.log('peers data', data);
 
           // data = await provider.send('net_peerCount');

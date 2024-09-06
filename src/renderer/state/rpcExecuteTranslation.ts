@@ -51,12 +51,19 @@ type RpcCall =
   | 'clientVersion'
   | 'net_version'
   | 'metrics';
-export const executeTranslation = async (
-  rpcCall: RpcCall,
-  rpcTranslation: string,
-  httpPort: string,
-  url?: string,
-): Promise<any> => {
+export const executeTranslation = async ({
+  rpcCall,
+  rpcTranslation,
+  httpPort,
+  url,
+  specId,
+}: {
+  rpcCall: string;
+  rpcTranslation: string;
+  httpPort: string;
+  url?: string;
+  specId?: string;
+}) => {
   const provider = new ethers.providers.JsonRpcProvider(
     url ? url : `http://localhost:${httpPort}`,
   );
@@ -238,8 +245,28 @@ export const executeTranslation = async (
   } else if (rpcTranslation === 'eth-l2-consensus') {
     // use provider
     if (rpcCall === 'sync') {
+      if (specId === 'op-node') {
+        const resp = await provider.send('optimism_syncStatus', []);
+        if (!resp) return { isSyncing: true, currentBlock: 0, highestBlock: 0 };
+
+        const l1Behind = resp.head_l1.number - resp.current_l1.number;
+        const l2Behind = resp.head_l1.number - resp.unsafe_l2.number;
+
+        const isSyncing =
+          l1Behind > 10 ||
+          l2Behind > 100 ||
+          resp.current_l1.number === 0 ||
+          resp.unsafe_l2.number === 0;
+        const currentBlock = resp.unsafe_l2.number;
+        const highestBlock = resp.head_l1.number;
+
+        return {
+          isSyncing,
+          currentBlock,
+          highestBlock,
+        };
+      }
       const resp = await provider.send('eth_syncing');
-      // const resp = await provider.send('optimism_syncStatus');
       if (!resp) return { isSyncing: false, currentSlot: 0, highestSlot: 0 };
 
       if (resp?.data) {
@@ -280,7 +307,7 @@ export const executeTranslation = async (
     }
   } else if (rpcTranslation === 'farcaster-l1') {
     // todo: use the current config httpPort value instead of hardcoding 2281
-    const hubbleBaseUrl = 'http://localhost:2281';
+    const hubbleBaseUrl = `http://localhost:${httpPort}`;
     if (rpcCall === 'sync') {
       const resp = await callFetch(`${hubbleBaseUrl}/v1/info`);
       if (resp && resp.isSyncing !== undefined) {

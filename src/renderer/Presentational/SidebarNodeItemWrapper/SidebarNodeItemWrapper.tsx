@@ -113,7 +113,11 @@ export const SidebarNodeItemWrapper = ({
     { pollingInterval },
   );
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
-    { rpcTranslation: executionRpcTranslation, httpPort: executionHttpPort },
+    {
+      rpcTranslation: executionRpcTranslation,
+      httpPort: executionHttpPort,
+      specId: executionNode?.spec.specId,
+    },
     { pollingInterval },
   );
   const qExecutionPeers = useGetExecutionPeersQuery(
@@ -128,6 +132,7 @@ export const SidebarNodeItemWrapper = ({
     {
       rpcTranslation: consensusRpcTranslation,
       httpPort: consensusHttpPort,
+      specId: consensusNode?.spec.specId,
     },
     { pollingInterval },
   );

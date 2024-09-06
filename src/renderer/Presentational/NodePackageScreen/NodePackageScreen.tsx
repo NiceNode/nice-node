@@ -82,7 +82,11 @@ const NodePackageScreen = () => {
     { pollingInterval },
   );
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
-    { rpcTranslation: executionRpcTranslation, httpPort: executionHttpPort },
+    {
+      rpcTranslation: executionRpcTranslation,
+      httpPort: executionHttpPort,
+      specId: executionNode?.spec.specId,
+    },
     { pollingInterval },
   );
   const qExecutionPeers = useGetExecutionPeersQuery(
@@ -97,6 +101,7 @@ const NodePackageScreen = () => {
     {
       rpcTranslation: consensusRpcTranslation,
       httpPort: consensusHttpPort,
+      specId: consensusNode?.spec.specId,
     },
     { pollingInterval },
   );
