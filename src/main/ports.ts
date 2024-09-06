@@ -180,6 +180,22 @@ export const assignPortsToNode = (node: Node): Node => {
 
       node.config.configValuesMap[endpointKey] = executionEndpoint;
     }
+
+    if (node.spec.rpcTranslation === 'eth-l2-consensus') {
+      let l2RpcUrl = node.config.configValuesMap.l2RpcUrl;
+      const httpPort = executionNode.config.configValuesMap.httpPort;
+
+      if (l2RpcUrl && httpPort && !/:\d{4}/.test(l2RpcUrl)) {
+        const portSuffix = `:${httpPort}`;
+        const isQuoted = l2RpcUrl.startsWith('"') && l2RpcUrl.endsWith('"');
+
+        l2RpcUrl = isQuoted
+          ? `${l2RpcUrl.slice(0, -1)}${portSuffix}"`
+          : `${l2RpcUrl}${portSuffix}`;
+
+        node.config.configValuesMap.l2RpcUrl = l2RpcUrl;
+      }
+    }
   }
 
   return node; // Return the updated node without persisting changes
