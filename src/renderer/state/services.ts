@@ -30,7 +30,12 @@ export const RtkqExecutionWs: any = createApi({
   baseQuery: fakeBaseQuery<CustomerErrorType>(),
   endpoints: (builder) => ({
     getExecutionLatestBlock: builder.query<ProviderResponse, QueryArg>({
-      queryFn: async ({ rpcTranslation, httpPort, url = undefined }) => {
+      queryFn: async ({
+        rpcTranslation,
+        httpPort,
+        url = undefined,
+        specId = undefined,
+      }) => {
         let data;
         // stop remote execution query IF not Ethereum node, we need a cleaner way to do this
         if (rpcTranslation !== 'eth-l1' && url) {
@@ -44,6 +49,7 @@ export const RtkqExecutionWs: any = createApi({
             rpcTranslation,
             httpPort,
             url,
+            specId,
           });
           console.log('latestBlock data', data);
         } catch (e) {
@@ -107,7 +113,7 @@ export const RtkqExecutionWs: any = createApi({
       },
     }),
     getExecutionPeers: builder.query<ProviderResponse, QueryArg>({
-      queryFn: async ({ rpcTranslation, httpPort, specId }) => {
+      queryFn: async ({ rpcTranslation, httpPort, specId = undefined }) => {
         let data;
         // let error;
         try {

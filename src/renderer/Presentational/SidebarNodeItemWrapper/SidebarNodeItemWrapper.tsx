@@ -121,7 +121,11 @@ export const SidebarNodeItemWrapper = ({
     { pollingInterval },
   );
   const qExecutionPeers = useGetExecutionPeersQuery(
-    { rpcTranslation: executionRpcTranslation, httpPort: executionHttpPort },
+    {
+      rpcTranslation: executionRpcTranslation,
+      httpPort: executionHttpPort,
+      specId: executionNode?.spec.specId,
+    },
     { pollingInterval },
   );
   const qExecutionLatestBlock = useGetExecutionLatestBlockQuery(
@@ -137,7 +141,11 @@ export const SidebarNodeItemWrapper = ({
     { pollingInterval },
   );
   const qConsensusPeers = useGetExecutionPeersQuery(
-    { rpcTranslation: consensusRpcTranslation, httpPort: consensusHttpPort },
+    {
+      rpcTranslation: consensusRpcTranslation,
+      httpPort: consensusHttpPort,
+      specId: consensusNode?.spec.specId,
+    },
     { pollingInterval },
   );
   const qConsensusLatestBlock = useGetExecutionLatestBlockQuery(
