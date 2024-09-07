@@ -182,7 +182,6 @@ export const ClientCard = (props: ClientProps) => {
     const showSyncProgress =
       !status.noConnection &&
       !status.synchronized &&
-      packageName === 'ethereum' &&
       (stats.currentBlock !== 0 || stats.currentSlot !== 0);
 
     const hasStatusLabels = Object.keys(status).some(
