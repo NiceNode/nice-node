@@ -24,7 +24,6 @@ import {
   useGetExecutionPeersQuery,
 } from '../../state/services';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
-import { hexToDecimal } from '../../utils';
 import { getSyncDataForServiceAndNode } from '../../utils.js';
 import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
 import type { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
@@ -49,7 +48,6 @@ const NodePackageScreen = () => {
   const [sCpuPercentUsed, setCpuPercentUsed] = useState<number>(0);
   const [sMemoryUsagePercent, setMemoryUsagePercent] = useState<number>(0);
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
-  const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
   const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
   // const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
@@ -165,52 +163,6 @@ const NodePackageScreen = () => {
     setCpuPercentUsed(cpuPercent);
     setMemoryUsagePercent(memoryPercent);
   }, [selectedNodePackage?.services, sUserNodes]);
-
-  useEffect(() => {
-    const savedSyncedBlock =
-      selectedNodePackage?.runtime?.usage?.syncedBlock || 0;
-    if (qExecutionLatestBlock.isError) {
-      setLatestBlockNumber(savedSyncedBlock);
-      return;
-    }
-
-    const updateNodeLastSyncedBlock = async (latestBlockNum: number) => {
-      if (!selectedNodePackage) {
-        return;
-      }
-      await electron.updateNodeLastSyncedBlock(
-        selectedNodePackage.id,
-        latestBlockNum,
-      );
-    };
-
-    const blockNumber = isEthereumNodePackage
-      ? qExecutionLatestBlock?.data
-      : qExecutionLatestBlock?.data?.number;
-    const slotNumber = qExecutionLatestBlock?.data?.header?.message?.slot;
-    const rpcTranslation = selectedNodePackage?.spec?.rpcTranslation;
-
-    let latestBlockNum = 0;
-    if (
-      (blockNumber &&
-        typeof blockNumber === 'string' &&
-        rpcTranslation === 'eth-l1') ||
-      rpcTranslation === 'eth-l2'
-    ) {
-      latestBlockNum = hexToDecimal(blockNumber);
-    } else if (
-      slotNumber &&
-      typeof slotNumber === 'string' &&
-      rpcTranslation === 'eth-l1-beacon'
-    ) {
-      latestBlockNum = Number.parseFloat(slotNumber);
-    }
-
-    const syncedBlock =
-      latestBlockNum > savedSyncedBlock ? latestBlockNum : savedSyncedBlock;
-    setLatestBlockNumber(syncedBlock);
-    updateNodeLastSyncedBlock(syncedBlock);
-  }, [qExecutionLatestBlock, selectedNodePackage]);
 
   const onNodeAction = useCallback(
     (action: NodeAction) => {
@@ -419,8 +371,6 @@ const NodePackageScreen = () => {
     });
   }
 
-  console.log('statusObject', getStatusObject(status, nodePackageSyncData));
-
   const nodePackageContent: SingleNodeContent = {
     nodeId: id,
     displayName: spec.displayName,
@@ -432,7 +382,6 @@ const NodePackageScreen = () => {
     status: getStatusObject(status, nodePackageSyncData),
     stats: {
       peers: nodePackageSyncData.peers,
-      currentBlock: sLatestBlockNumber,
       diskUsageGBs: sDiskUsed,
       memoryUsagePercent: sMemoryUsagePercent,
       cpuLoad: sCpuPercentUsed,
