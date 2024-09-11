@@ -44,9 +44,11 @@ const NodePackageScreen = () => {
   const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>(
     [],
   );
-  const [sDiskUsed, setDiskUsed] = useState<number>(0);
-  const [sCpuPercentUsed, setCpuPercentUsed] = useState<number>(0);
-  const [sMemoryUsagePercent, setMemoryUsagePercent] = useState<number>(0);
+  const [sResourceUsage, setResourceUsage] = useState({
+    disk: 0,
+    cpu: 0,
+    memory: 0,
+  });
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
   const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
@@ -132,14 +134,11 @@ const NodePackageScreen = () => {
   });
 
   useEffect(() => {
-    if (selectedNodePackage?.config?.configValuesMap?.network) {
-      setNetworkNodePackage(
-        selectedNodePackage?.config?.configValuesMap?.network,
-      );
-    } else {
-      setNetworkNodePackage('');
-    }
+    setNetworkNodePackage(
+      selectedNodePackage?.config?.configValuesMap?.network || '',
+    );
   }, [selectedNodePackage]);
+
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
   //   // Only polls network connection if there are exactly 0 peers
@@ -148,20 +147,19 @@ const NodePackageScreen = () => {
 
   // calc node package resource usage
   useEffect(() => {
-    // format for presentation
-    let diskUsedGBs = 0;
-    let cpuPercent = 0;
-    let memoryPercent = 0;
-    selectedNodePackage?.services.map((service) => {
-      const nodeId = service.node.id;
-      const node = sUserNodes?.nodes[nodeId];
-      diskUsedGBs += node?.runtime?.usage?.diskGBs?.[0]?.y ?? 0;
-      cpuPercent += node?.runtime?.usage?.cpuPercent?.[0]?.y ?? 0;
-      memoryPercent += node?.runtime?.usage?.memoryBytes?.[0]?.y ?? 0;
-    });
-    setDiskUsed(diskUsedGBs);
-    setCpuPercentUsed(cpuPercent);
-    setMemoryUsagePercent(memoryPercent);
+    const calculateResourceUsage = () => {
+      let disk = 0;
+      let cpu = 0;
+      let memory = 0;
+      selectedNodePackage?.services.forEach((service) => {
+        const node = sUserNodes?.nodes[service.node.id];
+        disk += node?.runtime?.usage?.diskGBs?.[0]?.y ?? 0;
+        cpu += node?.runtime?.usage?.cpuPercent?.[0]?.y ?? 0;
+        memory += node?.runtime?.usage?.memoryBytes?.[0]?.y ?? 0;
+      });
+      setResourceUsage({ disk, cpu, memory });
+    };
+    calculateResourceUsage();
   }, [selectedNodePackage?.services, sUserNodes]);
 
   const onNodeAction = useCallback(
@@ -382,9 +380,9 @@ const NodePackageScreen = () => {
     status: getStatusObject(status, nodePackageSyncData),
     stats: {
       peers: nodePackageSyncData.peers,
-      diskUsageGBs: sDiskUsed,
-      memoryUsagePercent: sMemoryUsagePercent,
-      cpuLoad: sCpuPercentUsed,
+      diskUsageGBs: sResourceUsage.disk,
+      memoryUsagePercent: sResourceUsage.memory,
+      cpuLoad: sResourceUsage.cpu,
     },
     onAction: onNodeAction,
     description: spec.description,
