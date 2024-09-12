@@ -121,6 +121,7 @@ export const common: { color: { [key: string]: string } } = {
     red: 'rgba(235, 83, 76, 1)',
     farcaster: '#855DCD',
     base: '#0052FF',
+    soneium: '#00000',
     optimism: '#FF0420',
     minecraft: '#5b8731',
   },

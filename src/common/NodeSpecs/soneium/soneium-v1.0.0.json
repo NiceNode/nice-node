@@ -1,0 +1,91 @@
+{
+  "specId": "soneium",
+  "version": "1.0.1",
+  "displayTagline": "Ethereum L2 - Soneium",
+  "execution": {
+    "executionTypes": ["nodePackage"],
+    "services": [
+      {
+        "serviceId": "executionClient",
+        "name": "Execution Client",
+        "nodeOptions": ["op-geth"],
+        "required": true,
+        "requiresCommonJwtSecret": true
+      },
+      {
+        "serviceId": "consensusClient",
+        "name": "Consensus Client",
+        "nodeOptions": ["op-node"],
+        "required": true,
+        "requiresCommonJwtSecret": true
+      }
+    ],
+    "dependencies": [
+      {
+        "name": "Ethereum node",
+        "specId": "ethereum"
+      }
+    ]
+  },
+  "category": "Ethereum/L2",
+  "rpcTranslation": "eth-l2-op-stack",
+  "systemRequirements": {
+    "documentationUrl": "https://geth.ethereum.org/docs/interface/hardware",
+    "cpu": {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 16
+    },
+    "storage": {
+      "minSizeGBs": 200,
+      "ssdRequired": true
+    },
+    "internet": {
+      "minDownloadSpeedMbps": 25,
+      "minUploadSpeedMbps": 10
+    }
+  },
+  "configTranslation": {
+    "network": {
+      "displayName": "Network",
+      "defaultValue": "Mainnet",
+      "addNodeFlow": "required",
+      "uiControl": {
+        "type": "select/single",
+        "controlTranslations": [
+          {
+            "value": "Minato",
+            "config": "unused in nodespec",
+            "serviceConfigs": {
+              "services": [
+                {
+                  "serviceId": "executionClient",
+                  "configValues": {
+                    "genesisFile": "minato-genesis-l2.json",
+                    "chainId": "1946",
+                    "enginePort": "9545"
+                  }
+                },
+                {
+                  "serviceId": "consensusClient",
+                  "configValues": {
+                    "network": "Minato",
+                    "chainId": "1946"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "documentation": "https://docs.soneium.org/docs/builders/node"
+    }
+  },
+  "iconUrl": "https://pub-9f2dc808c3d748eabde036c3d3465ee6.r2.dev/base.png",
+  "addNodeDescription": "Decentralization and collaboration are critical for the longer-term success of Base and scaling Ethereum. That’s why we are working with OP Labs and the Optimism Collective on a plan to scale Ethereum in a decentralized way.",
+  "description": "Base is a secure, low-cost, developer-friendly Ethereum L2 built to bring the next billion users onchain. It's built on Optimism’s open-source OP Stack.",
+  "documentation": {
+    "default": "https://docs.soneium.org/docs/builders/node"
+  }
+}

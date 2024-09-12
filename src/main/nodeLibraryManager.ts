@@ -1,5 +1,6 @@
 import arbitrumv1 from '../common/NodeSpecs/arbitrum/arbitrum-v1.0.0.json';
 import basev1 from '../common/NodeSpecs/base/base-v1.0.0.json';
+import soneiumv1 from '../common/NodeSpecs/soneium/soneium-v1.0.0.json';
 // Node Packages
 import ethereumv1 from '../common/NodeSpecs/ethereum/ethereum-v1.0.0.json';
 import farcasterv1 from '../common/NodeSpecs/farcaster/farcaster-v1.0.0.json';
@@ -146,6 +147,7 @@ export const updateLocalNodeAndPackageLibrary = async () => {
       arbitrumv1,
       optimismv1,
       basev1,
+      soneiumv1,
       minecraftv1,
       homeAssistantv1,
     ];

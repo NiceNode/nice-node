@@ -18,6 +18,7 @@ import teku from './Logo-Teku.png';
 
 import arbitrum from './Logo-Arbitrum.png';
 import base from './Logo-Base.png';
+import soneium from './Logo-Soneium.png';
 import magi from './Logo-Magi.png';
 // L2
 import optimism from './Logo-Optimism.png';
@@ -53,6 +54,7 @@ export interface NodeIcons {
   optimism?: string;
   arbitrum?: string;
   base?: string;
+  soneium?: string;
   starknet?: string;
   zkSync?: string;
   radicle?: string;
@@ -97,6 +99,7 @@ export const NODE_ICONS: NodeIcons = {
   'op-node': optimism,
   hildr,
   magi,
+  soneium,
   farcaster,
   hubble: farcaster,
   nitro: arbitrum,
@@ -105,6 +108,7 @@ export const NODE_ICONS: NodeIcons = {
 };
 
 const white = '#FFFFFF';
+const black = '#000000';
 
 export const NODE_COLORS: NodeIcons = {
   geth: white,
@@ -128,6 +132,7 @@ export const NODE_COLORS: NodeIcons = {
   hildr: common.color.optimism,
   magi: white,
   base: common.color.base,
+  soneium: black,
   ethereum: common.color.ethereum,
   arbitrum: common.color.arbitrum,
   starknet: common.color.starknet,
