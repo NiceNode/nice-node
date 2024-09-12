@@ -2,7 +2,7 @@ import { NodeStatus } from '../../../common/node.js';
 import { type ClientStatusProps, SYNC_STATUS } from './consts';
 
 export const getStatusObject = (
-  status: NodeStatus = NodeStatus.unknown,
+  status: NodeStatus,
   syncData: {
     isSyncing: boolean;
     peers: number;

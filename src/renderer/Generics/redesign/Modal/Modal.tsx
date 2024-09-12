@@ -113,7 +113,17 @@ export const Modal = ({
   );
 
   return (
-    <div className={modalBackdropStyle} onClick={handleBackdropClick}>
+    <div
+      className={modalBackdropStyle}
+      onClick={handleBackdropClick}
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          handleBackdropClick(
+            event as unknown as React.MouseEvent<HTMLDivElement>,
+          );
+        }
+      }}
+    >
       <div className={[modalContentStyle, modalStyle].join(' ')}>
         {modalType === 'modal' && (
           <ContentHeader

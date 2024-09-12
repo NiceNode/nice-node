@@ -2,7 +2,7 @@
   "specId": "arbitrum",
   "version": "1.0.0",
   "displayName": "Arbitrum One",
-  "displayTagline": "Non-Validating Node",
+  "displayTagline": "Ethereum L2 - Arbitrum",
   "execution": {
     "executionTypes": ["nodePackage"],
     "defaultExecutionType": "nodePackage",

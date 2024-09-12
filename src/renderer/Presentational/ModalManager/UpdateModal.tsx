@@ -1,8 +1,4 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Modal } from '../../Generics/redesign/Modal/Modal.js';
-import electron from '../../electronGlobal.js';
-import { reportEvent } from '../../events/reportEvent.js';
 import UpdateWrapper from '../UpdateModal/UpdateWrapper.js';
 import { type ModalConfig, modalOnChangeConfig } from './modalUtils.js';
 import { modalRoutes } from './modalUtils.js';
@@ -13,8 +9,6 @@ type Props = {
 };
 
 export const UpdateModal = ({ modalOnClose, data }: Props) => {
-  const [modalConfig, setModalConfig] = useState<ModalConfig>({});
-  const { t } = useTranslation();
   const { deeplink, nodeOverview } = data;
   const modalOnSaveConfig = async (updatedConfig: ModalConfig | undefined) => {
     modalOnClose();
@@ -33,15 +27,6 @@ export const UpdateModal = ({ modalOnClose, data }: Props) => {
         deeplink={deeplink}
         nodeOverview={nodeOverview}
         modalOnClose={modalOnClose}
-        modalOnChangeConfig={(config, save) => {
-          modalOnChangeConfig(
-            config,
-            modalConfig,
-            setModalConfig,
-            save,
-            modalOnSaveConfig,
-          );
-        }}
       />
     </Modal>
   );
