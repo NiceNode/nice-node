@@ -116,24 +116,19 @@ const NodeScreen = () => {
   //   );
   // todo: http apis
 
-  const getNodesDefaultStorageLocation = async () => {
-    const defaultNodesStorageDetails =
-      await electron.getNodesDefaultStorageLocation();
-    setFreeStorageGBs(defaultNodesStorageDetails.freeStorageGBs);
-  };
-
   useEffect(() => {
+    const getNodesDefaultStorageLocation = async () => {
+      const defaultNodesStorageDetails =
+        await electron.getNodesDefaultStorageLocation();
+      setFreeStorageGBs(defaultNodesStorageDetails.freeStorageGBs);
+    };
     getNodesDefaultStorageLocation();
     const interval = setInterval(getNodesDefaultStorageLocation, 15000);
     return () => clearInterval(interval);
   }, []);
 
-  const getSystemSize = async () => {
-    setTotalDiskSize(await electron.getSystemDiskSize());
-  };
-
   useEffect(() => {
-    getSystemSize();
+    electron.getSystemDiskSize().then(setTotalDiskSize);
   }, []);
 
   useEffect(() => {
