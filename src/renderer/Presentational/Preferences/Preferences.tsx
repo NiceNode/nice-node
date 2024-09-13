@@ -118,6 +118,7 @@ const Preferences = ({
           return (
             <div
               key={themeDetails.theme}
+              // biome-ignore lint: useSemanticElements
               role="button"
               tabIndex={index}
               style={{

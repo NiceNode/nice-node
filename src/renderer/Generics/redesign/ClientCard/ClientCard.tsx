@@ -156,6 +156,7 @@ export const ClientCard = (props: ClientProps) => {
           onClick();
         }
       }}
+      // biome-ignore lint: useSemanticElements
       role="presentation"
     >
       <div

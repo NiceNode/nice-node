@@ -96,6 +96,7 @@ export const Banner = ({
       className={container}
       onClick={onClickBanner}
       onKeyDown={onClickBanner}
+      // biome-ignore lint: useSemanticElements
       role="button"
       tabIndex={0}
     >
