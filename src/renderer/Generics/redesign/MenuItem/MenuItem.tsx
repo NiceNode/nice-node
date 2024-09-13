@@ -74,9 +74,10 @@ export const MenuItem = ({
   };
 
   return (
+    // biome-ignore lint: noLabelWithoutControl
     <label
       tabIndex={0}
-      // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: <explanation>
+      // biome-ignore lint: useSemanticElements
       role="button"
       onKeyDown={onClickAction}
       className={[container, `${disabledStyle}`].join(' ')}

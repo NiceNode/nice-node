@@ -68,6 +68,7 @@ export const NotificationItem = ({
       className={containerStyles.join(' ')}
       onClick={onClickAction}
       onKeyDown={onClickAction}
+      // biome-ignore lint: useSemanticElements
       role="button"
       tabIndex={0}
     >

@@ -31,6 +31,7 @@ const CopyButton = ({ data }: CopyButtonProps) => {
       className={copyIcon}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
+      // biome-ignore lint: useSemanticElements
       role="button"
       tabIndex={0}
     >

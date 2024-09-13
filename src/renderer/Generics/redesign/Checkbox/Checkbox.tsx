@@ -58,6 +58,7 @@ export const Checkbox = ({
           },
         }}
       />
+      {/* biome-ignore lint: labelForCheckbox */}
       {label && <label htmlFor="checkboxComponent">{label}</label>}
     </div>
   );

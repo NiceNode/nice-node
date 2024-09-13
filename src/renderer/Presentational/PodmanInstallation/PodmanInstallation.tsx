@@ -219,6 +219,7 @@ const PodmanInstallation = ({
         {(!isPodmanInstalled || podmanDetails?.isOutdated) && (
           <>
             {!sDownloadComplete && !sInstallComplete && (
+              // biome-ignore lint: unecessaryFragment
               <>
                 {!sHasStartedDownload ? (
                   <div>
@@ -279,14 +280,12 @@ const PodmanInstallation = ({
         {isPodmanInstalled &&
           !isPodmanRunning &&
           !podmanDetails?.isOutdated && (
-            <>
-              <Button
-                id="startPodmanBtn"
-                type="primary"
-                label={t('StartPodman')}
-                onClick={onClickStartPodman}
-              />
-            </>
+            <Button
+              id="startPodmanBtn"
+              type="primary"
+              label={t('StartPodman')}
+              onClick={onClickStartPodman}
+            />
           )}
         {sDidUserGrantPermissionToInstallPodman === false && (
           <p>{t('PodmanIsRequired')}</p>

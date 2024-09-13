@@ -95,6 +95,7 @@ const Main = (props: { platform?: string }) => {
       <div className={homeContainer}>
         <SidebarWrapper ref={sidebarRef} />
         <div
+          // biome-ignore lint: useSemanticElements
           role="button"
           className={sidebarDrag}
           tabIndex={0}

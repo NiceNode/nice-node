@@ -410,6 +410,7 @@ export const Logs = ({ sLogs }: LogsProps) => {
                   <div className={spacer} />
                   <div
                     tabIndex={0}
+                    // biome-ignore lint: useSemanticElements
                     role="button"
                     className={clearFilters}
                     onClick={resetFilters}
