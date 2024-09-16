@@ -254,9 +254,8 @@ app.on('before-quit', (e) => {
     // monitor node's statuses and alert the user when a node is down, and to continuously
     // track node usage.
     e.preventDefault(); // halts electron's full quitting action
-    // todo: close windows?
+    mainWindow?.close(); // close the main window
     if (process.platform === 'darwin' && app.dock) {
-      mainWindow?.close(); // close the main window
       app.dock.hide(); // app appears "quitted" in the dock
     }
   }
