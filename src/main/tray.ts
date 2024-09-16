@@ -441,6 +441,7 @@ export const initialize = (getAssetPath: (...paths: string[]) => string) => {
     // on windows, default is open/show window on click
     // on mac, default is open menu on click (no code needed)
     // on linux?
+    logger.info('tray icon clicked');
     if (isMac()) {
       toggleCustomTrayWindow();
       updateCustomTrayMenu();
