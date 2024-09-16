@@ -216,8 +216,8 @@ export const createWindow = async () => {
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
-  app.quit(); // todo: remove
   if (process.platform !== 'darwin') {
+    onExit();
     app.quit();
   }
 });
@@ -226,6 +226,7 @@ app.on('window-all-closed', () => {
 let isFullQuit = false;
 export const fullQuit = () => {
   isFullQuit = true;
+  onExit();
   app.quit();
 };
 
@@ -233,21 +234,27 @@ export const setFullQuitForNextQuit = (_isNextQuitAFullQuit: boolean) => {
   isFullQuit = _isNextQuitAFullQuit;
 };
 
-// Emitted on app.quit() after all windows have been closed
-app.on('will-quit', (e) => {
+// app.on('will-quit') is emitted on app.quit() after all windows have been closed
+// However, we don't want it to close the tray window! So we catch the quit action and stop
+// it before it closes the tray window, and we only close the main window.
+
+app.on('before-quit', (e) => {
   // Remove dev env check to test background. This is to prevent
   // multiple instances of the app staying open in dev env where we
   // regularly quit the app.
-  app.quit(); // todo: remove
+  logger.info(`app.on('will-quit'): isFullQuit: ${isFullQuit}`);
   if (isFullQuit || process.env.NODE_ENV === 'development') {
-    console.log('quitting app from background');
-    app.quit();
+    // if (isFullQuit) {
+    logger.info('quitting app from background');
+    onExit();
+    // continue with quitting
   } else {
-    console.log('quitting app from foreground');
+    logger.info('quitting app from foreground');
     // This allows NN to run in the background. The purpose is to keep a tray icon updated,
     // monitor node's statuses and alert the user when a node is down, and to continuously
     // track node usage.
-    e.preventDefault();
+    e.preventDefault(); // halts electron's full quitting action
+    mainWindow?.close(); // close the main window
     if (process.platform === 'darwin' && app.dock) {
       app.dock.hide(); // app appears "quitted" in the dock
     }
@@ -269,7 +276,6 @@ const onExit = () => {
   onExitNodeManager();
   monitor.onExit();
   cronJobs.onExit();
-  app.quit(); // todo: remove
 };
 
 // no blocking work

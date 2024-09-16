@@ -125,6 +125,7 @@ export const Checkbox = ({
           </span>
         )}
       </span>
+      {/* biome-ignore lint: labelForCheckbox */}
       {label && <span className={checkboxLabel}>{label}</span>}
     </label>
   );

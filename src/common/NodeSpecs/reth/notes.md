@@ -1,1 +1,1 @@
-`--color never` is set to avoid reth from using non-readble charcters in the logs
+`--color never` is set to avoid reth from using non-readble characters in the logs

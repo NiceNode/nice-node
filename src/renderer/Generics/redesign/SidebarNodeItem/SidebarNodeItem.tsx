@@ -75,6 +75,7 @@ export const SidebarNodeItem = ({
         setInternalSelected(false);
       }}
       onKeyDown={onClickAction}
+      // biome-ignore lint: useSemanticElements
       role="button"
       tabIndex={0}
     >

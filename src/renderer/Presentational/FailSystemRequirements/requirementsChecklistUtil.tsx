@@ -52,13 +52,11 @@ export const makeCheckList = (
       checkTitle = 'Virtual Machine Platform Enabled';
       valueText = 'Currently disabled.';
       valueComponent = (
-        <>
-          <ExternalLink
-            text="Manually enable Virtual Machine feature"
-            url="https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-3---enable-virtual-machine-feature"
-            inline
-          />
-        </>
+        <ExternalLink
+          text="Manually enable Virtual Machine feature"
+          url="https://learn.microsoft.com/en-us/windows/wsl/install-manual#step-3---enable-virtual-machine-feature"
+          inline
+        />
       );
       captionText = 'Try following  to enable.';
     } else if (reqType === 'CpuArch') {

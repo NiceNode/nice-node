@@ -22,6 +22,7 @@ const DropdownLink = ({ text, inline, onClick, isDown }: DropdownLinkProps) => {
       className={classContainer}
       onClick={onClick}
       onKeyDown={onClick}
+      // biome-ignore lint: useSemanticElements
       role="button"
       tabIndex={0}
     >
