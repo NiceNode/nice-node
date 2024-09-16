@@ -76,7 +76,8 @@ const updateAllNodeMetrics = async () => {
           }
           nodeStore.updateNode(node);
         } catch (err) {
-          logger.error('Error setting metrics for a node', err);
+          logger.error('Error setting metrics for a node...');
+          logger.error(err);
         }
       } else {
         // no containerId for a node
