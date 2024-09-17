@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { NodeStatus } from '../../../common/node.js';
 import Button from '../../Generics/redesign/Button/Button';
 import type { ClientProps, NodeAction } from '../../Generics/redesign/consts';
+import { SYNC_STATUS } from '../../Generics/redesign/consts';
 import { getStatusObject } from '../../Generics/redesign/utils.js';
 import type { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import electron from '../../electronGlobal';
@@ -13,11 +14,7 @@ import electron from '../../electronGlobal';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
 import { useGetNetworkConnectedQuery } from '../../state/network';
-import {
-  selectIsAvailableForPolling,
-  selectSelectedNodePackage,
-  selectUserNodes,
-} from '../../state/node';
+import { selectSelectedNodePackage, selectUserNodes } from '../../state/node';
 import {
   useGetExecutionIsSyncingQuery,
   useGetExecutionLatestBlockQuery,
@@ -51,9 +48,8 @@ const NodePackageScreen = () => {
   });
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
-  const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
-  // const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
-  const pollingInterval = 15000;
+  const pollingInterval =
+    selectedNodePackage?.status === SYNC_STATUS.RUNNING ? 15000 : 0;
 
   const executionService = selectedNodePackage?.services.find(
     (service) => service.serviceId !== 'consensusClient',

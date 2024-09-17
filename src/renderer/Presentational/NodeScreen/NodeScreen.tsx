@@ -12,10 +12,7 @@ import electron from '../../electronGlobal';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
 import { useGetNetworkConnectedQuery } from '../../state/network';
-import {
-  selectIsAvailableForPolling,
-  selectSelectedNode,
-} from '../../state/node';
+import { selectSelectedNode } from '../../state/node';
 import {
   useGetExecutionIsSyncingQuery,
   useGetExecutionLatestBlockQuery,
@@ -36,6 +33,7 @@ import {
   descriptionFont,
   titleFont,
 } from './NodeScreen.css';
+import { SYNC_STATUS } from '../../Generics/redesign/consts.js';
 
 let alphaModalRendered = false;
 
@@ -44,7 +42,6 @@ const NodeScreen = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const selectedNode = useAppSelector(selectSelectedNode);
-  const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
 
   const [sFreeStorageGBs, setFreeStorageGBs] = useState<number>(0);
   const [sTotalDiskSize, setTotalDiskSize] = useState<number>(0);
@@ -53,7 +50,8 @@ const NodeScreen = () => {
     selectedNode?.runtime?.usage?.syncedBlock || 0,
   );
 
-  const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
+  const pollingInterval =
+    selectedNode?.status === SYNC_STATUS.RUNNING ? 15000 : 0;
 
   const qNodeVersion = useGetNodeVersionQuery(
     {

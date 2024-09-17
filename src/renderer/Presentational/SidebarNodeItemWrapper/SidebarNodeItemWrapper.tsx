@@ -4,17 +4,14 @@ import { type NodePackage, NodeStatus } from '../../../common/node';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
 import { getStatusObject, getSyncStatus } from '../../Generics/redesign/utils';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
-import {
-  selectIsAvailableForPolling,
-  selectSelectedNodePackage,
-  selectUserNodes,
-} from '../../state/node';
+import { selectUserNodes } from '../../state/node';
 import {
   useGetExecutionIsSyncingQuery,
   useGetExecutionLatestBlockQuery,
   useGetExecutionPeersQuery,
 } from '../../state/services';
 import { getSyncDataForServiceAndNode } from '../../utils.js';
+import { SYNC_STATUS } from '../../Generics/redesign/consts.js';
 
 export type SidebarNodeStatus =
   | 'online'
@@ -85,7 +82,7 @@ export const SidebarNodeItemWrapper = ({
   node,
   offline,
 }: SidebarNodeItemWrapperProps) => {
-  const pollingInterval = 15000;
+  const pollingInterval = node?.status === SYNC_STATUS.RUNNING ? 15000 : 0;
   const sUserNodes = useAppSelector(selectUserNodes);
   const executionService = node?.services.find(
     (service: { serviceId: string }) => service.serviceId === 'executionClient',
