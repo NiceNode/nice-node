@@ -16,6 +16,7 @@ import CheckCircleFilled from './Check-circle-filled.svg?react';
 import CheckCircle from './Check-circle.svg?react';
 import CheckDouble from './Check-double.svg?react';
 import Check from './Check.svg?react';
+import Check2 from './Check2.svg?react';
 import CloseCircleFilled from './Close-circle-filled.svg?react';
 import CloseCircle from './Close-circle.svg?react';
 import Close from './Close.svg?react';
@@ -34,6 +35,7 @@ import Filter from './Filter.svg?react';
 import Health from './Health.svg?react';
 import InfoCircleFilled from './Info-circle-filled.svg?react';
 import InfoCircle from './Info-circle.svg?react';
+import Intermediate from './Intermediate.svg?react';
 import LeftLarge from './Left-large.svg?react';
 import Left from './Left.svg?react';
 import Lightning from './Lightning.svg?react';
@@ -86,6 +88,7 @@ export interface Icons {
   checkcircle?: React.ReactNode;
   checkdouble?: React.ReactNode;
   check?: React.ReactNode;
+  check2?: React.ReactNode;
   closecirclefilled?: React.ReactNode;
   closecircle?: React.ReactNode;
   close?: React.ReactNode;
@@ -105,6 +108,7 @@ export interface Icons {
   health?: React.ReactNode;
   infocirclefilled?: React.ReactNode;
   infocircle?: React.ReactNode;
+  intermediate?: React.ReactNode;
   leftlarge?: React.ReactNode;
   left?: React.ReactNode;
   lightning?: React.ReactNode;
@@ -159,6 +163,7 @@ export const ICONS: Icons = {
   checkcircle: <CheckCircle />,
   checkdouble: <CheckDouble />,
   check: <Check />,
+  check2: <Check2 />,
   closecirclefilled: <CloseCircleFilled />,
   closecircle: <CloseCircle />,
   close: <Close />,
@@ -178,6 +183,7 @@ export const ICONS: Icons = {
   health: <Health />,
   infocirclefilled: <InfoCircleFilled />,
   infocircle: <InfoCircle />,
+  intermediate: <Intermediate />,
   leftlarge: <LeftLarge />,
   left: <Left />,
   logs: <Logs />,

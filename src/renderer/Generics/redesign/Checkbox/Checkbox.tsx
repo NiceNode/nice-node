@@ -10,6 +10,7 @@ import {
   indeterminateCustomCheckbox,
   disabledCheckbox,
 } from './checkbox.css';
+import { Icon } from '../Icon/Icon.js';
 
 export interface CheckboxProps {
   /**
@@ -85,43 +86,12 @@ export const Checkbox = ({
       >
         {sIsChecked && !sIsIndeterminate && (
           <span className={svgCheckmark}>
-            {/* Checkmark SVG */}
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              title="Checkmark"
-            >
-              <path
-                d="M20 6L9 17L4 12"
-                stroke="currentColor"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <Icon iconId={'check'} />
           </span>
         )}
         {sIsIndeterminate && (
           <span className={svgIndeterminate}>
-            {/* Indeterminate SVG */}
-            <svg
-              width="10"
-              height="2"
-              viewBox="0 0 10 2"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              title="Indeterminate"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M0.555664 1C0.555664 0.50908 0.953633 0.111111 1.44455 0.111111H8.55567C9.04659 0.111111 9.44455 0.50908 9.44455 1C9.44455 1.49092 9.04659 1.88889 8.55567 1.88889H1.44455C0.953633 1.88889 0.555664 1.49092 0.555664 1Z"
-                fill="currentColor"
-              />
-            </svg>
+            <Icon iconId={'intermediate'} />
           </span>
         )}
       </span>
