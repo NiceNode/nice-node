@@ -101,10 +101,10 @@ const addNode = async () => {
 
 const testsForEachNode = async () => {
   describe('Should pass all of the eth node successfully starts syncing tests:', async () => {
-    it('Ethereum Node screen should be displayed with syncing and stop btn', async () => {
+    it('Ethereum Node screen should be displayed with starting and starting... btn', async () => {
       await expect(await $('div*=Ethereum Node')).toBeDisplayed();
       await expect(await $('div*=Starting')).toBeDisplayed();
-      await expect(await $('span*=Stop')).toBeDisplayed();
+      await expect(await $('span*=Starting...')).toBeDisplayed();
       // after docker containers are downloaded and the node is started, the node should be online
       // await expect(await $('div*=Online')).toBeDisplayed();
     }).timeout(120000); // wait 3 minutes for the node to download & start
