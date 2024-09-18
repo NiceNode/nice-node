@@ -77,8 +77,8 @@ export const executeTranslation = async ({
 
       if (resp !== undefined) {
         if (resp === false) {
-          if (specId === 'reth') {
-            // In reth, check eth_blockNumber as a fallback when eth_syncing is false
+          if (specId === 'reth' || specId === 'besu') {
+            // In reth & besu, check eth_blockNumber as a fallback when eth_syncing is false
             let rethCurrentBlock = await provider.send('eth_blockNumber');
             rethCurrentBlock = Number.parseInt(rethCurrentBlock, 16);
             isSyncing = rethCurrentBlock === 0;
