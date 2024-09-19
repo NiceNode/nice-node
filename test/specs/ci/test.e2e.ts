@@ -143,7 +143,7 @@ describe('Splash screen tests', () => {
       // after docker containers are downloaded and the node is started, the node should be online
       // await expect(await $('div*=Online')).toBeDisplayed();
       // await expect(await $('div*=')).toBeDisplayed();
-    }).timeout(120000); // wait 3 minutes for the node to download & start
+    }).timeout(240000); // wait 6 minutes for the node to download & start
   }
 });
 
