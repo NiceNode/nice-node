@@ -131,6 +131,8 @@ describe('Splash screen tests', () => {
     }).timeout(120000); // wait 3 minutes for the node to download & start
 
     it('clicking stop node btn should stop the node and show resume button', async () => {
+      // Stop doesn't show until the containers have downloaded. This is why we need to wait longer.
+      await $('span*=Stop').waitForExist({ timeout: 240000 }); // default wait time is only 5 seconds
       const stopBtn = (await $('span*=Stop')).parentElement();
       (await stopBtn).click();
       // await browser.pause(15000);
