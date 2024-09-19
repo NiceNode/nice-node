@@ -138,6 +138,7 @@ describe('Splash screen tests', () => {
       // await browser.pause(15000);
       // await expect(await $('div*=Stopping')).toBeDisplayed();
       // ...
+      await $('div*=Stopped').waitForExist({ timeout: 240000 }); // default wait time is only 5 seconds
       await expect(await $('div*=Stopped')).toBeDisplayed();
       await expect(await $('span*=Resume')).toBeDisplayed();
       // await browser.pause(15000);
@@ -145,7 +146,7 @@ describe('Splash screen tests', () => {
       // after docker containers are downloaded and the node is started, the node should be online
       // await expect(await $('div*=Online')).toBeDisplayed();
       // await expect(await $('div*=')).toBeDisplayed();
-    }).timeout(240000); // wait 6 minutes for the node to download & start
+    }).timeout(600000); // wait 10 minutes for the node to download & start
   }
 });
 
