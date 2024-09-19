@@ -1,7 +1,7 @@
 {
   "specId": "base",
-  "version": "1.0.0",
-  "displayName": "Base",
+  "version": "1.0.1",
+  "displayTagline": "Ethereum L2 - Base",
   "execution": {
     "executionTypes": ["nodePackage"],
     "services": [

@@ -16,9 +16,9 @@ export const inlineContainer = style([container, { display: 'inline-flex' }]);
 export const blockContainer = style([container, { display: 'flex' }]);
 
 export const linkText = style({
-  color: vars.color.primary,
+  color: vars.color.primaryLink,
   ':hover': {
-    color: vars.color.primaryHover,
+    color: vars.color.primaryLinkHover,
   },
   // todo: remove when app.css is removed. Legacy fix
   margin: 0,

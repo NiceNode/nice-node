@@ -157,27 +157,45 @@ export const assignPortsToNode = (node: Node): Node => {
     node.config.configValuesMap[portType] = assignedPort.toString();
   });
 
-  if (node.spec.rpcTranslation === 'eth-l1-beacon' && executionService) {
+  if (
+    (node.spec.rpcTranslation === 'eth-l1-beacon' ||
+      node.spec.rpcTranslation === 'eth-l2-consensus') &&
+    executionService
+  ) {
     const executionNode = getNode(executionService.node.id);
-    let executionEndpoint = node.config.configValuesMap.executionEndpoint;
+    const endpointKey =
+      node.spec.rpcTranslation === 'eth-l1-beacon'
+        ? 'executionEndpoint'
+        : 'l2executionEndpoint';
+    let executionEndpoint = node.config.configValuesMap[endpointKey];
 
-    const regex = /:\d{4}/;
-    if (regex.test(executionEndpoint)) {
-      return;
+    if (!/:\d{4}/.test(executionEndpoint)) {
+      const portSuffix = `:${executionNode.config.configValuesMap.enginePort}`;
+      const isQuoted =
+        executionEndpoint.startsWith('"') && executionEndpoint.endsWith('"');
+
+      executionEndpoint = isQuoted
+        ? `${executionEndpoint.slice(0, -1)}${portSuffix}"`
+        : `${executionEndpoint}${portSuffix}`;
+
+      node.config.configValuesMap[endpointKey] = executionEndpoint;
     }
 
-    // Check if the endpoint is enclosed in quotes
-    const isQuoted =
-      executionEndpoint.startsWith('"') && executionEndpoint.endsWith('"');
-    const portSuffix = `:${executionNode.config.configValuesMap.enginePort}`;
+    if (node.spec.rpcTranslation === 'eth-l2-consensus') {
+      let l2RpcUrl = node.config.configValuesMap.l2RpcUrl;
+      const httpPort = executionNode.config.configValuesMap.httpPort;
 
-    // Append the port inside the quotes if necessary
-    if (isQuoted) {
-      executionEndpoint = `${executionEndpoint.slice(0, -1) + portSuffix}"`;
-    } else {
-      executionEndpoint += portSuffix;
+      if (l2RpcUrl && httpPort && !/:\d{4}/.test(l2RpcUrl)) {
+        const portSuffix = `:${httpPort}`;
+        const isQuoted = l2RpcUrl.startsWith('"') && l2RpcUrl.endsWith('"');
+
+        l2RpcUrl = isQuoted
+          ? `${l2RpcUrl.slice(0, -1)}${portSuffix}"`
+          : `${l2RpcUrl}${portSuffix}`;
+
+        node.config.configValuesMap.l2RpcUrl = l2RpcUrl;
+      }
     }
-    node.config.configValuesMap.executionEndpoint = executionEndpoint;
   }
 
   return node; // Return the updated node without persisting changes

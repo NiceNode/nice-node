@@ -31,7 +31,7 @@ const callFetch = async (apiRoute: string) => {
       accept: 'application/json',
     },
     // mode: 'cors',
-    // cache: 'no-cache',
+    cache: 'no-cache',
     // credentials: 'same-origin',
     redirect: 'follow',
     referrer: 'client',
@@ -51,32 +51,70 @@ type RpcCall =
   | 'clientVersion'
   | 'net_version'
   | 'metrics';
-export const executeTranslation = async (
-  rpcCall: RpcCall,
-  rpcTranslation: string,
-  httpPort: string,
-): Promise<any> => {
+export const executeTranslation = async ({
+  rpcCall,
+  rpcTranslation,
+  httpPort,
+  url,
+  specId,
+}: {
+  rpcCall: string;
+  rpcTranslation: string;
+  httpPort: string;
+  url?: string;
+  specId?: string;
+}) => {
   const provider = new ethers.providers.JsonRpcProvider(
-    `http://localhost:${httpPort}`,
+    url ? url : `http://localhost:${httpPort}`,
   );
   if (rpcTranslation === 'eth-l1') {
     // use provider
     if (rpcCall === 'sync') {
       const resp = await provider.send('eth_syncing');
-      let isSyncing;
-      let currentBlock = 0;
+      let isSyncing = true; // Default to true unless explicitly set to false
       let highestBlock = 0;
+      let currentBlock = 0;
+
       if (resp !== undefined) {
-        if (typeof resp === 'object') {
-          currentBlock = Number.parseInt(resp.currentBlock, 10);
-          highestBlock = Number.parseInt(resp.highestBlock, 10);
-          isSyncing = true;
-        } else if (resp === false) {
-          // reth, light client geth, it is done syncing if data is false
-          isSyncing = false;
+        if (resp === false) {
+          if (specId === 'reth' || specId === 'besu') {
+            // In reth & besu, check eth_blockNumber as a fallback when eth_syncing is false
+            let rethCurrentBlock = await provider.send('eth_blockNumber');
+            rethCurrentBlock = Number.parseInt(rethCurrentBlock, 16);
+            isSyncing = rethCurrentBlock === 0;
+          } else {
+            isSyncing = false;
+          }
+        } else {
+          const parsed = Object.fromEntries(
+            Object.entries(resp).map(([key, value]) => {
+              if (typeof value === 'number') {
+                return [key, value];
+              }
+              if (typeof value === 'string') {
+                return [key, Number.parseInt(value)];
+              }
+              return [key, undefined];
+            }),
+          );
+
+          highestBlock = parsed.highestBlock || 0;
+          currentBlock = parsed.currentBlock || 0;
+
+          if (highestBlock === 0) {
+            isSyncing = true;
+          } else {
+            // Set isSyncing to false if within 30 blocks, true otherwise
+            isSyncing = highestBlock - currentBlock >= 30;
+          }
         }
       }
-      return { isSyncing, currentBlock, highestBlock };
+
+      return {
+        isSyncing,
+        currentBlock,
+        highestBlock,
+      };
     }
     if (rpcCall === 'peers') {
       const resp = await provider.send('net_peerCount');
@@ -86,10 +124,7 @@ export const executeTranslation = async (
       return undefined;
     }
     if (rpcCall === 'latestBlock') {
-      const resp = await provider.send('eth_getBlockByNumber', [
-        'latest',
-        true,
-      ]);
+      const resp = await provider.getBlockNumber();
       return resp;
     }
     if (rpcCall === 'clientVersion') {
@@ -99,22 +134,91 @@ export const executeTranslation = async (
       }
       return undefined;
     }
+  } else if (rpcTranslation === 'eth-l1-beacon') {
+    // call beacon api
+    const beaconBaseUrl = `http://localhost:${httpPort}`;
+    if (rpcCall === 'sync') {
+      const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/syncing`);
+      if (!resp) return { isSyncing: false, currentSlot: 0, highestSlot: 0 };
+
+      if (resp?.data) {
+        const {
+          is_syncing: isSyncing = false,
+          head_slot: highestSlot = 0,
+          sync_distance: syncDistance = 0,
+        } = resp.data;
+
+        const highestSlotNumber = Number(highestSlot);
+        const syncDistanceNumber = Number(syncDistance);
+        const currentSlot = highestSlotNumber - syncDistanceNumber;
+
+        return {
+          isSyncing,
+          currentSlot,
+          highestSlot: highestSlotNumber,
+        };
+      }
+    } else if (rpcCall === 'peers') {
+      const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/peer_count`);
+      console.log('peers fetch resp ', resp);
+      if (resp?.data?.connected !== undefined) {
+        return resp.data.connected;
+      }
+    } else if (rpcCall === 'latestBlock') {
+      const resp = await callFetch(
+        `${beaconBaseUrl}/eth/v2/beacon/blocks/head`,
+      );
+      console.log('latestBlock fetch resp ', resp);
+      if (resp?.data !== undefined) {
+        return resp.data;
+      }
+    } else if (rpcCall === 'clientVersion') {
+      const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/version`);
+      if (resp?.data?.version !== undefined) {
+        return resp.data.version;
+      }
+    }
   } else if (rpcTranslation === 'eth-l2') {
     if (rpcCall === 'sync') {
       const resp = await provider.send('eth_syncing');
-      let isSyncing;
-      let syncPercent;
-      if (resp) {
-        if (typeof resp === 'object') {
-          const syncRatio = resp.currentBlock / resp.highestBlock;
-          syncPercent = (syncRatio * 100).toFixed(1);
-          isSyncing = true;
-        } else if (resp === false) {
-          // light client geth, it is done syncing if data is false
+      let isSyncing = true; // Default to true unless explicitly set to false
+      let highestBlock = 0;
+      let currentBlock = 0;
+
+      //TODO: customize the following logic depending on the rollup
+      if (resp !== undefined) {
+        if (resp === false) {
           isSyncing = false;
+        } else {
+          const parsed = Object.fromEntries(
+            Object.entries(resp).map(([key, value]) => {
+              if (typeof value === 'number') {
+                return [key, value];
+              }
+              if (typeof value === 'string') {
+                return [key, Number.parseInt(value)];
+              }
+              return [key, undefined];
+            }),
+          );
+
+          highestBlock = parsed.highestBlock || 0;
+          currentBlock = parsed.currentBlock || 0;
+
+          if (highestBlock === 0) {
+            isSyncing = true;
+          } else {
+            // Set isSyncing to false if within 30 blocks, true otherwise
+            isSyncing = highestBlock - currentBlock >= 30;
+          }
         }
       }
-      return { isSyncing, syncPercent };
+
+      return {
+        isSyncing,
+        currentBlock,
+        highestBlock,
+      };
     }
     if (rpcCall === 'peers') {
       const resp = await provider.send('net_peerCount');
@@ -148,28 +252,62 @@ export const executeTranslation = async (
   } else if (rpcTranslation === 'eth-l2-consensus') {
     // use provider
     if (rpcCall === 'sync') {
-      const resp = await provider.send('eth_syncing');
-      let isSyncing;
-      let currentSlot;
-      let highestSlot;
-      if (resp) {
-        if (typeof resp === 'object') {
-          currentSlot = Number.parseInt(resp.currentSlot, 10);
-          highestSlot = Number.parseInt(resp.highestSlot, 10);
-          isSyncing = true;
-        } else if (resp === false) {
-          // light client geth, it is done syncing if data is false
-          isSyncing = false;
-        }
+      if (specId === 'op-node') {
+        const resp = await provider.send('optimism_syncStatus', []);
+        if (!resp) return { isSyncing: true, currentBlock: 0, highestBlock: 0 };
+
+        const l1Behind = resp.head_l1.number - resp.current_l1.number;
+        const l2Behind = resp.head_l1.number - resp.unsafe_l2.number;
+
+        const isSyncing =
+          l1Behind > 10 ||
+          l2Behind > 100 ||
+          resp.current_l1.number === 0 ||
+          resp.unsafe_l2.number === 0;
+        const currentBlock = resp.unsafe_l2.number;
+        const highestBlock = resp.head_l1.number;
+
+        return {
+          isSyncing,
+          currentBlock,
+          highestBlock,
+        };
       }
-      return { isSyncing, currentSlot, highestSlot };
+      const resp = await provider.send('eth_syncing');
+      if (!resp) return { isSyncing: false, currentSlot: 0, highestSlot: 0 };
+
+      if (resp?.data) {
+        const {
+          is_syncing: isSyncing = false,
+          head_slot: highestSlot = 0,
+          sync_distance: syncDistance = 0,
+        } = resp.data;
+
+        const highestSlotNumber = Number(highestSlot);
+        const syncDistanceNumber = Number(syncDistance);
+        const currentSlot = highestSlotNumber - syncDistanceNumber;
+
+        return {
+          isSyncing,
+          currentSlot,
+          highestSlot: highestSlotNumber,
+        };
+      }
     }
     if (rpcCall === 'peers') {
+      if (specId === 'op-node') {
+        const resp = await provider.send('opp2p_peers', [true]);
+        return resp?.totalConnected || 0;
+      }
       const resp = await provider.send('net_peerCount');
       if (resp) {
         return hexToDecimal(resp);
       }
     } else if (rpcCall === 'latestBlock') {
+      if (specId === 'op-node') {
+        const resp = await provider.send('optimism_syncStatus', []);
+        return resp?.unsafe_l2.number || 0;
+      }
       const resp = await provider.send('eth_getBlockByNumber', [
         'latest',
         true,
@@ -182,46 +320,8 @@ export const executeTranslation = async (
       }
       return undefined;
     }
-  } else if (rpcTranslation === 'eth-l1-beacon') {
-    // call beacon api
-    const beaconBaseUrl = `http://localhost:${httpPort}`;
-    if (rpcCall === 'sync') {
-      const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/syncing`);
-      if (resp?.data?.is_syncing !== undefined) {
-        let syncPercent;
-        if (resp.data.is_syncing) {
-          const syncRatio =
-            Number.parseInt(resp.data.head_slot, 10) /
-            (Number.parseInt(resp.data.sync_distance, 10) +
-              Number.parseInt(resp.data.head_slot, 10));
-          syncPercent = (syncRatio * 100).toFixed(1);
-        }
-
-        return { isSyncing: resp.data.is_syncing, syncPercent };
-      }
-    } else if (rpcCall === 'peers') {
-      const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/peer_count`);
-      console.log('peers fetch resp ', resp);
-      if (resp?.data?.connected !== undefined) {
-        return resp.data.connected;
-      }
-    } else if (rpcCall === 'latestBlock') {
-      const resp = await callFetch(
-        `${beaconBaseUrl}/eth/v1/beacon/headers/head`,
-      );
-      console.log('latestBlock fetch resp ', resp);
-      if (resp?.data !== undefined) {
-        return resp.data;
-      }
-    } else if (rpcCall === 'clientVersion') {
-      const resp = await callFetch(`${beaconBaseUrl}/eth/v1/node/version`);
-      if (resp?.data?.version !== undefined) {
-        return resp.data.version;
-      }
-    }
   } else if (rpcTranslation === 'farcaster-l1') {
-    // todo: use the current config httpPort value instead of hardcoding 2281
-    const hubbleBaseUrl = 'http://localhost:2281';
+    const hubbleBaseUrl = `http://localhost:${httpPort}`;
     if (rpcCall === 'sync') {
       const resp = await callFetch(`${hubbleBaseUrl}/v1/info`);
       if (resp && resp.isSyncing !== undefined) {

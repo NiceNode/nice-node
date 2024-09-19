@@ -47,6 +47,10 @@ export const modalContentStyle = style({
     '&.podman': {
       width: '624px',
     },
+    '&.update': {
+      width: '312px',
+      minHeight: 142,
+    },
     '&.preferences': {
       width: '624px',
     },
@@ -122,6 +126,10 @@ export const modalChildrenContainer = style({
   selectors: {
     '&.alert': {
       padding: '0px 24px',
+      overflow: 'hidden',
+    },
+    '&.simple': {
+      padding: 24,
       overflow: 'hidden',
     },
     '&.info': {

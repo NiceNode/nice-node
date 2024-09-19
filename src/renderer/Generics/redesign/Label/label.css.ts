@@ -49,6 +49,10 @@ export const container = style({
       background: vars.components.labelOrangeBackground,
       color: vars.components.labelOrangeFontColor,
     },
+    '&.orange2': {
+      background: vars.components.labelOrange2Background,
+      color: vars.components.labelOrange2FontColor,
+    },
     '&.pink2': {
       background: vars.components.labelPink2Background,
       color: vars.components.labelPink2FontColor,

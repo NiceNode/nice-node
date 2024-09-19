@@ -1,5 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
-import welcome from '../../../assets/images/artwork/welcome.png';
+import { useTheme } from '../../../ThemeManager.js';
+import welcomeDm from '../../../assets/images/artwork/welcome-Dm.png';
+import welcomeLm from '../../../assets/images/artwork/welcome-Lm.png';
 import niceNodeIcon from '../../../assets/images/logo/mono.svg';
 import Button from '../Button/Button';
 import Linking from '../Link/Linking';
@@ -24,13 +26,15 @@ export interface SplashProps {
 const Splash = ({ onClickGetStarted }: SplashProps) => {
   const { t } = useTranslation();
   const { t: g } = useTranslation('genericComponents');
+  const { isDarkTheme } = useTheme();
+  const welcomeImage = isDarkTheme ? welcomeDm : welcomeLm;
 
   return (
     <div
       className={container}
       // webpack and vanilla css config was clashing for image imports so it is here
       style={{
-        backgroundImage: `url(${welcome})`,
+        backgroundImage: `url(${welcomeImage})`,
       }}
     >
       <div className={contentContainer}>

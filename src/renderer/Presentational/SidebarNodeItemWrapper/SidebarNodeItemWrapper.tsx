@@ -1,36 +1,57 @@
-import { useEffect, useState } from 'react';
+import moment from 'moment';
+import { useEffect, useState, useCallback } from 'react';
 import { type NodePackage, NodeStatus } from '../../../common/node';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
-import { getSyncStatus } from '../../Generics/redesign/utils';
-import { useGetExecutionIsSyncingQuery } from '../../state/services';
+import { getStatusObject, getSyncStatus } from '../../Generics/redesign/utils';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { selectUserNodes } from '../../state/node';
+import {
+  useGetExecutionIsSyncingQuery,
+  useGetExecutionLatestBlockQuery,
+  useGetExecutionPeersQuery,
+} from '../../state/services';
+import { getSyncDataForServiceAndNode } from '../../utils.js';
+import { SYNC_STATUS } from '../../Generics/redesign/consts.js';
 
 export type SidebarNodeStatus =
-  | 'healthy'
+  | 'online'
   | 'warning'
   | 'error'
   | 'sync'
   | 'stopped'
   | 'updating';
 
+const STATUS_ONLINE: SidebarNodeStatus = 'online';
+const STATUS_WARNING: SidebarNodeStatus = 'warning';
+const STATUS_ERROR: SidebarNodeStatus = 'error';
+const STATUS_SYNC: SidebarNodeStatus = 'sync';
+const STATUS_STOPPED: SidebarNodeStatus = 'stopped';
+const STATUS_UPDATING: SidebarNodeStatus = 'updating';
+
 const NODE_SIDEBAR_STATUS_MAP: Record<string, SidebarNodeStatus> = {
-  created: 'stopped',
-  initializing: 'sync',
-  [NodeStatus.checkingForUpdates]: 'updating',
-  downloading: 'updating',
-  downloaded: 'stopped',
-  [NodeStatus.errorDownloading]: 'error',
-  updating: 'updating',
-  extracting: 'updating',
-  [NodeStatus.readyToStart]: 'stopped',
-  starting: 'sync',
-  running: 'healthy',
-  stopping: 'healthy',
-  stopped: 'stopped',
-  [NodeStatus.errorRunning]: 'error',
-  [NodeStatus.errorStarting]: 'error',
-  [NodeStatus.errorStopping]: 'error',
-  unknown: 'error',
-  error: 'error',
+  created: STATUS_STOPPED,
+  initializing: STATUS_SYNC,
+  [NodeStatus.checkingForUpdates]: STATUS_UPDATING,
+  downloading: STATUS_UPDATING,
+  downloaded: STATUS_STOPPED,
+  [NodeStatus.errorDownloading]: STATUS_ERROR,
+  updating: STATUS_UPDATING,
+  extracting: STATUS_UPDATING,
+  [NodeStatus.readyToStart]: STATUS_STOPPED,
+  starting: STATUS_SYNC,
+  running: STATUS_SYNC,
+  stopping: STATUS_SYNC,
+  removing: STATUS_SYNC,
+  stopped: STATUS_STOPPED,
+  lowPeerCount: STATUS_WARNING,
+  synchronized: STATUS_ONLINE,
+  noConnection: STATUS_ERROR,
+  [NodeStatus.errorRunning]: STATUS_ERROR,
+  [NodeStatus.errorStarting]: STATUS_ERROR,
+  [NodeStatus.errorStopping]: STATUS_ERROR,
+  catchingUp: STATUS_SYNC,
+  unknown: STATUS_ERROR,
+  error: STATUS_ERROR,
 };
 
 export interface SidebarNodeItemWrapperProps {
@@ -42,6 +63,7 @@ export interface SidebarNodeItemWrapperProps {
    * What's the status?
    */
   status?: SidebarNodeStatus;
+  offline?: boolean;
   /**
    * Optional click handler
    */
@@ -58,48 +80,145 @@ export const SidebarNodeItemWrapper = ({
   selected,
   id,
   node,
+  offline,
 }: SidebarNodeItemWrapperProps) => {
-  const [sIsSyncing, setIsSyncing] = useState<boolean>();
-  const [sSyncPercent, setSyncPercent] = useState<string>('');
-
-  const pollingInterval = 0;
+  const pollingInterval = node?.status === SYNC_STATUS.RUNNING ? 15000 : 0;
+  const sUserNodes = useAppSelector(selectUserNodes);
+  const executionService = node?.services.find(
+    (service: { serviceId: string }) => service.serviceId === 'executionClient',
+  );
+  const consensusService = node?.services.find(
+    (service: { serviceId: string }) => service.serviceId === 'consensusClient',
+  );
+  const executionServiceId = executionService?.node.id;
+  const consensusServiceId = consensusService?.node.id;
+  const executionNode = sUserNodes?.nodes[executionServiceId];
+  const consensusNode = sUserNodes?.nodes[consensusServiceId];
+  const executionHttpPort =
+    executionServiceId && executionNode?.config.configValuesMap.httpPort;
+  const consensusHttpPort =
+    consensusServiceId && consensusNode?.config.configValuesMap.httpPort;
+  const isEthereumNodePackage = node?.spec?.specId === 'ethereum';
+  const executionRpcTranslation = executionService?.node?.spec?.rpcTranslation;
+  const consensusRpcTranslation = consensusService?.node?.spec?.rpcTranslation;
+  const qPublicExecutionLatestBlock = useGetExecutionLatestBlockQuery(
+    {
+      rpcTranslation: executionRpcTranslation,
+      httpPort: executionHttpPort,
+      url: 'https://ethereum-rpc.publicnode.com',
+    },
+    { pollingInterval },
+  );
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     {
-      rpcTranslation: node.spec.rpcTranslation,
-      httpPort: node?.config?.configValuesMap?.httpPort,
+      rpcTranslation: executionRpcTranslation,
+      httpPort: executionHttpPort,
+      specId: executionNode?.spec.specId,
     },
-    {
-      pollingInterval,
-    },
+    { pollingInterval },
   );
-
-  useEffect(() => {
-    console.log('qExecutionIsSyncing: ', qExecutionIsSyncing);
-    if (qExecutionIsSyncing.isError) {
-      setSyncPercent('');
-      setIsSyncing(undefined);
-      return;
-    }
-    const syncingData = qExecutionIsSyncing.data;
-    if (typeof syncingData === 'object') {
-      setSyncPercent(syncingData.syncPercent);
-      setIsSyncing(syncingData.isSyncing);
-    } else {
-      setSyncPercent('');
-      setIsSyncing(undefined);
-    }
-  }, [qExecutionIsSyncing]);
+  const qExecutionPeers = useGetExecutionPeersQuery(
+    {
+      rpcTranslation: executionRpcTranslation,
+      httpPort: executionHttpPort,
+      specId: executionNode?.spec.specId,
+    },
+    { pollingInterval },
+  );
+  const qExecutionLatestBlock = useGetExecutionLatestBlockQuery(
+    { rpcTranslation: executionRpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
+  );
+  const qConsensusIsSyncing = useGetExecutionIsSyncingQuery(
+    {
+      rpcTranslation: consensusRpcTranslation,
+      httpPort: consensusHttpPort,
+      specId: consensusNode?.spec.specId,
+    },
+    { pollingInterval },
+  );
+  const qConsensusPeers = useGetExecutionPeersQuery(
+    {
+      rpcTranslation: consensusRpcTranslation,
+      httpPort: consensusHttpPort,
+      specId: consensusNode?.spec.specId,
+    },
+    { pollingInterval },
+  );
+  const qConsensusLatestBlock = useGetExecutionLatestBlockQuery(
+    {
+      rpcTranslation: consensusRpcTranslation,
+      httpPort: consensusHttpPort,
+    },
+    { pollingInterval },
+  );
 
   const { spec, status } = node;
 
-  const nodeStatus = {
-    stopped: status === 'stopped',
-    error: status.includes('error'),
-    synchronized: !sIsSyncing && Number.parseFloat(sSyncPercent) > 99.9,
+  const getSyncDataForService = useCallback(
+    (service: any, node: any) => {
+      return getSyncDataForServiceAndNode(
+        service,
+        node,
+        qExecutionIsSyncing,
+        qConsensusIsSyncing,
+        qExecutionPeers,
+        qConsensusPeers,
+        offline,
+      );
+    },
+    [
+      qExecutionIsSyncing,
+      qConsensusIsSyncing,
+      qExecutionPeers,
+      qConsensusPeers,
+      offline,
+    ],
+  );
+
+  const executionSyncData =
+    executionService && executionNode
+      ? getSyncDataForService(executionService, executionNode)
+      : undefined;
+  const consensusSyncData =
+    consensusService && consensusNode
+      ? getSyncDataForService(consensusService, consensusNode)
+      : undefined;
+
+  const isEthereumNodePackageSynced = () => {
+    const isSynced = (
+      executionBlockNumber: number,
+      otherBlockNumber: number,
+    ) => {
+      return Math.abs(executionBlockNumber - otherBlockNumber) < 120; // ~30 minutes of blocks, should be fairly close to be considered synced
+    };
+    const executionLatestBlockNumber = qExecutionLatestBlock?.data;
+    return (
+      // Check if the execution block is close to the execution block contained within the consensus block
+      isSynced(
+        executionLatestBlockNumber,
+        qConsensusLatestBlock?.data?.message?.body?.execution_payload
+          ?.block_number,
+      ) ||
+      // If not, check if our execution block number is close to the public node that is already synced
+      isSynced(executionLatestBlockNumber, qPublicExecutionLatestBlock?.data)
+    );
   };
 
-  const syncStatus = getSyncStatus(nodeStatus);
-  const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[syncStatus];
+  const isNodePackageSyncing =
+    executionSyncData?.isSyncing ||
+    consensusSyncData?.isSyncing ||
+    (executionSyncData?.isSyncing === undefined &&
+      consensusSyncData?.isSyncing === undefined) ||
+    (isEthereumNodePackage && !isEthereumNodePackageSynced());
+
+  const nodePackageSyncData = {
+    ...executionSyncData,
+    isSyncing: isNodePackageSyncing,
+  };
+
+  const nodeStatus = getStatusObject(status, nodePackageSyncData);
+  const sidebarStatus = NODE_SIDEBAR_STATUS_MAP[getSyncStatus(nodeStatus)];
 
   return (
     <SidebarNodeItem

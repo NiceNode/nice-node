@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import type { NodeId } from 'src/common/node.js';
 import { ClientCard } from '../../Generics/redesign/ClientCard/ClientCard';
 import { Header } from '../../Generics/redesign/Header/Header';
 import { HeaderMetrics } from '../../Generics/redesign/HeaderMetrics/HeaderMetrics';
@@ -31,6 +32,9 @@ const ContentMultipleClients = (props: {
   isPodmanRunning: boolean;
 }) => {
   const { clients, nodeContent, isPodmanRunning } = props;
+  if (clients.length === 0 || !nodeContent) {
+    return null; // or return a placeholder component
+  }
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -58,23 +62,24 @@ const ContentMultipleClients = (props: {
     onDismissClick();
   }, [onDismissClick]);
 
-  const onAction = useCallback(
-    (action: any) => {
-      // todo: handle nodeContent.nodeId undefined error
-      if (!nodeContent?.nodeId) {
-        return;
-      }
-      if (action === 'start') {
-        electron.startNodePackage(nodeContent?.nodeId);
-      } else if (action === 'stop') {
-        electron.stopNodePackage(nodeContent?.nodeId);
-      }
-    },
-    [nodeContent],
-  );
+  const onAction = useCallback((action: any, nodeId: NodeId) => {
+    // todo: handle nodeContent.nodeId undefined error
+    if (!nodeId) {
+      return;
+    }
+    if (action === 'start') {
+      electron.startNodePackage(nodeId);
+    } else if (action === 'stop') {
+      electron.stopNodePackage(nodeId);
+    }
+  }, []);
 
-  const clClient = clients.find((client) => client.nodeType === 'consensus');
-  const elClient = clients.find((client) => client.nodeType === 'execution');
+  const elClient = clients.find(
+    (client) => client?.serviceId === 'executionClient',
+  );
+  const clClient = clients.find(
+    (client) => client?.serviceId === 'consensusClient',
+  );
 
   const resourceData = useMemo(() => {
     const resourceData: { title: string; items: any[] } = {
@@ -120,8 +125,8 @@ const ContentMultipleClients = (props: {
       );
     }
     if (
-      !clClient?.status.initialized &&
-      !elClient?.status.initialized &&
+      // !clClient?.status.initialized &&
+      // !elClient?.status.initialized &&
       !synchronized &&
       !initialSyncMessageDismissed
     ) {
@@ -189,6 +194,7 @@ const ContentMultipleClients = (props: {
     }
     const nodeOverview: NodeOverviewProps = {
       name: nodeContent.name,
+      nodeId: nodeContent.nodeId,
       title: `${nodeContent.displayName} ${t('Node')}`,
       iconUrl: nodeContent.iconUrl,
       info: nodeContent.info ?? '',
@@ -201,7 +207,11 @@ const ContentMultipleClients = (props: {
       releaseNotesUrl: nodeContent.documentation?.releaseNotesUrl,
     };
     return nodeOverview;
-  }, [JSON.stringify(nodeContent?.status), JSON.stringify(nodeContent?.stats)]);
+  }, [
+    JSON.stringify(nodeContent?.nodeId),
+    JSON.stringify(nodeContent?.status),
+    JSON.stringify(nodeContent?.stats),
+  ]);
 
   const handleClientClick = useCallback(
     (clientId: string | undefined) => {
@@ -231,10 +241,12 @@ const ContentMultipleClients = (props: {
       </div>
       <div className={clientCardsContainer}>
         {clients.map((client) => {
+          if (!client || !client.id) return null;
           return (
             <ClientCard
               packageName={nodeContent.name}
               key={client.id}
+              single={clients.length === 1}
               {...client}
               onClick={() => handleClientClick(client.id)}
             />

@@ -10,6 +10,21 @@ export const outerDiv = style({
   borderRadius: 4,
   boxSizing: 'border-box',
   overflow: 'hidden',
+  background: vars.color.font8,
+});
+
+export const percentTextLeft = style({
+  position: 'absolute',
+  top: '45%',
+  right: 5,
+  transform: 'translateY(-50%)',
+});
+
+export const percentTextRight = style({
+  position: 'absolute',
+  left: 5,
+  top: '45%',
+  transform: 'translateY(-50%)',
 });
 
 export const innerDiv = style({
@@ -23,7 +38,7 @@ export const sectionFont = style({
 });
 
 export const captionText = style({
-  paddingTop: 4,
+  paddingTop: 8,
   fontSize: 11,
   lineHeight: '14px',
   color: vars.color.font50,

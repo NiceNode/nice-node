@@ -31,7 +31,7 @@ export interface NodeIconProps {
   /**
    * What's the status?
    */
-  status?: 'healthy' | 'warning' | 'error' | 'sync' | 'stopped' | 'updating';
+  status?: 'online' | 'warning' | 'error' | 'sync' | 'stopped' | 'updating';
   /**
    * What size should the icon be?
    */
@@ -55,7 +55,7 @@ const NodeIcon = ({ iconId, status, size, iconUrl }: NodeIconProps) => {
     sizeStyle = largeStyle;
   }
   let statusColorStyle;
-  if (status === 'healthy') {
+  if (status === 'online') {
     statusColorStyle = green;
   } else if (status === 'warning') {
     statusColorStyle = yellow;

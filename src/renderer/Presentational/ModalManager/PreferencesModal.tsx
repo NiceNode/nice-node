@@ -13,13 +13,14 @@ import { type ModalConfig, modalOnChangeConfig } from './modalUtils';
 
 type Props = {
   modalOnClose: () => void;
+  data?: any;
 };
 
 interface MetaElement extends HTMLMetaElement {
   content: ThemeSetting;
 }
 
-export const PreferencesModal = ({ modalOnClose }: Props) => {
+export const PreferencesModal = ({ modalOnClose, data }: Props) => {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({});
   const { t } = useTranslation();
   const modalTitle = t('Preferences');
@@ -89,6 +90,7 @@ export const PreferencesModal = ({ modalOnClose }: Props) => {
       modalOnCancel={modalOnClose}
     >
       <PreferencesWrapper
+        data={data}
         modalOnChangeConfig={(config, save) => {
           modalOnChangeConfig(
             config,

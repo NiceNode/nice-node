@@ -73,6 +73,8 @@ contextBridge.exposeInMainWorld('electron', {
   stopNodePackage: (nodeId: NodeId) => {
     ipcRenderer.invoke('stopNodePackage', nodeId);
   },
+  updateNodePackage: (nodeId: NodeId, propertiesToUpdate: any) =>
+    ipcRenderer.invoke('updateNodePackage', nodeId, propertiesToUpdate),
   removeNodePackage: (nodeId: NodeId, options: { isDeleteStorage: boolean }) =>
     ipcRenderer.invoke('removeNodePackage', nodeId, options),
   addNodePackage: async (

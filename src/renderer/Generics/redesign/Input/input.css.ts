@@ -54,6 +54,7 @@ export const inputContainer = style({
     background: vars.color.background96,
     border: '1px solid',
     borderColor: vars.color.background92,
+    cursor: 'not-allowed',
   },
   ':invalid': {
     border: '1px solid',

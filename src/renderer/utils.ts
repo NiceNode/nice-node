@@ -1,3 +1,4 @@
+import moment from 'moment';
 import type { NodeSpecification } from '../common/nodeSpec';
 import type { NodeLibrary } from '../main/state/nodeLibrary';
 
@@ -78,4 +79,65 @@ export const categorizeNodeLibrary = (
     }
   });
   return catgorized;
+};
+
+export const getSyncDataForServiceAndNode = (
+  service: any,
+  node: any,
+  qExecutionIsSyncing: any,
+  qConsensusIsSyncing: any,
+  qExecutionPeers: any,
+  qConsensusPeers: any,
+  networkStatus: string | boolean,
+) => {
+  const isNotConsensusClient = service.serviceId !== 'consensusClient';
+  const syncingQuery = isNotConsensusClient
+    ? qExecutionIsSyncing
+    : qConsensusIsSyncing;
+  const peersQuery = isNotConsensusClient ? qExecutionPeers : qConsensusPeers;
+
+  return getSyncData(
+    syncingQuery,
+    peersQuery,
+    networkStatus === 'rejected' || networkStatus === true,
+    node.lastRunningTimestampMs,
+    node.updateAvailable,
+    node.initialSyncFinished,
+  );
+};
+
+export const getSyncData = (
+  qIsSyncing: { isError: any; data: { isSyncing: any } },
+  qPeers: { isError: any; data: string },
+  offline: boolean,
+  lastRunningTimestampMs: moment.MomentInput,
+  updateAvailable: any,
+  initialSyncFinished: any,
+) => {
+  const isSyncing = qIsSyncing.isError
+    ? undefined
+    : qIsSyncing?.data?.isSyncing;
+
+  const peers = qPeers.isError
+    ? undefined
+    : typeof qPeers.data === 'number'
+      ? qPeers.data
+      : typeof qPeers.data === 'string'
+        ? Number.parseInt(qPeers.data, 10) || 0
+        : 0;
+
+  const now = moment();
+  const minutesPassedSinceLastRun = now.diff(
+    moment(lastRunningTimestampMs),
+    'minutes',
+  );
+
+  return {
+    isSyncing,
+    peers,
+    updateAvailable,
+    minutesPassedSinceLastRun,
+    offline,
+    initialSyncFinished: initialSyncFinished || false,
+  };
 };

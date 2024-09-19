@@ -10,7 +10,6 @@ import Button, { type ButtonProps } from '../Button/Button';
 import { Menu } from '../Menu/Menu';
 import { MenuItem } from '../MenuItem/MenuItem';
 import NodeIcon from '../NodeIcon/NodeIcon';
-import { UpdateCallout } from '../UpdateCallout/UpdateCallout';
 import type { NodeOverviewProps } from '../consts';
 import {
   buttonContainer,
@@ -44,10 +43,8 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
     status,
     version,
     onAction,
-    documentation,
   } = nodeOverview;
 
-  const [isCalloutDisplayed, setIsCalloutDisplayed] = useState<boolean>(false);
   const [isSettingsDisplayed, setIsSettingsDisplayed] =
     useState<boolean>(false);
 
@@ -55,32 +52,35 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
   const dispatch = useAppDispatch();
 
   const { t: g } = useTranslation('genericComponents');
-
-  let startStopButtonProps: ButtonProps = {
-    label: '',
-    iconId: undefined,
-    onClick: () => {},
-  };
   const startButtonProps: ButtonProps = {
     label: g('Resume'),
     iconId: 'play',
     onClick: () => {
-      if (onAction) onAction('start');
+      if (onAction) onAction('start', nodeId);
     },
   };
   const stopButtonProps: ButtonProps = {
     label: g('Stop'),
     iconId: 'stop',
     onClick: () => {
-      if (onAction) onAction('stop');
+      if (onAction) onAction('stop', nodeId);
     },
   };
-  if (!status.stopped) {
-    startStopButtonProps = stopButtonProps;
-  } else {
-    // const text = status.initialized ? 'Resume' : 'Start';
+  const transitionButtonProps: ButtonProps = {
+    label: status.stopping ? g('Stopping...') : g('Starting...'),
+    iconId: 'sync',
+  };
+  let startStopButtonProps: ButtonProps;
+  if (status.error) {
+    startStopButtonProps = startButtonProps; // show both buttons in case of error
+  } else if (status.stopping || status.starting) {
+    startStopButtonProps = transitionButtonProps;
+  } else if (status.stopped) {
     startStopButtonProps = startButtonProps;
+  } else {
+    startStopButtonProps = stopButtonProps;
   }
+
   let logsButtonProps: ButtonProps | undefined;
   if (screenType !== 'nodePackage') {
     logsButtonProps = {
@@ -109,52 +109,27 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
       </div>
       <div className={buttonContainer}>
         {status.updateAvailable && (
-          <div
-            className={menuButtonContainer}
-            onBlur={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget)) {
-                setIsCalloutDisplayed(false);
-              }
-            }}
-          >
+          <div className={menuButtonContainer}>
             <Button
-              label={g('Update')}
+              label={g('UpdateAvailable')}
               type="primary"
-              iconId="down"
-              variant="icon-right"
               size="small"
               onClick={() => {
-                setIsCalloutDisplayed(true);
+                dispatch(
+                  setModalState({
+                    isModalOpen: true,
+                    screen: {
+                      route: modalRoutes.update,
+                      type: 'modal',
+                      data: {
+                        deeplink: 'update',
+                        nodeOverview,
+                      },
+                    },
+                  }),
+                );
               }}
             />
-            {isCalloutDisplayed && (
-              // tabindex hack to keep focus, and allow blur behavior
-              // biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
-              <div className={popupContainer} tabIndex={0}>
-                <UpdateCallout
-                  // todo: pass http link to container release notes
-                  // todo: pass modal link for controller changes
-                  serviceName={displayName || name}
-                  releaseNotesUrl={documentation?.releaseNotesUrl}
-                  onClickShowChanges={() => {
-                    console.log('show change modal');
-                    dispatch(
-                      setModalState({
-                        isModalOpen: true,
-                        screen: {
-                          route: modalRoutes.controllerUpdate,
-                          type: 'modal',
-                        },
-                      }),
-                    );
-                  }}
-                  onClickInstallUpdate={() => {
-                    setIsCalloutDisplayed(false);
-                    electron.applyNodeUpdate(nodeId);
-                  }}
-                />
-              </div>
-            )}
           </div>
         )}
         {/* In case of the status being an error, we should show both start & stop buttons so the user can try
@@ -179,7 +154,10 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
             {...startStopButtonProps}
             variant="icon-left"
             size="small"
-            disabled={isPodmanRunning === false}
+            disabled={
+              isPodmanRunning === false ||
+              startStopButtonProps.iconId === 'sync'
+            }
             type={
               startStopButtonProps.iconId === 'play' ? 'primary' : 'secondary'
             }
@@ -241,6 +219,19 @@ export const Header = ({ nodeOverview, isPodmanRunning }: HeaderProps) => {
                         const isUpdateAvailable: NodeSpecification | undefined =
                           await electron.getCheckForControllerUpdate(nodeId);
                         console.log('isUpdateAvailable:', isUpdateAvailable);
+                        dispatch(
+                          setModalState({
+                            isModalOpen: true,
+                            screen: {
+                              route: modalRoutes.update,
+                              type: 'modal',
+                              data: {
+                                deeplink: 'check',
+                                nodeOverview,
+                              },
+                            },
+                          }),
+                        );
                       }}
                     />
                   </>

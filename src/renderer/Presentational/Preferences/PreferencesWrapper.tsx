@@ -9,10 +9,12 @@ import Preferences, { type Preference, type ThemeSetting } from './Preferences';
 
 export interface PreferencesWrapperProps {
   modalOnChangeConfig: (config: ModalConfig, save?: boolean) => void;
+  data?: any;
 }
 
 const PreferencesWrapper = ({
   modalOnChangeConfig,
+  data,
 }: PreferencesWrapperProps) => {
   const [sThemeSetting, setThemeSetting] = useState<ThemeSetting>();
   const [sOsIsDarkMode, setOsIsDarkMode] = useState<boolean>();
@@ -27,6 +29,7 @@ const PreferencesWrapper = ({
     useState<boolean>();
   const [sNiceNodeVersion, setNiceNodeVersion] = useState<string>();
   const [sLanguageSetting, setLanguageSetting] = useState<string>();
+  const [hasScrolled, setHasScrolled] = useState(false); // Track if the scroll has occurred
 
   const { i18n } = useTranslation();
   const qSettings = useGetSettingsQuery();
@@ -94,6 +97,16 @@ const PreferencesWrapper = ({
     getNiceNodeVersion();
     getLanguageSetting();
   }, []);
+
+  useEffect(() => {
+    if (!hasScrolled && data?.deeplink) {
+      const element = document.getElementById(data?.deeplink);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        setHasScrolled(true);
+      }
+    }
+  }, [sThemeSetting]);
 
   const onChangePreference = useCallback(
     async (preference: Preference, value: unknown) => {

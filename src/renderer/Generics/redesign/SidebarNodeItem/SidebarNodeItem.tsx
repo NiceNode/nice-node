@@ -11,7 +11,7 @@ import {
 } from './sideBarNodeItem.css';
 
 export type SidebarNodeStatus =
-  | 'healthy'
+  | 'online'
   | 'warning'
   | 'error'
   | 'sync'

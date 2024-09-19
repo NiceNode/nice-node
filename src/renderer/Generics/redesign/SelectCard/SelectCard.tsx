@@ -107,7 +107,7 @@ const SelectCard = ({
         </div>
         {releaseLabel && (
           <div className={tagStyle}>
-            <Label bold={false} type="pink2" label={releaseLabel} />{' '}
+            <Label bold={false} type="orange2" label={releaseLabel} />{' '}
           </div>
         )}
         {minority && (

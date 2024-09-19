@@ -14,6 +14,7 @@ export interface ClientStatusProps {
   online?: boolean;
   stopped?: boolean;
   error?: boolean;
+  removing?: boolean;
 }
 
 export interface ClientStatsProps {
@@ -47,6 +48,7 @@ export interface ClientProps {
 export type NodeAction = 'start' | 'stop' | 'logs' | 'settings';
 export interface NodeOverviewProps {
   name: NodeBackgroundId;
+  nodeId: NodeId;
   displayName?: string;
   title: string;
   info: string;
@@ -72,20 +74,25 @@ export interface SyncStatusProps {
   SYNCHRONIZED: string;
   LOW_PEER_COUNT: string;
   BLOCKS_BEHIND: string;
-  NO_NETWORK: string;
+  NO_CONNECTION: string;
   ONLINE: string;
   STOPPED: string;
+  REMOVING: string;
 }
 
 export const SYNC_STATUS = Object.freeze({
   ERROR: 'error',
   UPDATING: 'updating',
+  RUNNING: 'running',
   INITIALIZING: 'initializing',
   CATCHING_UP: 'catchingUp',
   SYNCHRONIZED: 'synchronized',
   LOW_PEER_COUNT: 'lowPeerCount',
   BLOCKS_BEHIND: 'blocksBehind',
-  NO_NETWORK: 'noNetwork',
+  NO_CONNECTION: 'noConnection',
   ONLINE: 'online',
   STOPPED: 'stopped',
+  STOPPING: 'stopping',
+  STARTING: 'starting',
+  REMOVING: 'removing',
 });

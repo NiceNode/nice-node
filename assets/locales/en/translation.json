@@ -18,7 +18,6 @@
   "Peers": "peers",
   "created": "created",
   "initializing": "initializing",
-  "checkingForUpdates": "checking for updates",
   "download": "download",
   "downloading": "downloading",
   "downloaded": "downloaded",
@@ -145,6 +144,8 @@
   "loadingDotDotDot": "loading...",
   "Preferences": "Preferences",
   "ShowAdvancedOptions": "Show advanced options",
+  "ShowOtherNodeTypes": "Show other node types",
+  "HideOtherNodeTypes": "Hide other node types",
   "SaveChanges": "Save changes",
   "Continue": "Continue",
   "Back": "Back",
@@ -174,5 +175,10 @@
   "CurrentPodman": "Your current Podman installation ({{currentPodmanVersion}}) is incompatible with NiceNode and requires version {{requiredPodmanVersion}} or higher for it to run.",
   "PodmanIsRequiredComponent": "Podman is a required component for NiceNode to run the many client options. Podman facilitates the running of containers within a virtualised Linux environment and will operate in the background.",
   "DownloadAndUpdate": "Download and update",
-  "PodmanUpdate": "Podman update"
+  "PodmanUpdate": "Podman update",
+  "CheckingForUpdates": "Checking for updates...",
+  "RunningLatestVersion": "You are running the latest version",
+  "SuccessfullyUpdated": "Successfully updated",
+  "Done": "Done",
+  "Close": "Close"
 }

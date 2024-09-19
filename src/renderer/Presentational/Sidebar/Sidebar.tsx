@@ -55,11 +55,15 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
 
+    function countUnreadItems(arr: NotificationItemProps[]): number {
+      return arr.filter((item) => item.unread === true).length;
+    }
+
     const itemListData: { iconId: IconId; label: string; count?: number }[] = [
       {
         iconId: 'bell',
         label: t('Notifications'),
-        count: notifications?.length,
+        count: (notifications && countUnreadItems(notifications)) || 0,
       },
       {
         iconId: 'add',
@@ -127,6 +131,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
                 key={nodeId}
                 id={node.id}
                 node={node}
+                offline={offline}
                 selected={selectedNodePackageId === node.id}
                 onClick={() => {
                   navigate('/main/nodePackage');

@@ -5,7 +5,6 @@ import { browser } from 'wdio-electron-service';
 // import { removeAllNodePackages } from '../../src/main/nodePackageManager.js';
 import { afterAll } from 'vitest';
 
-
 // const cleanup =  async () => {
 //   // remove all nodes and delete their data
 //   await removeAllNodePackages();
@@ -98,14 +97,13 @@ const addNode = async () => {
   });
 
   await testsForEachNode();
-}
+};
 
 const testsForEachNode = async () => {
   describe('Should pass all of the eth node successfully starts syncing tests:', async () => {
-
     it('Ethereum Node screen should be displayed with syncing and stop btn', async () => {
       await expect(await $('div*=Ethereum Node')).toBeDisplayed();
-      await expect(await $('div*=Syncing')).toBeDisplayed();
+      await expect(await $('div*=Starting')).toBeDisplayed();
       await expect(await $('span*=Stop')).toBeDisplayed();
       // after docker containers are downloaded and the node is started, the node should be online
       // await expect(await $('div*=Online')).toBeDisplayed();
@@ -116,13 +114,22 @@ const testsForEachNode = async () => {
       const memUsageElement = await $('#memoryUsagePercentValue');
       const cpuLoadElement = await $('#cpuLoadValue');
       const diskUsageElement = await $('#diskUsageGBsValue');
-      await browser.waitUntil(async () => Number.parseFloat(await memUsageElement.getText()) > 1, {timeout: 40000, interval: 5000});
-      await browser.waitUntil(async () => Number.parseFloat(await cpuLoadElement.getText()) > 1, {timeout: 40000, interval: 5000});
-      await browser.waitUntil(async () => {
-        console.log("Waiting for disk usage to be > 1 GB...")
-        return Number.parseFloat(await diskUsageElement.getText()) > 0.1 // todo: revert to 1
-      }, { timeout: 5*60*1000, interval: 15000 }); // give 5 minutes to download 1 GB
-    }).timeout(10*60*1000); // 10 minutes
+      await browser.waitUntil(
+        async () => Number.parseFloat(await memUsageElement.getText()) > 1,
+        { timeout: 40000, interval: 5000 },
+      );
+      await browser.waitUntil(
+        async () => Number.parseFloat(await cpuLoadElement.getText()) > 1,
+        { timeout: 40000, interval: 5000 },
+      );
+      await browser.waitUntil(
+        async () => {
+          console.log('Waiting for disk usage to be > 1 GB...');
+          return Number.parseFloat(await diskUsageElement.getText()) > 0.1; // todo: revert to 1
+        },
+        { timeout: 5 * 60 * 1000, interval: 15000 },
+      ); // give 5 minutes to download 1 GB
+    }).timeout(10 * 60 * 1000); // 10 minutes
 
     it('clicking stop node btn should stop the node and show resume button', async () => {
       const stopBtn = (await $('span*=Stop')).parentElement();
@@ -140,7 +147,9 @@ const testsForEachNode = async () => {
       const removeNodeBtn = (await $('div*=Remove Node')).parentElement();
       (await removeNodeBtn).click();
       // await $('#removeNodeMenuItem').click();
-      const confirmRemoveNodeBtn = (await $('span*=Remove node')).parentElement();
+      const confirmRemoveNodeBtn = (
+        await $('span*=Remove node')
+      ).parentElement();
       (await confirmRemoveNodeBtn).click();
 
       // No active nodes if there are no nodes... next click "Add Node" btn
@@ -156,7 +165,7 @@ const testsForEachNode = async () => {
   // afterAll(async () => {
   //   await cleanup();
   // });
-}
+};
 
 describe('Splash screen tests', async () => {
   it('application should open to splash screen with welcome message', async () => {
@@ -180,14 +189,14 @@ describe('Splash screen tests', async () => {
     await expect(alphaModalBtn).toBeDisplayed();
     await alphaModalBtn.click();
     await $('#stepperNextButton').click();
-    const elAddFirstNodeTitle = await $("#launchAVarNodeTitle");
+    const elAddFirstNodeTitle = await $('#launchAVarNodeTitle');
     await expect(elAddFirstNodeTitle).toBeDisplayed();
     await expect(elAddFirstNodeTitle).toHaveText('Launch a Ethereum Node');
   });
 
   it('clicking continue btn should take the user to service and node requirements screen', async () => {
     await $('#stepperNextButton').click();
-    const elAddFirstNodeTitle = await $("#nodeRequirementsTitle");
+    const elAddFirstNodeTitle = await $('#nodeRequirementsTitle');
     await expect(elAddFirstNodeTitle).toBeDisplayed();
     await expect(elAddFirstNodeTitle).toHaveText('Node Requirements');
   });
@@ -196,7 +205,7 @@ describe('Splash screen tests', async () => {
   it('clicking continue btn should take the user to Podman installation screen', async () => {
     await $('#stepperNextButton').click();
     await browser.pause(3000); // wait for podman is installed check to return to ui
-    const elPodmanInstallationTitle = await $("#podmanInstallationTitle");
+    const elPodmanInstallationTitle = await $('#podmanInstallationTitle');
     await expect(elPodmanInstallationTitle).toBeDisplayed();
     await expect(elPodmanInstallationTitle).toHaveText('Podman installation');
   });
@@ -206,20 +215,18 @@ describe('Splash screen tests', async () => {
   // process.env.CI = 'true';
   // || (os.platform() === 'darwin' && process.env.CI === 'true')
   // if(os.platform() === 'linux') {
-    // from splash screen, we always show podman screen
-    it('clicking continue btn should add and start the node (node status not checked here)', async () => {
-      await $('#stepperNextButton').click();
-    }).timeout(120000); // wait 3 minutes for the podman to download (& start)
+  // from splash screen, we always show podman screen
+  it('clicking continue btn should add and start the node (node status not checked here)', async () => {
+    await $('#stepperNextButton').click();
+  }).timeout(120000); // wait 3 minutes for the podman to download (& start)
 
-    // it('should pass all of the eth node successfully starts syncing tests:', async () => {
-    // });
+  // it('should pass all of the eth node successfully starts syncing tests:', async () => {
+  // });
   // }
 });
-
 
 await testsForEachNode(); // run tests for first node selection from splash screen
 
 await addNode(); // run tests for adding a node from the add node modal;
 
 // setTimeout(() => {debugger;}, 5000);
-
