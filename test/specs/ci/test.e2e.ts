@@ -140,6 +140,7 @@ describe('Splash screen tests', () => {
       // ...
       await $('div*=Stopped').waitForExist({ timeout: 240000 }); // default wait time is only 5 seconds
       await expect(await $('div*=Stopped')).toBeDisplayed();
+      await $('span*=Resume').waitForExist({ timeout: 240000 }); // default wait time is only 5 seconds
       await expect(await $('span*=Resume')).toBeDisplayed();
       // await browser.pause(15000);
       // await browser.pause(2000);
