@@ -321,7 +321,6 @@ export const executeTranslation = async ({
       return undefined;
     }
   } else if (rpcTranslation === 'farcaster-l1') {
-    // todo: use the current config httpPort value instead of hardcoding 2281
     const hubbleBaseUrl = `http://localhost:${httpPort}`;
     if (rpcCall === 'sync') {
       const resp = await callFetch(`${hubbleBaseUrl}/v1/info`);
