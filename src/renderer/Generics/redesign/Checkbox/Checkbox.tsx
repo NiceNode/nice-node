@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
+import { Icon } from '../Icon/Icon.js';
 import {
   checkboxContainer,
-  checkboxLabel,
   checkboxInput,
+  checkboxLabel,
+  checkedCustomCheckbox,
   customCheckbox,
+  disabledCheckbox,
+  indeterminateCustomCheckbox,
   svgCheckmark,
   svgIndeterminate,
-  checkedCustomCheckbox,
-  indeterminateCustomCheckbox,
-  disabledCheckbox,
 } from './checkbox.css';
-import { Icon } from '../Icon/Icon.js';
 
 export interface CheckboxProps {
   /**

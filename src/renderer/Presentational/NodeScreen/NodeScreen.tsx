@@ -6,6 +6,7 @@ import Button from '../../Generics/redesign/Button/Button';
 import CopyButton from '../../Generics/redesign/CopyButton/CopyButton.js';
 import { HeaderButton } from '../../Generics/redesign/HeaderButton/HeaderButton';
 import type { NodeAction } from '../../Generics/redesign/consts';
+import { SYNC_STATUS } from '../../Generics/redesign/consts.js';
 import { getStatusObject } from '../../Generics/redesign/utils.js';
 import type { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import electron from '../../electronGlobal';
@@ -33,7 +34,6 @@ import {
   descriptionFont,
   titleFont,
 } from './NodeScreen.css';
-import { SYNC_STATUS } from '../../Generics/redesign/consts.js';
 
 let alphaModalRendered = false;
 

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
+import electron from '../../../renderer/electronGlobal.js';
+import type { NodeOverviewProps } from '../../Generics/redesign/consts.js';
 import { useAppSelector } from '../../state/hooks';
 import { selectSelectedNodePackage } from '../../state/node';
 import type { ModalConfig } from '../ModalManager/modalUtils';
 import Update from './Update';
-import type { NodeOverviewProps } from '../../Generics/redesign/consts.js';
-import electron from '../../../renderer/electronGlobal.js';
 
 export interface UpdateWrapperProps {
   modalOnClose: () => void;

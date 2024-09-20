@@ -1,7 +1,8 @@
 import moment from 'moment';
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { type NodePackage, NodeStatus } from '../../../common/node';
 import { SidebarNodeItem } from '../../Generics/redesign/SidebarNodeItem/SidebarNodeItem';
+import { SYNC_STATUS } from '../../Generics/redesign/consts.js';
 import { getStatusObject, getSyncStatus } from '../../Generics/redesign/utils';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import { selectUserNodes } from '../../state/node';
@@ -11,7 +12,6 @@ import {
   useGetExecutionPeersQuery,
 } from '../../state/services';
 import { getSyncDataForServiceAndNode } from '../../utils.js';
-import { SYNC_STATUS } from '../../Generics/redesign/consts.js';
 
 export type SidebarNodeStatus =
   | 'online'
