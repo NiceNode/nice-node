@@ -70,5 +70,5 @@ export const descriptionStyle = style({
 });
 
 export const tagStyle = style({
-  marginLeft: 'auto',
+  marginLeft: '-8px',
 });

@@ -1,5 +1,11 @@
 import type React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { CHANNELS } from '../main/messenger';
 import type { Settings } from '../main/state/settings';
 import { darkTheme, lightTheme } from './Generics/redesign/theme.css';
@@ -18,9 +24,17 @@ interface MetaElement extends HTMLMetaElement {
   content: ThemeSetting;
 }
 
+interface ThemeContextType {
+  isDarkTheme: boolean;
+  themeSetting: ThemeSetting;
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
 const ThemeManager = ({ children }: Props) => {
   const qSettings = useGetSettingsQuery();
   const [sIsDarkTheme, setIsDarkTheme] = useState<boolean>();
+  const [themeSetting, setThemeSetting] = useState<ThemeSetting>('auto');
   const [platform, setPlatform] = useState<string>('');
 
   const handleColorSchemeChange = (colorScheme: ThemeSetting) => {
@@ -35,6 +49,7 @@ const ThemeManager = ({ children }: Props) => {
     const settingsData = qSettings?.data as Settings;
     if (settingsData) {
       const { osIsDarkMode, appThemeSetting, osPlatform } = settingsData;
+      setThemeSetting(appThemeSetting || 'auto');
       // check user and os settings
       if (appThemeSetting === 'light') {
         setIsDarkTheme(false);
@@ -93,22 +108,33 @@ const ThemeManager = ({ children }: Props) => {
   }, [onReportEventMessage]);
 
   return (
-    <div
-      id="onBoarding"
-      className={[
-        background,
-        platform,
-        sIsDarkTheme ? darkTheme : lightTheme,
-      ].join(' ')}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100vw',
-        height: '100vh',
-      }}
-    >
-      {children}
-    </div>
+    <ThemeContext.Provider value={{ isDarkTheme: sIsDarkTheme, themeSetting }}>
+      <div
+        id="onBoarding"
+        className={[
+          background,
+          platform,
+          sIsDarkTheme ? darkTheme : lightTheme,
+        ].join(' ')}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100vw',
+          height: '100vh',
+        }}
+      >
+        {children}
+      </div>
+    </ThemeContext.Provider>
   );
 };
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error('useTheme must be used within a ThemeManager');
+  }
+  return context;
+};
+
 export default ThemeManager;

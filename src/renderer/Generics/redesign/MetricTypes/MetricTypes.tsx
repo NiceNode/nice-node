@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import type { NiceNodeRpcTranslation } from '../../../../common/rpcTranslation';
-import type { IconId } from '../../../assets/images/icons';
 import { Icon } from '../Icon/Icon';
 import { SYNC_STATUS } from '../consts';
 import {
@@ -31,191 +30,165 @@ export type MetricStats =
   | 'balance'
   | 'stake'
   | 'rewards';
+
 export interface MetricTypesProps {
-  /**
-   * Stats types
-   */
   statsType?: MetricStats;
-  /**
-   * Status //TODO: match this with current status enum implementation
-   */
   statsValue?: string | number;
-  /**
-   * Info
-   */
   info?: string;
   rpcTranslation?: NiceNodeRpcTranslation;
 }
 
-/**
- * Primary UI component for user interaction
- */
+const getStatusDetails = (statusValue: string, t: any) => {
+  // console.log('statusValue', statusValue);
+  switch (statusValue) {
+    case SYNC_STATUS.UPDATING:
+      return {
+        color: updating,
+        title: t('Waiting'),
+        label: t('InstallingUpdate'),
+        iconId: 'updating',
+      };
+    case SYNC_STATUS.SYNCHRONIZED:
+      return { color: green, title: t('Online'), label: t('Synchronized') };
+    case SYNC_STATUS.BLOCKS_BEHIND:
+      return { color: yellow, title: t('Online'), label: t('BlocksBehind') };
+    case SYNC_STATUS.LOW_PEER_COUNT:
+      return { color: yellow, title: t('Online'), label: t('LowPeerCount') };
+    case SYNC_STATUS.ERROR:
+      return { color: red, title: t('Error'), label: t('ErrorOccurred') };
+    case SYNC_STATUS.NO_CONNECTION:
+      return { color: red, title: t('Offline'), label: t('NoNetwork') };
+    case SYNC_STATUS.STARTING:
+      return {
+        color: sync,
+        title: t('Starting'),
+        label: t('InProgress'),
+        iconId: 'syncing',
+      };
+    case SYNC_STATUS.CATCHING_UP:
+      return {
+        color: sync,
+        title: t('Syncing'),
+        label: t('CatchingUp'),
+        iconId: 'syncing',
+      };
+    case SYNC_STATUS.INITIALIZING:
+      return {
+        color: sync,
+        title: t('Syncing'),
+        label: t('InProgress'),
+        iconId: 'syncing',
+      };
+    case SYNC_STATUS.REMOVING:
+      return { color: stopped, title: t('Removing'), iconId: 'syncing' };
+    case SYNC_STATUS.STOPPING:
+      return { color: stopped, title: t('Stopping'), iconId: 'syncing' };
+    case SYNC_STATUS.STOPPED:
+      return { color: stopped, title: t('Stopped'), iconId: 'stop' };
+    case SYNC_STATUS.ONLINE:
+      return { color: green, title: t('Online'), label: t('Running') };
+    default:
+      return {};
+  }
+};
+
+const getStatsDetails = (
+  statsType: MetricStats,
+  statsValue: string | number,
+  t: any,
+  rpcTranslation?: NiceNodeRpcTranslation,
+) => {
+  switch (statsType) {
+    case 'currentBlock':
+      return {
+        iconId: 'slots',
+        title: `${(statsValue || 0).toLocaleString()}`,
+        label:
+          rpcTranslation === 'farcaster-l1'
+            ? `Farcaster ${t('Messages')}`
+            : `${t('LastSynced')} ${
+                rpcTranslation === 'eth-l1-beacon' ||
+                rpcTranslation === 'eth-l2-consensus'
+                  ? t('Slot')
+                  : t('Block')
+              }`,
+      };
+    case 'peers':
+      return {
+        iconId: 'peers',
+        title:
+          statsValue === undefined
+            ? `${0}`
+            : typeof statsValue === 'string'
+              ? `${(Number.parseInt(statsValue, 10) || 0).toLocaleString()}`
+              : `${statsValue.toLocaleString()}`,
+        label:
+          rpcTranslation === 'farcaster-l1'
+            ? `FIDs ${t('Registered')}`
+            : t('PeersConnected'),
+      };
+    case 'memoryUsagePercent':
+      return {
+        iconId: 'lightning',
+        title: `${Number(statsValue).toFixed(2)}%`,
+        label: t('MemoryUsage'),
+      };
+    case 'cpuLoad':
+      return {
+        iconId: 'cpu',
+        title: `${Number(statsValue).toFixed(2)}%`,
+        label: t('CPULoad'),
+      };
+    case 'diskUsageGBs':
+      return {
+        iconId: 'disks',
+        title: `${Number(statsValue).toFixed(2)} GB`,
+        label: t('DiskUsage'),
+      };
+    default:
+      return {};
+  }
+};
+
 export const MetricTypes = ({
   statsType,
   statsValue,
   info,
   rpcTranslation,
 }: MetricTypesProps) => {
-  let iconComponent = null;
-  let titleText = '';
-  let labelText = '';
-
   const { t: g } = useTranslation('genericComponents');
+  const isStatusStatsType = statsType === 'status';
 
-  const processStatus = () => {
-    let statusColorStyle;
-    let icon = null;
-    switch (statsValue) {
-      case SYNC_STATUS.UPDATING:
-        statusColorStyle = updating;
-        titleText = g('Waiting');
-        labelText = g('InstallingUpdate');
-        icon = <Icon iconId="updating" />;
-        break;
-      case SYNC_STATUS.SYNCHRONIZED:
-        statusColorStyle = green;
-        titleText = g('Online');
-        labelText = g('Synchronized');
-        break;
-      case SYNC_STATUS.BLOCKS_BEHIND:
-      case SYNC_STATUS.LOW_PEER_COUNT:
-        statusColorStyle = yellow;
-        titleText = g('Online');
-        labelText =
-          statsValue === SYNC_STATUS.BLOCKS_BEHIND
-            ? g('BlocksBehind')
-            : g('LowPeerCount');
-        break;
-      case SYNC_STATUS.ERROR:
-        statusColorStyle = red;
-        titleText = g('Error');
-        labelText = g('ErrorOccurred');
-        break;
-      case SYNC_STATUS.NO_NETWORK:
-        statusColorStyle = red;
-        titleText = g('Offline');
-        labelText = g('NoNetwork');
-        break;
-      case SYNC_STATUS.CATCHING_UP:
-      case SYNC_STATUS.INITIALIZING:
-        statusColorStyle = sync;
-        titleText = g('Syncing');
-        labelText =
-          statsValue === SYNC_STATUS.CATCHING_UP
-            ? g('CatchingUp')
-            : g('InProgress');
-        icon = <Icon iconId="syncing" />;
-        break;
-      case SYNC_STATUS.STOPPED:
-        statusColorStyle = stopped;
-        titleText = g('Stopped');
-        icon = <Icon iconId="stop" />;
-        break;
-      case SYNC_STATUS.ONLINE:
-        statusColorStyle = green;
-        titleText = g('Online');
-        labelText = g('Running');
-        break;
-      default:
-        break;
-    }
-    iconComponent = (
-      <div className={[statusStyle, statusColorStyle].join(' ')}>{icon}</div>
-    );
-  };
-
-  const processStatsType = () => {
-    let iconId: IconId = 'blank';
-    switch (statsType) {
-      case 'currentBlock':
-        iconId = 'slots';
-        titleText = `${(statsValue || 0).toLocaleString()}`;
-        if (rpcTranslation === 'farcaster-l1') {
-          labelText = `Farcaster ${g('Messages')}`;
-        } else {
-          labelText = `${g('LastSynced')} ${
-            rpcTranslation === 'eth-l1-beacon' ||
-            rpcTranslation === 'eth-l2-consensus'
-              ? g('Slot')
-              : g('Block')
-          }`;
-        }
-        break;
-      case 'peers':
-        iconId = 'peers';
-        if (statsValue === undefined) {
-          titleText = `${0}`;
-        } else if (typeof statsValue === 'string') {
-          titleText = `${(
-            Number.parseInt(statsValue, 10) || 0
-          ).toLocaleString()}`;
-        } else {
-          titleText = `${statsValue.toLocaleString()}`;
-        }
-        if (rpcTranslation === 'farcaster-l1') {
-          labelText = `FIDs ${g('Registered')}`;
-        } else {
-          labelText = g('PeersConnected');
-        }
-        break;
-      case 'memoryUsagePercent':
-        if (typeof statsValue === 'number') {
-          titleText = `${statsValue.toFixed(2)}%`;
-        } else {
-          titleText = `${statsValue}%`;
-        }
-        iconId = 'lightning';
-        labelText = g('MemoryUsage');
-        break;
-      case 'cpuLoad':
-        iconId = 'cpu';
-        if (typeof statsValue === 'number') {
-          titleText = `${statsValue.toFixed(2)}%`;
-        } else {
-          titleText = `${statsValue}%`;
-        }
-        labelText = g('CPULoad');
-        break;
-      case 'diskUsageGBs':
-        // if (typeof statsValue === 'number' && statsValue >= 1000000) {
-        //   titleText = `${statsValue / 1000000} TB`;
-        // } else if (
-        //   typeof statsValue === 'number' &&
-        //   statsValue <= 999999 &&
-        //   statsValue >= 1000
-        // ) {
-        //   titleText = `${statsValue / 1000} GB`;
-        // } else {
-        //   titleText = `${statsValue} MB`;
-        // }
-        if (typeof statsValue === 'number') {
-          titleText = `${statsValue.toFixed(2)} GB`;
-        } else {
-          titleText = `${statsValue} GB`;
-        }
-        iconId = 'disks';
-        labelText = g('DiskUsage');
-        break;
-      default:
-        break;
-    }
-    iconComponent = <Icon iconId={iconId} />;
-  };
-
-  if (statsType === 'status') {
-    processStatus();
+  let details = {};
+  if (isStatusStatsType) {
+    details = getStatusDetails(statsValue as string, g);
   } else if (statsType) {
-    processStatsType();
+    details = getStatsDetails(
+      statsType,
+      statsValue as string | number,
+      g,
+      rpcTranslation,
+    );
   }
+
+  const { color, title, label, iconId } = details as any;
+
   return (
     <div className={container}>
-      <div className={iconContainer}>{iconComponent}</div>
+      <div className={iconContainer}>
+        {isStatusStatsType && (
+          <div className={[statusStyle, color].join(' ')}>
+            <Icon iconId={iconId} />
+          </div>
+        )}
+        {!isStatusStatsType && <Icon iconId={iconId} />}
+      </div>
       <div className={textContainer}>
         <div className={titleContainer}>
           <div id={`${statsType}Value`} className={titleStyle}>
-            {titleText}
+            {title}
           </div>
-          <div className={labelStyle}>{labelText}</div>
+          <div className={labelStyle}>{label}</div>
         </div>
         <div className={infoStyle}>{info}</div>
       </div>

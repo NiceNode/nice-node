@@ -197,6 +197,13 @@ export const Chart = ({ tabId, metricData }: ChartProps) => {
     tooltip: {
       backgroundColor: toolTipColor,
       borderRadius: 4,
+      shadow: {
+        color: 'rgba(0, 0, 0, 0.15)', // Shadow color
+        offsetX: 0, // Horizontal offset of the shadow
+        offsetY: 4, // Vertical offset of the shadow
+        opacity: 0.15, // Opacity of the shadow
+        width: 5, // Blur radius of the shadow
+      },
       style: {
         color: 'rgba(255, 255, 255, 1)',
       },

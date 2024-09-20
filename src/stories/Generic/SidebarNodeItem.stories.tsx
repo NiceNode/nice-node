@@ -13,7 +13,7 @@ export default {
 export const Ethereum = {
   args: {
     iconId: 'ethereum',
-    status: 'healthy',
+    status: 'online',
     title: 'Ethereum node',
     info: 'Mainnet',
   },

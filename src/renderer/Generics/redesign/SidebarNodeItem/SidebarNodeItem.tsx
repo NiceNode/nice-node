@@ -11,7 +11,7 @@ import {
 } from './sideBarNodeItem.css';
 
 export type SidebarNodeStatus =
-  | 'healthy'
+  | 'online'
   | 'warning'
   | 'error'
   | 'sync'
@@ -47,6 +47,7 @@ export interface SidebarNodeItemProps {
 export const SidebarNodeItem = ({
   onClick,
   title,
+  iconUrl,
   info,
   iconId,
   status,
@@ -74,11 +75,17 @@ export const SidebarNodeItem = ({
         setInternalSelected(false);
       }}
       onKeyDown={onClickAction}
+      // biome-ignore lint: useSemanticElements
       role="button"
       tabIndex={0}
     >
       <div className={iconContainer}>
-        <NodeIcon iconId={iconId} status={status} size="small" />
+        <NodeIcon
+          iconId={iconId}
+          status={status}
+          size="small"
+          iconUrl={iconUrl}
+        />
       </div>
       <div className={textContainer}>
         <div className={titleStyle}>{title}</div>

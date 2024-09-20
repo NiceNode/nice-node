@@ -12,7 +12,7 @@ export const container = style({
   width: '268px',
   height: '100%',
   backgroundColor: vars.components.sidebarBackground,
-  // backdropFilter: 'blur(40px)',
+  backdropFilter: 'blur(40px)',
   selectors: {
     '&.darwin': {
       backgroundColor: 'transparent',

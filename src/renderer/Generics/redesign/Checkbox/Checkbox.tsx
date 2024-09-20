@@ -1,5 +1,16 @@
 import { useEffect, useState } from 'react';
-import { checkbox, container } from './checkbox.css';
+import {
+  checkboxContainer,
+  checkboxLabel,
+  checkboxInput,
+  customCheckbox,
+  svgCheckmark,
+  svgIndeterminate,
+  checkedCustomCheckbox,
+  indeterminateCustomCheckbox,
+  disabledCheckbox,
+} from './checkbox.css';
+import { Icon } from '../Icon/Icon.js';
 
 export interface CheckboxProps {
   /**
@@ -10,6 +21,10 @@ export interface CheckboxProps {
    * Is it checked?
    */
   checked?: boolean;
+  /**
+   * Is it in an indeterminate state?
+   */
+  indeterminate?: boolean;
   /**
    * Is this disabled?
    */
@@ -26,39 +41,61 @@ export interface CheckboxProps {
 export const Checkbox = ({
   label,
   checked = false,
+  indeterminate = false,
   disabled = false,
   onClick,
 }: CheckboxProps) => {
   const [sIsChecked, setIsChecked] = useState(checked);
+  const [sIsIndeterminate, setIsIndeterminate] = useState(indeterminate);
 
   useEffect(() => {
     setIsChecked(checked);
   }, [checked]);
 
-  const disabledStyle = disabled ? 'disabled' : '';
-  // TODO: implement indeterminate
+  useEffect(() => {
+    setIsIndeterminate(indeterminate);
+  }, [indeterminate]);
+
+  const handleCheckboxClick = () => {
+    if (!disabled) {
+      if (sIsIndeterminate) {
+        setIsChecked(true);
+        setIsIndeterminate(false);
+      } else {
+        setIsChecked(!sIsChecked);
+      }
+      if (onClick) {
+        onClick(!sIsChecked);
+      }
+    }
+  };
+
   return (
-    <div className={[container, `${disabledStyle}`].join(' ')}>
+    <label className={checkboxContainer}>
       <input
-        {...{
-          id: 'checkboxComponent',
-          className: checkbox,
-          type: 'checkbox',
-          // TODO: fix checked when text is pressed in MenuItem
-          checked: sIsChecked,
-          ...(disabled && { disabled }),
-          onChange: () => {
-            // protect against unpredictable state update occurring
-            //   before or after onClick callback
-            const isCheckedBeforeAction = sIsChecked;
-            setIsChecked(!isCheckedBeforeAction);
-            if (onClick && !disabled) {
-              onClick(!isCheckedBeforeAction);
-            }
-          },
-        }}
+        type="checkbox"
+        checked={sIsChecked}
+        disabled={disabled}
+        onChange={handleCheckboxClick}
+        className={checkboxInput}
       />
-      {label && <label htmlFor="checkboxComponent">{label}</label>}
-    </div>
+      <span
+        className={`${customCheckbox} ${sIsChecked ? checkedCustomCheckbox : ''} ${
+          sIsIndeterminate ? indeterminateCustomCheckbox : ''
+        } ${disabled ? disabledCheckbox : ''}`}
+      >
+        {sIsChecked && !sIsIndeterminate && (
+          <span className={svgCheckmark}>
+            <Icon iconId={'check'} />
+          </span>
+        )}
+        {sIsIndeterminate && (
+          <span className={svgIndeterminate}>
+            <Icon iconId={'intermediate'} />
+          </span>
+        )}
+      </span>
+      {label && <span className={checkboxLabel}>{label}</span>}
+    </label>
   );
 };

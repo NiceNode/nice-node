@@ -4,6 +4,8 @@ import {
   downloadingProgressContainer,
   innerDiv,
   outerDiv,
+  percentTextLeft,
+  percentTextRight,
   sectionFont,
 } from './progressBar.css';
 
@@ -16,6 +18,9 @@ export interface ProgressBarProps {
   caption?: string;
   color?: string;
   card?: boolean;
+  showPercent?: boolean;
+  outerStyle?: React.CSSProperties;
+  innerStyle?: React.CSSProperties;
 }
 
 const ProgressBar = ({
@@ -24,6 +29,9 @@ const ProgressBar = ({
   caption,
   color,
   card,
+  outerStyle,
+  innerStyle,
+  showPercent = false,
 }: ProgressBarProps) => {
   let progressWidth = 0;
   if (progress) {
@@ -38,15 +46,40 @@ const ProgressBar = ({
   const downloadContainer = card
     ? cardDownloadingProgressContainer
     : downloadingProgressContainer;
+
+  // Decide on the text position based on the progress percentage
+  const isLeftPosition = progress && progress > 12;
+  const percentTextClass = isLeftPosition ? percentTextLeft : percentTextRight;
+
   return (
     <div className={downloadContainer}>
-      <div className={sectionFont}>{title}</div>
-      <div className={outerDiv}>
+      {title && <div className={sectionFont}>{title}</div>}
+      <div className={outerDiv} style={outerStyle}>
         <div
-          style={{ width: `${progressWidth}%`, backgroundColor: color }}
+          style={{
+            ...innerStyle,
+            width: `${progressWidth}%`,
+            backgroundColor: color,
+            position: 'relative',
+          }}
           className={innerDiv}
-        />
-      </div>{' '}
+        >
+          {showPercent && progress !== 0 && (
+            <span
+              className={percentTextClass}
+              style={{
+                color: isLeftPosition ? 'white' : color,
+                left: isLeftPosition ? 'auto' : `${progressWidth * 2.5 + 10}px`, // TODO: come up with a better way to do this
+                transform: isLeftPosition
+                  ? 'translateX(0) translateY(-50%)'
+                  : '', // Handle position
+              }}
+            >
+              {Math.floor(progress)}%
+            </span>
+          )}
+        </div>
+      </div>
       <p className={captionText}>{caption}</p>
     </div>
   );

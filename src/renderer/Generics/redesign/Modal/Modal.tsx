@@ -16,7 +16,7 @@ import {
 } from './modal.css';
 
 type Props = {
-  modalType?: 'alert' | 'modal' | 'info';
+  modalType?: 'alert' | 'modal' | 'info' | 'simple';
   modalStyle?: string;
   modalTitle?: string;
   backButtonEnabled?: boolean;
@@ -102,8 +102,28 @@ export const Modal = ({
     return () => {};
   }, []);
 
+  const handleBackdropClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      // Check if the click target is the backdrop itself
+      if (event.target === event.currentTarget) {
+        modalOnClose();
+      }
+    },
+    [modalOnClose],
+  );
+
   return (
-    <div className={modalBackdropStyle}>
+    <div
+      className={modalBackdropStyle}
+      onClick={handleBackdropClick}
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          handleBackdropClick(
+            event as unknown as React.MouseEvent<HTMLDivElement>,
+          );
+        }
+      }}
+    >
       <div className={[modalContentStyle, modalStyle].join(' ')}>
         {modalType === 'modal' && (
           <ContentHeader
@@ -117,7 +137,7 @@ export const Modal = ({
           className={[modalChildrenContainer, modalStyle, modalType].join(' ')}
           ref={modalContentRef}
         >
-          {route !== modalRoutes.alphaBuild && (
+          {route !== modalRoutes.alphaBuild && route !== modalRoutes.update && (
             <div className={[modalHeaderContainer, modalType].join(' ')}>
               <span
                 id="modalTitle"
@@ -129,26 +149,28 @@ export const Modal = ({
           )}
           {children}
         </div>
-        <div className={[modalStepperContainer, modalType].join(' ')}>
-          {backButtonEnabled && (
+        {modalType !== 'simple' && (
+          <div className={[modalStepperContainer, modalType].join(' ')}>
+            {backButtonEnabled && (
+              <Button
+                variant="text"
+                type="secondary"
+                label={buttonCancelLabel}
+                onClick={modalOnCancel}
+              />
+            )}
             <Button
-              variant="text"
-              type="secondary"
-              label={buttonCancelLabel}
-              onClick={modalOnCancel}
+              variant={buttonSaveVariant}
+              type={buttonSaveType}
+              iconId={buttonSaveIcon}
+              disabled={isSaveButtonDisabled}
+              label={buttonSaveLabel}
+              onClick={() => {
+                modalOnSaveConfig(undefined);
+              }}
             />
-          )}
-          <Button
-            variant={buttonSaveVariant}
-            type={buttonSaveType}
-            iconId={buttonSaveIcon}
-            disabled={isSaveButtonDisabled}
-            label={buttonSaveLabel}
-            onClick={() => {
-              modalOnSaveConfig(undefined);
-            }}
-          />
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

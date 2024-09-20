@@ -3,29 +3,26 @@
 import { useCallback, useEffect, useState } from 'react';
 // import { NodeStatus } from '../common/node';
 import { useTranslation } from 'react-i18next';
-import { NodeStatus } from '../../../common/node';
+import { NodeStatus } from '../../../common/node.js';
 import Button from '../../Generics/redesign/Button/Button';
 import type { ClientProps, NodeAction } from '../../Generics/redesign/consts';
+import { SYNC_STATUS } from '../../Generics/redesign/consts';
+import { getStatusObject } from '../../Generics/redesign/utils.js';
 import type { NodeBackgroundId } from '../../assets/images/nodeBackgrounds';
 import electron from '../../electronGlobal';
 // import { useGetNodesQuery } from './state/nodeService';
 import { useAppDispatch, useAppSelector } from '../../state/hooks';
 import { setModalState } from '../../state/modal';
-import {
-  selectIsAvailableForPolling,
-  selectSelectedNodePackage,
-  selectUserNodes,
-} from '../../state/node';
+import { useGetNetworkConnectedQuery } from '../../state/network';
+import { selectSelectedNodePackage, selectUserNodes } from '../../state/node';
 import {
   useGetExecutionIsSyncingQuery,
   useGetExecutionLatestBlockQuery,
   useGetExecutionPeersQuery,
-  useGetNodeVersionQuery,
 } from '../../state/services';
 import { useGetIsPodmanRunningQuery } from '../../state/settingsService';
-import { hexToDecimal } from '../../utils';
+import { getSyncDataForServiceAndNode } from '../../utils.js';
 import ContentMultipleClients from '../ContentMultipleClients/ContentMultipleClients';
-// import { useGetNetworkConnectedQuery } from './state/network';
 import type { SingleNodeContent } from '../ContentSingleClient/ContentSingleClient';
 import {
   container,
@@ -41,74 +38,103 @@ const NodePackageScreen = () => {
   const dispatch = useAppDispatch();
   const selectedNodePackage = useAppSelector(selectSelectedNodePackage);
   const sUserNodes = useAppSelector(selectUserNodes);
-  const qNodeVersion = useGetNodeVersionQuery(
-    selectedNodePackage?.spec.rpcTranslation,
+  const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>(
+    [],
   );
-  const [sFormattedServices, setFormattedServices] = useState<ClientProps[]>();
-  // we will bring these vars back in the future
-  const [sIsSyncing, setIsSyncing] = useState<boolean>();
-  const [sSyncPercent, setSyncPercent] = useState<string>('');
-  const [sPeers, setPeers] = useState<number>();
-  const [sDiskUsed, setDiskUsed] = useState<number>(0);
-  const [sCpuPercentUsed, setCpuPercentUsed] = useState<number>(0);
-  const [sMemoryUsagePercent, setMemoryUsagePercent] = useState<number>(0);
-  const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
-  const [sLatestBlockNumber, setLatestBlockNumber] = useState<number>(0);
-  const sIsAvailableForPolling = useAppSelector(selectIsAvailableForPolling);
-  const pollingInterval = sIsAvailableForPolling ? 15000 : 0;
-  const executionNode = selectedNodePackage?.services.find((service) => {
-    return service.serviceId === 'executionClient';
+  const [sResourceUsage, setResourceUsage] = useState({
+    disk: 0,
+    cpu: 0,
+    memory: 0,
   });
-  const nodeId = executionNode?.node.id;
-  const httpPort =
-    nodeId && sUserNodes?.nodes[nodeId]?.config.configValuesMap.httpPort;
-  const rpcTranslation = selectedNodePackage?.spec.rpcTranslation;
+  const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
+  const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
+  const pollingInterval =
+    selectedNodePackage?.status === SYNC_STATUS.RUNNING ? 15000 : 0;
+
+  const executionService = selectedNodePackage?.services.find(
+    (service) => service.serviceId !== 'consensusClient',
+  );
+  const consensusService = selectedNodePackage?.services.find(
+    (service) => service.serviceId === 'consensusClient',
+  );
+  const executionServiceId = executionService?.node.id;
+  const consensusServiceId = consensusService?.node.id;
+  const executionNode = sUserNodes?.nodes[executionServiceId];
+  const consensusNode = sUserNodes?.nodes[consensusServiceId];
+  const executionHttpPort =
+    executionServiceId && executionNode?.config.configValuesMap.httpPort;
+  const consensusHttpPort =
+    consensusServiceId && consensusNode?.config.configValuesMap.httpPort;
+  const isEthereumNodePackage =
+    selectedNodePackage?.spec?.specId === 'ethereum';
+  const executionRpcTranslation = executionService?.node?.spec?.rpcTranslation;
+  const consensusRpcTranslation = consensusService?.node?.spec?.rpcTranslation;
+  const qPublicExecutionLatestBlock = useGetExecutionLatestBlockQuery(
+    {
+      rpcTranslation: executionRpcTranslation,
+      httpPort: executionHttpPort,
+      url: 'https://ethereum-rpc.publicnode.com',
+    },
+    { pollingInterval },
+  );
   const qExecutionIsSyncing = useGetExecutionIsSyncingQuery(
     {
-      rpcTranslation,
-      httpPort,
+      rpcTranslation: executionRpcTranslation,
+      httpPort: executionHttpPort,
+      specId: executionNode?.spec.specId,
     },
-    {
-      pollingInterval,
-    },
+    { pollingInterval },
   );
   const qExecutionPeers = useGetExecutionPeersQuery(
     {
-      rpcTranslation,
-      httpPort,
+      rpcTranslation: executionRpcTranslation,
+      httpPort: executionHttpPort,
+      specId: executionNode?.spec.specId,
     },
-    {
-      pollingInterval,
-    },
+    { pollingInterval },
   );
-  const qLatestBlock = useGetExecutionLatestBlockQuery(
+  const qExecutionLatestBlock = useGetExecutionLatestBlockQuery(
+    { rpcTranslation: executionRpcTranslation, httpPort: executionHttpPort },
+    { pollingInterval },
+  );
+  const qConsensusIsSyncing = useGetExecutionIsSyncingQuery(
     {
-      rpcTranslation,
-      httpPort,
+      rpcTranslation: consensusRpcTranslation,
+      httpPort: consensusHttpPort,
+      specId: consensusNode?.spec.specId,
     },
+    { pollingInterval },
+  );
+  const qConsensusPeers = useGetExecutionPeersQuery(
     {
-      pollingInterval,
+      rpcTranslation: consensusRpcTranslation,
+      httpPort: consensusHttpPort,
+      specId: consensusNode?.spec.specId,
     },
+    { pollingInterval },
+  );
+  const qConsensusLatestBlock = useGetExecutionLatestBlockQuery(
+    {
+      rpcTranslation: consensusRpcTranslation,
+      httpPort: consensusHttpPort,
+    },
+    { pollingInterval },
   );
   const qIsPodmanRunning = useGetIsPodmanRunningQuery(null, {
     pollingInterval: 15000,
   });
-  let isPodmanRunning = true;
-  if (qIsPodmanRunning && !qIsPodmanRunning.fetching) {
-    isPodmanRunning = qIsPodmanRunning.data;
-  }
+  const isPodmanRunning = !qIsPodmanRunning?.fetching && qIsPodmanRunning?.data;
   // temporary until network is set at the node package level
-  const [sNetworkNodePackage, setNetworkNodePackage] = useState<string>('');
+  const qNetwork = useGetNetworkConnectedQuery(null, {
+    pollingInterval: 30000,
+  });
 
   useEffect(() => {
-    if (selectedNodePackage?.config?.configValuesMap?.network) {
-      setNetworkNodePackage(
-        selectedNodePackage?.config?.configValuesMap?.network,
-      );
-    } else {
-      setNetworkNodePackage('');
-    }
+    setNetworkNodePackage(
+      selectedNodePackage?.config?.configValuesMap?.network || '',
+    );
   }, [selectedNodePackage]);
+
   // use to show if internet is disconnected
   // const qNetwork = useGetNetworkConnectedQuery(null, {
   //   // Only polls network connection if there are exactly 0 peers
@@ -117,110 +143,20 @@ const NodePackageScreen = () => {
 
   // calc node package resource usage
   useEffect(() => {
-    // format for presentation
-    let diskUsedGBs = 0;
-    let cpuPercent = 0;
-    let memoryPercent = 0;
-    selectedNodePackage?.services.map((service) => {
-      const nodeId = service.node.id;
-      const node = sUserNodes?.nodes[nodeId];
-      diskUsedGBs += node?.runtime?.usage?.diskGBs?.[0]?.y ?? 0;
-      cpuPercent += node?.runtime?.usage?.cpuPercent?.[0]?.y ?? 0;
-      memoryPercent += node?.runtime?.usage?.memoryBytes?.[0]?.y ?? 0;
-    });
-    setDiskUsed(diskUsedGBs);
-    setCpuPercentUsed(cpuPercent);
-    setMemoryUsagePercent(memoryPercent);
-  }, [selectedNodePackage?.services, sUserNodes]);
-
-  useEffect(() => {
-    if (!sIsAvailableForPolling) {
-      // clear all node data when it becomes unavailable to get
-      setSyncPercent('');
-      setIsSyncing(undefined);
-      setPeers(undefined);
-      setLatestBlockNumber(0);
-    }
-  }, [sIsAvailableForPolling]);
-
-  useEffect(() => {
-    console.log('qExecutionIsSyncing: ', qExecutionIsSyncing);
-    if (qExecutionIsSyncing.isError) {
-      setSyncPercent('');
-      setIsSyncing(undefined);
-      return;
-    }
-    const syncingData = qExecutionIsSyncing.data;
-    if (typeof syncingData === 'object') {
-      setSyncPercent('');
-      setIsSyncing(syncingData.isSyncing);
-    } else if (syncingData === false) {
-      // for nodes that do not have sync percent or other sync data
-      setSyncPercent('');
-      setIsSyncing(false);
-    } else {
-      setSyncPercent('');
-      setIsSyncing(undefined);
-    }
-  }, [qExecutionIsSyncing]);
-
-  useEffect(() => {
-    console.log('qExecutionPeers: ', qExecutionPeers.data);
-    if (qExecutionPeers.isError) {
-      setPeers(undefined);
-      return;
-    }
-    if (typeof qExecutionPeers.data === 'string') {
-      setPeers(qExecutionPeers.data);
-    } else if (typeof qExecutionPeers.data === 'number') {
-      setPeers(qExecutionPeers.data.toString());
-    } else {
-      setPeers(undefined);
-    }
-  }, [qExecutionPeers]);
-
-  useEffect(() => {
-    const savedSyncedBlock =
-      selectedNodePackage?.runtime?.usage?.syncedBlock || 0;
-    if (qLatestBlock.isError) {
-      setLatestBlockNumber(savedSyncedBlock);
-      return;
-    }
-
-    const updateNodeLSB = async (latestBlockNum: number) => {
-      if (!selectedNodePackage) {
-        return;
-      }
-      await electron.updateNodeLastSyncedBlock(
-        selectedNodePackage.id,
-        latestBlockNum,
-      );
+    const calculateResourceUsage = () => {
+      let disk = 0;
+      let cpu = 0;
+      let memory = 0;
+      selectedNodePackage?.services.forEach((service) => {
+        const node = sUserNodes?.nodes[service.node.id];
+        disk += node?.runtime?.usage?.diskGBs?.[0]?.y ?? 0;
+        cpu += node?.runtime?.usage?.cpuPercent?.[0]?.y ?? 0;
+        memory += node?.runtime?.usage?.memoryBytes?.[0]?.y ?? 0;
+      });
+      setResourceUsage({ disk, cpu, memory });
     };
-
-    const blockNumber = qLatestBlock?.data?.number;
-    const slotNumber = qLatestBlock?.data?.header?.message?.slot;
-    const rpcTranslation = selectedNodePackage?.spec?.rpcTranslation;
-
-    let latestBlockNum = 0;
-    if (
-      blockNumber &&
-      typeof blockNumber === 'string' &&
-      rpcTranslation === 'eth-l1'
-    ) {
-      latestBlockNum = hexToDecimal(blockNumber);
-    } else if (
-      slotNumber &&
-      typeof slotNumber === 'string' &&
-      rpcTranslation === 'eth-l1-beacon'
-    ) {
-      latestBlockNum = Number.parseFloat(slotNumber);
-    }
-
-    const syncedBlock =
-      latestBlockNum > savedSyncedBlock ? latestBlockNum : savedSyncedBlock;
-    setLatestBlockNumber(syncedBlock);
-    updateNodeLSB(syncedBlock);
-  }, [qLatestBlock, selectedNodePackage]);
+    calculateResourceUsage();
+  }, [selectedNodePackage?.services, sUserNodes]);
 
   const onNodeAction = useCallback(
     (action: NodeAction) => {
@@ -248,49 +184,82 @@ const NodePackageScreen = () => {
     setAlphaModal();
   }, []);
 
+  const getSyncDataForService = useCallback(
+    (service: any, node: any) => {
+      return getSyncDataForServiceAndNode(
+        service,
+        node,
+        qExecutionIsSyncing,
+        qConsensusIsSyncing,
+        qExecutionPeers,
+        qConsensusPeers,
+        qNetwork.status,
+      );
+    },
+    [
+      qExecutionIsSyncing,
+      qConsensusIsSyncing,
+      qExecutionPeers,
+      qConsensusPeers,
+      qNetwork.status,
+    ],
+  );
+
   useEffect(() => {
-    // format for presentation
-    const formattedServices: ClientProps[] = [];
-    selectedNodePackage?.services.map((service) => {
-      const nodeId = service.node.id;
-      const node = sUserNodes?.nodes[nodeId];
-      const data = qExecutionIsSyncing?.data;
-      console.log('data', data);
-      const stats =
-        service.serviceName === 'Execution Client'
+    const formattedServices: ClientProps[] =
+      selectedNodePackage?.services.map((service) => {
+        const { id: nodeId, spec } = service.node;
+        const node = sUserNodes?.nodes[nodeId];
+        if (!node) return null;
+        console.log('nodeWee', node);
+        // support other non-ethereum services
+        const isNotConsensusClient = service.serviceId !== 'consensusClient';
+        const syncData = getSyncDataForService(service, node);
+
+        const stats = isNotConsensusClient
           ? {
-              currentBlock: data?.currentBlock || 0,
-              highestBlock: data?.highestBlock || 0,
+              currentBlock: qExecutionIsSyncing?.data?.currentBlock || 0,
+              highestBlock: qExecutionIsSyncing?.data?.highestBlock || 0,
             }
           : {
-              currentSlot: data?.currentSlot || 0,
-              highestSlot: data?.highestSlot || 0,
+              currentSlot: qConsensusIsSyncing?.data?.currentSlot || 0,
+              highestSlot: qConsensusIsSyncing?.data?.highestSlot || 0,
             };
-      const serviceProps: ClientProps = {
-        id: service.node.id,
-        name: service.node.spec.specId,
-        displayName: service.node.spec.displayName as NodeBackgroundId,
-        version: '',
-        nodeType: service.serviceName,
-        status: {
-          running:
-            node?.status === NodeStatus.running ||
-            node?.status === NodeStatus.starting,
-          stopped:
-            node?.status === NodeStatus.stopped ||
-            node?.status === NodeStatus.stopping,
-          updating: node?.status === NodeStatus.updating,
-          error: node?.status.includes('error'),
-          // synchronized: !sIsSyncing && parseFloat(sSyncPercent) > 99.9,
-        },
-        stats,
-        resources: service.node.spec.resources,
-      };
-      formattedServices.push(serviceProps);
-    });
+        console.log('nodeStatus', getStatusObject(node?.status, syncData));
+        return {
+          id: nodeId,
+          iconUrl: spec.iconUrl,
+          name: spec.specId,
+          displayName: spec.displayName as NodeBackgroundId,
+          version: '',
+          nodeType: service.serviceName,
+          serviceId: service.serviceId,
+          status: getStatusObject(node?.status, syncData),
+          stats,
+          resources: spec.resources,
+        };
+      }) ?? [];
     setFormattedServices(formattedServices);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNodePackage?.services, sUserNodes]);
+
+  // Check and stop the NodePackage if all services are stopped
+  useEffect(() => {
+    const checkAndStopNodePackage = async () => {
+      if (selectedNodePackage?.status === NodeStatus.running) {
+        const allServicesStopped = selectedNodePackage.services.every(
+          (service) => {
+            const nodeId = service.node.id;
+            const nodeStatus = sUserNodes?.nodes[nodeId]?.status;
+            return nodeStatus === NodeStatus.stopped;
+          },
+        );
+        if (allServicesStopped) {
+          await electron.stopNodePackage(selectedNodePackage.id);
+        }
+      }
+    };
+    checkAndStopNodePackage();
+  }, [selectedNodePackage, sUserNodes]);
 
   if (sHasSeenAlphaModal === false && !alphaModalRendered) {
     dispatch(
@@ -328,59 +297,96 @@ const NodePackageScreen = () => {
     );
   }
 
-  const { status, spec } = selectedNodePackage;
+  const { id, status, spec, initialSyncFinished } = selectedNodePackage;
+  // console.log('nodePackageStatus', status);
   // todo: get node type, single or multi-service
   // parse node details from selectedNodePackage => SingleNodeContent
   // todo: add stop/start ability?
 
   // TODO: make this more flexible for other client specs
-  const formatSpec = (info: string | undefined) => {
-    let result = '';
-    if (info) {
-      result = `${info} ${sNetworkNodePackage}`;
-    } else if (sNetworkNodePackage !== '') {
-      result = `${sNetworkNodePackage}`;
-    }
-    return result;
-  };
-
-  const formatVersion = (version: string | undefined) => {
-    if (!version) {
-      return '';
-    }
-    return version;
-  };
+  const formatSpec = (info: string | undefined) =>
+    info ? `${info} ${sNetworkNodePackage}` : sNetworkNodePackage || '';
 
   const clientName = spec.specId.replace('-beacon', '');
-  const nodeVersionData =
-    typeof qNodeVersion === 'string' ? qNodeVersion : qNodeVersion?.currentData;
+
+  const executionSyncData =
+    executionService && executionNode
+      ? getSyncDataForService(executionService, executionNode)
+      : undefined;
+  const consensusSyncData =
+    consensusService && consensusNode
+      ? getSyncDataForService(consensusService, consensusNode)
+      : undefined;
+
+  const isEthereumNodePackageSynced = () => {
+    const isSynced = (
+      executionBlockNumber: number,
+      otherBlockNumber: number,
+    ) => {
+      return Math.abs(executionBlockNumber - otherBlockNumber) < 120; // ~30 minutes of blocks, should be fairly close to be considered synced
+    };
+    const executionLatestBlockNumber = qExecutionLatestBlock?.data;
+    return (
+      // Check if the execution block is close to the execution block contained within the consensus block
+      isSynced(
+        executionLatestBlockNumber,
+        qConsensusLatestBlock?.data?.message?.body?.execution_payload
+          ?.block_number,
+      ) ||
+      // If not, check if our execution block number is close to the public node that is already synced
+      isSynced(executionLatestBlockNumber, qPublicExecutionLatestBlock?.data)
+    );
+  };
+
+  const isNodePackageSyncing =
+    executionSyncData?.isSyncing ||
+    consensusSyncData?.isSyncing ||
+    (executionSyncData?.isSyncing === undefined &&
+      consensusSyncData?.isSyncing === undefined) ||
+    (isEthereumNodePackage && !isEthereumNodePackageSynced());
+
+  const nodePackageSyncData = {
+    ...executionSyncData,
+    isSyncing: isNodePackageSyncing,
+    updateAvailable: false,
+  };
+
+  console.log('nodePackage1', executionSyncData);
+  console.log('nodePackage2', consensusSyncData);
+  console.log('nodePackage3', nodePackageSyncData);
+
+  if (
+    nodePackageSyncData.isSyncing === false &&
+    status === NodeStatus.running &&
+    initialSyncFinished === undefined
+  ) {
+    electron.updateNodePackage(id, {
+      initialSyncFinished: true,
+    });
+  }
 
   const nodePackageContent: SingleNodeContent = {
-    nodeId: selectedNodePackage.id,
+    nodeId: id,
     displayName: spec.displayName,
     name: clientName as NodeBackgroundId,
+    iconUrl: spec.iconUrl,
     screenType: 'client',
     rpcTranslation: spec.rpcTranslation,
-    version: formatVersion(nodeVersionData), // todo: remove
     info: formatSpec(spec.displayTagline),
-    status: {
-      stopped: status === 'stopped',
-      error: status.includes('error'),
-      online: status === 'running',
-      updating: status === NodeStatus.updating,
-    },
+    status: getStatusObject(status, nodePackageSyncData),
     stats: {
-      peers: sPeers,
-      currentBlock: sLatestBlockNumber,
-      diskUsageGBs: sDiskUsed,
-      memoryUsagePercent: sMemoryUsagePercent,
-      cpuLoad: sCpuPercentUsed,
+      peers: nodePackageSyncData.peers,
+      diskUsageGBs: sResourceUsage.disk,
+      memoryUsagePercent: sResourceUsage.memory,
+      cpuLoad: sResourceUsage.cpu,
     },
     onAction: onNodeAction,
     description: spec.description,
     resources: spec.resources,
     documentation: spec.documentation,
   };
+
+  console.log('nodePackageScreen', nodePackageContent.status);
 
   /**
    * export interface ClientStatusProps {

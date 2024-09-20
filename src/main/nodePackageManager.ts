@@ -135,59 +135,45 @@ export const addNodePackage = async (
 
 export const startNodePackage = async (nodeId: NodeId) => {
   const node = nodePackageStore.getNodePackage(nodeId);
-  if (!node) {
+  if (!node)
     throw new Error(`Unable to start node package ${nodeId}. Not found.`);
-  }
-  logger.info(`Starting node ${JSON.stringify(node)}`);
-  let nodePackageStatus = NodeStatus.starting;
-  node.status = nodePackageStatus;
+
+  logger.info(`Starting node package ${JSON.stringify(node)}`);
+  node.status = NodeStatus.starting;
   node.lastStartedTimestampMs = Date.now();
   node.stoppedBy = undefined;
   nodePackageStore.updateNodePackage(node);
-
-  const isEthereumPackage = node.spec.specId === 'ethereum';
 
   const startService = async (service: any) => {
     try {
       await startNode(service.node.id);
     } catch (e) {
       logger.error(`Unable to start node service: ${JSON.stringify(service)}`);
-      nodePackageStatus = NodeStatus.errorStarting;
-      // try to start all services, or stop other services?
-      // todo: set as partially started?
-      // throw e;
+      node.status = NodeStatus.errorStarting;
+      nodePackageStore.updateNodePackage(node);
+      return Promise.reject(e);
     }
   };
 
-  // Make sure Ethereum clients run sequentially so that the correct
-  // engine and other ports can be assigned correctly
-  if (isEthereumPackage) {
+  if (node.services.length === 2) {
+    //TODO: support clients that don't have the following serviceIds
     const executionClient = node.services.find(
-      (service) => service.serviceId === 'executionClient',
+      (s) => s.serviceId === 'executionClient',
     );
     const consensusClient = node.services.find(
-      (service) => service.serviceId === 'consensusClient',
+      (s) => s.serviceId === 'consensusClient',
     );
 
-    if (executionClient) {
-      await startService(executionClient);
-    }
-
-    if (consensusClient) {
-      await startService(consensusClient);
-    }
+    if (executionClient) await startService(executionClient);
+    if (consensusClient) await startService(consensusClient);
   } else {
-    const startPromises = node.services.map(startService);
-    await Promise.all(startPromises);
+    await Promise.all(node.services.map(startService));
   }
 
-  // If all node services start without error, the package is considered running
-  if (nodePackageStatus === NodeStatus.running) {
+  if (node.status !== NodeStatus.errorStarting) {
+    node.status = NodeStatus.running;
     setLastRunningTime(nodeId, 'node');
   }
-
-  // set node status
-  node.status = nodePackageStatus;
   nodePackageStore.updateNodePackage(node);
 };
 
@@ -196,31 +182,30 @@ export const stopNodePackage = async (
   stoppedBy: NodeStoppedBy,
 ) => {
   const node = nodePackageStore.getNodePackage(nodeId);
-  if (!node) {
+  if (!node)
     throw new Error(`Unable to stop node package ${nodeId}. Not found.`);
-  }
-  logger.info(`Stopping node ${JSON.stringify(node)}`);
-  let nodePackageStatus = NodeStatus.stopping;
-  node.status = nodePackageStatus;
+
+  logger.info(`Stopping node package ${JSON.stringify(node)}`);
+  node.status = NodeStatus.stopping;
   node.lastStoppedTimestampMs = Date.now();
   node.stoppedBy = stoppedBy;
   nodePackageStore.updateNodePackage(node);
 
-  nodePackageStatus = NodeStatus.stopped;
-  for (let i = 0; i < node.services.length; i++) {
-    const service = node.services[i];
-    try {
-      await stopNode(service.node.id, stoppedBy);
-    } catch (e) {
-      logger.error(`Unable to stop node service: ${JSON.stringify(service)}`);
-      nodePackageStatus = NodeStatus.errorStopping;
-      // try to start all services, or stop other services?
-      // what to do here?
-      // throw e;
-    }
+  await Promise.all(
+    node.services.map(async (service) => {
+      try {
+        await stopNode(service.node.id, stoppedBy);
+      } catch (e) {
+        logger.error(`Unable to stop node service: ${JSON.stringify(service)}`);
+        node.status = NodeStatus.errorStopping;
+        nodePackageStore.updateNodePackage(node);
+      }
+    }),
+  );
+
+  if (node.status !== NodeStatus.errorStopping) {
+    node.status = NodeStatus.stopped;
   }
-  // set node status
-  node.status = nodePackageStatus;
   nodePackageStore.updateNodePackage(node);
 };
 
@@ -249,6 +234,8 @@ export const removeNodePackage = async (
     );
   }
   const node = nodePackageStore.getNodePackage(nodeId);
+  node.status = NodeStatus.removing;
+  nodePackageStore.updateNodePackage(node);
   for (let i = 0; i < node.services.length; i++) {
     const service = node.services[i];
     try {

@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { NodePackageLibrary } from '../../../main/state/nodeLibrary.js';
 import DropdownLink from '../../Generics/redesign/Link/DropdownLink';
 import SelectCard from '../../Generics/redesign/SelectCard/SelectCard';
 import type { SelectOption } from '../../Generics/redesign/SpecialSelect/SpecialSelect';
@@ -16,62 +17,6 @@ import {
   titleFont,
 } from './addNode.css';
 
-// Other node types are not ready yet
-const nodeOptions = [
-  {
-    iconId: 'ethereum',
-    title: 'Ethereum',
-    value: 'ethereum',
-    label: 'Ethereum',
-    info: 'The world computer',
-  },
-  {
-    iconId: 'base',
-    title: 'Base',
-    value: 'base',
-    label: 'Base',
-    info: 'A secure and low-cost Ethereum Layer 2 built on the OP stack',
-  },
-  {
-    iconId: 'optimism',
-    title: 'Optimism',
-    value: 'optimism',
-    label: 'Optimism',
-    info: 'Ethereum, scaled. Built by the OP Collective',
-  },
-  {
-    iconId: 'farcaster',
-    title: 'Farcaster',
-    value: 'farcaster',
-    label: 'Farcaster',
-    info: 'A protocol for decentralized social apps',
-  },
-  {
-    iconId: 'arbitrum',
-    title: 'Arbitrum One',
-    value: 'arbitrum',
-    label: 'Arbitrum One',
-    info: 'Welcome to the future of Ethereum',
-  },
-];
-
-const otherNodeOptions = [
-  {
-    iconId: 'home-assistant',
-    title: 'Home Assistant',
-    value: 'home-assistant',
-    label: 'Home Assistant',
-    info: 'Awaken your home',
-  },
-  {
-    iconId: 'minecraft',
-    title: 'Minecraft Server',
-    value: 'minecraft',
-    label: 'Minecraft Server',
-    info: 'The world is yours for the making',
-  },
-];
-
 let alphaModalRendered = false;
 
 export type AddNodeValues = {
@@ -85,6 +30,7 @@ export interface AddNodeProps {
   nodeConfig?: AddNodeValues;
   setNode?: (nodeSelection: SelectOption, object: AddNodeValues) => void;
   shouldHideTitle?: boolean;
+  nodePackageLibrary?: NodePackageLibrary;
 }
 
 const AddNode = ({
@@ -92,15 +38,37 @@ const AddNode = ({
   setNode,
   onChange,
   shouldHideTitle,
+  nodePackageLibrary,
 }: AddNodeProps) => {
   const { t } = useTranslation();
   const [sSelectedNode, setSelectedNode] = useState<SelectOption>(
-    nodeConfig?.node || nodeOptions[0],
+    // todo: and test splash screen
+    nodeConfig?.node,
   );
   const [sHasSeenAlphaModal, setHasSeenAlphaModal] = useState<boolean>();
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>();
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!sSelectedNode && nodePackageLibrary?.ethereum) {
+      console.log(
+        'sSelectedNode is null, setting it to nodePackageLibrary?.ethereum',
+        nodePackageLibrary?.ethereum,
+      );
+      const defaultNodePackage = nodePackageLibrary.ethereum;
+      setSelectedNode(defaultNodePackage);
+
+      // Modal Parent needs updated with the default initial value
+      // Todo: due to a JS closure bug with modalOnChangeConfig, we are setting the selected node here
+      const ethNodeConfig = {
+        node: defaultNodePackage,
+      };
+      if (setNode) {
+        setNode(defaultNodePackage, ethNodeConfig);
+      }
+    }
+  }, [nodePackageLibrary]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -168,47 +136,70 @@ const AddNode = ({
       </div>
       <p className={sectionFont}>{t('Network')}</p>
       <div style={{ width: '100%' }}>
-        {nodeOptions.map((nodeOption) => {
-          return (
-            <SelectCard
-              key={nodeOption.value}
-              title={nodeOption.title}
-              iconId={nodeOption.iconId as keyof NodeIcons}
-              info={nodeOption.info}
-              onClick={() => onChangeNode(nodeOption)}
-              isSelected={sSelectedNode?.value === nodeOption.value}
-            />
-          );
-        })}
+        {nodePackageLibrary &&
+          Object.keys(nodePackageLibrary).map((nodePackageId) => {
+            const nodeOption = nodePackageLibrary[nodePackageId];
+            if (
+              nodeOption?.category.includes('utility') ||
+              nodeOption?.category.includes('gaming')
+            ) {
+              return null;
+            }
+
+            return (
+              <SelectCard
+                key={nodeOption.specId}
+                title={nodeOption.displayName}
+                iconUrl={nodeOption.iconUrl}
+                iconId={nodeOption.specId as keyof NodeIcons}
+                info={
+                  nodeOption.selectCardTagline
+                    ? nodeOption.selectCardTagline
+                    : nodeOption.displayTagline
+                }
+                onClick={() => onChangeNode(nodeOption)}
+                isSelected={sSelectedNode?.specId === nodeOption.specId}
+              />
+            );
+          })}
       </div>
 
       {/* Other options are default hidden by a dropdown */}
       {/* Todo: this should be named "Show more options" */}
       <DropdownLink
         text={`${
-          isOptionsOpen ? t('HideAdvancedOptions') : t('ShowAdvancedOptions')
+          isOptionsOpen ? t('HideOtherNodeTypes') : t('ShowOtherNodeTypes')
         }`}
         onClick={() => setIsOptionsOpen(!isOptionsOpen)}
         isDown={!isOptionsOpen}
       />
       {isOptionsOpen && (
-        <>
-          <p className={sectionFont}>{t('Other')}</p>
-          <div style={{ width: '100%' }}>
-            {otherNodeOptions.map((nodeOption) => {
-              return (
-                <SelectCard
-                  key={nodeOption.value}
-                  title={nodeOption.title}
-                  iconId={nodeOption.iconId as keyof NodeIcons}
-                  info={nodeOption.info}
-                  onClick={() => onChangeNode(nodeOption)}
-                  isSelected={sSelectedNode?.value === nodeOption.value}
-                />
-              );
+        <div style={{ width: '100%' }}>
+          {nodePackageLibrary &&
+            Object.keys(nodePackageLibrary).map((nodePackageId) => {
+              const nodeOption = nodePackageLibrary[nodePackageId];
+              if (
+                nodeOption?.category.includes('utility') ||
+                nodeOption?.category.includes('gaming')
+              ) {
+                return (
+                  <SelectCard
+                    key={nodeOption.specId}
+                    title={nodeOption.displayName}
+                    iconUrl={nodeOption.iconUrl}
+                    iconId={nodeOption.specId as keyof NodeIcons}
+                    info={
+                      nodeOption.selectCardTagline
+                        ? nodeOption.selectCardTagline
+                        : nodeOption.displayTagline
+                    }
+                    onClick={() => onChangeNode(nodeOption)}
+                    isSelected={sSelectedNode?.specId === nodeOption.specId}
+                  />
+                );
+              }
             })}
-          </div>
-        </>
+        </div>
       )}
 
       {/* <SpecialSelect

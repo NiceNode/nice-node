@@ -55,6 +55,7 @@ export const HeaderButton = ({
     <div
       className={[container, isToggled ? 'toggled' : ''].join(' ')}
       onKeyDown={handleButtonClick}
+      // biome-ignore lint: useSemanticElements
       role="button"
       tabIndex={0}
       onClick={handleButtonClick}

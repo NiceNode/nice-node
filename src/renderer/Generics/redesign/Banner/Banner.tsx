@@ -45,7 +45,7 @@ export const Banner = ({
   const [iconId, setIconId] = useState<IconId>('blank');
   const [title, setTitle] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [isClicked, setIsClicked] = useState<boolean>(false);
+  // const [isClicked, setIsClicked] = useState<boolean>(false);
   const { t: g } = useTranslation('genericComponents');
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export const Banner = ({
       setIconId('boltstrike');
       setTitle(g('CurrentlyOffline'));
       setDescription(g('PleaseReconnect'));
-    } else if (!podmanInstalled) {
+    } else if (podmanInstalled === false) {
       setIconId('warningcircle');
       setTitle(g('PodmanIsNotInstalled'));
       setDescription(g('ClickToInstallPodman'));
@@ -66,14 +66,14 @@ export const Banner = ({
       setTitle(g('PodmanIsNotRunning'));
       setDescription(g('ClickToStartPodman'));
     }
-  }, [offline, updateAvailable, podmanStopped, podmanInstalled, g]);
+  }, [offline, updateAvailable, podmanStopped, podmanInstalled]);
 
   const onClickBanner = () => {
-    if (isClicked || offline) {
+    if (offline) {
       return;
     }
 
-    setIsClicked(true);
+    // setIsClicked(true);
 
     if (!podmanInstalled) {
       setDescription(g('PodmanInstalling'));
@@ -96,6 +96,7 @@ export const Banner = ({
       className={container}
       onClick={onClickBanner}
       onKeyDown={onClickBanner}
+      // biome-ignore lint: useSemanticElements
       role="button"
       tabIndex={0}
     >

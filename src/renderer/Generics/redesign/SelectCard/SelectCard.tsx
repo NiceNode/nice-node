@@ -23,7 +23,11 @@ export interface SelectCardProps {
    */
   info?: string;
   /**
-   * Which icon?
+   * Icon URL
+   */
+  iconUrl?: string;
+  /**
+   * Which icon? (deprecating)
    */
   iconId: NodeIconId;
   /**
@@ -50,6 +54,7 @@ export interface SelectCardProps {
 const SelectCard = ({
   onClick,
   title,
+  iconUrl,
   info,
   iconId,
   minority = false,
@@ -89,11 +94,12 @@ const SelectCard = ({
         // setSelected(false);
       }}
       onKeyDown={onClickAction}
+      // biome-ignore lint: useSemanticElements
       role="button"
       tabIndex={0}
     >
       <div className={containerStyles.join(' ')}>
-        <NodeIcon iconId={iconId} size="medium" />
+        <NodeIcon iconId={iconId} size="medium" iconUrl={iconUrl} />
         <div className={textContainer}>
           {/* TODO: Fix height to 60px */}
           <div className={titleStyle}>{title}</div>
@@ -101,7 +107,7 @@ const SelectCard = ({
         </div>
         {releaseLabel && (
           <div className={tagStyle}>
-            <Label bold={false} type="pink2" label={releaseLabel} />{' '}
+            <Label bold={false} type="orange2" label={releaseLabel} />{' '}
           </div>
         )}
         {minority && (

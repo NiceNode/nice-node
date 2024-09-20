@@ -22,14 +22,17 @@ import { mergeSystemRequirements } from './mergeNodeRequirements';
 
 import type { NodePackageSpecification } from '../../../common/nodeSpec';
 import type { AddNodePackageNodeService } from '../../../main/nodePackageManager';
-import step1 from '../../assets/images/artwork/NN-Onboarding-Artwork-01.png';
-import step2 from '../../assets/images/artwork/NN-Onboarding-Artwork-02.png';
-import step3 from '../../assets/images/artwork/NN-Onboarding-Artwork-03.png';
+import { useTheme } from '../../ThemeManager.js';
+import onboarding1Dm from '../../assets/images/artwork/onboarding-01-Dm.png';
+import onboarding1Lm from '../../assets/images/artwork/onboarding-01-Lm.png';
+import onboarding2Dm from '../../assets/images/artwork/onboarding-02-Dm.png';
+import onboarding2Lm from '../../assets/images/artwork/onboarding-02-Lm.png';
+import onboarding3Dm from '../../assets/images/artwork/onboarding-03-Dm.png';
+import onboarding3Lm from '../../assets/images/artwork/onboarding-03-Lm.png';
 import AddNodeConfiguration, {
   type AddNodeConfigurationValues,
 } from '../AddNodeConfiguration/AddNodeConfiguration';
 import { mergePackageAndClientConfigValues } from '../AddNodeConfiguration/mergePackageAndClientConfigValues';
-
 export interface AddNodeStepperProps {
   modal?: boolean;
   onChange: (newValue: 'done' | 'cancel') => void;
@@ -44,6 +47,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
   const [sNodeLibrary, setNodeLibrary] = useState<NodeLibrary>();
   const [sNodePackageLibrary, setNodePackageLibrary] =
     useState<NodePackageLibrary>();
+  const { isDarkTheme } = useTheme();
 
   const [sNode, setNode] = useState<AddNodeValues>();
 
@@ -86,9 +90,9 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
       let nodeReqs;
 
       if (newValue?.node) {
-        const ecValue = newValue?.node.value;
-        if (sNodeLibrary) {
-          nodeReqs = sNodeLibrary?.[ecValue]?.systemRequirements;
+        const newNodeSpecId = newValue?.node.specId;
+        if (sNodePackageLibrary) {
+          nodeReqs = sNodePackageLibrary?.[newNodeSpecId]?.systemRequirements;
         }
       }
       setSelectedNode(newValue);
@@ -107,19 +111,19 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
         console.error(e);
       }
     },
-    [sNodeLibrary],
+    [sNodePackageLibrary],
   );
 
   const addNodes = async () => {
     // Mostly duplicate code with AddNodeModal.modalOnSaveConfig()
     let nodePackageSpec: NodePackageSpecification;
-    if (sNodePackageLibrary && sNode?.node?.value) {
-      nodePackageSpec = sNodePackageLibrary?.[sNode?.node?.value];
+    if (sNodePackageLibrary && sNode?.node?.specId) {
+      nodePackageSpec = sNodePackageLibrary?.[sNode?.node?.specId];
     } else {
       console.error(
         'nodePackageLibrary, node: ',
         sNodePackageLibrary,
-        sNode?.node?.value,
+        sNode?.node?.specId,
       );
       throw new Error('No Node Package Spec found for the selected node');
     }
@@ -258,24 +262,28 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
 
   const getStepScreen = () => {
     let stepScreen = null;
-    let stepImage = step1;
+    let stepImage = isDarkTheme ? onboarding1Dm : onboarding1Lm;
     switch (sStep) {
       case 0:
-        stepScreen = <AddNode onChange={onChangeAddNode} />;
-        stepImage = step1;
+        stepScreen = (
+          <AddNode
+            onChange={onChangeAddNode}
+            nodePackageLibrary={sNodePackageLibrary}
+          />
+        );
         break;
       case 1:
         stepScreen = (
           <AddNodeConfiguration
             nodeLibrary={sNodeLibrary}
             nodePackageLibrary={sNodePackageLibrary}
-            nodeId={sNode?.node?.value}
+            nodeId={sNode?.node?.specId}
             onChange={onChangeAddNodeConfiguration}
             tempConfigValues={tempConfigValues}
             setTemporaryClientConfigValues={setTemporaryClientConfigValues}
           />
         );
-        stepImage = step1;
+        stepImage = isDarkTheme ? onboarding1Dm : onboarding1Lm;
         break;
       case 2:
         stepScreen = (
@@ -284,7 +292,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
             nodeStorageLocation={sNodeStorageLocation}
           />
         );
-        stepImage = step2;
+        stepImage = isDarkTheme ? onboarding2Dm : onboarding2Lm;
         break;
       case 3:
         stepScreen = (
@@ -293,7 +301,7 @@ const AddNodeStepper = ({ onChange, modal = false }: AddNodeStepperProps) => {
             disableSaveButton={setDisabledSaveButton}
           />
         );
-        stepImage = step3;
+        stepImage = isDarkTheme ? onboarding3Dm : onboarding3Lm;
         break;
       default:
     }

@@ -54,6 +54,7 @@ const SyncMode = ({
         // setSelected(false);
       }}
       onKeyDown={() => onClick(value)}
+      // biome-ignore lint: useSemanticElements
       role="button"
       tabIndex={0}
     >

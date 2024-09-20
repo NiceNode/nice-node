@@ -4,7 +4,6 @@ import { common, vars } from '../theme.css';
 export const container = style({
   boxSizing: 'border-box',
   cursor: 'pointer',
-  width: '50%',
   height: 280,
   background: vars.components.clientCardBackground,
   border: vars.components.clientCardBorder,
@@ -52,7 +51,7 @@ export const clientTitle = style({
 });
 
 export const cardContent = style({
-  padding: 20,
+  padding: 24,
 });
 
 export const clientBackground = style({
@@ -89,4 +88,5 @@ export const clientLabels = style({
   flexDirection: 'row',
   alignItems: 'flex-start',
   gap: 4,
+  marginBottom: 12,
 });

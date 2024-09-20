@@ -1,3 +1,4 @@
+import path from 'node:path';
 import {
   type BrowserWindow,
   Menu,
@@ -10,7 +11,6 @@ import {
   getSetHasSeenAlphaModal,
   getSetHasSeenSplashscreen,
 } from './state/settings';
-import path from 'node:path';
 
 import { runBenchmark } from './benchbuddy/runBenchmark';
 import { getDebugInfoString, getGithubIssueProblemURL } from './debug';

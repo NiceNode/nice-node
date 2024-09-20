@@ -20,7 +20,7 @@ export const Default = {
 export const Small = {
   args: {
     iconId: 'ethereum',
-    status: 'healthy',
+    status: 'online',
     size: 'small',
   },
 };

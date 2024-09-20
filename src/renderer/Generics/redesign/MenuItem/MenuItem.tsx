@@ -73,21 +73,30 @@ export const MenuItem = ({
     }
   };
 
+  const onClickNotCheckbox = (event: { preventDefault?: () => void }) => {
+    if (variant !== 'checkbox') {
+      onClickAction(event);
+    }
+  };
+
   return (
+    // biome-ignore lint: noLabelWithoutControl
     <label
       tabIndex={0}
-      // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: <explanation>
+      // biome-ignore lint: useSemanticElements
       role="button"
-      onKeyDown={onClickAction}
+      onKeyDown={onClickNotCheckbox}
       className={[container, `${disabledStyle}`].join(' ')}
-      onClick={onClickAction}
+      onClick={onClickNotCheckbox}
       onBlur={() => {
         if (selectable) {
           setChecked(false);
         }
       }}
     >
-      {variant === 'checkbox' && <Checkbox checked={isChecked} />}
+      {variant === 'checkbox' && (
+        <Checkbox checked={isChecked} onClick={onClickAction} />
+      )}
       {iconId && (
         <div>
           <Icon iconId={iconId} />

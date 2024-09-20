@@ -8,6 +8,8 @@ import NodeIcon from '../NodeIcon/NodeIcon';
 import ProgressBar from '../ProgressBar/ProgressBar';
 // import ProgressBar from '../ProgressBar/ProgressBar';
 import type { ClientProps, ClientStatusProps } from '../consts';
+// import { common } from '../theme.css';
+import { SYNC_STATUS } from '../consts.js';
 import { common } from '../theme.css';
 import {
   cardContent,
@@ -20,14 +22,22 @@ import {
   clientType,
   container,
 } from './clientCard.css';
-// import { common } from '../theme.css';
 
 /**
  * Primary UI component for user interaction
  */
 export const ClientCard = (props: ClientProps) => {
-  const { displayName, packageName, status, name, nodeType, onClick, stats } =
-    props;
+  const {
+    displayName,
+    packageName,
+    status,
+    name,
+    nodeType,
+    onClick,
+    stats,
+    iconUrl,
+    single,
+  } = props;
 
   const { t: g } = useTranslation('genericComponents');
 
@@ -37,19 +47,19 @@ export const ClientCard = (props: ClientProps) => {
       string: '',
     };
     switch (label) {
-      case 'synchronized':
+      case SYNC_STATUS.SYNCHRONIZED:
         labelDetails.color = 'green';
         labelDetails.string = g('Synchronized');
         break;
-      case 'blocksBehind':
+      case SYNC_STATUS.BLOCKS_BEHIND:
         labelDetails.color = 'orange';
         labelDetails.string = g('BlocksBehind');
         break;
-      case 'lowPeerCount':
+      case SYNC_STATUS.LOW_PEER_COUNT:
         labelDetails.color = 'orange';
         labelDetails.string = g('LowPeerCount');
         break;
-      case 'noConnection':
+      case SYNC_STATUS.NO_CONNECTION:
         labelDetails.color = 'red';
         labelDetails.string = g('NoConnection');
         break;
@@ -70,74 +80,137 @@ export const ClientCard = (props: ClientProps) => {
   //   (stats.highestBlock &&
   //     stats.currentBlock &&
   //     stats.highestBlock - stats.currentBlock > 10);
-  const isNotSynchronizedAndNotStopped = status.running && !status.stopped;
 
   const renderContents = () => {
-    if (status.stopped || status.updating) {
-      const label = status.stopped ? g('Stopped') : g('Updating');
+    if (
+      status.stopped ||
+      status.updating ||
+      status.stopping ||
+      status.starting ||
+      status.removing
+    ) {
+      let label;
+      switch (true) {
+        case status.removing:
+          label = g('Removing');
+          break;
+        case status.stopped:
+          label = g('Stopped');
+          break;
+        case status.updating:
+          label = g('Updating');
+          break;
+        case status.stopping:
+          label = g('Stopping');
+          break;
+        case status.starting:
+          label = g('Starting');
+          break;
+        default:
+          label = '';
+      }
       return <Label type="gray" label={label} />;
     }
-    if (
-      packageName === 'ethereum' &&
-      (stats.currentBlock !== 0 || stats.currentSlot !== 0)
-    ) {
+    const { updating, running, error, ...statusLabels } = status;
+    const statusKeys = Object.keys(statusLabels).filter((k: string) => {
+      const statusKey = k as keyof ClientStatusProps;
+      return status[statusKey] === true;
+    });
+
+    // Helper function to calculate progress
+    const calculateProgress = () => {
       let progress = 0;
       if (stats.highestSlot && stats.currentSlot) {
         progress = stats.currentSlot / stats.highestSlot;
       } else if (stats.highestBlock && stats.currentBlock) {
         progress = stats.currentBlock / stats.highestBlock;
       }
-      // const syncPercent = (progress * 100).toFixed(1);
-      const caption = !status.initialized
-        ? g('InitialSyncInProgress')
-        : g('CatchingUp');
-      return (
-        <>
-          {/* TODO: modify height of the bar for card */}
-          <ProgressBar
-            card
-            color={
-              common.color[name.replace('-beacon', '') as NodeBackgroundId] ??
-              common.color.geth
-            }
-            progress={progress}
-            caption={`${caption} (rely on logs for now, still a work in progress)`}
-            // caption={`${caption} (${syncPercent}%)`}
-          />
-        </>
-      );
-    }
-    if (isNotSynchronizedAndNotStopped) {
-      const label = g('Syncing');
-      return <Label type="gray" label={label} />;
-    }
-    const { updating, initialized, ...statusLabels } = status;
-    // Get all node statuses that are true
-    const statusKeys = Object.keys(statusLabels).filter((k: string) => {
-      const statusKey = k as keyof ClientStatusProps;
-      return status[statusKey] === true;
-    });
+      return progress * 100;
+    };
+
     return (
-      <div className={clientLabels}>
-        {statusKeys.map((key) => {
-          const labelDetails = getLabelDetails(key);
-          return (
-            <Label
-              // should only be one tag of (ex) "synchronized" per client
-              key={key}
-              type={labelDetails.color}
-              label={labelDetails.string}
+      <>
+        {statusKeys.length > 0 && (
+          <div className={clientLabels}>
+            {statusKeys.map((key) => {
+              const labelDetails = getLabelDetails(key);
+              return (
+                <Label
+                  key={key}
+                  type={labelDetails.color}
+                  label={labelDetails.string}
+                />
+              );
+            })}
+          </div>
+        )}
+        {!status.noConnection &&
+          !status.synchronized &&
+          (stats.currentBlock !== 0 || stats.currentSlot !== 0) && (
+            <ProgressBar
+              card
+              color={
+                common.color[name.replace('-beacon', '') as NodeBackgroundId] ??
+                common.color.geth
+              }
+              progress={calculateProgress()}
+              showPercent
+              caption={
+                !status.catchingUp
+                  ? g('InitialSyncInProgress')
+                  : g('CatchingUp')
+              }
+              outerStyle={{ height: '20px' }}
+              innerStyle={{ height: '20px' }}
             />
-          );
-        })}
-      </div>
+          )}
+      </>
     );
+  };
+
+  const calculateCardHeight = () => {
+    if (
+      status.stopped ||
+      status.updating ||
+      status.stopping ||
+      status.starting ||
+      status.removing
+    ) {
+      return 186; // Height for single label states
+    }
+
+    const showSyncProgress =
+      !status.noConnection &&
+      !status.synchronized &&
+      (stats.currentBlock !== 0 || stats.currentSlot !== 0);
+
+    const hasStatusLabels = Object.keys(status).some(
+      (key) =>
+        key !== 'updating' &&
+        key !== 'running' &&
+        key !== 'error' &&
+        status[key as keyof ClientStatusProps],
+    );
+
+    if (showSyncProgress && hasStatusLabels) {
+      return 132; // Height when both sync progress and labels are shown
+    }
+
+    if (
+      (status.running && !status.synchronized) ||
+      (status.error && !status.noConnection)
+    ) {
+      return 166; // Original condition for 166px height
+    }
+
+    return 186; // Default height
   };
 
   const stoppedStyle = status.stopped ? 'stopped' : '';
   return (
     <div
       className={container}
+      style={{ width: single ? '100%' : '50%' }}
       onClick={() => {
         if (onClick) {
           onClick();
@@ -148,6 +221,7 @@ export const ClientCard = (props: ClientProps) => {
           onClick();
         }
       }}
+      // biome-ignore lint: useSemanticElements
       role="presentation"
     >
       <div
@@ -156,14 +230,18 @@ export const ClientCard = (props: ClientProps) => {
             NODE_BACKGROUNDS[name.replace('-beacon', '') as NodeBackgroundId] ??
             NODE_BACKGROUNDS.nimbus
           })`,
-          // height: isNotSynchronizedAndNotStopped ? 166 : 186,
+          height: calculateCardHeight(),
         }}
         className={[cardTop, `${stoppedStyle}`].join(' ')}
       >
         <div className={[clientBackground, `${stoppedStyle}`].join(' ')}>
           <div className={clientDetails}>
             <div className={clientIcon}>
-              <NodeIcon iconId={name.replace('-beacon', '')} size="medium" />
+              <NodeIcon
+                iconId={name.replace('-beacon', '')}
+                size="medium"
+                iconUrl={iconUrl}
+              />
             </div>
             <div className={clientTitle}>{displayName}</div>
           </div>

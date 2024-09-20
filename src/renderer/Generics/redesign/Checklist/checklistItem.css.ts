@@ -56,6 +56,10 @@ export const successIcon = style({
   height: 16,
 });
 
+export const infoIcon = style({
+  color: vars.color.font40,
+});
+
 export const warningIcon = style({
   color: common.color.yellow,
 });
@@ -70,6 +74,8 @@ export const loadingIcon = style({
   animationName: rotate,
   animationDuration: '3s',
   animationIterationCount: 'infinite',
+  width: 16,
+  height: 16,
 });
 
 export const errorIcon = style({

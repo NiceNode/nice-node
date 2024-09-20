@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { common } from '../../Generics/redesign/theme.css';
+import { common, vars } from '../../Generics/redesign/theme.css';
 
 export const container = style({
   display: 'flex',
@@ -9,7 +9,7 @@ export const container = style({
 
 export const topBanner = style({
   height: 92,
-  backgroundColor: common.color.pink100,
+  backgroundColor: vars.components.alphaBannerBackground,
   borderTopLeftRadius: 14,
   borderTopRightRadius: 14,
   display: 'flex',

@@ -15,8 +15,18 @@ const timeRemainingCaption = (
   if (timeElapsed >= totalTime) {
     return g('FinishingUp');
   }
-  return g('AboutSecondsRemaining', {
-    seconds: Math.round(totalTime - timeElapsed),
+  const seconds = totalTime - timeElapsed;
+  if (seconds < 60) {
+    return g('AboutSecondsRemaining', {
+      seconds,
+    });
+  }
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+
+  return g('AboutMinutesAndSecondsRemaining', {
+    minutes,
+    remainingSeconds,
   });
 };
 

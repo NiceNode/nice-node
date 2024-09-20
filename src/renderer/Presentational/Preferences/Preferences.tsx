@@ -118,6 +118,7 @@ const Preferences = ({
           return (
             <div
               key={themeDetails.theme}
+              // biome-ignore lint: useSemanticElements
               role="button"
               tabIndex={index}
               style={{
@@ -192,7 +193,9 @@ const Preferences = ({
         />
       </div>
       <div className={preferenceSection}>
-        <div className={sectionTitle}>{t('Notifications')}</div>
+        <div id="notifications" className={sectionTitle}>
+          {t('Notifications')}
+        </div>
         <HorizontalLine />
         <LineLabelSettings
           items={[
