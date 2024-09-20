@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { NodePackage } from '../../../common/node';
-import type { ModalConfig } from '../ModalManager/modalUtils';
-import {
-  container,
-  statusContainer,
-  statusIcon,
-  successIcon,
-  loadingIcon,
-  statusText,
-  statusButton,
-} from './update.css';
-import { UpdateCallout } from '../../Generics/redesign/UpdateCallout/UpdateCallout.js';
+import { setModalState } from '../..//state/modal.js';
 import Button from '../../Generics/redesign/Button/Button.js';
 import { Icon } from '../../Generics/redesign/Icon/Icon.js';
+import { UpdateCallout } from '../../Generics/redesign/UpdateCallout/UpdateCallout.js';
 import type { NodeOverviewProps } from '../../Generics/redesign/consts.js';
 import { useAppDispatch } from '../../state/hooks.js';
-import { setModalState } from '../..//state/modal.js';
+import type { ModalConfig } from '../ModalManager/modalUtils';
 import { modalRoutes } from '../ModalManager/modalUtils.js';
+import {
+  container,
+  loadingIcon,
+  statusButton,
+  statusContainer,
+  statusIcon,
+  statusText,
+  successIcon,
+} from './update.css';
 
 export interface UpdateProps {
   updateStatus: string; // The current status of the update process

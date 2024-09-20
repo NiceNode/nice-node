@@ -11,8 +11,8 @@ import { NodeSettingsModal } from './NodeSettingsModal';
 import { PodmanModal } from './PodmanModal';
 import { PreferencesModal } from './PreferencesModal';
 import { RemoveNodeModal } from './RemoveNodeModal';
-import { UpdateModal } from './UpdateModal';
 import { ResetConfigModal } from './ResetConfigModal';
+import { UpdateModal } from './UpdateModal';
 import { modalRoutes } from './modalUtils';
 
 const ModalManager = () => {
