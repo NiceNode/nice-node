@@ -30,6 +30,7 @@ import * as metricsPolling from './metricsPolling';
 import { execPromise as podmanExecPromise } from './podman-desktop/podman-cli';
 import { getPodmanEnvWithPath } from './podman-env-path';
 import startPodman, { onStartUp } from './start';
+import { buildEnvInput } from '../../common/nodeConfig.js';
 
 let podmanWatchProcess: ChildProcess;
 
@@ -485,14 +486,6 @@ const createPodmanPortInput = (
   return result.join(' ');
 };
 
-const buildEnvInput = (input: string) => {
-  if (!input) {
-    return '';
-  }
-  const pairs = input.split(',');
-  return pairs.map((pair) => `-e ${pair.trim()}`).join(' ');
-};
-
 export const createRunCommand = (node: Node): string => {
   const { specId, execution, configTranslation } = node.spec;
   const { imageName, input } = execution as PodmanExecution;
@@ -571,7 +564,15 @@ export const createRunCommand = (node: Node): string => {
   });
   nodeInput += ` ${cliConfigInput}`;
 
-  const envConfigInput = buildEnvInput(node.config.configValuesMap.envInput);
+  const directUserEnvConfigInput = buildEnvInput(
+    node.config.configValuesMap.envInput,
+  );
+  const envConfigInput = buildCliConfig({
+    configValuesMap: node.config.configValuesMap,
+    configTranslationMap: node.spec.configTranslation,
+    excludeConfigKeys,
+    isBuildingEnvInput: true,
+  });
 
   const imageTag = getImageTag(node);
   // if imageTage is empty, use then imageTag is already included in the imageName (backwards compatability)
@@ -580,7 +581,7 @@ export const createRunCommand = (node: Node): string => {
 
   const containerName = getContainerName(node);
   // -q quiets podman logs (pulling new image logs) so we can parse the containerId
-  const podmanCommand = `run -q -d ${envConfigInput} --name ${containerName} ${finalPodmanInput} ${imageNameWithTag} ${nodeInput}`;
+  const podmanCommand = `run -q -d ${envConfigInput} ${directUserEnvConfigInput} --name ${containerName} ${finalPodmanInput} ${imageNameWithTag} ${nodeInput}`;
   logger.info(`podman run command ${podmanCommand}`);
   return podmanCommand;
 };
