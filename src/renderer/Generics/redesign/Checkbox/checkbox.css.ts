@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars, common } from '../theme.css';
+import { common, vars } from '../theme.css';
 
 export const checkboxContainer = style({
   display: 'flex',
