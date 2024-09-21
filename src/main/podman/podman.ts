@@ -20,6 +20,7 @@ import {
   type ConfigValuesMap,
   buildCliConfig,
 } from '../../common/nodeConfig';
+import { buildEnvInput } from '../../common/nodeConfig.js';
 import { CHANNELS, send } from '../messenger.js';
 import { restartNodes } from '../nodePackageManager';
 import { isLinux } from '../platform';
@@ -546,6 +547,7 @@ export const createRunCommand = (node: Node): string => {
   const excludeConfigKeys = [
     'dataDir',
     'serviceVersion',
+    'envInput',
     ...initCommandConfigKeys,
   ];
   if (
@@ -562,6 +564,16 @@ export const createRunCommand = (node: Node): string => {
   });
   nodeInput += ` ${cliConfigInput}`;
 
+  const directUserEnvConfigInput = buildEnvInput(
+    node.config.configValuesMap.envInput,
+  );
+  const envConfigInput = buildCliConfig({
+    configValuesMap: node.config.configValuesMap,
+    configTranslationMap: node.spec.configTranslation,
+    excludeConfigKeys,
+    isBuildingEnvInput: true,
+  });
+
   const imageTag = getImageTag(node);
   // if imageTage is empty, use then imageTag is already included in the imageName (backwards compatability)
   const imageNameWithTag =
@@ -569,7 +581,7 @@ export const createRunCommand = (node: Node): string => {
 
   const containerName = getContainerName(node);
   // -q quiets podman logs (pulling new image logs) so we can parse the containerId
-  const podmanCommand = `run -q -d --name ${containerName} ${finalPodmanInput} ${imageNameWithTag} ${nodeInput}`;
+  const podmanCommand = `run -q -d ${envConfigInput} ${directUserEnvConfigInput} --name ${containerName} ${finalPodmanInput} ${imageNameWithTag} ${nodeInput}`;
   logger.info(`podman run command ${podmanCommand}`);
   return podmanCommand;
 };

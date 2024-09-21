@@ -53,6 +53,7 @@ export type ConfigTranslation = {
   addNodeFlow?: ConfigTranslationAddNodeFlow;
   initCommandConfig?: boolean;
   hideFromUserAfterStart?: boolean;
+  isEnvVariable?: boolean;
 };
 
 export type ConfigKey = string;
@@ -89,23 +90,31 @@ export const buildCliConfig = ({
   configValuesMap,
   configTranslationMap,
   excludeConfigKeys,
+  isBuildingEnvInput,
 }: {
   configValuesMap: ConfigValuesMap;
   configTranslationMap?: ConfigTranslationMap;
   excludeConfigKeys?: string[];
+  isBuildingEnvInput?: boolean;
 }): string => {
   if (!configTranslationMap) return '';
   const cliConfigArray = Object.keys(configValuesMap).reduce(
     (cliString, configKey) => {
-      if (excludeConfigKeys?.includes(configKey)) {
-        return cliString;
-      }
       const configValue = configValuesMap[configKey];
       const configTranslation: ConfigTranslation =
         configTranslationMap[configKey];
 
+      // Only include env vars if building env input, ignore env vars if building cli input
+      if (
+        excludeConfigKeys?.includes(configKey) ||
+        isBuildingEnvInput !== configTranslation?.isEnvVariable
+      ) {
+        return cliString;
+      }
+
       if (configTranslation && configValue) {
         let currCliString = '';
+
         if (configTranslation.cliConfigPrefix) {
           if (typeof configTranslation.cliConfigPrefix === 'string') {
             currCliString = configTranslation.cliConfigPrefix;
@@ -161,12 +170,17 @@ export const buildCliConfig = ({
             currCliString += ` ${configTranslation.cliConfigPrefix[i]}${configValue}`;
           }
         }
+        // each env var needs to be prefixed with -e for podman/docker
+        if (isBuildingEnvInput) {
+          currCliString = `-e ${currCliString}`;
+        }
 
         console.log(
           'cliString, currCliString: ',
           JSON.stringify(cliString),
           JSON.stringify(currCliString),
         );
+
         // join the current config with the previous and a space between
         if (cliString) {
           return `${cliString} ${currCliString}`;
@@ -178,4 +192,12 @@ export const buildCliConfig = ({
     '',
   );
   return cliConfigArray;
+};
+
+export const buildEnvInput = (input: string) => {
+  if (!input) {
+    return '';
+  }
+  const pairs = input.split(',');
+  return pairs.map((pair) => `-e ${pair.trim()}`).join(' ');
 };
