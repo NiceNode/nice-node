@@ -1,4 +1,7 @@
-import type { ForgeConfig, ForgePackagerOptions } from '@electron-forge/shared-types';
+import type {
+  ForgeConfig,
+  ForgePackagerOptions,
+} from '@electron-forge/shared-types';
 // import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 // import { MakerDeb } from '@electron-forge/maker-deb';
@@ -14,7 +17,7 @@ const { version } = packageJson;
 const { versionPostfix } = process.env;
 
 const iconDir = path.resolve('assets', 'icons');
-console.log("forge.config.ts iconDir: ", iconDir);
+console.log('forge.config.ts iconDir: ', iconDir);
 
 const packagerConfig: ForgePackagerOptions = {
   asar: true,
@@ -25,9 +28,9 @@ const packagerConfig: ForgePackagerOptions = {
     {
       name: 'NiceNode Protocol',
       schemes: ['nice-node'],
-    }
+    },
   ],
-  appVersion: versionPostfix ? `${version}${versionPostfix}` : version
+  appVersion: versionPostfix ? `${version}${versionPostfix}` : version,
   // unsure if this is needed below:
   // ignore: [ /stories/, /__tests__/, /.storybook/, /storybook/, /storybook-static/ ],
 };
@@ -48,18 +51,19 @@ const commonLinuxConfig = {
   },
   executableName: 'nice-node',
   productName: 'NiceNode',
-  productDescription: "By running a node you become part of a global movement to decentralize a world of information. Prevent leaking your personal data to third party nodes. Ensure access when you need it, and don't be censored. Decentralization starts with you. Voice your choice, help your peers.",
-  maintainer: "NiceNode LLC <johns@nicenode.xyz>",
+  productDescription:
+    "By running a node you become part of a global movement to decentralize a world of information. Prevent leaking your personal data to third party nodes. Ensure access when you need it, and don't be censored. Decentralization starts with you. Voice your choice, help your peers.",
+  maintainer: 'NiceNode LLC <johns@nicenode.xyz>',
   categories: ['Utility', 'System', 'Network', 'Development'],
   mimeType: ['application/x-nice-node', 'x-scheme-handler/nice-node'],
-}
+};
 
 // skip signing & notarizing on local builds
-console.log("process.env.CI: ", process.env.CI);
-if(process.env.CI && process.env.NO_CODE_SIGNING !== 'true') {
-  console.log("Setting packagerConfig.osxSign and osxNotarize");
-  if(process.env.APPLE_PROD_CERT_NAME) {
-    console.log("process.env.APPLE_PROD_CERT_NAME is not null");
+console.log('process.env.CI: ', process.env.CI);
+if (process.env.CI && process.env.NO_CODE_SIGNING !== 'true') {
+  console.log('Setting packagerConfig.osxSign and osxNotarize');
+  if (process.env.APPLE_PROD_CERT_NAME) {
+    console.log('process.env.APPLE_PROD_CERT_NAME is not null');
   }
   packagerConfig.osxSign = {
     identity: process.env.APPLE_PROD_CERT_NAME,
@@ -67,9 +71,9 @@ if(process.env.CI && process.env.NO_CODE_SIGNING !== 'true') {
   packagerConfig.osxNotarize = {
     appleId: process.env.APPLE_ID,
     appleIdPassword: process.env.APPLE_ID_PASSWORD,
-    teamId: process.env.APPLE_TEAM_ID
+    teamId: process.env.APPLE_TEAM_ID,
   };
-} else if(process.env.LOCAL_MAC_SIGNING === 'true') {
+} else if (process.env.LOCAL_MAC_SIGNING === 'true') {
   packagerConfig.osxSign = {}; // local keychain works automatically
 }
 
@@ -87,27 +91,27 @@ const config: ForgeConfig = {
         exe: 'nice-node.exe',
         noMsi: true,
         setupExe: `NiceNode-${version}-windows-${arch}-setup.exe`,
-        setupIcon: path.resolve(iconDir, '..', 'icon.ico')
+        setupIcon: path.resolve(iconDir, '..', 'icon.ico'),
       }),
     },
     new MakerZIP({}),
     {
       name: '@electron-forge/maker-rpm',
       platforms: ['linux'],
-      config: commonLinuxConfig
+      config: commonLinuxConfig,
     },
     {
       name: '@electron-forge/maker-deb',
       platforms: ['linux'],
-      config: commonLinuxConfig
+      config: commonLinuxConfig,
     },
-    new MakerDMG({
-      background: './assets/dmg-background.tiff',
-      // installer name. default includes version number in filename
-      // name: "NiceNode Installer",
-      icon: './assets/installer.icns',
-      overwrite: true,
-    }),
+    {
+      name: '@electron-forge/maker-dmg',
+      config: {
+        background: './assets/installer.icns',
+        overwrite: true,
+      },
+    },
   ],
   plugins: [
     new VitePlugin({
@@ -118,10 +122,12 @@ const config: ForgeConfig = {
           // `entry` is just an alias for `build.lib.entry` in the corresponding file of `config`.
           entry: 'src/main/main.ts',
           config: 'vite.main.config.ts',
+          target: 'main',
         },
         {
           entry: 'src/main/preload.ts',
           config: 'vite.preload.config.ts',
+          target: 'preload',
         },
       ],
       renderer: [
@@ -133,7 +139,7 @@ const config: ForgeConfig = {
     }),
     {
       name: '@electron-forge/plugin-auto-unpack-natives',
-      config: {}
+      config: {},
     },
     // Fuses are used to enable/disable various Electron functionality
     // at package time, before code signing the application
@@ -156,10 +162,10 @@ const config: ForgeConfig = {
           name: 'nice-node',
         },
         prerelease: true,
-        generateReleaseNotes: true
+        generateReleaseNotes: true,
       },
     },
-  ]
+  ],
 };
 
 export default config;
