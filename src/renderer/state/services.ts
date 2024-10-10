@@ -1,6 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { NiceNodeRpcTranslation } from '../../common/rpcTranslation';
-import { ethers } from '../ethers';
+import { ethers } from 'ethers';
 import { executeTranslation } from './rpcExecuteTranslation';
 
 type CustomerErrorType = {

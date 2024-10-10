@@ -11,12 +11,12 @@ export const builtins = [
 // https://www.electronforge.io/config/plugins/vite#native-node-modules
 // export const external = [...builtins, 'cron', 'systeminformation', ...Object.keys('dependencies' in pkg ? (pkg.dependencies as Record<string, unknown>) : {})];
 export const external = [
-  // ...builtins,
-  // 'cron',
-  // 'dotenv',
-  // ...Object.keys(
-  //   'dependencies' in pkg ? (pkg.dependencies as Record<string, unknown>) : {},
-  // ),
+  ...builtins,
+  'cron',
+  'dotenv',
+  ...Object.keys(
+    'dependencies' in pkg ? (pkg.dependencies as Record<string, unknown>) : {},
+  ),
 ];
 
 console.log('vite.base.config.ts');
