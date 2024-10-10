@@ -38,7 +38,7 @@
     "@electron-forge/plugin-fuses": "^7.4.0",
     "@electron-forge/plugin-vite": "^7.4.0",
     "@electron-forge/publisher-github": "^7.4.0",
-    "@electron-forge/shared-types": "^7.4.0",
+    "@electron-forge/shared-types": "^7.5.0",
     "@electron/fuses": "^1.8.0",
     "@storybook/addon-actions": "^8.3.0",
     "@storybook/addon-essentials": "^8.3.0",
