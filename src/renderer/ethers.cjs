@@ -18,12 +18,10 @@ function createCommonjsModule(fn, basedir, module) {
     (module = {
       path: basedir,
       exports: {},
-      require: function (path, base) {
-        return commonjsRequire(
+      require: (path, base) => commonjsRequire(
           path,
           base === undefined || base === null ? module.path : base,
-        );
-      },
+        ),
     }),
     fn(module, module.exports),
     module.exports
@@ -44,7 +42,7 @@ function getDefaultExportFromNamespaceIfNotNamed(n) {
 function getAugmentedNamespace(n) {
   if (n.__esModule) return n;
   var a = Object.defineProperty({}, '__esModule', { value: true });
-  Object.keys(n).forEach(function (k) {
+  Object.keys(n).forEach((k) => {
     var d = Object.getOwnPropertyDescriptor(n, k);
     Object.defineProperty(
       a,
@@ -53,9 +51,7 @@ function getAugmentedNamespace(n) {
         ? d
         : {
             enumerable: true,
-            get: function () {
-              return n[k];
-            },
+            get: () => n[k],
           },
     );
   });
@@ -66,15 +62,15 @@ function commonjsRequire() {
     'Dynamic requires are not currently supported by @rollup/plugin-commonjs',
   );
 }
-var bn = createCommonjsModule(function (module) {
-  (function (module, exports) {
+var bn = createCommonjsModule((module) => {
+  ((module, exports) => {
     'use strict';
     function assert(val, msg) {
       if (!val) throw new Error(msg || 'Assertion failed');
     }
     function inherits(ctor, superCtor) {
       ctor.super_ = superCtor;
-      var TempCtor = function () {};
+      var TempCtor = () => {};
       TempCtor.prototype = superCtor.prototype;
       ctor.prototype = new TempCtor();
       ctor.prototype.constructor = ctor;
@@ -2838,7 +2834,7 @@ function _checkNormalize() {
 }
 const _normalizeError = _checkNormalize();
 var LogLevel;
-(function (LogLevel) {
+((LogLevel) => {
   LogLevel['DEBUG'] = 'DEBUG';
   LogLevel['INFO'] = 'INFO';
   LogLevel['WARNING'] = 'WARNING';
@@ -2846,7 +2842,7 @@ var LogLevel;
   LogLevel['OFF'] = 'OFF';
 })(LogLevel || (LogLevel = {}));
 var ErrorCode;
-(function (ErrorCode) {
+((ErrorCode) => {
   ErrorCode['UNKNOWN_ERROR'] = 'UNKNOWN_ERROR';
   ErrorCode['NOT_IMPLEMENTED'] = 'NOT_IMPLEMENTED';
   ErrorCode['UNSUPPORTED_OPERATION'] = 'UNSUPPORTED_OPERATION';
@@ -2965,7 +2961,7 @@ class Logger {
     const error = new Error(message);
     error.reason = reason;
     error.code = code;
-    Object.keys(params).forEach(function (key) {
+    Object.keys(params).forEach((key) => {
       error[key] = params[key];
     });
     return error;
@@ -3119,7 +3115,7 @@ function addSlice(array) {
   if (array.slice) {
     return array;
   }
-  array.slice = function () {
+  array.slice = () => {
     const args = Array.prototype.slice.call(arguments);
     return addSlice(new Uint8Array(Array.prototype.slice.apply(array, args)));
   };
@@ -3161,7 +3157,7 @@ function arrayify(value, options) {
     const result = [];
     while (value) {
       result.unshift(value & 255);
-      value = parseInt(String(value / 256));
+      value = Number.parseInt(String(value / 256));
     }
     if (result.length === 0) {
       result.push(0);
@@ -3191,7 +3187,7 @@ function arrayify(value, options) {
     }
     const result = [];
     for (let i = 0; i < hex.length; i += 2) {
-      result.push(parseInt(hex.substring(i, i + 2), 16));
+      result.push(Number.parseInt(hex.substring(i, i + 2), 16));
     }
     return addSlice(new Uint8Array(result));
   }
@@ -3294,7 +3290,7 @@ function hexlify(value, options) {
   if (isBytes(value)) {
     let result = '0x';
     for (let i = 0; i < value.length; i++) {
-      let v = value[i];
+      const v = value[i];
       result += HexCharacters[(v & 240) >> 4] + HexCharacters[v & 15];
     }
     return result;
@@ -3374,7 +3370,7 @@ function splitSignature(signature) {
     compact: '0x',
   };
   if (isBytesLike(signature)) {
-    let bytes = arrayify(signature);
+    const bytes = arrayify(signature);
     if (bytes.length === 64) {
       result.v = 27 + (bytes[32] >> 7);
       bytes[32] &= 127;
@@ -3978,8 +3974,8 @@ class FixedFormat {
           logger$2.throwArgumentError('invalid fixed format', 'format', value);
         }
         signed = match[1] !== 'u';
-        width = parseInt(match[2]);
-        decimals = parseInt(match[3]);
+        width = Number.parseInt(match[2]);
+        decimals = Number.parseInt(match[3]);
       }
     } else if (value) {
       const check = (key, type, defaultValue) => {
@@ -4145,7 +4141,7 @@ class FixedNumber {
     return hexZeroPad(hex, width / 8);
   }
   toUnsafeFloat() {
-    return parseFloat(this.toString());
+    return Number.parseFloat(this.toString());
   }
   toFormat(format) {
     return FixedNumber.fromString(this._value, format);
@@ -4238,15 +4234,15 @@ const version$3 = 'properties/5.6.0';
 ('use strict');
 var __awaiter =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -4268,7 +4264,7 @@ var __awaiter =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$3 = new Logger(version$3);
 function defineReadOnly(object, name, value) {
   Object.defineProperty(object, name, {
@@ -4396,8 +4392,8 @@ const version$4 = 'abi/5.6.0';
 ('use strict');
 const logger$4 = new Logger(version$4);
 const _constructorGuard$2 = {};
-let ModifiersBytes = { calldata: true, memory: true, storage: true };
-let ModifiersNest = { calldata: true, memory: true };
+const ModifiersBytes = { calldata: true, memory: true, storage: true };
+const ModifiersNest = { calldata: true, memory: true };
 function checkModifier(type, name) {
   if (type === 'bytes' || type === 'string') {
     if (ModifiersBytes[name]) {
@@ -4418,7 +4414,7 @@ function checkModifier(type, name) {
   return false;
 }
 function parseParamType(param, allowIndexed) {
-  let originalParam = param;
+  const originalParam = param;
   function throwError(i) {
     logger$4.throwArgumentError(
       `unexpected character at position ${i}`,
@@ -4428,7 +4424,7 @@ function parseParamType(param, allowIndexed) {
   }
   param = param.replace(/\s/g, ' ');
   function newNode(parent) {
-    let node = {
+    const node = {
       type: '',
       name: '',
       parent: parent,
@@ -4439,10 +4435,10 @@ function parseParamType(param, allowIndexed) {
     }
     return node;
   }
-  let parent = { type: '', name: '', state: { allowType: true } };
+  const parent = { type: '', name: '', state: { allowType: true } };
   let node = parent;
   for (let i = 0; i < param.length; i++) {
-    let c = param[i];
+    const c = param[i];
     switch (c) {
       case '(':
         if (node.state.allowType && node.type === '') {
@@ -4468,7 +4464,7 @@ function parseParamType(param, allowIndexed) {
           node.name = '';
         }
         node.type = verifyType(node.type);
-        let child = node;
+        const child = node;
         node = node.parent;
         if (!node) {
           throwError(i);
@@ -4491,7 +4487,7 @@ function parseParamType(param, allowIndexed) {
           node.name = '';
         }
         node.type = verifyType(node.type);
-        let sibling = newNode(node.parent);
+        const sibling = newNode(node.parent);
         node.parent.components.push(sibling);
         delete node.parent;
         node = sibling;
@@ -4577,7 +4573,7 @@ function parseParamType(param, allowIndexed) {
   return parent;
 }
 function populate(object, params) {
-  for (let key in params) {
+  for (const key in params) {
     defineReadOnly(object, key, params[key]);
   }
 }
@@ -4598,10 +4594,10 @@ class ParamType {
       );
     }
     populate(this, params);
-    let match = this.type.match(paramTypeArray);
+    const match = this.type.match(paramTypeArray);
     if (match) {
       populate(this, {
-        arrayLength: parseInt(match[2] || '-1'),
+        arrayLength: Number.parseInt(match[2] || '-1'),
         arrayChildren: ParamType.fromObject({
           type: match[1],
           components: this.components,
@@ -4626,7 +4622,7 @@ class ParamType {
       logger$4.throwArgumentError('invalid format type', 'format', format);
     }
     if (format === FormatTypes.json) {
-      let result = {
+      const result = {
         type: this.baseType === 'tuple' ? 'tuple' : this.type,
         name: this.name || undefined,
       };
@@ -4832,7 +4828,7 @@ class EventFragment extends Fragment {
     return new EventFragment(_constructorGuard$2, params);
   }
   static fromString(value) {
-    let match = value.match(regexParen);
+    const match = value.match(regexParen);
     if (!match) {
       logger$4.throwArgumentError('invalid event string', 'value', value);
     }
@@ -4861,7 +4857,7 @@ class EventFragment extends Fragment {
 }
 function parseGas(value, params) {
   params.gas = null;
-  let comps = value.split('@');
+  const comps = value.split('@');
   if (comps.length !== 1) {
     if (comps.length > 2) {
       logger$4.throwArgumentError(
@@ -4917,7 +4913,7 @@ function parseModifiers(value, params) {
   });
 }
 function verifyState(value) {
-  let result = { constant: false, payable: true, stateMutability: 'payable' };
+  const result = { constant: false, payable: true, stateMutability: 'payable' };
   if (value.stateMutability != null) {
     result.stateMutability = value.stateMutability;
     result.constant =
@@ -5033,7 +5029,7 @@ class ConstructorFragment extends Fragment {
     if (value.type !== 'constructor') {
       logger$4.throwArgumentError('invalid constructor object', 'value', value);
     }
-    let state = verifyState(value);
+    const state = verifyState(value);
     if (state.constant) {
       logger$4.throwArgumentError(
         'constructor cannot be constant',
@@ -5052,9 +5048,9 @@ class ConstructorFragment extends Fragment {
     return new ConstructorFragment(_constructorGuard$2, params);
   }
   static fromString(value) {
-    let params = { type: 'constructor' };
+    const params = { type: 'constructor' };
     value = parseGas(value, params);
-    let parens = value.match(regexParen);
+    const parens = value.match(regexParen);
     if (!parens || parens[1].trim() !== 'constructor') {
       logger$4.throwArgumentError('invalid constructor string', 'value', value);
     }
@@ -5135,7 +5131,7 @@ class FunctionFragment extends ConstructorFragment {
     if (value.type !== 'function') {
       logger$4.throwArgumentError('invalid function object', 'value', value);
     }
-    let state = verifyState(value);
+    const state = verifyState(value);
     const params = {
       type: value.type,
       name: verifyIdentifier(value.name),
@@ -5149,13 +5145,13 @@ class FunctionFragment extends ConstructorFragment {
     return new FunctionFragment(_constructorGuard$2, params);
   }
   static fromString(value) {
-    let params = { type: 'function' };
+    const params = { type: 'function' };
     value = parseGas(value, params);
-    let comps = value.split(' returns ');
+    const comps = value.split(' returns ');
     if (comps.length > 2) {
       logger$4.throwArgumentError('invalid function string', 'value', value);
     }
-    let parens = comps[0].match(regexParen);
+    const parens = comps[0].match(regexParen);
     if (!parens) {
       logger$4.throwArgumentError('invalid function signature', 'value', value);
     }
@@ -5166,7 +5162,7 @@ class FunctionFragment extends ConstructorFragment {
     params.inputs = parseParams(parens[2], false);
     parseModifiers(parens[3].trim(), params);
     if (comps.length > 1) {
-      let returns = comps[1].match(regexParen);
+      const returns = comps[1].match(regexParen);
       if (returns[1].trim() != '' || returns[3].trim() != '') {
         logger$4.throwArgumentError('unexpected tokens', 'value', value);
       }
@@ -5240,8 +5236,8 @@ class ErrorFragment extends Fragment {
     return checkForbidden(new ErrorFragment(_constructorGuard$2, params));
   }
   static fromString(value) {
-    let params = { type: 'error' };
-    let parens = value.match(regexParen);
+    const params = { type: 'error' };
+    const parens = value.match(regexParen);
     if (!parens) {
       logger$4.throwArgumentError('invalid error signature', 'value', value);
     }
@@ -5264,7 +5260,7 @@ function verifyType(type) {
   }
   return type;
 }
-const regexIdentifier = new RegExp('^[a-zA-Z$_][a-zA-Z0-9$_]*$');
+const regexIdentifier = /^[a-zA-Z$_][a-zA-Z0-9$_]*$/;
 function verifyIdentifier(value) {
   if (!value || !value.match(regexIdentifier)) {
     logger$4.throwArgumentError(
@@ -5275,14 +5271,14 @@ function verifyIdentifier(value) {
   }
   return value;
 }
-const regexParen = new RegExp('^([^)(]*)\\((.*)\\)([^)(]*)$');
+const regexParen = /^([^)(]*)\((.*)\)([^)(]*)$/;
 function splitNesting(value) {
   value = value.trim();
-  let result = [];
+  const result = [];
   let accum = '';
   let depth = 0;
   for (let offset = 0; offset < value.length; offset++) {
-    let c = value[offset];
+    const c = value[offset];
     if (c === ',' && depth === 0) {
       result.push(accum);
       accum = '';
@@ -5307,11 +5303,11 @@ function splitNesting(value) {
 const logger$5 = new Logger(version$4);
 function checkResultErrors(result) {
   const errors = [];
-  const checkErrors = function (path, object) {
+  const checkErrors = (path, object) => {
     if (!Array.isArray(object)) {
       return;
     }
-    for (let key in object) {
+    for (const key in object) {
       const childPath = path.slice();
       childPath.push(key);
       try {
@@ -5407,8 +5403,8 @@ class Reader {
     return this._offset;
   }
   static coerce(name, value) {
-    let match = name.match('^u?int([0-9]+)$');
-    if (match && parseInt(match[1]) <= 48) {
+    const match = name.match('^u?int([0-9]+)$');
+    if (match && Number.parseInt(match[1]) <= 48) {
       value = value.toNumber();
     }
     return value;
@@ -5447,7 +5443,7 @@ class Reader {
     );
   }
   readBytes(length, loose) {
-    let bytes = this._peekBytes(0, length, !!loose);
+    const bytes = this._peekBytes(0, length, !!loose);
     this._offset += bytes.length;
     return bytes.slice(0, length);
   }
@@ -5455,8 +5451,8 @@ class Reader {
     return BigNumber.from(this.readBytes(this.wordSize));
   }
 }
-var sha3 = createCommonjsModule(function (module) {
-  (function () {
+var sha3 = createCommonjsModule((module) => {
+  (() => {
     'use strict';
     var INPUT_ERROR = 'input is invalid type';
     var FINALIZE_ERROR = 'finalize already called';
@@ -5500,73 +5496,45 @@ var sha3 = createCommonjsModule(function (module) {
     var OUTPUT_TYPES = ['hex', 'buffer', 'arrayBuffer', 'array', 'digest'];
     var CSHAKE_BYTEPAD = { 128: 168, 256: 136 };
     if (root.JS_SHA3_NO_NODE_JS || !Array.isArray) {
-      Array.isArray = function (obj) {
-        return Object.prototype.toString.call(obj) === '[object Array]';
-      };
+      Array.isArray = (obj) => Object.prototype.toString.call(obj) === '[object Array]';
     }
     if (
       ARRAY_BUFFER &&
       (root.JS_SHA3_NO_ARRAY_BUFFER_IS_VIEW || !ArrayBuffer.isView)
     ) {
-      ArrayBuffer.isView = function (obj) {
-        return (
+      ArrayBuffer.isView = (obj) => (
           typeof obj === 'object' &&
           obj.buffer &&
           obj.buffer.constructor === ArrayBuffer
         );
-      };
     }
-    var createOutputMethod = function (bits, padding, outputType) {
-      return function (message) {
-        return new Keccak(bits, padding, bits).update(message)[outputType]();
-      };
-    };
-    var createShakeOutputMethod = function (bits, padding, outputType) {
-      return function (message, outputBits) {
-        return new Keccak(bits, padding, outputBits)
+    var createOutputMethod = (bits, padding, outputType) => (message) => new Keccak(bits, padding, bits).update(message)[outputType]();
+    var createShakeOutputMethod = (bits, padding, outputType) => (message, outputBits) => new Keccak(bits, padding, outputBits)
           .update(message)
           [outputType]();
-      };
-    };
-    var createCshakeOutputMethod = function (bits, padding, outputType) {
-      return function (message, outputBits, n, s) {
-        return methods['cshake' + bits]
+    var createCshakeOutputMethod = (bits, padding, outputType) => (message, outputBits, n, s) => methods['cshake' + bits]
           .update(message, outputBits, n, s)
           [outputType]();
-      };
-    };
-    var createKmacOutputMethod = function (bits, padding, outputType) {
-      return function (key, message, outputBits, s) {
-        return methods['kmac' + bits]
+    var createKmacOutputMethod = (bits, padding, outputType) => (key, message, outputBits, s) => methods['kmac' + bits]
           .update(key, message, outputBits, s)
           [outputType]();
-      };
-    };
-    var createOutputMethods = function (method, createMethod, bits, padding) {
+    var createOutputMethods = (method, createMethod, bits, padding) => {
       for (var i = 0; i < OUTPUT_TYPES.length; ++i) {
         var type = OUTPUT_TYPES[i];
         method[type] = createMethod(bits, padding, type);
       }
       return method;
     };
-    var createMethod = function (bits, padding) {
+    var createMethod = (bits, padding) => {
       var method = createOutputMethod(bits, padding, 'hex');
-      method.create = function () {
-        return new Keccak(bits, padding, bits);
-      };
-      method.update = function (message) {
-        return method.create().update(message);
-      };
+      method.create = () => new Keccak(bits, padding, bits);
+      method.update = (message) => method.create().update(message);
       return createOutputMethods(method, createOutputMethod, bits, padding);
     };
-    var createShakeMethod = function (bits, padding) {
+    var createShakeMethod = (bits, padding) => {
       var method = createShakeOutputMethod(bits, padding, 'hex');
-      method.create = function (outputBits) {
-        return new Keccak(bits, padding, outputBits);
-      };
-      method.update = function (message, outputBits) {
-        return method.create(outputBits).update(message);
-      };
+      method.create = (outputBits) => new Keccak(bits, padding, outputBits);
+      method.update = (message, outputBits) => method.create(outputBits).update(message);
       return createOutputMethods(
         method,
         createShakeOutputMethod,
@@ -5574,19 +5542,17 @@ var sha3 = createCommonjsModule(function (module) {
         padding,
       );
     };
-    var createCshakeMethod = function (bits, padding) {
+    var createCshakeMethod = (bits, padding) => {
       var w = CSHAKE_BYTEPAD[bits];
       var method = createCshakeOutputMethod(bits, padding, 'hex');
-      method.create = function (outputBits, n, s) {
+      method.create = (outputBits, n, s) => {
         if (!n && !s) {
           return methods['shake' + bits].create(outputBits);
         } else {
           return new Keccak(bits, padding, outputBits).bytepad([n, s], w);
         }
       };
-      method.update = function (message, outputBits, n, s) {
-        return method.create(outputBits, n, s).update(message);
-      };
+      method.update = (message, outputBits, n, s) => method.create(outputBits, n, s).update(message);
       return createOutputMethods(
         method,
         createCshakeOutputMethod,
@@ -5594,17 +5560,13 @@ var sha3 = createCommonjsModule(function (module) {
         padding,
       );
     };
-    var createKmacMethod = function (bits, padding) {
+    var createKmacMethod = (bits, padding) => {
       var w = CSHAKE_BYTEPAD[bits];
       var method = createKmacOutputMethod(bits, padding, 'hex');
-      method.create = function (key, outputBits, s) {
-        return new Kmac(bits, padding, outputBits)
+      method.create = (key, outputBits, s) => new Kmac(bits, padding, outputBits)
           .bytepad(['KMAC', s], w)
           .bytepad([key], w);
-      };
-      method.update = function (key, message, outputBits, s) {
-        return method.create(key, outputBits, s).update(message);
-      };
+      method.update = (key, message, outputBits, s) => method.create(key, outputBits, s).update(message);
       return createOutputMethods(method, createKmacOutputMethod, bits, padding);
     };
     var algorithms = [
@@ -5967,7 +5929,7 @@ var sha3 = createCommonjsModule(function (module) {
       this.encode(this.outputBits, true);
       return Keccak.prototype.finalize.call(this);
     };
-    var f = function (s) {
+    var f = (s) => {
       var h,
         l,
         n,
@@ -6213,9 +6175,7 @@ var sha3 = createCommonjsModule(function (module) {
         root[methodNames[i]] = methods[methodNames[i]];
       }
       if (AMD) {
-        undefined(function () {
-          return methods;
-        });
+        undefined(() => methods);
       }
     }
   })();
@@ -6245,7 +6205,7 @@ function unarrayifyInteger(data, offset, length) {
 function _encode(object) {
   if (Array.isArray(object)) {
     let payload = [];
-    object.forEach(function (child) {
+    object.forEach((child) => {
       payload = payload.concat(_encode(child));
     });
     if (payload.length <= 55) {
@@ -6419,10 +6379,10 @@ function ibanChecksum(address) {
     })
     .join('');
   while (expanded.length >= safeDigits) {
-    let block = expanded.substring(0, safeDigits);
-    expanded = (parseInt(block, 10) % 97) + expanded.substring(block.length);
+    const block = expanded.substring(0, safeDigits);
+    expanded = (Number.parseInt(block, 10) % 97) + expanded.substring(block.length);
   }
-  let checksum = String(98 - (parseInt(expanded, 10) % 97));
+  let checksum = String(98 - (Number.parseInt(expanded, 10) % 97));
   while (checksum.length < 2) {
     checksum = '0' + checksum;
   }
@@ -6546,7 +6506,7 @@ function pack(writer, coders, values) {
   if (Array.isArray(values)) {
     arrayValues = values;
   } else if (values && typeof values === 'object') {
-    let unique = {};
+    const unique = {};
     arrayValues = coders.map((coder) => {
       const name = coder.localName;
       if (!name) {
@@ -6572,15 +6532,15 @@ function pack(writer, coders, values) {
   if (coders.length !== arrayValues.length) {
     logger$8.throwArgumentError('types/value length mismatch', 'tuple', values);
   }
-  let staticWriter = new Writer(writer.wordSize);
-  let dynamicWriter = new Writer(writer.wordSize);
-  let updateFuncs = [];
+  const staticWriter = new Writer(writer.wordSize);
+  const dynamicWriter = new Writer(writer.wordSize);
+  const updateFuncs = [];
   coders.forEach((coder, index) => {
-    let value = arrayValues[index];
+    const value = arrayValues[index];
     if (coder.dynamic) {
-      let dynamicOffset = dynamicWriter.length;
+      const dynamicOffset = dynamicWriter.length;
       coder.encode(dynamicWriter, value);
-      let updateFunc = staticWriter.writeUpdatableValue();
+      const updateFunc = staticWriter.writeUpdatableValue();
       updateFuncs.push((baseOffset) => {
         updateFunc(baseOffset + dynamicOffset);
       });
@@ -6596,13 +6556,13 @@ function pack(writer, coders, values) {
   return length;
 }
 function unpack(reader, coders) {
-  let values = [];
-  let baseReader = reader.subReader(0);
+  const values = [];
+  const baseReader = reader.subReader(0);
   coders.forEach((coder) => {
     let value = null;
     if (coder.dynamic) {
-      let offset = reader.readValue();
-      let offsetReader = baseReader.subReader(offset.toNumber());
+      const offset = reader.readValue();
+      const offsetReader = baseReader.subReader(offset.toNumber());
       try {
         value = coder.decode(offsetReader);
       } catch (error) {
@@ -6707,7 +6667,7 @@ class ArrayCoder extends Coder {
       count,
       'coder array' + (this.localName ? ' ' + this.localName : ''),
     );
-    let coders = [];
+    const coders = [];
     for (let i = 0; i < value.length; i++) {
       coders.push(this.coder);
     }
@@ -6725,7 +6685,7 @@ class ArrayCoder extends Coder {
         );
       }
     }
-    let coders = [];
+    const coders = [];
     for (let i = 0; i < count; i++) {
       coders.push(new AnonymousCoder(this.coder));
     }
@@ -6776,7 +6736,7 @@ class BytesCoder extends DynamicBytesCoder {
 ('use strict');
 class FixedBytesCoder extends Coder {
   constructor(size, localName) {
-    let name = 'bytes' + String(size);
+    const name = 'bytes' + String(size);
     super(name, name, localName, false);
     this.size = size;
   }
@@ -6787,7 +6747,7 @@ class FixedBytesCoder extends Coder {
     );
   }
   encode(writer, value) {
-    let data = arrayify(value);
+    const data = arrayify(value);
     if (data.length !== this.size) {
       this._throwError('incorrect data length', value);
     }
@@ -6862,9 +6822,9 @@ class NumberCoder extends Coder {
   }
   encode(writer, value) {
     let v = BigNumber.from(value);
-    let maxUintValue = MaxUint256.mask(writer.wordSize * 8);
+    const maxUintValue = MaxUint256.mask(writer.wordSize * 8);
     if (this.signed) {
-      let bounds = maxUintValue.mask(this.size * 8 - 1);
+      const bounds = maxUintValue.mask(this.size * 8 - 1);
       if (v.gt(bounds) || v.lt(bounds.add(One).mul(NegativeOne$1))) {
         this._throwError('value out-of-bounds', value);
       }
@@ -6889,7 +6849,7 @@ const version$7 = 'strings/5.6.0';
 ('use strict');
 const logger$9 = new Logger(version$7);
 var UnicodeNormalizationForm;
-(function (UnicodeNormalizationForm) {
+((UnicodeNormalizationForm) => {
   UnicodeNormalizationForm['current'] = '';
   UnicodeNormalizationForm['NFC'] = 'NFC';
   UnicodeNormalizationForm['NFD'] = 'NFD';
@@ -6897,7 +6857,7 @@ var UnicodeNormalizationForm;
   UnicodeNormalizationForm['NFKD'] = 'NFKD';
 })(UnicodeNormalizationForm || (UnicodeNormalizationForm = {}));
 var Utf8ErrorReason;
-(function (Utf8ErrorReason) {
+((Utf8ErrorReason) => {
   Utf8ErrorReason['UNEXPECTED_CONTINUE'] = 'unexpected continuation byte';
   Utf8ErrorReason['BAD_PREFIX'] = 'bad codepoint prefix';
   Utf8ErrorReason['OVERRUN'] = 'string overrun';
@@ -6983,7 +6943,7 @@ function getUtf8CodePoints(bytes, onError) {
     }
     let res = c & ((1 << (8 - extraLength - 1)) - 1);
     for (let j = 0; j < extraLength; j++) {
-      let nextChar = bytes[i];
+      const nextChar = bytes[i];
       if ((nextChar & 192) != 128) {
         i += onError(Utf8ErrorReason.MISSING_CONTINUE, i, bytes, result);
         res = null;
@@ -7034,7 +6994,7 @@ function toUtf8Bytes(str, form = UnicodeNormalizationForm.current) {
     logger$9.checkNormalize();
     str = str.normalize(form);
   }
-  let result = [];
+  const result = [];
   for (let i = 0; i < str.length; i++) {
     const c = str.charCodeAt(i);
     if (c < 128) {
@@ -7149,23 +7109,21 @@ function bytes2(data) {
   if (data.length % 4 !== 0) {
     throw new Error('bad data');
   }
-  let result = [];
+  const result = [];
   for (let i = 0; i < data.length; i += 4) {
-    result.push(parseInt(data.substring(i, i + 4), 16));
+    result.push(Number.parseInt(data.substring(i, i + 4), 16));
   }
   return result;
 }
 function createTable(data, func) {
   if (!func) {
-    func = function (value) {
-      return [parseInt(value, 16)];
-    };
+    func = (value) => [Number.parseInt(value, 16)];
   }
   let lo = 0;
-  let result = {};
+  const result = {};
   data.split(',').forEach((pair) => {
-    let comps = pair.split(':');
-    lo += parseInt(comps[0], 16);
+    const comps = pair.split(':');
+    lo += Number.parseInt(comps[0], 16);
     result[lo] = func(comps[1]);
   });
   return result;
@@ -7173,21 +7131,21 @@ function createTable(data, func) {
 function createRangeTable(data) {
   let hi = 0;
   return data.split(',').map((v) => {
-    let comps = v.split('-');
+    const comps = v.split('-');
     if (comps.length === 1) {
       comps[1] = '0';
     } else if (comps[1] === '') {
       comps[1] = '1';
     }
-    let lo = hi + parseInt(comps[0], 16);
-    hi = parseInt(comps[1], 16);
+    const lo = hi + Number.parseInt(comps[0], 16);
+    hi = Number.parseInt(comps[1], 16);
     return { l: lo, h: hi };
   });
 }
 function matchMap(value, ranges) {
   let lo = 0;
   for (let i = 0; i < ranges.length; i++) {
-    let range = ranges[i];
+    const range = ranges[i];
     lo += range.l;
     if (
       value >= lo &&
@@ -7207,7 +7165,7 @@ const Table_A_1_ranges = createRangeTable(
 );
 const Table_B_1_flags = 'ad,34f,1806,180b,180c,180d,200b,200c,200d,2060,feff'
   .split(',')
-  .map((v) => parseInt(v, 16));
+  .map((v) => Number.parseInt(v, 16));
 const Table_B_2_ranges = [
   { h: 25, s: 32, l: 65 },
   { h: 30, s: 32, e: [23], l: 127 },
@@ -7277,19 +7235,19 @@ function _nameprepTableA1(codepoint) {
   return !!matchMap(codepoint, Table_A_1_ranges);
 }
 function _nameprepTableB2(codepoint) {
-  let range = matchMap(codepoint, Table_B_2_ranges);
+  const range = matchMap(codepoint, Table_B_2_ranges);
   if (range) {
     return [codepoint + range.s];
   }
-  let codes = Table_B_2_lut_abs[codepoint];
+  const codes = Table_B_2_lut_abs[codepoint];
   if (codes) {
     return codes;
   }
-  let shift = Table_B_2_lut_rel[codepoint];
+  const shift = Table_B_2_lut_rel[codepoint];
   if (shift) {
     return [codepoint + shift[0]];
   }
-  let complex = Table_B_2_complex[codepoint];
+  const complex = Table_B_2_complex[codepoint];
   if (complex) {
     return complex;
   }
@@ -7311,7 +7269,7 @@ function nameprep(value) {
       if (code >= 65024 && code <= 65039) {
         return [];
       }
-      let codesTableB2 = _nameprepTableB2(code);
+      const codesTableB2 = _nameprepTableB2(code);
       if (codesTableB2) {
         return codesTableB2;
       }
@@ -7329,7 +7287,7 @@ function nameprep(value) {
       throw new Error('STRINGPREP_CONTAINS_UNASSIGNED');
     }
   });
-  let name = _toUtf8String(codes);
+  const name = _toUtf8String(codes);
   if (
     name.substring(0, 1) === '-' ||
     name.substring(2, 4) === '--' ||
@@ -7447,7 +7405,7 @@ class AbiCoder {
     }
     let match = param.type.match(paramTypeNumber);
     if (match) {
-      let size = parseInt(match[2] || '256');
+      const size = Number.parseInt(match[2] || '256');
       if (size === 0 || size > 256 || size % 8 !== 0) {
         logger$a.throwArgumentError(
           'invalid ' + match[1] + ' bit length',
@@ -7459,7 +7417,7 @@ class AbiCoder {
     }
     match = param.type.match(paramTypeBytes);
     if (match) {
-      let size = parseInt(match[1]);
+      const size = Number.parseInt(match[1]);
       if (size === 0 || size > 32) {
         logger$a.throwArgumentError('invalid bytes length', 'param', param);
       }
@@ -7512,7 +7470,7 @@ const version$8 = 'hash/5.6.0';
 const logger$b = new Logger(version$8);
 const Zeros = new Uint8Array(32);
 Zeros.fill(0);
-const Partition = new RegExp('^((.*)\\.)?([^.]+)$');
+const Partition = /^((.*)\.)?([^.]+)$/;
 function isValidName(name) {
   try {
     const comps = name.split('.');
@@ -7574,15 +7532,15 @@ function hashMessage(message) {
 }
 var __awaiter$1 =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -7604,7 +7562,7 @@ var __awaiter$1 =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$c = new Logger(version$8);
 const padding = new Uint8Array(32);
 padding.fill(0);
@@ -7639,7 +7597,7 @@ const domainFieldNames = [
   'salt',
 ];
 function checkString(key) {
-  return function (value) {
+  return (value) => {
     if (typeof value !== 'string') {
       logger$c.throwArgumentError(
         `invalid domain value for ${JSON.stringify(key)}`,
@@ -7653,7 +7611,7 @@ function checkString(key) {
 const domainChecks = {
   name: checkString('name'),
   version: checkString('version'),
-  chainId: function (value) {
+  chainId: (value) => {
     try {
       return BigNumber.from(value).toString();
     } catch (error) {}
@@ -7663,7 +7621,7 @@ const domainChecks = {
       value,
     );
   },
-  verifyingContract: function (value) {
+  verifyingContract: (value) => {
     try {
       return getAddress(value).toLowerCase();
     } catch (error) {}
@@ -7673,7 +7631,7 @@ const domainChecks = {
       value,
     );
   },
-  salt: function (value) {
+  salt: (value) => {
     try {
       const bytes = arrayify(value);
       if (bytes.length !== 32) {
@@ -7693,7 +7651,7 @@ function getBaseEncoder(type) {
     const match = type.match(/^(u?)int(\d*)$/);
     if (match) {
       const signed = match[1] === '';
-      const width = parseInt(match[2] || '256');
+      const width = Number.parseInt(match[2] || '256');
       if (
         width % 8 !== 0 ||
         width > 256 ||
@@ -7705,7 +7663,7 @@ function getBaseEncoder(type) {
       const boundsLower = signed
         ? boundsUpper.add(One$1).mul(NegativeOne$2)
         : Zero$2;
-      return function (value) {
+      return (value) => {
         const v = BigNumber.from(value);
         if (v.lt(boundsLower) || v.gt(boundsUpper)) {
           logger$c.throwArgumentError(
@@ -7721,11 +7679,11 @@ function getBaseEncoder(type) {
   {
     const match = type.match(/^bytes(\d+)$/);
     if (match) {
-      const width = parseInt(match[1]);
+      const width = Number.parseInt(match[1]);
       if (width === 0 || width > 32 || match[1] !== String(width)) {
         logger$c.throwArgumentError('invalid bytes width', 'type', type);
       }
-      return function (value) {
+      return (value) => {
         const bytes = arrayify(value);
         if (bytes.length !== width) {
           logger$c.throwArgumentError(
@@ -7740,27 +7698,19 @@ function getBaseEncoder(type) {
   }
   switch (type) {
     case 'address':
-      return function (value) {
-        return hexZeroPad(getAddress(value), 32);
-      };
+      return (value) => hexZeroPad(getAddress(value), 32);
     case 'bool':
-      return function (value) {
-        return !value ? hexFalse : hexTrue;
-      };
+      return (value) => !value ? hexFalse : hexTrue;
     case 'bytes':
-      return function (value) {
-        return keccak256(value);
-      };
+      return (value) => keccak256(value);
     case 'string':
-      return function (value) {
-        return id(value);
-      };
+      return (value) => id(value);
   }
   return null;
 }
 function encodeType(name, fields) {
   return `${name}(${fields
-    .map(({ name: name, type: type }) => type + ' ' + name)
+    .map(({ name, type }) => type + ' ' + name)
     .join(',')})`;
 }
 class TypedDataEncoder {
@@ -7874,7 +7824,7 @@ class TypedDataEncoder {
     if (match) {
       const subtype = match[1];
       const subEncoder = this.getEncoder(subtype);
-      const length = parseInt(match[3]);
+      const length = Number.parseInt(match[3]);
       return (value) => {
         if (length >= 0 && value.length !== length) {
           logger$c.throwArgumentError(
@@ -7894,7 +7844,7 @@ class TypedDataEncoder {
     if (fields) {
       const encodedType = id(this._types[type]);
       return (value) => {
-        const values = fields.map(({ name: name, type: type }) => {
+        const values = fields.map(({ name, type }) => {
           const result = this.getEncoder(type)(value[name]);
           if (this._types[type]) {
             return keccak256(result);
@@ -7940,7 +7890,7 @@ class TypedDataEncoder {
     const match = type.match(/^(.*)(\x5b(\d*)\x5d)$/);
     if (match) {
       const subtype = match[1];
-      const length = parseInt(match[3]);
+      const length = Number.parseInt(match[3]);
       if (length >= 0 && value.length !== length) {
         logger$c.throwArgumentError(
           'array length mismatch; expected length ${ arrayLength }',
@@ -7952,7 +7902,7 @@ class TypedDataEncoder {
     }
     const fields = this.types[type];
     if (fields) {
-      return fields.reduce((accum, { name: name, type: type }) => {
+      return fields.reduce((accum, { name, type }) => {
         accum[name] = this._visit(type, value[name], callback);
         return accum;
       }, {});
@@ -8164,7 +8114,7 @@ class Interface {
         default:
           return;
       }
-      let signature = fragment.format();
+      const signature = fragment.format();
       if (bucket[signature]) {
         logger$d.warn('duplicate definition - ' + signature);
         return;
@@ -8407,7 +8357,7 @@ class Interface {
     if (typeof functionFragment === 'string') {
       functionFragment = this.getFunction(functionFragment);
     }
-    let bytes = arrayify(data);
+    const bytes = arrayify(data);
     let reason = null;
     let errorArgs = null;
     let errorName = null;
@@ -8470,7 +8420,7 @@ class Interface {
         { argument: 'values', value: values },
       );
     }
-    let topics = [];
+    const topics = [];
     if (!eventFragment.anonymous) {
       topics.push(this.getEventTopic(eventFragment));
     }
@@ -8486,7 +8436,7 @@ class Interface {
       return hexZeroPad(hexlify(value), 32);
     };
     values.forEach((value, index) => {
-      let param = eventFragment.inputs[index];
+      const param = eventFragment.inputs[index];
       if (!param.indexed) {
         if (value != null) {
           logger$d.throwArgumentError(
@@ -8560,7 +8510,7 @@ class Interface {
       eventFragment = this.getEvent(eventFragment);
     }
     if (topics != null && !eventFragment.anonymous) {
-      let topicHash = this.getEventTopic(eventFragment);
+      const topicHash = this.getEventTopic(eventFragment);
       if (
         !isHexString(topics[0], 32) ||
         topics[0].toLowerCase() !== topicHash
@@ -8573,9 +8523,9 @@ class Interface {
       }
       topics = topics.slice(1);
     }
-    let indexed = [];
-    let nonIndexed = [];
-    let dynamic = [];
+    const indexed = [];
+    const nonIndexed = [];
+    const dynamic = [];
     eventFragment.inputs.forEach((param, index) => {
       if (param.indexed) {
         if (
@@ -8597,10 +8547,10 @@ class Interface {
         dynamic.push(false);
       }
     });
-    let resultIndexed =
+    const resultIndexed =
       topics != null ? this._abiCoder.decode(indexed, concat(topics)) : null;
-    let resultNonIndexed = this._abiCoder.decode(nonIndexed, data, true);
-    let result = [];
+    const resultNonIndexed = this._abiCoder.decode(nonIndexed, data, true);
+    const result = [];
     let nonIndexedIndex = 0,
       indexedIndex = 0;
     eventFragment.inputs.forEach((param, index) => {
@@ -8657,7 +8607,7 @@ class Interface {
     return Object.freeze(result);
   }
   parseTransaction(tx) {
-    let fragment = this.getFunction(tx.data.substring(0, 10).toLowerCase());
+    const fragment = this.getFunction(tx.data.substring(0, 10).toLowerCase());
     if (!fragment) {
       return null;
     }
@@ -8674,7 +8624,7 @@ class Interface {
     });
   }
   parseLog(log) {
-    let fragment = this.getEvent(log.topics[0]);
+    const fragment = this.getEvent(log.topics[0]);
     if (!fragment || fragment.anonymous) {
       return null;
     }
@@ -8688,7 +8638,7 @@ class Interface {
   }
   parseError(data) {
     const hexData = hexlify(data);
-    let fragment = this.getError(hexData.substring(0, 10).toLowerCase());
+    const fragment = this.getError(hexData.substring(0, 10).toLowerCase());
     if (!fragment) {
       return null;
     }
@@ -8712,15 +8662,15 @@ const version$9 = 'abstract-provider/5.6.0';
 ('use strict');
 var __awaiter$2 =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -8742,7 +8692,7 @@ var __awaiter$2 =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$e = new Logger(version$9);
 class ForkEvent extends Description {
   static isForkEvent(value) {
@@ -8807,7 +8757,7 @@ class Provider {
   }
   getFeeData() {
     return __awaiter$2(this, void 0, void 0, function* () {
-      const { block: block, gasPrice: gasPrice } = yield resolveProperties({
+      const { block, gasPrice } = yield resolveProperties({
         block: this.getBlock('latest'),
         gasPrice: this.getGasPrice().catch((error) => {
           return null;
@@ -8840,15 +8790,15 @@ const version$a = 'abstract-signer/5.6.0';
 ('use strict');
 var __awaiter$3 =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -8870,7 +8820,7 @@ var __awaiter$3 =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$f = new Logger(version$a);
 const allowedTransactionKeys = [
   'accessList',
@@ -9170,7 +9120,7 @@ function assert(val, msg) {
 assert.equal = function assertEqual(l, r, msg) {
   if (l != r) throw new Error(msg || 'Assertion failed: ' + l + ' != ' + r);
 };
-var inherits_browser = createCommonjsModule(function (module) {
+var inherits_browser = createCommonjsModule((module) => {
   if (typeof Object.create === 'function') {
     module.exports = function inherits(ctor, superCtor) {
       if (superCtor) {
@@ -9189,7 +9139,7 @@ var inherits_browser = createCommonjsModule(function (module) {
     module.exports = function inherits(ctor, superCtor) {
       if (superCtor) {
         ctor.super_ = superCtor;
-        var TempCtor = function () {};
+        var TempCtor = () => {};
         TempCtor.prototype = superCtor.prototype;
         ctor.prototype = new TempCtor();
         ctor.prototype.constructor = ctor;
@@ -9197,7 +9147,7 @@ var inherits_browser = createCommonjsModule(function (module) {
     };
   }
 });
-var inherits = createCommonjsModule(function (module) {
+var inherits = createCommonjsModule((module) => {
   try {
     var util = null;
     if (typeof util.inherits !== 'function') throw '';
@@ -9247,7 +9197,7 @@ function toArray(msg, enc) {
       msg = msg.replace(/[^a-z0-9]+/gi, '');
       if (msg.length % 2 !== 0) msg = '0' + msg;
       for (i = 0; i < msg.length; i += 2)
-        res.push(parseInt(msg[i] + msg[i + 1], 16));
+        res.push(Number.parseInt(msg[i] + msg[i + 1], 16));
     }
   } else {
     for (i = 0; i < msg.length; i++) res[i] = msg[i] | 0;
@@ -10151,7 +10101,7 @@ Hmac.prototype.digest = function digest(enc) {
   this.outer.update(this.inner.digest());
   return this.outer.digest(enc);
 };
-var hash_1 = createCommonjsModule(function (module, exports) {
+var hash_1 = createCommonjsModule((module, exports) => {
   var hash = exports;
   hash.utils = utils;
   hash.common = common;
@@ -10185,12 +10135,10 @@ function createCommonjsModule$1(fn, basedir, module) {
     (module = {
       path: basedir,
       exports: {},
-      require: function (path, base) {
-        return commonjsRequire$1(
+      require: (path, base) => commonjsRequire$1(
           path,
           base === undefined || base === null ? module.path : base,
-        );
-      },
+        ),
     }),
     fn(module, module.exports),
     module.exports
@@ -10211,7 +10159,7 @@ function getDefaultExportFromNamespaceIfNotNamed$1(n) {
 function getAugmentedNamespace$1(n) {
   if (n.__esModule) return n;
   var a = Object.defineProperty({}, '__esModule', { value: true });
-  Object.keys(n).forEach(function (k) {
+  Object.keys(n).forEach((k) => {
     var d = Object.getOwnPropertyDescriptor(n, k);
     Object.defineProperty(
       a,
@@ -10220,9 +10168,7 @@ function getAugmentedNamespace$1(n) {
         ? d
         : {
             enumerable: true,
-            get: function () {
-              return n[k];
-            },
+            get: () => n[k],
           },
     );
   });
@@ -10240,7 +10186,7 @@ function assert$1(val, msg) {
 assert$1.equal = function assertEqual(l, r, msg) {
   if (l != r) throw new Error(msg || 'Assertion failed: ' + l + ' != ' + r);
 };
-var utils_1 = createCommonjsModule$1(function (module, exports) {
+var utils_1 = createCommonjsModule$1((module, exports) => {
   'use strict';
   var utils = exports;
   function toArray(msg, enc) {
@@ -10255,7 +10201,7 @@ var utils_1 = createCommonjsModule$1(function (module, exports) {
       msg = msg.replace(/[^a-z0-9]+/gi, '');
       if (msg.length % 2 !== 0) msg = '0' + msg;
       for (var i = 0; i < msg.length; i += 2)
-        res.push(parseInt(msg[i] + msg[i + 1], 16));
+        res.push(Number.parseInt(msg[i] + msg[i + 1], 16));
     } else {
       for (var i = 0; i < msg.length; i++) {
         var c = msg.charCodeAt(i);
@@ -10284,7 +10230,7 @@ var utils_1 = createCommonjsModule$1(function (module, exports) {
     else return arr;
   };
 });
-var utils_1$1 = createCommonjsModule$1(function (module, exports) {
+var utils_1$1 = createCommonjsModule$1((module, exports) => {
   'use strict';
   var utils = exports;
   utils.assert = minimalisticAssert$1;
@@ -10622,7 +10568,7 @@ BasePoint.prototype.dblp = function dblp(k) {
   for (var i = 0; i < k; i++) r = r.dbl();
   return r;
 };
-var inherits_browser$1 = createCommonjsModule$1(function (module) {
+var inherits_browser$1 = createCommonjsModule$1((module) => {
   if (typeof Object.create === 'function') {
     module.exports = function inherits(ctor, superCtor) {
       if (superCtor) {
@@ -10641,7 +10587,7 @@ var inherits_browser$1 = createCommonjsModule$1(function (module) {
     module.exports = function inherits(ctor, superCtor) {
       if (superCtor) {
         ctor.super_ = superCtor;
-        var TempCtor = function () {};
+        var TempCtor = () => {};
         TempCtor.prototype = superCtor.prototype;
         ctor.prototype = new TempCtor();
         ctor.prototype.constructor = ctor;
@@ -10688,9 +10634,7 @@ ShortCurve.prototype._getEndomorphism = function _getEndomorphism(conf) {
   }
   var basis;
   if (conf.basis) {
-    basis = conf.basis.map(function (vec) {
-      return { a: new bn(vec.a, 16), b: new bn(vec.b, 16) };
-    });
+    basis = conf.basis.map((vec) => ({ a: new bn(vec.a, 16), b: new bn(vec.b, 16) }));
   } else {
     basis = this._getEndoBasis(lambda);
   }
@@ -10861,9 +10805,7 @@ Point.prototype._getBeta = function _getBeta() {
   var beta = this.curve.point(this.x.redMul(this.curve.endo.beta), this.y);
   if (pre) {
     var curve = this.curve;
-    var endoMul = function (p) {
-      return curve.point(p.x.redMul(curve.endo.beta), p.y);
-    };
+    var endoMul = (p) => curve.point(p.x.redMul(curve.endo.beta), p.y);
     pre.beta = beta;
     beta.precomputed = {
       beta: null,
@@ -10988,9 +10930,7 @@ Point.prototype.neg = function neg(_precompute) {
   var res = this.curve.point(this.x, this.y.redNeg());
   if (_precompute && this.precomputed) {
     var pre = this.precomputed;
-    var negate = function (p) {
-      return p.neg();
-    };
+    var negate = (p) => p.neg();
     res.precomputed = {
       naf: pre.naf && { wnd: pre.naf.wnd, points: pre.naf.points.map(negate) },
       doubles: pre.doubles && {
@@ -11291,7 +11231,7 @@ JPoint.prototype.inspect = function inspect() {
 JPoint.prototype.isInfinity = function isInfinity() {
   return this.z.cmpn(0) === 0;
 };
-var curve_1 = createCommonjsModule$1(function (module, exports) {
+var curve_1 = createCommonjsModule$1((module, exports) => {
   'use strict';
   var curve = exports;
   curve.base = base;
@@ -11299,7 +11239,7 @@ var curve_1 = createCommonjsModule$1(function (module, exports) {
   curve.mont = null;
   curve.edwards = null;
 });
-var curves_1 = createCommonjsModule$1(function (module, exports) {
+var curves_1 = createCommonjsModule$1((module, exports) => {
   'use strict';
   var curves = exports;
   var assert = utils_1$1.assert;
@@ -11319,7 +11259,7 @@ var curves_1 = createCommonjsModule$1(function (module, exports) {
     Object.defineProperty(curves, name, {
       configurable: true,
       enumerable: true,
-      get: function () {
+      get: () => {
         var curve = new PresetCurve(options);
         Object.defineProperty(curves, name, {
           configurable: true,
@@ -11781,7 +11721,7 @@ Signature.prototype.toDER = function toDER(enc) {
   return utils_1$1.encode(res, enc);
 };
 ('use strict');
-var rand = function () {
+var rand = () => {
   throw new Error('unsupported');
 };
 var assert$5 = utils_1$1.assert;
@@ -11933,12 +11873,12 @@ EC.prototype.getKeyRecoveryParam = function (e, signature$1, Q, enc) {
   }
   throw new Error('Unable to find valid recovery factor');
 };
-var elliptic_1 = createCommonjsModule$1(function (module, exports) {
+var elliptic_1 = createCommonjsModule$1((module, exports) => {
   'use strict';
   var elliptic = exports;
   elliptic.version = { version: '6.5.4' }.version;
   elliptic.utils = utils_1$1;
-  elliptic.rand = function () {
+  elliptic.rand = () => {
     throw new Error('unsupported');
   };
   elliptic.curve = curve_1;
@@ -12041,7 +11981,7 @@ const version$c = 'transactions/5.6.0';
 ('use strict');
 const logger$h = new Logger(version$c);
 var TransactionTypes;
-(function (TransactionTypes) {
+((TransactionTypes) => {
   TransactionTypes[(TransactionTypes['legacy'] = 0)] = 'legacy';
   TransactionTypes[(TransactionTypes['eip2930'] = 1)] = 'eip2930';
   TransactionTypes[(TransactionTypes['eip1559'] = 2)] = 'eip1559';
@@ -12191,7 +12131,7 @@ function _serializeEip2930(transaction, signature) {
 function _serialize(transaction, signature) {
   checkProperties(transaction, allowedTransactionKeys$1);
   const raw = [];
-  transactionFields.forEach(function (fieldInfo) {
+  transactionFields.forEach((fieldInfo) => {
     let value = transaction[fieldInfo.name] || [];
     const options = {};
     if (fieldInfo.numeric) {
@@ -12457,15 +12397,15 @@ const version$d = 'contracts/5.6.0';
 ('use strict');
 var __awaiter$4 =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -12487,7 +12427,7 @@ var __awaiter$4 =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$i = new Logger(version$d);
 const allowedTransactionKeys$2 = {
   chainId: true,
@@ -12696,9 +12636,7 @@ function populateTransaction(contract, fragment, args) {
   });
 }
 function buildPopulate(contract, fragment) {
-  return function (...args) {
-    return populateTransaction(contract, fragment, args);
-  };
+  return (...args) => populateTransaction(contract, fragment, args);
 }
 function buildEstimate(contract, fragment) {
   const signerOrProvider = contract.signer || contract.provider;
@@ -12721,7 +12659,7 @@ function addContractWait(contract, tx) {
   tx.wait = (confirmations) => {
     return wait(confirmations).then((receipt) => {
       receipt.events = receipt.logs.map((log) => {
-        let event = deepCopy(log);
+        const event = deepCopy(log);
         let parsed = null;
         try {
           parsed = contract.interface.parseLog(log);
@@ -12891,7 +12829,7 @@ class ErrorRunningEvent extends RunningEvent {
 class FragmentRunningEvent extends RunningEvent {
   constructor(address, contractInterface, fragment, topics) {
     const filter = { address: address };
-    let topic = contractInterface.getEventTopic(fragment);
+    const topic = contractInterface.getEventTopic(fragment);
     if (topics) {
       if (topic !== topics[0]) {
         logger$i.throwArgumentError('topic mismatch', 'topics', topics);
@@ -13165,7 +13103,7 @@ class BaseContract {
       );
     }
     const tx = shallowCopy(overrides || {});
-    ['from', 'to'].forEach(function (key) {
+    ['from', 'to'].forEach((key) => {
       if (tx[key] == null) {
         return;
       }
@@ -13296,7 +13234,7 @@ class BaseContract {
     this._runningEvents[runningEvent.tag] = runningEvent;
     if (!this._wrappedEmits[runningEvent.tag]) {
       const wrappedEmit = (log) => {
-        let event = this._wrapEvent(runningEvent, log, listener);
+        const event = this._wrapEvent(runningEvent, log, listener);
         if (event.decodeError == null) {
           try {
             const args = runningEvent.getEmit(event);
@@ -13376,7 +13314,7 @@ class BaseContract {
     }
     if (eventName == null) {
       const result = [];
-      for (let tag in this._runningEvents) {
+      for (const tag in this._runningEvents) {
         this._runningEvents[tag].listeners().forEach((listener) => {
           result.push(listener);
         });
@@ -13565,11 +13503,11 @@ class BaseX {
     }
   }
   encode(value) {
-    let source = arrayify(value);
+    const source = arrayify(value);
     if (source.length === 0) {
       return '';
     }
-    let digits = [0];
+    const digits = [0];
     for (let i = 0; i < source.length; ++i) {
       let carry = source[i];
       for (let j = 0; j < digits.length; ++j) {
@@ -13595,13 +13533,13 @@ class BaseX {
     if (typeof value !== 'string') {
       throw new TypeError('Expected String');
     }
-    let bytes = [];
+    const bytes = [];
     if (value.length === 0) {
       return new Uint8Array(bytes);
     }
     bytes.push(0);
     for (let i = 0; i < value.length; i++) {
-      let byte = this._alphabetMap[value[i]];
+      const byte = this._alphabetMap[value[i]];
       if (byte === undefined) {
         throw new Error('Non-base' + this.base + ' character');
       }
@@ -13627,7 +13565,7 @@ const Base58 = new BaseX(
   '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
 );
 var SupportedAlgorithm;
-(function (SupportedAlgorithm) {
+((SupportedAlgorithm) => {
   SupportedAlgorithm['sha256'] = 'sha256';
   SupportedAlgorithm['sha512'] = 'sha512';
 })(SupportedAlgorithm || (SupportedAlgorithm = {}));
@@ -13955,13 +13893,13 @@ class HDNode {
     for (let i = 0; i < components.length; i++) {
       const component = components[i];
       if (component.match(/^[0-9]+'$/)) {
-        const index = parseInt(component.substring(0, component.length - 1));
+        const index = Number.parseInt(component.substring(0, component.length - 1));
         if (index >= HardenedBit) {
           throw new Error('invalid path index - ' + component);
         }
         result = result._derive(HardenedBit + index);
       } else if (component.match(/^[0-9]+$/)) {
-        const index = parseInt(component);
+        const index = Number.parseInt(component);
         if (index >= HardenedBit) {
           throw new Error('invalid path index - ' + component);
         }
@@ -14020,7 +13958,7 @@ class HDNode {
     }
     const depth = bytes[4];
     const parentFingerprint = hexlify(bytes.slice(5, 9));
-    const index = parseInt(hexlify(bytes.slice(9, 13)).substring(2), 16);
+    const index = Number.parseInt(hexlify(bytes.slice(9, 13)).substring(2), 16);
     const chainCode = hexlify(bytes.slice(13, 45));
     const key = bytes.slice(45, 78);
     switch (hexlify(bytes.slice(0, 4))) {
@@ -14085,7 +14023,7 @@ function mnemonicToEntropy(mnemonic, wordlist) {
   const entropy = arrayify(new Uint8Array(Math.ceil((11 * words.length) / 8)));
   let offset = 0;
   for (let i = 0; i < words.length; i++) {
-    let index = wordlist.getWordIndex(words[i].normalize('NFKD'));
+    const index = wordlist.getWordIndex(words[i].normalize('NFKD'));
     if (index === -1) {
       throw new Error('invalid mnemonic');
     }
@@ -14169,13 +14107,11 @@ const anyGlobal = getGlobal();
 let crypto = anyGlobal.crypto || anyGlobal.msCrypto;
 if (!crypto || !crypto.getRandomValues) {
   crypto = {
-    getRandomValues: function (buffer) {
-      return logger$m.throwError(
+    getRandomValues: (buffer) => logger$m.throwError(
         'no secure random source avaialble',
         Logger.errors.UNSUPPORTED_OPERATION,
         { operation: 'crypto.getRandomValues' },
-      );
-    },
+      ),
   };
 }
 function randomBytes(length) {
@@ -14198,11 +14134,11 @@ function shuffled(array) {
   return array;
 }
 ('use strict');
-var aesJs = createCommonjsModule(function (module, exports) {
+var aesJs = createCommonjsModule((module, exports) => {
   'use strict';
-  (function (root) {
+  ((root) => {
     function checkInt(value) {
-      return parseInt(value) === value;
+      return Number.parseInt(value) === value;
     }
     function checkInts(arrayish) {
       if (!checkInt(arrayish.length)) {
@@ -14260,7 +14196,7 @@ var aesJs = createCommonjsModule(function (module, exports) {
       }
       targetArray.set(sourceArray, targetStart);
     }
-    var convertUtf8 = (function () {
+    var convertUtf8 = (() => {
       function toBytes(text) {
         var result = [],
           i = 0;
@@ -14268,7 +14204,7 @@ var aesJs = createCommonjsModule(function (module, exports) {
         while (i < text.length) {
           var c = text.charCodeAt(i++);
           if (c === 37) {
-            result.push(parseInt(text.substr(i, 2), 16));
+            result.push(Number.parseInt(text.substr(i, 2), 16));
             i += 2;
           } else {
             result.push(c);
@@ -14304,11 +14240,11 @@ var aesJs = createCommonjsModule(function (module, exports) {
       }
       return { toBytes: toBytes, fromBytes: fromBytes };
     })();
-    var convertHex = (function () {
+    var convertHex = (() => {
       function toBytes(text) {
         var result = [];
         for (var i = 0; i < text.length; i += 2) {
-          result.push(parseInt(text.substr(i, 2), 16));
+          result.push(Number.parseInt(text.substr(i, 2), 16));
         }
         return result;
       }
@@ -15268,7 +15204,7 @@ var aesJs = createCommonjsModule(function (module, exports) {
       }
     };
     Counter.prototype.setValue = function (value) {
-      if (typeof value !== 'number' || parseInt(value) != value) {
+      if (typeof value !== 'number' || Number.parseInt(value) != value) {
         throw new Error('invalid counter value (must be an integer)');
       }
       for (var index = 15; index >= 0; --index) {
@@ -15487,8 +15423,8 @@ function isKeystoreWallet(json) {
   }
   if (
     !data.version ||
-    parseInt(data.version) !== data.version ||
-    parseInt(data.version) !== 3
+    Number.parseInt(data.version) !== data.version ||
+    Number.parseInt(data.version) !== 3
   ) {
     return false;
   }
@@ -15511,9 +15447,9 @@ function getJsonWalletAddress(json) {
   }
   return null;
 }
-var scrypt = createCommonjsModule(function (module, exports) {
+var scrypt = createCommonjsModule((module, exports) => {
   'use strict';
-  (function (root) {
+  ((root) => {
     const MAX_VALUE = 2147483647;
     function SHA256(m) {
       const K = new Uint32Array([
@@ -15837,10 +15773,10 @@ var scrypt = createCommonjsModule(function (module, exports) {
       let i0 = 0,
         i1;
       let Bi;
-      const limit = callback ? parseInt(1e3 / r) : 4294967295;
+      const limit = callback ? Number.parseInt(1e3 / r) : 4294967295;
       const nextTick =
         typeof setImmediate !== 'undefined' ? setImmediate : setTimeout;
-      const incrementalSMix = function () {
+      const incrementalSMix = () => {
         if (stop) {
           return callback(new Error('cancelled'), currentOp / totalOps);
         }
@@ -15863,7 +15799,7 @@ var scrypt = createCommonjsModule(function (module, exports) {
             i1 += steps;
             currentOp += steps;
             if (callback) {
-              const percent10 = parseInt((1e3 * currentOp) / totalOps);
+              const percent10 = Number.parseInt((1e3 * currentOp) / totalOps);
               if (percent10 !== lastPercent10) {
                 stop = callback(null, currentOp / totalOps);
                 if (stop) {
@@ -15891,7 +15827,7 @@ var scrypt = createCommonjsModule(function (module, exports) {
             i1 += steps;
             currentOp += steps;
             if (callback) {
-              const percent10 = parseInt((1e3 * currentOp) / totalOps);
+              const percent10 = Number.parseInt((1e3 * currentOp) / totalOps);
               if (percent10 !== lastPercent10) {
                 stop = callback(null, currentOp / totalOps);
                 if (stop) {
@@ -15937,8 +15873,7 @@ var scrypt = createCommonjsModule(function (module, exports) {
       incrementalSMix();
     }
     const lib = {
-      scrypt: function (password, salt, N, r, p, dkLen, progressCallback) {
-        return new Promise(function (resolve, reject) {
+      scrypt: (password, salt, N, r, p, dkLen, progressCallback) => new Promise((resolve, reject) => {
           let lastProgress = 0;
           if (progressCallback) {
             progressCallback(0);
@@ -15950,7 +15885,7 @@ var scrypt = createCommonjsModule(function (module, exports) {
             r,
             p,
             dkLen,
-            function (error, progress, key) {
+            (error, progress, key) => {
               if (error) {
                 reject(error);
               } else if (key) {
@@ -15964,11 +15899,8 @@ var scrypt = createCommonjsModule(function (module, exports) {
               }
             },
           );
-        });
-      },
-      syncScrypt: function (password, salt, N, r, p, dkLen) {
-        return new Uint8Array(_scrypt(password, salt, N, r, p, dkLen));
-      },
+        }),
+      syncScrypt: (password, salt, N, r, p, dkLen) => new Uint8Array(_scrypt(password, salt, N, r, p, dkLen)),
     };
     if ('object' !== 'undefined') {
       module.exports = lib;
@@ -15985,15 +15917,15 @@ var scrypt = createCommonjsModule(function (module, exports) {
 ('use strict');
 var __awaiter$5 =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -16015,7 +15947,7 @@ var __awaiter$5 =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$o = new Logger(version$i);
 function hasMnemonic(value) {
   return value != null && value.mnemonic && value.mnemonic.phrase;
@@ -16118,25 +16050,23 @@ function _computeKdfKey(
   const passwordBytes = getPassword(password);
   const kdf = searchPath(data, 'crypto/kdf');
   if (kdf && typeof kdf === 'string') {
-    const throwError = function (name, value) {
-      return logger$o.throwArgumentError(
+    const throwError = (name, value) => logger$o.throwArgumentError(
         'invalid key-derivation function parameters',
         name,
         value,
       );
-    };
     if (kdf.toLowerCase() === 'scrypt') {
       const salt = looseArrayify(searchPath(data, 'crypto/kdfparams/salt'));
-      const N = parseInt(searchPath(data, 'crypto/kdfparams/n'));
-      const r = parseInt(searchPath(data, 'crypto/kdfparams/r'));
-      const p = parseInt(searchPath(data, 'crypto/kdfparams/p'));
+      const N = Number.parseInt(searchPath(data, 'crypto/kdfparams/n'));
+      const r = Number.parseInt(searchPath(data, 'crypto/kdfparams/r'));
+      const p = Number.parseInt(searchPath(data, 'crypto/kdfparams/p'));
       if (!N || !r || !p) {
         throwError('kdf', kdf);
       }
       if ((N & (N - 1)) !== 0) {
         throwError('N', N);
       }
-      const dkLen = parseInt(searchPath(data, 'crypto/kdfparams/dklen'));
+      const dkLen = Number.parseInt(searchPath(data, 'crypto/kdfparams/dklen'));
       if (dkLen !== 32) {
         throwError('dklen', dkLen);
       }
@@ -16152,8 +16082,8 @@ function _computeKdfKey(
       } else {
         throwError('prf', prf);
       }
-      const count = parseInt(searchPath(data, 'crypto/kdfparams/c'));
-      const dkLen = parseInt(searchPath(data, 'crypto/kdfparams/dklen'));
+      const count = Number.parseInt(searchPath(data, 'crypto/kdfparams/c'));
+      const dkLen = Number.parseInt(searchPath(data, 'crypto/kdfparams/dklen'));
       if (dkLen !== 32) {
         throwError('dklen', dkLen);
       }
@@ -16360,15 +16290,15 @@ const version$j = 'wallet/5.6.0';
 ('use strict');
 var __awaiter$6 =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -16390,7 +16320,7 @@ var __awaiter$6 =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$p = new Logger(version$j);
 function isAccount(value) {
   return (
@@ -16584,7 +16514,7 @@ function isRenetworkable(value) {
   return value && typeof value.renetwork === 'function';
 }
 function ethDefaultProvider(network) {
-  const func = function (providers, options) {
+  const func = (providers, options) => {
     if (options == null) {
       options = {};
     }
@@ -16643,21 +16573,17 @@ function ethDefaultProvider(network) {
     }
     return providerList[0];
   };
-  func.renetwork = function (network) {
-    return ethDefaultProvider(network);
-  };
+  func.renetwork = (network) => ethDefaultProvider(network);
   return func;
 }
 function etcDefaultProvider(url, network) {
-  const func = function (providers, options) {
+  const func = (providers, options) => {
     if (providers.JsonRpcProvider) {
       return new providers.JsonRpcProvider(url, network);
     }
     return null;
   };
-  func.renetwork = function (network) {
-    return etcDefaultProvider(url, network);
-  };
+  func.renetwork = (network) => etcDefaultProvider(url, network);
   return func;
 }
 const homestead = {
@@ -16821,15 +16747,15 @@ const version$l = 'web/5.6.0';
 ('use strict');
 var __awaiter$7 =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -16851,7 +16777,7 @@ var __awaiter$7 =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 function getUrl(href, options) {
   return __awaiter$7(this, void 0, void 0, function* () {
     if (options == null) {
@@ -16892,15 +16818,15 @@ function getUrl(href, options) {
 ('use strict');
 var __awaiter$8 =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -16922,7 +16848,7 @@ var __awaiter$8 =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$r = new Logger(version$l);
 function staller(duration) {
   return new Promise((resolve) => {
@@ -17031,7 +16957,7 @@ function _fetchData(connection, body, processFunc) {
       options.skipFetchSetup = !!connection.skipFetchSetup;
     }
   }
-  const reData = new RegExp('^data:([a-z0-9-]+/[a-z0-9-]+);base64,(.*)$', 'i');
+  const reData = /^data:([a-z0-9-]+\/[a-z0-9-]+);base64,(.*)$/i;
   const dataMatch = url ? url.match(reData) : null;
   if (dataMatch) {
     try {
@@ -17082,9 +17008,9 @@ function _fetchData(connection, body, processFunc) {
     flatHeaders[header.key] = header.value;
   });
   options.headers = flatHeaders;
-  const runningTimeout = (function () {
+  const runningTimeout = (() => {
     let timer = null;
-    const promise = new Promise(function (resolve, reject) {
+    const promise = new Promise((resolve, reject) => {
       if (timeout) {
         timer = setTimeout(() => {
           if (timer == null) {
@@ -17102,7 +17028,7 @@ function _fetchData(connection, body, processFunc) {
         }, timeout);
       }
     });
-    const cancel = function () {
+    const cancel = () => {
       if (timer == null) {
         return;
       }
@@ -17136,11 +17062,11 @@ function _fetchData(connection, body, processFunc) {
                   typeof retryAfter === 'string' &&
                   retryAfter.match(/^[1-9][0-9]*$/)
                 ) {
-                  stall = parseInt(retryAfter) * 1e3;
+                  stall = Number.parseInt(retryAfter) * 1e3;
                 } else {
                   stall =
                     throttleSlotInterval *
-                    parseInt(String(Math.random() * Math.pow(2, attempt)));
+                    Number.parseInt(String(Math.random() * Math.pow(2, attempt)));
                 }
                 yield staller(stall);
                 continue;
@@ -17197,7 +17123,7 @@ function _fetchData(connection, body, processFunc) {
               if (tryAgain) {
                 const timeout =
                   throttleSlotInterval *
-                  parseInt(String(Math.random() * Math.pow(2, attempt)));
+                  Number.parseInt(String(Math.random() * Math.pow(2, attempt)));
                 yield staller(timeout);
                 continue;
               }
@@ -17236,7 +17162,7 @@ function _fetchData(connection, body, processFunc) {
   return Promise.race([runningTimeout.promise, runningFetch]);
 }
 function fetchJson(connection, json, processFunc) {
-  let processJsonFunc = (value, response) => {
+  const processJsonFunc = (value, response) => {
     let result = null;
     if (value != null) {
       try {
@@ -17290,7 +17216,7 @@ function poll(func, options) {
   if (options.interval == null) {
     options.interval = 250;
   }
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     let timer = null;
     let done = false;
     const cancel = () => {
@@ -17314,7 +17240,7 @@ function poll(func, options) {
     let attempt = 0;
     function check() {
       return func().then(
-        function (result) {
+        (result) => {
           if (result !== undefined) {
             if (cancel()) {
               resolve(result);
@@ -17333,7 +17259,7 @@ function poll(func, options) {
             }
             let timeout =
               options.interval *
-              parseInt(String(Math.random() * Math.pow(2, attempt)));
+              Number.parseInt(String(Math.random() * Math.pow(2, attempt)));
             if (timeout < options.floor) {
               timeout = options.floor;
             }
@@ -17344,7 +17270,7 @@ function poll(func, options) {
           }
           return null;
         },
-        function (error) {
+        (error) => {
           if (cancel()) {
             reject(error);
           }
@@ -17781,7 +17707,7 @@ class Formatter {
         if (chainId < 0) {
           chainId = 0;
         }
-        chainId = parseInt(chainId);
+        chainId = Number.parseInt(chainId);
       }
       if (typeof chainId !== 'number') {
         chainId = 0;
@@ -17865,7 +17791,7 @@ class Formatter {
     return result;
   }
   static allowNull(format, nullValue) {
-    return function (value) {
+    return (value) => {
       if (value == null) {
         return nullValue;
       }
@@ -17873,7 +17799,7 @@ class Formatter {
     };
   }
   static allowFalsish(format, replaceValue) {
-    return function (value) {
+    return (value) => {
       if (!value) {
         return replaceValue;
       }
@@ -17881,12 +17807,12 @@ class Formatter {
     };
   }
   static arrayOf(format) {
-    return function (array) {
+    return (array) => {
       if (!Array.isArray(array)) {
         throw new Error('not an array');
       }
       const result = [];
-      array.forEach(function (value) {
+      array.forEach((value) => {
         result.push(format(value));
       });
       return result;
@@ -17931,15 +17857,15 @@ function showThrottleMessage() {
 ('use strict');
 var __awaiter$9 =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -17961,7 +17887,7 @@ var __awaiter$9 =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$t = new Logger(version$m);
 const MAX_CCIP_REDIRECTS = 10;
 function checkTopic(topic) {
@@ -18104,12 +18030,12 @@ function base58Encode(data) {
     concat([data, hexDataSlice(sha256$1(sha256$1(data)), 0, 4)]),
   );
 }
-const matcherIpfs = new RegExp('^(ipfs)://(.*)$', 'i');
+const matcherIpfs = /^(ipfs):\/\/(.*)$/i;
 const matchers = [
-  new RegExp('^(https)://(.*)$', 'i'),
-  new RegExp('^(data):(.*)$', 'i'),
+  /^(https):\/\/(.*)$/i,
+  /^(data):(.*)$/i,
   matcherIpfs,
-  new RegExp('^eip155:[0-9]+/(erc[0-9]+):(.*)$', 'i'),
+  /^eip155:[0-9]+\/(erc[0-9]+):(.*)$/i,
 ];
 function _parseString(result, start) {
   try {
@@ -18260,7 +18186,7 @@ class Resolver {
     if (coinInfo.p2pkh != null) {
       const p2pkh = hexBytes.match(/^0x76a9([0-9a-f][0-9a-f])([0-9a-f]*)88ac$/);
       if (p2pkh) {
-        const length = parseInt(p2pkh[1], 16);
+        const length = Number.parseInt(p2pkh[1], 16);
         if (p2pkh[2].length === length * 2 && length >= 1 && length <= 75) {
           return base58Encode(concat([[coinInfo.p2pkh], '0x' + p2pkh[2]]));
         }
@@ -18269,7 +18195,7 @@ class Resolver {
     if (coinInfo.p2sh != null) {
       const p2sh = hexBytes.match(/^0xa9([0-9a-f][0-9a-f])([0-9a-f]*)87$/);
       if (p2sh) {
-        const length = parseInt(p2sh[1], 16);
+        const length = Number.parseInt(p2sh[1], 16);
         if (p2sh[2].length === length * 2 && length >= 1 && length <= 75) {
           return base58Encode(concat([[coinInfo.p2sh], '0x' + p2sh[2]]));
         }
@@ -18465,7 +18391,7 @@ class Resolver {
         /^0xe3010170(([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])([0-9a-f]*))$/,
       );
       if (ipfs) {
-        const length = parseInt(ipfs[3], 16);
+        const length = Number.parseInt(ipfs[3], 16);
         if (ipfs[4].length === length * 2) {
           return 'ipfs://' + Base58.encode('0x' + ipfs[1]);
         }
@@ -18474,7 +18400,7 @@ class Resolver {
         /^0xe5010172(([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])([0-9a-f]*))$/,
       );
       if (ipns) {
-        const length = parseInt(ipns[3], 16);
+        const length = Number.parseInt(ipns[3], 16);
         if (ipns[4].length === length * 2) {
           return 'ipns://' + Base58.encode('0x' + ipns[1]);
         }
@@ -18673,7 +18599,7 @@ class BaseProvider extends Provider {
           (network) => null,
           (error) => error,
         ),
-      }).then(({ blockNumber: blockNumber, networkError: networkError }) => {
+      }).then(({ blockNumber, networkError }) => {
         if (networkError) {
           if (this._internalBlockNumber === checkInternalBlockNumber) {
             this._internalBlockNumber = null;
@@ -18768,7 +18694,7 @@ class BaseProvider extends Provider {
         switch (event.type) {
           case 'tx': {
             const hash = event.hash;
-            let runner = this.getTransactionReceipt(hash)
+            const runner = this.getTransactionReceipt(hash)
               .then((receipt) => {
                 if (!receipt || receipt.blockNumber == null) {
                   return null;
@@ -18922,7 +18848,7 @@ class BaseProvider extends Provider {
     if (
       typeof value !== 'number' ||
       value <= 0 ||
-      parseInt(String(value)) != value
+      Number.parseInt(String(value)) != value
     ) {
       throw new Error('invalid polling interval');
     }
@@ -18981,7 +18907,7 @@ class BaseProvider extends Provider {
       return new Promise((resolve, reject) => {
         const cancelFuncs = [];
         let done = false;
-        const alreadyDone = function () {
+        const alreadyDone = () => {
           if (done) {
             return true;
           }
@@ -19593,7 +19519,7 @@ class BaseProvider extends Provider {
         try {
           params.blockTag = yield this._getBlockTag(blockHashOrBlockTag);
           if (isHexString(params.blockTag)) {
-            blockNumber = parseInt(params.blockTag.substring(2), 16);
+            blockNumber = Number.parseInt(params.blockTag.substring(2), 16);
           }
         } catch (error) {
           logger$t.throwArgumentError(
@@ -19938,8 +19864,8 @@ class BaseProvider extends Provider {
   }
   emit(eventName, ...args) {
     let result = false;
-    let stopped = [];
-    let eventTag = getEventTag$1(eventName);
+    const stopped = [];
+    const eventTag = getEventTag$1(eventName);
     this._events = this._events.filter((event) => {
       if (event.tag !== eventTag) {
         return true;
@@ -19963,7 +19889,7 @@ class BaseProvider extends Provider {
     if (!eventName) {
       return this._events.length;
     }
-    let eventTag = getEventTag$1(eventName);
+    const eventTag = getEventTag$1(eventName);
     return this._events.filter((event) => {
       return event.tag === eventTag;
     }).length;
@@ -19972,7 +19898,7 @@ class BaseProvider extends Provider {
     if (eventName == null) {
       return this._events.map((event) => event.listener);
     }
-    let eventTag = getEventTag$1(eventName);
+    const eventTag = getEventTag$1(eventName);
     return this._events
       .filter((event) => event.tag === eventTag)
       .map((event) => event.listener);
@@ -19983,7 +19909,7 @@ class BaseProvider extends Provider {
     }
     const stopped = [];
     let found = false;
-    let eventTag = getEventTag$1(eventName);
+    const eventTag = getEventTag$1(eventName);
     this._events = this._events.filter((event) => {
       if (event.tag !== eventTag || event.listener != listener) {
         return true;
@@ -20024,15 +19950,15 @@ class BaseProvider extends Provider {
 ('use strict');
 var __awaiter$a =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -20054,7 +19980,7 @@ var __awaiter$a =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$u = new Logger(version$m);
 const errorGas = ['call', 'estimateGas'];
 function spelunk(value) {
@@ -20153,7 +20079,7 @@ function checkError(method, error, params) {
   throw error;
 }
 function timer(timeout) {
-  return new Promise(function (resolve) {
+  return new Promise((resolve) => {
     setTimeout(resolve, timeout);
   });
 }
@@ -20267,7 +20193,7 @@ class JsonRpcSigner extends Signer {
     return resolveProperties({
       tx: resolveProperties(transaction),
       sender: fromAddress,
-    }).then(({ tx: tx, sender: sender }) => {
+    }).then(({ tx, sender }) => {
       if (tx.from != null) {
         if (tx.from.toLowerCase() !== sender) {
           logger$u.throwArgumentError(
@@ -20665,34 +20591,30 @@ class JsonRpcProvider extends BaseProvider {
     const pendingFilter = this.send('eth_newPendingTransactionFilter', []);
     this._pendingFilter = pendingFilter;
     pendingFilter
-      .then(function (filterId) {
+      .then((filterId) => {
         function poll() {
           self
             .send('eth_getFilterChanges', [filterId])
-            .then(function (hashes) {
+            .then((hashes) => {
               if (self._pendingFilter != pendingFilter) {
                 return null;
               }
               let seq = Promise.resolve();
-              hashes.forEach(function (hash) {
+              hashes.forEach((hash) => {
                 self._emitted['t:' + hash.toLowerCase()] = 'pending';
-                seq = seq.then(function () {
-                  return self.getTransaction(hash).then(function (tx) {
+                seq = seq.then(() => self.getTransaction(hash).then((tx) => {
                     self.emit('pending', tx);
                     return null;
-                  });
-                });
+                  }));
               });
-              return seq.then(function () {
-                return timer(1e3);
-              });
+              return seq.then(() => timer(1e3));
             })
-            .then(function () {
+            .then(() => {
               if (self._pendingFilter != pendingFilter) {
                 self.send('eth_uninstallFilter', [filterId]);
                 return;
               }
-              setTimeout(function () {
+              setTimeout(() => {
                 poll();
               }, 0);
               return null;
@@ -20730,7 +20652,7 @@ class JsonRpcProvider extends BaseProvider {
       'maxPriorityFeePerGas',
       'nonce',
       'value',
-    ].forEach(function (key) {
+    ].forEach((key) => {
       if (transaction[key] == null) {
         return;
       }
@@ -20740,7 +20662,7 @@ class JsonRpcProvider extends BaseProvider {
       }
       result[key] = value;
     });
-    ['from', 'to', 'data'].forEach(function (key) {
+    ['from', 'to', 'data'].forEach((key) => {
       if (transaction[key] == null) {
         return;
       }
@@ -20761,7 +20683,7 @@ try {
   }
 } catch (error) {
   const logger = new Logger(version$m);
-  WS = function () {
+  WS = () => {
     logger.throwError(
       'WebSockets not supported in this environment',
       Logger.errors.UNSUPPORTED_OPERATION,
@@ -20772,15 +20694,15 @@ try {
 ('use strict');
 var __awaiter$b =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -20802,7 +20724,7 @@ var __awaiter$b =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$v = new Logger(version$m);
 let NextId = 1;
 class WebSocketProvider extends JsonRpcProvider {
@@ -21044,10 +20966,10 @@ class WebSocketProvider extends JsonRpcProvider {
     return __awaiter$b(this, void 0, void 0, function* () {
       if (this.websocket.readyState === WS.CONNECTING) {
         yield new Promise((resolve) => {
-          this.websocket.onopen = function () {
+          this.websocket.onopen = () => {
             resolve(true);
           };
-          this.websocket.onerror = function () {
+          this.websocket.onerror = () => {
             resolve(false);
           };
         });
@@ -21059,15 +20981,15 @@ class WebSocketProvider extends JsonRpcProvider {
 ('use strict');
 var __awaiter$c =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -21089,7 +21011,7 @@ var __awaiter$c =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$w = new Logger(version$m);
 class StaticJsonRpcProvider extends JsonRpcProvider {
   detectNetwork() {
@@ -21293,15 +21215,15 @@ class AnkrProvider extends UrlJsonRpcProvider {
 ('use strict');
 var __awaiter$d =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -21323,7 +21245,7 @@ var __awaiter$d =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$z = new Logger(version$m);
 class CloudflareProvider extends UrlJsonRpcProvider {
   static getApiKey(apiKey) {
@@ -21369,15 +21291,15 @@ class CloudflareProvider extends UrlJsonRpcProvider {
 ('use strict');
 var __awaiter$e =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -21399,11 +21321,11 @@ var __awaiter$e =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$A = new Logger(version$m);
 function getTransactionPostData(transaction) {
   const result = {};
-  for (let key in transaction) {
+  for (const key in transaction) {
     if (transaction[key] == null) {
       continue;
     }
@@ -21495,7 +21417,7 @@ function checkLogTag(blockTag) {
   if (blockTag === 'latest') {
     return blockTag;
   }
-  return parseInt(blockTag.substring(2), 16);
+  return Number.parseInt(blockTag.substring(2), 16);
 }
 const defaultApiKey$2 = '9D13ZE7XSBTJ94N9BNJ2MA33VMAY2YPIRB';
 function checkError$1(method, error, transaction) {
@@ -21777,7 +21699,7 @@ class EtherscanProvider extends BaseProvider {
             }
           }
           const logs = yield this.fetch('logs', args);
-          let blocks = {};
+          const blocks = {};
           for (let i = 0; i < logs.length; i++) {
             const log = logs[i];
             if (log.blockHash != null) {
@@ -21797,7 +21719,7 @@ class EtherscanProvider extends BaseProvider {
           if (this.network.name !== 'homestead') {
             return 0;
           }
-          return parseFloat(
+          return Number.parseFloat(
             (yield this.fetch('stats', { action: 'ethprice' })).ethusd,
           );
         default:
@@ -21817,7 +21739,7 @@ class EtherscanProvider extends BaseProvider {
       };
       const result = yield this.fetch('account', params);
       return result.map((tx) => {
-        ['contractAddress', 'to'].forEach(function (key) {
+        ['contractAddress', 'to'].forEach((key) => {
           if (tx[key] == '') {
             delete tx[key];
           }
@@ -21827,7 +21749,7 @@ class EtherscanProvider extends BaseProvider {
         }
         const item = this.formatter.transactionResponse(tx);
         if (tx.timeStamp) {
-          item.timestamp = parseInt(tx.timeStamp);
+          item.timestamp = Number.parseInt(tx.timeStamp);
         }
         return item;
       });
@@ -21840,15 +21762,15 @@ class EtherscanProvider extends BaseProvider {
 ('use strict');
 var __awaiter$f =
   (window && window.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
+  ((thisArg, _arguments, P, generator) => {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function (resolve) {
+        : new P((resolve) => {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function (resolve, reject) {
+    return new (P || (P = Promise))((resolve, reject) => {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -21870,7 +21792,7 @@ var __awaiter$f =
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+  });
 const logger$B = new Logger(version$m);
 function now() {
   return new Date().getTime();
@@ -21949,7 +21871,7 @@ function stall$1(duration) {
   let cancel = null;
   let timer = null;
   let promise = new Promise((resolve) => {
-    cancel = function () {
+    cancel = () => {
       if (timer) {
         clearTimeout(timer);
         timer = null;
@@ -22001,7 +21923,7 @@ function exposeDebugConfig(config, now) {
   return result;
 }
 function normalizedTally(normalize, quorum) {
-  return function (configs) {
+  return (configs) => {
     const tally = {};
     configs.forEach((c) => {
       const value = normalize(c.result);
@@ -22024,7 +21946,7 @@ function getProcessFunc(provider, method, params) {
   let normalize = serialize$1;
   switch (method) {
     case 'getBlockNumber':
-      return function (configs) {
+      return (configs) => {
         const values = configs.map((c) => c.result);
         let blockNumber = median(
           configs.map((c) => c.result),
@@ -22043,15 +21965,13 @@ function getProcessFunc(provider, method, params) {
         return provider._highestBlockNumber;
       };
     case 'getGasPrice':
-      return function (configs) {
+      return (configs) => {
         const values = configs.map((c) => c.result);
         values.sort();
         return values[Math.floor(values.length / 2)];
       };
     case 'getEtherPrice':
-      return function (configs) {
-        return median(configs.map((c) => c.result));
-      };
+      return (configs) => median(configs.map((c) => c.result));
     case 'getBalance':
     case 'getTransactionCount':
     case 'getCode':
@@ -22062,7 +21982,7 @@ function getProcessFunc(provider, method, params) {
       break;
     case 'getTransaction':
     case 'getTransactionReceipt':
-      normalize = function (tx) {
+      normalize = (tx) => {
         if (tx == null) {
           return null;
         }
@@ -22073,7 +21993,7 @@ function getProcessFunc(provider, method, params) {
       break;
     case 'getBlock':
       if (params.includeTransactions) {
-        normalize = function (block) {
+        normalize = (block) => {
           if (block == null) {
             return null;
           }
@@ -22086,7 +22006,7 @@ function getProcessFunc(provider, method, params) {
           return serialize$1(block);
         };
       } else {
-        normalize = function (block) {
+        normalize = (block) => {
           if (block == null) {
             return null;
           }
@@ -22111,7 +22031,7 @@ function waitForSync(config, blockNumber) {
     return poll(
       () => {
         return new Promise((resolve, reject) => {
-          setTimeout(function () {
+          setTimeout(() => {
             if (provider.blockNumber >= blockNumber) {
               return resolve(provider);
             }
@@ -22171,7 +22091,7 @@ function getRunner(config, currentBlockNumber, method, params) {
       case 'getTransactionReceipt':
         return provider[method](params.transactionHash);
       case 'getLogs': {
-        let filter = params.filter;
+        const filter = params.filter;
         if (
           (filter.fromBlock && isHexString(filter.fromBlock)) ||
           (filter.toBlock && isHexString(filter.toBlock))
@@ -23000,9 +22920,9 @@ var index$3 = Object.freeze({
 });
 const version$n = 'solidity/5.6.0';
 ('use strict');
-const regexBytes = new RegExp('^bytes([0-9]+)$');
-const regexNumber = new RegExp('^(u?int)([0-9]*)$');
-const regexArray = new RegExp('^(.*)\\[([0-9]*)\\]$');
+const regexBytes = /^bytes([0-9]+)$/;
+const regexNumber = /^(u?int)([0-9]*)$/;
+const regexArray = /^(.*)\[([0-9]*)\]$/;
 const Zeros$1 =
   '0000000000000000000000000000000000000000000000000000000000000000';
 const logger$H = new Logger(version$n);
@@ -23026,7 +22946,7 @@ function _pack(type, value, isArray) {
   }
   let match = type.match(regexNumber);
   if (match) {
-    let size = parseInt(match[2] || '256');
+    let size = Number.parseInt(match[2] || '256');
     if (
       (match[2] && String(size) !== match[2]) ||
       size % 8 !== 0 ||
@@ -23043,7 +22963,7 @@ function _pack(type, value, isArray) {
   }
   match = type.match(regexBytes);
   if (match) {
-    const size = parseInt(match[1]);
+    const size = Number.parseInt(match[1]);
     if (String(size) !== match[1] || size === 0 || size > 32) {
       logger$H.throwArgumentError('invalid bytes type', 'type', type);
     }
@@ -23058,7 +22978,7 @@ function _pack(type, value, isArray) {
   match = type.match(regexArray);
   if (match && Array.isArray(value)) {
     const baseType = match[1];
-    const count = parseInt(match[2] || String(value.length));
+    const count = Number.parseInt(match[2] || String(value.length));
     if (count != value.length) {
       logger$H.throwArgumentError(
         `invalid array length for ${type}`,
@@ -23067,7 +22987,7 @@ function _pack(type, value, isArray) {
       );
     }
     const result = [];
-    value.forEach(function (value) {
+    value.forEach((value) => {
       result.push(_pack(baseType, value, true));
     });
     return concat(result);
@@ -23083,7 +23003,7 @@ function pack$1(types, values) {
     );
   }
   const tight = [];
-  types.forEach(function (type, index) {
+  types.forEach((type, index) => {
     tight.push(_pack(type, values[index]));
   });
   return hexlify(concat(tight));
