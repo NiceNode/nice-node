@@ -7,7 +7,7 @@ For the latest information, visit https://nicenode.xyz
 [![Downloads](https://badgen.net/badge/icon/alpha?label=downloads)](https://www.nicenode.xyz/#download)
 [![Github All Releases](https://img.shields.io/github/downloads/NiceNode/nice-node/total.svg)]()
 [![gitpoap badge](https://public-api.gitpoap.io/v1/repo/NiceNode/nice-node/badge)](https://www.gitpoap.io/gh/NiceNode/nice-node)
-[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=NiceNode)](https://twitter.com/NiceNodeApp)
+[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=NiceNode)](https://x.com/NiceNodeApp)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/k3dpYU4Pn9)
 [![Crowdin](https://badges.crowdin.net/nicenode/localized.svg)](https://crowdin.com/project/nicenode)
 
@@ -49,7 +49,7 @@ NICENODE_ENV=development
 CONTROLLER_API_URL=http://localhost:3000/api
 ```
 
-`SENTRY_DSN` and `MP_PROJECT_TOKEN` should be fake unless testing. Contact Johns, @jgresham, if you want to test new error or event reporting code.
+`SENTRY_DSN` and `MP_PROJECT_TOKEN` should be fake unless testing. Contact Johns, [@jgresham](https://github.com/jgresham), if you want to test new error or event reporting code.
 
 ## Packaging for Production
 
