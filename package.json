@@ -65,7 +65,7 @@
     "@wdio/mocha-framework": "^9.0.8",
     "@wdio/spec-reporter": "^9.0.8",
     "cross-env": "^7.0.3",
-    "electron": "^32.2.0",
+    "electron": "^33.2.1",
     "electron-devtools-installer": "^3.2.0",
     "electron-extension-installer": "^1.2.0",
     "electron-mock-ipc": "^0.3.12",
@@ -132,9 +132,9 @@
     "web3",
     "local"
   ],
-  "devEngines": {
+  "engines": {
     "node": ">=20.x",
-    "npm": ">=9.x"
+    "npm": ">=10.x"
   },
   "repository": {
     "type": "git",
