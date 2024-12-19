@@ -29,7 +29,7 @@
   },
   "files": {
     "ignore": [
-      "src/renderer/ethers.js",
+      "src/renderer/ethers.cjs",
       "src/main/util/*.js",
       "*genesis-l2.json"
     ]

@@ -3,13 +3,24 @@ import type { AddressInfo } from 'node:net';
 import type { ConfigEnv, Plugin, UserConfig } from 'vite';
 import pkg from './package.json';
 
-export const builtins = ['electron', ...builtinModules.map((m) => [m, `node:${m}`]).flat()];
+export const builtins = [
+  'electron',
+  ...builtinModules.map((m) => [m, `node:${m}`]).flat(),
+];
 
 // https://www.electronforge.io/config/plugins/vite#native-node-modules
 // export const external = [...builtins, 'cron', 'systeminformation', ...Object.keys('dependencies' in pkg ? (pkg.dependencies as Record<string, unknown>) : {})];
-export const external = [...builtins, 'cron', ...Object.keys('dependencies' in pkg ? (pkg.dependencies as Record<string, unknown>) : {})];
+export const external = [
+  ...builtins,
+  'cron',
+  'dotenv',
+  ...Object.keys(
+    'dependencies' in pkg ? (pkg.dependencies as Record<string, unknown>) : {},
+  ),
+];
 
-console.log("vite.base.config.ts");
+console.log('vite.base.config.ts');
+console.log('vite.base.config.ts: external: ', external);
 export function getBuildConfig(env: ConfigEnv<'build'>): UserConfig {
   const { root, mode, command } = env;
 
@@ -23,7 +34,7 @@ export function getBuildConfig(env: ConfigEnv<'build'>): UserConfig {
       outDir: '.vite/build',
       watch: command === 'serve' ? {} : null,
       minify: command === 'build',
-      sourcemap: true
+      sourcemap: true,
     },
     clearScreen: false,
   };
@@ -45,17 +56,25 @@ export function getDefineKeys(names: string[]) {
 
 export function getBuildDefine(env: ConfigEnv<'build'>) {
   const { command, forgeConfig } = env;
-  if(forgeConfig?.renderer) {
-    const names = forgeConfig.renderer.filter(({ name }) => name != null).map(({ name }) => name!);
+  if (forgeConfig?.renderer) {
+    const names = forgeConfig.renderer
+      .filter(({ name }) => name != null)
+      .map(({ name }) => name!);
     const defineKeys = getDefineKeys(names);
-    const define = Object.entries(defineKeys)?.reduce((acc, [name, keys]) => {
-      const { VITE_DEV_SERVER_URL, VITE_NAME } = keys;
-      const def = {
-        [VITE_DEV_SERVER_URL]: command === 'serve' ? JSON.stringify(process.env[VITE_DEV_SERVER_URL]) : undefined,
-        [VITE_NAME]: JSON.stringify(name),
-      };
-      return { ...acc, ...def };
-    }, {} as Record<string, any>);
+    const define = Object.entries(defineKeys)?.reduce(
+      (acc, [name, keys]) => {
+        const { VITE_DEV_SERVER_URL, VITE_NAME } = keys;
+        const def = {
+          [VITE_DEV_SERVER_URL]:
+            command === 'serve'
+              ? JSON.stringify(process.env[VITE_DEV_SERVER_URL])
+              : undefined,
+          [VITE_NAME]: JSON.stringify(name),
+        };
+        return { ...acc, ...def };
+      },
+      {} as Record<string, any>,
+    );
 
     return define;
   }
@@ -74,7 +93,8 @@ export function pluginExposeRenderer(name: string): Plugin {
       server.httpServer?.once('listening', () => {
         const addressInfo = server.httpServer!.address() as AddressInfo;
         // Expose env constant for main process use.
-        process.env[VITE_DEV_SERVER_URL] = `http://localhost:${addressInfo?.port}`;
+        process.env[VITE_DEV_SERVER_URL] =
+          `http://localhost:${addressInfo?.port}`;
       });
     },
   };
