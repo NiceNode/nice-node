@@ -1,0 +1,40 @@
+{
+  "specId": "arbitrum-orbit",
+  "version": "1.0.0",
+  "displayName": "Arbitrum Orbit",
+  "displayTagline": "Non-Validating Node",
+  "execution": {
+    "executionTypes": ["nodePackage"],
+    "defaultExecutionType": "nodePackage",
+    "services": [
+      {
+        "serviceId": "executionClient",
+        "name": "Execution Client",
+        "nodeOptions": ["nitro-orbit"],
+        "required": true
+      }
+    ]
+  },
+  "category": "Ethereum/L2",
+  "rpcTranslation": "eth-l1",
+  "systemRequirements": {
+    "documentationUrl": "https://docs.arbitrum.io/node-running/how-tos/running-an-orbit-node#prerequisites",
+    "cpu": {
+      "cores": 4
+    },
+    "memory": {
+      "minSizeGBs": 8
+    },
+    "storage": {
+      "minSizeGBs": 200,
+      "ssdRequired": true
+    },
+    "internet": {
+      "minDownloadSpeedMbps": 25,
+      "minUploadSpeedMbps": 10
+    }
+  },
+  "configTranslation": {},
+  "addNodeDescription": "Designed with you in mind, Arbitrum is the leading Layer 2 technology that empowers you to explore and build in the largest Layer 1 ecosystem, Ethereum.",
+  "description": "Designed with you in mind, Arbitrum is the leading Layer 2 technology that empowers you to explore and build in the largest Layer 1 ecosystem, Ethereum.  Take it to the next layer with Nitro. Making Ethereum more inclusive and sustainable, Nitro is the most advanced blockchain scaling technology in the industry."
+}
