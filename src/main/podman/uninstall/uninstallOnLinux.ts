@@ -1,6 +1,6 @@
+import { app } from 'electron';
 import { reportEvent } from '../../events';
 import { execAwait } from '../../execHelper';
-// import { app } from 'electron';
 import logger from '../../logger';
 import {
   type PackageManager,
@@ -19,7 +19,44 @@ const uninstallOnLinux = async (): Promise<boolean | { error: string }> => {
   logger.info('Uninstalling podman...');
   try {
     // Returns /Users/<user> (Ex. /Users/johns)
-    // const userHome = app.getPath('home');
+    const userHome = app.getPath('home');
+
+    // First cleanup containers and pods
+    try {
+      // Stop and remove all containers
+      await execAwait('podman stop -a', { log: true });
+      await execAwait('podman rm -af', { log: true });
+      
+      // Remove all pods
+      await execAwait('podman pod rm -af', { log: true });
+      
+      // Remove all images
+      await execAwait('podman rmi -af', { log: true });
+      
+      logger.info('Successfully cleaned up all podman containers, pods and images');
+    } catch (cleanupErr) {
+      logger.error('Error during container cleanup, continuing with uninstall:', cleanupErr);
+    }
+
+    // Remove podman configuration folders
+    const foldersToDelete = [
+      `${userHome}/.config/containers`,
+      `${userHome}/.local/share/containers`,
+      `${userHome}/.ssh/*podman*`,
+      '/usr/local/podman',
+    ];
+    
+    try {
+      const rmCommand = `rm -rf ${foldersToDelete.join(' ')}`;
+      await execAwait(rmCommand, {
+        log: true,
+        sudo: true,
+      });
+      logger.info('Successfully removed podman configuration folders');
+    } catch (rmErr) {
+      logger.error('Error removing configuration folders:', rmErr);
+      // Continue with uninstall even if folder removal fails
+    }
 
     // 1. (applies to mac, also linux?) This can throw return an error if a file or folder doesn't exist.
     // This is ok, because it will still delete the other folders that do exist.
@@ -42,7 +79,7 @@ const uninstallOnLinux = async (): Promise<boolean | { error: string }> => {
       log: true,
       sudo: true,
     });
-    logger.info(`${uninstallScript}  stdout, stderr ${stdout} ${stderr}`);
+    logger.info(`${uninstallScript} stdout, stderr ${stdout} ${stderr}`);
     return true;
   } catch (err: any) {
     logger.error(err);
