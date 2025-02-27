@@ -1,11 +1,11 @@
-import sleep from 'await-sleep';
 import { type BrowserWindow, app, dialog } from 'electron';
-import { autoUpdateLogger } from './logger';
+import { autoUpdateLogger } from './logger.js';
+import { sleep } from './utils/sleep.js';
 
-import { reportEvent } from './events';
-import i18nMain from './i18nMain';
-import { setFullQuitForNextQuit } from './main';
-import { autoUpdater } from './nn-auto-updater/main';
+import { reportEvent } from './events.js';
+import i18nMain from './i18nMain.js';
+import { setFullQuitForNextQuit } from './main.js';
+import { autoUpdater } from './nn-auto-updater/main.js';
 // import { getSetIsPreReleaseUpdatesEnabled } from './state/settings';
 
 let notifyUserIfNoUpdateAvailable: boolean;
@@ -15,7 +15,7 @@ const t = i18nMain.getFixedT(null, 'updater');
 const logger = autoUpdateLogger;
 
 const initUpdateHandlers = (browserWindow: BrowserWindow) => {
-  autoUpdater.on('error', (error) => {
+  autoUpdater.on('error', (error: Error) => {
     logger.error('autoUpdater:::::::::error', error);
   });
 
@@ -42,7 +42,7 @@ const initUpdateHandlers = (browserWindow: BrowserWindow) => {
     }
   });
 
-  autoUpdater.on('update-downloaded', (...args) => {
+  autoUpdater.on('update-downloaded', (...args: unknown[]) => {
     logger.info('autoUpdater:::::::::update-downloaded args: ', args);
     logger.info('Calling autoUpdater.quitAndInstall()');
     try {

@@ -31,7 +31,8 @@
     "ignore": [
       "src/renderer/ethers.js",
       "src/main/util/*.js",
-      "*genesis-l2.json"
+      "*genesis-l2.json",
+      "src/renderer/utils/browserLanguageDetector.js"
     ]
   }
 }
