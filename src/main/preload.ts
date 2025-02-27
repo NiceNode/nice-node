@@ -184,4 +184,7 @@ contextBridge.exposeInMainWorld('electron', {
   checkPorts: (ports: number[]) => {
     ipcRenderer.invoke('checkPorts', ports);
   },
+
+  setDefaultStorageLocation: (storageLocation: string) =>
+    ipcRenderer.invoke('setDefaultStorageLocation', storageLocation),
 });

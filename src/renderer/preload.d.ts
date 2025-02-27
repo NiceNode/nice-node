@@ -152,6 +152,9 @@ declare global {
 
       // Ports
       checkPorts(ports: number[]): void;
+
+      // New method
+      setDefaultStorageLocation(storageLocation: string): void;
     };
 
     performance: Performance;
