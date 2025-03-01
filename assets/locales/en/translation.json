@@ -183,5 +183,8 @@
   "Close": "Close",
   "Storage": "Storage",
   "DefaultNodeStorage": "Default Node Storage Location",
-  "DefaultNodeStorageDescription": "The default location where node data will be stored. This can be changed per node in node settings."
+  "DefaultNodeStorageDescription": "The default location where node data will be stored. This can be changed per node in node settings.",
+  "NoWritePermissions": "Permission Denied",
+  "NoWritePermissionsMessage": "Cannot write to selected folder",
+  "NoWritePermissionsDetail": "NiceNode does not have permission to write to the selected folder: {{path}}\n\nPlease select a different folder or check the folder permissions."
 }

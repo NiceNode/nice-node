@@ -292,6 +292,6 @@ export const initialize = () => {
     'setDefaultStorageLocation',
     (_event, storageLocation: string) => {
       return setDefaultStorageLocation(storageLocation);
-    }
+    },
   );
 };
