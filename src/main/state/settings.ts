@@ -24,9 +24,10 @@ const APP_IS_NOTIFICATIONS_ENABLED = 'appIsNotificationsEnabled';
 export const APP_IS_EVENT_REPORTING_ENABLED = 'appIsEventReportingEnabled';
 const APP_IS_PRE_RELEASE_UPDATES_ENABLED = 'appIsPreReleaseUpdatesEnabled';
 export const APP_IS_DEVELOPER_MODE_ENABLED = 'appIsDeveloperModeEnabled';
+const APP_DEFAULT_STORAGE_LOCATION = 'appDefaultStorageLocation';
 
 export type ThemeSetting = 'light' | 'dark' | 'auto';
-export type Settings = {
+export interface Settings {
   [OS_PLATFORM_KEY]?: string;
   [OS_ARCHITECTURE]?: string;
   [OS_LANGUAGE_KEY]?: string;
@@ -39,7 +40,8 @@ export type Settings = {
   [APP_IS_EVENT_REPORTING_ENABLED]?: boolean;
   [APP_IS_PRE_RELEASE_UPDATES_ENABLED]?: boolean;
   [APP_IS_DEVELOPER_MODE_ENABLED]?: boolean;
-};
+  [APP_DEFAULT_STORAGE_LOCATION]?: string;
+}
 
 /**
  * Called on app launch.
@@ -207,6 +209,10 @@ export const getSetIsDeveloperModeEnabled = (
     `${SETTINGS_KEY}.${APP_IS_DEVELOPER_MODE_ENABLED}`,
   );
   return savedIsDeveloperModeEnabled;
+};
+
+export const setDefaultStorageLocation = (storageLocation: string) => {
+  store.set('appDefaultStorageLocation', storageLocation);
 };
 
 // listen to OS theme updates

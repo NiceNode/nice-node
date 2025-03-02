@@ -1,16 +1,17 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { HorizontalLine } from '../../Generics/redesign/HorizontalLine/HorizontalLine';
-import { Icon } from '../../Generics/redesign/Icon/Icon';
-import LineLabelSettings from '../../Generics/redesign/LabelSetting/LabelSettings';
-import { Toggle } from '../../Generics/redesign/Toggle/Toggle';
-import LanguageSelect from '../../LanguageSelect';
-import AutoDark from '../../assets/images/artwork/auto-dark.png';
-import AutoLight from '../../assets/images/artwork/auto-light.png';
-import DarkDark from '../../assets/images/artwork/dark-dark.png';
-import DarkLight from '../../assets/images/artwork/dark-light.png';
-import LightDark from '../../assets/images/artwork/light-dark.png';
-import LightLight from '../../assets/images/artwork/light-light.png';
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { HorizontalLine } from "../../Generics/redesign/HorizontalLine/HorizontalLine";
+import { Icon } from "../../Generics/redesign/Icon/Icon";
+import LineLabelSettings from "../../Generics/redesign/LabelSetting/LabelSettings";
+import { Toggle } from "../../Generics/redesign/Toggle/Toggle";
+import LanguageSelect from "../../LanguageSelect";
+import AutoDark from "../../assets/images/artwork/auto-dark.png";
+import AutoLight from "../../assets/images/artwork/auto-light.png";
+import DarkDark from "../../assets/images/artwork/dark-dark.png";
+import DarkLight from "../../assets/images/artwork/dark-light.png";
+import LightDark from "../../assets/images/artwork/light-dark.png";
+import LightLight from "../../assets/images/artwork/light-light.png";
+import FolderInput from "../../Generics/redesign/Input/FolderInput";
 import {
   appearanceSection,
   captionText,
@@ -26,17 +27,18 @@ import {
   themeImage,
   themeInnerContainer,
   versionContainer,
-} from './preferences.css';
+} from "./preferences.css";
 
-export type ThemeSetting = 'light' | 'dark' | 'auto';
+export type ThemeSetting = "light" | "dark" | "auto";
 export type Preference =
-  | 'theme'
-  | 'isOpenOnStartup'
-  | 'isNotificationsEnabled'
-  | 'isEventReportingEnabled'
-  | 'isPreReleaseUpdatesEnabled'
-  | 'isDeveloperModeEnabled'
-  | 'language';
+  | "theme"
+  | "isOpenOnStartup"
+  | "isNotificationsEnabled"
+  | "isEventReportingEnabled"
+  | "isPreReleaseUpdatesEnabled"
+  | "isDeveloperModeEnabled"
+  | "language"
+  | "storageLocation";
 export interface PreferencesProps {
   themeSetting?: ThemeSetting;
   isOpenOnStartup?: boolean;
@@ -64,23 +66,40 @@ const Preferences = ({
 }: PreferencesProps) => {
   const { t } = useTranslation();
   const [initialThemeSetting] = useState(themeSetting);
+  const [sNodeStorageLocation, setNodeStorageLocation] = useState<string>("");
+  const [
+    sNodeStorageLocationFreeStorageGBs,
+    setNodeStorageLocationFreeStorageGBs,
+  ] = useState<number>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const defaultNodesStorageDetails =
+        await electron.getNodesDefaultStorageLocation();
+      setNodeStorageLocation(defaultNodesStorageDetails.folderPath);
+      setNodeStorageLocationFreeStorageGBs(
+        defaultNodesStorageDetails.freeStorageGBs
+      );
+    };
+    fetchData();
+  }, []);
 
   const onClickTheme = (theme: ThemeSetting) => {
     if (onChange) {
-      onChange('theme', theme);
+      onChange("theme", theme);
     }
   };
 
   const getThemeThumbnail = (theme: ThemeSetting) => {
-    const lightTheme = initialThemeSetting === 'light';
+    const lightTheme = initialThemeSetting === "light";
     switch (theme) {
-      case 'auto':
-        return !osDarkMode || initialThemeSetting === 'light'
+      case "auto":
+        return !osDarkMode || initialThemeSetting === "light"
           ? AutoLight
           : AutoDark;
-      case 'light':
+      case "light":
         return lightTheme ? LightLight : LightDark;
-      case 'dark':
+      case "dark":
         return lightTheme ? DarkLight : DarkDark;
       default:
     }
@@ -89,20 +108,20 @@ const Preferences = ({
 
   return (
     <div className={preferencesContainer}>
-      <div className={sectionTitle}>{t('Appearance')}</div>
+      <div className={sectionTitle}>{t("Appearance")}</div>
       <div className={appearanceSection}>
         {[
           {
-            theme: 'auto',
-            label: t('AutoFollowsComputerSetting'),
+            theme: "auto",
+            label: t("AutoFollowsComputerSetting"),
           },
           {
-            theme: 'light',
-            label: t('LightMode'),
+            theme: "light",
+            label: t("LightMode"),
           },
           {
-            theme: 'dark',
-            label: t('DarkMode'),
+            theme: "dark",
+            label: t("DarkMode"),
           },
         ].map((themeDetails, index) => {
           const isSelected = themeSetting === themeDetails.theme;
@@ -113,7 +132,7 @@ const Preferences = ({
             selectedStyle.push(selectedThemeContainer);
           }
           const thumbnail = getThemeThumbnail(
-            themeDetails.theme as ThemeSetting,
+            themeDetails.theme as ThemeSetting
           );
           return (
             <div
@@ -122,9 +141,9 @@ const Preferences = ({
               role="button"
               tabIndex={index}
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                position: 'relative',
+                display: "flex",
+                flexDirection: "column",
+                position: "relative",
               }}
               onClick={() => onClickTheme(themeDetails.theme as ThemeSetting)}
               onKeyDown={() => onClickTheme(themeDetails.theme as ThemeSetting)}
@@ -138,11 +157,11 @@ const Preferences = ({
                     <div className={themeCircleBackground} />
                   </div>
                 )}
-                <div className={selectedStyle.join(' ')}>
+                <div className={selectedStyle.join(" ")}>
                   <img
                     src={thumbnail}
                     alt={themeDetails.label}
-                    className={imgClassNames.join(' ')}
+                    className={imgClassNames.join(" ")}
                   />
                 </div>
               </div>
@@ -152,36 +171,36 @@ const Preferences = ({
         })}
       </div>
       <div className={preferenceSection}>
-        <div className={sectionTitle}>{t('General')}</div>
+        <div className={sectionTitle}>{t("General")}</div>
         <HorizontalLine />
         <LineLabelSettings
           items={[
             {
-              sectionTitle: '',
+              sectionTitle: "",
               items: [
                 {
-                  label: t('LaunchOnStartup'),
+                  label: t("LaunchOnStartup"),
                   value: (
                     <Toggle
-                      onText={t('Enabled')}
-                      offText={t('Disabled')}
+                      onText={t("Enabled")}
+                      offText={t("Disabled")}
                       checked={isOpenOnStartup}
                       onChange={(newValue) => {
                         if (onChange) {
-                          onChange('isOpenOnStartup', newValue);
+                          onChange("isOpenOnStartup", newValue);
                         }
                       }}
                     />
                   ),
                 },
                 {
-                  label: t('Language'),
+                  label: t("Language"),
                   value: (
                     <LanguageSelect
                       language={language}
                       onChange={(newValue) => {
                         if (onChange) {
-                          onChange('language', newValue);
+                          onChange("language", newValue);
                         }
                       }}
                     />
@@ -194,24 +213,24 @@ const Preferences = ({
       </div>
       <div className={preferenceSection}>
         <div id="notifications" className={sectionTitle}>
-          {t('Notifications')}
+          {t("Notifications")}
         </div>
         <HorizontalLine />
         <LineLabelSettings
           items={[
             {
-              sectionTitle: '',
+              sectionTitle: "",
               items: [
                 {
-                  label: t('DesktopNotifications'),
+                  label: t("DesktopNotifications"),
                   value: (
                     <Toggle
-                      onText={t('Enabled')}
-                      offText={t('Disabled')}
+                      onText={t("Enabled")}
+                      offText={t("Disabled")}
                       checked={isNotificationsEnabled}
                       onChange={(newValue) => {
                         if (onChange) {
-                          onChange('isNotificationsEnabled', newValue);
+                          onChange("isNotificationsEnabled", newValue);
                         }
                       }}
                     />
@@ -223,29 +242,29 @@ const Preferences = ({
         />
       </div>
       <div className={preferenceSection}>
-        <div className={sectionTitle}>{t('Privacy')}</div>
+        <div className={sectionTitle}>{t("Privacy")}</div>
         <HorizontalLine />
         <LineLabelSettings
           items={[
             {
-              sectionTitle: '',
+              sectionTitle: "",
               items: [
                 {
-                  label: t('SendErrorEventReports'),
-                  description: `${t('SendErrorEventReportsDescription')}`,
+                  label: t("SendErrorEventReports"),
+                  description: `${t("SendErrorEventReportsDescription")}`,
                   value: (
                     <Toggle
-                      onText={t('Enabled')}
-                      offText={t('Disabled')}
+                      onText={t("Enabled")}
+                      offText={t("Disabled")}
                       checked={isEventReportingEnabled}
                       onChange={(newValue) => {
                         if (onChange) {
-                          onChange('isEventReportingEnabled', newValue);
+                          onChange("isEventReportingEnabled", newValue);
                         }
                       }}
                     />
                   ),
-                  learnMoreLink: 'https://impact.nicenode.xyz',
+                  learnMoreLink: "https://impact.nicenode.xyz",
                 },
               ],
             },
@@ -253,42 +272,83 @@ const Preferences = ({
         />
       </div>
       <div className={preferenceSection}>
-        <div className={sectionTitle}>{t('Advanced')}</div>
+        <div className={sectionTitle}>{t("Storage")}</div>
         <HorizontalLine />
         <LineLabelSettings
           items={[
             {
-              sectionTitle: '',
+              sectionTitle: "",
               items: [
                 {
-                  label: t('PreReleaseUpdates'),
-                  description: t('PreReleaseUpdatesDescription'),
+                  label: t("DefaultNodeStorage"),
+                  description: t("DefaultNodeStorageDescription"),
+                  value: (
+                    <FolderInput
+                      placeholder={sNodeStorageLocation}
+                      freeStorageSpaceGBs={sNodeStorageLocationFreeStorageGBs}
+                      onClickChange={async () => {
+                        const storageLocationDetails =
+                          await electron.openDialogForStorageLocation();
+                        if (storageLocationDetails) {
+                          setNodeStorageLocation(
+                            storageLocationDetails.folderPath
+                          );
+                          setNodeStorageLocationFreeStorageGBs(
+                            storageLocationDetails.freeStorageGBs
+                          );
+                          if (onChange) {
+                            onChange(
+                              "storageLocation",
+                              storageLocationDetails.folderPath
+                            );
+                          }
+                        }
+                      }}
+                    />
+                  ),
+                },
+              ],
+            },
+          ]}
+        />
+      </div>
+      <div className={preferenceSection}>
+        <div className={sectionTitle}>{t("Advanced")}</div>
+        <HorizontalLine />
+        <LineLabelSettings
+          items={[
+            {
+              sectionTitle: "",
+              items: [
+                {
+                  label: t("PreReleaseUpdates"),
+                  description: t("PreReleaseUpdatesDescription"),
                   value: (
                     <Toggle
-                      onText={t('Enabled')}
-                      offText={t('Disabled')}
+                      onText={t("Enabled")}
+                      offText={t("Disabled")}
                       checked={isPreReleaseUpdatesEnabled}
                       onChange={(newValue) => {
                         if (onChange) {
-                          onChange('isPreReleaseUpdatesEnabled', newValue);
+                          onChange("isPreReleaseUpdatesEnabled", newValue);
                         }
                       }}
                     />
                   ),
                 },
                 {
-                  label: `${t('Developer mode')}`,
+                  label: `${t("Developer mode")}`,
                   description: t(
-                    'Show developer information throuhout the app marked by  👷',
+                    "Show developer information throuhout the app marked by  👷"
                   ),
                   value: (
                     <Toggle
-                      onText={t('Enabled')}
-                      offText={t('Disabled')}
+                      onText={t("Enabled")}
+                      offText={t("Disabled")}
                       checked={isDeveloperModeEnabled}
                       onChange={(newValue) => {
                         if (onChange) {
-                          onChange('isDeveloperModeEnabled', newValue);
+                          onChange("isDeveloperModeEnabled", newValue);
                         }
                       }}
                     />
@@ -300,7 +360,7 @@ const Preferences = ({
         />
       </div>
       <div className={versionContainer}>
-        {t('YouAreRunningNiceNode')} {version} {import.meta.env.NICENODE_ENV}
+        {t("YouAreRunningNiceNode")} {version} {import.meta.env.NICENODE_ENV}
         {import.meta.env.MP_PROJECT_ENV}
       </div>
     </div>

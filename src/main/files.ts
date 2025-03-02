@@ -8,6 +8,7 @@ import { app } from 'electron';
 import logger from './logger';
 
 import du from 'du';
+import store from './state/store';
 
 logger.info(`App data dir: ${app.getPath('appData')}`);
 logger.info(`User data dir: ${app.getPath('userData')}`);
@@ -27,7 +28,15 @@ export const getNNDirPath = (): string => {
  * @returns getNNDirPath + '/nodes'
  */
 export const getNodesDirPath = (): string => {
-  return path.join(getNNDirPath(), 'nodes');
+  // First check if user has set a custom default location
+  const userDefaultLocation = store.get('appDefaultStorageLocation');
+  if (userDefaultLocation) {
+    return userDefaultLocation;
+  }
+
+  // Fall back to default app storage location
+  const userDataPath = app.getPath('userData');
+  return path.join(userDataPath, 'nodes');
 };
 
 export const checkAndOrCreateDir = async (dirPath: string) => {

@@ -83,6 +83,7 @@ import {
 import { getSetIsDeveloperModeEnabled } from './state/settings.js';
 import store from './state/store';
 import { getSystemInfo } from './systemInfo';
+import { setDefaultStorageLocation } from './state/settings';
 
 export const initialize = () => {
   ipcMain.handle(
@@ -285,4 +286,12 @@ export const initialize = () => {
   ipcMain.handle('checkPorts', (_event, ports: number[]) => {
     return checkPorts(ports);
   });
+
+  // Add to the initialize function
+  ipcMain.handle(
+    'setDefaultStorageLocation',
+    (_event, storageLocation: string) => {
+      return setDefaultStorageLocation(storageLocation);
+    },
+  );
 };
