@@ -1,7 +1,13 @@
+/**
+ * Uses TypedEmitter implementation based on tiny-typed-emitter
+ * @see https://github.com/binier/tiny-typed-emitter
+ * @license MIT
+ */
+
 import EventEmitter from 'node:events';
 import { type AutoUpdater, autoUpdater as _autoUpdater } from 'electron';
-import { TypedEmitter } from 'tiny-typed-emitter';
 import { checkForUpdates } from './../updater';
+import { TypedEmitter } from './typed-emitter.js';
 
 import { isLinux } from '../platform';
 import { findPackageManager } from './findPackageManager';

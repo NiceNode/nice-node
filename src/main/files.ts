@@ -7,7 +7,7 @@ import { app } from 'electron';
 
 import logger from './logger';
 
-import du from 'du';
+import calculateDiskUsage from './utils/diskUsage';
 
 logger.info(`App data dir: ${app.getPath('appData')}`);
 logger.info(`User data dir: ${app.getPath('userData')}`);
@@ -124,7 +124,7 @@ export const getSystemDiskSize = async (): Promise<number> => {
 export const tryCalcDiskSpace = async (dirPath: string) => {
   let diskUsedInGBs;
   try {
-    diskUsedInGBs = (await du(dirPath)) * 1e-9;
+    diskUsedInGBs = (await calculateDiskUsage(dirPath)) * 1e-9;
   } catch (err) {
     console.info(
       `Cannot calculate disk usage at ${dirPath}. Could be changing files.`,

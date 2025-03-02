@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import I18nextCLILanguageDetector from 'i18next-cli-language-detector';
+import I18nextCLILanguageDetector from './utils/i18nextCLILanguageDetector.js';
 
 import { getMenuBuilder } from './main';
 import { getSettings, setLanguage } from './state/settings';

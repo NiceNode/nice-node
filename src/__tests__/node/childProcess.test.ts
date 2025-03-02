@@ -1,7 +1,7 @@
 import { type SpawnOptions, spawn } from 'node:child_process';
 import * as url from 'node:url';
-import sleep from 'await-sleep';
 import { describe, expect, it } from 'vitest';
+import { sleep } from '../../main/utils/sleep.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
