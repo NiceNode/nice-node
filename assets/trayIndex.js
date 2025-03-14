@@ -1,4 +1,5 @@
-const { ipcRenderer } = require('electron');
+// const { ipcRenderer } = require('electron');
+import { ipcRenderer } from 'electron';
 
 const getIconKey = (status) => {
   switch (status) {

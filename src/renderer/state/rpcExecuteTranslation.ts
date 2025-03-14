@@ -1,5 +1,5 @@
 // biome-disable lint/style/noUselessElse: readability
-import { ethers } from '../ethers';
+import { ethers } from 'ethers';
 import { callJsonRpc } from '../jsonRpcClient';
 import { hexToDecimal } from '../utils';
 
