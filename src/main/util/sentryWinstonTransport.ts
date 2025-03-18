@@ -3,6 +3,7 @@
  */
 import * as Sentry from '@sentry/electron/main';
 import TransportStream from 'winston-transport';
+import { rateLimit } from './rateLimiter.js';
 // import { LEVEL } from 'triple-beam';
 
 enum SentrySeverity {
@@ -47,8 +48,8 @@ class ExtendedError extends Error {
 
 export default class SentryTransport extends TransportStream {
   public silent = false;
-
   private levelsMap: SeverityOptions = {};
+  private normalLogRateLimiter: (info: any, callback: () => void) => void;
 
   public constructor(opts?: SentryTransportOptions) {
     super(opts);
@@ -56,12 +57,15 @@ export default class SentryTransport extends TransportStream {
     this.levelsMap = this.setLevelsMap(opts?.levelsMap);
     this.silent = opts?.silent || false;
 
+    // Only rate limit normal logs, not errors
+    this.normalLogRateLimiter = rateLimit(10, 1000, this.processLog.bind(this));
+
     if (!opts || !opts.skipSentryInit) {
       Sentry.init(SentryTransport.withDefaults(opts?.sentry || {}));
     }
   }
 
-  public log(info: any, callback: () => void) {
+  private processLog(info: any, callback: () => void) {
     setImmediate(() => {
       this.emit('logged', info);
     });
@@ -99,19 +103,30 @@ export default class SentryTransport extends TransportStream {
     //   // ...
     // });
 
-    // Capturing Errors / Exceptions
+    // Capturing Errors / Exceptions - bypass rate limiting
     if (SentryTransport.shouldLogException(sentryLevel)) {
       const error =
         Object.values(info).find((value) => value instanceof Error) ??
         new ExtendedError(info);
       Sentry.captureException(error, { tags });
-
-      return callback();
+      callback();
+      return;
     }
 
-    // Capturing Messages
+    // Normal messages go through rate limiting
     Sentry.captureMessage(message, sentryLevel);
-    return callback();
+    callback();
+  }
+
+  public log(info: any, callback: () => void) {
+    // Errors and fatal logs bypass rate limiting
+    if (SentryTransport.shouldLogException(this.levelsMap[info.level])) {
+      this.processLog(info, callback);
+      return;
+    }
+    
+    // Normal logs are rate limited
+    this.normalLogRateLimiter(info, callback);
   }
 
   end(...args: any[]) {
