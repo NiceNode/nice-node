@@ -141,7 +141,7 @@ const PodmanInstallation = ({
         setDownloadComplete(true);
       }
     } else {
-      console.error('recieved empty podman message');
+      console.error('received empty podman message');
     }
   };
 
