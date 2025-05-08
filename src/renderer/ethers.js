@@ -11911,7 +11911,7 @@ EC.prototype.recoverPubKey = function (msg, signature$1, j, enc) {
   var isYOdd = j & 1;
   var isSecondKey = j >> 1;
   if (r.cmp(this.curve.p.umod(this.curve.n)) >= 0 && isSecondKey)
-    throw new Error('Unable to find sencond key candinate');
+    throw new Error('Unable to find sencond key candidate');
   if (isSecondKey) r = this.curve.pointFromX(r.add(this.curve.n), isYOdd);
   else r = this.curve.pointFromX(r, isYOdd);
   var rInv = signature$1.r.invm(n);
