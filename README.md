@@ -6,6 +6,7 @@ For the latest information, visit https://nicenode.xyz
 
 [![Downloads](https://badgen.net/badge/icon/alpha?label=downloads)](https://www.nicenode.xyz/#download)
 [![Github All Releases](https://img.shields.io/github/downloads/NiceNode/nice-node/total.svg)]()
+[![License](https://img.shields.io/github/license/NiceNode/nice-node)](https://github.com/NiceNode/nice-node/blob/main/LICENSE)
 [![gitpoap badge](https://public-api.gitpoap.io/v1/repo/NiceNode/nice-node/badge)](https://www.gitpoap.io/gh/NiceNode/nice-node)
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=NiceNode)](https://x.com/NiceNodeApp)
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/k3dpYU4Pn9)
