@@ -28,7 +28,7 @@ jobs:
       - name: print os version details
         run: cat /etc/os-release
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
         with:
           node-version: 20
